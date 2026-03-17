@@ -1,4 +1,3 @@
-import { supabase } from "./supabase";
 import type {
   MarketingClient,
   Lead,
@@ -19,153 +18,237 @@ import type {
   ComputeSummariesResult,
 } from "./types";
 
-// ─── Fallback API base (used for endpoints not yet migrated to Supabase) ───
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
+// ─── Server-side API route ─────────────────────────────────────────────────
+// All Supabase queries run server-side via /api/dealeros.
+// Client components call these thin wrappers which just fetch the route.
 
-async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
-  if (!API_BASE) throw new Error("API_BASE not configured — waiting for Supabase migration");
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(options?.headers as Record<string, string>),
-    },
-  });
-  if (!res.ok) throw new Error(`API error ${res.status}: ${res.statusText}`);
+const ROUTE = "/api/dealeros";
+
+async function apiGet<T>(params: Record<string, string>): Promise<T> {
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(`${ROUTE}?${qs}`);
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error || `API error ${res.status}`);
+  }
   return res.json();
 }
 
-// ─── API methods ───
-// These currently use the FastAPI proxy pattern (same as SpencerOS dashboard).
-// They will be migrated to direct Supabase queries once the UsefulWax
-// Supabase rewiring is finalized. The interface stays the same.
+async function apiPost<T>(
+  params: Record<string, string>,
+  body?: Record<string, unknown>
+): Promise<T> {
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(`${ROUTE}?${qs}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.error || `API error ${res.status}`);
+  }
+  return res.json();
+}
+
+async function apiPatch<T>(
+  params: Record<string, string>,
+  body: Record<string, unknown>
+): Promise<T> {
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(`${ROUTE}?${qs}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.error || `API error ${res.status}`);
+  }
+  return res.json();
+}
+
+async function apiDelete<T>(params: Record<string, string>): Promise<T> {
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(`${ROUTE}?${qs}`, { method: "DELETE" });
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.error || `API error ${res.status}`);
+  }
+  return res.json();
+}
+
+// ─── API methods ───────────────────────────────────────────────────────────
+// Interface stays identical — page components don't need changes.
 
 export const api = {
   // Clients
   getMarketingClients: () =>
-    apiFetch<MarketingClient[]>("/api/marketing/clients"),
+    apiGet<MarketingClient[]>({ action: "clients" }),
 
   getMarketingClient: (tenantId: string) =>
-    apiFetch<MarketingClient>(`/api/marketing/clients/${tenantId}`),
+    apiGet<MarketingClient>({ action: "client", tenant: tenantId }),
 
   // Leads
-  getLeads: (tenantId: string, month?: string, source?: string, segment?: string, status?: string, limit = 200) => {
-    const params = new URLSearchParams({ tenant_id: tenantId });
-    if (month) params.set("month", month);
-    if (source) params.set("source", source);
-    if (segment) params.set("segment", segment);
-    if (status) params.set("status", status);
-    params.set("limit", String(limit));
-    return apiFetch<Lead[]>(`/api/marketing/leads?${params}`);
+  getLeads: (
+    tenantId: string,
+    month?: string,
+    source?: string,
+    segment?: string,
+    status?: string,
+    limit = 200
+  ) => {
+    const params: Record<string, string> = {
+      action: "leads",
+      tenant: tenantId,
+      limit: String(limit),
+    };
+    if (month) params.month = month;
+    if (source) params.source = source;
+    if (segment) params.segment = segment;
+    if (status) params.status = status;
+    return apiGet<Lead[]>(params);
   },
 
   createLead: (data: CreateLeadInput) =>
-    apiFetch<Lead>("/api/marketing/leads", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+    apiPost<Lead>(
+      { action: "create_lead", tenant: data.tenant_id },
+      data as unknown as Record<string, unknown>
+    ),
 
-  updateLead: (leadId: number, data: Partial<Lead>) =>
-    apiFetch<Lead>(`/api/marketing/leads/${leadId}`, {
-      method: "PATCH",
-      body: JSON.stringify(data),
-    }),
+  updateLead: (leadId: number, data: Partial<Lead>) => {
+    const tenantId = data.tenant_id || "santa_fe_kia";
+    return apiPatch<Lead>(
+      { action: "update_lead", tenant: tenantId, id: String(leadId) },
+      data as unknown as Record<string, unknown>
+    );
+  },
 
-  deleteLead: (leadId: number) =>
-    apiFetch<{ success: boolean }>(`/api/marketing/leads/${leadId}`, { method: "DELETE" }),
+  deleteLead: (leadId: number, tenantId = "santa_fe_kia") =>
+    apiDelete<{ success: boolean }>({
+      action: "delete_lead",
+      tenant: tenantId,
+      id: String(leadId),
+    }),
 
   // KPI
-  getMarketingKpi: (tenantId: string, month?: string) =>
-    apiFetch<KpiMonthly>(`/api/marketing/kpi?tenant_id=${tenantId}${month ? `&month=${month}` : ""}`),
+  getMarketingKpi: (tenantId: string, month?: string) => {
+    const params: Record<string, string> = { action: "kpi", tenant: tenantId };
+    if (month) params.month = month;
+    return apiGet<KpiMonthly>(params);
+  },
 
   getKpiTrend: (tenantId: string, months = 6) =>
-    apiFetch<KpiMonthly[]>(`/api/marketing/kpi/trend?tenant_id=${tenantId}&months=${months}`),
+    apiGet<KpiMonthly[]>({
+      action: "kpi_trend",
+      tenant: tenantId,
+      months: String(months),
+    }),
 
   // Source Attribution
   getSourceAttribution: (tenantId: string, startMonth?: string, endMonth?: string) => {
-    const params = new URLSearchParams({ tenant_id: tenantId });
-    if (startMonth) params.set("start_month", startMonth);
-    if (endMonth) params.set("end_month", endMonth);
-    return apiFetch<SourceAttribution[]>(`/api/marketing/kpi/sources?${params}`);
+    const params: Record<string, string> = {
+      action: "source_attribution",
+      tenant: tenantId,
+    };
+    if (startMonth) params.start_month = startMonth;
+    if (endMonth) params.end_month = endMonth;
+    return apiGet<SourceAttribution[]>(params);
   },
 
   // Vendors
   getVendors: (tenantId: string) =>
-    apiFetch<VendorBudget[]>(`/api/marketing/vendors?tenant_id=${tenantId}`),
+    apiGet<VendorBudget[]>({ action: "vendors", tenant: tenantId }),
 
   createVendor: (data: CreateVendorInput) =>
-    apiFetch<VendorBudget>("/api/marketing/vendors", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+    apiPost<VendorBudget>(
+      { action: "create_vendor", tenant: data.tenant_id },
+      data as unknown as Record<string, unknown>
+    ),
 
-  updateVendor: (vendorId: number, data: Partial<VendorBudget>) =>
-    apiFetch<VendorBudget>(`/api/marketing/vendors/${vendorId}`, {
-      method: "PATCH",
-      body: JSON.stringify(data),
-    }),
+  updateVendor: (vendorId: number, data: Partial<VendorBudget>) => {
+    const tenantId = data.tenant_id || "santa_fe_kia";
+    return apiPatch<VendorBudget>(
+      { action: "update_vendor", tenant: tenantId, id: String(vendorId) },
+      data as unknown as Record<string, unknown>
+    );
+  },
 
-  deleteVendor: (vendorId: number) =>
-    apiFetch<{ success: boolean }>(`/api/marketing/vendors/${vendorId}`, { method: "DELETE" }),
+  deleteVendor: (vendorId: number, tenantId = "santa_fe_kia") =>
+    apiDelete<{ success: boolean }>({
+      action: "delete_vendor",
+      tenant: tenantId,
+      id: String(vendorId),
+    }),
 
   // Lead Sources
   getLeadSources: (tenantId: string) =>
-    apiFetch<LeadSource[]>(`/api/marketing/sources?tenant_id=${tenantId}`),
+    apiGet<LeadSource[]>({ action: "lead_sources", tenant: tenantId }),
 
   createLeadSource: (data: CreateLeadSourceInput) =>
-    apiFetch<LeadSource>("/api/marketing/sources", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+    apiPost<LeadSource>(
+      { action: "create_lead_source", tenant: data.tenant_id },
+      data as unknown as Record<string, unknown>
+    ),
 
   // VinSolutions
-  vinUpload: async (tenantId: string, file: File): Promise<VinSyncResult> => {
-    if (!API_BASE) throw new Error("API_BASE not configured");
-    const formData = new FormData();
-    formData.append("tenant_id", tenantId);
-    formData.append("file", file);
-    const res = await fetch(`${API_BASE}/api/marketing/vinsolutions/upload`, {
-      method: "POST",
-      body: formData,
-    });
-    if (!res.ok) throw new Error(`API error ${res.status}: ${res.statusText}`);
-    return res.json();
+  vinUpload: async (_tenantId: string, _file: File): Promise<VinSyncResult> => {
+    // File upload requires edge function — not yet migrated to Supabase route
+    throw new Error("VIN file upload requires edge function — not yet migrated");
   },
 
   vinSyncGmail: (tenantId: string) =>
-    apiFetch<{ success: boolean; error?: string }>(`/api/marketing/vinsolutions/sync-gmail?tenant_id=${tenantId}`, {
-      method: "POST",
-    }),
+    apiPost<{ success: boolean; error?: string }>(
+      { action: "vin_sync_gmail", tenant: tenantId }
+    ),
 
   vinSyncHistory: (tenantId: string, limit = 20) =>
-    apiFetch<{ runs: VinSyncRun[]; count: number }>(
-      `/api/marketing/vinsolutions/sync-history?tenant_id=${tenantId}&limit=${limit}`
-    ),
+    apiGet<{ runs: VinSyncRun[]; count: number }>({
+      action: "vin_sync_history",
+      tenant: tenantId,
+      limit: String(limit),
+    }),
 
-  vinSourceBreakdown: (tenantId: string, month = "") =>
-    apiFetch<{ sources: VinSourceRow[]; count: number }>(
-      `/api/marketing/vinsolutions/sources?tenant_id=${tenantId}${month ? `&month=${month}` : ""}`
-    ),
+  vinSourceBreakdown: (tenantId: string, month = "") => {
+    const params: Record<string, string> = {
+      action: "vin_source_breakdown",
+      tenant: tenantId,
+    };
+    if (month) params.month = month;
+    return apiGet<{ sources: VinSourceRow[]; count: number }>(params);
+  },
 
-  vinSalespersonBreakdown: (tenantId: string, month = "") =>
-    apiFetch<{ reps: VinRepRow[]; count: number }>(
-      `/api/marketing/vinsolutions/salesperson?tenant_id=${tenantId}${month ? `&month=${month}` : ""}`
-    ),
+  vinSalespersonBreakdown: (tenantId: string, month = "") => {
+    const params: Record<string, string> = {
+      action: "vin_salesperson_breakdown",
+      tenant: tenantId,
+    };
+    if (month) params.month = month;
+    return apiGet<{ reps: VinRepRow[]; count: number }>(params);
+  },
 
-  vinResponseTimes: (tenantId: string, month = "") =>
-    apiFetch<VinResponseTimeStats>(
-      `/api/marketing/vinsolutions/response-times?tenant_id=${tenantId}${month ? `&month=${month}` : ""}`
-    ),
+  vinResponseTimes: (tenantId: string, month = "") => {
+    const params: Record<string, string> = {
+      action: "vin_response_times",
+      tenant: tenantId,
+    };
+    if (month) params.month = month;
+    return apiGet<VinResponseTimeStats>(params);
+  },
 
   vinSummary: (tenantId: string) =>
-    apiFetch<VinSummary>(`/api/marketing/vinsolutions/summary?tenant_id=${tenantId}`),
+    apiGet<VinSummary>({ action: "vin_summary", tenant: tenantId }),
 
   // Context & Summaries
   getDealershipContext: (tenantId: string) =>
-    apiFetch<DealershipContext>(`/api/marketing/context/${tenantId}`),
+    apiGet<DealershipContext>({ action: "dealership_context", tenant: tenantId }),
 
-  computeSummaries: (tenantId: string, month = "") =>
-    apiFetch<ComputeSummariesResult>(`/api/marketing/summaries/compute?tenant_id=${tenantId}${month ? `&month=${month}` : ""}`, {
-      method: "POST",
-    }),
+  computeSummaries: (tenantId: string, month = "") => {
+    const params: Record<string, string> = {
+      action: "compute_summaries",
+      tenant: tenantId,
+    };
+    if (month) params.month = month;
+    return apiPost<ComputeSummariesResult>(params);
+  },
 };
