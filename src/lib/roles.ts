@@ -2,8 +2,8 @@ import type { UserRole } from "./types";
 
 // Pages accessible by role
 const ROLE_ACCESS: Record<UserRole, string[]> = {
-  admin: ["/", "/leads", "/kpi", "/vendors", "/sources", "/vinsync", "/compass", "/gauge", "/sentry", "/service"],
-  rep: ["/", "/leads", "/compass", "/gauge"],
+  admin: ["/dashboard", "/leads", "/kpi", "/vendors", "/sources", "/vinsync", "/compass", "/gauge", "/sentry", "/service"],
+  rep: ["/dashboard", "/leads", "/compass", "/gauge"],
 };
 
 export function canAccess(role: UserRole, path: string): boolean {
@@ -12,7 +12,7 @@ export function canAccess(role: UserRole, path: string): boolean {
 
 export function getNavItems(role: UserRole) {
   const allItems = [
-    { href: "/", label: "Overview", icon: "O" },
+    { href: "/dashboard", label: "Overview", icon: "O" },
     { href: "/leads", label: "Leads", icon: "L" },
     { href: "/kpi", label: "KPI", icon: "K" },
     { href: "/vendors", label: "Vendors", icon: "V", adminOnly: true },
