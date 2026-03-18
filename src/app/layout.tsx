@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AppShell } from "@/components/app-shell";
 import { TenantProvider } from "@/components/tenant-provider";
+import { ClerkErrorBoundary } from "@/components/clerk-error-boundary";
 import "./globals.css";
 
 // Conditionally import Clerk — avoid crash when Clerk isn't configured
@@ -39,14 +40,16 @@ export default function RootLayout({
     <AppShell>{children}</AppShell>
   );
 
+  const noClerkShell = (
+    <html lang="en">
+      <body className="antialiased">
+        <TenantProvider>{content}</TenantProvider>
+      </body>
+    </html>
+  );
+
   if (!clerkKey || !ClerkProvider) {
-    return (
-      <html lang="en">
-        <body className="antialiased">
-          <TenantProvider>{content}</TenantProvider>
-        </body>
-      </html>
-    );
+    return noClerkShell;
   }
 
   const wrappedContent = AuthProvider ? (
@@ -58,12 +61,14 @@ export default function RootLayout({
   );
 
   return (
-    <ClerkProvider appearance={{ baseTheme: dark }}>
-      <html lang="en">
-        <body className="antialiased">
-          {wrappedContent}
-        </body>
-      </html>
-    </ClerkProvider>
+    <ClerkErrorBoundary fallback={noClerkShell}>
+      <ClerkProvider appearance={{ baseTheme: dark }}>
+        <html lang="en">
+          <body className="antialiased">
+            {wrappedContent}
+          </body>
+        </html>
+      </ClerkProvider>
+    </ClerkErrorBoundary>
   );
 }
