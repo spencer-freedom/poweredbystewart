@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Sidebar } from "@/components/sidebar";
+import { AppShell } from "@/components/app-shell";
 import { TenantProvider } from "@/components/tenant-provider";
 import "./globals.css";
 
@@ -26,7 +26,6 @@ export const metadata: Metadata = {
   description: "Marketing intelligence dashboard",
 };
 
-// All pages depend on Clerk auth + runtime data — skip static prerendering
 export const dynamic = "force-dynamic";
 
 const clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
@@ -37,13 +36,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const content = (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar />
-      <main className="flex-1 overflow-auto p-6">{children}</main>
-    </div>
+    <AppShell>{children}</AppShell>
   );
 
-  // Skip Clerk when publishable key isn't configured (local dev without Clerk)
   if (!clerkKey || !ClerkProvider) {
     return (
       <html lang="en">
