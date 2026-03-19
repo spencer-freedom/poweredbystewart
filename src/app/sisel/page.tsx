@@ -200,13 +200,13 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
 
 // ─── Tab 2: Platform Preview (Dashboard + pitch callouts) ───────
 
-function DashboardTab({ showPitch }: { showPitch: boolean }) {
+function DashboardTab() {
   const totalContacts = CONTACT_BUCKETS.reduce((sum, b) => sum + b.count, 0);
 
   return (
     <div className="space-y-6">
       {/* Contact Health */}
-      <PitchCallout show={showPitch}>
+      <PitchCallout show={true}>
         Every contact auto-sorted from Exigo. No more paying to email dead addresses.
       </PitchCallout>
       <div>
@@ -220,7 +220,7 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
       </div>
 
       {/* Performance */}
-      <PitchCallout show={showPitch}>
+      <PitchCallout show={true}>
         Real-time campaign metrics. 34% open rate vs 21% industry average.
       </PitchCallout>
       <div>
@@ -234,7 +234,7 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
       </div>
 
       {/* Automation Flows */}
-      <PitchCallout show={showPitch}>
+      <PitchCallout show={true}>
         Set up once, runs forever. Triggered by real Exigo data.
       </PitchCallout>
       <div>
@@ -268,7 +268,7 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
       </div>
 
       {/* Audience Segments */}
-      <PitchCallout show={showPitch}>
+      <PitchCallout show={true}>
         Segments built from Exigo purchase data. Update automatically as orders come in.
       </PitchCallout>
       <div>
@@ -288,7 +288,7 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
       </div>
 
       {/* Recent Campaigns */}
-      <PitchCallout show={showPitch}>
+      <PitchCallout show={true}>
         Newsletters, product launches, seasonal catalogs — pick audience, preview, send.
       </PitchCallout>
       <div>
@@ -322,7 +322,7 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
       </div>
 
       {/* Exigo Sync */}
-      <PitchCallout show={showPitch}>
+      <PitchCallout show={true}>
         Syncs automatically. No 66-hour integration project — it{"'"}s already built.
       </PitchCallout>
       <div>
@@ -351,7 +351,7 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
 
 // ─── Tab 3: Email Studio (with pitch callouts) ──────────────────
 
-function EmailStudioTab({ showPitch }: { showPitch: boolean }) {
+function EmailStudioTab() {
   const [step, setStep] = useState<"templates" | "compose" | "preview">("templates");
   const [selectedTemplate, setSelectedTemplate] = useState<number | null>(null);
   const [selectedProducts, setSelectedProducts] = useState<number[]>([1, 2, 3]);
@@ -362,7 +362,7 @@ function EmailStudioTab({ showPitch }: { showPitch: boolean }) {
   if (step === "templates") {
     return (
       <div className="space-y-6">
-        <PitchCallout show={showPitch}>
+        <PitchCallout show={true}>
           Pick a template, select products, choose your audience, send. Everything Mailchimp does plus Exigo-powered targeting.
         </PitchCallout>
 
@@ -414,7 +414,7 @@ function EmailStudioTab({ showPitch }: { showPitch: boolean }) {
           <span className="text-stewart-text">{template ? template.name : "New Campaign"}</span>
         </div>
 
-        <PitchCallout show={showPitch}>
+        <PitchCallout show={true}>
           Products auto-render as email-safe HTML. Audience segments powered by Exigo purchase data.
         </PitchCallout>
 
@@ -660,7 +660,6 @@ const TAB_CONFIG: { key: Tab; label: string }[] = [
 
 export default function SiselPage() {
   const [tab, setTab] = useState<Tab>("overview");
-  const [showPitch, setShowPitch] = useState(true);
 
   return (
     <div className="min-h-screen bg-stewart-bg">
@@ -676,18 +675,6 @@ export default function SiselPage() {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            {(tab === "dashboard" || tab === "email-studio") && (
-              <button
-                onClick={() => setShowPitch(!showPitch)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                  showPitch
-                    ? "bg-stewart-accent/20 text-stewart-accent border border-stewart-accent/30"
-                    : "bg-stewart-border text-stewart-muted"
-                }`}
-              >
-                {showPitch ? "Pitch notes on" : "Pitch notes off"}
-              </button>
-            )}
             <div className="bg-white rounded-lg px-3 py-1.5">
               <img src="/sisel-logo.png" alt="Sisel" className="h-8 w-auto" />
             </div>
@@ -714,8 +701,8 @@ export default function SiselPage() {
         </div>
 
         {tab === "overview" && <OverviewTab onNavigate={setTab} />}
-        {tab === "dashboard" && <DashboardTab showPitch={showPitch} />}
-        {tab === "email-studio" && <EmailStudioTab showPitch={showPitch} />}
+        {tab === "dashboard" && <DashboardTab />}
+        {tab === "email-studio" && <EmailStudioTab />}
         {tab === "get-started" && <GetStartedTab />}
       </div>
     </div>
