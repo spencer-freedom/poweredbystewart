@@ -114,21 +114,21 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        {/* 30K Contacts — pie chart + legend */}
+        {/* 30K Contacts — pie chart + legend to the right */}
         <div className="text-center">
-          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex flex-col items-center justify-center h-44">
-            <svg viewBox="0 0 36 36" className="w-16 h-16">
+          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center gap-4 h-44">
+            <svg viewBox="0 0 36 36" className="w-20 h-20 flex-shrink-0">
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#22c55e" strokeWidth="3.5" strokeDasharray="61 39" strokeDashoffset="25" />
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#eab308" strokeWidth="3.5" strokeDasharray="20 80" strokeDashoffset="64" />
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#ef4444" strokeWidth="3.5" strokeDasharray="14 86" strokeDashoffset="44" />
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#f97316" strokeWidth="3.5" strokeDasharray="5 95" strokeDashoffset="30" />
               <text x="18" y="18" textAnchor="middle" dy=".1em" className="fill-stewart-text text-[7px] font-bold">30K</text>
             </svg>
-            <div className="flex gap-3 mt-3 text-[10px] text-stewart-muted">
-              <span><span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1" />Active 61%</span>
-              <span><span className="inline-block w-1.5 h-1.5 rounded-full bg-yellow-500 mr-1" />Inactive 20%</span>
-              <span><span className="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1" />Bounced 14%</span>
-              <span><span className="inline-block w-1.5 h-1.5 rounded-full bg-orange-500 mr-1" />Unsub 5%</span>
+            <div className="space-y-1 text-[11px] text-stewart-muted text-left">
+              <p><span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5" />Active 61%</p>
+              <p><span className="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1.5" />Inactive 20%</p>
+              <p><span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5" />Bounced 14%</p>
+              <p><span className="inline-block w-2 h-2 rounded-full bg-orange-500 mr-1.5" />Unsub 5%</p>
             </div>
           </div>
           <p className="text-sm font-semibold text-stewart-text mt-3">Contacts synced & sorted</p>
@@ -138,7 +138,10 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
         {/* 66 Hours Saved */}
         <div className="text-center">
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center h-44">
-            <p className="text-4xl font-bold text-green-400">66 hrs</p>
+            <div>
+              <p className="text-5xl font-bold text-green-400">66</p>
+              <p className="text-lg text-green-400/70 font-medium -mt-1">hrs</p>
+            </div>
           </div>
           <p className="text-sm font-semibold text-stewart-text mt-3">Saved</p>
           <p className="text-xs text-stewart-muted mt-0.5">Exigo integration already built</p>
@@ -147,7 +150,10 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
         {/* Real-time Exigo Data */}
         <div className="text-center">
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center h-44">
-            <p className="text-3xl font-bold text-stewart-accent">Real-time</p>
+            <div>
+              <p className="text-4xl font-bold text-stewart-accent">Real-time</p>
+              <p className="text-lg text-stewart-accent/70 font-medium -mt-1">data</p>
+            </div>
           </div>
           <p className="text-sm font-semibold text-stewart-text mt-3">Live Exigo sales data</p>
           <p className="text-xs text-stewart-muted mt-0.5">Campaigns from fresh purchase history</p>
@@ -212,31 +218,6 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
           <StatCard label="Total Contacts" value={totalContacts} sub="Synced from Exigo" />
           {CONTACT_BUCKETS.map((b) => (
             <StatCard key={b.label} label={b.label} value={b.count} variant={b.label === "Active" ? "success" : b.label === "Bounced" ? "danger" : b.label === "Inactive" ? "warning" : undefined} />
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-stewart-card border border-stewart-border rounded-lg p-4">
-        <p className="text-xs text-stewart-muted mb-2">List Health Distribution</p>
-        <div className="flex h-6 rounded overflow-hidden">
-          {CONTACT_BUCKETS.map((b) => {
-            const pct = (b.count / totalContacts) * 100;
-            const bgMap: Record<string, string> = { Active: "bg-green-500", Inactive: "bg-yellow-500", Bounced: "bg-red-500", Unsubscribed: "bg-orange-500" };
-            return (
-              <div key={b.label} className={`${bgMap[b.label]} relative group`} style={{ width: `${pct}%` }}>
-                <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                  {b.label} {pct.toFixed(0)}%
-                </span>
-              </div>
-            );
-          })}
-        </div>
-        <div className="flex gap-4 mt-2">
-          {CONTACT_BUCKETS.map((b) => (
-            <div key={b.label} className="flex items-center gap-1.5 text-xs text-stewart-muted">
-              <span className={`w-2.5 h-2.5 rounded-sm ${b.bg}`} />
-              {b.label}: {((b.count / totalContacts) * 100).toFixed(0)}%
-            </div>
           ))}
         </div>
       </div>
