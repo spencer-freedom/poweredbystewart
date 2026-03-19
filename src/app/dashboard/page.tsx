@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { useTenant } from "@/components/tenant-provider";
 import type { KpiMonthly, DealershipContext, UserRole } from "@/lib/types";
@@ -34,8 +35,20 @@ function healthColor(score: number): string {
 }
 
 export default function DashboardPage() {
+  const { isSignedIn, isLoaded } = useAuth();
+  const router = useRouter();
   const { tenantId } = useTenant();
   const { user } = useUser();
+
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.replace("/sign-in");
+    }
+  }, [isLoaded, isSignedIn, router]);
+
+  if (!isLoaded || !isSignedIn) {
+    return <div className="text-center text-stewart-muted py-12 text-sm">Loading...</div>;
+  }
   const role = (user?.publicMetadata?.role as UserRole) || "rep";
 
   const [kpi, setKpi] = useState<KpiMonthly | null>(null);

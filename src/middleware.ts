@@ -1,26 +1,8 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
-const isPublicRoute = createRouteMatcher([
-  "/",
-  "/sign-in(.*)",
-  "/sign-up(.*)",
-  "/sisel(.*)",
-  "/privacy",
-  "/terms",
-  "/api(.*)",
-]);
-
-export default clerkMiddleware(async (auth, request) => {
-  if (!isPublicRoute(request)) {
-    const { userId } = await auth();
-    if (!userId) {
-      const signInUrl = new URL("/sign-in", request.url);
-      signInUrl.searchParams.set("redirect_url", request.nextUrl.pathname);
-      return NextResponse.redirect(signInUrl);
-    }
-  }
-});
+// Let Clerk set up session cookies but don't block any routes server-side.
+// Auth protection is handled client-side in the dashboard layout.
+export default clerkMiddleware();
 
 export const config = {
   matcher: [
