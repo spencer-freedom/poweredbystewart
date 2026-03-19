@@ -11,7 +11,12 @@ const clients = [
     name: "Santa Fe Kia",
     slug: "santa_fe_kia",
     description: "Sales & Marketing Intelligence",
-    logo: <img src="/santafekia-logo.png" alt="Santa Fe Kia" className="h-18 w-auto" />,
+    logo: (
+      <div className="flex flex-col items-center gap-1">
+        <img src="/santafekia-logo.png" alt="Kia" className="h-10 w-auto" />
+        <span className="text-sm font-semibold text-gray-900">Santa Fe Kia</span>
+      </div>
+    ),
   },
   {
     name: "UsefulWax",
