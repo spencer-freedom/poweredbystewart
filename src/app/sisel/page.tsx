@@ -114,44 +114,37 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        {/* 30K Contacts — with mini pie chart */}
-        <div className="bg-stewart-card border border-stewart-border rounded-lg p-5">
-          <div className="flex items-center gap-4">
-            <svg viewBox="0 0 36 36" className="w-16 h-16 flex-shrink-0">
-              {/* Active 61% */}
+        {/* 30K Contacts — pie chart only */}
+        <div className="text-center">
+          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center">
+            <svg viewBox="0 0 36 36" className="w-20 h-20">
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#22c55e" strokeWidth="3.5" strokeDasharray="61 39" strokeDashoffset="25" />
-              {/* Inactive 20% */}
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#eab308" strokeWidth="3.5" strokeDasharray="20 80" strokeDashoffset="64" />
-              {/* Bounced 14% */}
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#ef4444" strokeWidth="3.5" strokeDasharray="14 86" strokeDashoffset="44" />
-              {/* Unsubscribed 5% */}
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#f97316" strokeWidth="3.5" strokeDasharray="5 95" strokeDashoffset="30" />
               <text x="18" y="18" textAnchor="middle" dy=".1em" className="fill-stewart-text text-[7px] font-bold">30K</text>
             </svg>
-            <div>
-              <p className="text-lg font-bold text-stewart-text">Contacts synced & sorted</p>
-              <div className="mt-1.5 space-y-0.5 text-[11px] text-stewart-muted">
-                <p><span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5" />Active 61%</p>
-                <p><span className="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1.5" />Inactive 20%</p>
-                <p><span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5" />Bounced 14%</p>
-                <p><span className="inline-block w-2 h-2 rounded-full bg-orange-500 mr-1.5" />Unsubscribed 5%</p>
-              </div>
-            </div>
           </div>
+          <p className="text-sm font-semibold text-stewart-text mt-3">Contacts synced & sorted</p>
+          <p className="text-xs text-stewart-muted mt-0.5">Auto-categorized from Exigo</p>
         </div>
 
         {/* 66 Hours Saved */}
-        <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 text-center flex flex-col items-center justify-center">
-          <p className="text-3xl font-bold text-green-400">66 hrs</p>
-          <p className="text-sm font-medium text-stewart-text mt-1">Saved</p>
-          <p className="text-xs text-stewart-muted mt-1">Exigo integration already built</p>
+        <div className="text-center">
+          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center">
+            <p className="text-4xl font-bold text-green-400">66 hrs</p>
+          </div>
+          <p className="text-sm font-semibold text-stewart-text mt-3">Saved</p>
+          <p className="text-xs text-stewart-muted mt-0.5">Exigo integration already built</p>
         </div>
 
         {/* Real-time Exigo Data */}
-        <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 text-center flex flex-col items-center justify-center">
-          <p className="text-3xl font-bold text-stewart-accent">Real-time</p>
-          <p className="text-sm font-medium text-stewart-text mt-1">Exigo sales data</p>
-          <p className="text-xs text-stewart-muted mt-1">Build campaigns from live purchase history</p>
+        <div className="text-center">
+          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center">
+            <p className="text-3xl font-bold text-stewart-accent">Real-time</p>
+          </div>
+          <p className="text-sm font-semibold text-stewart-text mt-3">Live Exigo sales data</p>
+          <p className="text-xs text-stewart-muted mt-0.5">Campaigns from fresh purchase history</p>
         </div>
       </div>
 
