@@ -155,7 +155,7 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-red-500/5 border border-red-500/20 rounded-lg p-5 space-y-3">
+        <div className="bg-red-500/10 border-2 border-red-500/40 rounded-lg p-5 space-y-3">
           <h3 className="text-sm font-semibold text-red-400 uppercase tracking-wide">Now</h3>
           {[
             "$450/mo — no automation, no Exigo sync",
@@ -168,7 +168,7 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
             </p>
           ))}
         </div>
-        <div className="bg-green-500/5 border border-green-500/20 rounded-lg p-5 space-y-3">
+        <div className="bg-green-500/10 border-2 border-green-500/40 rounded-lg p-5 space-y-3">
           <h3 className="text-sm font-semibold text-green-400 uppercase tracking-wide">With this system</h3>
           {[
             "Two-way Exigo sync — live data, no exports",
