@@ -225,11 +225,10 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
       </PitchCallout>
       <div>
         <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Performance</h2>
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-3 gap-3">
           <StatCard label="Emails Sent (30d)" value="42,680" sub="All campaigns" variant="success" />
           <StatCard label="Avg Open Rate" value="34%" sub="Industry avg: 21%" variant="success" />
           <StatCard label="Avg Click Rate" value="12%" sub="Industry avg: 3%" variant="success" />
-          <StatCard label="Monthly Cost" value="$500" sub="vs $450 Mailchimp" />
         </div>
       </div>
 
