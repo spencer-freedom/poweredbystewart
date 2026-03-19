@@ -90,13 +90,10 @@ export default function LandingPage() {
                 key={client.slug}
                 className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex flex-col items-center text-center hover:border-stewart-accent/40 transition-colors"
               >
-                <div className="h-14 flex items-center justify-center mb-3">
+                <div className="h-14 flex items-center justify-center mb-2">
                   {client.logo}
                 </div>
-                <h3 className={`text-sm font-medium ${client.color}`}>
-                  {client.name}
-                </h3>
-                <p className="text-xs text-stewart-muted mt-0.5">
+                <p className="text-xs text-stewart-muted">
                   {client.description}
                 </p>
                 <Link
