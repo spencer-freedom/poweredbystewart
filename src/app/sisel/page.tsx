@@ -117,12 +117,12 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
         {/* 30K Contacts — pie chart + legend to the right */}
         <div className="text-center">
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center gap-4 h-44">
-            <svg viewBox="0 0 36 36" className="w-24 h-24 flex-shrink-0">
-              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#22c55e" strokeWidth="5.5" strokeDasharray="61 39" strokeDashoffset="25" />
-              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#eab308" strokeWidth="5.5" strokeDasharray="20 80" strokeDashoffset="64" />
-              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#ef4444" strokeWidth="5.5" strokeDasharray="14 86" strokeDashoffset="44" />
-              <circle cx="18" cy="18" r="15.9" fill="none" stroke="#f97316" strokeWidth="5.5" strokeDasharray="5 95" strokeDashoffset="30" />
-              <text x="18" y="18" textAnchor="middle" dy=".1em" className="fill-stewart-text text-[7px] font-bold">30K</text>
+            <svg viewBox="0 0 36 36" className="w-20 h-20 flex-shrink-0">
+              <circle cx="18" cy="18" r="13" fill="none" stroke="#22c55e" strokeWidth="10" strokeDasharray="50 82" strokeDashoffset="20" />
+              <circle cx="18" cy="18" r="13" fill="none" stroke="#eab308" strokeWidth="10" strokeDasharray="16 82" strokeDashoffset="52" />
+              <circle cx="18" cy="18" r="13" fill="none" stroke="#ef4444" strokeWidth="10" strokeDasharray="12 82" strokeDashoffset="36" />
+              <circle cx="18" cy="18" r="13" fill="none" stroke="#f97316" strokeWidth="10" strokeDasharray="4 82" strokeDashoffset="24" />
+              <text x="18" y="18" textAnchor="middle" dy=".1em" className="fill-stewart-text text-[6px] font-bold">30K</text>
             </svg>
             <div className="space-y-1 text-[11px] text-stewart-muted text-left">
               <p><span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5" />Active 61%</p>
