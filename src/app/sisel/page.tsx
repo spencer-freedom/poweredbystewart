@@ -105,7 +105,11 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
   return (
     <div className="space-y-8 max-w-3xl">
       <div>
-        <h2 className="text-3xl font-bold text-stewart-text">Replace Mailchimp. Connect Exigo. Automate everything.</h2>
+        <h2 className="text-3xl font-bold text-stewart-text leading-snug">
+          Replace Mailchimp.<br />
+          Connect Exigo.<br />
+          Automate everything.
+        </h2>
         <p className="mt-3 text-stewart-muted">Already built. Already running. Ready to deploy.</p>
       </div>
 
