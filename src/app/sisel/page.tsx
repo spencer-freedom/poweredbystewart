@@ -138,7 +138,7 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
         {/* 66 Hours Saved */}
         <div className="text-center">
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center h-44">
-            <p className="text-7xl font-bold text-green-400">66 <span className="text-lg font-medium text-green-400/70">hrs</span></p>
+            <p className="text-7xl font-bold text-green-400">66<span className="text-lg font-medium text-green-400/70">hrs</span></p>
           </div>
           <p className="text-sm font-semibold text-stewart-text mt-3">Saved</p>
           <p className="text-xs text-stewart-muted mt-0.5">Exigo integration already built</p>
