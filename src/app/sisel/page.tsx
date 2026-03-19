@@ -117,13 +117,13 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
         {/* 30K Contacts — pie chart + legend to the right */}
         <div className="text-center">
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center gap-4 h-44">
-            <svg viewBox="0 0 36 36" className="w-20 h-20 flex-shrink-0" style={{ transform: "rotate(-90deg)" }}>
-              {/* circumference = 2 * π * 15.915 ≈ 100 */}
-              <circle cx="18" cy="18" r="15.915" fill="none" stroke="#22c55e" strokeWidth="12" strokeDasharray="61 100" strokeDashoffset="0" />
-              <circle cx="18" cy="18" r="15.915" fill="none" stroke="#eab308" strokeWidth="12" strokeDasharray="20 100" strokeDashoffset="-61" />
-              <circle cx="18" cy="18" r="15.915" fill="none" stroke="#ef4444" strokeWidth="12" strokeDasharray="14 100" strokeDashoffset="-81" />
-              <circle cx="18" cy="18" r="15.915" fill="none" stroke="#f97316" strokeWidth="12" strokeDasharray="5 100" strokeDashoffset="-95" />
-              <text x="18" y="18" textAnchor="middle" dominantBaseline="central" className="fill-stewart-text text-[7px] font-bold" style={{ transform: "rotate(90deg)", transformOrigin: "18px 18px" }}>30K</text>
+            <svg viewBox="0 0 42 42" className="w-20 h-20 flex-shrink-0" style={{ transform: "rotate(-90deg)" }}>
+              {/* r=12, circumference = 2 * π * 12 ≈ 75.4, strokeWidth=14 fits in 42x42 viewBox */}
+              <circle cx="21" cy="21" r="12" fill="none" stroke="#22c55e" strokeWidth="14" strokeDasharray="46.0 75.4" strokeDashoffset="0" />
+              <circle cx="21" cy="21" r="12" fill="none" stroke="#eab308" strokeWidth="14" strokeDasharray="15.1 75.4" strokeDashoffset="-46.0" />
+              <circle cx="21" cy="21" r="12" fill="none" stroke="#ef4444" strokeWidth="14" strokeDasharray="10.6 75.4" strokeDashoffset="-61.1" />
+              <circle cx="21" cy="21" r="12" fill="none" stroke="#f97316" strokeWidth="14" strokeDasharray="3.8 75.4" strokeDashoffset="-71.7" />
+              <text x="21" y="21" textAnchor="middle" dominantBaseline="central" className="fill-stewart-text text-[7px] font-bold" style={{ transform: "rotate(90deg)", transformOrigin: "21px 21px" }}>30K</text>
             </svg>
             <div className="space-y-1 text-[11px] text-stewart-muted text-left">
               <p><span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5" />Active 61%</p>
