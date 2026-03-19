@@ -41,7 +41,7 @@ const SAMPLE_CAMPAIGNS = [
 const COST_COMPARISON = [
   { feature: "Monthly cost", mailchimp: "$450/mo", platform: "$500/mo" },
   { feature: "Automation flows", mailchimp: "Not included", platform: "Included" },
-  { feature: "Exigo integration", mailchimp: "66 hours quoted", platform: "Included" },
+  { feature: "Exigo integration", mailchimp: "54 hours quoted", platform: "Included" },
   { feature: "Purchase segments", mailchimp: "Manual CSV exports", platform: "Automatic" },
   { feature: "Dead email charges", mailchimp: "You pay for all", platform: "Auto-cleaned" },
   { feature: "List cleaning", mailchimp: "Manual", platform: "Automatic" },
@@ -140,7 +140,7 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
         {/* 66 Hours Saved */}
         <div className="text-center">
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center h-44">
-            <p className="text-7xl font-bold text-green-400">66<span className="text-lg font-medium text-green-400/70">hrs</span></p>
+            <p className="text-7xl font-bold text-green-400">54<span className="text-lg font-medium text-green-400/70">hrs</span></p>
           </div>
           <p className="text-sm font-semibold text-stewart-text mt-3">Saved</p>
           <p className="text-xs text-stewart-muted mt-0.5">Exigo integration already built</p>
@@ -165,7 +165,7 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
           {[
             "$450/mo — no automation, no Exigo sync",
             "Manual CSV exports for every segment",
-            "66 hours quoted just for integration",
+            "54 hours quoted just for integration",
             "Paying to email bounced & dead contacts",
           ].map((item) => (
             <p key={item} className="flex items-start gap-2 text-sm text-stewart-muted">
@@ -325,7 +325,7 @@ function DashboardTab() {
 
       {/* Exigo Sync */}
       <PitchCallout show={true}>
-        Syncs automatically. No 66-hour integration project — it{"'"}s already built.
+        Syncs automatically. No 54-hour integration project — it{"'"}s already built.
       </PitchCallout>
       <div>
         <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Exigo Sync</h2>
@@ -640,11 +640,11 @@ function GetStartedTab() {
       {/* CTA */}
       <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-between">
         <div>
-          <p className="text-stewart-text font-semibold">Ready to see it live?</p>
-          <p className="text-sm text-stewart-muted">Spencer Colby &middot; stewart@poweredbystewart.com</p>
+          <p className="text-stewart-text font-semibold">Ready to level up your email automation?</p>
+          <p className="text-sm text-stewart-muted">Spencer Colby &middot; (435) 749-9230 &middot; stewart@poweredbystewart.com</p>
         </div>
-        <a href="mailto:stewart@poweredbystewart.com" className="px-6 py-3 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors">
-          Let{"'"}s go
+        <a href="tel:4357499230" className="px-6 py-3 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors">
+          Contact me
         </a>
       </div>
     </div>
