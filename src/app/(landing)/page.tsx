@@ -7,17 +7,26 @@ const clients = [
     description: "Email Marketing & Automation",
     color: "text-green-400",
     logo: (
-      <svg viewBox="0 0 100 50" className="h-12 w-auto">
-        <circle cx="40" cy="6" r="3.5" fill="#6ab04c" />
-        <circle cx="48" cy="6" r="2.8" fill="#6ab04c" />
-        <circle cx="37" cy="13" r="2.8" fill="#6ab04c" />
-        <circle cx="51" cy="13" r="3.5" fill="#6ab04c" />
-        <circle cx="40" cy="20" r="3.5" fill="#6ab04c" />
-        <circle cx="48" cy="20" r="2.8" fill="#6ab04c" />
-        <circle cx="44" cy="27" r="2.2" fill="#6ab04c" />
-        <text x="20" y="46" fontFamily="Arial, sans-serif" fontSize="16" fontWeight="700" fill="#6ab04c" letterSpacing="2">
+      <svg viewBox="0 0 120 58" className="h-14 w-auto">
+        {/* Berry cluster — double helix pattern */}
+        <circle cx="52" cy="3" r="2.8" fill="#6ab04c" />
+        <circle cx="60" cy="3" r="2.2" fill="#6ab04c" />
+        <circle cx="67" cy="3" r="1.8" fill="#6ab04c" />
+        <circle cx="48" cy="9" r="2.2" fill="#6ab04c" />
+        <circle cx="56" cy="9" r="3" fill="#6ab04c" />
+        <circle cx="64" cy="9" r="2.5" fill="#6ab04c" />
+        <circle cx="71" cy="9" r="2" fill="#6ab04c" />
+        <circle cx="52" cy="15" r="2.8" fill="#6ab04c" />
+        <circle cx="60" cy="15" r="3" fill="#6ab04c" />
+        <circle cx="68" cy="15" r="2.2" fill="#6ab04c" />
+        <circle cx="56" cy="21" r="2.5" fill="#6ab04c" />
+        <circle cx="64" cy="21" r="2.8" fill="#6ab04c" />
+        <circle cx="60" cy="27" r="2" fill="#6ab04c" />
+        {/* Text — white for dark bg */}
+        <text x="10" y="52" fontFamily="'Helvetica Neue', Arial, sans-serif" fontSize="22" fontWeight="700" fill="white" letterSpacing="5">
           sisel
         </text>
+        <text x="108" y="42" fontFamily="Arial, sans-serif" fontSize="6" fill="#94a3b8">®</text>
       </svg>
     ),
   },
