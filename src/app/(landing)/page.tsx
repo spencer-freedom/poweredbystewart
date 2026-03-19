@@ -5,31 +5,20 @@ const clients = [
     name: "Sisel International",
     slug: "sisel",
     description: "Email Marketing & Automation",
-    color: "text-green-400",
-    logo: (
-      <div className="bg-white rounded-lg px-4 py-2">
-        <img src="/sisel-logo.png" alt="Sisel" className="h-10 w-auto" />
-      </div>
-    ),
+    logo: <img src="/sisel-logo.png" alt="Sisel" className="h-10 w-auto" />,
   },
   {
     name: "Santa Fe Kia",
     slug: "santa_fe_kia",
     description: "Sales & Marketing Intelligence",
-    color: "text-stewart-text",
-    logo: (
-      <div className="bg-white rounded-lg px-4 py-2">
-        <img src="/santafekia-logo.png" alt="Santa Fe Kia" className="h-12 w-auto" />
-      </div>
-    ),
+    logo: <img src="/santafekia-logo.png" alt="Santa Fe Kia" className="h-10 w-auto" />,
   },
   {
     name: "UsefulWax",
     slug: "usefulwax",
     description: "Record Store Operations",
-    color: "text-stewart-text",
     logo: (
-      <div className="bg-white rounded-lg px-4 py-2 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <svg viewBox="0 0 24 24" className="h-8 w-8">
           <circle cx="12" cy="12" r="11" fill="none" stroke="#1a1a2e" strokeWidth="1.5" />
           <circle cx="12" cy="12" r="7" fill="none" stroke="#1a1a2e" strokeWidth="1" />
@@ -72,23 +61,21 @@ export default function LandingPage() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl">
             {clients.map((client) => (
-              <div
+              <Link
                 key={client.slug}
-                className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex flex-col items-center text-center hover:border-stewart-accent/40 transition-colors"
+                href={client.slug === "sisel" ? "/sisel" : "/sign-in?redirect_url=/dashboard"}
+                className="bg-white rounded-xl p-6 flex flex-col items-center text-center hover:shadow-lg hover:scale-[1.02] transition-all"
               >
-                <div className="h-14 flex items-center justify-center mb-2">
+                <div className="h-12 flex items-center justify-center mb-3">
                   {client.logo}
                 </div>
-                <p className="text-xs text-stewart-muted">
+                <p className="text-xs text-gray-500">
                   {client.description}
                 </p>
-                <Link
-                  href={client.slug === "sisel" ? "/sisel" : "/sign-in?redirect_url=/dashboard"}
-                  className="mt-4 px-5 py-2 bg-stewart-accent text-white text-sm font-medium rounded-md hover:bg-stewart-accent/90 transition-colors"
-                >
+                <span className="mt-4 px-5 py-2 bg-stewart-accent text-white text-sm font-medium rounded-md hover:bg-stewart-accent/90 transition-colors">
                   Log in
-                </Link>
-              </div>
+                </span>
+              </Link>
             ))}
           </div>
         </div>
