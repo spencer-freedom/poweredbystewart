@@ -32,9 +32,9 @@ const SAMPLE_FLOWS = [
 ];
 
 const SAMPLE_CAMPAIGNS = [
-  { name: "March Newsletter", status: "sent", sent: 18240, opened: "34%", clicked: "12%", date: "2026-03-10" },
-  { name: "Spring Catalog Launch", status: "scheduled", sent: 0, opened: "--", clicked: "--", date: "2026-03-24" },
-  { name: "New Product: Revive Serum", status: "draft", sent: 0, opened: "--", clicked: "--", date: "--" },
+  { name: "Spring Catalog Launch", status: "sent", sent: 18240, opened: "34%", clicked: "12%", date: "2026-03-01" },
+  { name: "VIP Early Access - New Skincare", status: "sent", sent: 680, opened: "52%", clicked: "18%", date: "2026-02-25" },
+  { name: "Reorder Reminder - Supplements", status: "sent", sent: 3190, opened: "41%", clicked: "14%", date: "2026-02-20" },
   { name: "February Newsletter", status: "sent", sent: 17890, opened: "31%", clicked: "9%", date: "2026-02-14" },
 ];
 
@@ -42,58 +42,52 @@ const COST_COMPARISON = [
   { feature: "Monthly cost", mailchimp: "$450/mo", platform: "$500/mo" },
   { feature: "Automation flows", mailchimp: "Not included", platform: "Included" },
   { feature: "Exigo integration", mailchimp: "66 hours quoted", platform: "Included" },
-  { feature: "Purchase segments", mailchimp: "Manual CSV exports", platform: "Automatic from Exigo" },
-  { feature: "Dead email charges", mailchimp: "You pay for all", platform: "Sorted + cleaned" },
+  { feature: "Purchase segments", mailchimp: "Manual CSV exports", platform: "Automatic" },
+  { feature: "Dead email charges", mailchimp: "You pay for all", platform: "Auto-cleaned" },
   { feature: "List cleaning", mailchimp: "Manual", platform: "Automatic" },
-  { feature: "Unsubscribe handling", mailchimp: "Manual sync needed", platform: "Auto + synced to Exigo" },
-  { feature: "Email limit", mailchimp: "Tiered / capped", platform: "Unlimited" },
-];
-
-const TEMPLATES = [
-  { id: 1, name: "Welcome Series - Email 1", type: "automation", subject: "Welcome to Sisel, {name}!", status: "active", variables: ["name", "products"] },
-  { id: 2, name: "Monthly Newsletter", type: "campaign", subject: "Sisel Monthly: What's New", status: "active", variables: ["name"] },
-  { id: 3, name: "Reorder Reminder", type: "automation", subject: "{name}, it's been 30 days", status: "active", variables: ["name", "products"] },
-  { id: 4, name: "Win-Back Campaign", type: "automation", subject: "We miss you, {name}", status: "active", variables: ["name", "products"] },
-  { id: 5, name: "Spring Catalog 2026", type: "campaign", subject: "Spring Collection is Here", status: "draft", variables: ["name", "products"] },
-  { id: 6, name: "Rank Advancement", type: "automation", subject: "Congratulations on your new rank!", status: "active", variables: ["name"] },
+  { feature: "Unsubscribe handling", mailchimp: "Manual sync", platform: "Auto-synced to Exigo" },
 ];
 
 const SAMPLE_PRODUCTS = [
-  { id: 1, name: "SupraMax", price: "$54.95", image: "supplement", tag: "Best Seller" },
-  { id: 2, name: "Revive Serum", price: "$89.00", image: "skincare", tag: "New" },
-  { id: 3, name: "Triangle of Life", price: "$129.95", image: "supplement", tag: "Popular" },
-  { id: 4, name: "SiselSafe Toothpaste", price: "$12.95", image: "personal", tag: "" },
-  { id: 5, name: "Eternity Water Pitcher", price: "$349.00", image: "water", tag: "Premium" },
-  { id: 6, name: "SiselRich Shampoo", price: "$24.95", image: "personal", tag: "" },
+  { id: 1, name: "SupraDetox", price: "$54.95", image: "supplement", tag: "Best Seller" },
+  { id: 2, name: "Fucoydon", price: "$89.95", image: "supplement", tag: null },
+  { id: 3, name: "Eternity", price: "$69.95", image: "skincare", tag: "New" },
+  { id: 4, name: "SiseLean", price: "$74.95", image: "supplement", tag: null },
+  { id: 5, name: "Body Wash", price: "$24.95", image: "personal", tag: null },
+  { id: 6, name: "H2 Stix", price: "$39.95", image: "water", tag: null },
+];
+
+const TEMPLATES = [
+  { id: 1, name: "Product Launch", subject: "Just dropped: {product_name}", type: "promotional", status: "active", variables: ["name", "products"] },
+  { id: 2, name: "Monthly Newsletter", subject: "{name}, here's what's new at Sisel", type: "newsletter", status: "active", variables: ["name", "products"] },
+  { id: 3, name: "Seasonal Catalog", subject: "Spring Collection is here, {name}", type: "catalog", status: "active", variables: ["name", "products"] },
+  { id: 4, name: "Win-Back", subject: "We miss you, {name}", type: "automation", status: "active", variables: ["name", "products", "last_order"] },
+  { id: 5, name: "Rank Achievement", subject: "Congratulations on your new rank!", type: "automation", status: "active", variables: ["name", "rank"] },
+  { id: 6, name: "Reorder Reminder", subject: "Time to restock, {name}?", type: "automation", status: "draft", variables: ["name", "products", "last_order"] },
 ];
 
 // ─── Shared Components ──────────────────────────────────────────
 
-function statusBadge(s: string) {
-  const colors: Record<string, string> = {
-    active: "bg-green-500/20 text-green-400",
-    draft: "bg-blue-500/20 text-blue-400",
-    scheduled: "bg-purple-500/20 text-purple-400",
-    sent: "bg-green-500/20 text-green-400",
-  };
-  return <span className={`px-2 py-0.5 rounded text-xs font-medium ${colors[s] || "bg-stewart-border text-stewart-muted"}`}>{s}</span>;
-}
-
-function StatCard({ label, value, sub, variant }: { label: string; value: string | number; sub?: string; variant?: string }) {
-  const valueColor = variant === "success" ? "text-green-400" : variant === "danger" ? "text-red-400" : variant === "warning" ? "text-yellow-400" : "text-stewart-text";
+function StatCard({ label, value, sub, variant }: { label: string; value: string | number; sub?: string; variant?: "success" | "warning" | "danger" }) {
+  const accent = variant === "success" ? "text-green-400" : variant === "warning" ? "text-yellow-400" : variant === "danger" ? "text-red-400" : "text-stewart-accent";
   return (
     <div className="bg-stewart-card border border-stewart-border rounded-lg p-4">
-      <p className="text-xs text-stewart-muted">{label}</p>
-      <p className={`text-2xl font-bold mt-1 ${valueColor}`}>{typeof value === "number" ? value.toLocaleString() : value}</p>
-      {sub && <p className="text-xs text-stewart-muted mt-1">{sub}</p>}
+      <p className="text-xs text-stewart-muted mb-1">{label}</p>
+      <p className={`text-xl font-bold ${accent}`}>{typeof value === "number" ? value.toLocaleString() : value}</p>
+      {sub && <p className="text-[11px] text-stewart-muted mt-0.5">{sub}</p>}
     </div>
   );
+}
+
+function statusBadge(status: string) {
+  const map: Record<string, string> = { active: "bg-green-500/20 text-green-400", draft: "bg-yellow-500/20 text-yellow-400", sent: "bg-stewart-accent/20 text-stewart-accent" };
+  return <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${map[status] || "bg-stewart-border text-stewart-muted"}`}>{status}</span>;
 }
 
 function PitchCallout({ children, show }: { children: React.ReactNode; show: boolean }) {
   if (!show) return null;
   return (
-    <div className="bg-stewart-accent/5 border border-stewart-accent/20 rounded-lg p-4 text-sm text-stewart-muted leading-relaxed">
+    <div className="bg-stewart-accent/5 border-l-2 border-stewart-accent rounded-r-lg px-4 py-2.5 text-sm text-stewart-muted">
       {children}
     </div>
   );
@@ -110,17 +104,9 @@ function ProductIcon({ type }: { type: string }) {
 function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
   return (
     <div className="space-y-8 max-w-3xl">
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-stewart-text">A smarter email layer for Sisel</h2>
-        <p className="text-stewart-muted leading-relaxed">
-          Your customer data lives inside Exigo, but it{"'"}s not being used to drive follow-up,
-          retention, or repeat purchases. You{"'"}re paying $450/month for Mailchimp with limited
-          automation, and Exigo quoted 66 hours just to connect the two.
-        </p>
-        <p className="text-stewart-muted leading-relaxed">
-          This system replaces Mailchimp and connects directly to Exigo. It{"'"}s already built
-          and running -- not a proposal or a development project. It{"'"}s a deployment.
-        </p>
+      <div>
+        <h2 className="text-3xl font-bold text-stewart-text">Replace Mailchimp. Connect Exigo. Automate everything.</h2>
+        <p className="mt-3 text-stewart-muted">Already built. Already running. Ready to deploy.</p>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
@@ -138,44 +124,39 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
         </div>
       </div>
 
-      <div className="bg-stewart-accent/10 border border-stewart-accent/30 rounded-lg p-5">
-        <p className="text-stewart-accent text-sm font-medium leading-relaxed">
-          Built on Amazon Web Services -- the same email infrastructure behind companies sending
-          billions of emails per month. Full CAN-SPAM compliance, automated list hygiene,
-          and a dashboard for campaign management.
-        </p>
+      <div className="space-y-2">
+        <h3 className="text-sm font-semibold text-stewart-text uppercase tracking-wide">The problem</h3>
+        <div className="space-y-1.5 text-sm text-stewart-muted">
+          <p>&#x2022; Mailchimp costs $450/mo with no automation and no Exigo connection</p>
+          <p>&#x2022; Exigo quoted 66 hours just to build the integration</p>
+          <p>&#x2022; You{"'"}re emailing bounced and inactive contacts you{"'"}re paying for</p>
+          <p>&#x2022; Every audience segment requires a manual CSV export</p>
+        </div>
       </div>
 
-      <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-stewart-text">What{"'"}s included</h3>
-        <div className="grid grid-cols-2 gap-3">
+      <div className="space-y-2">
+        <h3 className="text-sm font-semibold text-stewart-text uppercase tracking-wide">What you get</h3>
+        <div className="grid grid-cols-2 gap-2">
           {[
-            "Direct Exigo sync -- no CSV exports",
-            "Smart contact buckets (active, bounced, inactive)",
+            "Direct Exigo sync — no CSV exports",
+            "Auto-sorted contacts (active, bounced, inactive)",
             "Purchase-based audience segments",
-            "Automated email flows (welcome, win-back, reorder)",
+            "Automated flows (welcome, win-back, reorder)",
             "Newsletters & seasonal catalogs",
-            "Unlimited sending included",
+            "Unlimited sending",
           ].map((item) => (
-            <div key={item} className="flex items-start gap-2 text-sm text-stewart-muted">
-              <span className="text-stewart-accent mt-0.5 flex-shrink-0">&#10003;</span>
-              {item}
+            <div key={item} className="flex items-center gap-2 text-sm text-stewart-muted">
+              <span className="text-green-400">&#10003;</span> {item}
             </div>
           ))}
         </div>
       </div>
 
-      <div className="flex gap-4">
-        <button
-          onClick={() => onNavigate("dashboard")}
-          className="px-6 py-3 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors"
-        >
+      <div className="flex gap-3">
+        <button onClick={() => onNavigate("dashboard")} className="px-6 py-3 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors">
           See the platform &rarr;
         </button>
-        <button
-          onClick={() => onNavigate("get-started")}
-          className="px-6 py-3 bg-stewart-card border border-stewart-border text-stewart-text text-sm font-medium rounded-lg hover:bg-stewart-border/50 transition-colors"
-        >
+        <button onClick={() => onNavigate("get-started")} className="px-6 py-3 bg-stewart-card border border-stewart-border text-stewart-text text-sm font-medium rounded-lg hover:bg-stewart-border/50 transition-colors">
           View pricing
         </button>
       </div>
@@ -192,9 +173,7 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
     <div className="space-y-6">
       {/* Contact Health */}
       <PitchCallout show={showPitch}>
-        <strong className="text-stewart-accent">Contact Health:</strong> Every contact synced from Exigo is
-        automatically sorted into buckets. You see exactly who{"'"}s active, who{"'"}s bounced, who{"'"}s unsubscribed.
-        No more paying to email dead addresses.
+        Every contact auto-sorted from Exigo. No more paying to email dead addresses.
       </PitchCallout>
       <div>
         <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Contact Health</h2>
@@ -233,8 +212,7 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
 
       {/* Performance */}
       <PitchCallout show={showPitch}>
-        <strong className="text-stewart-accent">Performance:</strong> Real-time metrics across all campaigns.
-        Real-time metrics across all campaigns so you always know what&apos;s working.
+        Real-time campaign metrics. 34% open rate vs 21% industry average.
       </PitchCallout>
       <div>
         <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Performance</h2>
@@ -248,9 +226,7 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
 
       {/* Automation Flows */}
       <PitchCallout show={showPitch}>
-        <strong className="text-stewart-accent">Automation Flows:</strong> Set up once, run automatically.
-        Welcome series for new customers, win-back emails for lapsed buyers, reorder reminders,
-        rank advancement congratulations -- all triggered by real Exigo data.
+        Set up once, runs forever. Triggered by real Exigo data.
       </PitchCallout>
       <div>
         <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Automation Flows</h2>
@@ -284,9 +260,7 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
 
       {/* Audience Segments */}
       <PitchCallout show={showPitch}>
-        <strong className="text-stewart-accent">Audience Segments:</strong> Create segments based on real
-        purchase behavior from Exigo. No more manual CSV exports. Segments update automatically
-        as new orders come in.
+        Segments built from Exigo purchase data. Update automatically as orders come in.
       </PitchCallout>
       <div>
         <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Audience Segments</h2>
@@ -298,7 +272,7 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
                 {statusBadge(seg.status)}
               </div>
               <p className="text-2xl font-bold text-stewart-accent">{seg.count.toLocaleString()}</p>
-              <p className="text-xs text-stewart-muted">contacts match</p>
+              <p className="text-xs text-stewart-muted">contacts</p>
             </div>
           ))}
         </div>
@@ -306,9 +280,7 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
 
       {/* Recent Campaigns */}
       <PitchCallout show={showPitch}>
-        <strong className="text-stewart-accent">Campaigns:</strong> Send newsletters, product launches,
-        seasonal catalogs. Pick your audience, preview the email, schedule or send immediately.
-        Everything you{"'"}re doing in Mailchimp today, plus automation.
+        Newsletters, product launches, seasonal catalogs — pick audience, preview, send.
       </PitchCallout>
       <div>
         <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Recent Campaigns</h2>
@@ -342,9 +314,7 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
 
       {/* Exigo Sync */}
       <PitchCallout show={showPitch}>
-        <strong className="text-stewart-accent">Exigo Sync:</strong> Your customer database syncs
-        automatically. New contacts, orders, rank changes -- all pulled via Exigo{"'"}s API.
-        No 66-hour integration project. It{"'"}s already built.
+        Syncs automatically. No 66-hour integration project — it{"'"}s already built.
       </PitchCallout>
       <div>
         <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Exigo Sync</h2>
@@ -384,10 +354,7 @@ function EmailStudioTab({ showPitch }: { showPitch: boolean }) {
     return (
       <div className="space-y-6">
         <PitchCallout show={showPitch}>
-          <strong className="text-stewart-accent">Email Studio:</strong> This is where campaigns
-          are created. Pick a template (or start from scratch), select products from your catalog,
-          choose your audience segment, preview, and send. Everything Mailchimp does, plus
-          automatic product injection from your catalog and Exigo-powered audience targeting.
+          Pick a template, select products, choose your audience, send. Everything Mailchimp does plus Exigo-powered targeting.
         </PitchCallout>
 
         <div className="grid grid-cols-4 gap-3">
@@ -439,10 +406,7 @@ function EmailStudioTab({ showPitch }: { showPitch: boolean }) {
         </div>
 
         <PitchCallout show={showPitch}>
-          <strong className="text-stewart-accent">Campaign Builder:</strong> Select products from
-          your catalog and they automatically render as email-safe HTML cards. Choose an audience
-          segment powered by Exigo purchase data. Schedule or send immediately. The preview shows
-          exactly what the recipient will see.
+          Products auto-render as email-safe HTML. Audience segments powered by Exigo purchase data.
         </PitchCallout>
 
         <div className="grid grid-cols-3 gap-6">
@@ -456,7 +420,6 @@ function EmailStudioTab({ showPitch }: { showPitch: boolean }) {
               <div>
                 <label className="text-xs text-stewart-muted block mb-1">Subject Line</label>
                 <div className="bg-stewart-bg border border-stewart-border rounded-lg px-4 py-2.5 text-sm text-stewart-text">{template ? template.subject : "Enter subject line..."}</div>
-                <p className="text-[10px] text-stewart-muted mt-1">Variables auto-populate per recipient</p>
               </div>
             </div>
 
@@ -569,7 +532,7 @@ function EmailStudioTab({ showPitch }: { showPitch: boolean }) {
           <button onClick={() => setStep("compose")} className="w-full px-4 py-2.5 bg-stewart-card border border-stewart-border text-stewart-text text-sm font-medium rounded-lg hover:bg-stewart-border/50 transition-colors">Back to Editor</button>
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-4 mt-4">
             <p className="text-xs font-semibold text-stewart-text mb-2">Dry Run</p>
-            <p className="text-[11px] text-stewart-muted mb-3">Send a test to yourself. Renders with real data from the first contact in your segment.</p>
+            <p className="text-[11px] text-stewart-muted mb-3">Send a test to yourself first.</p>
             <div className="flex gap-2">
               <div className="flex-1 bg-stewart-bg border border-stewart-border rounded px-3 py-2 text-xs text-stewart-muted">karen@sisel.com</div>
               <button className="px-3 py-2 bg-stewart-border text-stewart-text text-xs font-medium rounded hover:bg-stewart-accent/20 transition-colors">Send Test</button>
@@ -586,71 +549,57 @@ function EmailStudioTab({ showPitch }: { showPitch: boolean }) {
 function GetStartedTab() {
   return (
     <div className="space-y-8 max-w-3xl">
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-stewart-text">Ready to get started?</h2>
-        <p className="text-stewart-muted leading-relaxed">
-          You{"'"}re paying $450/month for Mailchimp with limited automation and no Exigo connection.
-          You were quoted 66 hours just for the integration. This system gives you everything --
-          email, automation, purchase targeting, list cleanup, and the Exigo integration --
-          and it{"'"}s already built.
-        </p>
-      </div>
+      <h2 className="text-3xl font-bold text-stewart-text">$500/mo. Everything included.</h2>
 
       {/* Cost Comparison */}
-      <div>
-        <h3 className="text-lg font-semibold text-stewart-text mb-3">Cost Comparison</h3>
-        <div className="overflow-hidden rounded-lg border border-stewart-border">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-stewart-border/50">
-                <th className="text-left px-4 py-2.5 text-stewart-muted font-medium"></th>
-                <th className="text-center px-4 py-2.5 text-stewart-muted font-medium">Mailchimp (Current)</th>
-                <th className="text-center px-4 py-2.5 text-stewart-accent font-semibold">This System</th>
+      <div className="overflow-hidden rounded-lg border border-stewart-border">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="bg-stewart-border/50">
+              <th className="text-left px-4 py-2.5 text-stewart-muted font-medium"></th>
+              <th className="text-center px-4 py-2.5 text-stewart-muted font-medium">Mailchimp (Current)</th>
+              <th className="text-center px-4 py-2.5 text-stewart-accent font-semibold">This System</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-stewart-border/30">
+            {COST_COMPARISON.map((row, i) => (
+              <tr key={row.feature} className={i % 2 === 0 ? "bg-stewart-card" : "bg-stewart-bg"}>
+                <td className="px-4 py-2.5 font-medium text-stewart-text">{row.feature}</td>
+                <td className="px-4 py-2.5 text-center text-stewart-muted">{row.mailchimp}</td>
+                <td className="px-4 py-2.5 text-center font-semibold text-stewart-accent">{row.platform}</td>
               </tr>
-            </thead>
-            <tbody className="divide-y divide-stewart-border/30">
-              {COST_COMPARISON.map((row, i) => (
-                <tr key={row.feature} className={i % 2 === 0 ? "bg-stewart-card" : "bg-stewart-bg"}>
-                  <td className="px-4 py-2.5 font-medium text-stewart-text">{row.feature}</td>
-                  <td className="px-4 py-2.5 text-center text-stewart-muted">{row.mailchimp}</td>
-                  <td className="px-4 py-2.5 text-center font-semibold text-stewart-accent">{row.platform}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* Investment */}
-      <div>
-        <h3 className="text-lg font-semibold text-stewart-text mb-3">Investment</h3>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-stewart-accent/10 border border-stewart-accent/30 rounded-lg p-5 text-center">
-            <p className="text-stewart-accent text-2xl font-bold">$1,000</p>
-            <p className="text-stewart-accent text-sm font-medium mt-1">One-time setup</p>
-            <p className="text-stewart-muted text-xs mt-2 leading-relaxed">Exigo integration, list cleanup, template migration, domain setup, first automation flows</p>
-          </div>
-          <div className="bg-stewart-accent/10 border border-stewart-accent/30 rounded-lg p-5 text-center">
-            <p className="text-stewart-accent text-2xl font-bold">$500/mo</p>
-            <p className="text-stewart-accent text-sm font-medium mt-1">Monthly</p>
-            <p className="text-stewart-muted text-xs mt-2 leading-relaxed">Unlimited sending, ongoing sync, automation, list hygiene, campaign management, direct support</p>
-          </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-stewart-accent/10 border border-stewart-accent/30 rounded-lg p-5 text-center">
+          <p className="text-stewart-accent text-3xl font-bold">$1,000</p>
+          <p className="text-stewart-accent text-sm font-medium mt-1">One-time setup</p>
+          <p className="text-stewart-muted text-xs mt-2">Exigo integration, list cleanup, templates, domain, first automation flows</p>
+        </div>
+        <div className="bg-stewart-accent/10 border border-stewart-accent/30 rounded-lg p-5 text-center">
+          <p className="text-stewart-accent text-3xl font-bold">$500/mo</p>
+          <p className="text-stewart-accent text-sm font-medium mt-1">Monthly</p>
+          <p className="text-stewart-muted text-xs mt-2">Unlimited sending, sync, automation, list hygiene, campaign management, support</p>
         </div>
       </div>
 
       {/* What I Need */}
       <div>
-        <h3 className="text-lg font-semibold text-stewart-text mb-3">What I need to get started</h3>
-        <div className="space-y-3">
+        <h3 className="text-lg font-semibold text-stewart-text mb-3">To get started I need</h3>
+        <div className="grid grid-cols-2 gap-3">
           {[
-            { n: 1, title: "Exigo API access", desc: "Your IT team or Exigo account manager provides API credentials." },
-            { n: 2, title: "Existing Mailchimp templates", desc: "So I can migrate your current email designs." },
-            { n: 3, title: "Sending domain", desc: "A subdomain for emails (e.g., mail.sisel.com). I handle DNS setup." },
-            { n: 4, title: "Your top automation priorities", desc: "Which auto-triggered flows matter most? I'll set up your top 2-3." },
-          ].map((item) => (
-            <div key={item.n} className="flex gap-3">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-stewart-accent/20 text-stewart-accent text-xs font-bold flex items-center justify-center">{item.n}</span>
-              <div><p className="text-sm font-medium text-stewart-text">{item.title}</p><p className="text-xs text-stewart-muted">{item.desc}</p></div>
+            "Exigo API credentials",
+            "Your current Mailchimp templates",
+            "A sending subdomain (e.g. mail.sisel.com)",
+            "Your top 2-3 automation priorities",
+          ].map((item, i) => (
+            <div key={item} className="flex items-center gap-3 text-sm text-stewart-muted">
+              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-stewart-accent/20 text-stewart-accent text-xs font-bold flex items-center justify-center">{i + 1}</span>
+              {item}
             </div>
           ))}
         </div>
@@ -659,32 +608,33 @@ function GetStartedTab() {
       {/* Timeline */}
       <div>
         <h3 className="text-lg font-semibold text-stewart-text mb-3">Timeline</h3>
-        <div className="space-y-2">
+        <div className="flex gap-3">
           {[
-            { week: "Week 1", desc: "Setup -- Exigo integration, list import, verification, template migration" },
-            { week: "Weeks 2-3", desc: "Warmup -- send to most engaged contacts first, gradually increase" },
-            { week: "Weeks 3-4", desc: "Automation -- build and activate your first auto-triggered flows" },
-            { week: "Week 4", desc: "Full launch -- campaigns and automations running" },
-            { week: "Ongoing", desc: "Automatic sync, list hygiene, automation monitoring, support" },
-          ].map((item) => (
-            <div key={item.week} className="flex gap-4 text-sm">
-              <span className="flex-shrink-0 w-20 font-semibold text-stewart-text">{item.week}</span>
-              <span className="text-stewart-muted">{item.desc}</span>
+            { week: "Week 1", label: "Setup & import" },
+            { week: "Week 2-3", label: "Warmup & test" },
+            { week: "Week 3-4", label: "Automation live" },
+            { week: "Week 4", label: "Full launch" },
+          ].map((item, i) => (
+            <div key={item.week} className="flex-1 relative">
+              <div className="bg-stewart-card border border-stewart-border rounded-lg p-4 text-center">
+                <p className="text-xs font-bold text-stewart-accent">{item.week}</p>
+                <p className="text-sm text-stewart-muted mt-1">{item.label}</p>
+              </div>
+              {i < 3 && <div className="absolute top-1/2 -right-2 text-stewart-muted text-xs">&rarr;</div>}
             </div>
           ))}
         </div>
       </div>
 
       {/* CTA */}
-      <div className="bg-stewart-card border border-stewart-border rounded-lg p-6">
-        <p className="text-stewart-text text-sm font-semibold leading-relaxed">
-          I{"'"}m happy to walk through it live and show exactly how it works. The demo you{"'"}ve
-          been looking at is the real system -- not a mockup.
-        </p>
-        <div className="mt-4 pt-4 border-t border-stewart-border">
-          <p className="text-sm font-medium text-stewart-text">Spencer Colby</p>
-          <p className="text-xs text-stewart-muted">stewart@poweredbystewart.com</p>
+      <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-between">
+        <div>
+          <p className="text-stewart-text font-semibold">Ready to see it live?</p>
+          <p className="text-sm text-stewart-muted">Spencer Colby &middot; stewart@poweredbystewart.com</p>
         </div>
+        <a href="mailto:stewart@poweredbystewart.com" className="px-6 py-3 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors">
+          Let{"'"}s go
+        </a>
       </div>
     </div>
   );
