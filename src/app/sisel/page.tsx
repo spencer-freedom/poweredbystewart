@@ -117,7 +117,7 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
         {/* 30K Contacts — pie chart + legend to the right */}
         <div className="text-center">
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center gap-4 h-44">
-            <svg viewBox="0 0 36 36" className="w-20 h-20 flex-shrink-0">
+            <svg viewBox="0 0 36 36" className="w-28 h-28 flex-shrink-0">
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#22c55e" strokeWidth="3.5" strokeDasharray="61 39" strokeDashoffset="25" />
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#eab308" strokeWidth="3.5" strokeDasharray="20 80" strokeDashoffset="64" />
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#ef4444" strokeWidth="3.5" strokeDasharray="14 86" strokeDashoffset="44" />
@@ -138,10 +138,7 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
         {/* 66 Hours Saved */}
         <div className="text-center">
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center h-44">
-            <div>
-              <p className="text-5xl font-bold text-green-400">66</p>
-              <p className="text-lg text-green-400/70 font-medium -mt-1">hrs</p>
-            </div>
+            <p className="text-7xl font-bold text-green-400">66 <span className="text-lg font-medium text-green-400/70">hrs</span></p>
           </div>
           <p className="text-sm font-semibold text-stewart-text mt-3">Saved</p>
           <p className="text-xs text-stewart-muted mt-0.5">Exigo integration already built</p>
@@ -152,7 +149,7 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center h-44">
             <div>
               <p className="text-4xl font-bold text-stewart-accent">Real-time</p>
-              <p className="text-lg text-stewart-accent/70 font-medium -mt-1">data</p>
+              <p className="text-4xl font-bold text-stewart-accent -mt-1">data</p>
             </div>
           </div>
           <p className="text-sm font-semibold text-stewart-text mt-3">Live Exigo sales data</p>
