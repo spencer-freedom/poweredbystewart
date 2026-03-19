@@ -119,10 +119,10 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center gap-4 h-44">
             <div className="relative w-20 h-20 flex-shrink-0">
               <svg viewBox="0 0 42 42" className="w-full h-full" style={{ transform: "rotate(-90deg)" }}>
-                <circle cx="21" cy="21" r="12" fill="none" stroke="#22c55e" strokeWidth="14" strokeDasharray="46.0 75.4" strokeDashoffset="0" />
-                <circle cx="21" cy="21" r="12" fill="none" stroke="#eab308" strokeWidth="14" strokeDasharray="15.1 75.4" strokeDashoffset="-46.0" />
-                <circle cx="21" cy="21" r="12" fill="none" stroke="#ef4444" strokeWidth="14" strokeDasharray="10.6 75.4" strokeDashoffset="-61.1" />
-                <circle cx="21" cy="21" r="12" fill="none" stroke="#f97316" strokeWidth="14" strokeDasharray="3.8 75.4" strokeDashoffset="-71.7" />
+                <circle cx="21" cy="21" r="15" fill="none" stroke="#22c55e" strokeWidth="8" strokeDasharray="57.5 94.2" strokeDashoffset="0" />
+                <circle cx="21" cy="21" r="15" fill="none" stroke="#eab308" strokeWidth="8" strokeDasharray="18.8 94.2" strokeDashoffset="-57.5" />
+                <circle cx="21" cy="21" r="15" fill="none" stroke="#ef4444" strokeWidth="8" strokeDasharray="13.2 94.2" strokeDashoffset="-76.3" />
+                <circle cx="21" cy="21" r="15" fill="none" stroke="#f97316" strokeWidth="8" strokeDasharray="4.7 94.2" strokeDashoffset="-89.5" />
               </svg>
               <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-stewart-text">30K</span>
             </div>
