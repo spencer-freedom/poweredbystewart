@@ -641,7 +641,7 @@ function GetStartedTab() {
       <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-between">
         <div>
           <p className="text-stewart-text font-semibold">Ready to level up your email automation?</p>
-          <p className="text-sm text-stewart-muted">Spencer Colby &middot; (435) 749-9230 &middot; stewart@poweredbystewart.com</p>
+          <p className="text-sm text-stewart-muted">Spencer Colby &middot; (435) 749-9230 &middot; info@poweredbystewart.com</p>
         </div>
       </div>
     </div>
