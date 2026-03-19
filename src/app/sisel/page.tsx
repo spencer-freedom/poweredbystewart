@@ -159,7 +159,7 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
       <div className="space-y-2">
         <h3 className="text-sm font-semibold text-stewart-text uppercase tracking-wide">The problem</h3>
         <div className="space-y-1.5 text-sm text-stewart-muted">
-          <p>&#x2022; Mailchimp costs $450/mo with no automation and no Exigo connection</p>
+          <p>&#x2022; Mailchimp costs $450/mo — manual exports, no two-way Exigo sync, no automated campaigns from live data</p>
           <p>&#x2022; Exigo quoted 66 hours just to build the integration</p>
           <p>&#x2022; You{"'"}re emailing bounced and inactive contacts you{"'"}re paying for</p>
           <p>&#x2022; Every audience segment requires a manual CSV export</p>
