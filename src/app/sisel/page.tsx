@@ -117,14 +117,15 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
         {/* 30K Contacts — pie chart + legend to the right */}
         <div className="text-center">
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center gap-4 h-44">
-            <svg viewBox="0 0 42 42" className="w-20 h-20 flex-shrink-0" style={{ transform: "rotate(-90deg)" }}>
-              {/* r=12, circumference = 2 * π * 12 ≈ 75.4, strokeWidth=14 fits in 42x42 viewBox */}
-              <circle cx="21" cy="21" r="12" fill="none" stroke="#22c55e" strokeWidth="14" strokeDasharray="46.0 75.4" strokeDashoffset="0" />
-              <circle cx="21" cy="21" r="12" fill="none" stroke="#eab308" strokeWidth="14" strokeDasharray="15.1 75.4" strokeDashoffset="-46.0" />
-              <circle cx="21" cy="21" r="12" fill="none" stroke="#ef4444" strokeWidth="14" strokeDasharray="10.6 75.4" strokeDashoffset="-61.1" />
-              <circle cx="21" cy="21" r="12" fill="none" stroke="#f97316" strokeWidth="14" strokeDasharray="3.8 75.4" strokeDashoffset="-71.7" />
-              <text x="21" y="21" textAnchor="middle" dominantBaseline="central" className="fill-stewart-text text-[7px] font-bold" style={{ transform: "rotate(90deg)", transformOrigin: "21px 21px" }}>30K</text>
-            </svg>
+            <div className="relative w-20 h-20 flex-shrink-0">
+              <svg viewBox="0 0 42 42" className="w-full h-full" style={{ transform: "rotate(-90deg)" }}>
+                <circle cx="21" cy="21" r="12" fill="none" stroke="#22c55e" strokeWidth="14" strokeDasharray="46.0 75.4" strokeDashoffset="0" />
+                <circle cx="21" cy="21" r="12" fill="none" stroke="#eab308" strokeWidth="14" strokeDasharray="15.1 75.4" strokeDashoffset="-46.0" />
+                <circle cx="21" cy="21" r="12" fill="none" stroke="#ef4444" strokeWidth="14" strokeDasharray="10.6 75.4" strokeDashoffset="-61.1" />
+                <circle cx="21" cy="21" r="12" fill="none" stroke="#f97316" strokeWidth="14" strokeDasharray="3.8 75.4" strokeDashoffset="-71.7" />
+              </svg>
+              <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-stewart-text">30K</span>
+            </div>
             <div className="space-y-1 text-[11px] text-stewart-muted text-left">
               <p><span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5" />Active 61%</p>
               <p><span className="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1.5" />Inactive 20%</p>
