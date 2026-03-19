@@ -2,37 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useUser, UserButton } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { getNavItems } from "@/lib/roles";
 import type { UserRole } from "@/lib/types";
 
-// Conditionally import Clerk — avoid crash when Clerk isn't configured
-let useUser: (() => { user: { fullName?: string | null; primaryEmailAddress?: { emailAddress: string } | null; publicMetadata?: Record<string, unknown> } | null | undefined }) | null = null;
-let UserButton: React.ComponentType<{ appearance?: Record<string, unknown> }> | null = null;
-
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const clerk = require("@clerk/nextjs");
-  useUser = clerk.useUser;
-  UserButton = clerk.UserButton;
-} catch {
-  // Clerk not available
-}
-
 export function Sidebar() {
   const pathname = usePathname();
-
-  // Safe Clerk access — returns null when Clerk isn't configured
-  let user: { fullName?: string | null; primaryEmailAddress?: { emailAddress: string } | null; publicMetadata?: Record<string, unknown> } | null = null;
-  try {
-    if (useUser) {
-      const result = useUser();
-      user = result.user ?? null;
-    }
-  } catch {
-    // Clerk not in context — use defaults
-  }
-
+  const { user } = useUser();
   const role = (user?.publicMetadata?.role as UserRole) || "admin";
   const navItems = getNavItems(role);
 
@@ -73,12 +50,12 @@ export function Sidebar() {
       {/* User */}
       <div className="p-4 border-t border-stewart-border space-y-2">
         <div className="flex items-center gap-2">
-          {UserButton && user && (
+          {user && (
             <UserButton appearance={{ elements: { avatarBox: "w-7 h-7" } }} />
           )}
           <div className="min-w-0">
             <p className="text-xs text-stewart-text truncate">
-              {user?.fullName || user?.primaryEmailAddress?.emailAddress || "Local Dev"}
+              {user?.fullName || user?.primaryEmailAddress?.emailAddress || "Guest"}
             </p>
             <p className="text-[10px] text-stewart-muted capitalize">{role}</p>
           </div>

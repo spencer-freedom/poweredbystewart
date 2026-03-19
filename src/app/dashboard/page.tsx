@@ -1,14 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-// Safe import — returns null when Clerk isn't active
-let useUser: () => { user: { firstName?: string; publicMetadata?: Record<string, unknown> } | null | undefined };
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  useUser = require("@clerk/nextjs").useUser;
-} catch {
-  useUser = () => ({ user: null });
-}
+import { useUser } from "@clerk/nextjs";
 import { api } from "@/lib/api";
 import { useTenant } from "@/components/tenant-provider";
 import type { KpiMonthly, DealershipContext, UserRole } from "@/lib/types";
