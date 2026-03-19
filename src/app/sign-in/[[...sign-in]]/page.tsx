@@ -6,7 +6,7 @@ export default function SignInPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-stewart-bg">
       <SignIn
-        forceRedirectUrl="/dashboard"
+        fallbackRedirectUrl="/dashboard"
         appearance={{
           elements: {
             rootBox: "mx-auto",

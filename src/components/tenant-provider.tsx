@@ -1,17 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-
-// Conditionally import Clerk — avoid crash when Clerk isn't configured
-let useUser: (() => { user: { publicMetadata?: Record<string, unknown> } | null | undefined }) | null = null;
-
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const clerk = require("@clerk/nextjs");
-  useUser = clerk.useUser;
-} catch {
-  // Clerk not available
-}
+import { useUser } from "@clerk/nextjs";
 
 interface TenantContextValue {
   tenantId: string;
@@ -28,16 +18,7 @@ export function useTenant() {
 }
 
 export function TenantProvider({ children }: { children: ReactNode }) {
-  // Safe Clerk access — returns null when Clerk isn't configured
-  let user: { publicMetadata?: Record<string, unknown> } | null = null;
-  try {
-    if (useUser) {
-      const result = useUser();
-      user = result.user ?? null;
-    }
-  } catch {
-    // Clerk not in context — use defaults
-  }
+  const { user } = useUser();
 
   const defaultTenant =
     (user?.publicMetadata?.tenantId as string) ||
