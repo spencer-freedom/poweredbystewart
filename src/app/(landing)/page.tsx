@@ -62,7 +62,7 @@ export default function LandingPage() {
                   {client.description}
                 </p>
                 <Link
-                  href="/sign-in"
+                  href="/sign-in?redirect_url=/dashboard"
                   className="mt-4 px-5 py-2 bg-stewart-accent text-white text-sm font-medium rounded-md hover:bg-stewart-accent/90 transition-colors"
                 >
                   Log in
