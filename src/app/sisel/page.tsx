@@ -114,16 +114,22 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        {/* 30K Contacts — pie chart only */}
+        {/* 30K Contacts — pie chart + legend */}
         <div className="text-center">
-          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center">
-            <svg viewBox="0 0 36 36" className="w-20 h-20">
+          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex flex-col items-center justify-center h-44">
+            <svg viewBox="0 0 36 36" className="w-16 h-16">
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#22c55e" strokeWidth="3.5" strokeDasharray="61 39" strokeDashoffset="25" />
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#eab308" strokeWidth="3.5" strokeDasharray="20 80" strokeDashoffset="64" />
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#ef4444" strokeWidth="3.5" strokeDasharray="14 86" strokeDashoffset="44" />
               <circle cx="18" cy="18" r="15.9" fill="none" stroke="#f97316" strokeWidth="3.5" strokeDasharray="5 95" strokeDashoffset="30" />
               <text x="18" y="18" textAnchor="middle" dy=".1em" className="fill-stewart-text text-[7px] font-bold">30K</text>
             </svg>
+            <div className="flex gap-3 mt-3 text-[10px] text-stewart-muted">
+              <span><span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1" />Active 61%</span>
+              <span><span className="inline-block w-1.5 h-1.5 rounded-full bg-yellow-500 mr-1" />Inactive 20%</span>
+              <span><span className="inline-block w-1.5 h-1.5 rounded-full bg-red-500 mr-1" />Bounced 14%</span>
+              <span><span className="inline-block w-1.5 h-1.5 rounded-full bg-orange-500 mr-1" />Unsub 5%</span>
+            </div>
           </div>
           <p className="text-sm font-semibold text-stewart-text mt-3">Contacts synced & sorted</p>
           <p className="text-xs text-stewart-muted mt-0.5">Auto-categorized from Exigo</p>
@@ -131,7 +137,7 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
 
         {/* 66 Hours Saved */}
         <div className="text-center">
-          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center">
+          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center h-44">
             <p className="text-4xl font-bold text-green-400">66 hrs</p>
           </div>
           <p className="text-sm font-semibold text-stewart-text mt-3">Saved</p>
@@ -140,7 +146,7 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
 
         {/* Real-time Exigo Data */}
         <div className="text-center">
-          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center">
+          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center h-44">
             <p className="text-3xl font-bold text-stewart-accent">Real-time</p>
           </div>
           <p className="text-sm font-semibold text-stewart-text mt-3">Live Exigo sales data</p>
