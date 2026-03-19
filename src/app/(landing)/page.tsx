@@ -6,18 +6,53 @@ const clients = [
     slug: "sisel",
     description: "Email Marketing & Automation",
     color: "text-green-400",
+    logo: (
+      <svg viewBox="0 0 100 50" className="h-12 w-auto">
+        <circle cx="40" cy="6" r="3.5" fill="#6ab04c" />
+        <circle cx="48" cy="6" r="2.8" fill="#6ab04c" />
+        <circle cx="37" cy="13" r="2.8" fill="#6ab04c" />
+        <circle cx="51" cy="13" r="3.5" fill="#6ab04c" />
+        <circle cx="40" cy="20" r="3.5" fill="#6ab04c" />
+        <circle cx="48" cy="20" r="2.8" fill="#6ab04c" />
+        <circle cx="44" cy="27" r="2.2" fill="#6ab04c" />
+        <text x="20" y="46" fontFamily="Arial, sans-serif" fontSize="16" fontWeight="700" fill="#6ab04c" letterSpacing="2">
+          sisel
+        </text>
+      </svg>
+    ),
   },
   {
     name: "Santa Fe Kia",
     slug: "santa_fe_kia",
     description: "Sales & Marketing Intelligence",
     color: "text-stewart-text",
+    logo: (
+      <div className="flex items-center gap-3">
+        <svg viewBox="0 0 50 22" className="h-8 w-auto">
+          <text x="0" y="19" fontFamily="Arial, sans-serif" fontSize="22" fontWeight="900" fill="white" letterSpacing="-1">
+            KIA
+          </text>
+        </svg>
+        <span className="text-base font-semibold text-white">Santa Fe Kia</span>
+      </div>
+    ),
   },
   {
     name: "UsefulWax",
     slug: "usefulwax",
     description: "Record Store Operations",
     color: "text-stewart-text",
+    logo: (
+      <div className="flex items-center gap-2">
+        <svg viewBox="0 0 24 24" className="h-8 w-8">
+          <circle cx="12" cy="12" r="11" fill="none" stroke="#e2e8f0" strokeWidth="1.5" />
+          <circle cx="12" cy="12" r="7" fill="none" stroke="#e2e8f0" strokeWidth="1" />
+          <circle cx="12" cy="12" r="3" fill="none" stroke="#e2e8f0" strokeWidth="0.8" />
+          <circle cx="12" cy="12" r="1.2" fill="#e2e8f0" />
+        </svg>
+        <span className="text-lg font-bold text-white tracking-tight">UsefulWax</span>
+      </div>
+    ),
   },
 ];
 
@@ -55,10 +90,13 @@ export default function LandingPage() {
                 key={client.slug}
                 className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex flex-col items-center text-center hover:border-stewart-accent/40 transition-colors"
               >
-                <h3 className={`text-lg font-semibold ${client.color}`}>
+                <div className="h-14 flex items-center justify-center mb-3">
+                  {client.logo}
+                </div>
+                <h3 className={`text-sm font-medium ${client.color}`}>
                   {client.name}
                 </h3>
-                <p className="text-xs text-stewart-muted mt-1">
+                <p className="text-xs text-stewart-muted mt-0.5">
                   {client.description}
                 </p>
                 <Link
