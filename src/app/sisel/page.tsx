@@ -129,8 +129,8 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
           <p className="text-xs text-stewart-muted mt-1">Contacts synced from Exigo</p>
         </div>
         <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 text-center">
-          <p className="text-3xl font-bold text-green-400">$4.27</p>
-          <p className="text-xs text-stewart-muted mt-1">Actual cost to send 42K emails</p>
+          <p className="text-3xl font-bold text-green-400">42K</p>
+          <p className="text-xs text-stewart-muted mt-1">Emails sent last month</p>
         </div>
         <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 text-center">
           <p className="text-3xl font-bold text-stewart-accent">34%</p>
@@ -155,7 +155,7 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
             "Purchase-based audience segments",
             "Automated email flows (welcome, win-back, reorder)",
             "Newsletters & seasonal catalogs",
-            "Unlimited sending -- no per-email charges",
+            "Unlimited sending included",
           ].map((item) => (
             <div key={item} className="flex items-start gap-2 text-sm text-stewart-muted">
               <span className="text-stewart-accent mt-0.5 flex-shrink-0">&#10003;</span>
@@ -234,12 +234,12 @@ function DashboardTab({ showPitch }: { showPitch: boolean }) {
       {/* Performance */}
       <PitchCallout show={showPitch}>
         <strong className="text-stewart-accent">Performance:</strong> Real-time metrics across all campaigns.
-        AWS SES costs a fraction of Mailchimp -- sending 42K emails costs $4.27, not $450.
+        Real-time metrics across all campaigns so you always know what&apos;s working.
       </PitchCallout>
       <div>
         <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Performance</h2>
         <div className="grid grid-cols-4 gap-3">
-          <StatCard label="Emails Sent (30d)" value="42,680" sub="$4.27 SES cost" variant="success" />
+          <StatCard label="Emails Sent (30d)" value="42,680" sub="All campaigns" variant="success" />
           <StatCard label="Avg Open Rate" value="34%" sub="Industry avg: 21%" variant="success" />
           <StatCard label="Avg Click Rate" value="12%" sub="Industry avg: 3%" variant="success" />
           <StatCard label="Monthly Cost" value="$500" sub="vs $450 Mailchimp" />
@@ -393,8 +393,8 @@ function EmailStudioTab({ showPitch }: { showPitch: boolean }) {
         <div className="grid grid-cols-4 gap-3">
           <StatCard label="Templates" value={TEMPLATES.length} sub={`${TEMPLATES.filter(t => t.status === "active").length} active`} />
           <StatCard label="Drafts" value={2} sub="Ready to finish" variant="warning" />
-          <StatCard label="Sent This Month" value="36,130" sub="$3.61 SES cost" variant="success" />
-          <StatCard label="Send Rate" value="14/sec" sub="AWS SES throughput" />
+          <StatCard label="Sent This Month" value="36,130" sub="All campaigns" variant="success" />
+          <StatCard label="Send Rate" value="14/sec" sub="High-speed delivery" />
         </div>
 
         <div className="flex items-center justify-between">
@@ -522,7 +522,7 @@ function EmailStudioTab({ showPitch }: { showPitch: boolean }) {
               <h3 className="text-sm font-semibold text-stewart-text">Schedule</h3>
               <div className="bg-stewart-bg border border-stewart-border rounded-lg px-3 py-2.5 text-sm text-stewart-text">March 24, 2026 at 9:00 AM MT</div>
               <div className="bg-stewart-bg rounded-lg p-3 text-xs space-y-1">
-                <div className="flex justify-between"><span className="text-stewart-muted">Est. SES cost</span><span className="text-stewart-text font-medium">${((selectedSegment === "all" ? 18116 : (SAMPLE_SEGMENTS.find(s => s.name === selectedSegment)?.count || 0) - 124) * 0.0001).toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-stewart-muted">Est. delivery</span><span className="text-stewart-text font-medium">99.8%</span></div>
                 <div className="flex justify-between"><span className="text-stewart-muted">Est. send time</span><span className="text-stewart-text font-medium">{Math.ceil((selectedSegment === "all" ? 18116 : (SAMPLE_SEGMENTS.find(s => s.name === selectedSegment)?.count || 0) - 124) / 14 / 60)} min</span></div>
               </div>
             </div>
@@ -560,7 +560,7 @@ function EmailStudioTab({ showPitch }: { showPitch: boolean }) {
               ].map(([label, value]) => (
                 <div key={label} className="flex justify-between"><span className="text-stewart-muted">{label}</span><span className="text-stewart-text">{value}</span></div>
               ))}
-              <div className="flex justify-between"><span className="text-stewart-muted">Estimated cost</span><span className="text-green-400 font-medium">${((selectedSegment === "all" ? 18116 : (SAMPLE_SEGMENTS.find(s => s.name === selectedSegment)?.count || 0) - 124) * 0.0001).toFixed(2)}</span></div>
+              <div className="flex justify-between"><span className="text-stewart-muted">Est. delivery</span><span className="text-green-400 font-medium">99.8%</span></div>
             </div>
           </div>
         </div>
