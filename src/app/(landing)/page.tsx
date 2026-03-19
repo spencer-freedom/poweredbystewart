@@ -7,27 +7,9 @@ const clients = [
     description: "Email Marketing & Automation",
     color: "text-green-400",
     logo: (
-      <svg viewBox="0 0 120 58" className="h-14 w-auto">
-        {/* Berry cluster — double helix pattern */}
-        <circle cx="52" cy="3" r="2.8" fill="#6ab04c" />
-        <circle cx="60" cy="3" r="2.2" fill="#6ab04c" />
-        <circle cx="67" cy="3" r="1.8" fill="#6ab04c" />
-        <circle cx="48" cy="9" r="2.2" fill="#6ab04c" />
-        <circle cx="56" cy="9" r="3" fill="#6ab04c" />
-        <circle cx="64" cy="9" r="2.5" fill="#6ab04c" />
-        <circle cx="71" cy="9" r="2" fill="#6ab04c" />
-        <circle cx="52" cy="15" r="2.8" fill="#6ab04c" />
-        <circle cx="60" cy="15" r="3" fill="#6ab04c" />
-        <circle cx="68" cy="15" r="2.2" fill="#6ab04c" />
-        <circle cx="56" cy="21" r="2.5" fill="#6ab04c" />
-        <circle cx="64" cy="21" r="2.8" fill="#6ab04c" />
-        <circle cx="60" cy="27" r="2" fill="#6ab04c" />
-        {/* Text — white for dark bg */}
-        <text x="10" y="52" fontFamily="'Helvetica Neue', Arial, sans-serif" fontSize="22" fontWeight="700" fill="white" letterSpacing="5">
-          sisel
-        </text>
-        <text x="108" y="42" fontFamily="Arial, sans-serif" fontSize="6" fill="#94a3b8">®</text>
-      </svg>
+      <div className="bg-white rounded-lg px-4 py-2">
+        <img src="/sisel-logo.png" alt="Sisel" className="h-10 w-auto" />
+      </div>
     ),
   },
   {
@@ -36,18 +18,8 @@ const clients = [
     description: "Sales & Marketing Intelligence",
     color: "text-stewart-text",
     logo: (
-      <div className="flex items-center gap-4">
-        <svg viewBox="0 0 62 24" className="h-7 w-auto" fill="white">
-          {/* New Kia logo — connected angular letterforms */}
-          {/* K */}
-          <polygon points="0,24 5,24 5,14 13,24 19,24 9,12 18,0 12,0 5,10 5,0 0,0" />
-          {/* I (angled) */}
-          <polygon points="22,0 19,24 24,24 27,0" />
-          {/* A */}
-          <polygon points="30,24 35,0 40,0 49,24 44,24 42,17 34,17 33,24" />
-          <polygon points="35,13 41,13 39,5 37,5" />
-        </svg>
-        <span className="text-base font-semibold text-white tracking-tight">Santa Fe Kia</span>
+      <div className="bg-white rounded-lg px-4 py-2">
+        <img src="/santafekia-logo.png" alt="Santa Fe Kia" className="h-8 w-auto" />
       </div>
     ),
   },

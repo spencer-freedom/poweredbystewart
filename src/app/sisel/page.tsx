@@ -862,25 +862,9 @@ export default function SiselPage() {
               <p className="text-stewart-muted text-xs">Email Marketing & Automation Platform</p>
             </div>
           </div>
-          <svg viewBox="0 0 120 58" className="h-12 w-auto">
-            <circle cx="52" cy="3" r="2.8" fill="#6ab04c" />
-            <circle cx="60" cy="3" r="2.2" fill="#6ab04c" />
-            <circle cx="67" cy="3" r="1.8" fill="#6ab04c" />
-            <circle cx="48" cy="9" r="2.2" fill="#6ab04c" />
-            <circle cx="56" cy="9" r="3" fill="#6ab04c" />
-            <circle cx="64" cy="9" r="2.5" fill="#6ab04c" />
-            <circle cx="71" cy="9" r="2" fill="#6ab04c" />
-            <circle cx="52" cy="15" r="2.8" fill="#6ab04c" />
-            <circle cx="60" cy="15" r="3" fill="#6ab04c" />
-            <circle cx="68" cy="15" r="2.2" fill="#6ab04c" />
-            <circle cx="56" cy="21" r="2.5" fill="#6ab04c" />
-            <circle cx="64" cy="21" r="2.8" fill="#6ab04c" />
-            <circle cx="60" cy="27" r="2" fill="#6ab04c" />
-            <text x="10" y="52" fontFamily="'Helvetica Neue', Arial, sans-serif" fontSize="22" fontWeight="700" fill="white" letterSpacing="5">
-              sisel
-            </text>
-            <text x="108" y="42" fontFamily="Arial, sans-serif" fontSize="6" fill="#94a3b8">®</text>
-          </svg>
+          <div className="bg-white rounded-lg px-3 py-1.5">
+            <img src="/sisel-logo.png" alt="Sisel" className="h-8 w-auto" />
+          </div>
         </div>
       </div>
 
