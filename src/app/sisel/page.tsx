@@ -156,30 +156,31 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
         </div>
       </div>
 
-      <div className="space-y-2">
-        <h3 className="text-sm font-semibold text-stewart-text uppercase tracking-wide">The problem</h3>
-        <div className="space-y-1.5 text-sm text-stewart-muted">
-          <p>&#x2022; Mailchimp costs $450/mo — manual exports, no two-way Exigo sync, no automated campaigns from live data</p>
-          <p>&#x2022; Exigo quoted 66 hours just to build the integration</p>
-          <p>&#x2022; You{"'"}re emailing bounced and inactive contacts you{"'"}re paying for</p>
-          <p>&#x2022; Every audience segment requires a manual CSV export</p>
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <h3 className="text-sm font-semibold text-stewart-text uppercase tracking-wide">What you get</h3>
-        <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-red-500/5 border border-red-500/20 rounded-lg p-5 space-y-3">
+          <h3 className="text-sm font-semibold text-red-400 uppercase tracking-wide">Now</h3>
           {[
-            "Direct Exigo sync — no CSV exports",
-            "Auto-sorted contacts (active, bounced, inactive)",
-            "Purchase-based audience segments",
-            "Automated flows (welcome, win-back, reorder)",
-            "Newsletters & seasonal catalogs",
-            "Unlimited sending",
+            "$450/mo — no automation, no Exigo sync",
+            "Manual CSV exports for every segment",
+            "66 hours quoted just for integration",
+            "Paying to email bounced & dead contacts",
           ].map((item) => (
-            <div key={item} className="flex items-center gap-2 text-sm text-stewart-muted">
-              <span className="text-green-400">&#10003;</span> {item}
-            </div>
+            <p key={item} className="flex items-start gap-2 text-sm text-stewart-muted">
+              <span className="text-red-400 mt-0.5">&#10005;</span> {item}
+            </p>
+          ))}
+        </div>
+        <div className="bg-green-500/5 border border-green-500/20 rounded-lg p-5 space-y-3">
+          <h3 className="text-sm font-semibold text-green-400 uppercase tracking-wide">With this system</h3>
+          {[
+            "Two-way Exigo sync — live data, no exports",
+            "Auto-sorted contacts & smart segments",
+            "Automated flows from real purchase data",
+            "Unlimited sending, auto list cleaning",
+          ].map((item) => (
+            <p key={item} className="flex items-start gap-2 text-sm text-stewart-muted">
+              <span className="text-green-400 mt-0.5">&#10003;</span> {item}
+            </p>
           ))}
         </div>
       </div>
