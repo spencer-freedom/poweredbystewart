@@ -643,9 +643,6 @@ function GetStartedTab() {
           <p className="text-stewart-text font-semibold">Ready to level up your email automation?</p>
           <p className="text-sm text-stewart-muted">Spencer Colby &middot; (435) 749-9230 &middot; stewart@poweredbystewart.com</p>
         </div>
-        <a href="tel:4357499230" className="px-6 py-3 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors">
-          Contact me
-        </a>
       </div>
     </div>
   );
