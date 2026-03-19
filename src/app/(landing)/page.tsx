@@ -13,7 +13,7 @@ const clients = [
     description: "Sales & Marketing Intelligence",
     logo: (
       <div className="flex flex-col items-center gap-1">
-        <img src="/santafekia-logo.png" alt="Kia" className="h-10 w-auto" />
+        <img src="/santafekia-logo.png" alt="Kia" className="h-16 w-auto" />
         <span className="text-sm font-semibold text-gray-900">Santa Fe Kia</span>
       </div>
     ),
