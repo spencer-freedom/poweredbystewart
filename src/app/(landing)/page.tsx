@@ -19,7 +19,7 @@ const clients = [
     color: "text-stewart-text",
     logo: (
       <div className="bg-white rounded-lg px-4 py-2">
-        <img src="/santafekia-logo.png" alt="Santa Fe Kia" className="h-8 w-auto" />
+        <img src="/santafekia-logo.png" alt="Santa Fe Kia" className="h-12 w-auto" />
       </div>
     ),
   },
@@ -29,14 +29,14 @@ const clients = [
     description: "Record Store Operations",
     color: "text-stewart-text",
     logo: (
-      <div className="flex items-center gap-2">
+      <div className="bg-white rounded-lg px-4 py-2 flex items-center gap-2">
         <svg viewBox="0 0 24 24" className="h-8 w-8">
-          <circle cx="12" cy="12" r="11" fill="none" stroke="#e2e8f0" strokeWidth="1.5" />
-          <circle cx="12" cy="12" r="7" fill="none" stroke="#e2e8f0" strokeWidth="1" />
-          <circle cx="12" cy="12" r="3" fill="none" stroke="#e2e8f0" strokeWidth="0.8" />
-          <circle cx="12" cy="12" r="1.2" fill="#e2e8f0" />
+          <circle cx="12" cy="12" r="11" fill="none" stroke="#1a1a2e" strokeWidth="1.5" />
+          <circle cx="12" cy="12" r="7" fill="none" stroke="#1a1a2e" strokeWidth="1" />
+          <circle cx="12" cy="12" r="3" fill="none" stroke="#1a1a2e" strokeWidth="0.8" />
+          <circle cx="12" cy="12" r="1.2" fill="#1a1a2e" />
         </svg>
-        <span className="text-lg font-bold text-white tracking-tight">UsefulWax</span>
+        <span className="text-lg font-bold text-gray-900 tracking-tight">UsefulWax</span>
       </div>
     ),
   },
