@@ -36,13 +36,18 @@ const clients = [
     description: "Sales & Marketing Intelligence",
     color: "text-stewart-text",
     logo: (
-      <div className="flex items-center gap-3">
-        <svg viewBox="0 0 50 22" className="h-8 w-auto">
-          <text x="0" y="19" fontFamily="Arial, sans-serif" fontSize="22" fontWeight="900" fill="white" letterSpacing="-1">
-            KIA
-          </text>
+      <div className="flex items-center gap-4">
+        <svg viewBox="0 0 62 24" className="h-7 w-auto" fill="white">
+          {/* New Kia logo — connected angular letterforms */}
+          {/* K */}
+          <polygon points="0,24 5,24 5,14 13,24 19,24 9,12 18,0 12,0 5,10 5,0 0,0" />
+          {/* I (angled) */}
+          <polygon points="22,0 19,24 24,24 27,0" />
+          {/* A */}
+          <polygon points="30,24 35,0 40,0 49,24 44,24 42,17 34,17 33,24" />
+          <polygon points="35,13 41,13 39,5 37,5" />
         </svg>
-        <span className="text-base font-semibold text-white">Santa Fe Kia</span>
+        <span className="text-base font-semibold text-white tracking-tight">Santa Fe Kia</span>
       </div>
     ),
   },
