@@ -108,7 +108,6 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
         <h2 className="text-3xl font-bold text-stewart-text leading-snug">
           Replace Mailchimp.<br />
           Connect Exigo.<br />
-          Templated and custom emails.<br />
           Automate everything.
         </h2>
         <p className="mt-3 text-stewart-muted">Already built. Already running. Ready to deploy.</p>
