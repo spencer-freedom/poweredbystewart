@@ -7,16 +7,24 @@ import { PageInfo } from "@/components/page-info";
 import type { Lead, LeadSource } from "@/lib/types";
 
 const SEGMENT_BADGES: Record<string, string> = {
+  new: "bg-blue-500/20 text-blue-400",
+  used: "bg-green-500/20 text-green-400",
+  cpo: "bg-yellow-500/20 text-yellow-400",
   New: "bg-blue-500/20 text-blue-400",
   Used: "bg-green-500/20 text-green-400",
   CPO: "bg-yellow-500/20 text-yellow-400",
 };
 
 const STATUS_BADGES: Record<string, string> = {
+  working: "bg-yellow-500/20 text-yellow-400",
+  dead: "bg-stewart-border text-stewart-muted",
+  sold: "bg-green-500/20 text-green-400",
   Working: "bg-yellow-500/20 text-yellow-400",
   Dead: "bg-stewart-border text-stewart-muted",
   Sold: "bg-green-500/20 text-green-400",
 };
+
+const CONTACTED_KEYWORDS = ["contacted", "conacted", "yes", "called", "emailed", "texted"];
 
 function getCurrentMonth(): string {
   const now = new Date();
@@ -26,6 +34,12 @@ function getCurrentMonth(): string {
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr);
   return `${d.getMonth() + 1}/${d.getDate()}`;
+}
+
+function isContacted(pastActions: string): boolean {
+  if (!pastActions) return false;
+  const lower = pastActions.toLowerCase();
+  return CONTACTED_KEYWORDS.some((kw) => lower.includes(kw));
 }
 
 export default function LeadsPage() {
@@ -48,14 +62,20 @@ export default function LeadsPage() {
     lead_date: new Date().toISOString().split("T")[0],
     source: "",
     interest: "",
-    segment: "New",
-    status: "Working",
+    segment: "new",
+    status: "working",
     to_salesperson: "",
+    past_actions: "",
+    future_actions: "",
+    appt: 0,
+    show: 0,
+    turn_over: 0,
   });
   const [saving, setSaving] = useState(false);
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<Partial<Lead>>({});
+  const [expandedId, setExpandedId] = useState<number | null>(null);
 
   const loadData = useCallback(async () => {
     if (!tenantId) return;
@@ -63,7 +83,7 @@ export default function LeadsPage() {
     setError(null);
     try {
       const [leadsRes, sourcesRes] = await Promise.all([
-        api.getLeads(tenantId, monthFilter || undefined, sourceFilter || undefined, segmentFilter || undefined, statusFilter || undefined, 200, leadTypeFilter || undefined),
+        api.getLeads(tenantId, monthFilter || undefined, sourceFilter || undefined, segmentFilter || undefined, statusFilter || undefined, 1000, leadTypeFilter || undefined),
         api.getLeadSources(tenantId),
       ]);
       setLeads(leadsRes);
@@ -91,9 +111,12 @@ export default function LeadsPage() {
         segment: addForm.segment || undefined,
         status: addForm.status || undefined,
         to_salesperson: addForm.to_salesperson || undefined,
+        appt: addForm.appt ? true : false,
+        show: addForm.show ? true : false,
+        turn_over: addForm.turn_over ? true : false,
       });
       setShowAddForm(false);
-      setAddForm({ customer_name: "", lead_date: new Date().toISOString().split("T")[0], source: "", interest: "", segment: "New", status: "Working", to_salesperson: "" });
+      setAddForm({ customer_name: "", lead_date: new Date().toISOString().split("T")[0], source: "", interest: "", segment: "new", status: "working", to_salesperson: "", past_actions: "", future_actions: "", appt: 0, show: 0, turn_over: 0 });
       await loadData();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to create lead");
@@ -118,6 +141,7 @@ export default function LeadsPage() {
   };
 
   const handleDeleteLead = async (leadId: number) => {
+    if (!confirm("Delete this lead? This cannot be undone.")) return;
     setError(null);
     try {
       await api.deleteLead(leadId);
@@ -136,6 +160,8 @@ export default function LeadsPage() {
       segment: lead.segment,
       status: lead.status,
       to_salesperson: lead.to_salesperson,
+      past_actions: lead.past_actions,
+      future_actions: lead.future_actions,
       appt: lead.appt,
       show: lead.show,
       turn_over: lead.turn_over,
@@ -143,6 +169,7 @@ export default function LeadsPage() {
   };
 
   const sourceNames = sources.map((s) => s.source_name);
+  const contacted = leads.filter((l) => isContacted(l.past_actions)).length;
 
   if (!tenantId) {
     return <div className="p-8 text-center text-stewart-muted text-sm">No client configured.</div>;
@@ -171,18 +198,18 @@ export default function LeadsPage() {
           <label className="text-xs text-stewart-muted block mb-1">Segment</label>
           <select value={segmentFilter} onChange={(e) => setSegmentFilter(e.target.value)} className="px-3 py-1.5 bg-stewart-card border border-stewart-border rounded-md text-sm text-stewart-text">
             <option value="">All Segments</option>
-            <option value="New">New</option>
-            <option value="Used">Used</option>
-            <option value="CPO">CPO</option>
+            <option value="new">New</option>
+            <option value="used">Used</option>
+            <option value="cpo">CPO</option>
           </select>
         </div>
         <div>
           <label className="text-xs text-stewart-muted block mb-1">Status</label>
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="px-3 py-1.5 bg-stewart-card border border-stewart-border rounded-md text-sm text-stewart-text">
             <option value="">All Statuses</option>
-            <option value="Working">Working</option>
-            <option value="Dead">Dead</option>
-            <option value="Sold">Sold</option>
+            <option value="working">Working</option>
+            <option value="dead">Dead</option>
+            <option value="sold">Sold</option>
           </select>
         </div>
         <div>
@@ -197,7 +224,7 @@ export default function LeadsPage() {
         </div>
         <div className="ml-auto self-end">
           <button onClick={() => setShowAddForm(!showAddForm)} className="px-4 py-1.5 bg-stewart-accent text-stewart-bg rounded-md text-sm font-medium hover:bg-stewart-accent/90">
-            {showAddForm ? "Cancel" : "Add Lead"}
+            {showAddForm ? "Cancel" : "+ New Lead"}
           </button>
         </div>
       </div>
@@ -206,11 +233,85 @@ export default function LeadsPage() {
 
       {/* Summary bar */}
       <div className="flex gap-4 text-xs text-stewart-muted">
-        <span>{leads.length} leads</span>
-        <span>{leads.filter((l) => l.status === "Sold").length} sold</span>
-        <span>{leads.filter((l) => l.appt).length} appts</span>
-        <span>{leads.filter((l) => l.show).length} shows</span>
+        <span><strong className="text-stewart-text">{leads.length}</strong> leads</span>
+        <span><strong className="text-stewart-text">{contacted}</strong> contacted</span>
+        <span><strong className="text-stewart-text">{leads.filter((l) => l.appt).length}</strong> appts</span>
+        <span><strong className="text-stewart-text">{leads.filter((l) => l.show).length}</strong> shows</span>
+        <span><strong className="text-green-400">{leads.filter((l) => l.status === "sold" || l.status === "Sold").length}</strong> sold</span>
       </div>
+
+      {/* Add Lead Form — card style */}
+      {showAddForm && (
+        <div className="bg-stewart-card border border-stewart-border rounded-lg p-4 space-y-3">
+          <h3 className="text-sm font-semibold text-stewart-text">New Lead</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div>
+              <label className="text-xs text-stewart-muted block mb-1">Date</label>
+              <input type="date" value={addForm.lead_date} onChange={(e) => setAddForm({ ...addForm, lead_date: e.target.value })} className="w-full px-2 py-1.5 bg-stewart-bg border border-stewart-border rounded text-sm text-stewart-text" />
+            </div>
+            <div>
+              <label className="text-xs text-stewart-muted block mb-1">Customer Name *</label>
+              <input type="text" placeholder="John Smith" value={addForm.customer_name} onChange={(e) => setAddForm({ ...addForm, customer_name: e.target.value })} className="w-full px-2 py-1.5 bg-stewart-bg border border-stewart-border rounded text-sm text-stewart-text" />
+            </div>
+            <div>
+              <label className="text-xs text-stewart-muted block mb-1">Source</label>
+              <select value={addForm.source} onChange={(e) => setAddForm({ ...addForm, source: e.target.value })} className="w-full px-2 py-1.5 bg-stewart-bg border border-stewart-border rounded text-sm text-stewart-text">
+                <option value="">Select source</option>
+                {sourceNames.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="text-xs text-stewart-muted block mb-1">Interest</label>
+              <input type="text" placeholder="2026 Sportage" value={addForm.interest} onChange={(e) => setAddForm({ ...addForm, interest: e.target.value })} className="w-full px-2 py-1.5 bg-stewart-bg border border-stewart-border rounded text-sm text-stewart-text" />
+            </div>
+            <div>
+              <label className="text-xs text-stewart-muted block mb-1">Segment</label>
+              <select value={addForm.segment} onChange={(e) => setAddForm({ ...addForm, segment: e.target.value })} className="w-full px-2 py-1.5 bg-stewart-bg border border-stewart-border rounded text-sm text-stewart-text">
+                <option value="new">New</option>
+                <option value="used">Used</option>
+                <option value="cpo">CPO</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-xs text-stewart-muted block mb-1">Salesperson</label>
+              <input type="text" placeholder="Rep name" value={addForm.to_salesperson} onChange={(e) => setAddForm({ ...addForm, to_salesperson: e.target.value })} className="w-full px-2 py-1.5 bg-stewart-bg border border-stewart-border rounded text-sm text-stewart-text" />
+            </div>
+            <div>
+              <label className="text-xs text-stewart-muted block mb-1">Status</label>
+              <select value={addForm.status} onChange={(e) => setAddForm({ ...addForm, status: e.target.value })} className="w-full px-2 py-1.5 bg-stewart-bg border border-stewart-border rounded text-sm text-stewart-text">
+                <option value="working">Working</option>
+                <option value="dead">Dead</option>
+                <option value="sold">Sold</option>
+              </select>
+            </div>
+            <div className="flex items-end gap-4 pb-1">
+              <label className="flex items-center gap-1.5 text-xs text-stewart-muted cursor-pointer">
+                <input type="checkbox" checked={!!addForm.appt} onChange={(e) => setAddForm({ ...addForm, appt: e.target.checked ? 1 : 0 })} className="accent-stewart-accent" /> Appt
+              </label>
+              <label className="flex items-center gap-1.5 text-xs text-stewart-muted cursor-pointer">
+                <input type="checkbox" checked={!!addForm.show} onChange={(e) => setAddForm({ ...addForm, show: e.target.checked ? 1 : 0 })} className="accent-stewart-accent" /> Show
+              </label>
+              <label className="flex items-center gap-1.5 text-xs text-stewart-muted cursor-pointer">
+                <input type="checkbox" checked={!!addForm.turn_over} onChange={(e) => setAddForm({ ...addForm, turn_over: e.target.checked ? 1 : 0 })} className="accent-stewart-accent" /> T/O
+              </label>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs text-stewart-muted block mb-1">Past Actions</label>
+              <input type="text" placeholder="Contacted, left VM, etc." value={addForm.past_actions} onChange={(e) => setAddForm({ ...addForm, past_actions: e.target.value })} className="w-full px-2 py-1.5 bg-stewart-bg border border-stewart-border rounded text-sm text-stewart-text" />
+            </div>
+            <div>
+              <label className="text-xs text-stewart-muted block mb-1">Future Actions</label>
+              <input type="text" placeholder="Follow up, schedule appt, etc." value={addForm.future_actions} onChange={(e) => setAddForm({ ...addForm, future_actions: e.target.value })} className="w-full px-2 py-1.5 bg-stewart-bg border border-stewart-border rounded text-sm text-stewart-text" />
+            </div>
+          </div>
+          <div className="flex justify-end gap-2 pt-1">
+            <button onClick={() => setShowAddForm(false)} className="px-4 py-1.5 text-stewart-muted hover:text-stewart-text text-sm">Cancel</button>
+            <button onClick={handleAddLead} disabled={saving || !addForm.customer_name.trim()} className="px-4 py-1.5 bg-stewart-accent text-stewart-bg rounded-md text-sm font-medium hover:bg-stewart-accent/90 disabled:opacity-50 disabled:cursor-not-allowed">{saving ? "Saving..." : "Save Lead"}</button>
+          </div>
+        </div>
+      )}
 
       {/* Table */}
       <div className="overflow-x-auto">
@@ -221,77 +322,99 @@ export default function LeadsPage() {
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Name</th>
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Source</th>
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Interest</th>
-              <th className="px-3 py-2 text-xs text-stewart-muted font-medium">N/U/CPO</th>
+              <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Seg</th>
+              <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Past Actions</th>
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium text-center">Appt</th>
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium text-center">Show</th>
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium text-center">T/O</th>
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Salesperson</th>
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Status</th>
-              <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Actions</th>
+              <th className="px-3 py-2 text-xs text-stewart-muted font-medium"></th>
             </tr>
           </thead>
           <tbody>
-            {showAddForm && (
-              <tr className="border-b border-stewart-border bg-stewart-accent/5">
-                <td className="px-3 py-2"><input type="date" value={addForm.lead_date} onChange={(e) => setAddForm({ ...addForm, lead_date: e.target.value })} className="w-28 px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text" /></td>
-                <td className="px-3 py-2"><input type="text" placeholder="Customer name" value={addForm.customer_name} onChange={(e) => setAddForm({ ...addForm, customer_name: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text" /></td>
-                <td className="px-3 py-2"><select value={addForm.source} onChange={(e) => setAddForm({ ...addForm, source: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text"><option value="">--</option>{sourceNames.map((s) => <option key={s} value={s}>{s}</option>)}</select></td>
-                <td className="px-3 py-2"><input type="text" placeholder="Interest" value={addForm.interest} onChange={(e) => setAddForm({ ...addForm, interest: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text" /></td>
-                <td className="px-3 py-2"><select value={addForm.segment} onChange={(e) => setAddForm({ ...addForm, segment: e.target.value })} className="w-24 px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text"><option value="New">New</option><option value="Used">Used</option><option value="CPO">CPO</option></select></td>
-                <td className="px-3 py-2" /><td className="px-3 py-2" /><td className="px-3 py-2" />
-                <td className="px-3 py-2"><input type="text" placeholder="Salesperson" value={addForm.to_salesperson} onChange={(e) => setAddForm({ ...addForm, to_salesperson: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text" /></td>
-                <td className="px-3 py-2"><select value={addForm.status} onChange={(e) => setAddForm({ ...addForm, status: e.target.value })} className="w-24 px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text"><option value="Working">Working</option><option value="Dead">Dead</option><option value="Sold">Sold</option></select></td>
-                <td className="px-3 py-2"><button onClick={handleAddLead} disabled={saving || !addForm.customer_name.trim()} className="px-3 py-1 bg-stewart-accent text-stewart-bg rounded text-xs font-medium hover:bg-stewart-accent/90 disabled:opacity-50 disabled:cursor-not-allowed">{saving ? "..." : "Save"}</button></td>
-              </tr>
-            )}
             {loading && leads.length === 0 ? (
-              <tr><td colSpan={11} className="px-3 py-8 text-center text-stewart-muted text-sm">Loading leads...</td></tr>
+              <tr><td colSpan={12} className="px-3 py-8 text-center text-stewart-muted text-sm">Loading leads...</td></tr>
             ) : leads.length === 0 ? (
-              <tr><td colSpan={11} className="px-3 py-8 text-center text-stewart-muted text-sm">No leads found for this period.</td></tr>
+              <tr><td colSpan={12} className="px-3 py-8 text-center text-stewart-muted text-sm">No leads found for this period.</td></tr>
             ) : (
               leads.map((lead) => (
-                <tr key={lead.id} className="border-b border-stewart-border/50 hover:bg-stewart-card/50 transition-colors">
-                  {editingId === lead.id ? (
-                    <>
-                      <td className="px-3 py-2 text-xs text-stewart-muted">{formatDate(lead.lead_date)}</td>
-                      <td className="px-3 py-2"><input type="text" value={editForm.customer_name || ""} onChange={(e) => setEditForm({ ...editForm, customer_name: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text" /></td>
-                      <td className="px-3 py-2"><select value={editForm.source || ""} onChange={(e) => setEditForm({ ...editForm, source: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text"><option value="">--</option>{sourceNames.map((s) => <option key={s} value={s}>{s}</option>)}</select></td>
-                      <td className="px-3 py-2"><input type="text" value={editForm.interest || ""} onChange={(e) => setEditForm({ ...editForm, interest: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text" /></td>
-                      <td className="px-3 py-2"><select value={editForm.segment || ""} onChange={(e) => setEditForm({ ...editForm, segment: e.target.value })} className="w-24 px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text"><option value="New">New</option><option value="Used">Used</option><option value="CPO">CPO</option></select></td>
-                      <td className="px-3 py-2 text-center"><input type="checkbox" checked={!!editForm.appt} onChange={(e) => setEditForm({ ...editForm, appt: e.target.checked ? 1 : 0 })} className="accent-stewart-accent" /></td>
-                      <td className="px-3 py-2 text-center"><input type="checkbox" checked={!!editForm.show} onChange={(e) => setEditForm({ ...editForm, show: e.target.checked ? 1 : 0 })} className="accent-stewart-accent" /></td>
-                      <td className="px-3 py-2 text-center"><input type="checkbox" checked={!!editForm.turn_over} onChange={(e) => setEditForm({ ...editForm, turn_over: e.target.checked ? 1 : 0 })} className="accent-stewart-accent" /></td>
-                      <td className="px-3 py-2"><input type="text" value={editForm.to_salesperson || ""} onChange={(e) => setEditForm({ ...editForm, to_salesperson: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text" /></td>
-                      <td className="px-3 py-2"><select value={editForm.status || ""} onChange={(e) => setEditForm({ ...editForm, status: e.target.value })} className="w-24 px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text"><option value="Working">Working</option><option value="Dead">Dead</option><option value="Sold">Sold</option></select></td>
-                      <td className="px-3 py-2 flex gap-1">
+                editingId === lead.id ? (
+                  <tr key={lead.id} className="border-b border-stewart-border bg-stewart-accent/5">
+                    <td className="px-3 py-2 text-xs text-stewart-muted">{formatDate(lead.lead_date)}</td>
+                    <td className="px-3 py-2"><input type="text" value={editForm.customer_name || ""} onChange={(e) => setEditForm({ ...editForm, customer_name: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text" /></td>
+                    <td className="px-3 py-2"><select value={editForm.source || ""} onChange={(e) => setEditForm({ ...editForm, source: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text"><option value="">--</option>{sourceNames.map((s) => <option key={s} value={s}>{s}</option>)}</select></td>
+                    <td className="px-3 py-2"><input type="text" value={editForm.interest || ""} onChange={(e) => setEditForm({ ...editForm, interest: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text" /></td>
+                    <td className="px-3 py-2"><select value={editForm.segment || ""} onChange={(e) => setEditForm({ ...editForm, segment: e.target.value })} className="w-20 px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text"><option value="new">New</option><option value="used">Used</option><option value="cpo">CPO</option></select></td>
+                    <td className="px-3 py-2"><input type="text" value={editForm.past_actions || ""} onChange={(e) => setEditForm({ ...editForm, past_actions: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text" /></td>
+                    <td className="px-3 py-2 text-center"><input type="checkbox" checked={!!editForm.appt} onChange={(e) => setEditForm({ ...editForm, appt: e.target.checked ? 1 : 0 })} className="accent-stewart-accent" /></td>
+                    <td className="px-3 py-2 text-center"><input type="checkbox" checked={!!editForm.show} onChange={(e) => setEditForm({ ...editForm, show: e.target.checked ? 1 : 0 })} className="accent-stewart-accent" /></td>
+                    <td className="px-3 py-2 text-center"><input type="checkbox" checked={!!editForm.turn_over} onChange={(e) => setEditForm({ ...editForm, turn_over: e.target.checked ? 1 : 0 })} className="accent-stewart-accent" /></td>
+                    <td className="px-3 py-2"><input type="text" value={editForm.to_salesperson || ""} onChange={(e) => setEditForm({ ...editForm, to_salesperson: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text" /></td>
+                    <td className="px-3 py-2"><select value={editForm.status || ""} onChange={(e) => setEditForm({ ...editForm, status: e.target.value })} className="w-20 px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text"><option value="working">Working</option><option value="dead">Dead</option><option value="sold">Sold</option></select></td>
+                    <td className="px-3 py-2">
+                      <div className="flex gap-1">
                         <button onClick={() => handleEditLead(lead.id)} disabled={saving} className="px-2 py-1 bg-stewart-accent text-stewart-bg rounded text-xs hover:bg-stewart-accent/90 disabled:opacity-50">{saving ? "..." : "Save"}</button>
-                        <button onClick={() => { setEditingId(null); setEditForm({}); }} className="px-2 py-1 text-stewart-muted hover:text-stewart-text text-xs">Cancel</button>
-                      </td>
-                    </>
-                  ) : (
-                    <>
-                      <td className="px-3 py-2 text-xs text-stewart-muted">{formatDate(lead.lead_date)}</td>
-                      <td className="px-3 py-2 text-sm text-stewart-text font-medium">{lead.customer_name}</td>
-                      <td className="px-3 py-2 text-xs text-stewart-muted">{lead.source || "--"}</td>
-                      <td className="px-3 py-2 text-xs text-stewart-muted">{lead.interest || "--"}</td>
-                      <td className="px-3 py-2"><span className={`px-2 py-0.5 rounded text-xs font-mono ${SEGMENT_BADGES[lead.segment] || "bg-stewart-border text-stewart-muted"}`}>{lead.segment || "--"}</span></td>
-                      <td className="px-3 py-2 text-center">{lead.appt ? <span className="text-green-400 text-xs font-bold">&#10003;</span> : <span className="text-stewart-muted text-xs">--</span>}</td>
-                      <td className="px-3 py-2 text-center">{lead.show ? <span className="text-green-400 text-xs font-bold">&#10003;</span> : <span className="text-stewart-muted text-xs">--</span>}</td>
-                      <td className="px-3 py-2 text-center">{lead.turn_over ? <span className="text-green-400 text-xs font-bold">&#10003;</span> : <span className="text-stewart-muted text-xs">--</span>}</td>
-                      <td className="px-3 py-2 text-xs text-stewart-muted">{lead.to_salesperson || "--"}</td>
-                      <td className="px-3 py-2"><span className={`px-2 py-0.5 rounded text-xs font-mono ${STATUS_BADGES[lead.status] || "bg-stewart-border text-stewart-muted"}`}>{lead.status || "--"}</span></td>
-                      <td className="px-3 py-2 flex gap-1">
+                        <button onClick={() => { setEditingId(null); setEditForm({}); }} className="px-2 py-1 text-stewart-muted hover:text-stewart-text text-xs">X</button>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  <tr key={lead.id} className="border-b border-stewart-border/50 hover:bg-stewart-card/50 transition-colors cursor-pointer" onClick={() => setExpandedId(expandedId === lead.id ? null : lead.id)}>
+                    <td className="px-3 py-2 text-xs text-stewart-muted">{formatDate(lead.lead_date)}</td>
+                    <td className="px-3 py-2 text-sm text-stewart-text font-medium">{lead.customer_name}</td>
+                    <td className="px-3 py-2 text-xs text-stewart-muted">{lead.source || "--"}</td>
+                    <td className="px-3 py-2 text-xs text-stewart-muted max-w-[140px] truncate">{lead.interest || "--"}</td>
+                    <td className="px-3 py-2"><span className={`px-2 py-0.5 rounded text-xs font-mono ${SEGMENT_BADGES[lead.segment] || "bg-stewart-border text-stewart-muted"}`}>{lead.segment || "--"}</span></td>
+                    <td className="px-3 py-2 text-xs text-stewart-muted max-w-[160px] truncate">{lead.past_actions || <span className="text-stewart-border">--</span>}</td>
+                    <td className="px-3 py-2 text-center">{lead.appt ? <span className="text-green-400 text-xs font-bold">&#10003;</span> : <span className="text-stewart-border">--</span>}</td>
+                    <td className="px-3 py-2 text-center">{lead.show ? <span className="text-green-400 text-xs font-bold">&#10003;</span> : <span className="text-stewart-border">--</span>}</td>
+                    <td className="px-3 py-2 text-center">{lead.turn_over ? <span className="text-green-400 text-xs font-bold">&#10003;</span> : <span className="text-stewart-border">--</span>}</td>
+                    <td className="px-3 py-2 text-xs text-stewart-muted">{lead.to_salesperson || "--"}</td>
+                    <td className="px-3 py-2"><span className={`px-2 py-0.5 rounded text-xs font-mono ${STATUS_BADGES[lead.status] || "bg-stewart-border text-stewart-muted"}`}>{lead.status || "--"}</span></td>
+                    <td className="px-3 py-2" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex gap-1">
                         <button onClick={() => startEditing(lead)} className="px-2 py-1 text-stewart-muted hover:text-stewart-accent text-xs transition-colors">Edit</button>
                         <button onClick={() => handleDeleteLead(lead.id)} className="px-2 py-1 text-stewart-muted hover:text-red-400 text-xs transition-colors">Del</button>
-                      </td>
-                    </>
-                  )}
-                </tr>
+                      </div>
+                    </td>
+                  </tr>
+                )
               ))
             )}
           </tbody>
         </table>
       </div>
+
+      {/* Expanded lead detail */}
+      {expandedId && (() => {
+        const lead = leads.find((l) => l.id === expandedId);
+        if (!lead) return null;
+        return (
+          <div className="bg-stewart-card border border-stewart-border rounded-lg p-4 space-y-2 text-sm">
+            <div className="flex justify-between items-start">
+              <h3 className="font-semibold text-stewart-text">{lead.customer_name}</h3>
+              <button onClick={() => setExpandedId(null)} className="text-stewart-muted hover:text-stewart-text text-xs">Close</button>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-1 text-xs">
+              <div><span className="text-stewart-muted">Date:</span> <span className="text-stewart-text">{lead.lead_date}</span></div>
+              <div><span className="text-stewart-muted">Source:</span> <span className="text-stewart-text">{lead.source || "--"}</span></div>
+              <div><span className="text-stewart-muted">Interest:</span> <span className="text-stewart-text">{lead.interest || "--"}</span></div>
+              <div><span className="text-stewart-muted">Segment:</span> <span className="text-stewart-text">{lead.segment}</span></div>
+              <div><span className="text-stewart-muted">Status:</span> <span className="text-stewart-text">{lead.status}</span></div>
+              <div><span className="text-stewart-muted">Salesperson:</span> <span className="text-stewart-text">{lead.to_salesperson || "--"}</span></div>
+              <div><span className="text-stewart-muted">T/O Date:</span> <span className="text-stewart-text">{lead.to_date || "--"}</span></div>
+              <div><span className="text-stewart-muted">Type:</span> <span className="text-stewart-text">{lead.lead_type || "internet"}</span></div>
+            </div>
+            {lead.past_actions && (
+              <div className="text-xs"><span className="text-stewart-muted">Past Actions:</span> <span className="text-stewart-text">{lead.past_actions}</span></div>
+            )}
+            {lead.future_actions && (
+              <div className="text-xs"><span className="text-stewart-muted">Future Actions:</span> <span className="text-stewart-text">{lead.future_actions}</span></div>
+            )}
+          </div>
+        );
+      })()}
     </div>
   );
 }

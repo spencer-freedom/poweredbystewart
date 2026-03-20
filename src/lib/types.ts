@@ -55,6 +55,8 @@ export interface CreateLeadInput {
   turn_over?: boolean;
   to_salesperson?: string;
   status?: string;
+  past_actions?: string;
+  future_actions?: string;
 }
 
 export interface KpiMonthly {
