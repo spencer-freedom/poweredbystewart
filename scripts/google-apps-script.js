@@ -291,3 +291,133 @@ function onEdit(e) {
     lock.releaseLock();
   }
 }
+
+// ─── Web App Endpoint — receive lead changes from dashboard ───────────────
+
+/**
+ * Receives POST requests from the poweredbystewart dashboard.
+ * Deploy as Web App: Deploy → New deployment → Web app → Execute as Me → Anyone.
+ * The deployment URL goes into APPS_SCRIPT_WEBHOOK_URL env var.
+ */
+function doPost(e) {
+  try {
+    var payload = JSON.parse(e.postData.contents);
+    var config = getConfig();
+
+    // Validate API key
+    if (payload.api_key !== config.apiKey) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ success: false, error: "Unauthorized" })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    var action = payload.action; // "create", "update", or "delete"
+    var lead = payload.lead;
+
+    if (!lead || !lead.lead_date || !lead.customer_name) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ success: false, error: "Missing lead data" })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheetName = getSheetNameFromDate(lead.lead_date);
+    var sheet = ss.getSheetByName(sheetName);
+
+    // Create sheet tab if it doesn't exist (for new months)
+    if (!sheet) {
+      sheet = ss.insertSheet(sheetName);
+      sheet.appendRow([
+        "Date", "Customer Name", "Source", "Interest",
+        "New", "Used", "Certified", "Past Actions",
+        "Appt", "Show", "T/O", "T/O Date", "T/O Sales Person",
+        "Working", "Dead", "Future Actions", "Sold"
+      ]);
+    }
+
+    var rowData = leadToRow(lead);
+
+    if (action === "delete") {
+      var delIdx = findLeadRow(sheet, lead.lead_date, lead.customer_name);
+      if (delIdx > 0) {
+        sheet.deleteRow(delIdx);
+      }
+      return ContentService.createTextOutput(
+        JSON.stringify({ success: true, action: "deleted", row: delIdx })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // Create or update
+    var existingRow = findLeadRow(sheet, lead.lead_date, lead.customer_name);
+
+    if (existingRow > 0) {
+      // Update existing row
+      sheet.getRange(existingRow, 1, 1, 17).setValues([rowData]);
+      return ContentService.createTextOutput(
+        JSON.stringify({ success: true, action: "updated", row: existingRow })
+      ).setMimeType(ContentService.MimeType.JSON);
+    } else {
+      // Append new row
+      sheet.appendRow(rowData);
+      return ContentService.createTextOutput(
+        JSON.stringify({ success: true, action: "created" })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+  } catch (err) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ success: false, error: err.toString() })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+/** Convert YYYY-MM-DD to sheet tab name like "Mar. 2026" */
+function getSheetNameFromDate(dateStr) {
+  var parts = dateStr.split("-");
+  var monthIdx = parseInt(parts[1], 10) - 1;
+  var year = parts[0];
+  var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return monthNames[monthIdx] + ". " + year;
+}
+
+/** Find row index (1-based) matching date + customer name. Returns 0 if not found. */
+function findLeadRow(sheet, dateStr, customerName) {
+  var data = sheet.getDataRange().getValues();
+  var targetName = customerName.toString().trim().toLowerCase();
+
+  for (var i = 1; i < data.length; i++) {
+    var rowDate = formatDate(data[i][0]);
+    var rowName = (data[i][1] || "").toString().trim().toLowerCase();
+
+    if (rowDate === dateStr && rowName === targetName) {
+      return i + 1; // 1-based row index
+    }
+  }
+  return 0;
+}
+
+/** Convert lead object back to a sheet row array (17 columns) */
+function leadToRow(lead) {
+  var seg = (lead.segment || "").toLowerCase();
+  var st = (lead.status || "").toLowerCase();
+
+  return [
+    new Date(lead.lead_date + "T12:00:00"),    // 0: Date
+    lead.customer_name || "",                   // 1: Name
+    lead.source || "",                          // 2: Source
+    lead.interest || "",                        // 3: Interest
+    seg === "new" ? "x" : "",                   // 4: New
+    seg === "used" ? "x" : "",                  // 5: Used
+    seg === "cpo" ? "x" : "",                   // 6: Certified
+    lead.past_actions || "",                    // 7: Past Actions
+    lead.appt === 1 || lead.appt === true ? "x" : "", // 8: Appt
+    lead.show === 1 || lead.show === true ? "x" : "", // 9: Show
+    lead.turn_over === 1 || lead.turn_over === true ? "x" : "", // 10: T/O
+    lead.to_date || "",                         // 11: T/O Date
+    lead.to_salesperson || "",                  // 12: T/O Sales Person
+    st === "working" ? "x" : "",                // 13: Working
+    st === "dead" ? "x" : "",                   // 14: Dead
+    lead.future_actions || "",                  // 15: Future Actions
+    st === "sold" ? "x" : "",                   // 16: Sold
+  ];
+}

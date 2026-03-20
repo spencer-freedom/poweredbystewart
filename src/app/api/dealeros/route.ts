@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { recomputeKpiForMonth } from "@/lib/kpi";
+import { pushLeadToSheet } from "@/lib/sheets-push";
 
 // Server-side Supabase client — uses service key when available
 // Uses placeholder URL at build time to avoid crash; real URL is used at runtime
@@ -542,6 +544,13 @@ export async function POST(req: NextRequest) {
           .select()
           .single();
         if (error) return errorResponse(error);
+        // Recompute KPI for the affected month
+        const createMonth = data.lead_date?.slice(0, 7);
+        if (createMonth) {
+          await recomputeKpiForMonth(supabase, tenantId, createMonth).catch(console.error);
+        }
+        // Push to Google Sheet (fire-and-forget)
+        void pushLeadToSheet("create", data);
         return NextResponse.json(data);
       }
 
@@ -642,6 +651,13 @@ export async function PATCH(req: NextRequest) {
           .select()
           .single();
         if (error) return errorResponse(error);
+        // Recompute KPI for the affected month
+        const updateMonth = data.lead_date?.slice(0, 7);
+        if (updateMonth) {
+          await recomputeKpiForMonth(supabase, tenantId, updateMonth).catch(console.error);
+        }
+        // Push to Google Sheet (fire-and-forget)
+        void pushLeadToSheet("update", data);
         return NextResponse.json(data);
       }
 
@@ -704,12 +720,25 @@ export async function DELETE(req: NextRequest) {
   try {
     switch (action) {
       case "delete_lead": {
+        // Fetch lead before deleting (need month for KPI recompute + sheet push)
+        const { data: leadToDelete } = await supabase
+          .from("leads")
+          .select("lead_date, customer_name")
+          .eq("id", parseInt(id, 10))
+          .eq("tenant_id", tenantId)
+          .single();
         const { error } = await supabase
           .from("leads")
           .delete()
           .eq("id", parseInt(id, 10))
           .eq("tenant_id", tenantId);
         if (error) return errorResponse(error);
+        // Recompute KPI for the affected month
+        if (leadToDelete?.lead_date) {
+          const delMonth = leadToDelete.lead_date.slice(0, 7);
+          await recomputeKpiForMonth(supabase, tenantId, delMonth).catch(console.error);
+          void pushLeadToSheet("delete", leadToDelete);
+        }
         return NextResponse.json({ success: true });
       }
 

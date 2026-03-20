@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { computeKpi, type KpiLeadRow } from "@/lib/kpi";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
@@ -17,105 +18,9 @@ function checkApiKey(req: NextRequest): boolean {
   return key === expected;
 }
 
-// ─── KPI Computation from leads ───────────────────────────────────────────
+// ─── KPI Computation from leads (shared module) ──────────────────────────
 
-interface LeadRow {
-  lead_date: string;
-  customer_name: string;
-  source: string;
-  interest: string;
-  segment: string;
-  past_actions: string;
-  appt: number;
-  show: number;
-  turn_over: number;
-  to_date: string | null;
-  to_salesperson: string;
-  status: string;
-  future_actions: string;
-  lead_type?: string;
-}
-
-function computeKpi(leads: LeadRow[], tenantId: string, month: string) {
-  const ml = leads.filter((l) => l.lead_date.startsWith(month));
-
-  const count = (fn: (l: LeadRow) => boolean) => ml.filter(fn).length;
-  const pct = (num: number, den: number) => den > 0 ? Math.round((num / den) * 1000) / 10 : 0;
-
-  const total_leads = ml.length;
-  const new_leads = count((l) => l.segment === "new");
-  const used_leads = count((l) => l.segment === "used");
-  const cpo_leads = count((l) => l.segment === "cpo");
-
-  const total_appts = count((l) => l.appt === 1);
-  const new_appts = count((l) => l.segment === "new" && l.appt === 1);
-  const used_appts = count((l) => l.segment === "used" && l.appt === 1);
-  const cpo_appts = count((l) => l.segment === "cpo" && l.appt === 1);
-
-  const total_shows = count((l) => l.show === 1);
-  const new_shows = count((l) => l.segment === "new" && l.show === 1);
-  const used_shows = count((l) => l.segment === "used" && l.show === 1);
-  const cpo_shows = count((l) => l.segment === "cpo" && l.show === 1);
-
-  const total_sold = count((l) => l.status === "sold");
-  const new_sold = count((l) => l.segment === "new" && l.status === "sold");
-  const used_sold = count((l) => l.segment === "used" && l.status === "sold");
-  const cpo_sold = count((l) => l.segment === "cpo" && l.status === "sold");
-
-  const total_turns = count((l) => l.turn_over === 1);
-  const total_contacted = count((l) => {
-    const pa = (l.past_actions || "").toLowerCase();
-    return pa.includes("contacted") || pa.includes("conacted");
-  });
-
-  // Source breakdown
-  const source_breakdown: Record<string, { leads: number; sold: number }> = {};
-  for (const l of ml) {
-    const src = l.source || "Unknown";
-    if (!source_breakdown[src]) source_breakdown[src] = { leads: 0, sold: 0 };
-    source_breakdown[src].leads++;
-    if (l.status === "sold") source_breakdown[src].sold++;
-  }
-
-  // Salesperson breakdown
-  const salesperson_breakdown: Record<string, { leads: number; sold: number }> = {};
-  for (const l of ml) {
-    if (l.to_salesperson) {
-      const rep = l.to_salesperson;
-      if (!salesperson_breakdown[rep]) salesperson_breakdown[rep] = { leads: 0, sold: 0 };
-      salesperson_breakdown[rep].leads++;
-      if (l.status === "sold") salesperson_breakdown[rep].sold++;
-    }
-  }
-
-  return {
-    tenant_id: tenantId,
-    month,
-    total_leads,
-    total_contacted,
-    total_appts,
-    total_shows,
-    total_sold,
-    total_turns,
-    new_leads, new_appts, new_shows, new_sold,
-    used_leads, used_appts, used_shows, used_sold,
-    cpo_leads, cpo_appts, cpo_shows, cpo_sold,
-    appt_showed: total_shows,
-    new_appt_showed: new_shows,
-    used_appt_showed: used_shows,
-    cpo_appt_showed: cpo_shows,
-    walk_ins: 0,
-    sold_from_appt: 0,
-    sold_from_walkin: 0,
-    pct_contacted: pct(total_contacted, total_leads),
-    pct_appt_set: pct(total_appts, total_leads),
-    pct_show_set: pct(total_shows, total_appts),
-    pct_show_sold: pct(total_sold, total_shows),
-    pct_overall: pct(total_sold, total_leads),
-    source_breakdown,
-    salesperson_breakdown,
-  };
-}
+type LeadRow = KpiLeadRow;
 
 // ─── POST handler ─────────────────────────────────────────────────────────
 
