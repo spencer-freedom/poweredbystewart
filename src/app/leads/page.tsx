@@ -54,7 +54,8 @@ export default function LeadsPage() {
   const [sourceFilter, setSourceFilter] = useState("");
   const [segmentFilter, setSegmentFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [leadTypeFilter, setLeadTypeFilter] = useState("internet");
+  const [leadTypeFilter, setLeadTypeFilter] = useState("");
+  const [includeService, setIncludeService] = useState(false);
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [addForm, setAddForm] = useState({
@@ -76,6 +77,7 @@ export default function LeadsPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<Partial<Lead>>({});
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [showHelp, setShowHelp] = useState(false);
 
   const loadData = useCallback(async () => {
     if (!tenantId) return;
@@ -86,7 +88,7 @@ export default function LeadsPage() {
         api.getLeads(tenantId, monthFilter || undefined, sourceFilter || undefined, segmentFilter || undefined, statusFilter || undefined, 1000, leadTypeFilter || undefined),
         api.getLeadSources(tenantId),
       ]);
-      setLeads(leadsRes);
+      setLeads(leadsRes as Lead[]);
       setSources(sourcesRes);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load leads");
@@ -169,7 +171,8 @@ export default function LeadsPage() {
   };
 
   const sourceNames = sources.map((s) => s.source_name);
-  const contacted = leads.filter((l) => isContacted(l.past_actions)).length;
+  const filteredLeads = includeService ? leads : leads.filter((l) => l.lead_type !== "service");
+  const contacted = filteredLeads.filter((l) => isContacted(l.past_actions)).length;
 
   if (!tenantId) {
     return <div className="p-8 text-center text-stewart-muted text-sm">No client configured.</div>;
@@ -180,6 +183,50 @@ export default function LeadsPage() {
       <PageInfo pageId="leads" title="Lead tracking and source management">
         <p>Track dealership leads across sources, segments, and salespeople. Filter by month, source, segment, or status.</p>
       </PageInfo>
+
+      {/* Help Panel */}
+      <div className="bg-stewart-card border border-stewart-border rounded-lg overflow-hidden">
+        <button onClick={() => setShowHelp(!showHelp)} className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-stewart-text hover:bg-stewart-card/80 transition-colors">
+          <span className="font-medium">How to use the Leads Dashboard</span>
+          <span className="text-stewart-muted text-xs">{showHelp ? "Hide" : "Show"}</span>
+        </button>
+        {showHelp && (
+          <div className="px-4 pb-4 pt-1 border-t border-stewart-border text-xs text-stewart-muted space-y-3">
+            <div>
+              <h4 className="font-semibold text-stewart-text mb-1">Adding a Lead</h4>
+              <ol className="list-decimal list-inside space-y-0.5">
+                <li>Click the <strong className="text-stewart-accent">&quot;+ New Lead&quot;</strong> button in the top right</li>
+                <li>Fill in the customer name (required), date, source, interest, and segment</li>
+                <li>Check Appt / Show / T/O as applicable</li>
+                <li>Add past actions (e.g. &quot;Contacted&quot;, &quot;Left VM&quot;) and future actions (e.g. &quot;Follow up Friday&quot;)</li>
+                <li>Click <strong>&quot;Save Lead&quot;</strong></li>
+              </ol>
+            </div>
+            <div>
+              <h4 className="font-semibold text-stewart-text mb-1">Editing a Lead</h4>
+              <p>Click <strong>&quot;Edit&quot;</strong> on any row to update fields inline. Hit <strong>&quot;Save&quot;</strong> when done. You can update status (Working / Dead / Sold), past actions, salesperson, and all checkboxes.</p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-stewart-text mb-1">Viewing Lead Details</h4>
+              <p>Click any row to expand and see all details including T/O date, lead type, and full past/future actions.</p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-stewart-text mb-1">Filtering</h4>
+              <ul className="list-disc list-inside space-y-0.5">
+                <li><strong>Month</strong> &mdash; switch between months to view that month&#39;s leads</li>
+                <li><strong>Source</strong> &mdash; filter by lead source (e.g. AutoTrader, TrueCar, Website)</li>
+                <li><strong>Segment</strong> &mdash; filter by New, Used, or CPO</li>
+                <li><strong>Status</strong> &mdash; filter by Working, Dead, or Sold</li>
+                <li><strong>Include Service</strong> &mdash; check this box to show Dealertrack service/parts leads (hidden by default since they are not sales leads)</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold text-stewart-text mb-1">Summary Bar</h4>
+              <p>The counts above the table show total leads, contacted, appointments set, shows, and sold for the current view.</p>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
@@ -212,15 +259,11 @@ export default function LeadsPage() {
             <option value="sold">Sold</option>
           </select>
         </div>
-        <div>
-          <label className="text-xs text-stewart-muted block mb-1">Type</label>
-          <select value={leadTypeFilter} onChange={(e) => setLeadTypeFilter(e.target.value)} className="px-3 py-1.5 bg-stewart-card border border-stewart-border rounded-md text-sm text-stewart-text">
-            <option value="">All Types</option>
-            <option value="internet">Internet</option>
-            <option value="walkin">Walk-in</option>
-            <option value="phone">Phone</option>
-            <option value="service">Service</option>
-          </select>
+        <div className="self-end pb-1">
+          <label className="flex items-center gap-2 text-sm text-stewart-muted cursor-pointer select-none">
+            <input type="checkbox" checked={includeService} onChange={(e) => setIncludeService(e.target.checked)} className="accent-stewart-accent" />
+            Include Service (Dealertrack)
+          </label>
         </div>
         <div className="ml-auto self-end">
           <button onClick={() => setShowAddForm(!showAddForm)} className="px-4 py-1.5 bg-stewart-accent text-stewart-bg rounded-md text-sm font-medium hover:bg-stewart-accent/90">
@@ -233,11 +276,11 @@ export default function LeadsPage() {
 
       {/* Summary bar */}
       <div className="flex gap-4 text-xs text-stewart-muted">
-        <span><strong className="text-stewart-text">{leads.length}</strong> leads</span>
+        <span><strong className="text-stewart-text">{filteredLeads.length}</strong> leads</span>
         <span><strong className="text-stewart-text">{contacted}</strong> contacted</span>
-        <span><strong className="text-stewart-text">{leads.filter((l) => l.appt).length}</strong> appts</span>
-        <span><strong className="text-stewart-text">{leads.filter((l) => l.show).length}</strong> shows</span>
-        <span><strong className="text-green-400">{leads.filter((l) => l.status === "sold" || l.status === "Sold").length}</strong> sold</span>
+        <span><strong className="text-stewart-text">{filteredLeads.filter((l) => l.appt).length}</strong> appts</span>
+        <span><strong className="text-stewart-text">{filteredLeads.filter((l) => l.show).length}</strong> shows</span>
+        <span><strong className="text-green-400">{filteredLeads.filter((l) => l.status === "sold" || l.status === "Sold").length}</strong> sold</span>
       </div>
 
       {/* Add Lead Form — card style */}
@@ -333,12 +376,12 @@ export default function LeadsPage() {
             </tr>
           </thead>
           <tbody>
-            {loading && leads.length === 0 ? (
+            {loading && filteredLeads.length === 0 ? (
               <tr><td colSpan={12} className="px-3 py-8 text-center text-stewart-muted text-sm">Loading leads...</td></tr>
-            ) : leads.length === 0 ? (
+            ) : filteredLeads.length === 0 ? (
               <tr><td colSpan={12} className="px-3 py-8 text-center text-stewart-muted text-sm">No leads found for this period.</td></tr>
             ) : (
-              leads.map((lead) => (
+              filteredLeads.map((lead) => (
                 editingId === lead.id ? (
                   <tr key={lead.id} className="border-b border-stewart-border bg-stewart-accent/5">
                     <td className="px-3 py-2 text-xs text-stewart-muted">{formatDate(lead.lead_date)}</td>
@@ -388,7 +431,7 @@ export default function LeadsPage() {
 
       {/* Expanded lead detail */}
       {expandedId && (() => {
-        const lead = leads.find((l) => l.id === expandedId);
+        const lead = filteredLeads.find((l) => l.id === expandedId);
         if (!lead) return null;
         return (
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-4 space-y-2 text-sm">
