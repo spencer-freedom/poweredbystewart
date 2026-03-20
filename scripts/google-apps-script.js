@@ -10,7 +10,7 @@
  *    - API_KEY = (the value of SHEETS_SYNC_API_KEY from your .env.local)
  *    - TENANT_ID = santa_fe_kia
  * 5. Save and run `initialSync` once manually to authorize
- * 6. Set up a time trigger: Triggers → Add Trigger → syncCurrentMonth → Time-driven → Every 5 minutes
+ * 6. Set up a time trigger: Triggers → Add Trigger → syncCurrentAndPreviousMonth → Time-driven → Every 5 minutes
  */
 
 // ─── Config ────────────────────────────────────────────────────────────────
@@ -194,10 +194,8 @@ function pushLeadsToApi(leads) {
 /**
  * Sync the current month's sheet. Set this on a 5-minute timer trigger.
  */
-function syncCurrentMonth() {
+function syncCurrentAndPreviousMonth() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-
-  // Find the current month's sheet (e.g., "Mar. 2026")
   var now = new Date();
   var monthNames = [
     "Jan",
@@ -213,23 +211,31 @@ function syncCurrentMonth() {
     "Nov",
     "Dec",
   ];
-  var sheetName = monthNames[now.getMonth()] + ". " + now.getFullYear();
 
-  var sheet = ss.getSheetByName(sheetName);
-  if (!sheet) {
-    Logger.log("Sheet not found: " + sheetName);
-    return;
+  // Current month
+  var currentName = monthNames[now.getMonth()] + ". " + now.getFullYear();
+
+  // Previous month
+  var prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  var prevName = monthNames[prev.getMonth()] + ". " + prev.getFullYear();
+
+  var sheetsToSync = [prevName, currentName];
+
+  for (var s = 0; s < sheetsToSync.length; s++) {
+    var sheetName = sheetsToSync[s];
+    var sheet = ss.getSheetByName(sheetName);
+    if (!sheet) {
+      Logger.log("Sheet not found: " + sheetName + " (skipping)");
+      continue;
+    }
+
+    var leads = parseSheetLeads(sheet);
+    Logger.log("Parsed " + leads.length + " leads from " + sheetName);
+
+    if (leads.length > 0) {
+      pushLeadsToApi(leads);
+    }
   }
-
-  var leads = parseSheetLeads(sheet);
-  Logger.log("Parsed " + leads.length + " leads from " + sheetName);
-
-  if (leads.length === 0) {
-    Logger.log("No leads to sync");
-    return;
-  }
-
-  pushLeadsToApi(leads);
 }
 
 /**
