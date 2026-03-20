@@ -96,7 +96,8 @@ export const api = {
     source?: string,
     segment?: string,
     status?: string,
-    limit = 200
+    limit = 200,
+    leadType?: string
   ) => {
     const params: Record<string, string> = {
       action: "leads",
@@ -107,6 +108,7 @@ export const api = {
     if (source) params.source = source;
     if (segment) params.segment = segment;
     if (status) params.status = status;
+    if (leadType) params.lead_type = leadType;
     return apiGet<Lead[]>(params);
   },
 

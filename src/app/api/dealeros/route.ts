@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 // Server-side Supabase client — uses service key when available
+// Uses placeholder URL at build time to avoid crash; real URL is used at runtime
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+  process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key"
 );
 
 // Allowed tenants — prevents querying arbitrary data
@@ -61,6 +62,7 @@ export async function GET(req: NextRequest) {
         const source = searchParams.get("source") || "";
         const segment = searchParams.get("segment") || "";
         const status = searchParams.get("status") || "";
+        const leadType = searchParams.get("lead_type") || "";
         const limit = parseInt(searchParams.get("limit") || "200", 10);
 
         let query = supabase
@@ -71,6 +73,7 @@ export async function GET(req: NextRequest) {
         if (source) query = query.eq("source", source);
         if (segment) query = query.eq("segment", segment);
         if (status) query = query.eq("status", status);
+        if (leadType) query = query.eq("lead_type", leadType);
         query = query.order("lead_date", { ascending: false }).limit(limit);
 
         const { data, error } = await query;
@@ -143,7 +146,7 @@ export async function GET(req: NextRequest) {
           .from("vendor_budgets")
           .select("vendor_name, monthly_budget, coop_amount")
           .eq("tenant_id", tenantId)
-          .eq("is_active", true);
+          .eq("is_active", 1);
 
         const budgetBySource: Record<string, number> = {};
         if (vendors) {

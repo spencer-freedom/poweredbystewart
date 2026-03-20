@@ -40,6 +40,7 @@ export default function LeadsPage() {
   const [sourceFilter, setSourceFilter] = useState("");
   const [segmentFilter, setSegmentFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [leadTypeFilter, setLeadTypeFilter] = useState("internet");
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [addForm, setAddForm] = useState({
@@ -62,7 +63,7 @@ export default function LeadsPage() {
     setError(null);
     try {
       const [leadsRes, sourcesRes] = await Promise.all([
-        api.getLeads(tenantId, monthFilter || undefined, sourceFilter || undefined, segmentFilter || undefined, statusFilter || undefined),
+        api.getLeads(tenantId, monthFilter || undefined, sourceFilter || undefined, segmentFilter || undefined, statusFilter || undefined, 200, leadTypeFilter || undefined),
         api.getLeadSources(tenantId),
       ]);
       setLeads(leadsRes);
@@ -72,7 +73,7 @@ export default function LeadsPage() {
     } finally {
       setLoading(false);
     }
-  }, [tenantId, monthFilter, sourceFilter, segmentFilter, statusFilter]);
+  }, [tenantId, monthFilter, sourceFilter, segmentFilter, statusFilter, leadTypeFilter]);
 
   useEffect(() => { loadData(); }, [loadData]);
 
@@ -182,6 +183,16 @@ export default function LeadsPage() {
             <option value="Working">Working</option>
             <option value="Dead">Dead</option>
             <option value="Sold">Sold</option>
+          </select>
+        </div>
+        <div>
+          <label className="text-xs text-stewart-muted block mb-1">Type</label>
+          <select value={leadTypeFilter} onChange={(e) => setLeadTypeFilter(e.target.value)} className="px-3 py-1.5 bg-stewart-card border border-stewart-border rounded-md text-sm text-stewart-text">
+            <option value="">All Types</option>
+            <option value="internet">Internet</option>
+            <option value="walkin">Walk-in</option>
+            <option value="phone">Phone</option>
+            <option value="service">Service</option>
           </select>
         </div>
         <div className="ml-auto self-end">
