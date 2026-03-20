@@ -231,31 +231,25 @@ export async function GET(req: NextRequest) {
       }
 
       case "vin_source_breakdown": {
-        // Aggregate leads by source from vin_showroom_visits or vin_leads
         let query = supabase
           .from("vin_leads")
-          .select("lead_source, id, appointment_date, show_date, status, total_gross, response_time_minutes")
+          .select("lead_source, id, lead_status_type, response_time_minutes")
           .eq("tenant_id", tenantId);
-        if (month) query = query.like("lead_date", `${month}%`);
+        if (month) query = query.like("lead_origination_date", `${month}%`);
 
         const { data: leads, error } = await query;
         if (error) return errorResponse(error);
 
-        // Group by source
         const sourceMap: Record<string, {
-          leads: number; appointments: number; shows: number;
-          sold: number; total_gross: number; response_sum: number; response_count: number;
+          leads: number; sold: number; response_sum: number; response_count: number;
         }> = {};
         for (const l of leads || []) {
           const src = l.lead_source || "Unknown";
           if (!sourceMap[src]) {
-            sourceMap[src] = { leads: 0, appointments: 0, shows: 0, sold: 0, total_gross: 0, response_sum: 0, response_count: 0 };
+            sourceMap[src] = { leads: 0, sold: 0, response_sum: 0, response_count: 0 };
           }
           sourceMap[src].leads++;
-          if (l.appointment_date) sourceMap[src].appointments++;
-          if (l.show_date) sourceMap[src].shows++;
-          if (l.status === "sold") sourceMap[src].sold++;
-          if (l.total_gross) sourceMap[src].total_gross += l.total_gross;
+          if (l.lead_status_type === "Sold") sourceMap[src].sold++;
           if (l.response_time_minutes != null) {
             sourceMap[src].response_sum += l.response_time_minutes;
             sourceMap[src].response_count++;
@@ -265,10 +259,10 @@ export async function GET(req: NextRequest) {
         const sources = Object.entries(sourceMap).map(([lead_source, v]) => ({
           lead_source,
           leads: v.leads,
-          appointments: v.appointments,
-          shows: v.shows,
+          appointments: 0,
+          shows: 0,
           sold: v.sold,
-          total_gross: v.total_gross || null,
+          total_gross: null,
           avg_response_min: v.response_count > 0
             ? Math.round(v.response_sum / v.response_count * 10) / 10
             : null,
@@ -280,43 +274,32 @@ export async function GET(req: NextRequest) {
       case "vin_salesperson_breakdown": {
         let query = supabase
           .from("vin_leads")
-          .select("salesperson, id, lead_date, contacted_date, appointment_date, show_date, status, front_gross, back_gross, total_gross, response_time_minutes, test_drive, write_up")
+          .select("sales_rep, id, lead_origination_date, first_customer_contact, lead_status_type, response_time_minutes")
           .eq("tenant_id", tenantId);
-        if (month) query = query.like("lead_date", `${month}%`);
+        if (month) query = query.like("lead_origination_date", `${month}%`);
 
         const { data: leads, error } = await query;
         if (error) return errorResponse(error);
 
         const repMap: Record<string, {
-          leads: number; contacted: number; appointments: number; shows: number; sold: number;
-          front_gross: number; back_gross: number; total_gross: number;
+          leads: number; contacted: number; sold: number;
           response_sum: number; response_count: number;
-          test_drives: number; write_ups: number;
         }> = {};
         for (const l of leads || []) {
-          const rep = l.salesperson || "Unassigned";
+          const rep = l.sales_rep || "Unassigned";
           if (!repMap[rep]) {
             repMap[rep] = {
-              leads: 0, contacted: 0, appointments: 0, shows: 0, sold: 0,
-              front_gross: 0, back_gross: 0, total_gross: 0,
+              leads: 0, contacted: 0, sold: 0,
               response_sum: 0, response_count: 0,
-              test_drives: 0, write_ups: 0,
             };
           }
           repMap[rep].leads++;
-          if (l.contacted_date) repMap[rep].contacted++;
-          if (l.appointment_date) repMap[rep].appointments++;
-          if (l.show_date) repMap[rep].shows++;
-          if (l.status === "sold") repMap[rep].sold++;
-          if (l.front_gross) repMap[rep].front_gross += l.front_gross;
-          if (l.back_gross) repMap[rep].back_gross += l.back_gross;
-          if (l.total_gross) repMap[rep].total_gross += l.total_gross;
+          if (l.first_customer_contact) repMap[rep].contacted++;
+          if (l.lead_status_type === "Sold") repMap[rep].sold++;
           if (l.response_time_minutes != null) {
             repMap[rep].response_sum += l.response_time_minutes;
             repMap[rep].response_count++;
           }
-          if (l.test_drive) repMap[rep].test_drives++;
-          if (l.write_up) repMap[rep].write_ups++;
         }
 
         const reps = Object.entries(repMap).map(([sales_rep, v]) => ({
@@ -326,14 +309,14 @@ export async function GET(req: NextRequest) {
           avg_response_min: v.response_count > 0
             ? Math.round(v.response_sum / v.response_count * 10) / 10
             : null,
-          appointments: v.appointments,
-          shows: v.shows,
+          appointments: 0,
+          shows: 0,
           sold: v.sold,
-          front_gross: v.front_gross || null,
-          back_gross: v.back_gross || null,
-          total_gross: v.total_gross || null,
-          test_drives: v.test_drives,
-          write_ups: v.write_ups,
+          front_gross: null,
+          back_gross: null,
+          total_gross: null,
+          test_drives: 0,
+          write_ups: 0,
         }));
 
         return NextResponse.json({ reps, count: reps.length });
@@ -342,10 +325,10 @@ export async function GET(req: NextRequest) {
       case "vin_response_times": {
         let query = supabase
           .from("vin_leads")
-          .select("lead_source, salesperson, response_time_minutes")
+          .select("lead_source, sales_rep, response_time_minutes")
           .eq("tenant_id", tenantId)
           .not("response_time_minutes", "is", null);
-        if (month) query = query.like("lead_date", `${month}%`);
+        if (month) query = query.like("lead_origination_date", `${month}%`);
 
         const { data: leads, error } = await query;
         if (error) return errorResponse(error);
@@ -375,7 +358,7 @@ export async function GET(req: NextRequest) {
         // By rep
         const byRepMap: Record<string, { sum: number; count: number }> = {};
         for (const l of leads || []) {
-          const rep = l.salesperson || "Unassigned";
+          const rep = l.sales_rep || "Unassigned";
           if (!byRepMap[rep]) byRepMap[rep] = { sum: 0, count: 0 };
           byRepMap[rep].sum += l.response_time_minutes as number;
           byRepMap[rep].count++;
@@ -400,13 +383,13 @@ export async function GET(req: NextRequest) {
           .from("vin_leads")
           .select("id", { count: "exact", head: true })
           .eq("tenant_id", tenantId)
-          .not("appointment_date", "is", null);
+          .not("first_customer_contact", "is", null);
 
         const { count: totalCrmSales } = await supabase
           .from("vin_leads")
           .select("id", { count: "exact", head: true })
           .eq("tenant_id", tenantId)
-          .eq("status", "sold");
+          .eq("lead_status_type", "Sold");
 
         const { count: totalVisits } = await supabase
           .from("vin_showroom_visits")
