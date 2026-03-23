@@ -72,7 +72,7 @@ export default function LeadsPage() {
   const [segmentFilter, setSegmentFilter] = useState(searchParams.get("segment") || "");
   const [statusFilter, setStatusFilter] = useState(searchParams.get("status") || "");
   const [leadTypeFilter, setLeadTypeFilter] = useState("");
-  const [includeService, setIncludeService] = useState(false);
+
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [addForm, setAddForm] = useState({
@@ -190,7 +190,7 @@ export default function LeadsPage() {
   };
 
   const sourceNames = sources.map((s) => s.source_name);
-  const filteredLeads = includeService ? leads : leads.filter((l) => l.lead_type !== "service");
+  const filteredLeads = leads;
   const contacted = filteredLeads.filter((l) => isContacted(l.past_actions)).length;
 
   if (!tenantId) {
@@ -236,7 +236,6 @@ export default function LeadsPage() {
                 <li><strong>Source</strong> &mdash; filter by lead source (e.g. AutoTrader, TrueCar, Website)</li>
                 <li><strong>Segment</strong> &mdash; filter by New, Used, or CPO</li>
                 <li><strong>Status</strong> &mdash; filter by Working, Dead, or Sold</li>
-                <li><strong>Include Service</strong> &mdash; check this box to show Dealertrack service/parts leads (hidden by default since they are not sales leads)</li>
               </ul>
             </div>
             <div>
@@ -302,12 +301,6 @@ export default function LeadsPage() {
             <option value="dead">Dead</option>
             <option value="sold">Sold</option>
           </select>
-        </div>
-        <div className="self-end pb-1">
-          <label className="flex items-center gap-2 text-sm text-stewart-muted cursor-pointer select-none">
-            <input type="checkbox" checked={includeService} onChange={(e) => setIncludeService(e.target.checked)} className="accent-stewart-accent" />
-            Include Service (Dealertrack)
-          </label>
         </div>
         <div className="ml-auto self-end">
           <button onClick={() => setShowAddForm(!showAddForm)} className="px-4 py-1.5 bg-stewart-accent text-stewart-bg rounded-md text-sm font-medium hover:bg-stewart-accent/90">

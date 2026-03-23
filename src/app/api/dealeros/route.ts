@@ -82,6 +82,8 @@ export async function GET(req: NextRequest) {
         if (segment) query = query.eq("segment", segment);
         if (status) query = query.eq("status", status);
         if (leadType) query = query.eq("lead_type", leadType);
+        // Always exclude service/Dealertrack leads unless explicitly requested
+        if (!leadType) query = query.neq("lead_type", "service");
         query = query.order("lead_date", { ascending: false }).limit(limit);
 
         const { data, error } = await query;
