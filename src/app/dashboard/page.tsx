@@ -58,6 +58,9 @@ export default function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
 
   const [showSourceBreakdown, setShowSourceBreakdown] = useState(false);
+  const [showSoldList, setShowSoldList] = useState(false);
+  const [soldLeads, setSoldLeads] = useState<{ customer_name: string; interest: string; source: string; lead_date: string; segment: string }[]>([]);
+  const [soldLoading, setSoldLoading] = useState(false);
 
   const month = getCurrentMonth();
 
@@ -80,6 +83,34 @@ export default function DashboardPage() {
   }, [tenantId, month]);
 
   useEffect(() => { load(); }, [load]);
+
+  const toggleSoldList = async () => {
+    if (showSoldList) {
+      setShowSoldList(false);
+      return;
+    }
+    if (soldLeads.length > 0) {
+      setShowSoldList(true);
+      return;
+    }
+    if (!tenantId) return;
+    setSoldLoading(true);
+    try {
+      const leads = await api.getLeads(tenantId, month, undefined, undefined, "sold", 500);
+      setSoldLeads(leads.map((l) => ({
+        customer_name: l.customer_name,
+        interest: l.interest || "--",
+        source: l.source || "--",
+        lead_date: l.lead_date,
+        segment: l.segment || "--",
+      })));
+      setShowSoldList(true);
+    } catch {
+      // silent
+    } finally {
+      setSoldLoading(false);
+    }
+  };
 
   const greeting = user?.firstName ? `Welcome back, ${user.firstName}` : "Welcome back";
 
@@ -134,7 +165,10 @@ export default function DashboardPage() {
                 <p className="text-xs text-stewart-muted">Total Leads <span className="text-stewart-accent">(click)</span></p>
                 <p className="text-2xl font-bold mt-1 text-stewart-text">{kpi.total_leads}</p>
               </button>
-              <StatCard label="Sold" value={String(kpi.total_sold)} accent />
+              <button onClick={toggleSoldList} className="bg-stewart-card border border-stewart-border rounded-lg p-4 text-left hover:border-stewart-accent/50 transition-colors">
+                <p className="text-xs text-stewart-muted">Sold <span className="text-stewart-accent">(click)</span></p>
+                <p className="text-2xl font-bold mt-1 text-stewart-accent">{soldLoading ? "..." : kpi.total_sold}</p>
+              </button>
               <StatCard
                 label="Close Rate"
                 value={fmtPct(kpi.pct_overall)}
@@ -197,6 +231,46 @@ export default function DashboardPage() {
                         </tr>
                       );
                     })}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Sold List (shown when Sold card is clicked) */}
+          {showSoldList && soldLeads.length > 0 && (
+            <div className="bg-stewart-card border border-stewart-border rounded-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-sm font-medium text-stewart-muted uppercase tracking-wider">
+                  Sold Deals — {month} ({soldLeads.length})
+                </h2>
+                <button onClick={() => setShowSoldList(false)} className="text-xs text-stewart-muted hover:text-stewart-text">Close</button>
+              </div>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-stewart-border text-left">
+                    <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Date</th>
+                    <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Customer</th>
+                    <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Vehicle</th>
+                    <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Source</th>
+                    <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Segment</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {soldLeads.map((lead, i) => (
+                    <tr key={i} className="border-b border-stewart-border/50 hover:bg-stewart-card/50">
+                      <td className="px-3 py-2 text-xs text-stewart-muted">{lead.lead_date?.slice(5).replace("-", "/")}</td>
+                      <td className="px-3 py-2 text-stewart-text font-medium">{lead.customer_name}</td>
+                      <td className="px-3 py-2 text-stewart-muted">{lead.interest}</td>
+                      <td className="px-3 py-2 text-stewart-muted">{lead.source}</td>
+                      <td className="px-3 py-2">
+                        <span className={`px-2 py-0.5 rounded text-xs font-mono ${
+                          lead.segment === "new" || lead.segment === "New" ? "bg-blue-500/20 text-blue-400" :
+                          lead.segment === "used" || lead.segment === "Used" ? "bg-green-500/20 text-green-400" :
+                          "bg-yellow-500/20 text-yellow-400"
+                        }`}>{lead.segment}</span>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
