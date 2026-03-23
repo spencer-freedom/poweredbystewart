@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { api } from "@/lib/api";
 import { useTenant } from "@/components/tenant-provider";
 import { PageInfo } from "@/components/page-info";
@@ -44,16 +45,17 @@ function isContacted(pastActions: string): boolean {
 
 export default function LeadsPage() {
   const { tenantId } = useTenant();
+  const searchParams = useSearchParams();
 
   const [leads, setLeads] = useState<Lead[]>([]);
   const [sources, setSources] = useState<LeadSource[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [monthFilter, setMonthFilter] = useState(getCurrentMonth());
-  const [sourceFilter, setSourceFilter] = useState("");
-  const [segmentFilter, setSegmentFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const [monthFilter, setMonthFilter] = useState(searchParams.get("month") || getCurrentMonth());
+  const [sourceFilter, setSourceFilter] = useState(searchParams.get("source") || "");
+  const [segmentFilter, setSegmentFilter] = useState(searchParams.get("segment") || "");
+  const [statusFilter, setStatusFilter] = useState(searchParams.get("status") || "");
   const [leadTypeFilter, setLeadTypeFilter] = useState("");
   const [includeService, setIncludeService] = useState(false);
 

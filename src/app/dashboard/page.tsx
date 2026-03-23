@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useUser, useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { api } from "@/lib/api";
 import { useTenant } from "@/components/tenant-provider";
 import type { KpiMonthly, DealershipContext, UserRole } from "@/lib/types";
@@ -55,6 +56,8 @@ export default function DashboardPage() {
   const [context, setContext] = useState<DealershipContext | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [showSourceBreakdown, setShowSourceBreakdown] = useState(false);
 
   const month = getCurrentMonth();
 
@@ -127,7 +130,10 @@ export default function DashboardPage() {
           {/* KPI Summary Cards */}
           {kpi && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <StatCard label="Total Leads" value={String(kpi.total_leads)} />
+              <button onClick={() => setShowSourceBreakdown(!showSourceBreakdown)} className="bg-stewart-card border border-stewart-border rounded-lg p-4 text-left hover:border-stewart-accent/50 transition-colors">
+                <p className="text-xs text-stewart-muted">Total Leads <span className="text-stewart-accent">(click)</span></p>
+                <p className="text-2xl font-bold mt-1 text-stewart-text">{kpi.total_leads}</p>
+              </button>
               <StatCard label="Sold" value={String(kpi.total_sold)} accent />
               <StatCard
                 label="Close Rate"
@@ -147,6 +153,52 @@ export default function DashboardPage() {
                     : undefined
                 }
               />
+            </div>
+          )}
+
+          {/* Source Breakdown (shown when Total Leads is clicked) */}
+          {kpi && showSourceBreakdown && kpi.source_breakdown && (
+            <div className="bg-stewart-card border border-stewart-border rounded-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-sm font-medium text-stewart-muted uppercase tracking-wider">
+                  Leads by Source — {month}
+                </h2>
+                <button onClick={() => setShowSourceBreakdown(false)} className="text-xs text-stewart-muted hover:text-stewart-text">Close</button>
+              </div>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-stewart-border text-left">
+                    <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Source</th>
+                    <th className="px-3 py-2 text-xs text-stewart-muted font-medium text-right">Leads</th>
+                    <th className="px-3 py-2 text-xs text-stewart-muted font-medium text-right">Sold</th>
+                    <th className="px-3 py-2 text-xs text-stewart-muted font-medium text-right">Close %</th>
+                    <th className="px-3 py-2 text-xs text-stewart-muted font-medium text-right">% of Total</th>
+                    <th className="px-3 py-2 text-xs text-stewart-muted font-medium"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(kpi.source_breakdown)
+                    .sort(([, a], [, b]) => b.leads - a.leads)
+                    .map(([source, data]) => {
+                      const closeRate = data.leads > 0 ? ((data.sold / data.leads) * 100).toFixed(1) : "0.0";
+                      const pctOfTotal = kpi.total_leads > 0 ? ((data.leads / kpi.total_leads) * 100).toFixed(1) : "0.0";
+                      return (
+                        <tr key={source} className="border-b border-stewart-border/50 hover:bg-stewart-card/50">
+                          <td className="px-3 py-2 text-stewart-text font-medium">{source}</td>
+                          <td className="px-3 py-2 text-right text-stewart-text">{data.leads}</td>
+                          <td className="px-3 py-2 text-right text-green-400 font-medium">{data.sold}</td>
+                          <td className="px-3 py-2 text-right text-stewart-muted">{closeRate}%</td>
+                          <td className="px-3 py-2 text-right text-stewart-muted">{pctOfTotal}%</td>
+                          <td className="px-3 py-2 text-right">
+                            <Link href={`/leads?source=${encodeURIComponent(source)}&month=${month}`} className="text-xs text-stewart-accent hover:underline">
+                              View
+                            </Link>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
             </div>
           )}
 
