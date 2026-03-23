@@ -65,13 +65,19 @@ export async function GET(req: NextRequest) {
         const segment = searchParams.get("segment") || "";
         const status = searchParams.get("status") || "";
         const leadType = searchParams.get("lead_type") || "";
+        const startDate = searchParams.get("start_date") || "";
+        const endDate = searchParams.get("end_date") || "";
         const limit = parseInt(searchParams.get("limit") || "200", 10);
 
         let query = supabase
           .from("leads")
           .select("*")
           .eq("tenant_id", tenantId);
-        if (month) query = query.like("lead_date", `${month}%`);
+        if (startDate && endDate) {
+          query = query.gte("lead_date", startDate).lte("lead_date", endDate);
+        } else if (month) {
+          query = query.like("lead_date", `${month}%`);
+        }
         if (source) query = query.eq("source", source);
         if (segment) query = query.eq("segment", segment);
         if (status) query = query.eq("status", status);

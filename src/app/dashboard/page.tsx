@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { useTenant } from "@/components/tenant-provider";
-import type { KpiMonthly, DealershipContext, UserRole } from "@/lib/types";
+import type { KpiMonthly, DealershipContext, UserRole, Lead } from "@/lib/types";
 
 function getCurrentMonth(): string {
   const now = new Date();
@@ -27,6 +27,70 @@ function fmtMin(v: number | null | undefined): string {
   if (v === null || v === undefined) return "--";
   if (v < 60) return `${v.toFixed(0)}m`;
   return `${(v / 60).toFixed(1)}h`;
+}
+
+function getMonthStart(month: string): string {
+  return `${month}-01`;
+}
+
+function getMonthEnd(month: string): string {
+  const [y, m] = month.split("-").map(Number);
+  const lastDay = new Date(y, m, 0).getDate();
+  return `${month}-${String(lastDay).padStart(2, "0")}`;
+}
+
+type DateMode = "month" | "custom";
+
+function computeKpiFromLeads(leads: Lead[]): KpiMonthly {
+  const nonService = leads.filter((l) => l.lead_type !== "service");
+  const total = nonService.length;
+  const seg = (l: Lead) => (l.segment || "").toLowerCase();
+  const isSold = (l: Lead) => (l.status || "").toLowerCase() === "sold";
+  const sold = nonService.filter(isSold).length;
+  const contacted = nonService.filter((l) => {
+    const pa = (l.past_actions || "").toLowerCase();
+    return ["contacted", "conacted", "yes", "called", "emailed", "texted"].some((kw) => pa.includes(kw));
+  }).length;
+  const appts = nonService.filter((l) => !!l.appt).length;
+  const shows = nonService.filter((l) => !!l.show).length;
+  const turns = nonService.filter((l) => !!l.turn_over).length;
+
+  const newL = nonService.filter((l) => seg(l) === "new");
+  const usedL = nonService.filter((l) => seg(l) === "used");
+  const cpoL = nonService.filter((l) => seg(l) === "cpo");
+
+  const pct = (n: number, d: number) => d > 0 ? Math.round((n / d) * 1000) / 10 : 0;
+
+  const sourceBreakdown: Record<string, { leads: number; sold: number }> = {};
+  for (const l of nonService) {
+    const src = l.source || "Unknown";
+    if (!sourceBreakdown[src]) sourceBreakdown[src] = { leads: 0, sold: 0 };
+    sourceBreakdown[src].leads++;
+    if (isSold(l)) sourceBreakdown[src].sold++;
+  }
+
+  return {
+    tenant_id: "", month: "",
+    total_leads: total, total_sold: sold, total_contacted: contacted,
+    total_appts: appts, total_shows: shows, total_turns: turns,
+    new_leads: newL.length, new_appts: newL.filter((l) => !!l.appt).length,
+    new_shows: newL.filter((l) => !!l.show).length, new_sold: newL.filter(isSold).length,
+    used_leads: usedL.length, used_appts: usedL.filter((l) => !!l.appt).length,
+    used_shows: usedL.filter((l) => !!l.show).length, used_sold: usedL.filter(isSold).length,
+    cpo_leads: cpoL.length, cpo_appts: cpoL.filter((l) => !!l.appt).length,
+    cpo_shows: cpoL.filter((l) => !!l.show).length, cpo_sold: cpoL.filter(isSold).length,
+    appt_showed: shows, new_appt_showed: newL.filter((l) => !!l.show).length,
+    used_appt_showed: usedL.filter((l) => !!l.show).length,
+    cpo_appt_showed: cpoL.filter((l) => !!l.show).length,
+    walk_ins: nonService.filter((l) => l.lead_type === "walkin").length,
+    sold_from_appt: 0,
+    sold_from_walkin: nonService.filter((l) => l.lead_type === "walkin" && isSold(l)).length,
+    pct_contacted: pct(contacted, total), pct_appt_set: pct(appts, total),
+    pct_show_set: pct(shows, appts), pct_show_sold: pct(sold, shows),
+    pct_overall: pct(sold, total),
+    source_breakdown: sourceBreakdown,
+    salesperson_breakdown: {},
+  } as KpiMonthly;
 }
 
 function healthColor(score: number): string {
@@ -62,25 +126,41 @@ export default function DashboardPage() {
   const [soldLeads, setSoldLeads] = useState<{ customer_name: string; interest: string; source: string; lead_date: string; segment: string }[]>([]);
   const [soldLoading, setSoldLoading] = useState(false);
 
-  const month = getCurrentMonth();
+  const [dateMode, setDateMode] = useState<DateMode>("month");
+  const [monthFilter, setMonthFilter] = useState(getCurrentMonth());
+  const [startDate, setStartDate] = useState(getMonthStart(getCurrentMonth()));
+  const [endDate, setEndDate] = useState(getMonthEnd(getCurrentMonth()));
+  const dateLabel = dateMode === "month" ? monthFilter : `${startDate} to ${endDate}`;
 
   const load = useCallback(async () => {
     if (!tenantId) return;
     setLoading(true);
     setError(null);
+    setSoldLeads([]);
+    setShowSoldList(false);
+    setShowSourceBreakdown(false);
     try {
-      const [kpiRes, ctxRes] = await Promise.all([
-        api.getMarketingKpi(tenantId, month).catch(() => null),
-        api.getDealershipContext(tenantId).catch(() => null),
-      ]);
-      setKpi(kpiRes);
-      setContext(ctxRes);
+      if (dateMode === "month") {
+        const [kpiRes, ctxRes] = await Promise.all([
+          api.getMarketingKpi(tenantId, monthFilter).catch(() => null),
+          api.getDealershipContext(tenantId).catch(() => null),
+        ]);
+        setKpi(kpiRes);
+        setContext(ctxRes);
+      } else {
+        const [leadsRes, ctxRes] = await Promise.all([
+          api.getLeads(tenantId, undefined, undefined, undefined, undefined, 2000, undefined, startDate, endDate).catch(() => []),
+          api.getDealershipContext(tenantId).catch(() => null),
+        ]);
+        setKpi(computeKpiFromLeads(leadsRes as Lead[]));
+        setContext(ctxRes);
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load");
     } finally {
       setLoading(false);
     }
-  }, [tenantId, month]);
+  }, [tenantId, dateMode, monthFilter, startDate, endDate]);
 
   useEffect(() => { load(); }, [load]);
 
@@ -96,7 +176,9 @@ export default function DashboardPage() {
     if (!tenantId) return;
     setSoldLoading(true);
     try {
-      const leads = await api.getLeads(tenantId, month, undefined, undefined, "sold", 500);
+      const leads = dateMode === "custom"
+        ? await api.getLeads(tenantId, undefined, undefined, undefined, "sold", 500, undefined, startDate, endDate)
+        : await api.getLeads(tenantId, monthFilter, undefined, undefined, "sold", 500);
       setSoldLeads(leads.map((l) => ({
         customer_name: l.customer_name,
         interest: l.interest || "--",
@@ -117,11 +199,39 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-stewart-text">{greeting}</h1>
-        <p className="text-sm text-stewart-muted">
-          {month} overview {tenantId && <span className="text-stewart-accent">({tenantId})</span>}
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-stewart-text">{greeting}</h1>
+          <p className="text-sm text-stewart-muted">
+            {dateLabel} overview {tenantId && <span className="text-stewart-accent">({tenantId})</span>}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <select value={dateMode} onChange={(e) => {
+            const mode = e.target.value as DateMode;
+            setDateMode(mode);
+            if (mode === "month") {
+              setStartDate(getMonthStart(monthFilter));
+              setEndDate(getMonthEnd(monthFilter));
+            }
+          }} className="px-2 py-1.5 bg-stewart-card border border-stewart-border rounded-md text-sm text-stewart-text">
+            <option value="month">Month</option>
+            <option value="custom">Custom</option>
+          </select>
+          {dateMode === "month" ? (
+            <input type="month" value={monthFilter} onChange={(e) => {
+              setMonthFilter(e.target.value);
+              setStartDate(getMonthStart(e.target.value));
+              setEndDate(getMonthEnd(e.target.value));
+            }} className="px-3 py-1.5 bg-stewart-card border border-stewart-border rounded-md text-sm text-stewart-text" />
+          ) : (
+            <>
+              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="px-2 py-1.5 bg-stewart-card border border-stewart-border rounded-md text-sm text-stewart-text" />
+              <span className="text-stewart-muted text-xs">to</span>
+              <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="px-2 py-1.5 bg-stewart-card border border-stewart-border rounded-md text-sm text-stewart-text" />
+            </>
+          )}
+        </div>
       </div>
 
       {error && (
@@ -195,7 +305,7 @@ export default function DashboardPage() {
             <div className="bg-stewart-card border border-stewart-border rounded-lg p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-sm font-medium text-stewart-muted uppercase tracking-wider">
-                  Leads by Source — {month}
+                  Leads by Source — {dateLabel}
                 </h2>
                 <button onClick={() => setShowSourceBreakdown(false)} className="text-xs text-stewart-muted hover:text-stewart-text">Close</button>
               </div>
@@ -224,7 +334,10 @@ export default function DashboardPage() {
                           <td className="px-3 py-2 text-right text-stewart-muted">{closeRate}%</td>
                           <td className="px-3 py-2 text-right text-stewart-muted">{pctOfTotal}%</td>
                           <td className="px-3 py-2 text-right">
-                            <Link href={`/leads?source=${encodeURIComponent(source)}&month=${month}`} className="text-xs text-stewart-accent hover:underline">
+                            <Link href={dateMode === "custom"
+                              ? `/leads?source=${encodeURIComponent(source)}&start_date=${startDate}&end_date=${endDate}`
+                              : `/leads?source=${encodeURIComponent(source)}&month=${monthFilter}`
+                            } className="text-xs text-stewart-accent hover:underline">
                               View
                             </Link>
                           </td>
@@ -241,7 +354,7 @@ export default function DashboardPage() {
             <div className="bg-stewart-card border border-stewart-border rounded-lg p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-sm font-medium text-stewart-muted uppercase tracking-wider">
-                  Sold Deals — {month} ({soldLeads.length})
+                  Sold Deals — {dateLabel} ({soldLeads.length})
                 </h2>
                 <button onClick={() => setShowSoldList(false)} className="text-xs text-stewart-muted hover:text-stewart-text">Close</button>
               </div>
@@ -318,7 +431,7 @@ export default function DashboardPage() {
           {/* No Data State */}
           {!kpi && !loading && (
             <div className="bg-stewart-card border border-stewart-border rounded-lg p-12 text-center">
-              <p className="text-stewart-muted text-sm">No KPI data for {month}</p>
+              <p className="text-stewart-muted text-sm">No KPI data for {dateLabel}</p>
               <p className="text-stewart-muted/60 text-xs mt-2">Upload VinSolutions data via VinSync to populate dashboards</p>
             </div>
           )}

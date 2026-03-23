@@ -97,14 +97,21 @@ export const api = {
     segment?: string,
     status?: string,
     limit = 200,
-    leadType?: string
+    leadType?: string,
+    startDate?: string,
+    endDate?: string
   ) => {
     const params: Record<string, string> = {
       action: "leads",
       tenant: tenantId,
       limit: String(limit),
     };
-    if (month) params.month = month;
+    if (startDate && endDate) {
+      params.start_date = startDate;
+      params.end_date = endDate;
+    } else if (month) {
+      params.month = month;
+    }
     if (source) params.source = source;
     if (segment) params.segment = segment;
     if (status) params.status = status;

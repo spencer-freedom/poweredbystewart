@@ -32,6 +32,18 @@ function getCurrentMonth(): string {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
 }
 
+function getMonthStart(month: string): string {
+  return `${month}-01`;
+}
+
+function getMonthEnd(month: string): string {
+  const [y, m] = month.split("-").map(Number);
+  const lastDay = new Date(y, m, 0).getDate();
+  return `${month}-${String(lastDay).padStart(2, "0")}`;
+}
+
+type DateMode = "month" | "custom";
+
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr);
   return `${d.getMonth() + 1}/${d.getDate()}`;
@@ -52,7 +64,10 @@ export default function LeadsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [dateMode, setDateMode] = useState<DateMode>(searchParams.get("start_date") ? "custom" : "month");
   const [monthFilter, setMonthFilter] = useState(searchParams.get("month") || getCurrentMonth());
+  const [startDate, setStartDate] = useState(searchParams.get("start_date") || getMonthStart(getCurrentMonth()));
+  const [endDate, setEndDate] = useState(searchParams.get("end_date") || getMonthEnd(getCurrentMonth()));
   const [sourceFilter, setSourceFilter] = useState(searchParams.get("source") || "");
   const [segmentFilter, setSegmentFilter] = useState(searchParams.get("segment") || "");
   const [statusFilter, setStatusFilter] = useState(searchParams.get("status") || "");
@@ -87,7 +102,9 @@ export default function LeadsPage() {
     setError(null);
     try {
       const [leadsRes, sourcesRes] = await Promise.all([
-        api.getLeads(tenantId, monthFilter || undefined, sourceFilter || undefined, segmentFilter || undefined, statusFilter || undefined, 1000, leadTypeFilter || undefined),
+        dateMode === "custom"
+          ? api.getLeads(tenantId, undefined, sourceFilter || undefined, segmentFilter || undefined, statusFilter || undefined, 1000, leadTypeFilter || undefined, startDate, endDate)
+          : api.getLeads(tenantId, monthFilter || undefined, sourceFilter || undefined, segmentFilter || undefined, statusFilter || undefined, 1000, leadTypeFilter || undefined),
         api.getLeadSources(tenantId),
       ]);
       setLeads(leadsRes as Lead[]);
@@ -97,7 +114,7 @@ export default function LeadsPage() {
     } finally {
       setLoading(false);
     }
-  }, [tenantId, monthFilter, sourceFilter, segmentFilter, statusFilter, leadTypeFilter]);
+  }, [tenantId, dateMode, monthFilter, startDate, endDate, sourceFilter, segmentFilter, statusFilter, leadTypeFilter]);
 
   useEffect(() => { loadData(); }, [loadData]);
 
@@ -233,8 +250,33 @@ export default function LeadsPage() {
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
         <div>
-          <label className="text-xs text-stewart-muted block mb-1">Month</label>
-          <input type="month" value={monthFilter} onChange={(e) => setMonthFilter(e.target.value)} className="px-3 py-1.5 bg-stewart-card border border-stewart-border rounded-md text-sm text-stewart-text" />
+          <label className="text-xs text-stewart-muted block mb-1">Date Range</label>
+          <div className="flex items-center gap-1">
+            <select value={dateMode} onChange={(e) => {
+              const mode = e.target.value as DateMode;
+              setDateMode(mode);
+              if (mode === "month") {
+                setStartDate(getMonthStart(monthFilter));
+                setEndDate(getMonthEnd(monthFilter));
+              }
+            }} className="px-2 py-1.5 bg-stewart-card border border-stewart-border rounded-md text-sm text-stewart-text">
+              <option value="month">Month</option>
+              <option value="custom">Custom</option>
+            </select>
+            {dateMode === "month" ? (
+              <input type="month" value={monthFilter} onChange={(e) => {
+                setMonthFilter(e.target.value);
+                setStartDate(getMonthStart(e.target.value));
+                setEndDate(getMonthEnd(e.target.value));
+              }} className="px-3 py-1.5 bg-stewart-card border border-stewart-border rounded-md text-sm text-stewart-text" />
+            ) : (
+              <>
+                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="px-2 py-1.5 bg-stewart-card border border-stewart-border rounded-md text-sm text-stewart-text" />
+                <span className="text-stewart-muted text-xs">to</span>
+                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="px-2 py-1.5 bg-stewart-card border border-stewart-border rounded-md text-sm text-stewart-text" />
+              </>
+            )}
+          </div>
         </div>
         <div>
           <label className="text-xs text-stewart-muted block mb-1">Source</label>
