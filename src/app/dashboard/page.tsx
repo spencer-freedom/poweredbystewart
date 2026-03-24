@@ -105,17 +105,6 @@ export default function DashboardPage() {
   const { tenantId } = useTenant();
   const { user } = useUser();
 
-  useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.replace("/sign-in");
-    }
-  }, [isLoaded, isSignedIn, router]);
-
-  if (!isLoaded || !isSignedIn) {
-    return <div className="text-center text-stewart-muted py-12 text-sm">Loading...</div>;
-  }
-  const role = (user?.publicMetadata?.role as UserRole) || "rep";
-
   const [kpi, setKpi] = useState<KpiMonthly | null>(null);
   const [context, setContext] = useState<DealershipContext | null>(null);
   const [loading, setLoading] = useState(false);
@@ -131,6 +120,12 @@ export default function DashboardPage() {
   const [startDate, setStartDate] = useState(getMonthStart(getCurrentMonth()));
   const [endDate, setEndDate] = useState(getMonthEnd(getCurrentMonth()));
   const dateLabel = dateMode === "month" ? monthFilter : `${startDate} to ${endDate}`;
+
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      router.replace("/sign-in");
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   const load = useCallback(async () => {
     if (!tenantId) return;
@@ -194,6 +189,11 @@ export default function DashboardPage() {
     }
   };
 
+  // Auth guard — after all hooks
+  if (!isLoaded || !isSignedIn) {
+    return <div className="text-center text-stewart-muted py-12 text-sm">Loading...</div>;
+  }
+  const role = (user?.publicMetadata?.role as UserRole) || "rep";
   const greeting = user?.firstName ? `Welcome back, ${user.firstName}` : "Welcome back";
 
   return (
