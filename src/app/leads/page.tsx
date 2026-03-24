@@ -398,6 +398,7 @@ export default function LeadsPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-stewart-border text-left">
+              <th className="px-2 py-2 text-xs text-stewart-muted font-medium w-[80px]"></th>
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Date</th>
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Name</th>
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Source</th>
@@ -409,7 +410,6 @@ export default function LeadsPage() {
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium text-center">T/O</th>
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Salesperson</th>
               <th className="px-3 py-2 text-xs text-stewart-muted font-medium">Status</th>
-              <th className="px-3 py-2 text-xs text-stewart-muted font-medium"></th>
             </tr>
           </thead>
           <tbody>
@@ -421,6 +421,12 @@ export default function LeadsPage() {
               filteredLeads.map((lead) => (
                 editingId === lead.id ? (
                   <tr key={lead.id} className="border-b border-stewart-border bg-stewart-accent/5">
+                    <td className="px-2 py-2">
+                      <div className="flex gap-1">
+                        <button onClick={() => handleEditLead(lead.id)} disabled={saving} className="px-2.5 py-1 bg-stewart-accent text-stewart-bg rounded text-xs font-medium hover:bg-stewart-accent/90 disabled:opacity-50">{saving ? "..." : "Save"}</button>
+                        <button onClick={() => { setEditingId(null); setEditForm({}); }} className="px-2 py-1 bg-stewart-border text-stewart-text rounded text-xs hover:bg-stewart-border/70">X</button>
+                      </div>
+                    </td>
                     <td className="px-3 py-2 text-xs text-stewart-muted">{formatDate(lead.lead_date)}</td>
                     <td className="px-3 py-2"><input type="text" value={editForm.customer_name || ""} onChange={(e) => setEditForm({ ...editForm, customer_name: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text" /></td>
                     <td className="px-3 py-2"><select value={editForm.source || ""} onChange={(e) => setEditForm({ ...editForm, source: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text"><option value="">--</option>{sourceNames.map((s) => <option key={s} value={s}>{s}</option>)}</select></td>
@@ -432,15 +438,15 @@ export default function LeadsPage() {
                     <td className="px-3 py-2 text-center"><input type="checkbox" checked={!!editForm.turn_over} onChange={(e) => setEditForm({ ...editForm, turn_over: e.target.checked ? 1 : 0 })} className="accent-stewart-accent" /></td>
                     <td className="px-3 py-2"><input type="text" value={editForm.to_salesperson || ""} onChange={(e) => setEditForm({ ...editForm, to_salesperson: e.target.value })} className="w-full px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text" /></td>
                     <td className="px-3 py-2"><select value={editForm.status || ""} onChange={(e) => setEditForm({ ...editForm, status: e.target.value })} className="w-20 px-2 py-1 bg-stewart-bg border border-stewart-border rounded text-xs text-stewart-text"><option value="working">Working</option><option value="dead">Dead</option><option value="sold">Sold</option></select></td>
-                    <td className="px-3 py-2">
-                      <div className="flex gap-1">
-                        <button onClick={() => handleEditLead(lead.id)} disabled={saving} className="px-2 py-1 bg-stewart-accent text-stewart-bg rounded text-xs hover:bg-stewart-accent/90 disabled:opacity-50">{saving ? "..." : "Save"}</button>
-                        <button onClick={() => { setEditingId(null); setEditForm({}); }} className="px-2 py-1 text-stewart-muted hover:text-stewart-text text-xs">X</button>
-                      </div>
-                    </td>
                   </tr>
                 ) : (
                   <tr key={lead.id} className="border-b border-stewart-border/50 hover:bg-stewart-card/50 transition-colors cursor-pointer" onClick={() => setExpandedId(expandedId === lead.id ? null : lead.id)}>
+                    <td className="px-2 py-2" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex gap-1">
+                        <button onClick={() => startEditing(lead)} className="px-2.5 py-1 bg-stewart-accent/20 text-stewart-accent rounded text-xs font-medium hover:bg-stewart-accent/30 transition-colors">Edit</button>
+                        <button onClick={() => handleDeleteLead(lead.id)} className="px-2 py-1 bg-red-500/10 text-red-400 rounded text-xs font-medium hover:bg-red-500/20 transition-colors">Del</button>
+                      </div>
+                    </td>
                     <td className="px-3 py-2 text-xs text-stewart-muted">{formatDate(lead.lead_date)}</td>
                     <td className="px-3 py-2 text-sm text-stewart-text font-medium">{lead.customer_name}</td>
                     <td className="px-3 py-2 text-xs text-stewart-muted">{lead.source || "--"}</td>
@@ -452,12 +458,6 @@ export default function LeadsPage() {
                     <td className="px-3 py-2 text-center">{lead.turn_over ? <span className="text-green-400 text-xs font-bold">&#10003;</span> : <span className="text-stewart-border">--</span>}</td>
                     <td className="px-3 py-2 text-xs text-stewart-muted">{lead.to_salesperson || "--"}</td>
                     <td className="px-3 py-2"><span className={`px-2 py-0.5 rounded text-xs font-mono ${STATUS_BADGES[lead.status] || "bg-stewart-border text-stewart-muted"}`}>{lead.status || "--"}</span></td>
-                    <td className="px-3 py-2" onClick={(e) => e.stopPropagation()}>
-                      <div className="flex gap-1">
-                        <button onClick={() => startEditing(lead)} className="px-2 py-1 text-stewart-muted hover:text-stewart-accent text-xs transition-colors">Edit</button>
-                        <button onClick={() => handleDeleteLead(lead.id)} className="px-2 py-1 text-stewart-muted hover:text-red-400 text-xs transition-colors">Del</button>
-                      </div>
-                    </td>
                   </tr>
                 )
               ))
