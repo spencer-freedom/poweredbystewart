@@ -1,5 +1,7 @@
 "use client";
 
+import { t, type Lang } from "./i18n";
+
 export const SISEL_PRODUCTS = [
   {
     id: "supradetox", name: "SupraDetox", price: "$54.95",
@@ -88,16 +90,17 @@ export function buildPreviewHtml(rawHtml: string, selectedProducts: string[], cu
 interface ProductGridProps {
   selectedProducts: string[];
   onToggle: (id: string) => void;
+  lang?: Lang;
 }
 
-export function ProductGrid({ selectedProducts, onToggle }: ProductGridProps) {
+export function ProductGrid({ selectedProducts, onToggle, lang = "en" }: ProductGridProps) {
   const hero = selectedProducts.length > 0 ? SISEL_PRODUCTS.find((p) => p.id === selectedProducts[0]) : null;
 
   return (
     <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-stewart-text">Product Grid</h3>
-        <span className="text-xs text-stewart-muted">{selectedProducts.length === 0 ? "Select a product" : "1 selected"}</span>
+        <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Product Grid")}</h3>
+        <span className="text-xs text-stewart-muted">{selectedProducts.length === 0 ? t(lang, "Select a product") : t(lang, "1 selected")}</span>
       </div>
       <div className="grid grid-cols-3 gap-3">
         {SISEL_PRODUCTS.map((p) => {
@@ -149,7 +152,7 @@ export function ProductGrid({ selectedProducts, onToggle }: ProductGridProps) {
       </div>
       {hero && (
         <div className="bg-stewart-accent/5 border-l-2 border-stewart-accent rounded-r-lg px-3 py-2 text-xs text-stewart-muted">
-          <strong className="text-stewart-text">{hero.name}</strong> selected — template variables auto-fill with this product's details.
+          <strong className="text-stewart-text">{hero.name}</strong> {t(lang, "selected — template variables auto-fill with this product's details.")}
         </div>
       )}
     </div>

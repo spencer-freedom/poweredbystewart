@@ -5,10 +5,12 @@ import { api } from "@/lib/api";
 import type { EmailTemplate } from "@/lib/types";
 import { statusBadge } from "@/lib/ui/badges";
 import { ProductGrid, buildPreviewHtml } from "./ProductGrid";
+import { t, type Lang } from "./i18n";
 
 interface Props {
   tenantId: string;
   onReloadSummary: () => void;
+  lang?: Lang;
 }
 
 const defaultForm = {
@@ -23,7 +25,7 @@ const defaultForm = {
 
 type View = "list" | "edit";
 
-export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
+export function TemplatesTab({ tenantId, onReloadSummary, lang = "en" }: Props) {
   const [templates, setTemplates] = useState<EmailTemplate[]>([]);
   const [view, setView] = useState<View>("list");
   const [selected, setSelected] = useState<EmailTemplate | null>(null);
@@ -63,20 +65,20 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
     "&redirect_after_review=https%3A%2F%2Fsisel.net%2Fthank-you%3Freviewer%3D{name}" +
     "%26product%3Dh2-stix%26submitted%3Dtrue%26reward_points%3D50";
 
-  const goToEdit = (t?: EmailTemplate) => {
-    if (t) {
-      setEditing(t);
+  const goToEdit = (tpl?: EmailTemplate) => {
+    if (tpl) {
+      setEditing(tpl);
       setForm({
-        template_name: t.template_name,
-        template_type: t.template_type,
-        subject_template: t.subject_template,
-        html_content: t.html_content,
-        text_content: t.text_content,
-        variables: (t.variables || []).join(", "),
-        status: t.status,
+        template_name: tpl.template_name,
+        template_type: tpl.template_type,
+        subject_template: tpl.subject_template,
+        html_content: tpl.html_content,
+        text_content: tpl.text_content,
+        variables: (tpl.variables || []).join(", "),
+        status: tpl.status,
       });
       // Pre-fill demo data for Product Review Request template
-      if (t.template_name?.toLowerCase().includes("review")) {
+      if (tpl.template_name?.toLowerCase().includes("review")) {
         setSelectedProducts(["h2stix"]);
         setProductUrl(DEMO_REVIEW_URL);
       } else {
@@ -121,7 +123,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
     return (
       <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
         {error}
-        <button onClick={() => { setError(""); load(); }} className="ml-3 underline">Retry</button>
+        <button onClick={() => { setError(""); load(); }} className="ml-3 underline">{t(lang, "Retry")}</button>
       </div>
     );
   }
@@ -132,33 +134,33 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
     return (
       <div className="space-y-5">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide">Email Templates</h2>
+          <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide">{t(lang, "Email Templates")}</h2>
           <button
             onClick={() => goToEdit()}
             className="px-4 py-2 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors"
           >
-            + New Template
+            {t(lang, "+ New Template")}
           </button>
         </div>
 
         {/* Template Cards — compact grid */}
         {templates.length === 0 ? (
           <div className="bg-stewart-card border border-stewart-border rounded-lg px-4 py-12 text-center text-stewart-muted text-sm">
-            No templates yet. Click + New Template to create one.
+            {t(lang, "No templates yet. Click + New Template to create one.")}
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-3">
-            {templates.map((t) => (
+            {templates.map((tpl) => (
               <div
-                key={t.id}
-                onClick={() => setSelected(selected?.id === t.id ? null : t)}
-                className={`bg-stewart-card border rounded-lg px-3 py-2.5 cursor-pointer transition-colors hover:border-stewart-accent/50 group ${selected?.id === t.id ? "border-stewart-accent bg-stewart-accent/5" : "border-stewart-border"}`}
+                key={tpl.id}
+                onClick={() => setSelected(selected?.id === tpl.id ? null : tpl)}
+                className={`bg-stewart-card border rounded-lg px-3 py-2.5 cursor-pointer transition-colors hover:border-stewart-accent/50 group ${selected?.id === tpl.id ? "border-stewart-accent bg-stewart-accent/5" : "border-stewart-border"}`}
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="text-xs font-semibold text-stewart-text truncate group-hover:text-stewart-accent transition-colors">{t.template_name}</h3>
-                  {statusBadge(t.status)}
+                  <h3 className="text-xs font-semibold text-stewart-text truncate group-hover:text-stewart-accent transition-colors">{tpl.template_name}</h3>
+                  {statusBadge(tpl.status)}
                 </div>
-                <p className="text-[10px] text-stewart-muted truncate">{t.subject_template || "No subject"}</p>
+                <p className="text-[10px] text-stewart-muted truncate">{tpl.subject_template || t(lang, "No subject")}</p>
               </div>
             ))}
           </div>
@@ -170,7 +172,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
             onClick={() => goToEdit(selected)}
             className="w-full px-4 py-3 bg-stewart-accent text-white text-sm font-semibold rounded-lg hover:bg-stewart-accent/80 transition-colors flex items-center justify-center gap-2"
           >
-            Edit Template — {selected.template_name}
+            {t(lang, "Edit Template")} — {selected.template_name}
           </button>
         )}
 
@@ -192,7 +194,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
 
                 {selected.variables && selected.variables.length > 0 && (
                   <div>
-                    <p className="text-[10px] text-stewart-muted uppercase tracking-wide mb-1">Variables</p>
+                    <p className="text-[10px] text-stewart-muted uppercase tracking-wide mb-1">{t(lang, "Variables")}</p>
                     <div className="flex flex-wrap gap-1">
                       {selected.variables.map((v) => (
                         <span key={v} className="px-2 py-0.5 bg-stewart-border rounded text-xs font-mono">{`{${v}}`}</span>
@@ -204,7 +206,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
 
               {selected.html_content && (
                 <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-                  <h3 className="text-sm font-semibold text-stewart-text">Email Preview</h3>
+                  <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Email Preview")}</h3>
                   <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
                     <iframe srcDoc={selected.html_content} className="w-full border-0" style={{ height: "350px" }} sandbox="allow-same-origin" title="Template Preview" />
                   </div>
@@ -213,7 +215,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
 
               {selected.text_content && (
                 <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-3">
-                  <h3 className="text-sm font-semibold text-stewart-text">Text Preview</h3>
+                  <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Text Preview")}</h3>
                   <div className="bg-stewart-bg rounded-lg p-3 text-xs max-h-32 overflow-auto whitespace-pre-wrap text-stewart-muted">
                     {selected.text_content}
                   </div>
@@ -223,24 +225,24 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
 
             <div className="space-y-5">
               <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-3">
-                <h3 className="text-sm font-semibold text-stewart-text">Summary</h3>
+                <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Summary")}</h3>
                 <div className="bg-stewart-bg rounded-lg p-3 space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-stewart-muted">Type</span>
+                    <span className="text-stewart-muted">{t(lang, "Type")}</span>
                     <span className="text-stewart-text">{selected.template_type}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-stewart-muted">Status</span>
+                    <span className="text-stewart-muted">{t(lang, "Status")}</span>
                     <span className="text-stewart-text">{selected.status}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-stewart-muted">Variables</span>
+                    <span className="text-stewart-muted">{t(lang, "Variables")}</span>
                     <span className="text-stewart-text">{(selected.variables || []).length}</span>
                   </div>
                   {selected.html_content && (
                     <div className="flex justify-between">
-                      <span className="text-stewart-muted">HTML size</span>
-                      <span className="text-stewart-text">{selected.html_content.length.toLocaleString()} chars</span>
+                      <span className="text-stewart-muted">{t(lang, "HTML size")}</span>
+                      <span className="text-stewart-text">{selected.html_content.length.toLocaleString()} {t(lang, "chars")}</span>
                     </div>
                   )}
                 </div>
@@ -250,7 +252,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
                 onClick={() => setSelected(null)}
                 className="w-full px-4 py-2 text-stewart-muted text-sm hover:text-stewart-text transition-colors"
               >
-                Close
+                {t(lang, "Close")}
               </button>
             </div>
           </div>
@@ -264,18 +266,18 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2 text-sm">
-        <button onClick={goToList} className="text-stewart-accent hover:underline">Templates</button>
+        <button onClick={goToList} className="text-stewart-accent hover:underline">{t(lang, "Templates")}</button>
         <span className="text-stewart-muted">/</span>
-        <span className="text-stewart-text">{editing ? editing.template_name : "New Template"}</span>
+        <span className="text-stewart-text">{editing ? editing.template_name : t(lang, "New Template")}</span>
       </div>
 
       <div className="grid grid-cols-3 gap-6">
         <div className="col-span-2 space-y-5">
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-            <h3 className="text-sm font-semibold text-stewart-text">Template Details</h3>
+            <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Template Details")}</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs text-stewart-muted block mb-1">Template Name</label>
+                <label className="text-xs text-stewart-muted block mb-1">{t(lang, "Template Name")}</label>
                 <input
                   value={form.template_name}
                   onChange={(e) => setForm({ ...form, template_name: e.target.value })}
@@ -284,7 +286,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
                 />
               </div>
               <div>
-                <label className="text-xs text-stewart-muted block mb-1">Type</label>
+                <label className="text-xs text-stewart-muted block mb-1">{t(lang, "Type")}</label>
                 <select
                   value={form.template_type}
                   onChange={(e) => setForm({ ...form, template_type: e.target.value })}
@@ -300,7 +302,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-stewart-muted block mb-1">Status</label>
+                <label className="text-xs text-stewart-muted block mb-1">{t(lang, "Status")}</label>
                 <select
                   value={form.status}
                   onChange={(e) => setForm({ ...form, status: e.target.value })}
@@ -311,7 +313,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
                 </select>
               </div>
               <div>
-                <label className="text-xs text-stewart-muted block mb-1">Variables (comma-separated)</label>
+                <label className="text-xs text-stewart-muted block mb-1">{t(lang, "Variables (comma-separated)")}</label>
                 <input
                   value={form.variables}
                   onChange={(e) => setForm({ ...form, variables: e.target.value })}
@@ -321,7 +323,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
               </div>
             </div>
             <div>
-              <label className="text-xs text-stewart-muted block mb-1">Subject Template</label>
+              <label className="text-xs text-stewart-muted block mb-1">{t(lang, "Subject Template")}</label>
               <input
                 value={form.subject_template}
                 onChange={(e) => setForm({ ...form, subject_template: e.target.value })}
@@ -336,6 +338,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
             <ProductGrid
               selectedProducts={selectedProducts}
               onToggle={(id) => setSelectedProducts((prev) => prev[0] === id ? [] : [id])}
+              lang={lang}
             />
           )}
 
@@ -347,13 +350,16 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
               <div className={`border rounded-lg p-5 space-y-3 ${isReview ? "bg-stewart-accent/5 border-stewart-accent/30" : "bg-stewart-card border-stewart-border"}`}>
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-semibold text-stewart-text">
-                    {isReview ? "\"Write Your Review\" Button URL" : "Product CTA Link"}
+                    {t(lang, isReview ? "\"Write Your Review\" Button URL" : "Product CTA Link")}
                   </h3>
                   <span className="text-[10px] text-stewart-muted font-mono">{"{product_url}"}</span>
                 </div>
                 {isReview && (
                   <p className="text-xs text-stewart-muted leading-relaxed">
-                    Paste the full review page URL below. This becomes the <strong className="text-stewart-text">&quot;Write Your Review&quot;</strong> button link in the email. No character limit — tracking params, UTMs, redirect chains, all of it.
+                    {lang === "ja"
+                      ? <>下記にレビューページの完全なURLを貼り付けてください。これがメール内の<strong className="text-stewart-text">「レビューを書く」</strong>ボタンのリンクになります。文字数制限なし — トラッキングパラメータ、UTM、リダイレクトチェーン、すべてOKです。</>
+                      : <>Paste the full review page URL below. This becomes the <strong className="text-stewart-text">&quot;Write Your Review&quot;</strong> button link in the email. No character limit — tracking params, UTMs, redirect chains, all of it.</>
+                    }
                   </p>
                 )}
                 <textarea
@@ -369,11 +375,11 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
                 {productUrl && (
                   <div className="flex items-center justify-between">
                     <p className="text-[10px] text-stewart-muted">
-                      <strong className={productUrl.length > 200 ? "text-green-400" : "text-stewart-text"}>{productUrl.length}</strong> characters
-                      {productUrl.length > 200 && <span className="text-green-400 ml-1">— no problem. Other platforms break at ~500.</span>}
+                      <strong className={productUrl.length > 200 ? "text-green-400" : "text-stewart-text"}>{productUrl.length}</strong> {t(lang, "characters")}
+                      {productUrl.length > 200 && <span className="text-green-400 ml-1">{t(lang, "— no problem. Other platforms break at ~500.")}</span>}
                     </p>
                     {isReview && productUrl.length > 100 && (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/20 text-green-400">URL preserved</span>
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/20 text-green-400">{t(lang, "URL preserved")}</span>
                     )}
                   </div>
                 )}
@@ -384,7 +390,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
           {/* Email Preview — above HTML editor */}
           {form.html_content && (
             <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-              <h3 className="text-sm font-semibold text-stewart-text">Email Preview</h3>
+              <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Email Preview")}</h3>
               <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
                 <iframe srcDoc={buildPreviewHtml(form.html_content, selectedProducts, productUrl || undefined)} className="w-full border-0" style={{ height: "350px" }} sandbox="allow-same-origin" title="Template Preview" />
               </div>
@@ -393,9 +399,9 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
 
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-stewart-text">HTML Content</h3>
+              <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "HTML Content")}</h3>
               <div className="flex items-center gap-3">
-                <span className="text-sm text-stewart-muted">Build with:</span>
+                <span className="text-sm text-stewart-muted">{t(lang, "Build with:")}</span>
                 <a href="https://stripo.email" target="_blank" rel="noopener noreferrer" className="text-sm text-stewart-accent hover:underline">Stripo</a>
                 <a href="https://www.canva.com/" target="_blank" rel="noopener noreferrer" className="text-sm text-stewart-accent hover:underline">Canva</a>
                 <a href="https://beefree.io" target="_blank" rel="noopener noreferrer" className="text-sm text-stewart-accent hover:underline">BEE Free</a>
@@ -409,10 +415,10 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
               placeholder="Paste HTML email template — supports long URLs, custom CTA buttons, tracking parameters."
             />
             {form.html_content && (
-              <p className="text-[10px] text-stewart-muted">{form.html_content.length.toLocaleString()} characters</p>
+              <p className="text-[10px] text-stewart-muted">{form.html_content.length.toLocaleString()} {t(lang, "characters")}</p>
             )}
             <div>
-              <label className="text-xs text-stewart-muted block mb-1">Plain Text Fallback</label>
+              <label className="text-xs text-stewart-muted block mb-1">{t(lang, "Plain Text Fallback")}</label>
               <textarea
                 value={form.text_content}
                 onChange={(e) => setForm({ ...form, text_content: e.target.value })}
@@ -426,24 +432,24 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
         {/* Right Sidebar */}
         <div className="space-y-5">
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-3">
-            <h3 className="text-sm font-semibold text-stewart-text">Summary</h3>
+            <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Summary")}</h3>
             <div className="bg-stewart-bg rounded-lg p-3 space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-stewart-muted">Type</span>
+                <span className="text-stewart-muted">{t(lang, "Type")}</span>
                 <span className="text-stewart-text">{form.template_type}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-stewart-muted">Status</span>
+                <span className="text-stewart-muted">{t(lang, "Status")}</span>
                 <span className="text-stewart-text">{form.status}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-stewart-muted">Variables</span>
+                <span className="text-stewart-muted">{t(lang, "Variables")}</span>
                 <span className="text-stewart-text">{form.variables ? form.variables.split(",").filter(Boolean).length : 0}</span>
               </div>
               {form.html_content && (
                 <div className="flex justify-between">
-                  <span className="text-stewart-muted">HTML size</span>
-                  <span className="text-stewart-text">{form.html_content.length.toLocaleString()} chars</span>
+                  <span className="text-stewart-muted">{t(lang, "HTML size")}</span>
+                  <span className="text-stewart-text">{form.html_content.length.toLocaleString()} {t(lang, "chars")}</span>
                 </div>
               )}
             </div>
@@ -454,10 +460,10 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
             disabled={!form.template_name}
             className="w-full px-4 py-2.5 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {editing ? "Save Changes" : "Create Template"}
+            {editing ? t(lang, "Save Changes") : t(lang, "Create Template")}
           </button>
           <button onClick={goToList} className="w-full px-4 py-2 text-stewart-muted text-sm hover:text-stewart-text transition-colors">
-            Cancel
+            {t(lang, "Cancel")}
           </button>
         </div>
       </div>

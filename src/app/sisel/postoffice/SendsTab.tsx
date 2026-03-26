@@ -4,12 +4,14 @@ import { useEffect, useState, useCallback } from "react";
 import { api } from "@/lib/api";
 import type { EmailSend, EmailCampaign } from "@/lib/types";
 import { statusBadge } from "@/lib/ui/badges";
+import { t, type Lang } from "./i18n";
 
 interface Props {
   tenantId: string;
+  lang?: Lang;
 }
 
-export function SendsTab({ tenantId }: Props) {
+export function SendsTab({ tenantId, lang = "en" }: Props) {
   const [sends, setSends] = useState<EmailSend[]>([]);
   const [campaigns, setCampaigns] = useState<EmailCampaign[]>([]);
   const [statusFilter, setStatusFilter] = useState("");
@@ -46,7 +48,7 @@ export function SendsTab({ tenantId }: Props) {
     return (
       <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
         {error}
-        <button onClick={() => { setError(""); loadSends(); }} className="ml-3 underline">Retry</button>
+        <button onClick={() => { setError(""); loadSends(); }} className="ml-3 underline">{t(lang, "Retry")}</button>
       </div>
     );
   }
@@ -54,23 +56,23 @@ export function SendsTab({ tenantId }: Props) {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide">Send Log</h2>
+        <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide">{t(lang, "Send Log")}</h2>
         <div className="flex gap-3 items-center">
           <select
             value={sendTypeFilter}
             onChange={(e) => setSendTypeFilter(e.target.value)}
             className="bg-stewart-card border border-stewart-border rounded-lg px-3 py-1.5 text-xs text-stewart-text appearance-none cursor-pointer"
           >
-            <option value="">All Types</option>
-            <option value="campaign">Campaign</option>
-            <option value="transactional">Transactional</option>
+            <option value="">{t(lang, "All Types")}</option>
+            <option value="campaign">{t(lang, "Campaign")}</option>
+            <option value="transactional">{t(lang, "Transactional")}</option>
           </select>
           <select
             value={campaignFilter}
             onChange={(e) => setCampaignFilter(e.target.value)}
             className="bg-stewart-card border border-stewart-border rounded-lg px-3 py-1.5 text-xs text-stewart-text appearance-none cursor-pointer"
           >
-            <option value="">All Campaigns</option>
+            <option value="">{t(lang, "All Campaigns")}</option>
             {campaigns.map((c) => (
               <option key={c.id} value={c.id}>{c.campaign_name}</option>
             ))}
@@ -90,7 +92,7 @@ export function SendsTab({ tenantId }: Props) {
                 : "bg-stewart-card border border-stewart-border text-stewart-muted hover:text-stewart-text"
             }`}
           >
-            {s || "All"}
+            {s ? t(lang, s) : t(lang, "All")}
           </button>
         ))}
       </div>
@@ -99,19 +101,19 @@ export function SendsTab({ tenantId }: Props) {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-stewart-border">
-              <th className="text-left px-4 py-2.5 text-stewart-muted font-medium">Email</th>
-              <th className="text-left px-4 py-2.5 text-stewart-muted font-medium">Name</th>
-              <th className="text-left px-4 py-2.5 text-stewart-muted font-medium">Subject</th>
-              <th className="text-center px-4 py-2.5 text-stewart-muted font-medium">Type</th>
-              <th className="text-center px-4 py-2.5 text-stewart-muted font-medium">Status</th>
-              <th className="text-right px-4 py-2.5 text-stewart-muted font-medium">Sent</th>
+              <th className="text-left px-4 py-2.5 text-stewart-muted font-medium">{t(lang, "Email")}</th>
+              <th className="text-left px-4 py-2.5 text-stewart-muted font-medium">{t(lang, "Name")}</th>
+              <th className="text-left px-4 py-2.5 text-stewart-muted font-medium">{t(lang, "Subject")}</th>
+              <th className="text-center px-4 py-2.5 text-stewart-muted font-medium">{t(lang, "Type")}</th>
+              <th className="text-center px-4 py-2.5 text-stewart-muted font-medium">{t(lang, "Status")}</th>
+              <th className="text-right px-4 py-2.5 text-stewart-muted font-medium">{t(lang, "Sent")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-stewart-border/30">
             {sends.length === 0 ? (
               <tr>
                 <td colSpan={6} className="px-4 py-12 text-center text-stewart-muted">
-                  No sends yet.
+                  {t(lang, "No sends yet.")}
                 </td>
               </tr>
             ) : (

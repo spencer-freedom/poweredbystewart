@@ -5,10 +5,12 @@ import { api } from "@/lib/api";
 import type { EmailCampaign, EmailTemplate } from "@/lib/types";
 import { statusBadge } from "@/lib/ui/badges";
 import { ProductGrid, buildPreviewHtml } from "./ProductGrid";
+import { t, tSegment, type Lang } from "./i18n";
 
 interface Props {
   tenantId: string;
   onReloadSummary: () => void;
+  lang?: Lang;
 }
 
 const AUDIENCE_SEGMENTS = [
@@ -38,7 +40,7 @@ function parseCriteria(campaign: EmailCampaign) {
   return typeof raw === "string" ? JSON.parse(raw) : raw;
 }
 
-export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
+export function CampaignsTab({ tenantId, onReloadSummary, lang = "en" }: Props) {
   const [campaigns, setCampaigns] = useState<EmailCampaign[]>([]);
   const [templates, setTemplates] = useState<EmailTemplate[]>([]);
   const [filter, setFilter] = useState("");
@@ -185,7 +187,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
   };
 
   const handleDelete = async (campaignId: string) => {
-    if (!confirm("Delete this draft campaign?")) return;
+    if (!confirm(t(lang, "Delete this draft campaign?"))) return;
     try {
       await api.emailDeleteCampaign(tenantId, campaignId);
       goToList();
@@ -244,7 +246,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
     return (
       <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
         {error}
-        <button onClick={() => { setError(""); loadCampaigns(); }} className="ml-3 underline">Retry</button>
+        <button onClick={() => { setError(""); loadCampaigns(); }} className="ml-3 underline">{t(lang, "Retry")}</button>
       </div>
     );
   }
@@ -257,12 +259,12 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
     return (
       <div className="space-y-5">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide">Campaigns</h2>
+          <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide">{t(lang, "Campaigns")}</h2>
           <button
             onClick={() => goToCompose()}
             className="px-4 py-2 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors"
           >
-            + New Campaign
+            {t(lang, "+ New Campaign")}
           </button>
         </div>
 
@@ -278,7 +280,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                   : "bg-stewart-card border border-stewart-border text-stewart-muted hover:text-stewart-text"
               }`}
             >
-              {s || "All"}
+              {s ? t(lang, s) : t(lang, "All")}
             </button>
           ))}
         </div>
@@ -286,7 +288,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
         {/* Campaign Cards — grid matching Email Studio */}
         {campaigns.length === 0 ? (
           <div className="bg-stewart-card border border-stewart-border rounded-lg px-4 py-12 text-center text-stewart-muted text-sm">
-            No campaigns yet. Click + New Campaign to create one.
+            {t(lang, "No campaigns yet. Click + New Campaign to create one.")}
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-4">
@@ -308,19 +310,19 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                     {statusBadge(c.status)}
                   </div>
                   <h3 className="text-sm font-semibold text-stewart-text mb-1 group-hover:text-stewart-accent transition-colors">{c.campaign_name}</h3>
-                  <p className="text-xs text-stewart-muted mb-3">{c.subject || "No subject"}</p>
+                  <p className="text-xs text-stewart-muted mb-3">{c.subject || t(lang, "No subject")}</p>
                   <div className="flex items-center gap-2 flex-wrap">
                     {criteria.label && (
                       <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-purple-500/20 text-purple-400">{criteria.label}</span>
                     )}
                     {c.total_recipients > 0 && (
-                      <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-stewart-border text-stewart-muted">{c.total_recipients} sent</span>
+                      <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-stewart-border text-stewart-muted">{c.total_recipients} {t(lang, "sent")}</span>
                     )}
                     <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-stewart-border text-stewart-muted">{c.created_at?.slice(0, 10)}</span>
                   </div>
                   <div className="mt-3 pt-3 border-t border-stewart-border">
                     <span className="text-xs text-stewart-accent opacity-0 group-hover:opacity-100 transition-opacity">
-                      {c.status === "draft" || c.status === "scheduled" ? "Edit campaign" : "View details"} &rarr;
+                      {c.status === "draft" || c.status === "scheduled" ? t(lang, "Edit campaign") : t(lang, "View details")} &rarr;
                     </span>
                   </div>
                 </div>
@@ -338,7 +340,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
 
   if (view === "compose") {
     const campaignId = editing?.id;
-    const rawHtml = form.body_html || (form.template_id ? templates.find((t) => t.id === form.template_id)?.html_content : "") || "";
+    const rawHtml = form.body_html || (form.template_id ? templates.find((tpl) => tpl.id === form.template_id)?.html_content : "") || "";
     const previewHtml = buildPreviewHtml(rawHtml, selectedProducts, productUrl || undefined);
 
     const toggleProduct = (id: string) => {
@@ -349,26 +351,26 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
       <div className="space-y-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm">
-          <button onClick={goToList} className="text-stewart-accent hover:underline">Campaigns</button>
+          <button onClick={goToList} className="text-stewart-accent hover:underline">{t(lang, "Campaigns")}</button>
           <span className="text-stewart-muted">/</span>
-          <span className="text-stewart-text">{editing ? editing.campaign_name : "New Campaign"}</span>
+          <span className="text-stewart-text">{editing ? editing.campaign_name : t(lang, "New Campaign")}</span>
         </div>
 
         {/* Send Confirmation Banner */}
         {sendConfirm && (
           <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-5 space-y-3">
-            <h3 className="text-sm font-semibold text-green-400">Ready to Send</h3>
+            <h3 className="text-sm font-semibold text-green-400">{t(lang, "Ready to Send")}</h3>
             <div className="bg-stewart-bg rounded-lg p-3 space-y-2 text-sm">
-              <div className="flex justify-between"><span className="text-stewart-muted">Subject</span><span className="text-stewart-text">{form.subject}</span></div>
-              <div className="flex justify-between"><span className="text-stewart-muted">Recipients</span><span className="font-bold text-stewart-text">{sendConfirm.count}</span></div>
-              <div className="flex justify-between"><span className="text-stewart-muted">Est. delivery</span><span className="text-green-400 font-medium">99.8%</span></div>
+              <div className="flex justify-between"><span className="text-stewart-muted">{t(lang, "Subject")}</span><span className="text-stewart-text">{form.subject}</span></div>
+              <div className="flex justify-between"><span className="text-stewart-muted">{t(lang, "Recipients")}</span><span className="font-bold text-stewart-text">{sendConfirm.count}</span></div>
+              <div className="flex justify-between"><span className="text-stewart-muted">{t(lang, "Est. delivery")}</span><span className="text-green-400 font-medium">99.8%</span></div>
             </div>
             <div className="flex gap-3">
               <button onClick={() => handleConfirmSend(sendConfirm.campaignId)} className="px-5 py-2.5 bg-green-600 hover:bg-green-500 text-white text-sm font-semibold rounded-lg transition-colors">
-                Confirm & Send
+                {t(lang, "Confirm & Send")}
               </button>
               <button onClick={() => setSendConfirm(null)} className="px-4 py-2 text-stewart-muted text-sm hover:text-stewart-text transition-colors">
-                Cancel
+                {t(lang, "Cancel")}
               </button>
             </div>
           </div>
@@ -378,9 +380,9 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
           {/* ─── Left: Campaign Details ─── */}
           <div className="col-span-2 space-y-5">
             <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-              <h3 className="text-sm font-semibold text-stewart-text">Campaign Details</h3>
+              <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Campaign Details")}</h3>
               <div>
-                <label className="text-xs text-stewart-muted block mb-1">Campaign Name</label>
+                <label className="text-xs text-stewart-muted block mb-1">{t(lang, "Campaign Name")}</label>
                 <input
                   value={form.campaign_name}
                   onChange={(e) => setForm({ ...form, campaign_name: e.target.value })}
@@ -389,7 +391,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                 />
               </div>
               <div>
-                <label className="text-xs text-stewart-muted block mb-1">Subject Line</label>
+                <label className="text-xs text-stewart-muted block mb-1">{t(lang, "Subject Line")}</label>
                 <input
                   value={form.subject}
                   onChange={(e) => setForm({ ...form, subject: e.target.value })}
@@ -398,39 +400,42 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                 />
               </div>
               <div>
-                <label className="text-xs text-stewart-muted block mb-1">Template (optional)</label>
+                <label className="text-xs text-stewart-muted block mb-1">{t(lang, "Template (optional)")}</label>
                 <select
                   value={form.template_id}
                   onChange={(e) => setForm({ ...form, template_id: e.target.value })}
                   className="w-full bg-stewart-bg border border-stewart-border rounded-lg px-3 py-2.5 text-sm text-stewart-text appearance-none cursor-pointer"
                 >
-                  <option value="">Custom (inline)</option>
-                  {templates.map((t) => (
-                    <option key={t.id} value={t.id}>{t.template_name}</option>
+                  <option value="">{t(lang, "Custom (inline)")}</option>
+                  {templates.map((tpl) => (
+                    <option key={tpl.id} value={tpl.id}>{tpl.template_name}</option>
                   ))}
                 </select>
               </div>
             </div>
 
             {/* Product Grid */}
-            <ProductGrid selectedProducts={selectedProducts} onToggle={toggleProduct} />
+            <ProductGrid selectedProducts={selectedProducts} onToggle={toggleProduct} lang={lang} />
 
             {/* Review URL — only for review templates/campaigns */}
             {selectedProducts.length > 0 && (() => {
-              const currentTemplate = templates.find((t) => t.id === form.template_id);
+              const currentTemplate = templates.find((tpl) => tpl.id === form.template_id);
               const isReview = currentTemplate?.template_name?.toLowerCase().includes("review") || form.campaign_name?.toLowerCase().includes("review");
               if (!isReview) return null;
               return (
                 <div className={`border rounded-lg p-5 space-y-3 ${isReview ? "bg-stewart-accent/5 border-stewart-accent/30" : "bg-stewart-card border-stewart-border"}`}>
                   <div className="flex items-center justify-between">
                     <h3 className="text-sm font-semibold text-stewart-text">
-                      {isReview ? "\"Write Your Review\" Button URL" : "Product CTA Link"}
+                      {t(lang, isReview ? "\"Write Your Review\" Button URL" : "Product CTA Link")}
                     </h3>
                     <span className="text-[10px] text-stewart-muted font-mono">{"{product_url}"}</span>
                   </div>
                   {isReview && (
                     <p className="text-xs text-stewart-muted leading-relaxed">
-                      Paste the full review page URL below. This becomes the <strong className="text-stewart-text">&quot;Write Your Review&quot;</strong> button link in the email. No character limit — tracking params, UTMs, redirect chains, all of it.
+                      {lang === "ja"
+                        ? <>下記にレビューページの完全なURLを貼り付けてください。これがメール内の<strong className="text-stewart-text">「レビューを書く」</strong>ボタンのリンクになります。文字数制限なし — トラッキングパラメータ、UTM、リダイレクトチェーン、すべてOKです。</>
+                        : <>Paste the full review page URL below. This becomes the <strong className="text-stewart-text">&quot;Write Your Review&quot;</strong> button link in the email. No character limit — tracking params, UTMs, redirect chains, all of it.</>
+                      }
                     </p>
                   )}
                   <textarea
@@ -446,11 +451,11 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                   {productUrl && (
                     <div className="flex items-center justify-between">
                       <p className="text-[10px] text-stewart-muted">
-                        <strong className={productUrl.length > 200 ? "text-green-400" : "text-stewart-text"}>{productUrl.length}</strong> characters
-                        {productUrl.length > 200 && <span className="text-green-400 ml-1">— no problem. Other platforms break at ~500.</span>}
+                        <strong className={productUrl.length > 200 ? "text-green-400" : "text-stewart-text"}>{productUrl.length}</strong> {t(lang, "characters")}
+                        {productUrl.length > 200 && <span className="text-green-400 ml-1">{t(lang, "— no problem. Other platforms break at ~500.")}</span>}
                       </p>
                       {isReview && productUrl.length > 100 && (
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/20 text-green-400">URL preserved</span>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/20 text-green-400">{t(lang, "URL preserved")}</span>
                       )}
                     </div>
                   )}
@@ -461,7 +466,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
             {/* Email Preview */}
             {previewHtml && (
               <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-                <h3 className="text-sm font-semibold text-stewart-text">Email Preview</h3>
+                <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Email Preview")}</h3>
                 <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
                   <iframe srcDoc={previewHtml} className="w-full border-0" style={{ height: "350px" }} sandbox="allow-same-origin" title="Email Preview" />
                 </div>
@@ -471,7 +476,10 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
             {/* Template callout */}
             {form.template_id && (
               <div className="bg-stewart-accent/5 border-l-2 border-stewart-accent rounded-r-lg px-4 py-2.5 text-sm text-stewart-muted">
-                Using template: <strong className="text-stewart-text">{templates.find((t) => t.id === form.template_id)?.template_name}</strong>. Content will be used as the email body.
+                {lang === "ja"
+                  ? <>テンプレート使用中: <strong className="text-stewart-text">{templates.find((tpl) => tpl.id === form.template_id)?.template_name}</strong>。このコンテンツがメール本文として使用されます。</>
+                  : <>Using template: <strong className="text-stewart-text">{templates.find((tpl) => tpl.id === form.template_id)?.template_name}</strong>. Content will be used as the email body.</>
+                }
               </div>
             )}
 
@@ -479,19 +487,19 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
             {!form.template_id && (
               <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-stewart-text">Email Content</h3>
+                  <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Email Content")}</h3>
                   <div className="flex gap-1 bg-stewart-bg rounded-lg p-0.5">
                     <button
                       onClick={() => setEditorMode("simple")}
                       className={`px-3 py-1 text-xs rounded-md transition-colors ${editorMode === "simple" ? "bg-stewart-card text-stewart-text shadow-sm" : "text-stewart-muted hover:text-stewart-text"}`}
                     >
-                      Simple
+                      {t(lang, "Simple")}
                     </button>
                     <button
                       onClick={() => setEditorMode("html")}
                       className={`px-3 py-1 text-xs rounded-md transition-colors ${editorMode === "html" ? "bg-stewart-card text-stewart-text shadow-sm" : "text-stewart-muted hover:text-stewart-text"}`}
                     >
-                      HTML
+                      {t(lang, "HTML")}
                     </button>
                   </div>
                 </div>
@@ -499,7 +507,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                 {editorMode === "simple" ? (
                   <>
                     <div>
-                      <label className="text-xs text-stewart-muted block mb-1">Body HTML</label>
+                      <label className="text-xs text-stewart-muted block mb-1">{t(lang, "Body HTML")}</label>
                       <textarea
                         value={form.body_html}
                         onChange={(e) => setForm({ ...form, body_html: e.target.value })}
@@ -508,7 +516,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-stewart-muted block mb-1">Plain Text Fallback</label>
+                      <label className="text-xs text-stewart-muted block mb-1">{t(lang, "Plain Text Fallback")}</label>
                       <textarea
                         value={form.body_text}
                         onChange={(e) => setForm({ ...form, body_text: e.target.value })}
@@ -521,14 +529,14 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                   <>
                     <div>
                       <div className="flex items-center justify-between mb-1">
-                        <label className="text-xs text-stewart-muted">HTML Email Content</label>
+                        <label className="text-xs text-stewart-muted">{t(lang, "HTML Email Content")}</label>
                         <div className="flex items-center gap-3">
-                          <span className="text-sm text-stewart-muted">Build with:</span>
+                          <span className="text-sm text-stewart-muted">{t(lang, "Build with:")}</span>
                           <a href="https://stripo.email" target="_blank" rel="noopener noreferrer" className="text-sm text-stewart-accent hover:underline">Stripo</a>
                           <a href="https://www.canva.com/" target="_blank" rel="noopener noreferrer" className="text-sm text-stewart-accent hover:underline">Canva</a>
                           <a href="https://beefree.io" target="_blank" rel="noopener noreferrer" className="text-sm text-stewart-accent hover:underline">BEE Free</a>
                           <button onClick={() => setShowHtmlPreview(!showHtmlPreview)} className="text-[10px] text-stewart-accent hover:underline">
-                            {showHtmlPreview ? "Hide Preview" : "Show Preview"}
+                            {showHtmlPreview ? t(lang, "Hide Preview") : t(lang, "Show Preview")}
                           </button>
                         </div>
                       </div>
@@ -540,19 +548,19 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                         placeholder="Design in Stripo, Canva, or BEE Free → Export HTML → Paste here."
                       />
                       {form.body_html && (
-                        <p className="text-[10px] text-stewart-muted mt-1">{form.body_html.length.toLocaleString()} characters</p>
+                        <p className="text-[10px] text-stewart-muted mt-1">{form.body_html.length.toLocaleString()} {t(lang, "characters")}</p>
                       )}
                     </div>
                     {showHtmlPreview && form.body_html && (
                       <div>
-                        <p className="text-xs text-stewart-muted mb-1">Live Preview</p>
+                        <p className="text-xs text-stewart-muted mb-1">{t(lang, "Live Preview")}</p>
                         <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
                           <iframe srcDoc={form.body_html} className="w-full border-0" style={{ height: "400px" }} sandbox="allow-same-origin" title="Email Preview" />
                         </div>
                       </div>
                     )}
                     <div>
-                      <label className="text-xs text-stewart-muted block mb-1">Plain Text Fallback (optional)</label>
+                      <label className="text-xs text-stewart-muted block mb-1">{t(lang, "Plain Text Fallback (optional)")}</label>
                       <textarea
                         value={form.body_text}
                         onChange={(e) => setForm({ ...form, body_text: e.target.value })}
@@ -572,8 +580,8 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
             {/* Audience — multi-select */}
             <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-stewart-text">Audience</h3>
-                <span className="text-xs text-stewart-muted">{form.audience_segments.length} selected</span>
+                <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Audience")}</h3>
+                <span className="text-xs text-stewart-muted">{form.audience_segments.length} {t(lang, "selected")}</span>
               </div>
               <div className="space-y-1.5">
                 {AUDIENCE_SEGMENTS.map((s) => {
@@ -601,7 +609,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                         }`}>
                           {active && <svg viewBox="0 0 16 16" className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" strokeWidth="3"><path d="M3 8l3 3 7-7" /></svg>}
                         </div>
-                        <span>{s.label}</span>
+                        <span>{tSegment(lang, s.label)}</span>
                       </div>
                       <span className={`text-[10px] ${active ? "text-stewart-accent" : "text-stewart-muted"}`}>{s.count.toLocaleString()}</span>
                     </button>
@@ -610,15 +618,15 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
               </div>
               <div className="bg-stewart-bg rounded-lg p-3 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-stewart-muted">Recipients</span>
+                  <span className="text-stewart-muted">{t(lang, "Recipients")}</span>
                   <span className="font-bold text-stewart-text">{totalRecipients.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-stewart-muted">Unsubscribed</span>
+                  <span className="text-stewart-muted">{t(lang, "Unsubscribed")}</span>
                   <span className="text-red-400">-3</span>
                 </div>
                 <div className="flex justify-between pt-2 border-t border-stewart-border">
-                  <span className="text-stewart-muted">Will receive</span>
+                  <span className="text-stewart-muted">{t(lang, "Will receive")}</span>
                   <span className="font-bold text-green-400">{(totalRecipients - 3).toLocaleString()}</span>
                 </div>
               </div>
@@ -626,7 +634,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
 
             {/* Schedule */}
             <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-              <h3 className="text-sm font-semibold text-stewart-text">Schedule</h3>
+              <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Schedule")}</h3>
               <input
                 type="datetime-local"
                 value={form.scheduled_at}
@@ -635,12 +643,12 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
               />
               <div className="bg-stewart-bg rounded-lg p-3 text-xs space-y-1">
                 <div className="flex justify-between">
-                  <span className="text-stewart-muted">Est. delivery</span>
+                  <span className="text-stewart-muted">{t(lang, "Est. delivery")}</span>
                   <span className="text-stewart-text font-medium">99.8%</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-stewart-muted">Est. send time</span>
-                  <span className="text-stewart-text font-medium">{Math.max(1, Math.ceil((totalRecipients - 3) / 14 / 60))} min</span>
+                  <span className="text-stewart-muted">{t(lang, "Est. send time")}</span>
+                  <span className="text-stewart-text font-medium">{Math.max(1, Math.ceil((totalRecipients - 3) / 14 / 60))} {t(lang, "min")}</span>
                 </div>
               </div>
             </div>
@@ -648,8 +656,8 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
             {/* Dry Run */}
             {campaignId && (
               <div className="bg-stewart-card border border-stewart-border rounded-lg p-4 space-y-3">
-                <p className="text-xs font-semibold text-stewart-text">Dry Run</p>
-                <p className="text-[11px] text-stewart-muted">Send a test to yourself first.</p>
+                <p className="text-xs font-semibold text-stewart-text">{t(lang, "Dry Run")}</p>
+                <p className="text-[11px] text-stewart-muted">{t(lang, "Send a test to yourself first.")}</p>
                 <div className="flex gap-2">
                   <input
                     type="email"
@@ -663,7 +671,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                     disabled={testSending || !testEmail}
                     className="px-3 py-2 bg-stewart-border text-stewart-text text-xs font-medium rounded hover:bg-stewart-accent/20 transition-colors disabled:opacity-50"
                   >
-                    {testSending ? "Sending..." : "Send Test"}
+                    {testSending ? t(lang, "Sending...") : t(lang, "Send Test")}
                   </button>
                 </div>
                 {testResult && (
@@ -678,7 +686,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                 onClick={() => handlePreviewSend(campaignId)}
                 className="w-full px-4 py-3 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors"
               >
-                Preview & Send
+                {t(lang, "Preview & Send")}
               </button>
             )}
             <button
@@ -686,18 +694,18 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
               disabled={!form.campaign_name || !form.subject}
               className="w-full px-4 py-2.5 bg-stewart-card border border-stewart-border text-stewart-text text-sm font-medium rounded-lg hover:bg-stewart-border/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {editing ? "Save Changes" : "Save as Draft"}
+              {editing ? t(lang, "Save Changes") : t(lang, "Save as Draft")}
             </button>
             {editing?.status === "draft" && (
               <button
                 onClick={() => handleDelete(editing.id)}
                 className="w-full px-4 py-2 text-red-400 text-sm hover:text-red-300 transition-colors"
               >
-                Delete Campaign
+                {t(lang, "Delete Campaign")}
               </button>
             )}
             <button onClick={goToList} className="w-full px-4 py-2 text-stewart-muted text-sm hover:text-stewart-text transition-colors">
-              Cancel
+              {t(lang, "Cancel")}
             </button>
           </div>
         </div>
@@ -711,13 +719,13 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
 
   if (view === "detail" && selected) {
     const criteria = parseCriteria(selected);
-    const detailHtml = selected.body_html || templates.find((t) => t.id === selected.template_id)?.html_content || "";
+    const detailHtml = selected.body_html || templates.find((tpl) => tpl.id === selected.template_id)?.html_content || "";
 
     return (
       <div className="space-y-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-sm">
-          <button onClick={goToList} className="text-stewart-accent hover:underline">Campaigns</button>
+          <button onClick={goToList} className="text-stewart-accent hover:underline">{t(lang, "Campaigns")}</button>
           <span className="text-stewart-muted">/</span>
           <span className="text-stewart-text">{selected.campaign_name}</span>
         </div>
@@ -728,17 +736,17 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
             {/* Performance */}
             <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-stewart-text">Campaign Performance</h3>
+                <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Campaign Performance")}</h3>
                 {statusBadge(selected.status)}
               </div>
               <div className="grid grid-cols-3 gap-3">
                 {[
-                  { label: "Sent", val: selected.sent_count, color: "text-stewart-text" },
-                  { label: "Delivered", val: selected.delivered_count, color: "text-green-400" },
-                  { label: "Opened", val: selected.opened_count, color: "text-cyan-400" },
-                  { label: "Clicked", val: selected.clicked_count, color: "text-stewart-accent" },
-                  { label: "Bounced", val: selected.bounced_count, color: "text-red-400" },
-                  { label: "Unsubs", val: selected.unsubscribed_count, color: "text-orange-400" },
+                  { label: t(lang, "Sent"), val: selected.sent_count, color: "text-stewart-text" },
+                  { label: t(lang, "Delivered"), val: selected.delivered_count, color: "text-green-400" },
+                  { label: t(lang, "Opened"), val: selected.opened_count, color: "text-cyan-400" },
+                  { label: t(lang, "Clicked"), val: selected.clicked_count, color: "text-stewart-accent" },
+                  { label: t(lang, "Bounced"), val: selected.bounced_count, color: "text-red-400" },
+                  { label: t(lang, "Unsubs"), val: selected.unsubscribed_count, color: "text-orange-400" },
                 ].map(({ label, val, color }) => (
                   <div key={label} className="bg-stewart-bg rounded-lg p-3 text-center">
                     <p className="text-[10px] text-stewart-muted uppercase tracking-wide">{label}</p>
@@ -752,9 +760,9 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
             {detailHtml && (
               <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
                 <h3 className="text-sm font-semibold text-stewart-text">
-                  Email Preview
+                  {t(lang, "Email Preview")}
                   {!selected.body_html && selected.template_id && (
-                    <span className="ml-2 text-xs font-normal text-stewart-accent">(from template)</span>
+                    <span className="ml-2 text-xs font-normal text-stewart-accent">{t(lang, "(from template)")}</span>
                   )}
                 </h3>
                 <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
@@ -765,7 +773,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
 
             {/* Send Test */}
             <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-3">
-              <p className="text-xs font-semibold text-stewart-text">Send Test Email</p>
+              <p className="text-xs font-semibold text-stewart-text">{t(lang, "Send Test Email")}</p>
               <div className="flex gap-2">
                 <input
                   type="email"
@@ -779,7 +787,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                   disabled={testSending || !testEmail}
                   className="px-4 py-2.5 bg-stewart-border text-stewart-text text-xs font-medium rounded-lg hover:bg-stewart-accent/20 transition-colors disabled:opacity-50"
                 >
-                  {testSending ? "Sending..." : "Send Test"}
+                  {testSending ? t(lang, "Sending...") : t(lang, "Send Test")}
                 </button>
               </div>
               {testResult && (
@@ -792,26 +800,26 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
           <div className="space-y-5">
             {/* Details */}
             <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-              <h3 className="text-sm font-semibold text-stewart-text">Details</h3>
+              <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Details")}</h3>
               <div className="bg-stewart-bg rounded-lg p-3 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-stewart-muted">Subject</span>
+                  <span className="text-stewart-muted">{t(lang, "Subject")}</span>
                   <span className="text-stewart-text text-right max-w-[60%] truncate">{selected.subject}</span>
                 </div>
                 {selected.scheduled_at && (
                   <div className="flex justify-between">
-                    <span className="text-stewart-muted">Scheduled</span>
+                    <span className="text-stewart-muted">{t(lang, "Scheduled")}</span>
                     <span className="text-stewart-text">{selected.scheduled_at.slice(0, 16).replace("T", " ")}</span>
                   </div>
                 )}
                 {selected.sent_at && (
                   <div className="flex justify-between">
-                    <span className="text-stewart-muted">Sent</span>
+                    <span className="text-stewart-muted">{t(lang, "Sent")}</span>
                     <span className="text-stewart-text">{selected.sent_at.slice(0, 16).replace("T", " ")}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <span className="text-stewart-muted">Created</span>
+                  <span className="text-stewart-muted">{t(lang, "Created")}</span>
                   <span className="text-stewart-text">{selected.created_at?.slice(0, 10)}</span>
                 </div>
               </div>
@@ -820,12 +828,12 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
             {/* Audience */}
             {criteria.label && (
               <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-                <h3 className="text-sm font-semibold text-stewart-text">Audience</h3>
+                <h3 className="text-sm font-semibold text-stewart-text">{t(lang, "Audience")}</h3>
                 <div className="bg-stewart-bg rounded-lg p-3 space-y-2 text-sm">
                   <p className="text-stewart-text font-medium">{criteria.label}</p>
                   {criteria.estimated_count && (
                     <div className="flex justify-between pt-1">
-                      <span className="text-stewart-muted">Recipients</span>
+                      <span className="text-stewart-muted">{t(lang, "Recipients")}</span>
                       <span className="font-bold text-stewart-text">{criteria.estimated_count.toLocaleString()}</span>
                     </div>
                   )}
@@ -839,7 +847,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                 onClick={() => goToCompose(selected)}
                 className="w-full px-4 py-2.5 bg-stewart-card border border-stewart-border text-stewart-text text-sm font-medium rounded-lg hover:bg-stewart-border/50 transition-colors"
               >
-                Edit Campaign
+                {t(lang, "Edit Campaign")}
               </button>
             )}
             {selected.status === "draft" && (
@@ -847,11 +855,11 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                 onClick={() => handleDelete(selected.id)}
                 className="w-full px-4 py-2 text-red-400 text-sm hover:text-red-300 transition-colors"
               >
-                Delete Campaign
+                {t(lang, "Delete Campaign")}
               </button>
             )}
             <button onClick={goToList} className="w-full px-4 py-2 text-stewart-muted text-sm hover:text-stewart-text transition-colors">
-              &larr; Back to Campaigns
+              {t(lang, "← Back to Campaigns")}
             </button>
           </div>
         </div>
