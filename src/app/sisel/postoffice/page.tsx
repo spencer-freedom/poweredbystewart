@@ -45,8 +45,11 @@ export default function SiselPostOfficePage() {
               <p className="text-stewart-muted text-xs">Sisel International — Email Marketing & Automation</p>
             </div>
           </div>
-          <div className="bg-white rounded-lg px-3 py-1.5">
-            <img src="/sisel-logo.png" alt="Sisel" className="h-8 w-auto" />
+          <div className="flex items-center gap-3">
+            <a href="/sisel" className="px-4 py-2 bg-white text-stewart-bg text-sm font-semibold rounded-lg hover:bg-gray-100 transition-colors">Proposal</a>
+            <div className="bg-white rounded-lg px-3 py-1.5">
+              <img src="/sisel-logo.png" alt="Sisel" className="h-8 w-auto" />
+            </div>
           </div>
         </div>
       </div>
