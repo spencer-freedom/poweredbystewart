@@ -141,34 +141,25 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
           </button>
         </div>
 
-        {/* Template List — compact rows */}
+        {/* Template Cards — compact grid */}
         {templates.length === 0 ? (
           <div className="bg-stewart-card border border-stewart-border rounded-lg px-4 py-12 text-center text-stewart-muted text-sm">
             No templates yet. Click + New Template to create one.
           </div>
         ) : (
-          <div className="bg-stewart-card border border-stewart-border rounded-lg divide-y divide-stewart-border">
+          <div className="grid grid-cols-3 gap-3">
             {templates.map((t) => (
-              <button
+              <div
                 key={t.id}
                 onClick={() => setSelected(selected?.id === t.id ? null : t)}
-                className={`w-full flex items-center gap-4 px-4 py-3 text-left transition-colors hover:bg-stewart-accent/5 ${selected?.id === t.id ? "bg-stewart-accent/10" : ""}`}
+                className={`bg-stewart-card border rounded-lg px-3 py-2.5 cursor-pointer transition-colors hover:border-stewart-accent/50 group ${selected?.id === t.id ? "border-stewart-accent bg-stewart-accent/5" : "border-stewart-border"}`}
               >
-                <div className="w-8 h-8 rounded-lg bg-stewart-accent/10 flex items-center justify-center shrink-0">
-                  <svg viewBox="0 0 24 24" className="w-4 h-4 text-stewart-accent" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M2 8l10 6 10-6" /></svg>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-stewart-text truncate">{t.template_name}</p>
-                  <p className="text-xs text-stewart-muted truncate">{t.subject_template || "No subject"}</p>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-stewart-border text-stewart-muted">{t.template_type}</span>
-                  {(t.variables || []).length > 0 && (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-stewart-border text-stewart-muted">{(t.variables || []).length} vars</span>
-                  )}
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="text-xs font-semibold text-stewart-text truncate group-hover:text-stewart-accent transition-colors">{t.template_name}</h3>
                   {statusBadge(t.status)}
                 </div>
-              </button>
+                <p className="text-[10px] text-stewart-muted truncate">{t.subject_template || "No subject"}</p>
+              </div>
             ))}
           </div>
         )}
