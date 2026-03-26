@@ -5,6 +5,8 @@ import { api } from "@/lib/api";
 import type { EmailCampaign, EmailTemplate } from "@/lib/types";
 import { statusBadge } from "@/lib/ui/badges";
 import { ProductGrid, buildPreviewHtml } from "./ProductGrid";
+import { CsvImport } from "./CsvImport";
+import type { CsvRecipient } from "./csvUtils";
 import { t, tSegment, type Lang } from "./i18n";
 
 interface Props {
@@ -56,6 +58,7 @@ export function CampaignsTab({ tenantId, onReloadSummary, lang = "en" }: Props) 
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [productUrl, setProductUrl] = useState("");
+  const [csvRecipients, setCsvRecipients] = useState<CsvRecipient[]>([]);
   const [error, setError] = useState("");
 
   // ─── Data loading ─────────────────────────────────────────────
@@ -89,6 +92,7 @@ export function CampaignsTab({ tenantId, onReloadSummary, lang = "en" }: Props) 
     setTestResult(null);
     setSelectedProducts([]);
     setProductUrl("");
+    setCsvRecipients([]);
   };
 
   const goToCompose = (campaign?: EmailCampaign) => {
@@ -417,6 +421,29 @@ export function CampaignsTab({ tenantId, onReloadSummary, lang = "en" }: Props) 
             {/* Product Grid */}
             <ProductGrid selectedProducts={selectedProducts} onToggle={toggleProduct} lang={lang} />
 
+            {/* CSV Import — recipient data */}
+            <CsvImport
+              lang={lang}
+              campaignHtml={previewHtml}
+              campaignSubject={form.subject}
+              onRecipientsReady={setCsvRecipients}
+            />
+
+            {/* CSV recipient badge */}
+            {csvRecipients.length > 0 && (
+              <div className="bg-green-500/10 border border-green-500/30 rounded-lg px-4 py-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center">
+                    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-green-400" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" /></svg>
+                  </div>
+                  <p className="text-sm font-semibold text-green-400">
+                    {csvRecipients.length} {lang === "ja" ? "件のパーソナライズメール送信準備完了" : "personalized emails ready to send"}
+                  </p>
+                </div>
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/20 text-green-400">CSV</span>
+              </div>
+            )}
+
             {/* Review URL — only for review templates/campaigns */}
             {selectedProducts.length > 0 && (() => {
               const currentTemplate = templates.find((tpl) => tpl.id === form.template_id);
@@ -694,7 +721,12 @@ export function CampaignsTab({ tenantId, onReloadSummary, lang = "en" }: Props) 
               disabled={!form.campaign_name || !form.subject}
               className="w-full px-4 py-2.5 bg-stewart-card border border-stewart-border text-stewart-text text-sm font-medium rounded-lg hover:bg-stewart-border/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {editing ? t(lang, "Save Changes") : t(lang, "Save as Draft")}
+              {editing
+                ? t(lang, "Save Changes")
+                : csvRecipients.length > 0
+                  ? `${t(lang, "Save as Draft")} (${csvRecipients.length} ${lang === "ja" ? "件" : "recipients"})`
+                  : t(lang, "Save as Draft")
+              }
             </button>
             {editing?.status === "draft" && (
               <button
