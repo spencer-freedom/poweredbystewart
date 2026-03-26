@@ -417,24 +417,47 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
             {/* Product Grid */}
             <ProductGrid selectedProducts={selectedProducts} onToggle={toggleProduct} />
 
-            {/* Product URL — for review links, CTAs, etc. */}
-            {selectedProducts.length > 0 && (
-              <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-stewart-text">Product Link</h3>
-                  <span className="text-[10px] text-stewart-muted">Maps to {"{product_url}"} in template</span>
+            {/* Review / Product URL — centerpiece demo feature */}
+            {selectedProducts.length > 0 && (() => {
+              const currentTemplate = templates.find((t) => t.id === form.template_id);
+              const isReview = currentTemplate?.template_name?.toLowerCase().includes("review") || form.campaign_name?.toLowerCase().includes("review");
+              return (
+                <div className={`border rounded-lg p-5 space-y-3 ${isReview ? "bg-stewart-accent/5 border-stewart-accent/30" : "bg-stewart-card border-stewart-border"}`}>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-stewart-text">
+                      {isReview ? "\"Write Your Review\" Button URL" : "Product CTA Link"}
+                    </h3>
+                    <span className="text-[10px] text-stewart-muted font-mono">{"{product_url}"}</span>
+                  </div>
+                  {isReview && (
+                    <p className="text-xs text-stewart-muted leading-relaxed">
+                      Paste the full review page URL below. This becomes the <strong className="text-stewart-text">&quot;Write Your Review&quot;</strong> button link in the email. No character limit — tracking params, UTMs, redirect chains, all of it.
+                    </p>
+                  )}
+                  <textarea
+                    value={productUrl}
+                    onChange={(e) => setProductUrl(e.target.value)}
+                    className="w-full bg-stewart-bg border border-stewart-border rounded-lg px-4 py-2.5 text-sm text-stewart-text font-mono break-all"
+                    rows={productUrl.length > 120 ? 4 : 2}
+                    placeholder={isReview
+                      ? "https://sisel.net/products/h2-stix?variant=43298574336123&utm_source=email&utm_medium=..."
+                      : "https://sisel.net/products/..."
+                    }
+                  />
+                  {productUrl && (
+                    <div className="flex items-center justify-between">
+                      <p className="text-[10px] text-stewart-muted">
+                        <strong className={productUrl.length > 200 ? "text-green-400" : "text-stewart-text"}>{productUrl.length}</strong> characters
+                        {productUrl.length > 200 && <span className="text-green-400 ml-1">— no problem. Other platforms break at ~500.</span>}
+                      </p>
+                      {isReview && productUrl.length > 100 && (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/20 text-green-400">URL preserved</span>
+                      )}
+                    </div>
+                  )}
                 </div>
-                <input
-                  value={productUrl}
-                  onChange={(e) => setProductUrl(e.target.value)}
-                  className="w-full bg-stewart-bg border border-stewart-border rounded-lg px-4 py-2.5 text-sm text-stewart-text font-mono"
-                  placeholder="https://sisel.net/products/..."
-                />
-                {productUrl && (
-                  <p className="text-[10px] text-stewart-muted">{productUrl.length} characters — this URL will be used for all CTA buttons in the email.</p>
-                )}
-              </div>
-            )}
+              );
+            })()}
 
             {/* Email Preview */}
             {previewHtml && (
