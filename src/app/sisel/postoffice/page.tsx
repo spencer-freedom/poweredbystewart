@@ -46,7 +46,7 @@ export default function SiselPostOfficePage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <a href="/sisel" className="px-4 py-2 bg-white text-stewart-bg text-sm font-semibold rounded-lg hover:bg-gray-100 transition-colors">Proposal</a>
+            <a href="/sisel" className="px-4 py-2 text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-colors" style={{ backgroundColor: "#1a5c3a" }}>Proposal</a>
             <div className="bg-white rounded-lg px-3 py-1.5">
               <img src="/sisel-logo.png" alt="Sisel" className="h-8 w-auto" />
             </div>
