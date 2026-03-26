@@ -16,6 +16,11 @@ import type {
   VinSummary,
   DealershipContext,
   ComputeSummariesResult,
+  EmailSummary,
+  EmailTemplate,
+  EmailCampaign,
+  EmailSend,
+  EmailUnsubscribe,
 } from "./types";
 
 // ─── Server-side API route ─────────────────────────────────────────────────
@@ -96,26 +101,17 @@ export const api = {
     source?: string,
     segment?: string,
     status?: string,
-    limit = 200,
-    leadType?: string,
-    startDate?: string,
-    endDate?: string
+    limit = 200
   ) => {
     const params: Record<string, string> = {
       action: "leads",
       tenant: tenantId,
       limit: String(limit),
     };
-    if (startDate && endDate) {
-      params.start_date = startDate;
-      params.end_date = endDate;
-    } else if (month) {
-      params.month = month;
-    }
+    if (month) params.month = month;
     if (source) params.source = source;
     if (segment) params.segment = segment;
     if (status) params.status = status;
-    if (leadType) params.lead_type = leadType;
     return apiGet<Lead[]>(params);
   },
 
@@ -260,4 +256,90 @@ export const api = {
     if (month) params.month = month;
     return apiPost<ComputeSummariesResult>(params);
   },
+
+  // ─── Email Marketing (The Post Office) ──────────────────────────────────────
+
+  emailSummary: (tenantId: string) =>
+    emailGet<EmailSummary>({ action: "summary", tenant: tenantId }),
+
+  emailListTemplates: (tenantId: string, limit = 50) =>
+    emailGet<EmailTemplate[]>({ action: "templates", tenant: tenantId, limit: String(limit) }),
+
+  emailListCampaigns: (tenantId: string, status?: string, limit = 50) => {
+    const params: Record<string, string> = { action: "campaigns", tenant: tenantId, limit: String(limit) };
+    if (status) params.status = status;
+    return emailGet<EmailCampaign[]>(params);
+  },
+
+  emailListSends: (tenantId: string, campaignId?: string, sendType?: string, limit = 100) => {
+    const params: Record<string, string> = { action: "sends", tenant: tenantId, limit: String(limit) };
+    if (campaignId) params.campaign_id = campaignId;
+    if (sendType) params.send_type = sendType;
+    return emailGet<EmailSend[]>(params);
+  },
+
+  emailListUnsubscribes: (tenantId: string, limit = 100) =>
+    emailGet<EmailUnsubscribe[]>({ action: "unsubscribes", tenant: tenantId, limit: String(limit) }),
+
+  emailCreateTemplate: (tenantId: string, data: Record<string, unknown>) =>
+    emailPost<EmailTemplate>({ action: "create_template", tenant: tenantId }, data),
+
+  emailUpdateTemplate: (tenantId: string, templateId: string, data: Record<string, unknown>) =>
+    emailPatch<EmailTemplate>({ action: "update_template", tenant: tenantId, id: templateId }, data),
+
+  emailCreateCampaign: (tenantId: string, data: Record<string, unknown>) =>
+    emailPost<EmailCampaign>({ action: "create_campaign", tenant: tenantId }, data),
+
+  emailSendCampaign: (tenantId: string, campaignId: string, dryRun = false) =>
+    emailPost<Record<string, unknown>>(
+      { action: "send_campaign", tenant: tenantId, campaign_id: campaignId, dry_run: String(dryRun) },
+    ),
 };
+
+// ─── Email API helpers (separate route) ───────────────────────────────────────
+
+const EMAIL_ROUTE = "/api/email";
+
+async function emailGet<T>(params: Record<string, string>): Promise<T> {
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(`${EMAIL_ROUTE}?${qs}`);
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.error || `API error ${res.status}`);
+  }
+  return res.json();
+}
+
+async function emailPost<T>(
+  params: Record<string, string>,
+  body?: Record<string, unknown>
+): Promise<T> {
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(`${EMAIL_ROUTE}?${qs}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.error || `API error ${res.status}`);
+  }
+  return res.json();
+}
+
+async function emailPatch<T>(
+  params: Record<string, string>,
+  body: Record<string, unknown>
+): Promise<T> {
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(`${EMAIL_ROUTE}?${qs}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.error || `API error ${res.status}`);
+  }
+  return res.json();
+}

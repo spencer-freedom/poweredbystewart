@@ -16,8 +16,6 @@ export interface MarketingClient {
   created_at: string;
 }
 
-export type LeadType = "internet" | "walkin" | "phone" | "service";
-
 export interface Lead {
   id: number;
   tenant_id: string;
@@ -27,7 +25,6 @@ export interface Lead {
   source_confidence: string;
   interest: string;
   segment: string;
-  lead_type: LeadType;
   past_actions: string;
   appt: number;
   show: number;
@@ -49,14 +46,11 @@ export interface CreateLeadInput {
   source?: string;
   interest?: string;
   segment?: string;
-  lead_type?: LeadType;
   appt?: boolean;
   show?: boolean;
   turn_over?: boolean;
   to_salesperson?: string;
   status?: string;
-  past_actions?: string;
-  future_actions?: string;
 }
 
 export interface KpiMonthly {
@@ -391,6 +385,77 @@ export interface ComputeSummariesResult {
   health_score: number | null;
   token_estimate: number | null;
   version: number | null;
+}
+
+// ─── Email Marketing (The Post Office) ───
+
+export interface EmailSummary {
+  campaigns: { total: number; sent: number; draft: number; scheduled: number; sending: number };
+  sends: { total: number; campaign: number; transactional: number; sent: number; failed: number };
+  templates: number;
+  unsubscribes: number;
+}
+
+export interface EmailTemplate {
+  id: string;
+  tenant_id: string;
+  template_name: string;
+  template_type: string;
+  subject_template: string;
+  html_content: string;
+  text_content: string;
+  variables: string[];
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface EmailCampaign {
+  id: string;
+  tenant_id: string;
+  campaign_name: string;
+  template_id: string | null;
+  subject: string;
+  body_html: string;
+  body_text: string;
+  status: string;
+  scheduled_at: string | null;
+  sent_at: string | null;
+  total_recipients: number;
+  sent_count: number;
+  delivered_count: number;
+  opened_count: number;
+  clicked_count: number;
+  bounced_count: number;
+  unsubscribed_count: number;
+  metadata: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface EmailSend {
+  id: number;
+  tenant_id: string;
+  campaign_id: string | null;
+  customer_id: string;
+  email: string;
+  customer_name: string;
+  send_type: string;
+  template_type: string;
+  subject: string;
+  status: string;
+  sent_at: string | null;
+  error: string;
+  created_at: string;
+}
+
+export interface EmailUnsubscribe {
+  id: number;
+  tenant_id: string;
+  email: string;
+  reason: string;
+  source: string;
+  created_at: string;
 }
 
 // ─── User roles ───

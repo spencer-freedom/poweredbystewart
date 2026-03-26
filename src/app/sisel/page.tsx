@@ -1,708 +1,1203 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { useEffect, useState, useCallback } from "react";
+import { api } from "@/lib/api";
+import type {
+  EmailSummary,
+  EmailTemplate,
+  EmailCampaign,
+  EmailSend,
+  EmailUnsubscribe,
+} from "@/lib/types";
 
-type Tab = "overview" | "dashboard" | "email-studio" | "get-started";
+const TENANT_ID = "sisel";
 
-// ─── Shared Data ────────────────────────────────────────────────
+// ─── Top-level tabs ─────────────────────────────────────────────
+type TopTab = "platform" | "overview";
+type PlatformTab = "campaigns" | "templates" | "sends" | "unsubscribes";
 
-const CONTACT_BUCKETS = [
-  { label: "Active", count: 18240, color: "text-green-400", bg: "bg-green-500/20" },
-  { label: "Inactive", count: 6130, color: "text-yellow-400", bg: "bg-yellow-500/20" },
-  { label: "Bounced", count: 4310, color: "text-red-400", bg: "bg-red-500/20" },
-  { label: "Unsubscribed", count: 1320, color: "text-orange-400", bg: "bg-orange-500/20" },
-];
+// ─── Helpers ────────────────────────────────────────────────────
 
-const SAMPLE_SEGMENTS = [
-  { name: "Bought in last 90 days", count: 4820, status: "active" },
-  { name: "Hasn't ordered in 60+ days", count: 3190, status: "active" },
-  { name: "Lifetime spend over $500", count: 1450, status: "active" },
-  { name: "New customers this month", count: 312, status: "active" },
-  { name: "VIP - Top 10% by spend", count: 680, status: "active" },
-  { name: "International distributors", count: 2140, status: "draft" },
-];
-
-const SAMPLE_FLOWS = [
-  { name: "New Customer Welcome Series", trigger: "First purchase", emails: 3, status: "active", sent: 1240, opened: "68%" },
-  { name: "60-Day Win-Back", trigger: "No order in 60 days", emails: 2, status: "active", sent: 890, opened: "42%" },
-  { name: "Cross-Sell: Personal Care", trigger: "Bought supplements", emails: 1, status: "draft", sent: 0, opened: "--" },
-  { name: "Rank Advancement", trigger: "Rank change in Exigo", emails: 1, status: "active", sent: 156, opened: "74%" },
-  { name: "Reorder Reminder", trigger: "30 days since last order", emails: 1, status: "active", sent: 2100, opened: "51%" },
-];
-
-const SAMPLE_CAMPAIGNS = [
-  { name: "Spring Catalog Launch", status: "sent", sent: 18240, opened: "34%", clicked: "12%", date: "2026-03-01" },
-  { name: "VIP Early Access - New Skincare", status: "sent", sent: 680, opened: "52%", clicked: "18%", date: "2026-02-25" },
-  { name: "Reorder Reminder - Supplements", status: "sent", sent: 3190, opened: "41%", clicked: "14%", date: "2026-02-20" },
-  { name: "February Newsletter", status: "sent", sent: 17890, opened: "31%", clicked: "9%", date: "2026-02-14" },
-];
-
-const COST_COMPARISON = [
-  { feature: "Monthly cost", mailchimp: "$450/mo", platform: "$500/mo" },
-  { feature: "Automation flows", mailchimp: "Not included", platform: "Included" },
-  { feature: "Exigo integration", mailchimp: "54 hours quoted", platform: "Included" },
-  { feature: "Purchase segments", mailchimp: "Manual CSV exports", platform: "Automatic" },
-  { feature: "Dead email charges", mailchimp: "You pay for all", platform: "Auto-cleaned" },
-  { feature: "List cleaning", mailchimp: "Manual", platform: "Automatic" },
-  { feature: "Unsubscribe handling", mailchimp: "Manual sync", platform: "Auto-synced to Exigo" },
-];
-
-const SAMPLE_PRODUCTS = [
-  { id: 1, name: "SupraDetox", price: "$54.95", image: "supplement", tag: "Best Seller" },
-  { id: 2, name: "Fucoydon", price: "$89.95", image: "supplement", tag: null },
-  { id: 3, name: "Eternity", price: "$69.95", image: "skincare", tag: "New" },
-  { id: 4, name: "SiseLean", price: "$74.95", image: "supplement", tag: null },
-  { id: 5, name: "Body Wash", price: "$24.95", image: "personal", tag: null },
-  { id: 6, name: "H2 Stix", price: "$39.95", image: "water", tag: null },
-];
-
-const TEMPLATES = [
-  { id: 1, name: "Product Launch", subject: "Just dropped: {product_name}", type: "promotional", status: "active", variables: ["name", "products"] },
-  { id: 2, name: "Monthly Newsletter", subject: "{name}, here's what's new at Sisel", type: "newsletter", status: "active", variables: ["name", "products"] },
-  { id: 3, name: "Seasonal Catalog", subject: "Spring Collection is here, {name}", type: "catalog", status: "active", variables: ["name", "products"] },
-  { id: 4, name: "Win-Back", subject: "We miss you, {name}", type: "automation", status: "active", variables: ["name", "products", "last_order"] },
-  { id: 5, name: "Rank Achievement", subject: "Congratulations on your new rank!", type: "automation", status: "active", variables: ["name", "rank"] },
-  { id: 6, name: "Reorder Reminder", subject: "Time to restock, {name}?", type: "automation", status: "draft", variables: ["name", "products", "last_order"] },
-];
-
-// ─── Shared Components ──────────────────────────────────────────
-
-function StatCard({ label, value, sub, variant }: { label: string; value: string | number; sub?: string; variant?: "success" | "warning" | "danger" }) {
-  const accent = variant === "success" ? "text-green-400" : variant === "warning" ? "text-yellow-400" : variant === "danger" ? "text-red-400" : "text-stewart-accent";
+function statusBadge(s: string) {
+  const colors: Record<string, string> = {
+    draft: "bg-blue-500/20 text-blue-400",
+    active: "bg-green-500/20 text-green-400",
+    scheduled: "bg-purple-500/20 text-purple-400",
+    sending: "bg-yellow-500/20 text-yellow-400",
+    sent: "bg-green-500/20 text-green-400",
+    failed: "bg-red-500/20 text-red-400",
+    bounced: "bg-red-500/20 text-red-400",
+    delivered: "bg-green-500/20 text-green-400",
+    opened: "bg-cyan-500/20 text-cyan-400",
+    clicked: "bg-stewart-accent/20 text-stewart-accent",
+    custom: "bg-stewart-border text-stewart-muted",
+    transactional: "bg-purple-500/20 text-purple-400",
+    promotional: "bg-orange-500/20 text-orange-400",
+    campaign: "bg-stewart-accent/20 text-stewart-accent",
+    newsletter: "bg-blue-500/20 text-blue-400",
+    announcement: "bg-cyan-500/20 text-cyan-400",
+    onboarding: "bg-green-500/20 text-green-400",
+    promotion: "bg-orange-500/20 text-orange-400",
+    internal: "bg-stewart-border text-stewart-muted",
+  };
   return (
-    <div className="bg-stewart-card border border-stewart-border rounded-lg p-4">
-      <p className="text-xs text-stewart-muted mb-1">{label}</p>
-      <p className={`text-xl font-bold ${accent}`}>{typeof value === "number" ? value.toLocaleString() : value}</p>
-      {sub && <p className="text-[11px] text-stewart-muted mt-0.5">{sub}</p>}
-    </div>
+    <span className={`px-2 py-0.5 rounded text-xs font-medium ${colors[s] || "bg-stewart-border text-stewart-muted"}`}>
+      {s.replace(/_/g, " ")}
+    </span>
   );
 }
 
-function statusBadge(status: string) {
-  const map: Record<string, string> = { active: "bg-green-500/20 text-green-400", draft: "bg-yellow-500/20 text-yellow-400", sent: "bg-stewart-accent/20 text-stewart-accent" };
-  return <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${map[status] || "bg-stewart-border text-stewart-muted"}`}>{status}</span>;
-}
-
-function PitchCallout({ children, show }: { children: React.ReactNode; show: boolean }) {
-  if (!show) return null;
+function sourceBadge(s: string) {
+  const colors: Record<string, string> = {
+    link: "bg-blue-500/20 text-blue-400",
+    manual: "bg-stewart-border text-stewart-muted",
+    ses_bounce: "bg-red-500/20 text-red-400",
+    ses_complaint: "bg-orange-500/20 text-orange-400",
+  };
   return (
-    <div className="bg-stewart-accent/5 border-l-2 border-stewart-accent rounded-r-lg px-4 py-2.5 text-sm text-stewart-muted">
-      {children}
-    </div>
+    <span className={`px-2 py-0.5 rounded text-xs font-medium ${colors[s] || "bg-stewart-border text-stewart-muted"}`}>
+      {s.replace(/_/g, " ")}
+    </span>
   );
 }
 
-function ProductIcon({ type }: { type: string }) {
-  const colors: Record<string, string> = { supplement: "bg-green-500/20 text-green-400", skincare: "bg-purple-500/20 text-purple-400", personal: "bg-blue-500/20 text-blue-400", water: "bg-cyan-500/20 text-cyan-400" };
-  const icons: Record<string, string> = { supplement: "S", skincare: "R", personal: "P", water: "W" };
-  return <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-sm font-bold ${colors[type] || "bg-stewart-border text-stewart-muted"}`}>{icons[type] || "?"}</div>;
-}
+// ─── Defaults ───────────────────────────────────────────────────
 
-// ─── Tab 1: Overview ────────────────────────────────────────────
+const defaultCampaignForm = {
+  campaign_name: "",
+  subject: "",
+  template_id: "",
+  body_html: "",
+  body_text: "",
+  scheduled_at: "",
+};
 
-function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
-  return (
-    <div className="space-y-8 max-w-3xl">
-      <div>
-        <h2 className="text-3xl font-bold text-stewart-text leading-snug">
-          Replace Mailchimp.<br />
-          Connect Exigo.<br />
-          Automate everything.
-        </h2>
-        <p className="mt-3 text-stewart-muted">Already built. Already running. Ready to deploy.</p>
-      </div>
+const defaultTemplateForm = {
+  template_name: "",
+  template_type: "custom",
+  subject_template: "",
+  html_content: "",
+  text_content: "",
+  variables: "",
+  status: "draft",
+};
 
-      <div className="grid grid-cols-3 gap-4">
-        {/* 30K Contacts — pie chart + legend to the right */}
-        <div className="text-center">
-          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center gap-4 h-44">
-            <div className="relative w-20 h-20 flex-shrink-0">
-              <svg viewBox="0 0 42 42" className="w-full h-full" style={{ transform: "rotate(-90deg)" }}>
-                <circle cx="21" cy="21" r="15" fill="none" stroke="#22c55e" strokeWidth="8" strokeDasharray="57.5 94.2" strokeDashoffset="0" />
-                <circle cx="21" cy="21" r="15" fill="none" stroke="#eab308" strokeWidth="8" strokeDasharray="18.8 94.2" strokeDashoffset="-57.5" />
-                <circle cx="21" cy="21" r="15" fill="none" stroke="#ef4444" strokeWidth="8" strokeDasharray="13.2 94.2" strokeDashoffset="-76.3" />
-                <circle cx="21" cy="21" r="15" fill="none" stroke="#f97316" strokeWidth="8" strokeDasharray="4.7 94.2" strokeDashoffset="-89.5" />
-              </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-stewart-text">30K</span>
-            </div>
-            <div className="space-y-1 text-[11px] text-stewart-muted text-left">
-              <p><span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5" />Active 61%</p>
-              <p><span className="inline-block w-2 h-2 rounded-full bg-yellow-500 mr-1.5" />Inactive 20%</p>
-              <p><span className="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5" />Bounced 14%</p>
-              <p><span className="inline-block w-2 h-2 rounded-full bg-orange-500 mr-1.5" />Unsub 5%</p>
-            </div>
-          </div>
-          <p className="text-sm font-semibold text-stewart-text mt-3">Emails synced & sorted</p>
-          <p className="text-xs text-stewart-muted mt-0.5">Auto-categorized from Exigo</p>
-        </div>
-
-        {/* 66 Hours Saved */}
-        <div className="text-center">
-          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center h-44">
-            <p className="text-7xl font-bold text-green-400">54<span className="text-lg font-medium text-green-400/70">hrs</span></p>
-          </div>
-          <p className="text-sm font-semibold text-stewart-text mt-3">Saved</p>
-          <p className="text-xs text-stewart-muted mt-0.5">Exigo integration already built</p>
-        </div>
-
-        {/* Real-time Exigo Data */}
-        <div className="text-center">
-          <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-center h-44">
-            <div>
-              <p className="text-4xl font-bold text-stewart-accent">Real-time</p>
-              <p className="text-4xl font-bold text-stewart-accent -mt-1">data</p>
-            </div>
-          </div>
-          <p className="text-sm font-semibold text-stewart-text mt-3">Live Exigo sales data</p>
-          <p className="text-xs text-stewart-muted mt-0.5">Campaigns from fresh purchase history</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-red-500/10 border-2 border-red-500/40 rounded-lg p-5 space-y-3">
-          <h3 className="text-sm font-semibold text-red-400 uppercase tracking-wide">Now</h3>
-          {[
-            "$450/mo — no automation, no Exigo sync",
-            "Manual CSV exports for every segment",
-            "54 hours quoted just for integration",
-            "Paying to email bounced & dead contacts",
-          ].map((item) => (
-            <p key={item} className="flex items-start gap-2 text-sm text-stewart-muted">
-              <span className="text-red-400 mt-0.5">&#10005;</span> {item}
-            </p>
-          ))}
-        </div>
-        <div className="bg-green-500/10 border-2 border-green-500/40 rounded-lg p-5 space-y-3">
-          <h3 className="text-sm font-semibold text-green-400 uppercase tracking-wide">With this system</h3>
-          {[
-            "Two-way Exigo sync — live data, no exports",
-            "Auto-sorted contacts & smart segments",
-            "Automated flows from real purchase data",
-            "Unlimited sending, auto list cleaning",
-          ].map((item) => (
-            <p key={item} className="flex items-start gap-2 text-sm text-stewart-muted">
-              <span className="text-green-400 mt-0.5">&#10003;</span> {item}
-            </p>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex gap-3">
-        <button onClick={() => onNavigate("dashboard")} className="px-6 py-3 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors">
-          See the platform &rarr;
-        </button>
-        <button onClick={() => onNavigate("get-started")} className="px-6 py-3 bg-stewart-card border border-stewart-border text-stewart-text text-sm font-medium rounded-lg hover:bg-stewart-border/50 transition-colors">
-          View pricing
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ─── Tab 2: Platform Preview (Dashboard + pitch callouts) ───────
-
-function DashboardTab() {
-  const totalContacts = CONTACT_BUCKETS.reduce((sum, b) => sum + b.count, 0);
-
-  return (
-    <div className="space-y-6">
-      {/* Contact Health */}
-      <PitchCallout show={true}>
-        Every contact auto-sorted from Exigo. No more paying to email dead addresses.
-      </PitchCallout>
-      <div>
-        <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Contact Health</h2>
-        <div className="grid grid-cols-5 gap-3">
-          <StatCard label="Total Contacts" value={totalContacts} sub="Synced from Exigo" />
-          {CONTACT_BUCKETS.map((b) => (
-            <StatCard key={b.label} label={b.label} value={b.count} variant={b.label === "Active" ? "success" : b.label === "Bounced" ? "danger" : b.label === "Inactive" ? "warning" : undefined} />
-          ))}
-        </div>
-      </div>
-
-      {/* Performance */}
-      <PitchCallout show={true}>
-        Real-time campaign metrics. 34% open rate vs 21% industry average.
-      </PitchCallout>
-      <div>
-        <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Performance</h2>
-        <div className="grid grid-cols-4 gap-3">
-          <StatCard label="Emails Sent (30d)" value="42,680" sub="All campaigns" variant="success" />
-          <StatCard label="Avg Open Rate" value="34%" sub="Industry avg: 21%" variant="success" />
-          <StatCard label="Avg Click Rate" value="12%" sub="Industry avg: 3%" variant="success" />
-          <StatCard label="Conversion Rate" value="4.8%" sub="Email → Exigo order" variant="success" />
-        </div>
-      </div>
-
-      {/* Automation Flows */}
-      <PitchCallout show={true}>
-        Set up once, runs forever. Triggered by real Exigo data.
-      </PitchCallout>
-      <div>
-        <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Automation Flows</h2>
-        <div className="bg-stewart-card border border-stewart-border rounded-lg overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-stewart-border">
-                <th className="text-left px-4 py-2.5 text-stewart-muted font-medium">Flow</th>
-                <th className="text-left px-4 py-2.5 text-stewart-muted font-medium">Trigger</th>
-                <th className="text-center px-4 py-2.5 text-stewart-muted font-medium">Emails</th>
-                <th className="text-center px-4 py-2.5 text-stewart-muted font-medium">Status</th>
-                <th className="text-right px-4 py-2.5 text-stewart-muted font-medium">Sent</th>
-                <th className="text-right px-4 py-2.5 text-stewart-muted font-medium">Open Rate</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-stewart-border/30">
-              {SAMPLE_FLOWS.map((flow) => (
-                <tr key={flow.name}>
-                  <td className="px-4 py-2.5 font-medium text-stewart-text">{flow.name}</td>
-                  <td className="px-4 py-2.5 text-stewart-muted">{flow.trigger}</td>
-                  <td className="px-4 py-2.5 text-center text-stewart-muted">{flow.emails}</td>
-                  <td className="px-4 py-2.5 text-center">{statusBadge(flow.status)}</td>
-                  <td className="px-4 py-2.5 text-right text-stewart-muted">{flow.sent.toLocaleString()}</td>
-                  <td className="px-4 py-2.5 text-right text-stewart-muted">{flow.opened}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Audience Segments */}
-      <PitchCallout show={true}>
-        Segments built from Exigo purchase data. Update automatically as orders come in.
-      </PitchCallout>
-      <div>
-        <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Audience Segments</h2>
-        <div className="grid grid-cols-3 gap-3">
-          {SAMPLE_SEGMENTS.map((seg) => (
-            <div key={seg.name} className="bg-stewart-card border border-stewart-border rounded-lg p-4">
-              <div className="flex items-center justify-between mb-1">
-                <p className="text-sm font-medium text-stewart-text">{seg.name}</p>
-                {statusBadge(seg.status)}
-              </div>
-              <p className="text-2xl font-bold text-stewart-accent">{seg.count.toLocaleString()}</p>
-              <p className="text-xs text-stewart-muted">contacts</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Recent Campaigns */}
-      <PitchCallout show={true}>
-        Newsletters, product launches, seasonal catalogs — pick audience, preview, send.
-      </PitchCallout>
-      <div>
-        <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Recent Campaigns</h2>
-        <div className="bg-stewart-card border border-stewart-border rounded-lg overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-stewart-border">
-                <th className="text-left px-4 py-2.5 text-stewart-muted font-medium">Campaign</th>
-                <th className="text-center px-4 py-2.5 text-stewart-muted font-medium">Status</th>
-                <th className="text-right px-4 py-2.5 text-stewart-muted font-medium">Sent</th>
-                <th className="text-right px-4 py-2.5 text-stewart-muted font-medium">Opened</th>
-                <th className="text-right px-4 py-2.5 text-stewart-muted font-medium">Clicked</th>
-                <th className="text-right px-4 py-2.5 text-stewart-muted font-medium">Date</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-stewart-border/30">
-              {SAMPLE_CAMPAIGNS.map((c) => (
-                <tr key={c.name}>
-                  <td className="px-4 py-2.5 font-medium text-stewart-text">{c.name}</td>
-                  <td className="px-4 py-2.5 text-center">{statusBadge(c.status)}</td>
-                  <td className="px-4 py-2.5 text-right text-stewart-muted">{c.sent > 0 ? c.sent.toLocaleString() : "--"}</td>
-                  <td className="px-4 py-2.5 text-right text-stewart-muted">{c.opened}</td>
-                  <td className="px-4 py-2.5 text-right text-stewart-muted">{c.clicked}</td>
-                  <td className="px-4 py-2.5 text-right text-stewart-muted">{c.date}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Exigo Sync */}
-      <PitchCallout show={true}>
-        Syncs automatically. No 54-hour integration project — it{"'"}s already built.
-      </PitchCallout>
-      <div>
-        <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide mb-3">Exigo Sync</h2>
-        <div className="grid grid-cols-3 gap-3">
-          <div className="bg-stewart-card border border-stewart-border rounded-lg p-4">
-            <p className="text-xs text-stewart-muted">Last Sync</p>
-            <p className="text-lg font-bold text-green-400 mt-1">2 hours ago</p>
-            <p className="text-xs text-stewart-muted mt-1">Next: in 58 minutes</p>
-          </div>
-          <div className="bg-stewart-card border border-stewart-border rounded-lg p-4">
-            <p className="text-xs text-stewart-muted">Contacts Synced</p>
-            <p className="text-lg font-bold text-stewart-text mt-1">30,000</p>
-            <p className="text-xs text-stewart-muted mt-1">+42 new this week</p>
-          </div>
-          <div className="bg-stewart-card border border-stewart-border rounded-lg p-4">
-            <p className="text-xs text-stewart-muted">Orders Synced</p>
-            <p className="text-lg font-bold text-stewart-text mt-1">148,320</p>
-            <p className="text-xs text-stewart-muted mt-1">Purchase history loaded</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── Tab 3: Email Studio (with pitch callouts) ──────────────────
-
-function EmailStudioTab() {
-  const [step, setStep] = useState<"templates" | "compose" | "preview">("templates");
-  const [selectedTemplate, setSelectedTemplate] = useState<number | null>(null);
-  const [selectedProducts, setSelectedProducts] = useState<number[]>([1, 2, 3]);
-  const [selectedSegment, setSelectedSegment] = useState("Bought in last 90 days");
-
-  const template = TEMPLATES.find(t => t.id === selectedTemplate);
-
-  if (step === "templates") {
-    return (
-      <div className="space-y-6">
-        <PitchCallout show={true}>
-          Pick a template, select products, choose your audience, send. Everything Mailchimp does plus Exigo-powered targeting.
-        </PitchCallout>
-
-        <div className="grid grid-cols-4 gap-3">
-          <StatCard label="Templates" value={TEMPLATES.length} sub={`${TEMPLATES.filter(t => t.status === "active").length} active`} />
-          <StatCard label="Drafts" value={2} sub="Ready to finish" variant="warning" />
-          <StatCard label="Sent This Month" value="36,130" sub="All campaigns" variant="success" />
-          <StatCard label="Send Rate" value="14/sec" sub="High-speed delivery" />
-        </div>
-
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide">Email Templates</h2>
-          <button onClick={() => { setSelectedTemplate(null); setStep("compose"); }} className="px-4 py-2 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors">
-            + New Campaign
-          </button>
-        </div>
-
-        <div className="grid grid-cols-3 gap-4">
-          {TEMPLATES.map((t) => (
-            <div key={t.id} className="bg-stewart-card border border-stewart-border rounded-lg p-5 hover:border-stewart-accent/50 transition-colors cursor-pointer group" onClick={() => { setSelectedTemplate(t.id); setStep("compose"); }}>
-              <div className="flex items-start justify-between mb-3">
-                <div className="w-10 h-10 rounded-lg bg-stewart-accent/10 flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" className="w-5 h-5 text-stewart-accent" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M2 8l10 6 10-6" /></svg>
-                </div>
-                {statusBadge(t.status)}
-              </div>
-              <h3 className="text-sm font-semibold text-stewart-text mb-1">{t.name}</h3>
-              <p className="text-xs text-stewart-muted mb-3">{t.subject}</p>
-              <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-stewart-border text-stewart-muted">{t.type}</span>
-                {t.variables.includes("products") && <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-purple-500/20 text-purple-400">product grid</span>}
-              </div>
-              <div className="mt-3 pt-3 border-t border-stewart-border">
-                <span className="text-xs text-stewart-accent opacity-0 group-hover:opacity-100 transition-opacity">Use template &rarr;</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (step === "compose") {
-    return (
-      <div className="space-y-6">
-        <div className="flex items-center gap-2 text-sm">
-          <button onClick={() => setStep("templates")} className="text-stewart-accent hover:underline">Templates</button>
-          <span className="text-stewart-muted">/</span>
-          <span className="text-stewart-text">{template ? template.name : "New Campaign"}</span>
-        </div>
-
-        <PitchCallout show={true}>
-          Products auto-render as email-safe HTML. Audience segments powered by Exigo purchase data.
-        </PitchCallout>
-
-        <div className="grid grid-cols-3 gap-6">
-          <div className="col-span-2 space-y-5">
-            <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-              <h3 className="text-sm font-semibold text-stewart-text">Campaign Details</h3>
-              <div>
-                <label className="text-xs text-stewart-muted block mb-1">Campaign Name</label>
-                <div className="bg-stewart-bg border border-stewart-border rounded-lg px-4 py-2.5 text-sm text-stewart-text">{template ? `${template.name} - March 2026` : "New Campaign"}</div>
-              </div>
-              <div>
-                <label className="text-xs text-stewart-muted block mb-1">Subject Line</label>
-                <div className="bg-stewart-bg border border-stewart-border rounded-lg px-4 py-2.5 text-sm text-stewart-text">{template ? template.subject : "Enter subject line..."}</div>
-              </div>
-            </div>
-
-            <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-semibold text-stewart-text">Product Grid</h3>
-                <span className="text-xs text-stewart-muted">{selectedProducts.length} selected</span>
-              </div>
-              <div className="grid grid-cols-3 gap-3">
-                {SAMPLE_PRODUCTS.map((p) => {
-                  const isSelected = selectedProducts.includes(p.id);
-                  return (
-                    <div key={p.id} className={`relative rounded-lg p-3 cursor-pointer transition-all ${isSelected ? "bg-stewart-accent/10 border-2 border-stewart-accent" : "bg-stewart-bg border border-stewart-border hover:border-stewart-accent/30"}`} onClick={() => setSelectedProducts(prev => prev.includes(p.id) ? prev.filter(id => id !== p.id) : [...prev, p.id])}>
-                      {p.tag && <span className="absolute top-2 right-2 px-1.5 py-0.5 rounded text-[9px] font-bold bg-stewart-accent/20 text-stewart-accent">{p.tag}</span>}
-                      <div className="flex items-center gap-3"><ProductIcon type={p.image} /><div><p className="text-sm font-medium text-stewart-text">{p.name}</p><p className="text-xs text-stewart-muted">{p.price}</p></div></div>
-                      {isSelected && <div className="absolute top-2 left-2 w-4 h-4 rounded-full bg-stewart-accent flex items-center justify-center"><svg viewBox="0 0 16 16" className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" strokeWidth="3"><path d="M3 8l3 3 7-7" /></svg></div>}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Email preview */}
-            <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-              <h3 className="text-sm font-semibold text-stewart-text">Email Preview</h3>
-              <div className="bg-white rounded-lg p-6 text-gray-800">
-                <div className="text-center mb-6"><div className="inline-block px-4 py-2 bg-green-50 rounded"><span className="text-green-700 font-bold text-lg tracking-wider">SISEL</span></div></div>
-                <h2 className="text-xl font-bold text-gray-900 mb-2">{template?.subject.replace("{name}", "Karen") || "Your Email Subject"}</h2>
-                <p className="text-gray-600 text-sm leading-relaxed mb-4">Hi Karen, we wanted to share some products we think you{"'"}ll love based on your recent purchases.</p>
-                <div className="border-t border-gray-200 pt-4 mt-4">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Featured Products</p>
-                  <div className="space-y-3">
-                    {SAMPLE_PRODUCTS.filter(p => selectedProducts.includes(p.id)).map((p) => (
-                      <div key={p.id} className="flex items-center gap-4 p-3 border border-gray-200 rounded-lg">
-                        <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center"><ProductIcon type={p.image} /></div>
-                        <div className="flex-1"><p className="text-sm font-semibold text-gray-900">{p.name}</p><p className="text-sm text-gray-500">{p.price}</p></div>
-                        <div className="px-4 py-2 bg-green-600 text-white text-xs font-semibold rounded">Shop Now</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="border-t border-gray-200 mt-6 pt-4 text-center"><p className="text-[10px] text-gray-400">Sisel International | Pleasant Grove, UT<br /><span className="underline">Unsubscribe</span> | <span className="underline">Manage Preferences</span></p></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right sidebar */}
-          <div className="space-y-5">
-            <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-              <h3 className="text-sm font-semibold text-stewart-text">Audience</h3>
-              <select value={selectedSegment} onChange={(e) => setSelectedSegment(e.target.value)} className="w-full bg-stewart-bg border border-stewart-border rounded-lg px-3 py-2.5 text-sm text-stewart-text appearance-none cursor-pointer">
-                {SAMPLE_SEGMENTS.map(s => <option key={s.name} value={s.name}>{s.name} ({s.count.toLocaleString()})</option>)}
-                <option value="all">All Active Contacts (18,240)</option>
-              </select>
-              <div className="bg-stewart-bg rounded-lg p-3 space-y-2 text-sm">
-                <div className="flex justify-between"><span className="text-stewart-muted">Recipients</span><span className="font-bold text-stewart-text">{selectedSegment === "all" ? "18,240" : SAMPLE_SEGMENTS.find(s => s.name === selectedSegment)?.count.toLocaleString() || "0"}</span></div>
-                <div className="flex justify-between"><span className="text-stewart-muted">Unsubscribed</span><span className="text-red-400">-124</span></div>
-                <div className="flex justify-between pt-2 border-t border-stewart-border"><span className="text-stewart-muted">Will receive</span><span className="font-bold text-green-400">{selectedSegment === "all" ? "18,116" : ((SAMPLE_SEGMENTS.find(s => s.name === selectedSegment)?.count || 0) - 124).toLocaleString()}</span></div>
-              </div>
-            </div>
-
-            <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-              <h3 className="text-sm font-semibold text-stewart-text">Schedule</h3>
-              <div className="bg-stewart-bg border border-stewart-border rounded-lg px-3 py-2.5 text-sm text-stewart-text">March 24, 2026 at 9:00 AM MT</div>
-              <div className="bg-stewart-bg rounded-lg p-3 text-xs space-y-1">
-                <div className="flex justify-between"><span className="text-stewart-muted">Est. delivery</span><span className="text-stewart-text font-medium">99.8%</span></div>
-                <div className="flex justify-between"><span className="text-stewart-muted">Est. send time</span><span className="text-stewart-text font-medium">{Math.ceil((selectedSegment === "all" ? 18116 : (SAMPLE_SEGMENTS.find(s => s.name === selectedSegment)?.count || 0) - 124) / 14 / 60)} min</span></div>
-              </div>
-            </div>
-
-            <button onClick={() => setStep("preview")} className="w-full px-4 py-3 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors">Preview & Send</button>
-            <button className="w-full px-4 py-2.5 bg-stewart-card border border-stewart-border text-stewart-text text-sm font-medium rounded-lg hover:bg-stewart-border/50 transition-colors">Save as Draft</button>
-            <button onClick={() => setStep("templates")} className="w-full px-4 py-2 text-stewart-muted text-sm hover:text-stewart-text transition-colors">Cancel</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Preview step
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-2 text-sm">
-        <button onClick={() => setStep("templates")} className="text-stewart-accent hover:underline">Templates</button>
-        <span className="text-stewart-muted">/</span>
-        <button onClick={() => setStep("compose")} className="text-stewart-accent hover:underline">Compose</button>
-        <span className="text-stewart-muted">/</span>
-        <span className="text-stewart-text">Preview</span>
-      </div>
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2">
-          <div className="bg-stewart-card border border-stewart-border rounded-lg p-5">
-            <h3 className="text-sm font-semibold text-stewart-text mb-4">Send Preview</h3>
-            <div className="bg-stewart-bg rounded-lg p-4 space-y-3 text-sm">
-              {[
-                ["From", "Sisel International <mail@sisel.com>"],
-                ["Subject", template?.subject.replace("{name}", "Karen") || "Your Email Subject"],
-                ["Recipients", `${selectedSegment === "all" ? "18,116" : ((SAMPLE_SEGMENTS.find(s => s.name === selectedSegment)?.count || 0) - 124).toLocaleString()} contacts`],
-                ["Products", `${selectedProducts.length} product cards`],
-                ["Scheduled", "March 24, 2026 at 9:00 AM MT"],
-              ].map(([label, value]) => (
-                <div key={label} className="flex justify-between"><span className="text-stewart-muted">{label}</span><span className="text-stewart-text">{value}</span></div>
-              ))}
-              <div className="flex justify-between"><span className="text-stewart-muted">Est. delivery</span><span className="text-green-400 font-medium">99.8%</span></div>
-            </div>
-          </div>
-        </div>
-        <div className="space-y-3">
-          <button onClick={() => setStep("templates")} className="w-full px-4 py-3 bg-green-600 hover:bg-green-500 text-white text-sm font-semibold rounded-lg transition-colors">Confirm & Schedule</button>
-          <button onClick={() => setStep("compose")} className="w-full px-4 py-2.5 bg-stewart-card border border-stewart-border text-stewart-text text-sm font-medium rounded-lg hover:bg-stewart-border/50 transition-colors">Back to Editor</button>
-          <div className="bg-stewart-card border border-stewart-border rounded-lg p-4 mt-4">
-            <p className="text-xs font-semibold text-stewart-text mb-2">Dry Run</p>
-            <p className="text-[11px] text-stewart-muted mb-3">Send a test to yourself first.</p>
-            <div className="flex gap-2">
-              <div className="flex-1 bg-stewart-bg border border-stewart-border rounded px-3 py-2 text-xs text-stewart-muted">karen@sisel.com</div>
-              <button className="px-3 py-2 bg-stewart-border text-stewart-text text-xs font-medium rounded hover:bg-stewart-accent/20 transition-colors">Send Test</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── Tab 4: Get Started ─────────────────────────────────────────
-
-function GetStartedTab() {
-  return (
-    <div className="space-y-8 max-w-3xl">
-      <h2 className="text-3xl font-bold text-stewart-text">$500/mo. Everything included.</h2>
-
-      {/* Cost Comparison */}
-      <div className="overflow-hidden rounded-lg border border-stewart-border">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-stewart-border/50">
-              <th className="text-left px-4 py-2.5 text-stewart-muted font-medium"></th>
-              <th className="text-center px-4 py-2.5 text-stewart-muted font-medium">Mailchimp (Current)</th>
-              <th className="text-center px-4 py-2.5 text-stewart-accent font-semibold">This System</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-stewart-border/30">
-            {COST_COMPARISON.map((row, i) => (
-              <tr key={row.feature} className={i % 2 === 0 ? "bg-stewart-card" : "bg-stewart-bg"}>
-                <td className="px-4 py-2.5 font-medium text-stewart-text">{row.feature}</td>
-                <td className="px-4 py-2.5 text-center text-stewart-muted">{row.mailchimp}</td>
-                <td className="px-4 py-2.5 text-center font-semibold text-stewart-accent">{row.platform}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Investment */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-stewart-accent/10 border border-stewart-accent/30 rounded-lg p-5 text-center">
-          <p className="text-stewart-accent text-3xl font-bold">$1,000</p>
-          <p className="text-stewart-accent text-sm font-medium mt-1">One-time setup</p>
-          <p className="text-stewart-muted text-xs mt-2">Exigo integration, list cleanup, templates, domain, first automation flows</p>
-        </div>
-        <div className="bg-stewart-accent/10 border border-stewart-accent/30 rounded-lg p-5 text-center">
-          <p className="text-stewart-accent text-3xl font-bold">$500/mo</p>
-          <p className="text-stewart-accent text-sm font-medium mt-1">Monthly</p>
-          <p className="text-stewart-muted text-xs mt-2">Unlimited sending, sync, automation, list hygiene, campaign management, support</p>
-        </div>
-      </div>
-
-      {/* What I Need */}
-      <div>
-        <h3 className="text-lg font-semibold text-stewart-text mb-3">To get started I need</h3>
-        <div className="grid grid-cols-2 gap-3">
-          {[
-            "Exigo API credentials",
-            "Your current Mailchimp templates",
-            "A sending subdomain (e.g. mail.sisel.com)",
-            "Your top 2-3 automation priorities",
-          ].map((item, i) => (
-            <div key={item} className="flex items-center gap-3 text-sm text-stewart-muted">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-stewart-accent/20 text-stewart-accent text-xs font-bold flex items-center justify-center">{i + 1}</span>
-              {item}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Timeline */}
-      <div>
-        <h3 className="text-lg font-semibold text-stewart-text mb-3">Timeline</h3>
-        <div className="flex gap-3">
-          {[
-            { week: "Week 1", label: "Setup & import" },
-            { week: "Week 2-3", label: "Warmup & test" },
-            { week: "Week 3-4", label: "Automation live" },
-            { week: "Week 4", label: "Full launch" },
-          ].map((item, i) => (
-            <div key={item.week} className="flex-1 relative">
-              <div className="bg-stewart-card border border-stewart-border rounded-lg p-4 text-center">
-                <p className="text-xs font-bold text-stewart-accent">{item.week}</p>
-                <p className="text-sm text-stewart-muted mt-1">{item.label}</p>
-              </div>
-              {i < 3 && <div className="absolute top-1/2 -right-2 text-stewart-muted text-xs">&rarr;</div>}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* CTA */}
-      <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 flex items-center justify-between">
-        <div>
-          <p className="text-stewart-text font-semibold">Ready to level up your email automation?</p>
-          <p className="text-sm text-stewart-muted">Spencer Colby &middot; (435) 749-9230 &middot; info@poweredbystewart.com</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─── Main Page ──────────────────────────────────────────────────
-
-const TAB_CONFIG: { key: Tab; label: string }[] = [
-  { key: "overview", label: "Overview" },
-  { key: "dashboard", label: "Platform Preview" },
-  { key: "email-studio", label: "Email Studio" },
-  { key: "get-started", label: "Get Started" },
-];
+// ═════════════════════════════════════════════════════════════════
+// MAIN PAGE
+// ═════════════════════════════════════════════════════════════════
 
 export default function SiselPage() {
-  const [tab, setTab] = useState<Tab>("overview");
+  const [topTab, setTopTab] = useState<TopTab>("platform");
 
   return (
     <div className="min-h-screen bg-stewart-bg">
       {/* Header */}
-      <div className="border-b border-stewart-border bg-stewart-card">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="text-stewart-muted hover:text-stewart-text text-sm transition-colors">&larr; Back</Link>
-            <div className="w-px h-6 bg-stewart-border" />
-            <div>
-              <h1 className="text-xl font-bold text-stewart-text">Sisel International</h1>
-              <p className="text-stewart-muted text-xs">Email Marketing & Automation Platform</p>
-            </div>
+      <div className="border-b border-stewart-border bg-stewart-card px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold text-stewart-text">Sisel International</h1>
+            <p className="text-sm text-stewart-muted">Email Marketing & Automation Platform</p>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="bg-white rounded-lg px-3 py-1.5">
-              <img src="/sisel-logo.png" alt="Sisel" className="h-8 w-auto" />
-            </div>
+          <div className="flex gap-1">
+            {([
+              { key: "platform" as TopTab, label: "Platform" },
+              { key: "overview" as TopTab, label: "Overview" },
+            ]).map((t) => (
+              <button
+                key={t.key}
+                onClick={() => setTopTab(t.key)}
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  topTab === t.key
+                    ? "bg-stewart-accent/20 text-stewart-accent"
+                    : "text-stewart-muted hover:text-stewart-text"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-6xl mx-auto px-6 py-6 space-y-6">
-        <div className="flex gap-1 border-b border-stewart-border">
-          {TAB_CONFIG.map((t) => (
+      {topTab === "platform" ? <PlatformView /> : <OverviewTab />}
+    </div>
+  );
+}
+
+// ═════════════════════════════════════════════════════════════════
+// PLATFORM VIEW — The real email tool
+// ═════════════════════════════════════════════════════════════════
+
+function PlatformView() {
+  const [tab, setTab] = useState<PlatformTab>("campaigns");
+  const [summary, setSummary] = useState<EmailSummary | null>(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  // Campaigns
+  const [campaigns, setCampaigns] = useState<EmailCampaign[]>([]);
+  const [campaignFilter, setCampaignFilter] = useState("");
+  const [selectedCampaign, setSelectedCampaign] = useState<EmailCampaign | null>(null);
+  const [showCreateCampaign, setShowCreateCampaign] = useState(false);
+  const [campaignForm, setCampaignForm] = useState(defaultCampaignForm);
+  const [campaignEditorMode, setCampaignEditorMode] = useState<"simple" | "html">("simple");
+  const [showHtmlPreview, setShowHtmlPreview] = useState(false);
+  const [sendConfirm, setSendConfirm] = useState<{ campaignId: string; preview: { recipient_count: number; subject: string } } | null>(null);
+
+  // Templates
+  const [templates, setTemplates] = useState<EmailTemplate[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate | null>(null);
+  const [showCreateTemplate, setShowCreateTemplate] = useState(false);
+  const [templateForm, setTemplateForm] = useState(defaultTemplateForm);
+  const [editingTemplate, setEditingTemplate] = useState<EmailTemplate | null>(null);
+  const [showTemplatePreview, setShowTemplatePreview] = useState(false);
+
+  // Sends
+  const [sends, setSends] = useState<EmailSend[]>([]);
+  const [sendFilter, setSendFilter] = useState("");
+  const [sendTypeFilter, setSendTypeFilter] = useState("");
+  const [sendCampaignFilter, setSendCampaignFilter] = useState("");
+
+  // Unsubscribes
+  const [unsubscribes, setUnsubscribes] = useState<EmailUnsubscribe[]>([]);
+
+  // ─── Data loaders ───────────────────────────────────────────
+
+  const loadSummary = useCallback(async () => {
+    try {
+      const res = await api.emailSummary(TENANT_ID);
+      setSummary(res);
+    } catch {
+      setError("Failed to load summary");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const loadCampaigns = useCallback(async () => {
+    try {
+      const res = await api.emailListCampaigns(TENANT_ID, campaignFilter || undefined, 50);
+      setCampaigns(res);
+    } catch {
+      setError("Failed to load campaigns");
+    }
+  }, [campaignFilter]);
+
+  const loadTemplates = useCallback(async () => {
+    try {
+      const res = await api.emailListTemplates(TENANT_ID, 50);
+      setTemplates(res);
+    } catch {
+      setError("Failed to load templates");
+    }
+  }, []);
+
+  const loadSends = useCallback(async () => {
+    try {
+      const res = await api.emailListSends(
+        TENANT_ID,
+        sendCampaignFilter || undefined,
+        sendTypeFilter || undefined,
+        100,
+      );
+      setSends(res);
+    } catch {
+      setError("Failed to load send log");
+    }
+  }, [sendCampaignFilter, sendTypeFilter]);
+
+  const loadUnsubscribes = useCallback(async () => {
+    try {
+      const res = await api.emailListUnsubscribes(TENANT_ID, 100);
+      setUnsubscribes(res);
+    } catch {
+      setError("Failed to load unsubscribes");
+    }
+  }, []);
+
+  useEffect(() => { loadSummary(); }, [loadSummary]);
+
+  useEffect(() => {
+    if (tab === "campaigns") { loadCampaigns(); loadTemplates(); }
+    if (tab === "templates") loadTemplates();
+    if (tab === "sends") { loadSends(); loadCampaigns(); }
+    if (tab === "unsubscribes") loadUnsubscribes();
+  }, [tab, loadCampaigns, loadTemplates, loadSends, loadUnsubscribes]);
+
+  // ─── Handlers ───────────────────────────────────────────────
+
+  const handleCreateCampaign = async () => {
+    try {
+      await api.emailCreateCampaign(TENANT_ID, {
+        campaign_name: campaignForm.campaign_name,
+        subject: campaignForm.subject,
+        template_id: campaignForm.template_id || null,
+        body_html: campaignForm.body_html,
+        body_text: campaignForm.body_text,
+        scheduled_at: campaignForm.scheduled_at || null,
+      });
+      setShowCreateCampaign(false);
+      setCampaignForm(defaultCampaignForm);
+      setCampaignEditorMode("simple");
+      loadCampaigns();
+      loadSummary();
+    } catch {
+      setError("Failed to create campaign");
+    }
+  };
+
+  const handlePreviewCampaign = async (campaignId: string) => {
+    try {
+      const res = await api.emailSendCampaign(TENANT_ID, campaignId, true);
+      setSendConfirm({
+        campaignId,
+        preview: {
+          recipient_count: (res.recipient_count as number) ?? 0,
+          subject: campaigns.find((c) => c.id === campaignId)?.subject || "",
+        },
+      });
+    } catch {
+      setError("Failed to preview campaign");
+    }
+  };
+
+  const handleSendCampaign = async (campaignId: string) => {
+    try {
+      await api.emailSendCampaign(TENANT_ID, campaignId, false);
+      setSendConfirm(null);
+      loadCampaigns();
+      loadSummary();
+    } catch {
+      setError("Failed to send campaign");
+    }
+  };
+
+  const handleCreateTemplate = async () => {
+    try {
+      await api.emailCreateTemplate(TENANT_ID, {
+        template_name: templateForm.template_name,
+        template_type: templateForm.template_type,
+        subject_template: templateForm.subject_template,
+        html_content: templateForm.html_content,
+        text_content: templateForm.text_content,
+        variables: templateForm.variables ? templateForm.variables.split(",").map((v: string) => v.trim()).filter(Boolean) : [],
+        status: templateForm.status,
+      });
+      setShowCreateTemplate(false);
+      setTemplateForm(defaultTemplateForm);
+      loadTemplates();
+      loadSummary();
+    } catch {
+      setError("Failed to create template");
+    }
+  };
+
+  const handleEditTemplate = (t: EmailTemplate) => {
+    setEditingTemplate(t);
+    setTemplateForm({
+      template_name: t.template_name,
+      template_type: t.template_type,
+      subject_template: t.subject_template,
+      html_content: t.html_content,
+      text_content: t.text_content,
+      variables: (t.variables || []).join(", "),
+      status: t.status,
+    });
+    setShowCreateTemplate(true);
+    setSelectedTemplate(null);
+  };
+
+  const handleSaveTemplate = async () => {
+    if (!editingTemplate) {
+      await handleCreateTemplate();
+      return;
+    }
+    try {
+      await api.emailUpdateTemplate(TENANT_ID, editingTemplate.id, {
+        template_name: templateForm.template_name,
+        template_type: templateForm.template_type,
+        subject_template: templateForm.subject_template,
+        html_content: templateForm.html_content,
+        text_content: templateForm.text_content,
+        variables: templateForm.variables ? templateForm.variables.split(",").map((v: string) => v.trim()).filter(Boolean) : [],
+        status: templateForm.status,
+      });
+      setShowCreateTemplate(false);
+      setEditingTemplate(null);
+      setTemplateForm(defaultTemplateForm);
+      loadTemplates();
+    } catch {
+      setError("Failed to update template");
+    }
+  };
+
+  // ─── Render ─────────────────────────────────────────────────
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-md text-red-400 text-sm">
+          {error}
+          <button onClick={() => { setError(""); loadSummary(); }} className="ml-3 underline">Retry</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return <div className="p-6 text-center text-stewart-muted">Loading platform...</div>;
+  }
+
+  return (
+    <div className="p-6 space-y-6">
+      {/* Summary Cards */}
+      {summary && (
+        <div className="grid grid-cols-4 gap-3">
+          <div className="bg-stewart-card border border-stewart-border rounded-lg p-4">
+            <p className="text-xs text-stewart-muted">Total Campaigns</p>
+            <p className="text-2xl font-bold text-stewart-text">{summary.campaigns.total}</p>
+          </div>
+          <div className="bg-stewart-card border border-stewart-border rounded-lg p-4">
+            <p className="text-xs text-stewart-muted">Templates</p>
+            <p className="text-2xl font-bold text-stewart-text">{summary.templates}</p>
+          </div>
+          <div className="bg-stewart-card border border-stewart-border rounded-lg p-4">
+            <p className="text-xs text-stewart-muted">Emails Sent</p>
+            <p className="text-2xl font-bold text-green-400">{summary.sends.total}</p>
+          </div>
+          <div className="bg-stewart-card border border-stewart-border rounded-lg p-4">
+            <p className="text-xs text-stewart-muted">Unsubscribes</p>
+            <p className={`text-2xl font-bold ${summary.unsubscribes > 0 ? "text-orange-400" : "text-green-400"}`}>
+              {summary.unsubscribes}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Platform Sub-tabs */}
+      <div className="flex items-center justify-between">
+        <div className="flex gap-1">
+          {([
+            { key: "campaigns" as PlatformTab, label: "Campaigns" },
+            { key: "templates" as PlatformTab, label: "Templates" },
+            { key: "sends" as PlatformTab, label: "Send Log" },
+            { key: "unsubscribes" as PlatformTab, label: "Unsubscribes" },
+          ]).map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+              className={`px-4 py-2 text-sm rounded-t-lg transition-colors ${
                 tab === t.key
-                  ? "border-stewart-accent text-stewart-accent"
-                  : "border-transparent text-stewart-muted hover:text-stewart-text"
+                  ? "bg-stewart-card border border-stewart-border border-b-transparent text-stewart-text font-medium"
+                  : "text-stewart-muted hover:text-stewart-text"
               }`}
             >
               {t.label}
             </button>
           ))}
         </div>
+        {tab === "campaigns" && (
+          <button
+            onClick={() => { setShowCreateCampaign(true); setSelectedCampaign(null); setCampaignEditorMode("simple"); }}
+            className="px-3 py-1.5 text-xs bg-stewart-accent/10 text-stewart-accent border border-stewart-accent/30 rounded-md hover:bg-stewart-accent/20 transition-colors"
+          >
+            + New Campaign
+          </button>
+        )}
+        {tab === "templates" && (
+          <button
+            onClick={() => { setShowCreateTemplate(true); setEditingTemplate(null); setTemplateForm(defaultTemplateForm); setSelectedTemplate(null); }}
+            className="px-3 py-1.5 text-xs bg-stewart-accent/10 text-stewart-accent border border-stewart-accent/30 rounded-md hover:bg-stewart-accent/20 transition-colors"
+          >
+            + New Template
+          </button>
+        )}
+      </div>
 
-        {tab === "overview" && <OverviewTab onNavigate={setTab} />}
-        {tab === "dashboard" && <DashboardTab />}
-        {tab === "email-studio" && <EmailStudioTab />}
-        {tab === "get-started" && <GetStartedTab />}
+      {/* Send Confirmation Modal */}
+      {sendConfirm && (
+        <div className="bg-yellow-500/5 border border-yellow-500/20 rounded-lg p-4">
+          <h3 className="text-sm font-semibold text-yellow-400 mb-2">Confirm Send</h3>
+          <p className="text-sm text-stewart-muted mb-1">
+            Subject: <span className="text-stewart-text">{sendConfirm.preview.subject}</span>
+          </p>
+          <p className="text-sm text-stewart-muted mb-3">
+            Recipients: <span className="text-stewart-text font-bold">{sendConfirm.preview.recipient_count}</span>
+          </p>
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleSendCampaign(sendConfirm.campaignId)}
+              className="px-4 py-1.5 text-sm bg-green-500/20 text-green-400 border border-green-500/30 rounded hover:bg-green-500/30 transition-colors"
+            >
+              Confirm Send
+            </button>
+            <button
+              onClick={() => setSendConfirm(null)}
+              className="px-4 py-1.5 text-sm text-stewart-muted hover:text-stewart-text"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ======================== CAMPAIGNS TAB ======================== */}
+      {tab === "campaigns" && (
+        <div className="flex gap-4">
+          <div className={`${selectedCampaign ? "w-1/2" : "w-full"} space-y-4`}>
+            {/* Create Campaign Form */}
+            {showCreateCampaign && (
+              <div className="bg-stewart-card border border-stewart-accent/30 rounded-lg p-4">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-sm font-semibold">New Campaign</h3>
+                  <button onClick={() => { setShowCreateCampaign(false); setCampaignEditorMode("simple"); }} className="text-xs text-stewart-muted hover:text-stewart-text">Cancel</button>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs text-stewart-muted">Campaign Name</label>
+                    <input
+                      value={campaignForm.campaign_name}
+                      onChange={(e) => setCampaignForm({ ...campaignForm, campaign_name: e.target.value })}
+                      className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1"
+                      placeholder="e.g. April Product Spotlight"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-stewart-muted">Subject Line</label>
+                    <input
+                      value={campaignForm.subject}
+                      onChange={(e) => setCampaignForm({ ...campaignForm, subject: e.target.value })}
+                      className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1"
+                      placeholder="e.g. Spring Into Wellness"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-stewart-muted">Template (optional)</label>
+                    <select
+                      value={campaignForm.template_id}
+                      onChange={(e) => setCampaignForm({ ...campaignForm, template_id: e.target.value })}
+                      className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1"
+                    >
+                      <option value="">Custom (inline)</option>
+                      {templates.map((t) => (
+                        <option key={t.id} value={t.id}>{t.template_name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-xs text-stewart-muted">Schedule (optional)</label>
+                    <input
+                      type="datetime-local"
+                      value={campaignForm.scheduled_at}
+                      onChange={(e) => setCampaignForm({ ...campaignForm, scheduled_at: e.target.value })}
+                      className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1"
+                    />
+                  </div>
+                </div>
+
+                {/* Editor Mode Toggle — Simple vs Custom HTML */}
+                {!campaignForm.template_id && (
+                  <div className="mt-4 space-y-3">
+                    <div className="flex items-center gap-2">
+                      <div className="flex gap-1 bg-stewart-bg rounded-lg p-0.5">
+                        <button
+                          onClick={() => setCampaignEditorMode("simple")}
+                          className={`px-3 py-1 text-xs rounded-md transition-colors ${
+                            campaignEditorMode === "simple"
+                              ? "bg-stewart-card text-stewart-text shadow-sm"
+                              : "text-stewart-muted hover:text-stewart-text"
+                          }`}
+                        >
+                          Simple Editor
+                        </button>
+                        <button
+                          onClick={() => setCampaignEditorMode("html")}
+                          className={`px-3 py-1 text-xs rounded-md transition-colors ${
+                            campaignEditorMode === "html"
+                              ? "bg-stewart-card text-stewart-text shadow-sm"
+                              : "text-stewart-muted hover:text-stewart-text"
+                          }`}
+                        >
+                          Custom HTML
+                        </button>
+                      </div>
+                      {campaignEditorMode === "html" && (
+                        <span className="text-[10px] text-green-400">
+                          Paste any HTML — long URLs, custom buttons, tracking parameters. No character limits.
+                        </span>
+                      )}
+                    </div>
+
+                    {campaignEditorMode === "simple" ? (
+                      <>
+                        <div>
+                          <label className="text-xs text-stewart-muted">Body HTML</label>
+                          <textarea
+                            value={campaignForm.body_html}
+                            onChange={(e) => setCampaignForm({ ...campaignForm, body_html: e.target.value })}
+                            className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1 h-24 font-mono"
+                            placeholder="<h1>Hello!</h1>"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-stewart-muted">Body Text (plain text fallback)</label>
+                          <textarea
+                            value={campaignForm.body_text}
+                            onChange={(e) => setCampaignForm({ ...campaignForm, body_text: e.target.value })}
+                            className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1 h-16 font-mono"
+                            placeholder="Plain text version"
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      /* ─── Custom HTML Editor ─── */
+                      <div className="space-y-3">
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <label className="text-xs text-stewart-muted">HTML Email Content</label>
+                            <button
+                              onClick={() => setShowHtmlPreview(!showHtmlPreview)}
+                              className="text-[10px] text-stewart-accent hover:underline"
+                            >
+                              {showHtmlPreview ? "Hide Preview" : "Show Preview"}
+                            </button>
+                          </div>
+                          <textarea
+                            value={campaignForm.body_html}
+                            onChange={(e) => setCampaignForm({ ...campaignForm, body_html: e.target.value })}
+                            className="w-full bg-stewart-bg border border-stewart-border rounded px-3 py-2 text-sm mt-1 font-mono text-green-300"
+                            rows={16}
+                            placeholder="Paste your full HTML email here — includes support for long CTA links, embedded tracking parameters, and custom formatting."
+                          />
+                          {campaignForm.body_html && (
+                            <p className="text-[10px] text-stewart-muted mt-1">
+                              {campaignForm.body_html.length.toLocaleString()} characters
+                            </p>
+                          )}
+                        </div>
+                        {showHtmlPreview && campaignForm.body_html && (
+                          <div>
+                            <p className="text-xs text-stewart-muted mb-1">Live Preview</p>
+                            <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
+                              <iframe
+                                srcDoc={campaignForm.body_html}
+                                className="w-full border-0"
+                                style={{ height: "400px" }}
+                                sandbox="allow-same-origin"
+                                title="Email Preview"
+                              />
+                            </div>
+                          </div>
+                        )}
+                        <div>
+                          <label className="text-xs text-stewart-muted">Plain Text Fallback (optional)</label>
+                          <textarea
+                            value={campaignForm.body_text}
+                            onChange={(e) => setCampaignForm({ ...campaignForm, body_text: e.target.value })}
+                            className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1 h-12 font-mono"
+                            placeholder="Plain text version for email clients that don't render HTML"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className="mt-3 flex justify-end">
+                  <button
+                    onClick={handleCreateCampaign}
+                    disabled={!campaignForm.campaign_name || !campaignForm.subject}
+                    className="px-4 py-1.5 text-sm bg-stewart-accent/20 text-stewart-accent border border-stewart-accent/30 rounded hover:bg-stewart-accent/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Create Draft
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Campaign Filter Chips */}
+            <div className="flex gap-2">
+              {["", "draft", "scheduled", "sending", "sent"].map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setCampaignFilter(s)}
+                  className={`px-3 py-1 text-xs rounded transition-colors ${
+                    campaignFilter === s
+                      ? "bg-stewart-accent/20 text-stewart-accent"
+                      : "bg-stewart-card border border-stewart-border text-stewart-muted hover:text-stewart-text"
+                  }`}
+                >
+                  {s || "All"}
+                </button>
+              ))}
+            </div>
+
+            {/* Campaign List */}
+            <div className="bg-stewart-card border border-stewart-border rounded-lg divide-y divide-stewart-border/50">
+              {campaigns.length === 0 ? (
+                <div className="px-4 py-8 text-center text-stewart-muted text-sm">
+                  No campaigns yet. Click + New Campaign to create one.
+                </div>
+              ) : (
+                campaigns.map((c) => (
+                  <button
+                    key={c.id}
+                    onClick={() => setSelectedCampaign(selectedCampaign?.id === c.id ? null : c)}
+                    className={`w-full text-left px-4 py-3 hover:bg-stewart-border/20 transition-colors ${
+                      selectedCampaign?.id === c.id ? "bg-stewart-border/30" : ""
+                    }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium">{c.campaign_name}</span>
+                      {statusBadge(c.status)}
+                    </div>
+                    <div className="flex gap-3 mt-1 text-xs text-stewart-muted">
+                      <span>{c.subject || "No subject"}</span>
+                      {c.total_recipients > 0 && <span>{c.total_recipients} recipients</span>}
+                      <span>{c.created_at?.slice(0, 10)}</span>
+                    </div>
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* Campaign Detail Panel */}
+          {selectedCampaign && (
+            <div className="w-1/2 bg-stewart-card border border-stewart-border rounded-lg p-4 space-y-4 h-fit">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-sm font-semibold">{selectedCampaign.campaign_name}</h3>
+                  <p className="text-xs text-stewart-muted mt-0.5">{selectedCampaign.subject}</p>
+                </div>
+                {statusBadge(selectedCampaign.status)}
+              </div>
+
+              {/* Stats Grid */}
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { label: "Sent", val: selectedCampaign.sent_count, color: "" },
+                  { label: "Delivered", val: selectedCampaign.delivered_count, color: "text-green-400" },
+                  { label: "Opened", val: selectedCampaign.opened_count, color: "text-cyan-400" },
+                  { label: "Clicked", val: selectedCampaign.clicked_count, color: "text-stewart-accent" },
+                  { label: "Bounced", val: selectedCampaign.bounced_count, color: "text-red-400" },
+                  { label: "Unsubs", val: selectedCampaign.unsubscribed_count, color: "text-orange-400" },
+                ].map(({ label, val, color }) => (
+                  <div key={label} className="bg-stewart-bg/50 rounded p-2 text-center">
+                    <p className="text-[10px] text-stewart-muted">{label}</p>
+                    <p className={`text-sm font-bold ${color}`}>{val}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Details */}
+              <div className="text-xs space-y-1 text-stewart-muted">
+                {selectedCampaign.scheduled_at && (
+                  <p>Scheduled: <span className="text-stewart-text">{selectedCampaign.scheduled_at.slice(0, 16)}</span></p>
+                )}
+                {selectedCampaign.sent_at && (
+                  <p>Sent: <span className="text-stewart-text">{selectedCampaign.sent_at.slice(0, 16)}</span></p>
+                )}
+                <p>Created: <span className="text-stewart-text">{selectedCampaign.created_at?.slice(0, 16)}</span></p>
+              </div>
+
+              {/* HTML Preview for selected campaign */}
+              {selectedCampaign.body_html && (
+                <div>
+                  <p className="text-[10px] text-stewart-muted uppercase tracking-wide mb-1">Email Preview</p>
+                  <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
+                    <iframe
+                      srcDoc={selectedCampaign.body_html}
+                      className="w-full border-0"
+                      style={{ height: "300px" }}
+                      sandbox="allow-same-origin"
+                      title="Campaign Preview"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Actions */}
+              <div className="flex gap-2 pt-2 border-t border-stewart-border/50">
+                {(selectedCampaign.status === "draft" || selectedCampaign.status === "scheduled") && (
+                  <>
+                    <button
+                      onClick={() => handlePreviewCampaign(selectedCampaign.id)}
+                      className="px-3 py-1 text-xs bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded hover:bg-blue-500/30 transition-colors"
+                    >
+                      Preview / Dry Run
+                    </button>
+                    <button
+                      onClick={() => handlePreviewCampaign(selectedCampaign.id)}
+                      className="px-3 py-1 text-xs bg-green-500/20 text-green-400 border border-green-500/30 rounded hover:bg-green-500/30 transition-colors"
+                    >
+                      Send
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ======================== TEMPLATES TAB ======================== */}
+      {tab === "templates" && (
+        <div className="flex gap-4">
+          <div className={`${selectedTemplate ? "w-1/2" : "w-full"} space-y-4`}>
+            {/* Create/Edit Template Form */}
+            {showCreateTemplate && (
+              <div className="bg-stewart-card border border-stewart-accent/30 rounded-lg p-4">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-sm font-semibold">
+                    {editingTemplate ? "Edit Template" : "New Template"}
+                  </h3>
+                  <button onClick={() => { setShowCreateTemplate(false); setEditingTemplate(null); setTemplateForm(defaultTemplateForm); }} className="text-xs text-stewart-muted hover:text-stewart-text">Cancel</button>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs text-stewart-muted">Template Name</label>
+                    <input
+                      value={templateForm.template_name}
+                      onChange={(e) => setTemplateForm({ ...templateForm, template_name: e.target.value })}
+                      className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1"
+                      placeholder="e.g. Distributor Welcome"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-stewart-muted">Type</label>
+                    <select
+                      value={templateForm.template_type}
+                      onChange={(e) => setTemplateForm({ ...templateForm, template_type: e.target.value })}
+                      className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1"
+                    >
+                      <option value="custom">Custom</option>
+                      <option value="newsletter">Newsletter</option>
+                      <option value="announcement">Announcement</option>
+                      <option value="onboarding">Onboarding</option>
+                      <option value="promotion">Promotion</option>
+                      <option value="internal">Internal</option>
+                      <option value="transactional">Transactional</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-xs text-stewart-muted">Status</label>
+                    <select
+                      value={templateForm.status}
+                      onChange={(e) => setTemplateForm({ ...templateForm, status: e.target.value })}
+                      className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1"
+                    >
+                      <option value="draft">Draft</option>
+                      <option value="active">Active</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-xs text-stewart-muted">Variables (comma-separated)</label>
+                    <input
+                      value={templateForm.variables}
+                      onChange={(e) => setTemplateForm({ ...templateForm, variables: e.target.value })}
+                      className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1"
+                      placeholder="name, unsubscribe_url"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="text-xs text-stewart-muted">Subject Template</label>
+                    <input
+                      value={templateForm.subject_template}
+                      onChange={(e) => setTemplateForm({ ...templateForm, subject_template: e.target.value })}
+                      className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1"
+                      placeholder="e.g. Welcome to the Sisel Family, {name}"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="text-xs text-stewart-muted">HTML Content</label>
+                      {templateForm.html_content && (
+                        <button
+                          onClick={() => setShowTemplatePreview(!showTemplatePreview)}
+                          className="text-[10px] text-stewart-accent hover:underline"
+                        >
+                          {showTemplatePreview ? "Hide Preview" : "Show Preview"}
+                        </button>
+                      )}
+                    </div>
+                    <textarea
+                      value={templateForm.html_content}
+                      onChange={(e) => setTemplateForm({ ...templateForm, html_content: e.target.value })}
+                      className="w-full bg-stewart-bg border border-stewart-border rounded px-3 py-2 text-sm mt-1 font-mono text-green-300"
+                      rows={12}
+                      placeholder="Paste HTML email template — supports long URLs, custom CTA buttons, tracking parameters."
+                    />
+                    {templateForm.html_content && (
+                      <p className="text-[10px] text-stewart-muted mt-1">
+                        {templateForm.html_content.length.toLocaleString()} characters
+                      </p>
+                    )}
+                  </div>
+                  {showTemplatePreview && templateForm.html_content && (
+                    <div className="col-span-2">
+                      <p className="text-xs text-stewart-muted mb-1">Live Preview</p>
+                      <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
+                        <iframe
+                          srcDoc={templateForm.html_content}
+                          className="w-full border-0"
+                          style={{ height: "350px" }}
+                          sandbox="allow-same-origin"
+                          title="Template Preview"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  <div className="col-span-2">
+                    <label className="text-xs text-stewart-muted">Text Content (plain text fallback)</label>
+                    <textarea
+                      value={templateForm.text_content}
+                      onChange={(e) => setTemplateForm({ ...templateForm, text_content: e.target.value })}
+                      className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1 h-16 font-mono"
+                      placeholder="Plain text version"
+                    />
+                  </div>
+                </div>
+                <div className="mt-3 flex justify-end">
+                  <button
+                    onClick={handleSaveTemplate}
+                    disabled={!templateForm.template_name}
+                    className="px-4 py-1.5 text-sm bg-stewart-accent/20 text-stewart-accent border border-stewart-accent/30 rounded hover:bg-stewart-accent/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {editingTemplate ? "Save Changes" : "Create Template"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Template List */}
+            <div className="bg-stewart-card border border-stewart-border rounded-lg divide-y divide-stewart-border/50">
+              {templates.length === 0 ? (
+                <div className="px-4 py-8 text-center text-stewart-muted text-sm">
+                  No templates yet. Click + New Template to create one.
+                </div>
+              ) : (
+                templates.map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => setSelectedTemplate(selectedTemplate?.id === t.id ? null : t)}
+                    className={`w-full text-left px-4 py-3 hover:bg-stewart-border/20 transition-colors ${
+                      selectedTemplate?.id === t.id ? "bg-stewart-border/30" : ""
+                    }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium">{t.template_name}</span>
+                      <div className="flex gap-1">
+                        {statusBadge(t.template_type)}
+                        {statusBadge(t.status)}
+                      </div>
+                    </div>
+                    <div className="flex gap-3 mt-1 text-xs text-stewart-muted">
+                      <span>{t.subject_template || "No subject"}</span>
+                      <span>{(t.variables || []).length} vars</span>
+                    </div>
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* Template Detail Panel */}
+          {selectedTemplate && (
+            <div className="w-1/2 bg-stewart-card border border-stewart-border rounded-lg p-4 space-y-4 h-fit">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-sm font-semibold">{selectedTemplate.template_name}</h3>
+                  <p className="text-xs text-stewart-muted mt-0.5">{selectedTemplate.subject_template}</p>
+                </div>
+                <div className="flex gap-1">
+                  {statusBadge(selectedTemplate.template_type)}
+                  {statusBadge(selectedTemplate.status)}
+                </div>
+              </div>
+
+              {selectedTemplate.variables && selectedTemplate.variables.length > 0 && (
+                <div>
+                  <p className="text-[10px] text-stewart-muted uppercase tracking-wide mb-1">Variables</p>
+                  <div className="flex flex-wrap gap-1">
+                    {selectedTemplate.variables.map((v) => (
+                      <span key={v} className="px-2 py-0.5 bg-stewart-border rounded text-xs font-mono">
+                        {`{${v}}`}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* HTML Rendered Preview */}
+              {selectedTemplate.html_content && (
+                <div>
+                  <p className="text-[10px] text-stewart-muted uppercase tracking-wide mb-1">Email Preview</p>
+                  <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
+                    <iframe
+                      srcDoc={selectedTemplate.html_content}
+                      className="w-full border-0"
+                      style={{ height: "300px" }}
+                      sandbox="allow-same-origin"
+                      title="Template Preview"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {selectedTemplate.text_content && (
+                <div>
+                  <p className="text-[10px] text-stewart-muted uppercase tracking-wide mb-1">Text Preview</p>
+                  <div className="bg-stewart-bg rounded p-3 text-xs max-h-32 overflow-auto whitespace-pre-wrap">
+                    {selectedTemplate.text_content}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-2 pt-2 border-t border-stewart-border/50">
+                <button
+                  onClick={() => handleEditTemplate(selectedTemplate)}
+                  className="px-3 py-1 text-xs bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded hover:bg-blue-500/30 transition-colors"
+                >
+                  Edit
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ======================== SEND LOG TAB ======================== */}
+      {tab === "sends" && (
+        <div className="space-y-4">
+          <div className="flex gap-3 items-center">
+            <div className="flex gap-2">
+              {["", "sent", "failed", "bounced"].map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setSendFilter(s)}
+                  className={`px-3 py-1 text-xs rounded transition-colors ${
+                    sendFilter === s
+                      ? "bg-stewart-accent/20 text-stewart-accent"
+                      : "bg-stewart-card border border-stewart-border text-stewart-muted hover:text-stewart-text"
+                  }`}
+                >
+                  {s || "All"}
+                </button>
+              ))}
+            </div>
+            <select
+              value={sendTypeFilter}
+              onChange={(e) => setSendTypeFilter(e.target.value)}
+              className="bg-stewart-card border border-stewart-border rounded px-2 py-1 text-sm"
+            >
+              <option value="">All Types</option>
+              <option value="campaign">Campaign</option>
+              <option value="transactional">Transactional</option>
+            </select>
+            <select
+              value={sendCampaignFilter}
+              onChange={(e) => setSendCampaignFilter(e.target.value)}
+              className="bg-stewart-card border border-stewart-border rounded px-2 py-1 text-sm"
+            >
+              <option value="">All Campaigns</option>
+              {campaigns.map((c) => (
+                <option key={c.id} value={c.id}>{c.campaign_name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="bg-stewart-card border border-stewart-border rounded-lg overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-stewart-border bg-stewart-bg/50">
+                  <th className="text-left px-3 py-2 text-xs text-stewart-muted">Email</th>
+                  <th className="text-left px-3 py-2 text-xs text-stewart-muted">Name</th>
+                  <th className="text-left px-3 py-2 text-xs text-stewart-muted">Subject</th>
+                  <th className="text-center px-3 py-2 text-xs text-stewart-muted">Type</th>
+                  <th className="text-center px-3 py-2 text-xs text-stewart-muted">Status</th>
+                  <th className="text-left px-3 py-2 text-xs text-stewart-muted">Sent</th>
+                  <th className="text-left px-3 py-2 text-xs text-stewart-muted">Error</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sends.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-3 py-8 text-center text-stewart-muted">
+                      No sends yet.
+                    </td>
+                  </tr>
+                ) : (
+                  sends
+                    .filter((s) => !sendFilter || s.status === sendFilter)
+                    .map((s) => (
+                    <tr key={s.id} className="border-b border-stewart-border/50 hover:bg-stewart-border/20">
+                      <td className="px-3 py-2 text-xs font-mono">{s.email}</td>
+                      <td className="px-3 py-2 text-xs">{s.customer_name || "\u2014"}</td>
+                      <td className="px-3 py-2 text-xs max-w-[200px] truncate">{s.subject}</td>
+                      <td className="px-3 py-2 text-center">{statusBadge(s.send_type)}</td>
+                      <td className="px-3 py-2 text-center">{statusBadge(s.status)}</td>
+                      <td className="px-3 py-2 text-xs text-stewart-muted">{s.sent_at?.slice(0, 16) || "\u2014"}</td>
+                      <td className="px-3 py-2 text-xs text-red-400 max-w-[150px] truncate">{s.error || ""}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* ======================== UNSUBSCRIBES TAB ======================== */}
+      {tab === "unsubscribes" && (
+        <div className="space-y-4">
+          <div className="bg-stewart-card border border-stewart-border rounded-lg overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-stewart-border bg-stewart-bg/50">
+                  <th className="text-left px-3 py-2 text-xs text-stewart-muted">Email</th>
+                  <th className="text-left px-3 py-2 text-xs text-stewart-muted">Reason</th>
+                  <th className="text-center px-3 py-2 text-xs text-stewart-muted">Source</th>
+                  <th className="text-left px-3 py-2 text-xs text-stewart-muted">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {unsubscribes.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="px-3 py-8 text-center text-stewart-muted">
+                      No unsubscribes. CAN-SPAM compliance link is included in every email.
+                    </td>
+                  </tr>
+                ) : (
+                  unsubscribes.map((u) => (
+                    <tr key={u.id} className="border-b border-stewart-border/50 hover:bg-stewart-border/20">
+                      <td className="px-3 py-2 text-xs font-mono">{u.email}</td>
+                      <td className="px-3 py-2 text-xs text-stewart-muted">{u.reason || "\u2014"}</td>
+                      <td className="px-3 py-2 text-center">{sourceBadge(u.source)}</td>
+                      <td className="px-3 py-2 text-xs text-stewart-muted">{u.created_at?.slice(0, 10)}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═════════════════════════════════════════════════════════════════
+// OVERVIEW TAB — The pitch / proposal (secondary)
+// ═════════════════════════════════════════════════════════════════
+
+function ProposalSection({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-3">
+      <h2 className="text-lg font-semibold text-stewart-text border-b border-stewart-border pb-2">{title}</h2>
+      {children}
+    </div>
+  );
+}
+
+const COST_COMPARISON = [
+  { feature: "Monthly cost", mailchimp: "$450/mo", platform: "$500/mo" },
+  { feature: "Automation flows", mailchimp: "Not included", platform: "Included" },
+  { feature: "Exigo integration", mailchimp: "66 hours quoted", platform: "Included" },
+  { feature: "Purchase segments", mailchimp: "Manual CSV exports", platform: "Automatic from Exigo" },
+  { feature: "Dead email charges", mailchimp: "You pay for all", platform: "Sorted + cleaned" },
+  { feature: "List cleaning", mailchimp: "Manual", platform: "Automatic" },
+  { feature: "Unsubscribe handling", mailchimp: "Manual sync needed", platform: "Auto + synced to Exigo" },
+  { feature: "Email limit", mailchimp: "Tiered / capped", platform: "Unlimited" },
+  { feature: "Custom HTML support", mailchimp: "Character limits on links", platform: "No limits — paste any HTML" },
+];
+
+function OverviewTab() {
+  return (
+    <div className="p-6 space-y-8 max-w-3xl">
+      <ProposalSection title="The Opportunity">
+        <p className="text-stewart-text text-sm leading-relaxed">
+          Right now, your customer data lives inside Exigo, but it{"'"}s not being fully used to drive
+          follow-up, retention, or repeat purchases.
+        </p>
+        <ul className="space-y-2 text-sm text-stewart-muted">
+          <li className="flex items-start gap-2"><span className="text-stewart-accent mt-0.5">-</span>You{"'"}re paying ~$450/month for Mailchimp with limited automation tied to your actual customer data</li>
+          <li className="flex items-start gap-2"><span className="text-stewart-accent mt-0.5">-</span>A portion of that cost goes toward inactive or unusable email addresses</li>
+          <li className="flex items-start gap-2"><span className="text-stewart-accent mt-0.5">-</span>There{"'"}s no direct connection between purchase behavior and marketing</li>
+          <li className="flex items-start gap-2"><span className="text-stewart-accent mt-0.5">-</span>Custom HTML with long tracking links breaks in Mailchimp</li>
+          <li className="flex items-start gap-2"><span className="text-stewart-accent mt-0.5">-</span>Exigo quoted <strong className="text-stewart-text">66 hours of development time</strong> just to connect to Mailchimp</li>
+        </ul>
+      </ProposalSection>
+
+      <ProposalSection title="What the Platform Does">
+        <div className="space-y-4">
+          {[
+            { label: "Direct Exigo Sync", desc: "Your customer database and order history sync automatically via Exigo's API. No manual exports, no CSV uploads, no 66-hour integration project." },
+            { label: "Smart Contact Buckets", desc: "Every contact is automatically sorted: Active, Bounced, Unsubscribed, Complained, or Inactive. You see exactly how many people are in each bucket." },
+            { label: "Purchase-Based Targeting", desc: "Create segments based on real behavior. \"Bought in the last 90 days.\" \"Spent over $500 lifetime.\" \"Hasn't ordered in 60 days.\"" },
+            { label: "Automated Email Flows", desc: "Welcome series, reorder reminders, win-back sequences, cross-sell emails, rank advancement notifications. Set up once, run automatically." },
+            { label: "Custom HTML — No Limits", desc: "Paste any HTML email content including long CTA links, embedded tracking parameters, and custom formatting. No character limits, no broken links. Your product review URLs work exactly as intended." },
+            { label: "Full Campaign Management", desc: "Pick a template, choose your audience, preview, and send. Track opens, clicks, and engagement. Unlimited sending." },
+          ].map((item) => (
+            <div key={item.label} className="bg-stewart-card border border-stewart-border rounded-lg p-4">
+              <h3 className="text-sm font-semibold text-stewart-text mb-1">{item.label}</h3>
+              <p className="text-xs text-stewart-muted leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </ProposalSection>
+
+      <ProposalSection title="Cost Comparison">
+        <div className="overflow-hidden rounded-lg border border-stewart-border">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-stewart-border/50">
+                <th className="text-left px-4 py-2.5 text-stewart-muted font-medium"></th>
+                <th className="text-center px-4 py-2.5 text-stewart-muted font-medium">Mailchimp (Current)</th>
+                <th className="text-center px-4 py-2.5 text-stewart-accent font-semibold">This Platform</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-stewart-border/30">
+              {COST_COMPARISON.map((row, i) => (
+                <tr key={row.feature} className={i % 2 === 0 ? "bg-stewart-card" : "bg-stewart-bg"}>
+                  <td className="px-4 py-2.5 font-medium text-stewart-text">{row.feature}</td>
+                  <td className="px-4 py-2.5 text-center text-stewart-muted">{row.mailchimp}</td>
+                  <td className="px-4 py-2.5 text-center font-semibold text-stewart-accent">{row.platform}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </ProposalSection>
+
+      <ProposalSection title="Investment">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-stewart-accent/10 border border-stewart-accent/30 rounded-lg p-5 text-center">
+            <p className="text-stewart-accent text-2xl font-bold">$1,000</p>
+            <p className="text-stewart-accent text-sm font-medium mt-1">One-time setup</p>
+            <p className="text-stewart-muted text-xs mt-2 leading-relaxed">
+              Exigo integration, list cleanup, template migration, domain setup, first automation flows
+            </p>
+          </div>
+          <div className="bg-stewart-accent/10 border border-stewart-accent/30 rounded-lg p-5 text-center">
+            <p className="text-stewart-accent text-2xl font-bold">$500/mo</p>
+            <p className="text-stewart-accent text-sm font-medium mt-1">Monthly</p>
+            <p className="text-stewart-muted text-xs mt-2 leading-relaxed">
+              Unlimited sending, ongoing sync, automation, list hygiene, campaign management, direct support
+            </p>
+          </div>
+        </div>
+      </ProposalSection>
+
+      <div className="bg-stewart-card border border-stewart-border rounded-lg p-6">
+        <p className="text-stewart-text text-sm font-semibold leading-relaxed">
+          This is a deployment, not a development project. The platform is already built and running.
+          Setup is connecting your Exigo data, migrating your templates, and configuring your sending domain.
+        </p>
+        <div className="mt-4 pt-4 border-t border-stewart-border">
+          <p className="text-sm font-medium text-stewart-text">Spencer Colby</p>
+          <p className="text-xs text-stewart-muted">stewart@poweredbystewart.com</p>
+        </div>
       </div>
     </div>
   );
