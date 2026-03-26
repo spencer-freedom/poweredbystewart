@@ -36,26 +36,24 @@ export default function SiselPostOfficePage() {
 
   return (
     <div className="min-h-screen bg-stewart-bg">
-      {/* Header */}
-      <div className="border-b border-stewart-border bg-stewart-card px-6 py-4">
-        <div className="flex items-center justify-between">
+      {/* Header — matches proposal page layout */}
+      <div className="border-b border-stewart-border bg-stewart-card">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <img src="/sisel-logo.png" alt="Sisel International" className="h-10" />
+            <a href="/sisel" className="text-stewart-muted hover:text-stewart-text text-sm transition-colors">&larr; Back</a>
+            <div className="w-px h-6 bg-stewart-border" />
             <div>
               <h1 className="text-xl font-bold text-stewart-text">The Post Office</h1>
-              <p className="text-sm text-stewart-muted">Sisel International — Email Marketing & Automation</p>
+              <p className="text-stewart-muted text-xs">Sisel International — Email Marketing & Automation</p>
             </div>
           </div>
-          <a
-            href="/sisel"
-            className="px-4 py-2 text-sm font-medium text-stewart-muted hover:text-stewart-text transition-colors"
-          >
-            &larr; Back to Proposal
-          </a>
+          <div className="bg-white rounded-lg px-3 py-1.5">
+            <img src="/sisel-logo.png" alt="Sisel" className="h-8 w-auto" />
+          </div>
         </div>
       </div>
 
-      <div className="p-6 space-y-6">
+      <div className="max-w-6xl mx-auto px-6 py-6 space-y-6">
         {loading && <div className="py-12 text-center text-stewart-muted">Loading platform...</div>}
 
         {!loading && (
@@ -64,36 +62,40 @@ export default function SiselPostOfficePage() {
             {summary && (
               <div className="grid grid-cols-4 gap-3">
                 <button onClick={() => setTab("campaigns")} className="bg-stewart-card border border-stewart-border rounded-lg p-4 text-left hover:border-stewart-accent transition-colors cursor-pointer">
-                  <p className="text-xs text-stewart-muted">Total Campaigns</p>
-                  <p className="text-2xl font-bold text-stewart-text">{summary.campaigns.total}</p>
+                  <p className="text-xs text-stewart-muted mb-1">Total Campaigns</p>
+                  <p className="text-xl font-bold text-stewart-accent">{summary.campaigns.total}</p>
+                  <p className="text-[11px] text-stewart-muted mt-0.5">{summary.campaigns.sent} sent, {summary.campaigns.draft} drafts</p>
                 </button>
                 <button onClick={() => setTab("templates")} className="bg-stewart-card border border-stewart-border rounded-lg p-4 text-left hover:border-stewart-accent transition-colors cursor-pointer">
-                  <p className="text-xs text-stewart-muted">Templates</p>
-                  <p className="text-2xl font-bold text-stewart-text">{summary.templates}</p>
+                  <p className="text-xs text-stewart-muted mb-1">Templates</p>
+                  <p className="text-xl font-bold text-stewart-accent">{summary.templates}</p>
+                  <p className="text-[11px] text-stewart-muted mt-0.5">Ready to use</p>
                 </button>
                 <button onClick={() => setTab("sends")} className="bg-stewart-card border border-stewart-border rounded-lg p-4 text-left hover:border-stewart-accent transition-colors cursor-pointer">
-                  <p className="text-xs text-stewart-muted">Emails Sent</p>
-                  <p className="text-2xl font-bold text-green-400">{summary.sends.total}</p>
+                  <p className="text-xs text-stewart-muted mb-1">Emails Sent</p>
+                  <p className="text-xl font-bold text-green-400">{summary.sends.total}</p>
+                  <p className="text-[11px] text-stewart-muted mt-0.5">{summary.sends.sent} delivered, {summary.sends.failed} failed</p>
                 </button>
                 <button onClick={() => setTab("unsubscribes")} className="bg-stewart-card border border-stewart-border rounded-lg p-4 text-left hover:border-stewart-accent transition-colors cursor-pointer">
-                  <p className="text-xs text-stewart-muted">Unsubscribes</p>
-                  <p className={`text-2xl font-bold ${summary.unsubscribes > 0 ? "text-orange-400" : "text-green-400"}`}>
+                  <p className="text-xs text-stewart-muted mb-1">Unsubscribes</p>
+                  <p className={`text-xl font-bold ${summary.unsubscribes > 0 ? "text-orange-400" : "text-green-400"}`}>
                     {summary.unsubscribes}
                   </p>
+                  <p className="text-[11px] text-stewart-muted mt-0.5">Auto-synced</p>
                 </button>
               </div>
             )}
 
-            {/* Tab Navigation */}
-            <div className="flex gap-1">
+            {/* Tab Navigation — underline style matching proposal */}
+            <div className="flex gap-1 border-b border-stewart-border">
               {TABS.map((t) => (
                 <button
                   key={t.key}
                   onClick={() => setTab(t.key)}
-                  className={`px-4 py-2 text-sm rounded-t-lg transition-colors ${
+                  className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
                     tab === t.key
-                      ? "bg-stewart-card border border-stewart-border border-b-transparent text-stewart-text font-medium"
-                      : "text-stewart-muted hover:text-stewart-text"
+                      ? "border-stewart-accent text-stewart-accent"
+                      : "border-transparent text-stewart-muted hover:text-stewart-text"
                   }`}
                 >
                   {t.label}

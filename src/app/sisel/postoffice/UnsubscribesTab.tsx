@@ -25,7 +25,7 @@ export function UnsubscribesTab({ tenantId }: Props) {
 
   if (error) {
     return (
-      <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-md text-red-400 text-sm">
+      <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
         {error}
         <button onClick={() => { setError(""); load(); }} className="ml-3 underline">Retry</button>
       </div>
@@ -33,31 +33,37 @@ export function UnsubscribesTab({ tenantId }: Props) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
+      <h2 className="text-sm font-semibold text-stewart-muted uppercase tracking-wide">Unsubscribes</h2>
+
+      <div className="bg-stewart-accent/5 border-l-2 border-stewart-accent rounded-r-lg px-4 py-2.5 text-sm text-stewart-muted">
+        CAN-SPAM compliant unsubscribe link is automatically included in every email footer.
+      </div>
+
       <div className="bg-stewart-card border border-stewart-border rounded-lg overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-stewart-border bg-stewart-bg/50">
-              <th className="text-left px-3 py-2 text-xs text-stewart-muted">Email</th>
-              <th className="text-left px-3 py-2 text-xs text-stewart-muted">Reason</th>
-              <th className="text-center px-3 py-2 text-xs text-stewart-muted">Source</th>
-              <th className="text-left px-3 py-2 text-xs text-stewart-muted">Date</th>
+            <tr className="border-b border-stewart-border">
+              <th className="text-left px-4 py-2.5 text-stewart-muted font-medium">Email</th>
+              <th className="text-left px-4 py-2.5 text-stewart-muted font-medium">Reason</th>
+              <th className="text-center px-4 py-2.5 text-stewart-muted font-medium">Source</th>
+              <th className="text-right px-4 py-2.5 text-stewart-muted font-medium">Date</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-stewart-border/30">
             {unsubscribes.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-3 py-8 text-center text-stewart-muted">
-                  No unsubscribes. CAN-SPAM compliance link is included in every email.
+                <td colSpan={4} className="px-4 py-12 text-center text-stewart-muted">
+                  No unsubscribes recorded.
                 </td>
               </tr>
             ) : (
               unsubscribes.map((u) => (
-                <tr key={u.id} className="border-b border-stewart-border/50 hover:bg-stewart-border/20">
-                  <td className="px-3 py-2 text-xs font-mono">{u.email}</td>
-                  <td className="px-3 py-2 text-xs text-stewart-muted">{u.reason || "\u2014"}</td>
-                  <td className="px-3 py-2 text-center">{sourceBadge(u.source)}</td>
-                  <td className="px-3 py-2 text-xs text-stewart-muted">{u.created_at?.slice(0, 10)}</td>
+                <tr key={u.id} className="hover:bg-stewart-border/20">
+                  <td className="px-4 py-2.5 text-xs font-mono text-stewart-text">{u.email}</td>
+                  <td className="px-4 py-2.5 text-xs text-stewart-muted">{u.reason || "\u2014"}</td>
+                  <td className="px-4 py-2.5 text-center">{sourceBadge(u.source)}</td>
+                  <td className="px-4 py-2.5 text-right text-xs text-stewart-muted">{u.created_at?.slice(0, 10)}</td>
                 </tr>
               ))
             )}
