@@ -146,6 +146,9 @@ function PlatformView() {
   const [campaignEditorMode, setCampaignEditorMode] = useState<"simple" | "html">("simple");
   const [showHtmlPreview, setShowHtmlPreview] = useState(false);
   const [sendConfirm, setSendConfirm] = useState<{ campaignId: string; preview: { recipient_count: number; subject: string } } | null>(null);
+  const [testEmail, setTestEmail] = useState("");
+  const [testSending, setTestSending] = useState(false);
+  const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
 
   // Templates
   const [templates, setTemplates] = useState<EmailTemplate[]>([]);
@@ -251,7 +254,7 @@ function PlatformView() {
 
   const handlePreviewCampaign = async (campaignId: string) => {
     try {
-      const res = await api.emailSendCampaign(TENANT_ID, campaignId, true);
+      const res = await api.emailSendCampaign(TENANT_ID, campaignId, [], true);
       setSendConfirm({
         campaignId,
         preview: {
@@ -266,12 +269,33 @@ function PlatformView() {
 
   const handleSendCampaign = async (campaignId: string) => {
     try {
-      await api.emailSendCampaign(TENANT_ID, campaignId, false);
+      await api.emailSendCampaign(TENANT_ID, campaignId, [], false);
       setSendConfirm(null);
       loadCampaigns();
       loadSummary();
     } catch {
       setError("Failed to send campaign");
+    }
+  };
+
+  const handleSendTest = async (campaignId: string) => {
+    if (!testEmail) return;
+    setTestSending(true);
+    setTestResult(null);
+    try {
+      const res = await api.emailSendTest(TENANT_ID, campaignId, testEmail);
+      setTestResult({
+        success: res.success,
+        message: res.success ? `Test sent to ${testEmail}` : (res.error || "Send failed"),
+      });
+      if (res.success) {
+        loadSends();
+        loadSummary();
+      }
+    } catch (err) {
+      setTestResult({ success: false, message: err instanceof Error ? err.message : "Send failed" });
+    } finally {
+      setTestSending(false);
     }
   };
 
@@ -558,19 +582,25 @@ function PlatformView() {
                         <div>
                           <div className="flex items-center justify-between mb-1">
                             <label className="text-xs text-stewart-muted">HTML Email Content</label>
-                            <button
-                              onClick={() => setShowHtmlPreview(!showHtmlPreview)}
-                              className="text-[10px] text-stewart-accent hover:underline"
-                            >
-                              {showHtmlPreview ? "Hide Preview" : "Show Preview"}
-                            </button>
+                            <div className="flex items-center gap-3">
+                              <span className="text-[10px] text-stewart-muted">Build with:</span>
+                              <a href="https://stripo.email" target="_blank" rel="noopener noreferrer" className="text-[10px] text-stewart-accent hover:underline">Stripo</a>
+                              <a href="https://www.canva.com/email-newsletters/" target="_blank" rel="noopener noreferrer" className="text-[10px] text-stewart-accent hover:underline">Canva</a>
+                              <a href="https://beefree.io" target="_blank" rel="noopener noreferrer" className="text-[10px] text-stewart-accent hover:underline">BEE Free</a>
+                              <button
+                                onClick={() => setShowHtmlPreview(!showHtmlPreview)}
+                                className="text-[10px] text-stewart-accent hover:underline"
+                              >
+                                {showHtmlPreview ? "Hide Preview" : "Show Preview"}
+                              </button>
+                            </div>
                           </div>
                           <textarea
                             value={campaignForm.body_html}
                             onChange={(e) => setCampaignForm({ ...campaignForm, body_html: e.target.value })}
                             className="w-full bg-stewart-bg border border-stewart-border rounded px-3 py-2 text-sm mt-1 font-mono text-green-300"
                             rows={16}
-                            placeholder="Paste your full HTML email here — includes support for long CTA links, embedded tracking parameters, and custom formatting."
+                            placeholder="Design in Stripo, Canva, or BEE Free → Export HTML → Paste here. Supports long CTA links, embedded tracking parameters, and custom formatting."
                           />
                           {campaignForm.body_html && (
                             <p className="text-[10px] text-stewart-muted mt-1">
@@ -720,23 +750,43 @@ function PlatformView() {
                 </div>
               )}
 
+              {/* Send Test Email */}
+              {(selectedCampaign.status === "draft" || selectedCampaign.status === "scheduled") && (
+                <div className="pt-2 border-t border-stewart-border/50 space-y-2">
+                  <p className="text-[10px] text-stewart-muted uppercase tracking-wide">Send Test Email</p>
+                  <div className="flex gap-2">
+                    <input
+                      type="email"
+                      placeholder="recipient@example.com"
+                      value={testEmail}
+                      onChange={(e) => { setTestEmail(e.target.value); setTestResult(null); }}
+                      className="flex-1 bg-stewart-bg border border-stewart-border rounded px-3 py-1.5 text-xs text-stewart-text placeholder:text-stewart-muted/50"
+                    />
+                    <button
+                      onClick={() => handleSendTest(selectedCampaign.id)}
+                      disabled={testSending || !testEmail}
+                      className="px-3 py-1.5 text-xs bg-stewart-accent/20 text-stewart-accent border border-stewart-accent/30 rounded hover:bg-stewart-accent/30 transition-colors disabled:opacity-50"
+                    >
+                      {testSending ? "Sending..." : "Send Test"}
+                    </button>
+                  </div>
+                  {testResult && (
+                    <p className={`text-xs ${testResult.success ? "text-green-400" : "text-red-400"}`}>
+                      {testResult.message}
+                    </p>
+                  )}
+                </div>
+              )}
+
               {/* Actions */}
               <div className="flex gap-2 pt-2 border-t border-stewart-border/50">
                 {(selectedCampaign.status === "draft" || selectedCampaign.status === "scheduled") && (
-                  <>
-                    <button
-                      onClick={() => handlePreviewCampaign(selectedCampaign.id)}
-                      className="px-3 py-1 text-xs bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded hover:bg-blue-500/30 transition-colors"
-                    >
-                      Preview / Dry Run
-                    </button>
-                    <button
-                      onClick={() => handlePreviewCampaign(selectedCampaign.id)}
-                      className="px-3 py-1 text-xs bg-green-500/20 text-green-400 border border-green-500/30 rounded hover:bg-green-500/30 transition-colors"
-                    >
-                      Send
-                    </button>
-                  </>
+                  <button
+                    onClick={() => handlePreviewCampaign(selectedCampaign.id)}
+                    className="px-3 py-1 text-xs bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded hover:bg-blue-500/30 transition-colors"
+                  >
+                    Preview / Dry Run
+                  </button>
                 )}
               </div>
             </div>
@@ -815,21 +865,28 @@ function PlatformView() {
                   <div className="col-span-2">
                     <div className="flex items-center justify-between mb-1">
                       <label className="text-xs text-stewart-muted">HTML Content</label>
-                      {templateForm.html_content && (
-                        <button
-                          onClick={() => setShowTemplatePreview(!showTemplatePreview)}
-                          className="text-[10px] text-stewart-accent hover:underline"
-                        >
-                          {showTemplatePreview ? "Hide Preview" : "Show Preview"}
-                        </button>
-                      )}
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] text-stewart-muted">Build with:</span>
+                        <a href="https://stripo.email" target="_blank" rel="noopener noreferrer" className="text-[10px] text-stewart-accent hover:underline">Stripo</a>
+                        <a href="https://www.canva.com/email-newsletters/" target="_blank" rel="noopener noreferrer" className="text-[10px] text-stewart-accent hover:underline">Canva</a>
+                        <a href="https://beefree.io" target="_blank" rel="noopener noreferrer" className="text-[10px] text-stewart-accent hover:underline">BEE Free</a>
+                        <span className="text-[10px] text-stewart-muted">then paste HTML below</span>
+                        {templateForm.html_content && (
+                          <button
+                            onClick={() => setShowTemplatePreview(!showTemplatePreview)}
+                            className="text-[10px] text-stewart-accent hover:underline"
+                          >
+                            {showTemplatePreview ? "Hide Preview" : "Show Preview"}
+                          </button>
+                        )}
+                      </div>
                     </div>
                     <textarea
                       value={templateForm.html_content}
                       onChange={(e) => setTemplateForm({ ...templateForm, html_content: e.target.value })}
                       className="w-full bg-stewart-bg border border-stewart-border rounded px-3 py-2 text-sm mt-1 font-mono text-green-300"
                       rows={12}
-                      placeholder="Paste HTML email template — supports long URLs, custom CTA buttons, tracking parameters."
+                      placeholder="Paste HTML email template — supports long URLs, custom CTA buttons, tracking parameters. Design in Stripo, Canva, or BEE Free, then export and paste here."
                     />
                     {templateForm.html_content && (
                       <p className="text-[10px] text-stewart-muted mt-1">

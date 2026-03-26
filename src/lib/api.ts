@@ -299,10 +299,20 @@ export const api = {
   emailCreateCampaign: (tenantId: string, data: Record<string, unknown>) =>
     emailPost<EmailCampaign>({ action: "create_campaign", tenant: tenantId }, data),
 
-  emailSendCampaign: (tenantId: string, campaignId: string, dryRun = false) =>
+  emailSendCampaign: (tenantId: string, campaignId: string, recipients: { email: string; name: string }[], dryRun = false) =>
     emailPost<Record<string, unknown>>(
       { action: "send_campaign", tenant: tenantId, campaign_id: campaignId, dry_run: String(dryRun) },
+      { recipients },
     ),
+
+  emailSendTest: (tenantId: string, campaignId: string, email: string) =>
+    emailPost<{ success: boolean; email: string; error?: string }>(
+      { action: "send_test", tenant: tenantId, campaign_id: campaignId },
+      { email },
+    ),
+
+  emailUpdateCampaign: (tenantId: string, campaignId: string, data: Record<string, unknown>) =>
+    emailPatch<EmailCampaign>({ action: "update_campaign", tenant: tenantId, id: campaignId }, data),
 };
 
 // ─── Email API helpers (separate route) ───────────────────────────────────────

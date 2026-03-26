@@ -189,8 +189,11 @@ function OverviewTab({ onNavigate }: { onNavigate: (tab: Tab) => void }) {
       </div>
 
       <div className="flex gap-3">
-        <button onClick={() => onNavigate("dashboard")} className="px-6 py-3 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors">
-          See the platform &rarr;
+        <a href="/sisel/postoffice" className="px-6 py-3 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors">
+          Enter The Post Office &rarr;
+        </a>
+        <button onClick={() => onNavigate("dashboard")} className="px-6 py-3 bg-stewart-card border border-stewart-border text-stewart-text text-sm font-medium rounded-lg hover:bg-stewart-border/50 transition-colors">
+          See platform preview
         </button>
         <button onClick={() => onNavigate("get-started")} className="px-6 py-3 bg-stewart-card border border-stewart-border text-stewart-text text-sm font-medium rounded-lg hover:bg-stewart-border/50 transition-colors">
           View pricing
@@ -643,6 +646,12 @@ function GetStartedTab() {
           <p className="text-stewart-text font-semibold">Ready to level up your email automation?</p>
           <p className="text-sm text-stewart-muted">Spencer Colby &middot; (435) 749-9230 &middot; info@poweredbystewart.com</p>
         </div>
+        <a
+          href="/sisel/postoffice"
+          className="px-5 py-2.5 bg-stewart-accent text-white text-sm font-semibold rounded-lg hover:bg-stewart-accent/80 transition-colors whitespace-nowrap"
+        >
+          Enter The Post Office &rarr;
+        </a>
       </div>
     </div>
   );

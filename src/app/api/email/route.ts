@@ -1,12 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
-);
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+    process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
+  );
+}
 
 const ALLOWED_TENANTS = new Set(["sisel"]);
+
+// Tenant config (mirrors config/email.yaml)
+const TENANT_CONFIG: Record<string, { from_name: string; store_address: string; brand_color: string }> = {
+  sisel: {
+    from_name: "Sisel International",
+    store_address: "Sisel International, Springville, UT",
+    brand_color: "#1a5c3a",
+  },
+};
 
 function tenantGuard(tenantId: string) {
   if (!ALLOWED_TENANTS.has(tenantId)) {
@@ -17,6 +29,59 @@ function tenantGuard(tenantId: string) {
 
 function errorResponse(error: { message: string }, status = 500) {
   return NextResponse.json({ error: error.message }, { status });
+}
+
+// ─── SES helpers ───────────────────────────────────────────────────────────────
+
+function getSesClient(): SESClient {
+  return new SESClient({
+    region: process.env.AWS_SES_REGION || "us-east-1",
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+    },
+  });
+}
+
+async function sendEmail(
+  to: string,
+  subject: string,
+  htmlBody: string,
+  textBody: string,
+  fromName: string,
+): Promise<{ success: boolean; error?: string }> {
+  const fromEmail = process.env.AWS_SES_FROM_EMAIL || "";
+  if (!fromEmail || !process.env.AWS_ACCESS_KEY_ID) {
+    return { success: false, error: "AWS SES not configured" };
+  }
+  const source = fromName ? `${fromName} <${fromEmail}>` : fromEmail;
+
+  try {
+    const ses = getSesClient();
+    await ses.send(
+      new SendEmailCommand({
+        Source: source,
+        Destination: { ToAddresses: [to] },
+        Message: {
+          Subject: { Data: subject, Charset: "UTF-8" },
+          Body: {
+            Text: { Data: textBody || subject, Charset: "UTF-8" },
+            ...(htmlBody ? { Html: { Data: htmlBody, Charset: "UTF-8" } } : {}),
+          },
+        },
+      })
+    );
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : "SES send failed" };
+  }
+}
+
+function injectUnsubscribeFooter(html: string, storeAddress: string): string {
+  const footer = `<div style="margin-top:32px;padding-top:16px;border-top:1px solid #ddd;font-size:12px;color:#888;text-align:center;"><p>${storeAddress}</p><p><a href="#" style="color:#888;">Unsubscribe</a></p></div>`;
+  const idx = html.toLowerCase().indexOf("</body>");
+  if (idx >= 0) return html.slice(0, idx) + footer + html.slice(idx);
+  return html + footer;
 }
 
 // ─── GET ──────────────────────────────────────────────────────────────────────
@@ -33,19 +98,19 @@ export async function GET(req: NextRequest) {
     switch (action) {
       case "summary": {
         const [campaigns, sends, tpl, unsub] = await Promise.all([
-          supabase
+          getSupabase()
             .from("email_campaigns")
             .select("status", { count: "exact" })
             .eq("tenant_id", tenantId),
-          supabase
+          getSupabase()
             .from("email_sends")
             .select("send_type,status", { count: "exact" })
             .eq("tenant_id", tenantId),
-          supabase
+          getSupabase()
             .from("email_templates")
             .select("id", { count: "exact" })
             .eq("tenant_id", tenantId),
-          supabase
+          getSupabase()
             .from("email_unsubscribes")
             .select("id", { count: "exact" })
             .eq("tenant_id", tenantId),
@@ -79,7 +144,7 @@ export async function GET(req: NextRequest) {
         const templateType = searchParams.get("template_type") || "";
         const status = searchParams.get("status") || "";
 
-        let query = supabase
+        let query = getSupabase()
           .from("email_templates")
           .select("*")
           .eq("tenant_id", tenantId);
@@ -96,7 +161,7 @@ export async function GET(req: NextRequest) {
         const limit = parseInt(searchParams.get("limit") || "50", 10);
         const status = searchParams.get("status") || "";
 
-        let query = supabase
+        let query = getSupabase()
           .from("email_campaigns")
           .select("*")
           .eq("tenant_id", tenantId);
@@ -113,7 +178,7 @@ export async function GET(req: NextRequest) {
         const campaignId = searchParams.get("campaign_id") || "";
         const sendType = searchParams.get("send_type") || "";
 
-        let query = supabase
+        let query = getSupabase()
           .from("email_sends")
           .select("*")
           .eq("tenant_id", tenantId);
@@ -128,7 +193,7 @@ export async function GET(req: NextRequest) {
 
       case "unsubscribes": {
         const limit = parseInt(searchParams.get("limit") || "100", 10);
-        const { data, error } = await supabase
+        const { data, error } = await getSupabase()
           .from("email_unsubscribes")
           .select("*")
           .eq("tenant_id", tenantId)
@@ -166,7 +231,7 @@ export async function POST(req: NextRequest) {
       case "create_template": {
         const id = crypto.randomUUID();
         const now = new Date().toISOString();
-        const { data, error } = await supabase
+        const { data, error } = await getSupabase()
           .from("email_templates")
           .insert({
             id,
@@ -191,7 +256,7 @@ export async function POST(req: NextRequest) {
         const id = crypto.randomUUID();
         const now = new Date().toISOString();
         const status = body.scheduled_at ? "scheduled" : "draft";
-        const { data, error } = await supabase
+        const { data, error } = await getSupabase()
           .from("email_campaigns")
           .insert({
             id,
@@ -214,35 +279,191 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(data);
       }
 
-      case "send_campaign": {
+      case "send_test": {
+        // Send a single test email for a campaign
         const campaignId = searchParams.get("campaign_id") || "";
-        const dryRun = searchParams.get("dry_run") === "true";
+        const testEmail = body.email || "";
+        if (!testEmail) {
+          return NextResponse.json({ error: "email is required" }, { status: 400 });
+        }
 
         // Fetch campaign
-        const { data: campaign, error } = await supabase
+        const { data: campaign, error: campErr } = await getSupabase()
           .from("email_campaigns")
           .select("*")
           .eq("id", campaignId)
           .eq("tenant_id", tenantId)
           .single();
-        if (error || !campaign) {
+        if (campErr || !campaign) {
           return NextResponse.json({ error: "Campaign not found" }, { status: 404 });
         }
+
+        // Resolve HTML — campaign body or linked template
+        let html = campaign.body_html || "";
+        let text = campaign.body_text || "";
+        if (!html && campaign.template_id) {
+          const { data: tpl } = await getSupabase()
+            .from("email_templates")
+            .select("html_content,text_content")
+            .eq("id", campaign.template_id)
+            .single();
+          if (tpl) {
+            html = tpl.html_content || "";
+            text = tpl.text_content || "";
+          }
+        }
+
+        const cfg = TENANT_CONFIG[tenantId] || TENANT_CONFIG.sisel;
+        if (html) html = injectUnsubscribeFooter(html, cfg.store_address);
+
+        const result = await sendEmail(testEmail, `[TEST] ${campaign.subject}`, html, text, cfg.from_name);
+
+        // Log the test send
+        if (result.success) {
+          await getSupabase().from("email_sends").insert({
+            tenant_id: tenantId,
+            campaign_id: campaignId,
+            customer_id: "test",
+            email: testEmail,
+            customer_name: "Test Send",
+            send_type: "campaign",
+            template_type: "test",
+            subject: `[TEST] ${campaign.subject}`,
+            status: "sent",
+            sent_at: new Date().toISOString(),
+            error: "",
+            created_at: new Date().toISOString(),
+          });
+        }
+
+        return NextResponse.json({
+          success: result.success,
+          email: testEmail,
+          error: result.error,
+        });
+      }
+
+      case "send_campaign": {
+        const campaignId = searchParams.get("campaign_id") || "";
+        const dryRun = searchParams.get("dry_run") === "true";
+        const recipients: { email: string; name: string }[] = body.recipients || [];
+
+        // Fetch campaign
+        const { data: campaign, error: campError } = await getSupabase()
+          .from("email_campaigns")
+          .select("*")
+          .eq("id", campaignId)
+          .eq("tenant_id", tenantId)
+          .single();
+        if (campError || !campaign) {
+          return NextResponse.json({ error: "Campaign not found" }, { status: 404 });
+        }
+        if (campaign.status !== "draft" && campaign.status !== "scheduled") {
+          return NextResponse.json({ error: `Campaign already ${campaign.status}` }, { status: 400 });
+        }
+
+        // Resolve HTML — campaign body or linked template
+        let html = campaign.body_html || "";
+        let text = campaign.body_text || "";
+        if (!html && campaign.template_id) {
+          const { data: tpl } = await getSupabase()
+            .from("email_templates")
+            .select("html_content,text_content")
+            .eq("id", campaign.template_id)
+            .single();
+          if (tpl) {
+            html = tpl.html_content || "";
+            text = tpl.text_content || "";
+          }
+        }
+
+        if (!html && !text) {
+          return NextResponse.json({ error: "Campaign has no email content" }, { status: 400 });
+        }
+
+        // Filter unsubscribes
+        const { data: unsubs } = await getSupabase()
+          .from("email_unsubscribes")
+          .select("email")
+          .eq("tenant_id", tenantId);
+        const unsubSet = new Set((unsubs || []).map((u) => u.email));
+        const filtered = recipients.filter((r) => !unsubSet.has(r.email));
 
         if (dryRun) {
           return NextResponse.json({
             dry_run: true,
-            recipient_count: 0,
+            recipient_count: filtered.length,
+            filtered_unsubscribes: recipients.length - filtered.length,
             sample_subject: campaign.subject,
-            cost_estimate_usd: 0,
+            cost_estimate_usd: Math.round(filtered.length * 0.0001 * 10000) / 10000,
           });
         }
 
-        // Real sends would require backend SES integration
-        return NextResponse.json(
-          { error: "Email sending requires backend configuration. Use dry run for preview." },
-          { status: 501 }
-        );
+        if (filtered.length === 0) {
+          return NextResponse.json({ error: "No recipients (all filtered or none provided)" }, { status: 400 });
+        }
+
+        const cfg = TENANT_CONFIG[tenantId] || TENANT_CONFIG.sisel;
+
+        // Mark sending
+        await getSupabase()
+          .from("email_campaigns")
+          .update({ status: "sending", total_recipients: filtered.length, updated_at: new Date().toISOString() })
+          .eq("id", campaignId);
+
+        // Send loop
+        let sent = 0;
+        let failed = 0;
+        for (const recipient of filtered) {
+          const renderedHtml = injectUnsubscribeFooter(
+            html.replace(/\{name\}/g, recipient.name || ""),
+            cfg.store_address,
+          );
+          const renderedSubject = campaign.subject.replace(/\{name\}/g, recipient.name || "");
+          const renderedText = text.replace(/\{name\}/g, recipient.name || "");
+
+          const result = await sendEmail(recipient.email, renderedSubject, renderedHtml, renderedText, cfg.from_name);
+
+          const now = new Date().toISOString();
+          await getSupabase().from("email_sends").insert({
+            tenant_id: tenantId,
+            campaign_id: campaignId,
+            customer_id: crypto.randomUUID(),
+            email: recipient.email,
+            customer_name: recipient.name || "",
+            send_type: "campaign",
+            template_type: campaign.template_id ? "template" : "custom",
+            subject: renderedSubject,
+            status: result.success ? "sent" : "failed",
+            sent_at: result.success ? now : null,
+            error: result.error || "",
+            created_at: now,
+          });
+
+          if (result.success) sent++;
+          else failed++;
+        }
+
+        // Update campaign to sent
+        const finalNow = new Date().toISOString();
+        await getSupabase()
+          .from("email_campaigns")
+          .update({
+            status: "sent",
+            sent_at: finalNow,
+            sent_count: sent,
+            bounced_count: failed,
+            updated_at: finalNow,
+          })
+          .eq("id", campaignId);
+
+        return NextResponse.json({
+          campaign_id: campaignId,
+          status: "sent",
+          total_recipients: filtered.length,
+          sent,
+          failed,
+        });
       }
 
       default:
@@ -285,10 +506,32 @@ export async function PATCH(req: NextRequest) {
           }
         }
 
-        const { data, error } = await supabase
+        const { data, error } = await getSupabase()
           .from("email_templates")
           .update(updates)
           .eq("id", templateId)
+          .eq("tenant_id", tenantId)
+          .select()
+          .single();
+        if (error) return errorResponse(error);
+        return NextResponse.json(data);
+      }
+
+      case "update_campaign": {
+        const campId = searchParams.get("id") || "";
+        const campaignAllowed = [
+          "campaign_name", "subject", "body_html", "body_text",
+          "template_id", "status", "scheduled_at",
+        ];
+        const campUpdates: Record<string, unknown> = { updated_at: new Date().toISOString() };
+        for (const key of campaignAllowed) {
+          if (body[key] !== undefined) campUpdates[key] = body[key];
+        }
+
+        const { data, error } = await getSupabase()
+          .from("email_campaigns")
+          .update(campUpdates)
+          .eq("id", campId)
           .eq("tenant_id", tenantId)
           .select()
           .single();
