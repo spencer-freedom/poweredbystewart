@@ -393,6 +393,17 @@ export interface ComputeSummariesResult {
   version: number | null;
 }
 
+// ─── User roles ───
+
+export type UserRole = "admin" | "rep";
+
+export interface StewartUser {
+  id: string;
+  role: UserRole;
+  tenantId: string;
+  name: string;
+}
+
 // ─── Email Marketing (The Post Office) ───
 
 export interface EmailSummary {
@@ -462,15 +473,4 @@ export interface EmailUnsubscribe {
   reason: string;
   source: string;
   created_at: string;
-}
-
-// ─── User roles ───
-
-export type UserRole = "admin" | "rep";
-
-export interface StewartUser {
-  id: string;
-  role: UserRole;
-  tenantId: string;
-  name: string;
 }
