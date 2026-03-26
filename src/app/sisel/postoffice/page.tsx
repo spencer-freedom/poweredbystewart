@@ -522,6 +522,16 @@ function PlatformView() {
                   </div>
                 </div>
 
+                {/* Template selected message */}
+                {campaignForm.template_id && (
+                  <div className="mt-3 bg-stewart-accent/10 border border-stewart-accent/20 rounded-lg p-3">
+                    <p className="text-xs text-stewart-accent">
+                      Using template: <strong>{templates.find((t) => t.id === campaignForm.template_id)?.template_name}</strong>
+                    </p>
+                    <p className="text-[10px] text-stewart-muted mt-1">Template content will be used as the email body. You can preview it after creating the campaign.</p>
+                  </div>
+                )}
+
                 {/* Editor Mode Toggle — Simple vs Custom HTML */}
                 {!campaignForm.template_id && (
                   <div className="mt-4 space-y-3">
@@ -735,25 +745,34 @@ function PlatformView() {
               </div>
 
               {/* HTML Preview for selected campaign */}
-              {selectedCampaign.body_html && (
-                <div>
-                  <p className="text-[10px] text-stewart-muted uppercase tracking-wide mb-1">Email Preview</p>
-                  <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
-                    <iframe
-                      srcDoc={selectedCampaign.body_html}
-                      className="w-full border-0"
-                      style={{ height: "300px" }}
-                      sandbox="allow-same-origin"
-                      title="Campaign Preview"
-                    />
+              {(() => {
+                const previewHtml = selectedCampaign.body_html
+                  || templates.find((t) => t.id === selectedCampaign.template_id)?.html_content
+                  || "";
+                return previewHtml ? (
+                  <div>
+                    <p className="text-[10px] text-stewart-muted uppercase tracking-wide mb-1">
+                      Email Preview
+                      {!selectedCampaign.body_html && selectedCampaign.template_id && (
+                        <span className="ml-2 text-stewart-accent">(from template)</span>
+                      )}
+                    </p>
+                    <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
+                      <iframe
+                        srcDoc={previewHtml}
+                        className="w-full border-0"
+                        style={{ height: "300px" }}
+                        sandbox="allow-same-origin"
+                        title="Campaign Preview"
+                      />
+                    </div>
                   </div>
-                </div>
-              )}
+                ) : null;
+              })()}
 
-              {/* Send Test Email */}
-              {(selectedCampaign.status === "draft" || selectedCampaign.status === "scheduled") && (
-                <div className="pt-2 border-t border-stewart-border/50 space-y-2">
-                  <p className="text-[10px] text-stewart-muted uppercase tracking-wide">Send Test Email</p>
+              {/* Send Test Email — available on all campaigns */}
+              <div className="pt-2 border-t border-stewart-border/50 space-y-2">
+                <p className="text-[10px] text-stewart-muted uppercase tracking-wide">Send Test Email</p>
                   <div className="flex gap-2">
                     <input
                       type="email"
@@ -776,7 +795,6 @@ function PlatformView() {
                     </p>
                   )}
                 </div>
-              )}
 
               {/* Actions */}
               <div className="flex gap-2 pt-2 border-t border-stewart-border/50">
