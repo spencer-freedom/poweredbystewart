@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { statusBadge } from "@/lib/ui/badges";
 
 type Tab = "overview" | "dashboard" | "email-studio" | "get-started";
 
@@ -77,11 +78,6 @@ function StatCard({ label, value, sub, variant }: { label: string; value: string
       {sub && <p className="text-[11px] text-stewart-muted mt-0.5">{sub}</p>}
     </div>
   );
-}
-
-function statusBadge(status: string) {
-  const map: Record<string, string> = { active: "bg-green-500/20 text-green-400", draft: "bg-yellow-500/20 text-yellow-400", sent: "bg-stewart-accent/20 text-stewart-accent" };
-  return <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${map[status] || "bg-stewart-border text-stewart-muted"}`}>{status}</span>;
 }
 
 function PitchCallout({ children, show }: { children: React.ReactNode; show: boolean }) {

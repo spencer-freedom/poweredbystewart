@@ -202,6 +202,7 @@ export async function GET(req: NextRequest) {
         const limit = parseInt(searchParams.get("limit") || "100", 10);
         const campaignId = searchParams.get("campaign_id") || "";
         const sendType = searchParams.get("send_type") || "";
+        const sendStatus = searchParams.get("status") || "";
 
         let query = getSupabase()
           .from("email_sends")
@@ -209,6 +210,7 @@ export async function GET(req: NextRequest) {
           .eq("tenant_id", tenantId);
         if (campaignId) query = query.eq("campaign_id", campaignId);
         if (sendType) query = query.eq("send_type", sendType);
+        if (sendStatus) query = query.eq("status", sendStatus);
         query = query.order("created_at", { ascending: false }).limit(limit);
 
         const { data, error } = await query;

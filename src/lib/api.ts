@@ -280,10 +280,11 @@ export const api = {
     return emailGet<EmailCampaign[]>(params);
   },
 
-  emailListSends: (tenantId: string, campaignId?: string, sendType?: string, limit = 100) => {
+  emailListSends: (tenantId: string, campaignId?: string, sendType?: string, status?: string, limit = 100) => {
     const params: Record<string, string> = { action: "sends", tenant: tenantId, limit: String(limit) };
     if (campaignId) params.campaign_id = campaignId;
     if (sendType) params.send_type = sendType;
+    if (status) params.status = status;
     return emailGet<EmailSend[]>(params);
   },
 
