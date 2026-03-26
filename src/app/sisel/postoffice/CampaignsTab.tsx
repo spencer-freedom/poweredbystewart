@@ -53,6 +53,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
   const [testSending, setTestSending] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+  const [productUrl, setProductUrl] = useState("");
   const [error, setError] = useState("");
 
   // ─── Data loading ─────────────────────────────────────────────
@@ -85,6 +86,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
     setSendConfirm(null);
     setTestResult(null);
     setSelectedProducts([]);
+    setProductUrl("");
   };
 
   const goToCompose = (campaign?: EmailCampaign) => {
@@ -101,10 +103,19 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
         audience_segment: criteria.segment || "all_active",
       });
       setEditorMode(campaign.body_html ? "html" : "simple");
+      // Pre-select hero product from saved audience_criteria
+      if (criteria.hero_product) {
+        setSelectedProducts([criteria.hero_product]);
+      } else {
+        setSelectedProducts([]);
+      }
+      setProductUrl(criteria.product_url || "");
     } else {
       setEditing(null);
       setForm(defaultForm);
       setEditorMode("simple");
+      setSelectedProducts([]);
+      setProductUrl("");
     }
     setView("compose");
     setSendConfirm(null);
@@ -129,7 +140,11 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
         body_html: form.body_html,
         body_text: form.body_text,
         scheduled_at: form.scheduled_at || null,
-        audience_criteria: { segment: form.audience_segment, label: seg?.label, estimated_count: seg?.count },
+        audience_criteria: {
+          segment: form.audience_segment, label: seg?.label, estimated_count: seg?.count,
+          ...(selectedProducts[0] && { hero_product: selectedProducts[0] }),
+          ...(productUrl && { product_url: productUrl }),
+        },
       });
       goToList();
       loadCampaigns();
@@ -150,7 +165,11 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
         body_html: form.body_html,
         body_text: form.body_text,
         scheduled_at: form.scheduled_at || null,
-        audience_criteria: JSON.stringify({ segment: form.audience_segment, label: seg?.label, estimated_count: seg?.count }),
+        audience_criteria: JSON.stringify({
+          segment: form.audience_segment, label: seg?.label, estimated_count: seg?.count,
+          ...(selectedProducts[0] && { hero_product: selectedProducts[0] }),
+          ...(productUrl && { product_url: productUrl }),
+        }),
       });
       goToList();
       loadCampaigns();
@@ -313,7 +332,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
   if (view === "compose") {
     const campaignId = editing?.id;
     const rawHtml = form.body_html || (form.template_id ? templates.find((t) => t.id === form.template_id)?.html_content : "") || "";
-    const previewHtml = buildPreviewHtml(rawHtml, selectedProducts);
+    const previewHtml = buildPreviewHtml(rawHtml, selectedProducts, productUrl || undefined);
 
     const toggleProduct = (id: string) => {
       setSelectedProducts((prev) =>
@@ -390,6 +409,25 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
 
             {/* Product Grid */}
             <ProductGrid selectedProducts={selectedProducts} onToggle={toggleProduct} />
+
+            {/* Product URL — for review links, CTAs, etc. */}
+            {selectedProducts.length > 0 && (
+              <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-semibold text-stewart-text">Product Link</h3>
+                  <span className="text-[10px] text-stewart-muted">Maps to {"{product_url}"} in template</span>
+                </div>
+                <input
+                  value={productUrl}
+                  onChange={(e) => setProductUrl(e.target.value)}
+                  className="w-full bg-stewart-bg border border-stewart-border rounded-lg px-4 py-2.5 text-sm text-stewart-text font-mono"
+                  placeholder="https://sisel.net/products/..."
+                />
+                {productUrl && (
+                  <p className="text-[10px] text-stewart-muted">{productUrl.length} characters — this URL will be used for all CTA buttons in the email.</p>
+                )}
+              </div>
+            )}
 
             {/* Email Preview */}
             {previewHtml && (

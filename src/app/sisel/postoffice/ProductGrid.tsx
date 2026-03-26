@@ -4,36 +4,42 @@ export const SISEL_PRODUCTS = [
   {
     id: "supradetox", name: "SupraDetox", price: "$54.95",
     badge: "Best Seller", bgColor: "#16a34a", letter: "S",
+    imageUrl: "/sisel-products/supradetox.webp",
     tagline: "Full-body detox & cleanse formula",
     description: "30-day intensive cleanse that supports your body's natural detoxification pathways. Gentle enough for daily use, powerful enough to feel the difference.",
   },
   {
     id: "fucoydon", name: "Fucoydon", price: "$89.95",
     badge: "", bgColor: "#16a34a", letter: "F",
+    imageUrl: "/sisel-products/fucoydon.webp",
     tagline: "Premium organic fucoidan blend",
     description: "Organic fucoidan sourced from three ocean species — supports immune function, cellular health, and healthy aging. One of Sisel's most trusted formulas.",
   },
   {
     id: "eternity", name: "Eternity", price: "$69.95",
     badge: "New", bgColor: "#e11d48", letter: "E",
+    imageUrl: "/sisel-products/eternity.jpg",
     tagline: "Anti-aging telomere support",
     description: "Telomere support formula with resveratrol and science-backed ingredients for cellular longevity. Because aging well starts at the cellular level.",
   },
   {
     id: "h2stix", name: "H2 Stix", price: "$39.95",
     badge: "", bgColor: "#0d9488", letter: "H",
+    imageUrl: "/sisel-products/h2stix.webp",
     tagline: "Molecular hydrogen water tablets",
     description: "Drop a tablet in any glass of water for powerful antioxidant support. Molecular hydrogen is one of the smallest, most bioavailable antioxidants on earth.",
   },
   {
     id: "ript_sunburst", name: "SiselRIPT Sunburst", price: "$83.99",
     badge: "New", bgColor: "#f59e0b", letter: "R",
+    imageUrl: "/sisel-products/ript_sunburst.png",
     tagline: "Essential amino acids — new citrus flavor",
     description: "All 9 essential amino acids in Dr. Wolfe's researched ratio. Brand new citrus flavor, same patented formula backed by $20M in research and 25 human trials. Sugar-free, 15 calories.",
   },
   {
     id: "ript_lemonberry", name: "SiselRIPT Lemon Berry", price: "$83.99",
     badge: "", bgColor: "#84cc16", letter: "R",
+    imageUrl: "/sisel-products/ript_lemonberry.jpg",
     tagline: "Essential amino acids — original flavor",
     description: "The original RIPT formula that started it all. Lemon Berry flavor with all 9 essential amino acids, sugar-free, sweetened with stevia only. Muscle recovery and lean muscle support.",
   },
@@ -67,48 +73,13 @@ export function getPreviewVariables(selectedProducts: string[]): Record<string, 
   };
 }
 
-// ─── Email HTML generation ───────────────────────────────────────
-
-export function buildProductGridHtml(productIds: string[]): string {
-  const items = SISEL_PRODUCTS.filter((p) => productIds.includes(p.id));
-  if (!items.length) return "";
-  let rows = "";
-  for (let i = 0; i < items.length; i += 2) {
-    rows += "<tr>";
-    for (let j = i; j < Math.min(i + 2, items.length); j++) {
-      const p = items[j];
-      rows += `<td width="50%" style="padding:6px;" valign="top"><table width="100%" cellpadding="0" cellspacing="0" style="background:#f9f9f9;border-radius:8px;border:1px solid #eee;"><tr><td style="padding:14px;text-align:center;"><div style="width:48px;height:48px;background:${p.bgColor};border-radius:50%;margin:0 auto 8px;line-height:48px;color:#fff;font-weight:700;font-size:16px;">${p.letter}</div><p style="color:#333;font-weight:600;font-size:13px;margin:0 0 4px;">${p.name}</p><p style="color:#1a5c3a;font-weight:700;font-size:14px;margin:0;">${p.price}</p></td></tr></table></td>`;
-    }
-    if (items.length - i === 1) rows += '<td width="50%"></td>';
-    rows += "</tr>";
-  }
-  return `<div style="border-top:1px solid #eee;padding-top:20px;margin-top:24px;"><p style="color:#666;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin:0 0 12px;">Featured Products</p><table width="100%" cellpadding="0" cellspacing="0">${rows}</table><div style="text-align:center;margin:16px 0 0;"><a href="https://sisel.net" style="display:inline-block;padding:10px 28px;background:#1a5c3a;color:#fff;text-decoration:none;border-radius:4px;font-size:13px;font-weight:600;">Shop All Products</a></div></div>`;
-}
-
-export function injectProductsIntoEmail(html: string, gridHtml: string): string {
-  if (!html || !gridHtml) return html;
-  const match = html.match(/<tr>\s*<td[^>]*background:\s*#f9f9f9/);
-  if (match?.index !== undefined) {
-    return html.slice(0, match.index) + `<tr><td style="padding:0 32px 24px;">${gridHtml}</td></tr>` + html.slice(match.index);
-  }
-  return html;
-}
-
-/** Full preview pipeline: substitute variables → inject product grid */
-export function buildPreviewHtml(rawHtml: string, selectedProducts: string[]): string {
+/** Full preview pipeline: substitute template variables with hero product data */
+export function buildPreviewHtml(rawHtml: string, selectedProducts: string[], customProductUrl?: string): string {
   if (!rawHtml) return rawHtml;
-  let html = rawHtml;
-  // Substitute template variables with hero product data
   const vars = getPreviewVariables(selectedProducts);
-  if (Object.keys(vars).length > 0) {
-    html = substituteProductVariables(html, vars);
-  }
-  // Inject featured products grid (all selected)
-  if (selectedProducts.length > 0) {
-    const gridHtml = buildProductGridHtml(selectedProducts);
-    html = injectProductsIntoEmail(html, gridHtml);
-  }
-  return html;
+  if (Object.keys(vars).length === 0) return rawHtml;
+  if (customProductUrl) vars.product_url = customProductUrl;
+  return substituteProductVariables(rawHtml, vars);
 }
 
 // ─── UI Component ────────────────────────────────────────────────
@@ -153,12 +124,20 @@ export function ProductGrid({ selectedProducts, onToggle }: ProductGridProps) {
                   {p.badge}
                 </span>
               )}
-              <div
-                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0"
-                style={{ backgroundColor: p.bgColor }}
-              >
-                {p.letter}
-              </div>
+              {p.imageUrl ? (
+                <img
+                  src={p.imageUrl}
+                  alt={p.name}
+                  className="w-10 h-10 rounded-lg object-cover shrink-0 bg-white"
+                />
+              ) : (
+                <div
+                  className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm shrink-0"
+                  style={{ backgroundColor: p.bgColor }}
+                >
+                  {p.letter}
+                </div>
+              )}
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-stewart-text truncate">{p.name}</p>
                 <p className="text-xs text-stewart-muted">{p.price}</p>
