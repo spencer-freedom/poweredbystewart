@@ -435,7 +435,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                         <div className="flex items-center gap-3">
                           <span className="text-[10px] text-stewart-muted">Build with:</span>
                           <a href="https://stripo.email" target="_blank" rel="noopener noreferrer" className="text-[10px] text-stewart-accent hover:underline">Stripo</a>
-                          <a href="https://www.canva.com/email-newsletters/" target="_blank" rel="noopener noreferrer" className="text-[10px] text-stewart-accent hover:underline">Canva</a>
+                          <a href="https://www.canva.com/" target="_blank" rel="noopener noreferrer" className="text-[10px] text-stewart-accent hover:underline">Canva</a>
                           <a href="https://beefree.io" target="_blank" rel="noopener noreferrer" className="text-[10px] text-stewart-accent hover:underline">BEE Free</a>
                           <button onClick={() => setShowHtmlPreview(!showHtmlPreview)} className="text-[10px] text-stewart-accent hover:underline">
                             {showHtmlPreview ? "Hide Preview" : "Show Preview"}
