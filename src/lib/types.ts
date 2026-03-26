@@ -16,6 +16,8 @@ export interface MarketingClient {
   created_at: string;
 }
 
+export type LeadType = "internet" | "walkin" | "phone" | "service";
+
 export interface Lead {
   id: number;
   tenant_id: string;
@@ -25,6 +27,7 @@ export interface Lead {
   source_confidence: string;
   interest: string;
   segment: string;
+  lead_type: LeadType;
   past_actions: string;
   appt: number;
   show: number;
@@ -46,11 +49,14 @@ export interface CreateLeadInput {
   source?: string;
   interest?: string;
   segment?: string;
+  lead_type?: LeadType;
   appt?: boolean;
   show?: boolean;
   turn_over?: boolean;
   to_salesperson?: string;
   status?: string;
+  past_actions?: string;
+  future_actions?: string;
 }
 
 export interface KpiMonthly {
