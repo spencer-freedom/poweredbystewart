@@ -117,42 +117,50 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
           </button>
         </div>
 
-        <div className="flex gap-4">
-          <div className={`${selected ? "w-1/2" : "w-full"}`}>
-            <div className="bg-stewart-card border border-stewart-border rounded-lg overflow-hidden">
-              {templates.length === 0 ? (
-                <div className="px-4 py-12 text-center text-stewart-muted text-sm">
-                  No templates yet. Click + New Template to create one.
-                </div>
-              ) : (
-                <div className="divide-y divide-stewart-border/30">
-                  {templates.map((t) => (
-                    <button
-                      key={t.id}
-                      onClick={() => setSelected(selected?.id === t.id ? null : t)}
-                      className={`w-full text-left px-5 py-3.5 hover:bg-stewart-border/20 transition-colors group ${selected?.id === t.id ? "bg-stewart-border/30" : ""}`}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium text-stewart-text group-hover:text-stewart-accent transition-colors">{t.template_name}</span>
-                        <div className="flex gap-1">
-                          {statusBadge(t.template_type)}
-                          {statusBadge(t.status)}
-                        </div>
-                      </div>
-                      <div className="flex gap-3 mt-1 text-xs text-stewart-muted">
-                        <span>{t.subject_template || "No subject"}</span>
-                        <span>{(t.variables || []).length} vars</span>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+        {/* Template Cards — grid matching Email Studio */}
+        {templates.length === 0 ? (
+          <div className="bg-stewart-card border border-stewart-border rounded-lg px-4 py-12 text-center text-stewart-muted text-sm">
+            No templates yet. Click + New Template to create one.
           </div>
+        ) : (
+          <div className="grid grid-cols-3 gap-4">
+            {templates.map((t) => (
+              <div
+                key={t.id}
+                onClick={() => setSelected(selected?.id === t.id ? null : t)}
+                className={`bg-stewart-card border rounded-lg p-5 hover:border-stewart-accent/50 transition-colors cursor-pointer group ${selected?.id === t.id ? "border-stewart-accent" : "border-stewart-border"}`}
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-stewart-accent/10 flex items-center justify-center">
+                    <svg viewBox="0 0 24 24" className="w-5 h-5 text-stewart-accent" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M2 8l10 6 10-6" /></svg>
+                  </div>
+                  {statusBadge(t.status)}
+                </div>
+                <h3 className="text-sm font-semibold text-stewart-text mb-1 group-hover:text-stewart-accent transition-colors">{t.template_name}</h3>
+                <p className="text-xs text-stewart-muted mb-3">{t.subject_template || "No subject"}</p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-stewart-border text-stewart-muted">{t.template_type}</span>
+                  {(t.variables || []).includes("products") && (
+                    <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-purple-500/20 text-purple-400">product grid</span>
+                  )}
+                  {(t.variables || []).length > 0 && (
+                    <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-stewart-border text-stewart-muted">{(t.variables || []).length} vars</span>
+                  )}
+                </div>
+                <div className="mt-3 pt-3 border-t border-stewart-border">
+                  <span className="text-xs text-stewart-accent opacity-0 group-hover:opacity-100 transition-opacity">
+                    {selected?.id === t.id ? "View details" : "Use template"} &rarr;
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
-          {/* Detail Panel */}
-          {selected && (
-            <div className="w-1/2 space-y-5">
+        {/* Detail Panel — slides below the grid */}
+        {selected && (
+          <div className="grid grid-cols-3 gap-6">
+            <div className="col-span-2 space-y-5">
               <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
                 <div className="flex justify-between items-start">
                   <div>
@@ -181,7 +189,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
                 <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
                   <h3 className="text-sm font-semibold text-stewart-text">Email Preview</h3>
                   <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
-                    <iframe srcDoc={selected.html_content} className="w-full border-0" style={{ height: "300px" }} sandbox="allow-same-origin" title="Template Preview" />
+                    <iframe srcDoc={selected.html_content} className="w-full border-0" style={{ height: "350px" }} sandbox="allow-same-origin" title="Template Preview" />
                   </div>
                 </div>
               )}
@@ -194,16 +202,48 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
                   </div>
                 </div>
               )}
+            </div>
+
+            <div className="space-y-5">
+              <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-3">
+                <h3 className="text-sm font-semibold text-stewart-text">Summary</h3>
+                <div className="bg-stewart-bg rounded-lg p-3 space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-stewart-muted">Type</span>
+                    <span className="text-stewart-text">{selected.template_type}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-stewart-muted">Status</span>
+                    <span className="text-stewart-text">{selected.status}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-stewart-muted">Variables</span>
+                    <span className="text-stewart-text">{(selected.variables || []).length}</span>
+                  </div>
+                  {selected.html_content && (
+                    <div className="flex justify-between">
+                      <span className="text-stewart-muted">HTML size</span>
+                      <span className="text-stewart-text">{selected.html_content.length.toLocaleString()} chars</span>
+                    </div>
+                  )}
+                </div>
+              </div>
 
               <button
                 onClick={() => goToEdit(selected)}
-                className="w-full px-4 py-2.5 bg-stewart-card border border-stewart-border text-stewart-text text-sm font-medium rounded-lg hover:bg-stewart-border/50 transition-colors"
+                className="w-full px-4 py-2.5 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors"
               >
                 Edit Template
               </button>
+              <button
+                onClick={() => setSelected(null)}
+                className="w-full px-4 py-2 text-stewart-muted text-sm hover:text-stewart-text transition-colors"
+              >
+                Close
+              </button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     );
   }
