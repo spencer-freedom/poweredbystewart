@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { api } from "@/lib/api";
 import type { EmailTemplate } from "@/lib/types";
 import { statusBadge } from "@/lib/ui/badges";
+import { ProductGrid, buildProductGridHtml, injectProductsIntoEmail } from "./ProductGrid";
 
 interface Props {
   tenantId: string;
@@ -29,6 +30,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
   const [editing, setEditing] = useState<EmailTemplate | null>(null);
   const [form, setForm] = useState(defaultForm);
   const [showPreview, setShowPreview] = useState(false);
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [error, setError] = useState("");
 
   const load = useCallback(async () => {
@@ -46,6 +48,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
     setEditing(null);
     setForm(defaultForm);
     setShowPreview(false);
+    setSelectedProducts([]);
   };
 
   const goToEdit = (t?: EmailTemplate) => {
@@ -320,6 +323,12 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
             </div>
           </div>
 
+          {/* Product Grid */}
+          <ProductGrid
+            selectedProducts={selectedProducts}
+            onToggle={(id) => setSelectedProducts((prev) => prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id])}
+          />
+
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-stewart-text">HTML Content</h3>
@@ -349,7 +358,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
               <div>
                 <p className="text-xs text-stewart-muted mb-1">Live Preview</p>
                 <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
-                  <iframe srcDoc={form.html_content} className="w-full border-0" style={{ height: "350px" }} sandbox="allow-same-origin" title="Template Preview" />
+                  <iframe srcDoc={selectedProducts.length > 0 ? injectProductsIntoEmail(form.html_content, buildProductGridHtml(selectedProducts)) : form.html_content} className="w-full border-0" style={{ height: "350px" }} sandbox="allow-same-origin" title="Template Preview" />
                 </div>
               </div>
             )}
