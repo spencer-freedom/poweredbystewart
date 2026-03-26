@@ -391,6 +391,16 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
             {/* Product Grid */}
             <ProductGrid selectedProducts={selectedProducts} onToggle={toggleProduct} />
 
+            {/* Email Preview */}
+            {previewHtml && (
+              <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
+                <h3 className="text-sm font-semibold text-stewart-text">Email Preview</h3>
+                <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
+                  <iframe srcDoc={previewHtml} className="w-full border-0" style={{ height: "350px" }} sandbox="allow-same-origin" title="Email Preview" />
+                </div>
+              </div>
+            )}
+
             {/* Template callout */}
             {form.template_id && (
               <div className="bg-stewart-accent/5 border-l-2 border-stewart-accent rounded-r-lg px-4 py-2.5 text-sm text-stewart-muted">
@@ -485,16 +495,6 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                     </div>
                   </>
                 )}
-              </div>
-            )}
-
-            {/* Email Preview */}
-            {previewHtml && (
-              <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-                <h3 className="text-sm font-semibold text-stewart-text">Email Preview</h3>
-                <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
-                  <iframe srcDoc={previewHtml} className="w-full border-0" style={{ height: "350px" }} sandbox="allow-same-origin" title="Email Preview" />
-                </div>
               </div>
             )}
 
