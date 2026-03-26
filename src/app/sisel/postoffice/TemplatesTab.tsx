@@ -29,7 +29,6 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
   const [selected, setSelected] = useState<EmailTemplate | null>(null);
   const [editing, setEditing] = useState<EmailTemplate | null>(null);
   const [form, setForm] = useState(defaultForm);
-  const [showPreview, setShowPreview] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [productUrl, setProductUrl] = useState("");
   const [error, setError] = useState("");
@@ -48,7 +47,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
     setView("list");
     setEditing(null);
     setForm(defaultForm);
-    setShowPreview(false);
+
     setSelectedProducts([]);
     setProductUrl("");
   };
@@ -71,7 +70,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
     }
     setView("edit");
     setSelected(null);
-    setShowPreview(false);
+
   };
 
   const handleSave = async () => {
@@ -372,6 +371,16 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
             );
           })()}
 
+          {/* Email Preview — above HTML editor */}
+          {form.html_content && (
+            <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
+              <h3 className="text-sm font-semibold text-stewart-text">Email Preview</h3>
+              <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
+                <iframe srcDoc={buildPreviewHtml(form.html_content, selectedProducts, productUrl || undefined)} className="w-full border-0" style={{ height: "350px" }} sandbox="allow-same-origin" title="Template Preview" />
+              </div>
+            </div>
+          )}
+
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-stewart-text">HTML Content</h3>
@@ -380,11 +389,6 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
                 <a href="https://stripo.email" target="_blank" rel="noopener noreferrer" className="text-[10px] text-stewart-accent hover:underline">Stripo</a>
                 <a href="https://www.canva.com/" target="_blank" rel="noopener noreferrer" className="text-[10px] text-stewart-accent hover:underline">Canva</a>
                 <a href="https://beefree.io" target="_blank" rel="noopener noreferrer" className="text-[10px] text-stewart-accent hover:underline">BEE Free</a>
-                {form.html_content && (
-                  <button onClick={() => setShowPreview(!showPreview)} className="text-[10px] text-stewart-accent hover:underline">
-                    {showPreview ? "Hide Preview" : "Show Preview"}
-                  </button>
-                )}
               </div>
             </div>
             <textarea
@@ -396,14 +400,6 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
             />
             {form.html_content && (
               <p className="text-[10px] text-stewart-muted">{form.html_content.length.toLocaleString()} characters</p>
-            )}
-            {showPreview && form.html_content && (
-              <div>
-                <p className="text-xs text-stewart-muted mb-1">Live Preview</p>
-                <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
-                  <iframe srcDoc={buildPreviewHtml(form.html_content, selectedProducts, productUrl || undefined)} className="w-full border-0" style={{ height: "350px" }} sandbox="allow-same-origin" title="Template Preview" />
-                </div>
-              </div>
             )}
             <div>
               <label className="text-xs text-stewart-muted block mb-1">Plain Text Fallback</label>
