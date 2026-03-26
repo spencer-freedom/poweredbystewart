@@ -40,8 +40,6 @@ export default function SiselPostOfficePage() {
       <div className="border-b border-stewart-border bg-stewart-card">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <a href="/sisel" className="text-stewart-muted hover:text-stewart-text text-sm transition-colors">&larr; Back</a>
-            <div className="w-px h-6 bg-stewart-border" />
             <div>
               <h1 className="text-xl font-bold text-stewart-text">The Post Office</h1>
               <p className="text-stewart-muted text-xs">Sisel International — Email Marketing & Automation</p>
