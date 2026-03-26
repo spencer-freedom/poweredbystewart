@@ -23,7 +23,7 @@ const SISEL_PRODUCTS = [
   { id: "supradetox", name: "SupraDetox", price: "$54.95", badge: "Best Seller", bgColor: "#16a34a", letter: "S" },
   { id: "fucoydon", name: "Fucoydon", price: "$89.95", badge: "", bgColor: "#16a34a", letter: "F" },
   { id: "eternity", name: "Eternity", price: "$69.95", badge: "New", bgColor: "#e11d48", letter: "E" },
-  { id: "siselean", name: "SiseLean", price: "$74.95", badge: "", bgColor: "#16a34a", letter: "S" },
+  { id: "h2stix", name: "H2 Stix", price: "$39.95", badge: "", bgColor: "#0d9488", letter: "H" },
   { id: "ript_sunburst", name: "SiselRIPT Sunburst", price: "$83.99", badge: "New", bgColor: "#f59e0b", letter: "R" },
   { id: "ript_lemonberry", name: "SiselRIPT Lemon Berry", price: "$83.99", badge: "", bgColor: "#84cc16", letter: "R" },
 ];
