@@ -68,6 +68,7 @@ export function getPreviewVariables(selectedProducts: string[]): Record<string, 
     product_description: hero.description,
     product_tagline: hero.tagline,
     price: hero.price,
+    product_image: hero.imageUrl ? `https://poweredbystewart.com${hero.imageUrl}` : "",
     product_url: "https://sisel.net",
     name: "Sarah",  // demo preview name
   };

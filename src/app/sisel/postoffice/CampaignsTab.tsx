@@ -29,7 +29,7 @@ const defaultForm = {
   body_html: "",
   body_text: "",
   scheduled_at: "",
-  audience_segment: "all_active",
+  audience_segments: ["all_active"] as string[],
 };
 
 function parseCriteria(campaign: EmailCampaign) {
@@ -100,7 +100,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
         body_html: campaign.body_html || "",
         body_text: campaign.body_text || "",
         scheduled_at: campaign.scheduled_at?.slice(0, 16) || "",
-        audience_segment: criteria.segment || "all_active",
+        audience_segments: criteria.segments || (criteria.segment ? [criteria.segment] : ["all_active"]),
       });
       setEditorMode(campaign.body_html ? "html" : "simple");
       // Pre-select hero product from saved audience_criteria
@@ -131,7 +131,8 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
   // ─── Handlers ─────────────────────────────────────────────────
 
   const handleCreate = async () => {
-    const seg = AUDIENCE_SEGMENTS.find((s) => s.key === form.audience_segment);
+    const selectedSegs = AUDIENCE_SEGMENTS.filter((s) => form.audience_segments.includes(s.key));
+    const totalCount = selectedSegs.reduce((sum, s) => sum + s.count, 0);
     try {
       await api.emailCreateCampaign(tenantId, {
         campaign_name: form.campaign_name,
@@ -141,7 +142,9 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
         body_text: form.body_text,
         scheduled_at: form.scheduled_at || null,
         audience_criteria: {
-          segment: form.audience_segment, label: seg?.label, estimated_count: seg?.count,
+          segments: form.audience_segments,
+          labels: selectedSegs.map((s) => s.label),
+          estimated_count: totalCount,
           ...(selectedProducts[0] && { hero_product: selectedProducts[0] }),
           ...(productUrl && { product_url: productUrl }),
         },
@@ -156,7 +159,8 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
 
   const handleSave = async () => {
     if (!editing) return;
-    const seg = AUDIENCE_SEGMENTS.find((s) => s.key === form.audience_segment);
+    const selectedSegs = AUDIENCE_SEGMENTS.filter((s) => form.audience_segments.includes(s.key));
+    const totalCount = selectedSegs.reduce((sum, s) => sum + s.count, 0);
     try {
       await api.emailUpdateCampaign(tenantId, editing.id, {
         campaign_name: form.campaign_name,
@@ -166,7 +170,9 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
         body_text: form.body_text,
         scheduled_at: form.scheduled_at || null,
         audience_criteria: JSON.stringify({
-          segment: form.audience_segment, label: seg?.label, estimated_count: seg?.count,
+          segments: form.audience_segments,
+          labels: selectedSegs.map((s) => s.label),
+          estimated_count: totalCount,
           ...(selectedProducts[0] && { hero_product: selectedProducts[0] }),
           ...(productUrl && { product_url: productUrl }),
         }),
@@ -229,7 +235,8 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
     }
   };
 
-  const currentSegment = AUDIENCE_SEGMENTS.find((s) => s.key === form.audience_segment);
+  const selectedSegments = AUDIENCE_SEGMENTS.filter((s) => form.audience_segments.includes(s.key));
+  const totalRecipients = selectedSegments.reduce((sum, s) => sum + s.count, 0);
 
   // ─── Error state ──────────────────────────────────────────────
 
@@ -540,22 +547,49 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
 
           {/* ─── Right Sidebar ─── */}
           <div className="space-y-5">
-            {/* Audience */}
+            {/* Audience — multi-select */}
             <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">
-              <h3 className="text-sm font-semibold text-stewart-text">Audience</h3>
-              <select
-                value={form.audience_segment}
-                onChange={(e) => setForm({ ...form, audience_segment: e.target.value })}
-                className="w-full bg-stewart-bg border border-stewart-border rounded-lg px-3 py-2.5 text-sm text-stewart-text appearance-none cursor-pointer"
-              >
-                {AUDIENCE_SEGMENTS.map((s) => (
-                  <option key={s.key} value={s.key}>{s.label} ({s.count.toLocaleString()})</option>
-                ))}
-              </select>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-stewart-text">Audience</h3>
+                <span className="text-xs text-stewart-muted">{form.audience_segments.length} selected</span>
+              </div>
+              <div className="space-y-1.5">
+                {AUDIENCE_SEGMENTS.map((s) => {
+                  const active = form.audience_segments.includes(s.key);
+                  return (
+                    <button
+                      key={s.key}
+                      onClick={() => {
+                        setForm((prev) => ({
+                          ...prev,
+                          audience_segments: active
+                            ? prev.audience_segments.filter((k) => k !== s.key)
+                            : [...prev.audience_segments, s.key],
+                        }));
+                      }}
+                      className={`w-full flex items-center justify-between rounded-lg px-3 py-2 text-left text-xs transition-all ${
+                        active
+                          ? "bg-stewart-accent/15 border border-stewart-accent/50 text-stewart-text"
+                          : "bg-stewart-bg border border-stewart-border text-stewart-muted hover:border-stewart-accent/30"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center shrink-0 ${
+                          active ? "bg-stewart-accent border-stewart-accent" : "border-stewart-border"
+                        }`}>
+                          {active && <svg viewBox="0 0 16 16" className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" strokeWidth="3"><path d="M3 8l3 3 7-7" /></svg>}
+                        </div>
+                        <span>{s.label}</span>
+                      </div>
+                      <span className={`text-[10px] ${active ? "text-stewart-accent" : "text-stewart-muted"}`}>{s.count.toLocaleString()}</span>
+                    </button>
+                  );
+                })}
+              </div>
               <div className="bg-stewart-bg rounded-lg p-3 space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-stewart-muted">Recipients</span>
-                  <span className="font-bold text-stewart-text">{currentSegment?.count.toLocaleString()}</span>
+                  <span className="font-bold text-stewart-text">{totalRecipients.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-stewart-muted">Unsubscribed</span>
@@ -563,7 +597,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                 </div>
                 <div className="flex justify-between pt-2 border-t border-stewart-border">
                   <span className="text-stewart-muted">Will receive</span>
-                  <span className="font-bold text-green-400">{((currentSegment?.count || 0) - 3).toLocaleString()}</span>
+                  <span className="font-bold text-green-400">{(totalRecipients - 3).toLocaleString()}</span>
                 </div>
               </div>
             </div>
@@ -584,7 +618,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-stewart-muted">Est. send time</span>
-                  <span className="text-stewart-text font-medium">{Math.max(1, Math.ceil(((currentSegment?.count || 0) - 3) / 14 / 60))} min</span>
+                  <span className="text-stewart-text font-medium">{Math.max(1, Math.ceil((totalRecipients - 3) / 14 / 60))} min</span>
                 </div>
               </div>
             </div>
