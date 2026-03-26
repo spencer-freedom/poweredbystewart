@@ -415,10 +415,11 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
             {/* Product Grid */}
             <ProductGrid selectedProducts={selectedProducts} onToggle={toggleProduct} />
 
-            {/* Review / Product URL — centerpiece demo feature */}
+            {/* Review URL — only for review templates/campaigns */}
             {selectedProducts.length > 0 && (() => {
               const currentTemplate = templates.find((t) => t.id === form.template_id);
               const isReview = currentTemplate?.template_name?.toLowerCase().includes("review") || form.campaign_name?.toLowerCase().includes("review");
+              if (!isReview) return null;
               return (
                 <div className={`border rounded-lg p-5 space-y-3 ${isReview ? "bg-stewart-accent/5 border-stewart-accent/30" : "bg-stewart-card border-stewart-border"}`}>
                   <div className="flex items-center justify-between">
