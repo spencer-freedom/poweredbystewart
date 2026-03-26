@@ -52,6 +52,17 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
     setProductUrl("");
   };
 
+  const DEMO_REVIEW_URL =
+    "https://sisel.net/products/sisel-h2-stix-hydrogen-water?variant=43298574336123" +
+    "&utm_source=email&utm_medium=distributor_blast&utm_campaign=product_review_march2026" +
+    "&utm_content=cta_button_primary&utm_term=hydrogen_water" +
+    "&ref=distributor_network&tracking_id=dist_blast_20260315" +
+    "&session_source=email_marketing_platform&click_id=clk_9f8e7d6c5b4a3" +
+    "&distributor_tier=gold&region=north_america&promo_code=SPRING2026" +
+    "&ab_test=variant_b&personalization_token=usr_abc123def456ghi789" +
+    "&redirect_after_review=https%3A%2F%2Fsisel.net%2Fthank-you%3Freviewer%3D{name}" +
+    "%26product%3Dh2-stix%26submitted%3Dtrue%26reward_points%3D50";
+
   const goToEdit = (t?: EmailTemplate) => {
     if (t) {
       setEditing(t);
@@ -64,13 +75,22 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
         variables: (t.variables || []).join(", "),
         status: t.status,
       });
+      // Pre-fill demo data for Product Review Request template
+      if (t.template_name?.toLowerCase().includes("review")) {
+        setSelectedProducts(["h2stix"]);
+        setProductUrl(DEMO_REVIEW_URL);
+      } else {
+        setSelectedProducts([]);
+        setProductUrl("");
+      }
     } else {
       setEditing(null);
       setForm(defaultForm);
+      setSelectedProducts([]);
+      setProductUrl("");
     }
     setView("edit");
     setSelected(null);
-
   };
 
   const handleSave = async () => {
