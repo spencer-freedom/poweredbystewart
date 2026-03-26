@@ -344,11 +344,13 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
             </div>
           </div>
 
-          {/* Product Grid */}
-          <ProductGrid
-            selectedProducts={selectedProducts}
-            onToggle={(id) => setSelectedProducts((prev) => prev[0] === id ? [] : [id])}
-          />
+          {/* Product Grid — only for templates that use product variables */}
+          {form.html_content?.includes("{product_") && (
+            <ProductGrid
+              selectedProducts={selectedProducts}
+              onToggle={(id) => setSelectedProducts((prev) => prev[0] === id ? [] : [id])}
+            />
+          )}
 
           {/* Review / Product URL */}
           {selectedProducts.length > 0 && (() => {
