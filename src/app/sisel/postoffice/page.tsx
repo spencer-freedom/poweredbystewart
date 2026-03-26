@@ -149,6 +149,7 @@ function PlatformView() {
   const [testEmail, setTestEmail] = useState("");
   const [testSending, setTestSending] = useState(false);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [editingCampaign, setEditingCampaign] = useState<EmailCampaign | null>(null);
 
   // Templates
   const [templates, setTemplates] = useState<EmailTemplate[]>([]);
@@ -249,6 +250,42 @@ function PlatformView() {
       loadSummary();
     } catch {
       setError("Failed to create campaign");
+    }
+  };
+
+  const handleEditCampaign = (c: EmailCampaign) => {
+    setEditingCampaign(c);
+    setCampaignForm({
+      campaign_name: c.campaign_name,
+      subject: c.subject,
+      template_id: c.template_id || "",
+      body_html: c.body_html || "",
+      body_text: c.body_text || "",
+      scheduled_at: c.scheduled_at?.slice(0, 16) || "",
+    });
+    setCampaignEditorMode(c.body_html ? "html" : "simple");
+    setShowCreateCampaign(true);
+    setSelectedCampaign(null);
+  };
+
+  const handleSaveCampaign = async () => {
+    if (!editingCampaign) return;
+    try {
+      await api.emailUpdateCampaign(TENANT_ID, editingCampaign.id, {
+        campaign_name: campaignForm.campaign_name,
+        subject: campaignForm.subject,
+        template_id: campaignForm.template_id || null,
+        body_html: campaignForm.body_html,
+        body_text: campaignForm.body_text,
+        scheduled_at: campaignForm.scheduled_at || null,
+      });
+      setShowCreateCampaign(false);
+      setEditingCampaign(null);
+      setCampaignForm(defaultCampaignForm);
+      setCampaignEditorMode("simple");
+      loadCampaigns();
+    } catch {
+      setError("Failed to update campaign");
     }
   };
 
@@ -476,8 +513,8 @@ function PlatformView() {
             {showCreateCampaign && (
               <div className="bg-stewart-card border border-stewart-accent/30 rounded-lg p-4">
                 <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-sm font-semibold">New Campaign</h3>
-                  <button onClick={() => { setShowCreateCampaign(false); setCampaignEditorMode("simple"); }} className="text-xs text-stewart-muted hover:text-stewart-text">Cancel</button>
+                  <h3 className="text-sm font-semibold">{editingCampaign ? "Edit Campaign" : "New Campaign"}</h3>
+                  <button onClick={() => { setShowCreateCampaign(false); setEditingCampaign(null); setCampaignForm(defaultCampaignForm); setCampaignEditorMode("simple"); }} className="text-xs text-stewart-muted hover:text-stewart-text">Cancel</button>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
@@ -648,11 +685,11 @@ function PlatformView() {
 
                 <div className="mt-3 flex justify-end">
                   <button
-                    onClick={handleCreateCampaign}
+                    onClick={editingCampaign ? handleSaveCampaign : handleCreateCampaign}
                     disabled={!campaignForm.campaign_name || !campaignForm.subject}
                     className="px-4 py-1.5 text-sm bg-stewart-accent/20 text-stewart-accent border border-stewart-accent/30 rounded hover:bg-stewart-accent/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Create Draft
+                    {editingCampaign ? "Save Changes" : "Create Draft"}
                   </button>
                 </div>
               </div>
@@ -798,6 +835,14 @@ function PlatformView() {
 
               {/* Actions */}
               <div className="flex gap-2 pt-2 border-t border-stewart-border/50">
+                {(selectedCampaign.status === "draft" || selectedCampaign.status === "scheduled") && (
+                  <button
+                    onClick={() => handleEditCampaign(selectedCampaign)}
+                    className="px-3 py-1 text-xs bg-stewart-accent/20 text-stewart-accent border border-stewart-accent/30 rounded hover:bg-stewart-accent/30 transition-colors"
+                  >
+                    Edit
+                  </button>
+                )}
                 {(selectedCampaign.status === "draft" || selectedCampaign.status === "scheduled") && (
                   <button
                     onClick={() => handlePreviewCampaign(selectedCampaign.id)}
