@@ -61,28 +61,21 @@ export default function SiselPostOfficePage() {
             {/* Summary Cards */}
             {summary && (
               <div className="grid grid-cols-4 gap-3">
-                <button onClick={() => setTab("campaigns")} className="bg-stewart-card border border-stewart-border rounded-lg p-4 text-left hover:border-stewart-accent transition-colors cursor-pointer">
-                  <p className="text-xs text-stewart-muted mb-1">Total Campaigns</p>
-                  <p className="text-xl font-bold text-stewart-accent">{summary.campaigns.total}</p>
-                  <p className="text-[11px] text-stewart-muted mt-0.5">{summary.campaigns.sent} sent, {summary.campaigns.draft} drafts</p>
-                </button>
-                <button onClick={() => setTab("templates")} className="bg-stewart-card border border-stewart-border rounded-lg p-4 text-left hover:border-stewart-accent transition-colors cursor-pointer">
-                  <p className="text-xs text-stewart-muted mb-1">Templates</p>
-                  <p className="text-xl font-bold text-stewart-accent">{summary.templates}</p>
-                  <p className="text-[11px] text-stewart-muted mt-0.5">Ready to use</p>
-                </button>
-                <button onClick={() => setTab("sends")} className="bg-stewart-card border border-stewart-border rounded-lg p-4 text-left hover:border-stewart-accent transition-colors cursor-pointer">
-                  <p className="text-xs text-stewart-muted mb-1">Emails Sent</p>
-                  <p className="text-xl font-bold text-green-400">{summary.sends.total}</p>
-                  <p className="text-[11px] text-stewart-muted mt-0.5">{summary.sends.sent} delivered, {summary.sends.failed} failed</p>
-                </button>
-                <button onClick={() => setTab("unsubscribes")} className="bg-stewart-card border border-stewart-border rounded-lg p-4 text-left hover:border-stewart-accent transition-colors cursor-pointer">
-                  <p className="text-xs text-stewart-muted mb-1">Unsubscribes</p>
-                  <p className={`text-xl font-bold ${summary.unsubscribes > 0 ? "text-orange-400" : "text-green-400"}`}>
-                    {summary.unsubscribes}
-                  </p>
-                  <p className="text-[11px] text-stewart-muted mt-0.5">Auto-synced</p>
-                </button>
+                {[
+                  { key: "campaigns" as const, label: "Total Campaigns", value: summary.campaigns.total, color: "text-stewart-accent", sub: `${summary.campaigns.sent} sent, ${summary.campaigns.draft} drafts`, arrow: "View campaigns" },
+                  { key: "templates" as const, label: "Templates", value: summary.templates, color: "text-stewart-accent", sub: "Ready to use", arrow: "View templates" },
+                  { key: "sends" as const, label: "Emails Sent", value: summary.sends.total, color: "text-green-400", sub: `${summary.sends.sent} delivered, ${summary.sends.failed} failed`, arrow: "View send log" },
+                  { key: "unsubscribes" as const, label: "Unsubscribes", value: summary.unsubscribes, color: summary.unsubscribes > 0 ? "text-orange-400" : "text-green-400", sub: "Auto-synced", arrow: "View unsubscribes" },
+                ].map((card) => (
+                  <button key={card.key} onClick={() => setTab(card.key)} className="bg-stewart-card border border-stewart-border rounded-lg p-4 text-left hover:border-stewart-accent/50 transition-colors cursor-pointer group">
+                    <p className="text-xs text-stewart-muted mb-1">{card.label}</p>
+                    <p className={`text-xl font-bold ${card.color}`}>{card.value}</p>
+                    <p className="text-[11px] text-stewart-muted mt-0.5">{card.sub}</p>
+                    <div className="mt-2 pt-2 border-t border-stewart-border">
+                      <span className="text-xs text-stewart-accent opacity-0 group-hover:opacity-100 transition-opacity">{card.arrow} &rarr;</span>
+                    </div>
+                  </button>
+                ))}
               </div>
             )}
 
