@@ -485,32 +485,6 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
               </div>
             )}
 
-            {/* Dry Run / Send Test — only when editing */}
-            {campaignId && (
-              <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-3">
-                <p className="text-xs font-semibold text-stewart-text">Dry Run</p>
-                <p className="text-[11px] text-stewart-muted">Send a test email to yourself before sending to the full audience.</p>
-                <div className="flex gap-2">
-                  <input
-                    type="email"
-                    placeholder="recipient@example.com"
-                    value={testEmail}
-                    onChange={(e) => { setTestEmail(e.target.value); setTestResult(null); }}
-                    className="flex-1 bg-stewart-bg border border-stewart-border rounded-lg px-4 py-2.5 text-sm text-stewart-text placeholder:text-stewart-muted/50"
-                  />
-                  <button
-                    onClick={() => handleSendTest(campaignId)}
-                    disabled={testSending || !testEmail}
-                    className="px-4 py-2.5 bg-stewart-border text-stewart-text text-xs font-medium rounded-lg hover:bg-stewart-accent/20 transition-colors disabled:opacity-50"
-                  >
-                    {testSending ? "Sending..." : "Send Test"}
-                  </button>
-                </div>
-                {testResult && (
-                  <p className={`text-xs ${testResult.success ? "text-green-400" : "text-red-400"}`}>{testResult.message}</p>
-                )}
-              </div>
-            )}
           </div>
 
           {/* ─── Right Sidebar ─── */}
@@ -563,6 +537,33 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                 </div>
               </div>
             </div>
+
+            {/* Dry Run */}
+            {campaignId && (
+              <div className="bg-stewart-card border border-stewart-border rounded-lg p-4 space-y-3">
+                <p className="text-xs font-semibold text-stewart-text">Dry Run</p>
+                <p className="text-[11px] text-stewart-muted">Send a test to yourself first.</p>
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    placeholder="recipient@example.com"
+                    value={testEmail}
+                    onChange={(e) => { setTestEmail(e.target.value); setTestResult(null); }}
+                    className="flex-1 bg-stewart-bg border border-stewart-border rounded px-3 py-2 text-xs text-stewart-text placeholder:text-stewart-muted/50"
+                  />
+                  <button
+                    onClick={() => handleSendTest(campaignId)}
+                    disabled={testSending || !testEmail}
+                    className="px-3 py-2 bg-stewart-border text-stewart-text text-xs font-medium rounded hover:bg-stewart-accent/20 transition-colors disabled:opacity-50"
+                  >
+                    {testSending ? "Sending..." : "Send Test"}
+                  </button>
+                </div>
+                {testResult && (
+                  <p className={`text-xs ${testResult.success ? "text-green-400" : "text-red-400"}`}>{testResult.message}</p>
+                )}
+              </div>
+            )}
 
             {/* Actions */}
             {campaignId && (editing?.status === "draft" || editing?.status === "scheduled") && (
