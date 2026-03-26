@@ -326,7 +326,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
           {/* Product Grid */}
           <ProductGrid
             selectedProducts={selectedProducts}
-            onToggle={(id) => setSelectedProducts((prev) => prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id])}
+            onToggle={(id) => setSelectedProducts((prev) => prev[0] === id ? [] : [id])}
           />
 
           <div className="bg-stewart-card border border-stewart-border rounded-lg p-5 space-y-4">

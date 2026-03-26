@@ -342,9 +342,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
     const previewHtml = buildPreviewHtml(rawHtml, selectedProducts, productUrl || undefined);
 
     const toggleProduct = (id: string) => {
-      setSelectedProducts((prev) =>
-        prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
-      );
+      setSelectedProducts((prev) => prev[0] === id ? [] : [id]);
     };
 
     return (
