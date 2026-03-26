@@ -164,7 +164,17 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
           </div>
         )}
 
-        {/* Detail Panel — slides below the grid */}
+        {/* Edit Template — full-width bar right under the cards */}
+        {selected && (
+          <button
+            onClick={() => goToEdit(selected)}
+            className="w-full px-4 py-3 bg-stewart-accent text-white text-sm font-semibold rounded-lg hover:bg-stewart-accent/80 transition-colors flex items-center justify-center gap-2"
+          >
+            Edit Template — {selected.template_name}
+          </button>
+        )}
+
+        {/* Detail Panel — slides below */}
         {selected && (
           <div className="grid grid-cols-3 gap-6">
             <div className="col-span-2 space-y-5">
@@ -236,12 +246,6 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
                 </div>
               </div>
 
-              <button
-                onClick={() => goToEdit(selected)}
-                className="w-full px-4 py-2.5 bg-stewart-accent text-white text-sm font-medium rounded-lg hover:bg-stewart-accent/80 transition-colors"
-              >
-                Edit Template
-              </button>
               <button
                 onClick={() => setSelected(null)}
                 className="w-full px-4 py-2 text-stewart-muted text-sm hover:text-stewart-text transition-colors"
