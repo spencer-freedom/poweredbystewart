@@ -353,6 +353,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
           {/* Review / Product URL */}
           {selectedProducts.length > 0 && (() => {
             const isReview = form.template_name?.toLowerCase().includes("review");
+            if (!isReview) return null;
             return (
               <div className={`border rounded-lg p-5 space-y-3 ${isReview ? "bg-stewart-accent/5 border-stewart-accent/30" : "bg-stewart-card border-stewart-border"}`}>
                 <div className="flex items-center justify-between">
