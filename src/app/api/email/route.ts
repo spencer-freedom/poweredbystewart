@@ -33,14 +33,18 @@ function errorResponse(error: { message: string }, status = 500) {
 
 // ─── SES helpers ───────────────────────────────────────────────────────────────
 
+let _ses: SESClient;
 function getSesClient(): SESClient {
-  return new SESClient({
-    region: process.env.AWS_SES_REGION || "us-east-1",
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
-    },
-  });
+  if (!_ses) {
+    _ses = new SESClient({
+      region: process.env.AWS_SES_REGION || "us-east-1",
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+      },
+    });
+  }
+  return _ses;
 }
 
 async function sendEmail(
@@ -75,6 +79,27 @@ async function sendEmail(
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : "SES send failed" };
   }
+}
+
+async function resolveEmailContent(
+  campaign: { body_html?: string; body_text?: string; template_id?: string },
+  tenantId: string,
+): Promise<{ html: string; text: string }> {
+  let html = campaign.body_html || "";
+  let text = campaign.body_text || "";
+  if (!html && campaign.template_id) {
+    const { data: tpl } = await getSupabase()
+      .from("email_templates")
+      .select("html_content,text_content")
+      .eq("id", campaign.template_id)
+      .eq("tenant_id", tenantId)
+      .single();
+    if (tpl) {
+      html = tpl.html_content || "";
+      text = tpl.text_content || "";
+    }
+  }
+  return { html, text };
 }
 
 function injectUnsubscribeFooter(html: string, storeAddress: string): string {
@@ -298,23 +323,9 @@ export async function POST(req: NextRequest) {
           return NextResponse.json({ error: "Campaign not found" }, { status: 404 });
         }
 
-        // Resolve HTML — campaign body or linked template
-        let html = campaign.body_html || "";
-        let text = campaign.body_text || "";
-        if (!html && campaign.template_id) {
-          const { data: tpl } = await getSupabase()
-            .from("email_templates")
-            .select("html_content,text_content")
-            .eq("id", campaign.template_id)
-            .single();
-          if (tpl) {
-            html = tpl.html_content || "";
-            text = tpl.text_content || "";
-          }
-        }
-
+        const { html: rawHtml, text } = await resolveEmailContent(campaign, tenantId);
         const cfg = TENANT_CONFIG[tenantId] || TENANT_CONFIG.sisel;
-        if (html) html = injectUnsubscribeFooter(html, cfg.store_address);
+        const html = rawHtml ? injectUnsubscribeFooter(rawHtml, cfg.store_address) : "";
 
         const result = await sendEmail(testEmail, `[TEST] ${campaign.subject}`, html, text, cfg.from_name);
 
@@ -362,20 +373,7 @@ export async function POST(req: NextRequest) {
           return NextResponse.json({ error: `Campaign already ${campaign.status}` }, { status: 400 });
         }
 
-        // Resolve HTML — campaign body or linked template
-        let html = campaign.body_html || "";
-        let text = campaign.body_text || "";
-        if (!html && campaign.template_id) {
-          const { data: tpl } = await getSupabase()
-            .from("email_templates")
-            .select("html_content,text_content")
-            .eq("id", campaign.template_id)
-            .single();
-          if (tpl) {
-            html = tpl.html_content || "";
-            text = tpl.text_content || "";
-          }
-        }
+        const { html, text } = await resolveEmailContent(campaign, tenantId);
 
         if (!html && !text) {
           return NextResponse.json({ error: "Campaign has no email content" }, { status: 400 });
@@ -411,51 +409,52 @@ export async function POST(req: NextRequest) {
           .update({ status: "sending", total_recipients: filtered.length, updated_at: new Date().toISOString() })
           .eq("id", campaignId);
 
-        // Send loop
+        // Send loop with try/finally to prevent stuck "sending" status
         let sent = 0;
         let failed = 0;
-        for (const recipient of filtered) {
-          const renderedHtml = injectUnsubscribeFooter(
-            html.replace(/\{name\}/g, recipient.name || ""),
-            cfg.store_address,
-          );
-          const renderedSubject = campaign.subject.replace(/\{name\}/g, recipient.name || "");
-          const renderedText = text.replace(/\{name\}/g, recipient.name || "");
+        try {
+          for (const recipient of filtered) {
+            const renderedHtml = html
+              ? injectUnsubscribeFooter(html.replace(/\{name\}/g, recipient.name || ""), cfg.store_address)
+              : "";
+            const renderedSubject = campaign.subject.replace(/\{name\}/g, recipient.name || "");
+            const renderedText = text.replace(/\{name\}/g, recipient.name || "");
 
-          const result = await sendEmail(recipient.email, renderedSubject, renderedHtml, renderedText, cfg.from_name);
+            const result = await sendEmail(recipient.email, renderedSubject, renderedHtml, renderedText, cfg.from_name);
 
-          const now = new Date().toISOString();
-          await getSupabase().from("email_sends").insert({
-            tenant_id: tenantId,
-            campaign_id: campaignId,
-            customer_id: crypto.randomUUID(),
-            email: recipient.email,
-            customer_name: recipient.name || "",
-            send_type: "campaign",
-            template_type: campaign.template_id ? "template" : "custom",
-            subject: renderedSubject,
-            status: result.success ? "sent" : "failed",
-            sent_at: result.success ? now : null,
-            error: result.error || "",
-            created_at: now,
-          });
+            const now = new Date().toISOString();
+            await getSupabase().from("email_sends").insert({
+              tenant_id: tenantId,
+              campaign_id: campaignId,
+              customer_id: crypto.randomUUID(),
+              email: recipient.email,
+              customer_name: recipient.name || "",
+              send_type: "campaign",
+              template_type: campaign.template_id ? "template" : "custom",
+              subject: renderedSubject,
+              status: result.success ? "sent" : "failed",
+              sent_at: result.success ? now : null,
+              error: result.error || "",
+              created_at: now,
+            });
 
-          if (result.success) sent++;
-          else failed++;
+            if (result.success) sent++;
+            else failed++;
+          }
+        } finally {
+          // Always update campaign status, even if loop crashes mid-way
+          const finalNow = new Date().toISOString();
+          await getSupabase()
+            .from("email_campaigns")
+            .update({
+              status: "sent",
+              sent_at: finalNow,
+              sent_count: sent,
+              bounced_count: failed,
+              updated_at: finalNow,
+            })
+            .eq("id", campaignId);
         }
-
-        // Update campaign to sent
-        const finalNow = new Date().toISOString();
-        await getSupabase()
-          .from("email_campaigns")
-          .update({
-            status: "sent",
-            sent_at: finalNow,
-            sent_count: sent,
-            bounced_count: failed,
-            updated_at: finalNow,
-          })
-          .eq("id", campaignId);
 
         return NextResponse.json({
           campaign_id: campaignId,

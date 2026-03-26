@@ -12,8 +12,7 @@ import type {
 
 const TENANT_ID = "sisel";
 
-// ─── Top-level tabs ─────────────────────────────────────────────
-type TopTab = "platform" | "overview";
+// ─── Platform tabs ──────────────────────────────────────────────
 type PlatformTab = "campaigns" | "templates" | "sends" | "unsubscribes";
 
 // ─── Helpers ────────────────────────────────────────────────────
@@ -86,9 +85,7 @@ const defaultTemplateForm = {
 // MAIN PAGE
 // ═════════════════════════════════════════════════════════════════
 
-export default function SiselPage() {
-  const [topTab, setTopTab] = useState<TopTab>("platform");
-
+export default function SiselPostOfficePage() {
   return (
     <div className="min-h-screen bg-stewart-bg">
       {/* Header */}
@@ -101,28 +98,16 @@ export default function SiselPage() {
               <p className="text-sm text-stewart-muted">Sisel International — Email Marketing & Automation</p>
             </div>
           </div>
-          <div className="flex gap-1">
-            {([
-              { key: "platform" as TopTab, label: "Platform" },
-              { key: "overview" as TopTab, label: "Overview" },
-            ]).map((t) => (
-              <button
-                key={t.key}
-                onClick={() => setTopTab(t.key)}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                  topTab === t.key
-                    ? "bg-stewart-accent/20 text-stewart-accent"
-                    : "text-stewart-muted hover:text-stewart-text"
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
+          <a
+            href="/sisel"
+            className="px-4 py-2 text-sm font-medium text-stewart-muted hover:text-stewart-text transition-colors"
+          >
+            &larr; Back to Proposal
+          </a>
         </div>
       </div>
 
-      {topTab === "platform" ? <PlatformView /> : <OverviewTab />}
+      <PlatformView />
     </div>
   );
 }
@@ -782,30 +767,28 @@ function PlatformView() {
               </div>
 
               {/* HTML Preview for selected campaign */}
-              {(() => {
-                const previewHtml = selectedCampaign.body_html
-                  || templates.find((t) => t.id === selectedCampaign.template_id)?.html_content
-                  || "";
-                return previewHtml ? (
-                  <div>
-                    <p className="text-[10px] text-stewart-muted uppercase tracking-wide mb-1">
-                      Email Preview
-                      {!selectedCampaign.body_html && selectedCampaign.template_id && (
-                        <span className="ml-2 text-stewart-accent">(from template)</span>
-                      )}
-                    </p>
-                    <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
-                      <iframe
-                        srcDoc={previewHtml}
-                        className="w-full border-0"
-                        style={{ height: "300px" }}
-                        sandbox="allow-same-origin"
-                        title="Campaign Preview"
-                      />
-                    </div>
+              {(selectedCampaign.body_html
+                || templates.find((t) => t.id === selectedCampaign.template_id)?.html_content) && (
+                <div>
+                  <p className="text-[10px] text-stewart-muted uppercase tracking-wide mb-1">
+                    Email Preview
+                    {!selectedCampaign.body_html && selectedCampaign.template_id && (
+                      <span className="ml-2 text-stewart-accent">(from template)</span>
+                    )}
+                  </p>
+                  <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
+                    <iframe
+                      srcDoc={selectedCampaign.body_html
+                        || templates.find((t) => t.id === selectedCampaign.template_id)?.html_content
+                        || ""}
+                      className="w-full border-0"
+                      style={{ height: "300px" }}
+                      sandbox="allow-same-origin"
+                      title="Campaign Preview"
+                    />
                   </div>
-                ) : null;
-              })()}
+                </div>
+              )}
 
               {/* Send Test Email — available on all campaigns */}
               <div className="pt-2 border-t border-stewart-border/50 space-y-2">
@@ -1210,118 +1193,3 @@ function PlatformView() {
   );
 }
 
-// ═════════════════════════════════════════════════════════════════
-// OVERVIEW TAB — The pitch / proposal (secondary)
-// ═════════════════════════════════════════════════════════════════
-
-function ProposalSection({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="space-y-3">
-      <h2 className="text-lg font-semibold text-stewart-text border-b border-stewart-border pb-2">{title}</h2>
-      {children}
-    </div>
-  );
-}
-
-const COST_COMPARISON = [
-  { feature: "Monthly cost", mailchimp: "$450/mo", platform: "$500/mo" },
-  { feature: "Automation flows", mailchimp: "Not included", platform: "Included" },
-  { feature: "Exigo integration", mailchimp: "66 hours quoted", platform: "Included" },
-  { feature: "Purchase segments", mailchimp: "Manual CSV exports", platform: "Automatic from Exigo" },
-  { feature: "Dead email charges", mailchimp: "You pay for all", platform: "Sorted + cleaned" },
-  { feature: "List cleaning", mailchimp: "Manual", platform: "Automatic" },
-  { feature: "Unsubscribe handling", mailchimp: "Manual sync needed", platform: "Auto + synced to Exigo" },
-  { feature: "Email limit", mailchimp: "Tiered / capped", platform: "Unlimited" },
-  { feature: "Custom HTML support", mailchimp: "Character limits on links", platform: "No limits — paste any HTML" },
-];
-
-function OverviewTab() {
-  return (
-    <div className="p-6 space-y-8 max-w-3xl">
-      <ProposalSection title="The Opportunity">
-        <p className="text-stewart-text text-sm leading-relaxed">
-          Right now, your customer data lives inside Exigo, but it{"'"}s not being fully used to drive
-          follow-up, retention, or repeat purchases.
-        </p>
-        <ul className="space-y-2 text-sm text-stewart-muted">
-          <li className="flex items-start gap-2"><span className="text-stewart-accent mt-0.5">-</span>You{"'"}re paying ~$450/month for Mailchimp with limited automation tied to your actual customer data</li>
-          <li className="flex items-start gap-2"><span className="text-stewart-accent mt-0.5">-</span>A portion of that cost goes toward inactive or unusable email addresses</li>
-          <li className="flex items-start gap-2"><span className="text-stewart-accent mt-0.5">-</span>There{"'"}s no direct connection between purchase behavior and marketing</li>
-          <li className="flex items-start gap-2"><span className="text-stewart-accent mt-0.5">-</span>Custom HTML with long tracking links breaks in Mailchimp</li>
-          <li className="flex items-start gap-2"><span className="text-stewart-accent mt-0.5">-</span>Exigo quoted <strong className="text-stewart-text">66 hours of development time</strong> just to connect to Mailchimp</li>
-        </ul>
-      </ProposalSection>
-
-      <ProposalSection title="What the Platform Does">
-        <div className="space-y-4">
-          {[
-            { label: "Direct Exigo Sync", desc: "Your customer database and order history sync automatically via Exigo's API. No manual exports, no CSV uploads, no 66-hour integration project." },
-            { label: "Smart Contact Buckets", desc: "Every contact is automatically sorted: Active, Bounced, Unsubscribed, Complained, or Inactive. You see exactly how many people are in each bucket." },
-            { label: "Purchase-Based Targeting", desc: "Create segments based on real behavior. \"Bought in the last 90 days.\" \"Spent over $500 lifetime.\" \"Hasn't ordered in 60 days.\"" },
-            { label: "Automated Email Flows", desc: "Welcome series, reorder reminders, win-back sequences, cross-sell emails, rank advancement notifications. Set up once, run automatically." },
-            { label: "Custom HTML — No Limits", desc: "Paste any HTML email content including long CTA links, embedded tracking parameters, and custom formatting. No character limits, no broken links. Your product review URLs work exactly as intended." },
-            { label: "Full Campaign Management", desc: "Pick a template, choose your audience, preview, and send. Track opens, clicks, and engagement. Unlimited sending." },
-          ].map((item) => (
-            <div key={item.label} className="bg-stewart-card border border-stewart-border rounded-lg p-4">
-              <h3 className="text-sm font-semibold text-stewart-text mb-1">{item.label}</h3>
-              <p className="text-xs text-stewart-muted leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </ProposalSection>
-
-      <ProposalSection title="Cost Comparison">
-        <div className="overflow-hidden rounded-lg border border-stewart-border">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-stewart-border/50">
-                <th className="text-left px-4 py-2.5 text-stewart-muted font-medium"></th>
-                <th className="text-center px-4 py-2.5 text-stewart-muted font-medium">Mailchimp (Current)</th>
-                <th className="text-center px-4 py-2.5 text-stewart-accent font-semibold">This Platform</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-stewart-border/30">
-              {COST_COMPARISON.map((row, i) => (
-                <tr key={row.feature} className={i % 2 === 0 ? "bg-stewart-card" : "bg-stewart-bg"}>
-                  <td className="px-4 py-2.5 font-medium text-stewart-text">{row.feature}</td>
-                  <td className="px-4 py-2.5 text-center text-stewart-muted">{row.mailchimp}</td>
-                  <td className="px-4 py-2.5 text-center font-semibold text-stewart-accent">{row.platform}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </ProposalSection>
-
-      <ProposalSection title="Investment">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-stewart-accent/10 border border-stewart-accent/30 rounded-lg p-5 text-center">
-            <p className="text-stewart-accent text-2xl font-bold">$1,000</p>
-            <p className="text-stewart-accent text-sm font-medium mt-1">One-time setup</p>
-            <p className="text-stewart-muted text-xs mt-2 leading-relaxed">
-              Exigo integration, list cleanup, template migration, domain setup, first automation flows
-            </p>
-          </div>
-          <div className="bg-stewart-accent/10 border border-stewart-accent/30 rounded-lg p-5 text-center">
-            <p className="text-stewart-accent text-2xl font-bold">$500/mo</p>
-            <p className="text-stewart-accent text-sm font-medium mt-1">Monthly</p>
-            <p className="text-stewart-muted text-xs mt-2 leading-relaxed">
-              Unlimited sending, ongoing sync, automation, list hygiene, campaign management, direct support
-            </p>
-          </div>
-        </div>
-      </ProposalSection>
-
-      <div className="bg-stewart-card border border-stewart-border rounded-lg p-6">
-        <p className="text-stewart-text text-sm font-semibold leading-relaxed">
-          This is a deployment, not a development project. The platform is already built and running.
-          Setup is connecting your Exigo data, migrating your templates, and configuring your sending domain.
-        </p>
-        <div className="mt-4 pt-4 border-t border-stewart-border">
-          <p className="text-sm font-medium text-stewart-text">Spencer Colby</p>
-          <p className="text-xs text-stewart-muted">stewart@poweredbystewart.com</p>
-        </div>
-      </div>
-    </div>
-  );
-}
