@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { api } from "@/lib/api";
 import type { EmailCampaign, EmailTemplate } from "@/lib/types";
 import { statusBadge } from "@/lib/ui/badges";
-import { ProductGrid, buildProductGridHtml, injectProductsIntoEmail } from "./ProductGrid";
+import { ProductGrid, buildPreviewHtml } from "./ProductGrid";
 
 interface Props {
   tenantId: string;
@@ -313,7 +313,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
   if (view === "compose") {
     const campaignId = editing?.id;
     const rawHtml = form.body_html || (form.template_id ? templates.find((t) => t.id === form.template_id)?.html_content : "") || "";
-    const previewHtml = selectedProducts.length > 0 ? injectProductsIntoEmail(rawHtml, buildProductGridHtml(selectedProducts)) : rawHtml;
+    const previewHtml = buildPreviewHtml(rawHtml, selectedProducts);
 
     const toggleProduct = (id: string) => {
       setSelectedProducts((prev) =>

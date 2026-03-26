@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { api } from "@/lib/api";
 import type { EmailTemplate } from "@/lib/types";
 import { statusBadge } from "@/lib/ui/badges";
-import { ProductGrid, buildProductGridHtml, injectProductsIntoEmail } from "./ProductGrid";
+import { ProductGrid, buildPreviewHtml } from "./ProductGrid";
 
 interface Props {
   tenantId: string;
@@ -358,7 +358,7 @@ export function TemplatesTab({ tenantId, onReloadSummary }: Props) {
               <div>
                 <p className="text-xs text-stewart-muted mb-1">Live Preview</p>
                 <div className="border border-stewart-border rounded-lg overflow-hidden bg-white">
-                  <iframe srcDoc={selectedProducts.length > 0 ? injectProductsIntoEmail(form.html_content, buildProductGridHtml(selectedProducts)) : form.html_content} className="w-full border-0" style={{ height: "350px" }} sandbox="allow-same-origin" title="Template Preview" />
+                  <iframe srcDoc={buildPreviewHtml(form.html_content, selectedProducts)} className="w-full border-0" style={{ height: "350px" }} sandbox="allow-same-origin" title="Template Preview" />
                 </div>
               </div>
             )}
