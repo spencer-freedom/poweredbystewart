@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+import { generateUnsubToken } from "@/lib/unsub-token";
 
 function getSupabase() {
   return createClient(
@@ -10,6 +11,21 @@ function getSupabase() {
 }
 
 const ALLOWED_TENANTS = new Set(["sisel"]);
+
+// ─── Rate limiting (in-memory, per-tenant) ────────────────────────────────────
+const RATE_LIMIT_WINDOW = 60_000; // 1 minute
+const RATE_LIMIT_MAX = 30; // max requests per window
+const rateBuckets = new Map<string, number[]>();
+
+function checkRateLimit(tenantId: string): boolean {
+  const now = Date.now();
+  const bucket = rateBuckets.get(tenantId) || [];
+  const recent = bucket.filter((t) => now - t < RATE_LIMIT_WINDOW);
+  if (recent.length >= RATE_LIMIT_MAX) return false;
+  recent.push(now);
+  rateBuckets.set(tenantId, recent);
+  return true;
+}
 
 // Tenant config (mirrors config/email.yaml)
 const TENANT_CONFIG: Record<string, { from_name: string; store_address: string; brand_color: string }> = {
@@ -102,8 +118,12 @@ async function resolveEmailContent(
   return { html, text };
 }
 
-function injectUnsubscribeFooter(html: string, storeAddress: string): string {
-  const footer = `<div style="margin-top:32px;padding-top:16px;border-top:1px solid #ddd;font-size:12px;color:#888;text-align:center;"><p>${storeAddress}</p><p><a href="#" style="color:#888;">Unsubscribe</a></p></div>`;
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://poweredbystewart.com";
+
+function injectUnsubscribeFooter(html: string, storeAddress: string, email: string, tenantId: string): string {
+  const token = generateUnsubToken(email, tenantId);
+  const unsubUrl = `${BASE_URL}/unsubscribe?token=${encodeURIComponent(token)}&email=${encodeURIComponent(email)}&tenant=${encodeURIComponent(tenantId)}`;
+  const footer = `<div style="margin-top:32px;padding-top:16px;border-top:1px solid #ddd;font-size:12px;color:#888;text-align:center;"><p>${storeAddress}</p><p><a href="${unsubUrl}" style="color:#888;">Unsubscribe</a></p></div>`;
   const idx = html.toLowerCase().indexOf("</body>");
   if (idx >= 0) return html.slice(0, idx) + footer + html.slice(idx);
   return html + footer;
@@ -118,6 +138,9 @@ export async function GET(req: NextRequest) {
 
   const guard = tenantGuard(tenantId);
   if (guard) return guard;
+  if (!checkRateLimit(tenantId)) {
+    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+  }
 
   try {
     switch (action) {
@@ -241,6 +264,63 @@ export async function GET(req: NextRequest) {
   }
 }
 
+// ─── DELETE ──────────────────────────────────────────────────────────────────
+
+export async function DELETE(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const action = searchParams.get("action") || "";
+  const tenantId = searchParams.get("tenant") || "sisel";
+
+  const guard = tenantGuard(tenantId);
+  if (guard) return guard;
+  if (!checkRateLimit(tenantId)) {
+    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+  }
+
+  try {
+    switch (action) {
+      case "delete_campaign": {
+        const campId = searchParams.get("id") || "";
+        if (!campId) {
+          return NextResponse.json({ error: "Missing campaign id" }, { status: 400 });
+        }
+
+        // Only allow deleting draft campaigns
+        const { data: campaign } = await getSupabase()
+          .from("email_campaigns")
+          .select("status")
+          .eq("id", campId)
+          .eq("tenant_id", tenantId)
+          .single();
+
+        if (!campaign) {
+          return NextResponse.json({ error: "Campaign not found" }, { status: 404 });
+        }
+        if (campaign.status !== "draft") {
+          return NextResponse.json({ error: "Only draft campaigns can be deleted" }, { status: 400 });
+        }
+
+        const { error } = await getSupabase()
+          .from("email_campaigns")
+          .delete()
+          .eq("id", campId)
+          .eq("tenant_id", tenantId);
+
+        if (error) return errorResponse(error);
+        return NextResponse.json({ success: true });
+      }
+
+      default:
+        return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
+    }
+  } catch (err) {
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : "Internal error" },
+      { status: 500 }
+    );
+  }
+}
+
 // ─── POST ─────────────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
@@ -250,6 +330,9 @@ export async function POST(req: NextRequest) {
 
   const guard = tenantGuard(tenantId);
   if (guard) return guard;
+  if (!checkRateLimit(tenantId)) {
+    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+  }
 
   const body = await req.json().catch(() => ({}));
 
@@ -296,7 +379,7 @@ export async function POST(req: NextRequest) {
             status,
             scheduled_at: body.scheduled_at || null,
             metadata: JSON.stringify(body.metadata || {}),
-            audience_criteria: JSON.stringify({}),
+            audience_criteria: JSON.stringify(body.audience_criteria || {}),
             created_at: now,
             updated_at: now,
           })
@@ -327,7 +410,7 @@ export async function POST(req: NextRequest) {
 
         const { html: rawHtml, text } = await resolveEmailContent(campaign, tenantId);
         const cfg = TENANT_CONFIG[tenantId] || TENANT_CONFIG.sisel;
-        const html = rawHtml ? injectUnsubscribeFooter(rawHtml, cfg.store_address) : "";
+        const html = rawHtml ? injectUnsubscribeFooter(rawHtml, cfg.store_address, testEmail, tenantId) : "";
 
         const result = await sendEmail(testEmail, `[TEST] ${campaign.subject}`, html, text, cfg.from_name);
 
@@ -411,37 +494,47 @@ export async function POST(req: NextRequest) {
           .update({ status: "sending", total_recipients: filtered.length, updated_at: new Date().toISOString() })
           .eq("id", campaignId);
 
-        // Send loop with try/finally to prevent stuck "sending" status
+        // Send in batches of 10 with try/finally to prevent stuck "sending" status
         let sent = 0;
         let failed = 0;
+        const BATCH_SIZE = 10;
         try {
-          for (const recipient of filtered) {
-            const renderedHtml = html
-              ? injectUnsubscribeFooter(html.replace(/\{name\}/g, recipient.name || ""), cfg.store_address)
-              : "";
-            const renderedSubject = campaign.subject.replace(/\{name\}/g, recipient.name || "");
-            const renderedText = text.replace(/\{name\}/g, recipient.name || "");
+          for (let i = 0; i < filtered.length; i += BATCH_SIZE) {
+            const batch = filtered.slice(i, i + BATCH_SIZE);
+            const results = await Promise.allSettled(
+              batch.map(async (recipient) => {
+                const renderedHtml = html
+                  ? injectUnsubscribeFooter(html.replace(/\{name\}/g, recipient.name || ""), cfg.store_address, recipient.email, tenantId)
+                  : "";
+                const renderedSubject = campaign.subject.replace(/\{name\}/g, recipient.name || "");
+                const renderedText = text.replace(/\{name\}/g, recipient.name || "");
 
-            const result = await sendEmail(recipient.email, renderedSubject, renderedHtml, renderedText, cfg.from_name);
+                const result = await sendEmail(recipient.email, renderedSubject, renderedHtml, renderedText, cfg.from_name);
 
-            const now = new Date().toISOString();
-            await getSupabase().from("email_sends").insert({
-              tenant_id: tenantId,
-              campaign_id: campaignId,
-              customer_id: crypto.randomUUID(),
-              email: recipient.email,
-              customer_name: recipient.name || "",
-              send_type: "campaign",
-              template_type: campaign.template_id ? "template" : "custom",
-              subject: renderedSubject,
-              status: result.success ? "sent" : "failed",
-              sent_at: result.success ? now : null,
-              error: result.error || "",
-              created_at: now,
-            });
+                const now = new Date().toISOString();
+                await getSupabase().from("email_sends").insert({
+                  tenant_id: tenantId,
+                  campaign_id: campaignId,
+                  customer_id: crypto.randomUUID(),
+                  email: recipient.email,
+                  customer_name: recipient.name || "",
+                  send_type: "campaign",
+                  template_type: campaign.template_id ? "template" : "custom",
+                  subject: renderedSubject,
+                  status: result.success ? "sent" : "failed",
+                  sent_at: result.success ? now : null,
+                  error: result.error || "",
+                  created_at: now,
+                });
 
-            if (result.success) sent++;
-            else failed++;
+                return result;
+              })
+            );
+
+            for (const r of results) {
+              if (r.status === "fulfilled" && r.value.success) sent++;
+              else failed++;
+            }
           }
         } finally {
           // Always update campaign status, even if loop crashes mid-way
@@ -487,6 +580,9 @@ export async function PATCH(req: NextRequest) {
 
   const guard = tenantGuard(tenantId);
   if (guard) return guard;
+  if (!checkRateLimit(tenantId)) {
+    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+  }
 
   const body = await req.json().catch(() => ({}));
 
@@ -522,7 +618,7 @@ export async function PATCH(req: NextRequest) {
         const campId = searchParams.get("id") || "";
         const campaignAllowed = [
           "campaign_name", "subject", "body_html", "body_text",
-          "template_id", "status", "scheduled_at",
+          "template_id", "status", "scheduled_at", "audience_criteria",
         ];
         const campUpdates: Record<string, unknown> = { updated_at: new Date().toISOString() };
         for (const key of campaignAllowed) {

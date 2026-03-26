@@ -7,6 +7,7 @@ import { CampaignsTab } from "./CampaignsTab";
 import { TemplatesTab } from "./TemplatesTab";
 import { SendsTab } from "./SendsTab";
 import { UnsubscribesTab } from "./UnsubscribesTab";
+import { ErrorBoundary } from "@/lib/ui/ErrorBoundary";
 
 const TENANT_ID = "sisel";
 type PlatformTab = "campaigns" | "templates" | "sends" | "unsubscribes";
@@ -101,10 +102,12 @@ export default function SiselPostOfficePage() {
             </div>
 
             {/* Tab Content */}
-            {tab === "campaigns" && <CampaignsTab tenantId={TENANT_ID} onReloadSummary={loadSummary} />}
-            {tab === "templates" && <TemplatesTab tenantId={TENANT_ID} onReloadSummary={loadSummary} />}
-            {tab === "sends" && <SendsTab tenantId={TENANT_ID} />}
-            {tab === "unsubscribes" && <UnsubscribesTab tenantId={TENANT_ID} />}
+            <ErrorBoundary>
+              {tab === "campaigns" && <CampaignsTab tenantId={TENANT_ID} onReloadSummary={loadSummary} />}
+              {tab === "templates" && <TemplatesTab tenantId={TENANT_ID} onReloadSummary={loadSummary} />}
+              {tab === "sends" && <SendsTab tenantId={TENANT_ID} />}
+              {tab === "unsubscribes" && <UnsubscribesTab tenantId={TENANT_ID} />}
+            </ErrorBoundary>
           </>
         )}
       </div>

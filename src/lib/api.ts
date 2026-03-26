@@ -314,6 +314,9 @@ export const api = {
 
   emailUpdateCampaign: (tenantId: string, campaignId: string, data: Record<string, unknown>) =>
     emailPatch<EmailCampaign>({ action: "update_campaign", tenant: tenantId, id: campaignId }, data),
+
+  emailDeleteCampaign: (tenantId: string, campaignId: string) =>
+    emailDelete<{ success: boolean }>({ action: "delete_campaign", tenant: tenantId, id: campaignId }),
 };
 
 // ─── Email API helpers (separate route) ───────────────────────────────────────
@@ -357,6 +360,16 @@ async function emailPatch<T>(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.error || `API error ${res.status}`);
+  }
+  return res.json();
+}
+
+async function emailDelete<T>(params: Record<string, string>): Promise<T> {
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(`${EMAIL_ROUTE}?${qs}`, { method: "DELETE" });
   if (!res.ok) {
     const errBody = await res.json().catch(() => ({}));
     throw new Error(errBody.error || `API error ${res.status}`);

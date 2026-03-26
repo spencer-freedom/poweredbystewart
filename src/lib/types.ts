@@ -445,6 +445,7 @@ export interface EmailCampaign {
   clicked_count: number;
   bounced_count: number;
   unsubscribed_count: number;
+  audience_criteria: string | Record<string, unknown>;
   metadata: string;
   created_at: string;
   updated_at: string;

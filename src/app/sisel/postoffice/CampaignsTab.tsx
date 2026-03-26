@@ -10,6 +10,15 @@ interface Props {
   onReloadSummary: () => void;
 }
 
+const AUDIENCE_SEGMENTS = [
+  { key: "all_active", label: "All Active Distributors", count: 847 },
+  { key: "recent_90d", label: "Bought in Last 90 Days", count: 423 },
+  { key: "new_signups", label: "New Sign-ups This Month", count: 156 },
+  { key: "vip", label: "VIP Distributors", count: 92 },
+  { key: "inactive_6m", label: "Inactive 6+ Months", count: 318 },
+  { key: "all", label: "Entire List", count: 1_247 },
+];
+
 const defaultForm = {
   campaign_name: "",
   subject: "",
@@ -17,6 +26,7 @@ const defaultForm = {
   body_html: "",
   body_text: "",
   scheduled_at: "",
+  audience_segment: "all_active",
 };
 
 export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
@@ -63,6 +73,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
   };
 
   const handleCreate = async () => {
+    const seg = AUDIENCE_SEGMENTS.find((s) => s.key === form.audience_segment);
     try {
       await api.emailCreateCampaign(tenantId, {
         campaign_name: form.campaign_name,
@@ -71,6 +82,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
         body_html: form.body_html,
         body_text: form.body_text,
         scheduled_at: form.scheduled_at || null,
+        audience_criteria: { segment: form.audience_segment, label: seg?.label, estimated_count: seg?.count },
       });
       closeForm();
       loadCampaigns();
@@ -81,6 +93,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
   };
 
   const handleEdit = (c: EmailCampaign) => {
+    const criteria = typeof c.audience_criteria === "string" ? JSON.parse(c.audience_criteria || "{}") : (c.audience_criteria || {});
     setEditing(c);
     setForm({
       campaign_name: c.campaign_name,
@@ -89,6 +102,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
       body_html: c.body_html || "",
       body_text: c.body_text || "",
       scheduled_at: c.scheduled_at?.slice(0, 16) || "",
+      audience_segment: criteria.segment || "all_active",
     });
     setEditorMode(c.body_html ? "html" : "simple");
     setShowForm(true);
@@ -97,6 +111,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
 
   const handleSave = async () => {
     if (!editing) return;
+    const seg = AUDIENCE_SEGMENTS.find((s) => s.key === form.audience_segment);
     try {
       await api.emailUpdateCampaign(tenantId, editing.id, {
         campaign_name: form.campaign_name,
@@ -105,6 +120,7 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
         body_html: form.body_html,
         body_text: form.body_text,
         scheduled_at: form.scheduled_at || null,
+        audience_criteria: JSON.stringify({ segment: form.audience_segment, label: seg?.label, estimated_count: seg?.count }),
       });
       closeForm();
       loadCampaigns();
@@ -136,6 +152,18 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
       onReloadSummary();
     } catch {
       setError("Failed to send campaign");
+    }
+  };
+
+  const handleDelete = async (campaignId: string) => {
+    if (!confirm("Delete this draft campaign?")) return;
+    try {
+      await api.emailDeleteCampaign(tenantId, campaignId);
+      setSelected(null);
+      loadCampaigns();
+      onReloadSummary();
+    } catch {
+      setError("Failed to delete campaign");
     }
   };
 
@@ -250,6 +278,20 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
                     className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1"
                   />
                 </div>
+              </div>
+              <div className="mt-3">
+                <label className="text-xs text-stewart-muted">Audience Segment</label>
+                <select
+                  value={form.audience_segment}
+                  onChange={(e) => setForm({ ...form, audience_segment: e.target.value })}
+                  className="w-full bg-stewart-bg border border-stewart-border rounded px-2 py-1 text-sm mt-1"
+                >
+                  {AUDIENCE_SEGMENTS.map((s) => (
+                    <option key={s.key} value={s.key}>
+                      {s.label} ({s.count.toLocaleString()} contacts)
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* Template selected */}
@@ -446,6 +488,22 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
               <p>Created: <span className="text-stewart-text">{selected.created_at?.slice(0, 16)}</span></p>
             </div>
 
+            {/* Audience */}
+            {(() => {
+              const criteria = typeof selected.audience_criteria === "string"
+                ? JSON.parse(selected.audience_criteria || "{}")
+                : (selected.audience_criteria || {});
+              return criteria.label ? (
+                <div className="bg-stewart-accent/5 border border-stewart-accent/20 rounded-lg p-3">
+                  <p className="text-[10px] text-stewart-muted uppercase tracking-wide mb-1">Audience</p>
+                  <p className="text-sm text-stewart-text font-medium">{criteria.label}</p>
+                  {criteria.estimated_count && (
+                    <p className="text-xs text-stewart-muted">{criteria.estimated_count.toLocaleString()} estimated recipients</p>
+                  )}
+                </div>
+              ) : null;
+            })()}
+
             {/* Email Preview */}
             {(selected.body_html || templates.find((t) => t.id === selected.template_id)?.html_content) && (
               <div>
@@ -501,6 +559,11 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
               {(selected.status === "draft" || selected.status === "scheduled") && (
                 <button onClick={() => handlePreview(selected.id)} className="px-3 py-1 text-xs bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded hover:bg-blue-500/30 transition-colors">
                   Preview / Dry Run
+                </button>
+              )}
+              {selected.status === "draft" && (
+                <button onClick={() => handleDelete(selected.id)} className="px-3 py-1 text-xs bg-red-500/10 text-red-400 border border-red-500/30 rounded hover:bg-red-500/20 transition-colors ml-auto">
+                  Delete
                 </button>
               )}
             </div>
