@@ -254,39 +254,51 @@ export function CampaignsTab({ tenantId, onReloadSummary }: Props) {
           ))}
         </div>
 
-        {/* Campaign List */}
-        <div className="bg-stewart-card border border-stewart-border rounded-lg overflow-hidden">
-          {campaigns.length === 0 ? (
-            <div className="px-4 py-12 text-center text-stewart-muted text-sm">
-              No campaigns yet. Click + New Campaign to create one.
-            </div>
-          ) : (
-            <div className="divide-y divide-stewart-border/30">
-              {campaigns.map((c) => (
-                <button
+        {/* Campaign Cards — grid matching Email Studio */}
+        {campaigns.length === 0 ? (
+          <div className="bg-stewart-card border border-stewart-border rounded-lg px-4 py-12 text-center text-stewart-muted text-sm">
+            No campaigns yet. Click + New Campaign to create one.
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 gap-4">
+            {campaigns.map((c) => {
+              const criteria = parseCriteria(c);
+              return (
+                <div
                   key={c.id}
                   onClick={() => {
                     if (c.status === "draft" || c.status === "scheduled") goToCompose(c);
                     else goToDetail(c);
                   }}
-                  className="w-full text-left px-5 py-3.5 hover:bg-stewart-border/20 transition-colors group"
+                  className="bg-stewart-card border border-stewart-border rounded-lg p-5 hover:border-stewart-accent/50 transition-colors cursor-pointer group"
                 >
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-stewart-text group-hover:text-stewart-accent transition-colors">
-                      {c.campaign_name}
-                    </span>
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-stewart-accent/10 flex items-center justify-center">
+                      <svg viewBox="0 0 24 24" className="w-5 h-5 text-stewart-accent" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M2 8l10 6 10-6" /></svg>
+                    </div>
                     {statusBadge(c.status)}
                   </div>
-                  <div className="flex gap-3 mt-1 text-xs text-stewart-muted">
-                    <span>{c.subject || "No subject"}</span>
-                    {c.total_recipients > 0 && <span>{c.total_recipients} recipients</span>}
-                    <span>{c.created_at?.slice(0, 10)}</span>
+                  <h3 className="text-sm font-semibold text-stewart-text mb-1 group-hover:text-stewart-accent transition-colors">{c.campaign_name}</h3>
+                  <p className="text-xs text-stewart-muted mb-3">{c.subject || "No subject"}</p>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {criteria.label && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-purple-500/20 text-purple-400">{criteria.label}</span>
+                    )}
+                    {c.total_recipients > 0 && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-stewart-border text-stewart-muted">{c.total_recipients} sent</span>
+                    )}
+                    <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-stewart-border text-stewart-muted">{c.created_at?.slice(0, 10)}</span>
                   </div>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+                  <div className="mt-3 pt-3 border-t border-stewart-border">
+                    <span className="text-xs text-stewart-accent opacity-0 group-hover:opacity-100 transition-opacity">
+                      {c.status === "draft" || c.status === "scheduled" ? "Edit campaign" : "View details"} &rarr;
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     );
   }
