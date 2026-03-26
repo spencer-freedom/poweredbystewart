@@ -4,14 +4,14 @@ export const SISEL_PRODUCTS = [
   {
     id: "supradetox", name: "SupraDetox", price: "$54.95",
     badge: "Best Seller", bgColor: "#16a34a", letter: "S",
-    imageUrl: "/sisel-products/supradetox.webp",
+    imageUrl: "/sisel-products/supradetox.jpg",
     tagline: "Full-body detox & cleanse formula",
     description: "30-day intensive cleanse that supports your body's natural detoxification pathways. Gentle enough for daily use, powerful enough to feel the difference.",
   },
   {
     id: "fucoydon", name: "Fucoydon", price: "$89.95",
     badge: "", bgColor: "#16a34a", letter: "F",
-    imageUrl: "/sisel-products/fucoydon.webp",
+    imageUrl: "/sisel-products/fucoydon.png",
     tagline: "Premium organic fucoidan blend",
     description: "Organic fucoidan sourced from three ocean species — supports immune function, cellular health, and healthy aging. One of Sisel's most trusted formulas.",
   },
@@ -39,7 +39,7 @@ export const SISEL_PRODUCTS = [
   {
     id: "ript_lemonberry", name: "SiselRIPT Lemon Berry", price: "$83.99",
     badge: "", bgColor: "#84cc16", letter: "R",
-    imageUrl: "/sisel-products/ript_lemonberry.jpg",
+    imageUrl: "/sisel-products/ript_lemonberry.png",
     tagline: "Essential amino acids — original flavor",
     description: "The original RIPT formula that started it all. Lemon Berry flavor with all 9 essential amino acids, sugar-free, sweetened with stevia only. Muscle recovery and lean muscle support.",
   },
