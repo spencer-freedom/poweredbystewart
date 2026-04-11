@@ -696,7 +696,7 @@ export default function LeadDedupPage() {
                   <thead>
                     <tr className="border-b border-stewart-border text-stewart-muted text-left">
                       <th className="px-3 py-2">First</th>
-                      <th className="px-3 py-2 text-center">-></th>
+                      <th className="px-3 py-2 text-center">{"->"}</th>
                       <th className="px-3 py-2">Last</th>
                       <th className="px-3 py-2 text-right">Sold</th>
                     </tr>
