@@ -505,6 +505,339 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(context);
       }
 
+      // ── Lead Dedup: Summary ──────────────────────────────────────
+      case "dedup_summary": {
+        const startDate = searchParams.get("start_date") || "";
+        const endDate = searchParams.get("end_date") || "";
+
+        let query = supabase
+          .from("vin_leads")
+          .select("customer, lead_origination_date, lead_source, lead_id")
+          .eq("tenant_id", tenantId)
+          .not("customer", "in", '("","Name","Wireless")');
+        if (startDate) query = query.gte("lead_origination_date", startDate);
+        if (endDate) query = query.lte("lead_origination_date", endDate + " 23:59:59");
+
+        const { data: leads, error } = await query;
+        if (error) return errorResponse(error);
+        if (!leads) return NextResponse.json({ total_leads: 0, unique_customers: 0, windows: {} });
+
+        const uniqueCustomers = new Set(leads.map((l) => l.customer));
+
+        // Compute clusters for both windows
+        const windows: Record<string, object> = {};
+        for (const [label, windowDays] of [["7d", 7], ["30d", 30]] as const) {
+          const windowMs = windowDays * 86400000;
+          let sameSourceSpam = 0;
+          let allClusters = 0;
+
+          // Group by customer
+          const byCustomer: Record<string, typeof leads> = {};
+          for (const l of leads) {
+            (byCustomer[l.customer] ||= []).push(l);
+          }
+
+          for (const custLeads of Object.values(byCustomer)) {
+            if (custLeads.length < 2) continue;
+            custLeads.sort((a, b) => a.lead_origination_date.localeCompare(b.lead_origination_date));
+
+            for (let i = 1; i < custLeads.length; i++) {
+              const curr = new Date(custLeads[i].lead_origination_date).getTime();
+              // Check if any earlier lead is within the window
+              for (let j = 0; j < i; j++) {
+                const prev = new Date(custLeads[j].lead_origination_date).getTime();
+                if (Math.abs(curr - prev) < windowMs) {
+                  allClusters++;
+                  if (custLeads[i].lead_source === custLeads[j].lead_source) {
+                    sameSourceSpam++;
+                  }
+                  break; // Count each lead as clustered at most once
+                }
+              }
+            }
+          }
+
+          windows[label] = {
+            window_days: windowDays,
+            same_source_spam: sameSourceSpam,
+            all_clusters: allClusters,
+            multi_channel: allClusters - sameSourceSpam,
+            clean_leads: leads.length - allClusters,
+            spam_pct: leads.length > 0 ? Math.round(sameSourceSpam * 1000 / leads.length) / 10 : 0,
+            cluster_pct: leads.length > 0 ? Math.round(allClusters * 1000 / leads.length) / 10 : 0,
+          };
+        }
+
+        return NextResponse.json({
+          total_leads: leads.length,
+          unique_customers: uniqueCustomers.size,
+          windows,
+        });
+      }
+
+      // ── Lead Dedup: Spam Sources ───────────────────────────────────
+      case "dedup_spam_sources": {
+        const startDate = searchParams.get("start_date") || "";
+        const endDate = searchParams.get("end_date") || "";
+        const windowDays = parseInt(searchParams.get("window_days") || "7");
+        const windowMs = windowDays * 86400000;
+
+        let query = supabase
+          .from("vin_leads")
+          .select("customer, lead_origination_date, lead_source")
+          .eq("tenant_id", tenantId)
+          .not("customer", "in", '("","Name","Wireless")');
+        if (startDate) query = query.gte("lead_origination_date", startDate);
+        if (endDate) query = query.lte("lead_origination_date", endDate + " 23:59:59");
+
+        const { data: leads, error } = await query;
+        if (error) return errorResponse(error);
+
+        // Group by customer+source, find same-source repeats within window
+        const spamMap: Record<string, { excess: number; customers: Set<string> }> = {};
+        const byCustomer: Record<string, typeof leads> = {};
+        for (const l of leads || []) {
+          (byCustomer[l.customer] ||= []).push(l);
+        }
+
+        for (const custLeads of Object.values(byCustomer)) {
+          if (custLeads.length < 2) continue;
+          custLeads.sort((a, b) => a.lead_origination_date.localeCompare(b.lead_origination_date));
+
+          for (let i = 1; i < custLeads.length; i++) {
+            const curr = new Date(custLeads[i].lead_origination_date).getTime();
+            for (let j = 0; j < i; j++) {
+              const prev = new Date(custLeads[j].lead_origination_date).getTime();
+              if (custLeads[i].lead_source === custLeads[j].lead_source && Math.abs(curr - prev) < windowMs) {
+                const src = custLeads[i].lead_source;
+                if (!spamMap[src]) spamMap[src] = { excess: 0, customers: new Set() };
+                spamMap[src].excess++;
+                spamMap[src].customers.add(custLeads[i].customer);
+                break;
+              }
+            }
+          }
+        }
+
+        const sources = Object.entries(spamMap)
+          .map(([source, v]) => ({ source, excess_leads: v.excess, affected_customers: v.customers.size }))
+          .sort((a, b) => b.excess_leads - a.excess_leads);
+
+        return NextResponse.json({ window_days: windowDays, sources });
+      }
+
+      // ── Lead Dedup: Source ROI ─────────────────────────────────────
+      case "dedup_source_roi": {
+        const startDate = searchParams.get("start_date") || "";
+        const endDate = searchParams.get("end_date") || "";
+
+        let query = supabase
+          .from("vin_leads")
+          .select("customer, lead_source, lead_status_type, lead_origination_date")
+          .eq("tenant_id", tenantId)
+          .not("customer", "in", '("","Name","Wireless")');
+        if (startDate) query = query.gte("lead_origination_date", startDate);
+        if (endDate) query = query.lte("lead_origination_date", endDate + " 23:59:59");
+
+        const { data: leads, error } = await query;
+        if (error) return errorResponse(error);
+
+        const SOLD = new Set(["Sold", "Sold Delivered", "Delivered"]);
+
+        // Source performance
+        const srcMap: Record<string, { total: number; customers: Set<string>; sold: Set<string> }> = {};
+        for (const l of leads || []) {
+          const src = l.lead_source || "Unknown";
+          if (!srcMap[src]) srcMap[src] = { total: 0, customers: new Set(), sold: new Set() };
+          srcMap[src].total++;
+          srcMap[src].customers.add(l.customer);
+          if (SOLD.has(l.lead_status_type || "")) srcMap[src].sold.add(l.customer);
+        }
+
+        const sources = Object.entries(srcMap)
+          .map(([source, v]) => ({
+            source,
+            total_leads: v.total,
+            unique_customers: v.customers.size,
+            excess_leads: v.total - v.customers.size,
+            noise_pct: v.total > 0 ? Math.round((v.total - v.customers.size) * 1000 / v.total) / 10 : 0,
+            sold: v.sold.size,
+            unique_sold: v.sold.size,
+            conversion_pct: v.customers.size > 0 ? Math.round(v.sold.size * 1000 / v.customers.size) / 10 : 0,
+          }))
+          .sort((a, b) => b.total_leads - a.total_leads);
+
+        // First-touch attribution
+        const byCustomer: Record<string, typeof leads> = {};
+        for (const l of leads || []) {
+          (byCustomer[l.customer] ||= []).push(l);
+        }
+        const firstTouchMap: Record<string, number> = {};
+        const journeyMap: Record<string, number> = {};
+        for (const custLeads of Object.values(byCustomer)) {
+          custLeads.sort((a, b) => a.lead_origination_date.localeCompare(b.lead_origination_date));
+          const first = custLeads[0].lead_source;
+          const last = custLeads[custLeads.length - 1].lead_source;
+          firstTouchMap[first] = (firstTouchMap[first] || 0) + 1;
+          // Only track journeys for sold customers
+          if (custLeads.some((l) => SOLD.has(l.lead_status_type || ""))) {
+            const key = `${first}|||${last}`;
+            journeyMap[key] = (journeyMap[key] || 0) + 1;
+          }
+        }
+
+        const first_touch_attribution = Object.entries(firstTouchMap)
+          .map(([source, first_touches]) => ({ source, first_touches }))
+          .sort((a, b) => b.first_touches - a.first_touches)
+          .slice(0, 20);
+
+        const journeys = Object.entries(journeyMap)
+          .map(([key, conversions]) => {
+            const [first_source, last_source] = key.split("|||");
+            return { first_source, last_source, conversions };
+          })
+          .sort((a, b) => b.conversions - a.conversions)
+          .slice(0, 20);
+
+        return NextResponse.json({ sources, journeys, first_touch_attribution });
+      }
+
+      // ── Lead Dedup: Customer Clusters ──────────────────────────────
+      case "dedup_customers": {
+        const startDate = searchParams.get("start_date") || "";
+        const endDate = searchParams.get("end_date") || "";
+        const windowDays = parseInt(searchParams.get("window_days") || "7");
+        const windowMs = windowDays * 86400000;
+        const limit = parseInt(searchParams.get("limit") || "30");
+
+        let query = supabase
+          .from("vin_leads")
+          .select("customer, lead_id, lead_origination_date, lead_source, lead_source_type, sales_rep, lead_status_type, year, make, model")
+          .eq("tenant_id", tenantId)
+          .not("customer", "in", '("","Name","Wireless")')
+          .order("lead_origination_date", { ascending: false });
+        if (startDate) query = query.gte("lead_origination_date", startDate);
+        if (endDate) query = query.lte("lead_origination_date", endDate + " 23:59:59");
+
+        const { data: leads, error } = await query;
+        if (error) return errorResponse(error);
+
+        // Group by customer
+        const byCustomer: Record<string, typeof leads> = {};
+        for (const l of leads || []) {
+          (byCustomer[l.customer] ||= []).push(l);
+        }
+
+        // Find customers with clusters
+        const clustered: { customer: string; leads: typeof leads; clusterCount: number }[] = [];
+        for (const [customer, custLeads] of Object.entries(byCustomer)) {
+          if (custLeads.length < 2) continue;
+          custLeads.sort((a, b) => b.lead_origination_date.localeCompare(a.lead_origination_date));
+
+          let clusterCount = 0;
+          for (let i = 1; i < custLeads.length; i++) {
+            const curr = new Date(custLeads[i].lead_origination_date).getTime();
+            for (let j = 0; j < i; j++) {
+              const prev = new Date(custLeads[j].lead_origination_date).getTime();
+              if (Math.abs(curr - prev) < windowMs) { clusterCount++; break; }
+            }
+          }
+          if (clusterCount > 0) {
+            clustered.push({ customer, leads: custLeads, clusterCount });
+          }
+        }
+
+        clustered.sort((a, b) => b.leads.length - a.leads.length);
+
+        const customers = clustered.slice(0, limit).map((c) => {
+          const seenSources: Record<string, string> = {};
+          const timeline = c.leads.map((l) => {
+            const src = l.lead_source;
+            const dt = l.lead_origination_date;
+            let dupe_type = "unique";
+            if (seenSources[src]) {
+              const prev = new Date(seenSources[src]).getTime();
+              const curr = new Date(dt).getTime();
+              dupe_type = Math.abs(curr - prev) / 86400000 <= windowDays ? "same_source_spam" : "re_engagement";
+            } else if (Object.keys(seenSources).length > 0) {
+              dupe_type = "multi_channel";
+            }
+            seenSources[src] = dt;
+            return {
+              lead_id: l.lead_id,
+              date: dt,
+              source: src,
+              source_type: l.lead_source_type,
+              sales_rep: l.sales_rep,
+              status: l.lead_status_type,
+              vehicle: [l.year, l.make, l.model].filter(Boolean).join(" "),
+              dupe_type,
+            };
+          });
+
+          const sources = new Set(c.leads.map((l) => l.lead_source));
+          return {
+            customer: c.customer,
+            lead_count: c.leads.length,
+            source_count: sources.size,
+            first_lead: c.leads[c.leads.length - 1].lead_origination_date,
+            last_lead: c.leads[0].lead_origination_date,
+            timeline,
+          };
+        });
+
+        return NextResponse.json({ window_days: windowDays, customers });
+      }
+
+      // ── Lead Dedup: Clean View ─────────────────────────────────────
+      case "dedup_clean": {
+        const startDate = searchParams.get("start_date") || "";
+        const endDate = searchParams.get("end_date") || "";
+        const limit = parseInt(searchParams.get("limit") || "200");
+
+        let query = supabase
+          .from("vin_leads")
+          .select("customer, lead_id, lead_origination_date, lead_source, lead_source_type, sales_rep, lead_status_type, year, make, model")
+          .eq("tenant_id", tenantId)
+          .not("customer", "in", '("","Name","Wireless")')
+          .order("lead_origination_date", { ascending: false });
+        if (startDate) query = query.gte("lead_origination_date", startDate);
+        if (endDate) query = query.lte("lead_origination_date", endDate + " 23:59:59");
+
+        const { data: leads, error } = await query;
+        if (error) return errorResponse(error);
+
+        // One row per customer — most recent lead wins
+        const seen = new Map<string, { lead: (typeof leads)[0]; total: number; sources: Set<string> }>();
+        for (const l of leads || []) {
+          const existing = seen.get(l.customer);
+          if (!existing) {
+            seen.set(l.customer, { lead: l, total: 1, sources: new Set([l.lead_source]) });
+          } else {
+            existing.total++;
+            existing.sources.add(l.lead_source);
+          }
+        }
+
+        const clean = Array.from(seen.values())
+          .sort((a, b) => b.lead.lead_origination_date.localeCompare(a.lead.lead_origination_date))
+          .slice(0, limit)
+          .map((v) => ({
+            customer: v.lead.customer,
+            lead_id: v.lead.lead_id,
+            date: v.lead.lead_origination_date,
+            source: v.lead.lead_source,
+            source_type: v.lead.lead_source_type,
+            sales_rep: v.lead.sales_rep,
+            status: v.lead.lead_status_type,
+            vehicle: [v.lead.year, v.lead.make, v.lead.model].filter(Boolean).join(" "),
+            total_leads: v.total,
+            source_count: v.sources.size,
+          }));
+
+        return NextResponse.json({ count: clean.length, leads: clean });
+      }
+
       default:
         return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }

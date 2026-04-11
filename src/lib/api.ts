@@ -317,6 +317,42 @@ export const api = {
 
   emailDeleteCampaign: (tenantId: string, campaignId: string) =>
     emailDelete<{ success: boolean }>({ action: "delete_campaign", tenant: tenantId, id: campaignId }),
+
+  // Lead Dedup
+  getDedupSummary: (tenantId: string, startDate?: string, endDate?: string) => {
+    const params: Record<string, string> = { action: "dedup_summary", tenant: tenantId };
+    if (startDate) params.start_date = startDate;
+    if (endDate) params.end_date = endDate;
+    return apiGet<{ total_leads: number; unique_customers: number; windows: Record<string, unknown> }>(params);
+  },
+
+  getDedupSpamSources: (tenantId: string, windowDays = 7, startDate?: string, endDate?: string) => {
+    const params: Record<string, string> = { action: "dedup_spam_sources", tenant: tenantId, window_days: String(windowDays) };
+    if (startDate) params.start_date = startDate;
+    if (endDate) params.end_date = endDate;
+    return apiGet<{ sources: Array<{ source: string; excess_leads: number; affected_customers: number }> }>(params);
+  },
+
+  getDedupSourceROI: (tenantId: string, startDate?: string, endDate?: string) => {
+    const params: Record<string, string> = { action: "dedup_source_roi", tenant: tenantId };
+    if (startDate) params.start_date = startDate;
+    if (endDate) params.end_date = endDate;
+    return apiGet<{ sources: unknown[]; journeys: unknown[]; first_touch_attribution: unknown[] }>(params);
+  },
+
+  getDedupCustomers: (tenantId: string, windowDays = 7, limit = 30, startDate?: string, endDate?: string) => {
+    const params: Record<string, string> = { action: "dedup_customers", tenant: tenantId, window_days: String(windowDays), limit: String(limit) };
+    if (startDate) params.start_date = startDate;
+    if (endDate) params.end_date = endDate;
+    return apiGet<{ customers: unknown[] }>(params);
+  },
+
+  getDedupClean: (tenantId: string, limit = 200, startDate?: string, endDate?: string) => {
+    const params: Record<string, string> = { action: "dedup_clean", tenant: tenantId, limit: String(limit) };
+    if (startDate) params.start_date = startDate;
+    if (endDate) params.end_date = endDate;
+    return apiGet<{ leads: unknown[] }>(params);
+  },
 };
 
 // ─── Email API helpers (separate route) ───────────────────────────────────────
