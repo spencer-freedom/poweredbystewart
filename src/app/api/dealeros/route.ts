@@ -24,6 +24,25 @@ function errorResponse(error: { message: string; code?: string }, status = 500) 
   return NextResponse.json({ error: error.message }, { status });
 }
 
+// Paginate around Supabase's 1,000-row default cap. Caller passes a factory
+// that builds a fresh query each page (query builders are single-use once awaited).
+async function fetchAllRows<T>(
+  buildQuery: () => { range: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: { message: string; code?: string } | null }> },
+  batchSize = 1000,
+): Promise<{ data: T[]; error: { message: string; code?: string } | null }> {
+  const all: T[] = [];
+  let offset = 0;
+  while (true) {
+    const { data, error } = await buildQuery().range(offset, offset + batchSize - 1);
+    if (error) return { data: all, error };
+    if (!data || data.length === 0) break;
+    all.push(...data);
+    if (data.length < batchSize) break;
+    offset += batchSize;
+  }
+  return { data: all, error: null };
+}
+
 // ─── GET handler ───────────────────────────────────────────────────────────
 
 export async function GET(req: NextRequest) {
@@ -510,17 +529,20 @@ export async function GET(req: NextRequest) {
         const startDate = searchParams.get("start_date") || "";
         const endDate = searchParams.get("end_date") || "";
 
-        let query = supabase
-          .from("vin_leads")
-          .select("customer, lead_origination_date, lead_source, lead_id")
-          .eq("tenant_id", tenantId)
-          .not("customer", "in", '("","Name","Wireless")');
-        if (startDate) query = query.gte("lead_origination_date", startDate);
-        if (endDate) query = query.lte("lead_origination_date", endDate + " 23:59:59");
+        const buildQuery = () => {
+          let q = supabase
+            .from("vin_leads")
+            .select("customer, lead_origination_date, lead_source, lead_id")
+            .eq("tenant_id", tenantId)
+            .not("customer", "in", '("","Name","Wireless")');
+          if (startDate) q = q.gte("lead_origination_date", startDate);
+          if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
+          return q;
+        };
 
-        const { data: leads, error } = await query;
+        const { data: leads, error } = await fetchAllRows<{ customer: string; lead_origination_date: string; lead_source: string; lead_id: string }>(buildQuery);
         if (error) return errorResponse(error);
-        if (!leads) return NextResponse.json({ total_leads: 0, unique_customers: 0, windows: {} });
+        if (!leads.length) return NextResponse.json({ total_leads: 0, unique_customers: 0, windows: {} });
 
         const uniqueCustomers = new Set(leads.map((l) => l.customer));
 
@@ -582,21 +604,24 @@ export async function GET(req: NextRequest) {
         const windowDays = parseInt(searchParams.get("window_days") || "7");
         const windowMs = windowDays * 86400000;
 
-        let query = supabase
-          .from("vin_leads")
-          .select("customer, lead_origination_date, lead_source")
-          .eq("tenant_id", tenantId)
-          .not("customer", "in", '("","Name","Wireless")');
-        if (startDate) query = query.gte("lead_origination_date", startDate);
-        if (endDate) query = query.lte("lead_origination_date", endDate + " 23:59:59");
+        const buildQuery = () => {
+          let q = supabase
+            .from("vin_leads")
+            .select("customer, lead_origination_date, lead_source")
+            .eq("tenant_id", tenantId)
+            .not("customer", "in", '("","Name","Wireless")');
+          if (startDate) q = q.gte("lead_origination_date", startDate);
+          if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
+          return q;
+        };
 
-        const { data: leads, error } = await query;
+        const { data: leads, error } = await fetchAllRows<{ customer: string; lead_origination_date: string; lead_source: string }>(buildQuery);
         if (error) return errorResponse(error);
 
         // Group by customer+source, find same-source repeats within window
         const spamMap: Record<string, { excess: number; customers: Set<string> }> = {};
         const byCustomer: Record<string, typeof leads> = {};
-        for (const l of leads || []) {
+        for (const l of leads) {
           (byCustomer[l.customer] ||= []).push(l);
         }
 
@@ -631,22 +656,25 @@ export async function GET(req: NextRequest) {
         const startDate = searchParams.get("start_date") || "";
         const endDate = searchParams.get("end_date") || "";
 
-        let query = supabase
-          .from("vin_leads")
-          .select("customer, lead_source, lead_status_type, lead_origination_date")
-          .eq("tenant_id", tenantId)
-          .not("customer", "in", '("","Name","Wireless")');
-        if (startDate) query = query.gte("lead_origination_date", startDate);
-        if (endDate) query = query.lte("lead_origination_date", endDate + " 23:59:59");
+        const buildQuery = () => {
+          let q = supabase
+            .from("vin_leads")
+            .select("customer, lead_source, lead_status_type, lead_origination_date")
+            .eq("tenant_id", tenantId)
+            .not("customer", "in", '("","Name","Wireless")');
+          if (startDate) q = q.gte("lead_origination_date", startDate);
+          if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
+          return q;
+        };
 
-        const { data: leads, error } = await query;
+        const { data: leads, error } = await fetchAllRows<{ customer: string; lead_source: string; lead_status_type: string | null; lead_origination_date: string }>(buildQuery);
         if (error) return errorResponse(error);
 
         const SOLD = new Set(["Sold", "Sold Delivered", "Delivered"]);
 
         // Source performance
         const srcMap: Record<string, { total: number; customers: Set<string>; sold: Set<string> }> = {};
-        for (const l of leads || []) {
+        for (const l of leads) {
           const src = l.lead_source || "Unknown";
           if (!srcMap[src]) srcMap[src] = { total: 0, customers: new Set(), sold: new Set() };
           srcMap[src].total++;
@@ -669,7 +697,7 @@ export async function GET(req: NextRequest) {
 
         // First-touch attribution
         const byCustomer: Record<string, typeof leads> = {};
-        for (const l of leads || []) {
+        for (const l of leads) {
           (byCustomer[l.customer] ||= []).push(l);
         }
         const firstTouchMap: Record<string, number> = {};
@@ -710,21 +738,24 @@ export async function GET(req: NextRequest) {
         const windowMs = windowDays * 86400000;
         const limit = parseInt(searchParams.get("limit") || "30");
 
-        let query = supabase
-          .from("vin_leads")
-          .select("customer, lead_id, lead_origination_date, lead_source, lead_source_type, sales_rep, lead_status_type, year, make, model")
-          .eq("tenant_id", tenantId)
-          .not("customer", "in", '("","Name","Wireless")')
-          .order("lead_origination_date", { ascending: false });
-        if (startDate) query = query.gte("lead_origination_date", startDate);
-        if (endDate) query = query.lte("lead_origination_date", endDate + " 23:59:59");
+        const buildQuery = () => {
+          let q = supabase
+            .from("vin_leads")
+            .select("customer, lead_id, lead_origination_date, lead_source, lead_source_type, sales_rep, lead_status_type, year, make, model")
+            .eq("tenant_id", tenantId)
+            .not("customer", "in", '("","Name","Wireless")')
+            .order("lead_origination_date", { ascending: false });
+          if (startDate) q = q.gte("lead_origination_date", startDate);
+          if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
+          return q;
+        };
 
-        const { data: leads, error } = await query;
+        const { data: leads, error } = await fetchAllRows<{ customer: string; lead_id: string; lead_origination_date: string; lead_source: string; lead_source_type: string | null; sales_rep: string | null; lead_status_type: string | null; year: string | null; make: string | null; model: string | null }>(buildQuery);
         if (error) return errorResponse(error);
 
         // Group by customer
         const byCustomer: Record<string, typeof leads> = {};
-        for (const l of leads || []) {
+        for (const l of leads) {
           (byCustomer[l.customer] ||= []).push(l);
         }
 
@@ -795,21 +826,25 @@ export async function GET(req: NextRequest) {
         const endDate = searchParams.get("end_date") || "";
         const limit = parseInt(searchParams.get("limit") || "200");
 
-        let query = supabase
-          .from("vin_leads")
-          .select("customer, lead_id, lead_origination_date, lead_source, lead_source_type, sales_rep, lead_status_type, year, make, model")
-          .eq("tenant_id", tenantId)
-          .not("customer", "in", '("","Name","Wireless")')
-          .order("lead_origination_date", { ascending: false });
-        if (startDate) query = query.gte("lead_origination_date", startDate);
-        if (endDate) query = query.lte("lead_origination_date", endDate + " 23:59:59");
+        const buildQuery = () => {
+          let q = supabase
+            .from("vin_leads")
+            .select("customer, lead_id, lead_origination_date, lead_source, lead_source_type, sales_rep, lead_status_type, year, make, model")
+            .eq("tenant_id", tenantId)
+            .not("customer", "in", '("","Name","Wireless")')
+            .order("lead_origination_date", { ascending: false });
+          if (startDate) q = q.gte("lead_origination_date", startDate);
+          if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
+          return q;
+        };
 
-        const { data: leads, error } = await query;
+        type CleanLead = { customer: string; lead_id: string; lead_origination_date: string; lead_source: string; lead_source_type: string | null; sales_rep: string | null; lead_status_type: string | null; year: string | null; make: string | null; model: string | null };
+        const { data: leads, error } = await fetchAllRows<CleanLead>(buildQuery);
         if (error) return errorResponse(error);
 
         // One row per customer — most recent lead wins
-        const seen = new Map<string, { lead: (typeof leads)[0]; total: number; sources: Set<string> }>();
-        for (const l of leads || []) {
+        const seen = new Map<string, { lead: CleanLead; total: number; sources: Set<string> }>();
+        for (const l of leads) {
           const existing = seen.get(l.customer);
           if (!existing) {
             seen.set(l.customer, { lead: l, total: 1, sources: new Set([l.lead_source]) });
