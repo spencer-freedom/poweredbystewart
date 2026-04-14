@@ -93,12 +93,24 @@ interface TimeGapBucket {
   pct_of_gaps: number;
 }
 
+interface LeadsPerCustomerBucket {
+  key: string;
+  label: string;
+  min: number;
+  max: number | null;
+  customer_count: number;
+  sold_count: number;
+  pct_of_customers: number;
+  sold_pct: number;
+}
+
 interface TimeGapResponse {
   total_leads: number;
   unique_customers: number;
   customers_with_repeats: number;
   total_gaps: number;
   histogram: TimeGapBucket[];
+  leads_per_customer: LeadsPerCustomerBucket[];
 }
 
 /* ─── helpers ─── */
@@ -229,6 +241,118 @@ function Legend() {
   );
 }
 
+/* ─── Pie chart (SVG, no dependencies) ─── */
+
+interface PieSlice {
+  label: string;
+  value: number;
+  color: string;
+}
+
+function PieChart({ slices, size = 180 }: { slices: PieSlice[]; size?: number }) {
+  const total = slices.reduce((s, x) => s + x.value, 0);
+  if (total === 0) return null;
+  const radius = size / 2;
+  const cx = radius;
+  const cy = radius;
+
+  let cumAngle = -Math.PI / 2;
+  const paths = slices.map((slice, idx) => {
+    const frac = slice.value / total;
+    const angle = frac * Math.PI * 2;
+    const x1 = cx + radius * Math.cos(cumAngle);
+    const y1 = cy + radius * Math.sin(cumAngle);
+    cumAngle += angle;
+    const x2 = cx + radius * Math.cos(cumAngle);
+    const y2 = cy + radius * Math.sin(cumAngle);
+    const largeArc = frac > 0.5 ? 1 : 0;
+    // Full circle edge case — draw as two semicircles
+    const d = frac === 1
+      ? `M ${cx} ${cy - radius} A ${radius} ${radius} 0 1 1 ${cx} ${cy + radius} A ${radius} ${radius} 0 1 1 ${cx} ${cy - radius} Z`
+      : `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+    return <path key={idx} d={d} fill={slice.color} />;
+  });
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      {paths}
+    </svg>
+  );
+}
+
+/* ─── Leads per customer (intent proxy) ─── */
+
+function LeadsPerCustomerView({ data }: { data: LeadsPerCustomerBucket[] }) {
+  const maxCount = Math.max(...data.map((b) => b.customer_count));
+  const totalCustomers = data.reduce((s, b) => s + b.customer_count, 0);
+  const totalSold = data.reduce((s, b) => s + b.sold_count, 0);
+  const baselineSoldPct = totalCustomers > 0 ? (totalSold / totalCustomers) * 100 : 0;
+
+  // Highest-intent bucket (by sold %)
+  const bestIntent = [...data]
+    .filter((b) => b.customer_count >= 5)
+    .sort((a, b) => b.sold_pct - a.sold_pct)[0];
+
+  return (
+    <div className="stewart-card p-4 space-y-4">
+      <div>
+        <h3 className="text-base font-semibold text-stewart-text">
+          Intent signal — more leads per customer = higher intent?
+        </h3>
+        <p className="text-xs text-stewart-muted mt-1">
+          How many leads each unique customer submitted, and what % of
+          those customers eventually bought. More touches usually means
+          higher intent. Baseline conversion: <span className="text-stewart-accent font-mono">{pct(baselineSoldPct)}</span> across all customers.
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        <div className="grid grid-cols-12 gap-2 text-xs text-stewart-muted border-b border-stewart-border pb-2">
+          <div className="col-span-2">Leads per customer</div>
+          <div className="col-span-5">Customers</div>
+          <div className="col-span-2 text-right">Count</div>
+          <div className="col-span-1 text-right">Share</div>
+          <div className="col-span-1 text-right">Sold</div>
+          <div className="col-span-1 text-right">Sold %</div>
+        </div>
+        {data.map((b) => {
+          const widthPct = maxCount > 0 ? (b.customer_count / maxCount) * 100 : 0;
+          const liftVsBaseline = b.sold_pct - baselineSoldPct;
+          const liftColor = liftVsBaseline > 2 ? "text-green-400" : liftVsBaseline < -2 ? "text-red-400" : "text-stewart-muted";
+          return (
+            <div key={b.key} className="grid grid-cols-12 gap-2 items-center text-xs">
+              <div className="col-span-2 text-stewart-text">{b.label}</div>
+              <div className="col-span-5">
+                <div className="h-5 bg-stewart-bg rounded overflow-hidden">
+                  <div
+                    className="h-full bg-stewart-accent"
+                    style={{ width: `${widthPct}%` }}
+                  />
+                </div>
+              </div>
+              <div className="col-span-2 text-right font-mono text-stewart-text">{num(b.customer_count)}</div>
+              <div className="col-span-1 text-right font-mono text-stewart-muted">{pct(b.pct_of_customers)}</div>
+              <div className="col-span-1 text-right font-mono text-stewart-muted">{num(b.sold_count)}</div>
+              <div className={`col-span-1 text-right font-mono ${liftColor}`}>{pct(b.sold_pct)}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {bestIntent && (
+        <div className="text-xs text-stewart-muted pt-2 border-t border-stewart-border">
+          <span className="text-stewart-text">Highest-intent bucket:</span>{" "}
+          <span className="text-stewart-accent">{bestIntent.label}</span>{" "}
+          converts at <span className="font-mono">{pct(bestIntent.sold_pct)}</span> vs.{" "}
+          <span className="font-mono">{pct(baselineSoldPct)}</span> baseline — that&apos;s{" "}
+          <span className="font-mono">{(bestIntent.sold_pct / Math.max(baselineSoldPct, 0.1)).toFixed(1)}×</span>{" "}
+          the average conversion rate.
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ─── Customer Behavior ─── */
 
 const BEHAVIOR_GROUPS: { title: string; takeaway: string; keys: string[] }[] = [
@@ -317,6 +441,43 @@ function BehaviorView({ data }: { data: TimeGapResponse }) {
           re-engagement — and pick the right spam window from real data.
         </p>
       </div>
+
+      {/* Pie chart — behavior group share */}
+      <div className="stewart-card p-4">
+        <h3 className="text-base font-semibold text-stewart-text mb-1">
+          Where are the repeats happening?
+        </h3>
+        <p className="text-xs text-stewart-muted mb-4">
+          Share of every repeat-lead event by behavior group.
+        </p>
+        <div className="flex flex-wrap items-center gap-8">
+          <PieChart
+            slices={BEHAVIOR_GROUPS.map((g, i) => ({
+              label: g.title,
+              value: g.keys.reduce((s, k) => s + (byKey[k]?.gap_count || 0), 0),
+              color: ["#60a5fa", "#34d399", "#fbbf24", "#f87171"][i % 4],
+            }))}
+          />
+          <div className="space-y-2 text-sm">
+            {BEHAVIOR_GROUPS.map((g, i) => {
+              const val = g.keys.reduce((s, k) => s + (byKey[k]?.gap_count || 0), 0);
+              const p = data.total_gaps > 0 ? (val / data.total_gaps) * 100 : 0;
+              const color = ["#60a5fa", "#34d399", "#fbbf24", "#f87171"][i % 4];
+              return (
+                <div key={g.title} className="flex items-center gap-3">
+                  <span className="w-3 h-3 rounded-sm" style={{ backgroundColor: color }} />
+                  <span className="text-stewart-text w-64">{g.title}</span>
+                  <span className="font-mono text-stewart-accent w-16 text-right">{pct(p)}</span>
+                  <span className="font-mono text-stewart-muted text-xs">{num(val)} events</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Leads per customer — intent proxy */}
+      <LeadsPerCustomerView data={data.leads_per_customer} />
 
       {/* Grouped histogram */}
       {BEHAVIOR_GROUPS.map((group) => {

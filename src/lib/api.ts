@@ -372,6 +372,16 @@ export const api = {
         multi_channel_count: number;
         pct_of_gaps: number;
       }>;
+      leads_per_customer: Array<{
+        key: string;
+        label: string;
+        min: number;
+        max: number | null;
+        customer_count: number;
+        sold_count: number;
+        pct_of_customers: number;
+        sold_pct: number;
+      }>;
     }>(params);
   },
 };

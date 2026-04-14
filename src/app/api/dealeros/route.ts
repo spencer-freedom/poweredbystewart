@@ -886,7 +886,7 @@ export async function GET(req: NextRequest) {
         const buildQuery = () => {
           let q = supabase
             .from("vin_leads")
-            .select("customer, lead_origination_date, lead_source")
+            .select("customer, lead_origination_date, lead_source, lead_status_type")
             .eq("tenant_id", tenantId)
             .not("customer", "in", '("","Name","Wireless")')
             .neq("lead_source_type", "Service");
@@ -895,7 +895,7 @@ export async function GET(req: NextRequest) {
           return q;
         };
 
-        const { data: leads, error } = await fetchAllRows<{ customer: string; lead_origination_date: string; lead_source: string }>(buildQuery);
+        const { data: leads, error } = await fetchAllRows<{ customer: string; lead_origination_date: string; lead_source: string; lead_status_type: string | null }>(buildQuery);
         if (error) return errorResponse(error);
 
         const buckets = [
@@ -928,8 +928,31 @@ export async function GET(req: NextRequest) {
         let customersWithGaps = 0;
         const uniqueCustomers = Object.keys(byCustomer).length;
 
+        // Leads-per-customer distribution (+ intent proxy via sold conversion)
+        const SOLD = new Set(["Sold", "Sold Delivered", "Delivered"]);
+        const leadCountBins = [
+          { key: "1",      label: "1 lead",       min: 1,  max: 1 },
+          { key: "2",      label: "2 leads",      min: 2,  max: 2 },
+          { key: "3",      label: "3 leads",      min: 3,  max: 3 },
+          { key: "4",      label: "4 leads",      min: 4,  max: 4 },
+          { key: "5",      label: "5 leads",      min: 5,  max: 5 },
+          { key: "6_10",   label: "6–10 leads",   min: 6,  max: 10 },
+          { key: "11_20",  label: "11–20 leads",  min: 11, max: 20 },
+          { key: "21plus", label: "21+ leads",    min: 21, max: Infinity },
+        ];
+        const leadCountDist = leadCountBins.map((b) => ({ ...b, customer_count: 0, sold_count: 0 }));
+
         for (const custLeads of Object.values(byCustomer)) {
-          if (custLeads.length < 2) continue;
+          const n = custLeads.length;
+          const wasSold = custLeads.some((l) => SOLD.has(l.lead_status_type || ""));
+          for (const b of leadCountDist) {
+            if (n >= b.min && n <= b.max) {
+              b.customer_count++;
+              if (wasSold) b.sold_count++;
+              break;
+            }
+          }
+          if (n < 2) continue;
           customersWithGaps++;
           custLeads.sort((a, b) => a.lead_origination_date.localeCompare(b.lead_origination_date));
 
@@ -960,12 +983,24 @@ export async function GET(req: NextRequest) {
           pct_of_gaps: totalGaps > 0 ? Math.round((b.gap_count / totalGaps) * 1000) / 10 : 0,
         }));
 
+        const leads_per_customer = leadCountDist.map((b) => ({
+          key: b.key,
+          label: b.label,
+          min: b.min,
+          max: b.max === Infinity ? null : b.max,
+          customer_count: b.customer_count,
+          sold_count: b.sold_count,
+          pct_of_customers: uniqueCustomers > 0 ? Math.round((b.customer_count / uniqueCustomers) * 1000) / 10 : 0,
+          sold_pct: b.customer_count > 0 ? Math.round((b.sold_count / b.customer_count) * 1000) / 10 : 0,
+        }));
+
         return NextResponse.json({
           total_leads: leads.length,
           unique_customers: uniqueCustomers,
           customers_with_repeats: customersWithGaps,
           total_gaps: totalGaps,
           histogram,
+          leads_per_customer,
         });
       }
 
