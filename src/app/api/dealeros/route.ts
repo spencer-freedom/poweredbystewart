@@ -534,7 +534,8 @@ export async function GET(req: NextRequest) {
             .from("vin_leads")
             .select("customer, lead_origination_date, lead_source, lead_id")
             .eq("tenant_id", tenantId)
-            .not("customer", "in", '("","Name","Wireless")');
+            .not("customer", "in", '("","Name","Wireless")')
+            .neq("lead_type", "service");
           if (startDate) q = q.gte("lead_origination_date", startDate);
           if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
           return q;
@@ -609,7 +610,8 @@ export async function GET(req: NextRequest) {
             .from("vin_leads")
             .select("customer, lead_origination_date, lead_source")
             .eq("tenant_id", tenantId)
-            .not("customer", "in", '("","Name","Wireless")');
+            .not("customer", "in", '("","Name","Wireless")')
+            .neq("lead_type", "service");
           if (startDate) q = q.gte("lead_origination_date", startDate);
           if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
           return q;
@@ -661,7 +663,8 @@ export async function GET(req: NextRequest) {
             .from("vin_leads")
             .select("customer, lead_source, lead_status_type, lead_origination_date")
             .eq("tenant_id", tenantId)
-            .not("customer", "in", '("","Name","Wireless")');
+            .not("customer", "in", '("","Name","Wireless")')
+            .neq("lead_type", "service");
           if (startDate) q = q.gte("lead_origination_date", startDate);
           if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
           return q;
@@ -744,6 +747,7 @@ export async function GET(req: NextRequest) {
             .select("customer, lead_id, lead_origination_date, lead_source, lead_source_type, sales_rep, lead_status_type, year, make, model")
             .eq("tenant_id", tenantId)
             .not("customer", "in", '("","Name","Wireless")')
+            .neq("lead_type", "service")
             .order("lead_origination_date", { ascending: false });
           if (startDate) q = q.gte("lead_origination_date", startDate);
           if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
@@ -832,6 +836,7 @@ export async function GET(req: NextRequest) {
             .select("customer, lead_id, lead_origination_date, lead_source, lead_source_type, sales_rep, lead_status_type, year, make, model")
             .eq("tenant_id", tenantId)
             .not("customer", "in", '("","Name","Wireless")')
+            .neq("lead_type", "service")
             .order("lead_origination_date", { ascending: false });
           if (startDate) q = q.gte("lead_origination_date", startDate);
           if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
