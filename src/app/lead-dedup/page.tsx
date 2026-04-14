@@ -241,6 +241,170 @@ function Legend() {
   );
 }
 
+/* ─── Action Window (sales-rep facing urgency view) ─── */
+
+function ActionWindowView({ data }: { data: ActionWindow }) {
+  const maxCustomers = Math.max(...data.intensity.map((b) => b.customer_count));
+
+  // Headline intensity → conversion callout
+  const multiTouch = data.intensity.filter((b) => b.key !== "1");
+  const multiTouchCustomers = multiTouch.reduce((s, b) => s + b.customer_count, 0);
+  const multiTouchSold = multiTouch.reduce((s, b) => s + b.sold_count, 0);
+  const multiTouchSoldPct = multiTouchCustomers > 0 ? (multiTouchSold / multiTouchCustomers) * 100 : 0;
+
+  const single = data.intensity.find((b) => b.key === "1");
+  const singleSoldPct = single ? single.sold_pct : 0;
+  const intensityLift = singleSoldPct > 0 ? multiTouchSoldPct / singleSoldPct : 0;
+
+  // Dropout headline — what % of unsold never come back
+  const neverReturned = data.dropout.find((b) => b.key === "no")?.pct || 0;
+
+  return (
+    <div className="space-y-6">
+      {/* ─── Sales-rep headline ─── */}
+      <div className="stewart-card p-5 border-l-4 border-stewart-accent">
+        <div className="text-sm font-semibold text-stewart-accent uppercase tracking-wide mb-2">
+          What this means for the phones
+        </div>
+        <div className="text-lg text-stewart-text leading-relaxed">
+          When a customer submits <strong>2+ leads in their first hour</strong>, they buy at{" "}
+          <span className="text-stewart-accent font-bold">{pct(multiTouchSoldPct)}</span>
+          {" "}— that&apos;s{" "}
+          <span className="text-stewart-accent font-bold">{intensityLift.toFixed(1)}×</span>{" "}
+          the rate of single-lead customers ({pct(singleSoldPct)}).
+          <br />
+          And of the customers who <em>don&apos;t</em> buy,{" "}
+          <span className="text-red-400 font-bold">{pct(neverReturned)}</span>{" "}
+          <strong>never come back</strong>. If you don&apos;t reach them in the first hour, most are gone.
+        </div>
+      </div>
+
+      {/* ─── Top cards ─── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <StatCard
+          label="Customers Analyzed"
+          value={num(data.total_customers)}
+          sub={`${num(data.total_leads)} total leads`}
+        />
+        <StatCard
+          label="Baseline Conversion"
+          value={pct(data.baseline_sold_pct)}
+          sub="All customers"
+        />
+        <StatCard
+          label="Multi-touch Lift"
+          value={`${intensityLift.toFixed(1)}×`}
+          sub="2+ leads vs. single-lead"
+          color="bg-stewart-accent/10 border-stewart-accent"
+        />
+        <StatCard
+          label="Never Return"
+          value={pct(neverReturned)}
+          sub="Of customers who didn&rsquo;t buy"
+        />
+      </div>
+
+      {/* ─── Intensity → Conversion ─── */}
+      <div className="stewart-card p-4 space-y-3">
+        <div>
+          <h3 className="text-base font-semibold text-stewart-text">
+            First-hour intensity → conversion
+          </h3>
+          <p className="text-xs text-stewart-muted mt-1">
+            Count of leads a customer submits in their first hour, paired with
+            whether they eventually bought. More action in the first hour means
+            higher intent — and the gap is real.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-12 gap-2 text-xs text-stewart-muted border-b border-stewart-border pb-2">
+          <div className="col-span-2">First-hour leads</div>
+          <div className="col-span-4">Customers</div>
+          <div className="col-span-2 text-right">Count</div>
+          <div className="col-span-2 text-right">Sold</div>
+          <div className="col-span-1 text-right">Sold %</div>
+          <div className="col-span-1 text-right">Multi-src</div>
+        </div>
+
+        {data.intensity.map((b) => {
+          const widthPct = maxCustomers > 0 ? (b.customer_count / maxCustomers) * 100 : 0;
+          const liftVsBase = b.sold_pct - data.baseline_sold_pct;
+          const liftColor = liftVsBase > 2 ? "text-green-400" : liftVsBase < -2 ? "text-red-400" : "text-stewart-muted";
+          return (
+            <div key={b.key} className="grid grid-cols-12 gap-2 items-center text-xs">
+              <div className="col-span-2 text-stewart-text font-medium">{b.label}</div>
+              <div className="col-span-4">
+                <div className="h-5 bg-stewart-bg rounded overflow-hidden">
+                  <div
+                    className="h-full bg-stewart-accent"
+                    style={{ width: `${widthPct}%` }}
+                  />
+                </div>
+              </div>
+              <div className="col-span-2 text-right font-mono text-stewart-text">{num(b.customer_count)}</div>
+              <div className="col-span-2 text-right font-mono text-stewart-muted">{num(b.sold_count)}</div>
+              <div className={`col-span-1 text-right font-mono font-bold ${liftColor}`}>{pct(b.sold_pct)}</div>
+              <div className="col-span-1 text-right font-mono text-stewart-muted">{pct(b.multi_source_pct)}</div>
+            </div>
+          );
+        })}
+
+        <div className="pt-3 text-xs text-stewart-muted border-t border-stewart-border">
+          Green = above {pct(data.baseline_sold_pct)} baseline. Red = below.{" "}
+          Multi-src column shows % whose first-hour leads came from 2+ different
+          channels — a strong buying-intent signal.
+        </div>
+      </div>
+
+      {/* ─── Dropout fate ─── */}
+      <div className="stewart-card p-4 space-y-3">
+        <div>
+          <h3 className="text-base font-semibold text-stewart-text">
+            If they don&apos;t buy — do they come back?
+          </h3>
+          <p className="text-xs text-stewart-muted mt-1">
+            Of the {num(data.unsold_count)} customers who didn&apos;t buy, this is
+            when (or if) they came back after their first-hour session.
+            This is the disengagement pattern.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          {data.dropout.map((b) => {
+            const maxDropoutPct = Math.max(...data.dropout.map((d) => d.pct));
+            const widthPct = maxDropoutPct > 0 ? (b.pct / maxDropoutPct) * 100 : 0;
+            const isNever = b.key === "no";
+            return (
+              <div key={b.key} className="grid grid-cols-12 gap-2 items-center text-xs">
+                <div className={`col-span-3 ${isNever ? "text-red-400 font-semibold" : "text-stewart-text"}`}>
+                  {b.label}
+                </div>
+                <div className="col-span-6">
+                  <div className="h-5 bg-stewart-bg rounded overflow-hidden">
+                    <div
+                      className={`h-full ${isNever ? "bg-red-500" : "bg-stewart-accent"}`}
+                      style={{ width: `${widthPct}%` }}
+                    />
+                  </div>
+                </div>
+                <div className="col-span-2 text-right font-mono text-stewart-muted">{num(b.count)}</div>
+                <div className={`col-span-1 text-right font-mono ${isNever ? "text-red-400 font-bold" : "text-stewart-text"}`}>{pct(b.pct)}</div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="pt-3 text-xs text-stewart-muted border-t border-stewart-border leading-relaxed">
+          <span className="text-stewart-text font-semibold">The takeaway for reps:</span>{" "}
+          Most unsold customers are one-and-done. The first hour isn&apos;t
+          just important — it&apos;s often the <em>only</em> hour you have.
+          Same-day follow-up isn&apos;t fast enough.
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Pie chart (SVG, no dependencies) ─── */
 
 interface PieSlice {
@@ -568,7 +732,30 @@ function BehaviorView({ data }: { data: TimeGapResponse }) {
 
 /* ─── main page ─── */
 
-type Tab = "summary" | "behavior" | "sources" | "journeys" | "clean";
+type Tab = "summary" | "behavior" | "action" | "sources" | "journeys" | "clean";
+
+interface ActionWindow {
+  total_leads: number;
+  total_customers: number;
+  baseline_sold_pct: number;
+  unsold_count: number;
+  intensity: Array<{
+    key: string;
+    label: string;
+    customer_count: number;
+    sold_count: number;
+    sold_pct: number;
+    multi_source_count: number;
+    multi_source_pct: number;
+    avg_hours_to_sale: number | null;
+  }>;
+  dropout: Array<{
+    key: string;
+    label: string;
+    count: number;
+    pct: number;
+  }>;
+}
 
 export default function LeadDedupPage() {
   const { tenantId } = useTenant();
@@ -589,6 +776,7 @@ export default function LeadDedupPage() {
   const [firstTouches, setFirstTouches] = useState<FirstTouch[]>([]);
   const [cleanLeads, setCleanLeads] = useState<CleanLead[]>([]);
   const [timeGaps, setTimeGaps] = useState<TimeGapResponse | null>(null);
+  const [actionWindow, setActionWindow] = useState<ActionWindow | null>(null);
   const [expandedCustomer, setExpandedCustomer] = useState<string | null>(null);
   const [roiSort, setRoiSort] = useState<"total" | "conversion" | "noise">("total");
 
@@ -624,6 +812,9 @@ export default function LeadDedupPage() {
       } else if (tab === "behavior") {
         const tg = await api.getDedupTimeGaps(tenantId, startDate || undefined, endDate || undefined);
         setTimeGaps(tg);
+      } else if (tab === "action") {
+        const aw = await api.getDedupActionWindow(tenantId, startDate || undefined, endDate || undefined);
+        setActionWindow(aw);
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load");
@@ -648,6 +839,7 @@ export default function LeadDedupPage() {
   const tabs: { key: Tab; label: string }[] = [
     { key: "summary", label: "Overview" },
     { key: "behavior", label: "Customer Behavior" },
+    { key: "action", label: "Action Window" },
     { key: "sources", label: "Source ROI" },
     { key: "journeys", label: "Customer Journeys" },
     { key: "clean", label: "Clean View" },
@@ -751,6 +943,11 @@ export default function LeadDedupPage() {
       {/* ─── CUSTOMER BEHAVIOR TAB ─── */}
       {!loading && tab === "behavior" && timeGaps && (
         <BehaviorView data={timeGaps} />
+      )}
+
+      {/* ─── ACTION WINDOW TAB ─── */}
+      {!loading && tab === "action" && actionWindow && (
+        <ActionWindowView data={actionWindow} />
       )}
 
       {/* ─── SUMMARY TAB ─── */}

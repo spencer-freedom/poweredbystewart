@@ -1004,6 +1004,138 @@ export async function GET(req: NextRequest) {
         });
       }
 
+      // ── Lead Dedup: Action Window — first-hour intensity and outcome ───
+      case "dedup_action_window": {
+        const startDate = searchParams.get("start_date") || "";
+        const endDate = searchParams.get("end_date") || "";
+
+        const buildQuery = () => {
+          let q = supabase
+            .from("vin_leads")
+            .select("customer, lead_origination_date, lead_source, lead_status_type")
+            .eq("tenant_id", tenantId)
+            .not("customer", "in", '("","Name","Wireless")')
+            .neq("lead_source_type", "Service");
+          if (startDate) q = q.gte("lead_origination_date", startDate);
+          if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
+          return q;
+        };
+
+        const { data: leads, error } = await fetchAllRows<{ customer: string; lead_origination_date: string; lead_source: string; lead_status_type: string | null }>(buildQuery);
+        if (error) return errorResponse(error);
+
+        const SOLD = new Set(["Sold", "Sold Delivered", "Delivered"]);
+        const HOUR = 3600000;
+
+        // Group by customer, compute per-customer profile
+        const byCustomer: Record<string, typeof leads> = {};
+        for (const l of leads) (byCustomer[l.customer] ||= []).push(l);
+
+        interface Profile {
+          firstHourLeads: number;
+          firstHourSources: Set<string>;
+          sold: boolean;
+          hoursToSale: number | null;
+          returnedAfterSession: "no" | "0_24h" | "1_3d" | "3_7d" | "7_30d" | "30d_plus";
+        }
+        const profiles: Profile[] = [];
+
+        for (const custLeads of Object.values(byCustomer)) {
+          custLeads.sort((a, b) => a.lead_origination_date.localeCompare(b.lead_origination_date));
+          const firstTs = new Date(custLeads[0].lead_origination_date).getTime();
+
+          // Session = leads within 1 hour of the first lead
+          const session = custLeads.filter((l) => new Date(l.lead_origination_date).getTime() - firstTs < HOUR);
+          const sessionEnd = new Date(session[session.length - 1].lead_origination_date).getTime();
+          const postSession = custLeads.slice(session.length);
+
+          const sold = custLeads.some((l) => SOLD.has(l.lead_status_type || ""));
+          let hoursToSale: number | null = null;
+          if (sold) {
+            const firstSold = custLeads.find((l) => SOLD.has(l.lead_status_type || ""));
+            if (firstSold) {
+              hoursToSale = (new Date(firstSold.lead_origination_date).getTime() - firstTs) / HOUR;
+            }
+          }
+
+          let returned: Profile["returnedAfterSession"] = "no";
+          if (postSession.length > 0) {
+            const gapHours = (new Date(postSession[0].lead_origination_date).getTime() - sessionEnd) / HOUR;
+            if (gapHours < 24) returned = "0_24h";
+            else if (gapHours < 72) returned = "1_3d";
+            else if (gapHours < 168) returned = "3_7d";
+            else if (gapHours < 720) returned = "7_30d";
+            else returned = "30d_plus";
+          }
+
+          profiles.push({
+            firstHourLeads: session.length,
+            firstHourSources: new Set(session.map((l) => l.lead_source)),
+            sold,
+            hoursToSale,
+            returnedAfterSession: returned,
+          });
+        }
+
+        // Intensity buckets
+        const intensityBins = [
+          { key: "1",   label: "1 lead",        min: 1, max: 1 },
+          { key: "2",   label: "2 leads",       min: 2, max: 2 },
+          { key: "3",   label: "3 leads",       min: 3, max: 3 },
+          { key: "4",   label: "4 leads",       min: 4, max: 4 },
+          { key: "5p",  label: "5+ leads",      min: 5, max: Infinity },
+        ];
+        const intensity = intensityBins.map((b) => {
+          const matched = profiles.filter((p) => p.firstHourLeads >= b.min && p.firstHourLeads <= b.max);
+          const sold = matched.filter((p) => p.sold).length;
+          const soldTimes = matched.map((p) => p.hoursToSale).filter((h): h is number => h !== null);
+          const multiSource = matched.filter((p) => p.firstHourSources.size >= 2).length;
+          return {
+            key: b.key,
+            label: b.label,
+            customer_count: matched.length,
+            sold_count: sold,
+            sold_pct: matched.length > 0 ? Math.round((sold / matched.length) * 1000) / 10 : 0,
+            multi_source_count: multiSource,
+            multi_source_pct: matched.length > 0 ? Math.round((multiSource / matched.length) * 1000) / 10 : 0,
+            avg_hours_to_sale: soldTimes.length > 0 ? Math.round((soldTimes.reduce((a, b) => a + b, 0) / soldTimes.length) * 10) / 10 : null,
+          };
+        });
+
+        // Dropout fate — unsold customers only
+        const unsold = profiles.filter((p) => !p.sold);
+        const dropoutBins = [
+          { key: "no",       label: "Never returned" },
+          { key: "0_24h",    label: "Returned within 24h" },
+          { key: "1_3d",     label: "Returned 1–3 days later" },
+          { key: "3_7d",     label: "Returned 3–7 days later" },
+          { key: "7_30d",    label: "Returned 7–30 days later" },
+          { key: "30d_plus", label: "Returned 30+ days later" },
+        ];
+        const dropout = dropoutBins.map((b) => {
+          const count = unsold.filter((p) => p.returnedAfterSession === b.key).length;
+          return {
+            key: b.key,
+            label: b.label,
+            count,
+            pct: unsold.length > 0 ? Math.round((count / unsold.length) * 1000) / 10 : 0,
+          };
+        });
+
+        // Baseline conversion across everyone
+        const baselineSold = profiles.filter((p) => p.sold).length;
+        const baselineSoldPct = profiles.length > 0 ? Math.round((baselineSold / profiles.length) * 1000) / 10 : 0;
+
+        return NextResponse.json({
+          total_leads: leads.length,
+          total_customers: profiles.length,
+          baseline_sold_pct: baselineSoldPct,
+          unsold_count: unsold.length,
+          intensity,
+          dropout,
+        });
+      }
+
       default:
         return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }

@@ -384,6 +384,34 @@ export const api = {
       }>;
     }>(params);
   },
+
+  getDedupActionWindow: (tenantId: string, startDate?: string, endDate?: string) => {
+    const params: Record<string, string> = { action: "dedup_action_window", tenant: tenantId };
+    if (startDate) params.start_date = startDate;
+    if (endDate) params.end_date = endDate;
+    return apiGet<{
+      total_leads: number;
+      total_customers: number;
+      baseline_sold_pct: number;
+      unsold_count: number;
+      intensity: Array<{
+        key: string;
+        label: string;
+        customer_count: number;
+        sold_count: number;
+        sold_pct: number;
+        multi_source_count: number;
+        multi_source_pct: number;
+        avg_hours_to_sale: number | null;
+      }>;
+      dropout: Array<{
+        key: string;
+        label: string;
+        count: number;
+        pct: number;
+      }>;
+    }>(params);
+  },
 };
 
 // ─── Email API helpers (separate route) ───────────────────────────────────────
