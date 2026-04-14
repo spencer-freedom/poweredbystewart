@@ -159,12 +159,17 @@ function getPresetDates(preset: string): { start: string; end: string } {
     case "ytd": {
       return { start: `${now.getFullYear()}-01-01`, end: fmt(now) };
     }
+    case "2026": return { start: "2026-01-01", end: "2026-12-31" };
     case "2025": return { start: "2025-01-01", end: "2025-12-31" };
     case "2024": return { start: "2024-01-01", end: "2024-12-31" };
     case "2023": return { start: "2023-01-01", end: "2023-12-31" };
     case "2022": return { start: "2022-01-01", end: "2022-12-31" };
     case "2021": return { start: "2021-01-01", end: "2021-12-31" };
     case "2020": return { start: "2020-01-01", end: "2020-12-31" };
+    case "2019": return { start: "2019-01-01", end: "2019-12-31" };
+    case "2018": return { start: "2018-01-01", end: "2018-12-31" };
+    case "2017": return { start: "2017-01-01", end: "2017-12-31" };
+    case "2016": return { start: "2016-01-01", end: "2016-12-31" };
     case "all":
     default:
       return { start: "", end: "" };
@@ -293,12 +298,17 @@ export default function LeadDedupPage() {
     { key: "30d", label: "30 days" },
     { key: "90d", label: "90 days" },
     { key: "ytd", label: "YTD" },
+    { key: "2026", label: "2026" },
     { key: "2025", label: "2025" },
     { key: "2024", label: "2024" },
     { key: "2023", label: "2023" },
     { key: "2022", label: "2022" },
     { key: "2021", label: "2021" },
     { key: "2020", label: "2020" },
+    { key: "2019", label: "2019" },
+    { key: "2018", label: "2018" },
+    { key: "2017", label: "2017" },
+    { key: "2016", label: "2016" },
     { key: "all", label: "All time" },
   ];
 
