@@ -83,6 +83,24 @@ interface CleanLead {
   source_count: number;
 }
 
+interface TimeGapBucket {
+  key: string;
+  label: string;
+  gap_count: number;
+  affected_customers: number;
+  same_source_count: number;
+  multi_channel_count: number;
+  pct_of_gaps: number;
+}
+
+interface TimeGapResponse {
+  total_leads: number;
+  unique_customers: number;
+  customers_with_repeats: number;
+  total_gaps: number;
+  histogram: TimeGapBucket[];
+}
+
 /* ─── helpers ─── */
 
 function fmtDate(s: string) {
@@ -211,9 +229,185 @@ function Legend() {
   );
 }
 
+/* ─── Customer Behavior ─── */
+
+const BEHAVIOR_GROUPS: { title: string; takeaway: string; keys: string[] }[] = [
+  {
+    title: "Same-session (under 1 day)",
+    takeaway:
+      "These look like website behavior — form submits within minutes or hours of each other. Safe to treat as one lead.",
+    keys: ["lt_1h", "1_6h", "6_24h"],
+  },
+  {
+    title: "Active shopping window (1–14 days)",
+    takeaway:
+      "Active buyers comparing options. Every repeat here is a real signal, not spam — but it is the same shopper.",
+    keys: ["1_3d", "3_7d", "7_14d"],
+  },
+  {
+    title: "Re-engagement (14–90 days)",
+    takeaway:
+      "Customer came back later. If they convert, first-touch source usually gets undercounted — worth knowing.",
+    keys: ["14_30d", "30_90d"],
+  },
+  {
+    title: "Separate intent (90+ days)",
+    takeaway:
+      "Long enough that this is almost certainly a new shopping cycle. Don't count as duplicate at all.",
+    keys: ["90_180d", "gt_180d"],
+  },
+];
+
+function BehaviorView({ data }: { data: TimeGapResponse }) {
+  if (data.total_gaps === 0) {
+    return (
+      <div className="text-stewart-muted text-sm">
+        No repeat-customer gaps in this range. Widen the date window.
+      </div>
+    );
+  }
+
+  const maxPct = Math.max(...data.histogram.map((h) => h.pct_of_gaps));
+  const byKey: Record<string, TimeGapBucket> = Object.fromEntries(
+    data.histogram.map((h) => [h.key, h]),
+  );
+
+  // Dominant group — highest combined pct
+  const groupTotals = BEHAVIOR_GROUPS.map((g) => ({
+    title: g.title,
+    pct: g.keys.reduce((s, k) => s + (byKey[k]?.pct_of_gaps || 0), 0),
+  }));
+  const dominant = groupTotals.reduce((a, b) => (a.pct >= b.pct ? a : b));
+
+  return (
+    <div className="space-y-6">
+      {/* Top-line cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <StatCard
+          label="Total Leads (sales only)"
+          value={num(data.total_leads)}
+          sub="Service leads excluded"
+        />
+        <StatCard
+          label="Unique Customers"
+          value={num(data.unique_customers)}
+          sub={`${num(data.customers_with_repeats)} came back more than once`}
+        />
+        <StatCard
+          label="Repeat Lead Events"
+          value={num(data.total_gaps)}
+          sub="Times the same person submitted again"
+        />
+        <StatCard
+          label="Dominant Pattern"
+          value={dominant.title.split(" ")[0]}
+          sub={`${pct(dominant.pct)} of repeats`}
+          color="bg-stewart-accent/10 border-stewart-accent"
+        />
+      </div>
+
+      {/* Explainer */}
+      <div className="stewart-card p-4 text-sm text-stewart-text">
+        <p className="mb-1 font-semibold">What this shows</p>
+        <p className="text-stewart-muted">
+          Every time the same customer submits a lead after an earlier one, we
+          measure how long between them. The chart below buckets those gaps
+          from &ldquo;under 1 hour&rdquo; to &ldquo;6 months later&rdquo; so
+          you can see which patterns are website noise, real shopping, or
+          re-engagement — and pick the right spam window from real data.
+        </p>
+      </div>
+
+      {/* Grouped histogram */}
+      {BEHAVIOR_GROUPS.map((group) => {
+        const groupPct = group.keys.reduce(
+          (s, k) => s + (byKey[k]?.pct_of_gaps || 0),
+          0,
+        );
+        return (
+          <div key={group.title} className="stewart-card p-4 space-y-3">
+            <div className="flex items-baseline justify-between">
+              <h3 className="text-base font-semibold text-stewart-text">
+                {group.title}
+              </h3>
+              <span className="text-sm text-stewart-accent font-mono">
+                {pct(groupPct)} of repeats
+              </span>
+            </div>
+            <p className="text-xs text-stewart-muted">{group.takeaway}</p>
+
+            <div className="space-y-2 pt-2">
+              {group.keys.map((k) => {
+                const b = byKey[k];
+                if (!b) return null;
+                const widthPct = maxPct > 0 ? (b.pct_of_gaps / maxPct) * 100 : 0;
+                return (
+                  <div key={k} className="grid grid-cols-12 gap-2 items-center text-xs">
+                    <div className="col-span-3 text-stewart-muted">{b.label}</div>
+                    <div className="col-span-6">
+                      <div className="h-5 bg-stewart-bg rounded overflow-hidden">
+                        <div
+                          className="h-full bg-stewart-accent"
+                          style={{ width: `${widthPct}%` }}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-span-1 text-right font-mono text-stewart-text">
+                      {pct(b.pct_of_gaps)}
+                    </div>
+                    <div className="col-span-2 text-right font-mono text-stewart-muted">
+                      {num(b.gap_count)} gaps
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Same-source vs multi-channel breakdown */}
+      <div className="stewart-card p-4">
+        <h3 className="text-base font-semibold text-stewart-text mb-1">
+          Same source vs. different source
+        </h3>
+        <p className="text-xs text-stewart-muted mb-3">
+          When a customer comes back, did the same source generate the
+          duplicate (spam signal) or a different one (shopping signal)?
+        </p>
+        <table className="w-full text-xs">
+          <thead className="text-stewart-muted border-b border-stewart-border">
+            <tr>
+              <th className="text-left py-2">Gap range</th>
+              <th className="text-right py-2">Repeats</th>
+              <th className="text-right py-2">Same source</th>
+              <th className="text-right py-2">Different source</th>
+              <th className="text-right py-2">Same-source share</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.histogram.map((b) => {
+              const sameShare = b.gap_count > 0 ? (b.same_source_count / b.gap_count) * 100 : 0;
+              return (
+                <tr key={b.key} className="border-b border-stewart-border/50">
+                  <td className="py-2 text-stewart-text">{b.label}</td>
+                  <td className="py-2 text-right font-mono">{num(b.gap_count)}</td>
+                  <td className="py-2 text-right font-mono text-red-400">{num(b.same_source_count)}</td>
+                  <td className="py-2 text-right font-mono text-blue-400">{num(b.multi_channel_count)}</td>
+                  <td className="py-2 text-right font-mono">{pct(sameShare)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 /* ─── main page ─── */
 
-type Tab = "summary" | "sources" | "journeys" | "clean";
+type Tab = "summary" | "behavior" | "sources" | "journeys" | "clean";
 
 export default function LeadDedupPage() {
   const { tenantId } = useTenant();
@@ -233,6 +427,7 @@ export default function LeadDedupPage() {
   const [journeys, setJourneys] = useState<Journey[]>([]);
   const [firstTouches, setFirstTouches] = useState<FirstTouch[]>([]);
   const [cleanLeads, setCleanLeads] = useState<CleanLead[]>([]);
+  const [timeGaps, setTimeGaps] = useState<TimeGapResponse | null>(null);
   const [expandedCustomer, setExpandedCustomer] = useState<string | null>(null);
   const [roiSort, setRoiSort] = useState<"total" | "conversion" | "noise">("total");
 
@@ -265,6 +460,9 @@ export default function LeadDedupPage() {
           leads: CleanLead[];
         };
         setCleanLeads(cl.leads);
+      } else if (tab === "behavior") {
+        const tg = await api.getDedupTimeGaps(tenantId, startDate || undefined, endDate || undefined);
+        setTimeGaps(tg);
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load");
@@ -288,6 +486,7 @@ export default function LeadDedupPage() {
 
   const tabs: { key: Tab; label: string }[] = [
     { key: "summary", label: "Overview" },
+    { key: "behavior", label: "Customer Behavior" },
     { key: "sources", label: "Source ROI" },
     { key: "journeys", label: "Customer Journeys" },
     { key: "clean", label: "Clean View" },
@@ -387,6 +586,11 @@ export default function LeadDedupPage() {
         <div className="text-stewart-muted text-sm">Loading...</div>
       )}
       {error && <div className="text-red-400 text-sm">{error}</div>}
+
+      {/* ─── CUSTOMER BEHAVIOR TAB ─── */}
+      {!loading && tab === "behavior" && timeGaps && (
+        <BehaviorView data={timeGaps} />
+      )}
 
       {/* ─── SUMMARY TAB ─── */}
       {!loading && tab === "summary" && summary && (

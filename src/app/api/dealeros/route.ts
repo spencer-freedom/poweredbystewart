@@ -878,6 +878,97 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ count: clean.length, leads: clean });
       }
 
+      // ── Lead Dedup: Customer Behavior / Time-Gap Histogram ─────────
+      case "dedup_time_gaps": {
+        const startDate = searchParams.get("start_date") || "";
+        const endDate = searchParams.get("end_date") || "";
+
+        const buildQuery = () => {
+          let q = supabase
+            .from("vin_leads")
+            .select("customer, lead_origination_date, lead_source")
+            .eq("tenant_id", tenantId)
+            .not("customer", "in", '("","Name","Wireless")')
+            .neq("lead_source_type", "Service");
+          if (startDate) q = q.gte("lead_origination_date", startDate);
+          if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
+          return q;
+        };
+
+        const { data: leads, error } = await fetchAllRows<{ customer: string; lead_origination_date: string; lead_source: string }>(buildQuery);
+        if (error) return errorResponse(error);
+
+        const buckets = [
+          { key: "lt_1h",     label: "Under 1 hour",      floorHours: 0,     ceilHours: 1 },
+          { key: "1_6h",      label: "1–6 hours",         floorHours: 1,     ceilHours: 6 },
+          { key: "6_24h",     label: "6–24 hours",        floorHours: 6,     ceilHours: 24 },
+          { key: "1_3d",      label: "1–3 days",          floorHours: 24,    ceilHours: 72 },
+          { key: "3_7d",      label: "3–7 days",          floorHours: 72,    ceilHours: 168 },
+          { key: "7_14d",     label: "7–14 days",         floorHours: 168,   ceilHours: 336 },
+          { key: "14_30d",    label: "14–30 days",        floorHours: 336,   ceilHours: 720 },
+          { key: "30_90d",    label: "30–90 days",        floorHours: 720,   ceilHours: 2160 },
+          { key: "90_180d",   label: "90–180 days",       floorHours: 2160,  ceilHours: 4320 },
+          { key: "gt_180d",   label: "180+ days",         floorHours: 4320,  ceilHours: Infinity },
+        ];
+
+        const bucketStats = buckets.map((b) => ({
+          ...b,
+          gap_count: 0,
+          customers: new Set<string>(),
+          same_source_count: 0,
+        }));
+
+        // Group by customer
+        const byCustomer: Record<string, typeof leads> = {};
+        for (const l of leads) {
+          (byCustomer[l.customer] ||= []).push(l);
+        }
+
+        let totalGaps = 0;
+        let customersWithGaps = 0;
+        const uniqueCustomers = Object.keys(byCustomer).length;
+
+        for (const custLeads of Object.values(byCustomer)) {
+          if (custLeads.length < 2) continue;
+          customersWithGaps++;
+          custLeads.sort((a, b) => a.lead_origination_date.localeCompare(b.lead_origination_date));
+
+          for (let i = 1; i < custLeads.length; i++) {
+            const gapMs = new Date(custLeads[i].lead_origination_date).getTime() - new Date(custLeads[i - 1].lead_origination_date).getTime();
+            const gapHours = gapMs / 3600000;
+            const sameSource = custLeads[i].lead_source === custLeads[i - 1].lead_source;
+
+            for (const b of bucketStats) {
+              if (gapHours >= b.floorHours && gapHours < b.ceilHours) {
+                b.gap_count++;
+                b.customers.add(custLeads[i].customer);
+                if (sameSource) b.same_source_count++;
+                totalGaps++;
+                break;
+              }
+            }
+          }
+        }
+
+        const histogram = bucketStats.map((b) => ({
+          key: b.key,
+          label: b.label,
+          gap_count: b.gap_count,
+          affected_customers: b.customers.size,
+          same_source_count: b.same_source_count,
+          multi_channel_count: b.gap_count - b.same_source_count,
+          pct_of_gaps: totalGaps > 0 ? Math.round((b.gap_count / totalGaps) * 1000) / 10 : 0,
+        }));
+
+        return NextResponse.json({
+          total_leads: leads.length,
+          unique_customers: uniqueCustomers,
+          customers_with_repeats: customersWithGaps,
+          total_gaps: totalGaps,
+          histogram,
+        });
+      }
+
       default:
         return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }

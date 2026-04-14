@@ -353,6 +353,27 @@ export const api = {
     if (endDate) params.end_date = endDate;
     return apiGet<{ leads: unknown[] }>(params);
   },
+
+  getDedupTimeGaps: (tenantId: string, startDate?: string, endDate?: string) => {
+    const params: Record<string, string> = { action: "dedup_time_gaps", tenant: tenantId };
+    if (startDate) params.start_date = startDate;
+    if (endDate) params.end_date = endDate;
+    return apiGet<{
+      total_leads: number;
+      unique_customers: number;
+      customers_with_repeats: number;
+      total_gaps: number;
+      histogram: Array<{
+        key: string;
+        label: string;
+        gap_count: number;
+        affected_customers: number;
+        same_source_count: number;
+        multi_channel_count: number;
+        pct_of_gaps: number;
+      }>;
+    }>(params);
+  },
 };
 
 // ─── Email API helpers (separate route) ───────────────────────────────────────
