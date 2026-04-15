@@ -1144,7 +1144,7 @@ export async function GET(req: NextRequest) {
         const buildQuery = () => {
           let q = supabase
             .from("vin_leads")
-            .select("customer, lead_origination_date, lead_source, lead_status_type, response_time_minutes, contacted_indicator")
+            .select("customer, lead_origination_date, lead_source, lead_status_type, response_time_minutes, first_customer_contact")
             .eq("tenant_id", tenantId)
             .not("customer", "in", '("","Name","Wireless")')
             .neq("lead_source_type", "Service");
@@ -1159,17 +1159,17 @@ export async function GET(req: NextRequest) {
           lead_source: string;
           lead_status_type: string | null;
           response_time_minutes: number | null;
-          contacted_indicator: string | null;
+          first_customer_contact: string | null;
         }>(buildQuery);
         if (error) return errorResponse(error);
 
         const SOLD = new Set(["Sold", "Sold Delivered", "Delivered"]);
 
-        // Classify each lead
-        const isContacted = (l: { contacted_indicator: string | null; response_time_minutes: number | null }) => {
+        // A lead was contacted if response_time_minutes > 0 OR first_customer_contact is populated
+        const isContacted = (l: { first_customer_contact: string | null; response_time_minutes: number | null }) => {
           if (l.response_time_minutes !== null && l.response_time_minutes > 0) return true;
-          const ci = (l.contacted_indicator || "").toString().trim().toLowerCase();
-          return ci === "y" || ci === "yes" || ci === "true" || ci === "1";
+          const fcc = (l.first_customer_contact || "").trim();
+          return fcc !== "" && fcc !== "0" && fcc.toLowerCase() !== "null";
         };
 
         let totalLeads = leads.length;
