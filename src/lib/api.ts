@@ -412,6 +412,41 @@ export const api = {
       }>;
     }>(params);
   },
+
+  getDedupResponseTime: (tenantId: string, startDate?: string, endDate?: string) => {
+    const params: Record<string, string> = { action: "dedup_response_time", tenant: tenantId };
+    if (startDate) params.start_date = startDate;
+    if (endDate) params.end_date = endDate;
+    return apiGet<{
+      total_leads: number;
+      contacted_leads: number;
+      never_contacted_leads: number;
+      never_contacted_pct: number;
+      contacted_sold_pct: number;
+      never_contacted_sold_pct: number;
+      avg_response_min: number;
+      median_response_min: number;
+      distribution: Array<{
+        key: string;
+        label: string;
+        lead_count: number;
+        sold_count: number;
+        sold_pct: number;
+        pct_of_contacted: number;
+      }>;
+      intensity: Array<{
+        key: string;
+        label: string;
+        customer_count: number;
+        contacted_count: number;
+        contacted_pct: number;
+        sold_count: number;
+        sold_pct: number;
+        avg_response_min: number | null;
+        median_response_min: number | null;
+      }>;
+    }>(params);
+  },
 };
 
 // ─── Email API helpers (separate route) ───────────────────────────────────────

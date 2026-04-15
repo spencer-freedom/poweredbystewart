@@ -1136,6 +1136,170 @@ export async function GET(req: NextRequest) {
         });
       }
 
+      // ── Lead Dedup: Response Time — speed-to-contact vs. conversion ──
+      case "dedup_response_time": {
+        const startDate = searchParams.get("start_date") || "";
+        const endDate = searchParams.get("end_date") || "";
+
+        const buildQuery = () => {
+          let q = supabase
+            .from("vin_leads")
+            .select("customer, lead_origination_date, lead_source, lead_status_type, response_time_minutes, contacted_indicator")
+            .eq("tenant_id", tenantId)
+            .not("customer", "in", '("","Name","Wireless")')
+            .neq("lead_source_type", "Service");
+          if (startDate) q = q.gte("lead_origination_date", startDate);
+          if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
+          return q;
+        };
+
+        const { data: leads, error } = await fetchAllRows<{
+          customer: string;
+          lead_origination_date: string;
+          lead_source: string;
+          lead_status_type: string | null;
+          response_time_minutes: number | null;
+          contacted_indicator: string | null;
+        }>(buildQuery);
+        if (error) return errorResponse(error);
+
+        const SOLD = new Set(["Sold", "Sold Delivered", "Delivered"]);
+
+        // Classify each lead
+        const isContacted = (l: { contacted_indicator: string | null; response_time_minutes: number | null }) => {
+          if (l.response_time_minutes !== null && l.response_time_minutes > 0) return true;
+          const ci = (l.contacted_indicator || "").toString().trim().toLowerCase();
+          return ci === "y" || ci === "yes" || ci === "true" || ci === "1";
+        };
+
+        let totalLeads = leads.length;
+        let contactedLeads = 0;
+        let neverContactedLeads = 0;
+        let contactedSold = 0;
+        let neverContactedSold = 0;
+        const responseTimes: number[] = [];
+
+        for (const l of leads) {
+          const sold = SOLD.has(l.lead_status_type || "");
+          if (isContacted(l)) {
+            contactedLeads++;
+            if (sold) contactedSold++;
+            if (l.response_time_minutes !== null && l.response_time_minutes > 0) {
+              responseTimes.push(l.response_time_minutes);
+            }
+          } else {
+            neverContactedLeads++;
+            if (sold) neverContactedSold++;
+          }
+        }
+
+        // Response time distribution buckets
+        const rtBins = [
+          { key: "lt_5",    label: "Under 5 min",     minM: 0,      maxM: 5 },
+          { key: "5_15",    label: "5–15 min",        minM: 5,      maxM: 15 },
+          { key: "15_30",   label: "15–30 min",       minM: 15,     maxM: 30 },
+          { key: "30_60",   label: "30–60 min",       minM: 30,     maxM: 60 },
+          { key: "1_4h",    label: "1–4 hours",       minM: 60,     maxM: 240 },
+          { key: "4_24h",   label: "4–24 hours",      minM: 240,    maxM: 1440 },
+          { key: "24h_plus",label: "24+ hours",       minM: 1440,   maxM: Infinity },
+        ];
+        const distribution = rtBins.map((b) => ({ ...b, lead_count: 0, sold_count: 0 }));
+        for (const l of leads) {
+          if (!isContacted(l) || l.response_time_minutes === null || l.response_time_minutes <= 0) continue;
+          const rt = l.response_time_minutes;
+          const sold = SOLD.has(l.lead_status_type || "");
+          for (const b of distribution) {
+            if (rt >= b.minM && rt < b.maxM) {
+              b.lead_count++;
+              if (sold) b.sold_count++;
+              break;
+            }
+          }
+        }
+        const distributionOut = distribution.map((b) => ({
+          key: b.key,
+          label: b.label,
+          lead_count: b.lead_count,
+          sold_count: b.sold_count,
+          sold_pct: b.lead_count > 0 ? Math.round((b.sold_count / b.lead_count) * 1000) / 10 : 0,
+          pct_of_contacted: contactedLeads > 0 ? Math.round((b.lead_count / contactedLeads) * 1000) / 10 : 0,
+        }));
+
+        // Median and average response time
+        responseTimes.sort((a, b) => a - b);
+        const avgResponseMin = responseTimes.length > 0 ? responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length : 0;
+        const medianResponseMin = responseTimes.length > 0 ? responseTimes[Math.floor(responseTimes.length / 2)] : 0;
+
+        // Intensity × response time — group customers by first-hour intensity,
+        // use response time of their FIRST lead
+        const HOUR = 3600000;
+        const byCustomer: Record<string, typeof leads> = {};
+        for (const l of leads) (byCustomer[l.customer] ||= []).push(l);
+
+        const intensityBins = [
+          { key: "1",  label: "1 lead",   min: 1, max: 1 },
+          { key: "2",  label: "2 leads",  min: 2, max: 2 },
+          { key: "3",  label: "3 leads",  min: 3, max: 3 },
+          { key: "4",  label: "4 leads",  min: 4, max: 4 },
+          { key: "5p", label: "5+ leads", min: 5, max: Infinity },
+        ];
+        interface IntensityRow { key: string; label: string; customer_count: number; contacted_count: number; sold_count: number; response_times: number[] }
+        const intensity: IntensityRow[] = intensityBins.map((b) => ({ key: b.key, label: b.label, customer_count: 0, contacted_count: 0, sold_count: 0, response_times: [] }));
+
+        for (const custLeads of Object.values(byCustomer)) {
+          custLeads.sort((a, b) => a.lead_origination_date.localeCompare(b.lead_origination_date));
+          const firstTs = new Date(custLeads[0].lead_origination_date).getTime();
+          const session = custLeads.filter((l) => new Date(l.lead_origination_date).getTime() - firstTs < HOUR);
+          const n = session.length;
+          const firstLead = custLeads[0];
+          const sold = custLeads.some((l) => SOLD.has(l.lead_status_type || ""));
+          const firstContacted = isContacted(firstLead);
+
+          for (let i = 0; i < intensityBins.length; i++) {
+            const b = intensityBins[i];
+            if (n >= b.min && n <= b.max) {
+              intensity[i].customer_count++;
+              if (firstContacted) intensity[i].contacted_count++;
+              if (sold) intensity[i].sold_count++;
+              if (firstContacted && firstLead.response_time_minutes !== null && firstLead.response_time_minutes > 0) {
+                intensity[i].response_times.push(firstLead.response_time_minutes);
+              }
+              break;
+            }
+          }
+        }
+
+        const intensityOut = intensity.map((r) => {
+          const rts = r.response_times.sort((a, b) => a - b);
+          const median = rts.length > 0 ? rts[Math.floor(rts.length / 2)] : null;
+          const avg = rts.length > 0 ? rts.reduce((a, b) => a + b, 0) / rts.length : null;
+          return {
+            key: r.key,
+            label: r.label,
+            customer_count: r.customer_count,
+            contacted_count: r.contacted_count,
+            contacted_pct: r.customer_count > 0 ? Math.round((r.contacted_count / r.customer_count) * 1000) / 10 : 0,
+            sold_count: r.sold_count,
+            sold_pct: r.customer_count > 0 ? Math.round((r.sold_count / r.customer_count) * 1000) / 10 : 0,
+            avg_response_min: avg !== null ? Math.round(avg * 10) / 10 : null,
+            median_response_min: median !== null ? Math.round(median * 10) / 10 : null,
+          };
+        });
+
+        return NextResponse.json({
+          total_leads: totalLeads,
+          contacted_leads: contactedLeads,
+          never_contacted_leads: neverContactedLeads,
+          never_contacted_pct: totalLeads > 0 ? Math.round((neverContactedLeads / totalLeads) * 1000) / 10 : 0,
+          contacted_sold_pct: contactedLeads > 0 ? Math.round((contactedSold / contactedLeads) * 1000) / 10 : 0,
+          never_contacted_sold_pct: neverContactedLeads > 0 ? Math.round((neverContactedSold / neverContactedLeads) * 1000) / 10 : 0,
+          avg_response_min: Math.round(avgResponseMin * 10) / 10,
+          median_response_min: Math.round(medianResponseMin * 10) / 10,
+          distribution: distributionOut,
+          intensity: intensityOut,
+        });
+      }
+
       default:
         return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }

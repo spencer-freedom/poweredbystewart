@@ -241,6 +241,188 @@ function Legend() {
   );
 }
 
+/* ─── Response Time view ─── */
+
+function fmtMinutes(m: number | null): string {
+  if (m === null) return "—";
+  if (m < 1) return `${Math.round(m * 60)}s`;
+  if (m < 60) return `${Math.round(m)} min`;
+  if (m < 1440) return `${(m / 60).toFixed(1)} hr`;
+  return `${(m / 1440).toFixed(1)} days`;
+}
+
+function ResponseTimeView({ data }: { data: ResponseTimeData }) {
+  const maxLeadCount = Math.max(...data.distribution.map((b) => b.lead_count));
+  const maxSoldPct = Math.max(...data.distribution.map((b) => b.sold_pct), 1);
+
+  // Fast (<15 min) vs. slow (>1hr) conversion — headline framing
+  const fast = data.distribution.filter((b) => b.key === "lt_5" || b.key === "5_15");
+  const slow = data.distribution.filter((b) => b.key === "4_24h" || b.key === "24h_plus");
+  const fastLeads = fast.reduce((s, b) => s + b.lead_count, 0);
+  const fastSold = fast.reduce((s, b) => s + b.sold_count, 0);
+  const slowLeads = slow.reduce((s, b) => s + b.lead_count, 0);
+  const slowSold = slow.reduce((s, b) => s + b.sold_count, 0);
+  const fastPct = fastLeads > 0 ? (fastSold / fastLeads) * 100 : 0;
+  const slowPct = slowLeads > 0 ? (slowSold / slowLeads) * 100 : 0;
+  const speedLift = slowPct > 0 ? fastPct / slowPct : 0;
+
+  return (
+    <div className="space-y-6">
+      {/* Headline */}
+      <div className="stewart-card p-5 border-l-4 border-stewart-accent">
+        <div className="text-sm font-semibold text-stewart-accent uppercase tracking-wide mb-2">
+          Speed-to-contact = money
+        </div>
+        <div className="text-lg text-stewart-text leading-relaxed">
+          Leads contacted in <strong>under 15 minutes</strong> close at{" "}
+          <span className="text-stewart-accent font-bold">{pct(fastPct)}</span>.
+          Leads where the rep waited <strong>over 4 hours</strong> close at{" "}
+          <span className="text-red-400 font-bold">{pct(slowPct)}</span>.
+          {speedLift > 1 && (
+            <>
+              {" "}That&apos;s{" "}
+              <span className="text-stewart-accent font-bold">{speedLift.toFixed(1)}×</span>{" "}
+              the conversion rate just for picking up the phone faster.
+            </>
+          )}
+          <br />
+          <span className="text-red-400 font-bold">
+            {pct(data.never_contacted_pct)}
+          </span>{" "}
+          of leads were never contacted at all.
+          They close at{" "}
+          <span className="text-red-400 font-bold">{pct(data.never_contacted_sold_pct)}</span>{" "}
+          vs.{" "}
+          <span className="text-stewart-accent font-bold">{pct(data.contacted_sold_pct)}</span>{" "}
+          when a rep actually reaches them.
+        </div>
+      </div>
+
+      {/* Summary cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <StatCard
+          label="Median Response"
+          value={fmtMinutes(data.median_response_min)}
+          sub={`Avg: ${fmtMinutes(data.avg_response_min)}`}
+        />
+        <StatCard
+          label="Never Contacted"
+          value={pct(data.never_contacted_pct)}
+          sub={`${num(data.never_contacted_leads)} leads`}
+        />
+        <StatCard
+          label="Contacted Close Rate"
+          value={pct(data.contacted_sold_pct)}
+          sub={`${num(data.contacted_leads)} contacted leads`}
+          color="bg-stewart-accent/10 border-stewart-accent"
+        />
+        <StatCard
+          label="Speed Lift"
+          value={speedLift > 0 ? `${speedLift.toFixed(1)}×` : "—"}
+          sub="<15 min vs. >4 hr conversion"
+        />
+      </div>
+
+      {/* Response time → conversion correlation */}
+      <div className="stewart-card p-4 space-y-3">
+        <div>
+          <h3 className="text-base font-semibold text-stewart-text">
+            Response time vs. closing rate
+          </h3>
+          <p className="text-xs text-stewart-muted mt-1">
+            For every contacted lead, time between lead submission and first
+            rep response. Each bar shows how many leads fell in that window
+            and what % closed.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-12 gap-2 text-xs text-stewart-muted border-b border-stewart-border pb-2">
+          <div className="col-span-2">Response time</div>
+          <div className="col-span-4">Leads (volume)</div>
+          <div className="col-span-4">Sold % (closing rate)</div>
+          <div className="col-span-1 text-right">Leads</div>
+          <div className="col-span-1 text-right">Sold %</div>
+        </div>
+
+        {data.distribution.map((b) => {
+          const volWidth = maxLeadCount > 0 ? (b.lead_count / maxLeadCount) * 100 : 0;
+          const soldWidth = maxSoldPct > 0 ? (b.sold_pct / maxSoldPct) * 100 : 0;
+          const liftVsBase = b.sold_pct - data.contacted_sold_pct;
+          const soldColor = liftVsBase > 2 ? "bg-green-500" : liftVsBase < -2 ? "bg-red-500" : "bg-stewart-accent";
+          const soldTextColor = liftVsBase > 2 ? "text-green-400" : liftVsBase < -2 ? "text-red-400" : "text-stewart-text";
+          return (
+            <div key={b.key} className="grid grid-cols-12 gap-2 items-center text-xs">
+              <div className="col-span-2 text-stewart-text font-medium">{b.label}</div>
+              <div className="col-span-4">
+                <div className="h-5 bg-stewart-bg rounded overflow-hidden">
+                  <div className="h-full bg-stewart-accent/60" style={{ width: `${volWidth}%` }} />
+                </div>
+              </div>
+              <div className="col-span-4">
+                <div className="h-5 bg-stewart-bg rounded overflow-hidden">
+                  <div className={`h-full ${soldColor}`} style={{ width: `${soldWidth}%` }} />
+                </div>
+              </div>
+              <div className="col-span-1 text-right font-mono text-stewart-muted">{num(b.lead_count)}</div>
+              <div className={`col-span-1 text-right font-mono font-bold ${soldTextColor}`}>{pct(b.sold_pct)}</div>
+            </div>
+          );
+        })}
+
+        <div className="pt-3 text-xs text-stewart-muted border-t border-stewart-border">
+          Green = above {pct(data.contacted_sold_pct)} contacted baseline.
+          Red = below. If closing rate drops as response time rises, that&apos;s
+          the speed-to-contact correlation showing up directly in your data.
+        </div>
+      </div>
+
+      {/* Intensity × response time — the bombshell */}
+      <div className="stewart-card p-4 space-y-3">
+        <div>
+          <h3 className="text-base font-semibold text-stewart-text">
+            Hottest leads — are they actually getting contacted faster?
+          </h3>
+          <p className="text-xs text-stewart-muted mt-1">
+            For customers bucketed by first-hour intensity, how fast did reps
+            respond to their first lead and what % closed. If reps are slower
+            on the highest-intent leads, that&apos;s the most fixable revenue
+            leak in the whole dataset.
+          </p>
+        </div>
+
+        <table className="w-full text-xs">
+          <thead className="text-stewart-muted border-b border-stewart-border">
+            <tr>
+              <th className="text-left py-2">First-hour intensity</th>
+              <th className="text-right py-2">Customers</th>
+              <th className="text-right py-2">Contacted %</th>
+              <th className="text-right py-2">Median response</th>
+              <th className="text-right py-2">Avg response</th>
+              <th className="text-right py-2">Sold %</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.intensity.map((r) => {
+              const liftVsBase = r.sold_pct - data.contacted_sold_pct;
+              const soldColor = liftVsBase > 2 ? "text-green-400" : liftVsBase < -2 ? "text-red-400" : "text-stewart-text";
+              return (
+                <tr key={r.key} className="border-b border-stewart-border/50">
+                  <td className="py-2 text-stewart-text font-medium">{r.label}</td>
+                  <td className="py-2 text-right font-mono">{num(r.customer_count)}</td>
+                  <td className="py-2 text-right font-mono">{pct(r.contacted_pct)}</td>
+                  <td className="py-2 text-right font-mono text-stewart-text">{fmtMinutes(r.median_response_min)}</td>
+                  <td className="py-2 text-right font-mono text-stewart-muted">{fmtMinutes(r.avg_response_min)}</td>
+                  <td className={`py-2 text-right font-mono font-bold ${soldColor}`}>{pct(r.sold_pct)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Action Window (sales-rep facing urgency view) ─── */
 
 function ActionWindowView({ data }: { data: ActionWindow }) {
@@ -732,7 +914,37 @@ function BehaviorView({ data }: { data: TimeGapResponse }) {
 
 /* ─── main page ─── */
 
-type Tab = "summary" | "behavior" | "action" | "sources" | "journeys" | "clean";
+type Tab = "summary" | "behavior" | "action" | "response" | "sources" | "journeys" | "clean";
+
+interface ResponseTimeData {
+  total_leads: number;
+  contacted_leads: number;
+  never_contacted_leads: number;
+  never_contacted_pct: number;
+  contacted_sold_pct: number;
+  never_contacted_sold_pct: number;
+  avg_response_min: number;
+  median_response_min: number;
+  distribution: Array<{
+    key: string;
+    label: string;
+    lead_count: number;
+    sold_count: number;
+    sold_pct: number;
+    pct_of_contacted: number;
+  }>;
+  intensity: Array<{
+    key: string;
+    label: string;
+    customer_count: number;
+    contacted_count: number;
+    contacted_pct: number;
+    sold_count: number;
+    sold_pct: number;
+    avg_response_min: number | null;
+    median_response_min: number | null;
+  }>;
+}
 
 interface ActionWindow {
   total_leads: number;
@@ -777,6 +989,7 @@ export default function LeadDedupPage() {
   const [cleanLeads, setCleanLeads] = useState<CleanLead[]>([]);
   const [timeGaps, setTimeGaps] = useState<TimeGapResponse | null>(null);
   const [actionWindow, setActionWindow] = useState<ActionWindow | null>(null);
+  const [responseTime, setResponseTime] = useState<ResponseTimeData | null>(null);
   const [expandedCustomer, setExpandedCustomer] = useState<string | null>(null);
   const [roiSort, setRoiSort] = useState<"total" | "conversion" | "noise">("total");
 
@@ -815,6 +1028,9 @@ export default function LeadDedupPage() {
       } else if (tab === "action") {
         const aw = await api.getDedupActionWindow(tenantId, startDate || undefined, endDate || undefined);
         setActionWindow(aw);
+      } else if (tab === "response") {
+        const rt = await api.getDedupResponseTime(tenantId, startDate || undefined, endDate || undefined);
+        setResponseTime(rt);
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load");
@@ -840,6 +1056,7 @@ export default function LeadDedupPage() {
     { key: "summary", label: "Overview" },
     { key: "behavior", label: "Customer Behavior" },
     { key: "action", label: "Action Window" },
+    { key: "response", label: "Response Time" },
     { key: "sources", label: "Source ROI" },
     { key: "journeys", label: "Customer Journeys" },
     { key: "clean", label: "Clean View" },
@@ -948,6 +1165,11 @@ export default function LeadDedupPage() {
       {/* ─── ACTION WINDOW TAB ─── */}
       {!loading && tab === "action" && actionWindow && (
         <ActionWindowView data={actionWindow} />
+      )}
+
+      {/* ─── RESPONSE TIME TAB ─── */}
+      {!loading && tab === "response" && responseTime && (
+        <ResponseTimeView data={responseTime} />
       )}
 
       {/* ─── SUMMARY TAB ─── */}
