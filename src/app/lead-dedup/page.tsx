@@ -439,6 +439,202 @@ function ResponseTimeView({ data, phoneJourney }: { data: ResponseTimeData; phon
         </div>
       </div>
 
+      {/* ── OPTION 1: Bubble scatter ── */}
+      <div className="stewart-card p-4 space-y-3">
+        <div>
+          <h3 className="text-base font-semibold text-stewart-text">
+            Response time × deals closed × close rate
+          </h3>
+          <p className="text-xs text-stewart-muted mt-1">
+            Each bubble is a response-time bucket.{" "}
+            <strong>Horizontal position</strong> = how fast reps answered.{" "}
+            <strong>Vertical position</strong> = close rate.{" "}
+            <strong>Bubble size</strong> = number of deals closed in that bucket.
+            The sweet spot is the highest bubble that&apos;s also reasonably big.
+          </p>
+        </div>
+
+        {(() => {
+          const n = data.distribution.length;
+          const W = 680, H = 300, PAD_L = 60, PAD_R = 20, PAD_T = 24, PAD_B = 56;
+          const plotW = W - PAD_L - PAD_R;
+          const plotH = H - PAD_T - PAD_B;
+          const maxPct = Math.max(...data.distribution.map((b) => b.sold_pct)) * 1.15 || 1;
+          const maxSold = Math.max(...data.distribution.map((b) => b.sold_count)) || 1;
+          const baselineY = PAD_T + plotH * (1 - data.contacted_sold_pct / maxPct);
+
+          return (
+            <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto">
+              {/* Y-axis gridlines */}
+              {[0, 0.25, 0.5, 0.75, 1].map((t) => (
+                <g key={t}>
+                  <line
+                    x1={PAD_L}
+                    y1={PAD_T + plotH * (1 - t)}
+                    x2={W - PAD_R}
+                    y2={PAD_T + plotH * (1 - t)}
+                    stroke="#374151"
+                    strokeDasharray="2,4"
+                    strokeWidth={0.5}
+                  />
+                  <text
+                    x={PAD_L - 6}
+                    y={PAD_T + plotH * (1 - t) + 4}
+                    textAnchor="end"
+                    fill="#9ca3af"
+                    fontSize={10}
+                    fontFamily="ui-monospace, monospace"
+                  >
+                    {(maxPct * t).toFixed(1)}%
+                  </text>
+                </g>
+              ))}
+
+              {/* Baseline line */}
+              <line
+                x1={PAD_L}
+                y1={baselineY}
+                x2={W - PAD_R}
+                y2={baselineY}
+                stroke="#3b82f6"
+                strokeDasharray="4,4"
+                strokeWidth={1.5}
+              />
+              <text x={W - PAD_R - 4} y={baselineY - 4} textAnchor="end" fill="#3b82f6" fontSize={10}>
+                Baseline {pct(data.contacted_sold_pct)}
+              </text>
+
+              {/* Bubbles */}
+              {data.distribution.map((b, i) => {
+                const cx = PAD_L + plotW * ((i + 0.5) / n);
+                const cy = PAD_T + plotH * (1 - b.sold_pct / maxPct);
+                const r = 6 + Math.sqrt(b.sold_count / maxSold) * 28;
+                const lift = b.sold_pct - data.contacted_sold_pct;
+                const color = lift > 1 ? "#22c55e" : lift < -1 ? "#ef4444" : "#60a5fa";
+                return (
+                  <g key={b.key}>
+                    <circle cx={cx} cy={cy} r={r} fill={color} fillOpacity={0.35} stroke={color} strokeWidth={2} />
+                    <text x={cx} y={cy + 4} textAnchor="middle" fill="white" fontSize={12} fontWeight="bold">
+                      {b.sold_count}
+                    </text>
+                    <text
+                      x={cx}
+                      y={H - PAD_B + 16}
+                      textAnchor="middle"
+                      fill="#e5e7eb"
+                      fontSize={10}
+                    >
+                      {b.label}
+                    </text>
+                    <text
+                      x={cx}
+                      y={H - PAD_B + 30}
+                      textAnchor="middle"
+                      fill="#9ca3af"
+                      fontSize={9}
+                      fontFamily="ui-monospace, monospace"
+                    >
+                      {pct(b.sold_pct)}
+                    </text>
+                  </g>
+                );
+              })}
+
+              {/* Axis labels */}
+              <text x={PAD_L + plotW / 2} y={H - 4} textAnchor="middle" fill="#9ca3af" fontSize={10}>
+                Response time →
+              </text>
+              <text
+                x={14}
+                y={PAD_T + plotH / 2}
+                textAnchor="middle"
+                fill="#9ca3af"
+                fontSize={10}
+                transform={`rotate(-90, 14, ${PAD_T + plotH / 2})`}
+              >
+                Close rate %
+              </text>
+            </svg>
+          );
+        })()}
+
+        <div className="pt-2 text-xs text-stewart-muted border-t border-stewart-border">
+          Number inside each bubble = deals closed. Bigger bubble = more absolute sold. Higher bubble = better close rate per lead.
+          The best bucket balances both — a tall bubble that&apos;s also reasonably sized.
+        </div>
+      </div>
+
+      {/* ── OPTION 3: Dual bars — volume vs. deals closed ── */}
+      <div className="stewart-card p-4 space-y-3">
+        <div>
+          <h3 className="text-base font-semibold text-stewart-text">
+            Lead volume vs. deals closed
+          </h3>
+          <p className="text-xs text-stewart-muted mt-1">
+            For each response-time bucket, the gray bar is how many leads
+            we had there; the colored bar is how many of those actually
+            closed. The gap between them is the waste. Where the deal bar
+            is longest relative to the volume bar = best conversion.
+          </p>
+        </div>
+
+        {(() => {
+          const maxLeads = Math.max(...data.distribution.map((b) => b.lead_count)) || 1;
+          const maxSold = Math.max(...data.distribution.map((b) => b.sold_count)) || 1;
+          return (
+            <div className="space-y-3">
+              {data.distribution.map((b) => {
+                const volWidth = (b.lead_count / maxLeads) * 100;
+                const soldWidth = (b.sold_count / maxSold) * 100;
+                const lift = b.sold_pct - data.contacted_sold_pct;
+                const soldColor = lift > 1 ? "bg-green-500" : lift < -1 ? "bg-red-500" : "bg-stewart-accent";
+                const textColor = lift > 1 ? "text-green-400" : lift < -1 ? "text-red-400" : "text-stewart-text";
+                return (
+                  <div key={b.key} className="space-y-1">
+                    <div className="flex items-baseline justify-between text-xs">
+                      <span className="text-stewart-text font-medium">{b.label}</span>
+                      <span className="text-stewart-muted font-mono">
+                        {num(b.lead_count)} leads → {num(b.sold_count)} sold ·{" "}
+                        <span className={`font-bold ${textColor}`}>{pct(b.sold_pct)}</span>
+                      </span>
+                    </div>
+                    <div className="relative">
+                      <div className="h-4 bg-stewart-bg rounded overflow-hidden">
+                        <div className="h-full bg-stewart-muted/40" style={{ width: `${volWidth}%` }} />
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <div className="h-4 bg-stewart-bg rounded overflow-hidden">
+                        <div className={`h-full ${soldColor}`} style={{ width: `${soldWidth}%` }} />
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })()}
+
+        <div className="pt-2 text-xs text-stewart-muted border-t border-stewart-border flex items-center gap-4 flex-wrap">
+          <span className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-stewart-muted/40" />
+            Leads (volume)
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-stewart-accent" />
+            Deals closed
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-green-500" />
+            Above baseline
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-red-500" />
+            Below baseline
+          </span>
+        </div>
+      </div>
+
       {/* Per-bucket sold % — absolute scale with baseline line */}
       <div className="stewart-card p-4 space-y-3">
         <div>
