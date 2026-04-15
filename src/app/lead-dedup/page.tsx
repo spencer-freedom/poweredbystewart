@@ -266,8 +266,57 @@ function ResponseTimeView({ data, phoneJourney }: { data: ResponseTimeData; phon
   const slowPct = slowLeads > 0 ? (slowSold / slowLeads) * 100 : 0;
   const speedLift = slowPct > 0 ? fastPct / slowPct : 0;
 
+  const bh = data.business_hours;
+  const bhVsOverall = bh.median_response_min > 0 && data.median_response_min > 0
+    ? ((data.median_response_min - bh.median_response_min) / data.median_response_min) * 100
+    : 0;
+
+  // Pinned key findings — compute lift for called-back segment if available
+  const cb = phoneJourney?.segments.called_back;
+  const io = phoneJourney?.segments.internet_only;
+  const calledBackLift = cb && io && io.sold_pct > 0 ? cb.sold_pct / io.sold_pct : 0;
+
   return (
     <div className="space-y-6">
+      {/* ── Pinned: Hottest Signals ── */}
+      <div className="stewart-card p-4 border-l-4 border-green-600/70 bg-green-900/5">
+        <div className="text-sm font-semibold text-green-400 uppercase tracking-wide mb-2">
+          Key findings — don&apos;t lose these
+        </div>
+        <ul className="space-y-2 text-sm text-stewart-text">
+          {cb && calledBackLift > 1.2 && (
+            <li>
+              <span className="text-green-400">▲</span>{" "}
+              <strong>Internet lead → called in themselves</strong> closes at{" "}
+              <span className="font-mono font-bold text-green-400">{pct(cb.sold_pct)}</span> —{" "}
+              <span className="font-bold">{calledBackLift.toFixed(1)}×</span> the rate of internet-only leads ({pct(io!.sold_pct)}).{" "}
+              These are the hottest leads in the pipeline and you only see them because they got impatient.{" "}
+              <span className="text-stewart-muted">({num(cb.customer_count)} customers in range)</span>
+            </li>
+          )}
+          <li>
+            <span className="text-red-400">▼</span>{" "}
+            <strong>Median digital response time: </strong>
+            <span className="font-mono font-bold text-red-400">{fmtMinutes(data.median_response_min)}</span>{" "}
+            overall,{" "}
+            <span className="font-mono font-bold">{fmtMinutes(bh.median_response_min)}</span>{" "}
+            during business hours (Mon–Sat 8am–8pm).{" "}
+            {bhVsOverall > 25
+              ? <span className="text-stewart-muted">The overall number is inflated by nights/Sundays, but business-hours response is still the actionable metric — and it&apos;s still too slow.</span>
+              : <span className="text-stewart-muted">Even in prime hours we&apos;re too slow. This isn&apos;t a staffing problem.</span>
+            }
+          </li>
+          <li>
+            <span className="text-red-400">▼</span>{" "}
+            <strong>Never contacted:</strong>{" "}
+            <span className="font-mono font-bold text-red-400">{pct(data.never_contacted_pct)}</span>{" "}
+            of digital leads ({num(data.never_contacted_leads)} total){" "}
+            get no reply. Their close rate is{" "}
+            <span className="font-mono font-bold">{pct(data.never_contacted_sold_pct)}</span>.
+          </li>
+        </ul>
+      </div>
+
       {/* Headline */}
       <div className="stewart-card p-5 border-l-4 border-stewart-accent">
         <div className="text-sm font-semibold text-stewart-accent uppercase tracking-wide mb-2">
@@ -332,29 +381,62 @@ function ResponseTimeView({ data, phoneJourney }: { data: ResponseTimeData; phon
         </div>
       </div>
 
-      {/* Summary cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard
-          label="Median Response"
-          value={fmtMinutes(data.median_response_min)}
-          sub={`Avg: ${fmtMinutes(data.avg_response_min)}`}
-        />
-        <StatCard
-          label="Never Contacted"
-          value={pct(data.never_contacted_pct)}
-          sub={`${num(data.never_contacted_leads)} leads`}
-        />
-        <StatCard
-          label="Contacted Close Rate"
-          value={pct(data.contacted_sold_pct)}
-          sub={`${num(data.contacted_leads)} contacted leads`}
-          color="bg-stewart-accent/10 border-stewart-accent"
-        />
-        <StatCard
-          label="Speed Lift"
-          value={speedLift > 0 ? `${speedLift.toFixed(1)}×` : "—"}
-          sub="<15 min vs. >4 hr conversion"
-        />
+      {/* Summary cards — overall */}
+      <div>
+        <div className="text-xs text-stewart-muted uppercase tracking-wide mb-2">All digital leads</div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <StatCard
+            label="Median Response"
+            value={fmtMinutes(data.median_response_min)}
+            sub={`Avg: ${fmtMinutes(data.avg_response_min)}`}
+          />
+          <StatCard
+            label="Never Contacted"
+            value={pct(data.never_contacted_pct)}
+            sub={`${num(data.never_contacted_leads)} leads`}
+          />
+          <StatCard
+            label="Contacted Close Rate"
+            value={pct(data.contacted_sold_pct)}
+            sub={`${num(data.contacted_leads)} contacted leads`}
+            color="bg-stewart-accent/10 border-stewart-accent"
+          />
+          <StatCard
+            label="Speed Lift"
+            value={speedLift > 0 ? `${speedLift.toFixed(1)}×` : "—"}
+            sub="<15 min vs. >4 hr conversion"
+          />
+        </div>
+      </div>
+
+      {/* Summary cards — business hours only */}
+      <div>
+        <div className="text-xs text-stewart-muted uppercase tracking-wide mb-2">
+          Business hours only (Mon–Sat 8am–8pm) — {num(bh.total_leads)} of {num(data.total_leads)} leads
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <StatCard
+            label="Median Response (BH)"
+            value={fmtMinutes(bh.median_response_min)}
+            sub={bhVsOverall > 0 ? `${bhVsOverall.toFixed(0)}% faster than overall` : `Avg: ${fmtMinutes(bh.avg_response_min)}`}
+            color="bg-green-900/10 border-green-700/40"
+          />
+          <StatCard
+            label="Never Contacted (BH)"
+            value={pct(bh.never_contacted_pct)}
+            sub={`${num(bh.never_contacted_leads)} leads`}
+          />
+          <StatCard
+            label="Contacted Close (BH)"
+            value={pct(bh.contacted_sold_pct)}
+            sub={`${num(bh.contacted_leads)} contacted`}
+          />
+          <StatCard
+            label="Time Saved vs. Overall"
+            value={bhVsOverall > 0 ? `${fmtMinutes(data.median_response_min - bh.median_response_min)}` : "—"}
+            sub="Gap blamed on off-hours leads"
+          />
+        </div>
       </div>
 
       {/* Per-bucket sold % — absolute scale with baseline line */}
@@ -1185,6 +1267,16 @@ interface ResponseTimeData {
     unique_customers: number;
     sold_customers: number;
     sold_pct: number;
+  };
+  business_hours: {
+    total_leads: number;
+    contacted_leads: number;
+    never_contacted_leads: number;
+    never_contacted_pct: number;
+    contacted_sold_pct: number;
+    never_contacted_sold_pct: number;
+    avg_response_min: number;
+    median_response_min: number;
   };
   avg_response_min: number;
   median_response_min: number;

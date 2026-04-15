@@ -1341,6 +1341,39 @@ export async function GET(req: NextRequest) {
           }
         }
 
+        // Business hours filter: Mon–Sat 8am–8pm (local dealership time, naive parse)
+        const isBusinessHours = (ts: string): boolean => {
+          const m = ts.match(/^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):/);
+          if (!m) return false;
+          const year = +m[1], month = +m[2], day = +m[3], hour = +m[4];
+          const d = new Date(year, month - 1, day);
+          if (d.getDay() === 0) return false; // Sunday
+          if (hour < 8 || hour >= 20) return false;
+          return true;
+        };
+
+        // Compute business-hours-only metrics in parallel
+        let bhLeads = 0, bhContacted = 0, bhNeverContacted = 0, bhContactedSold = 0, bhNeverSold = 0;
+        const bhResponseTimes: number[] = [];
+        for (const l of leads) {
+          if (!isBusinessHours(l.lead_origination_date)) continue;
+          bhLeads++;
+          const sold = SOLD.has(l.lead_status_type || "");
+          if (isContacted(l)) {
+            bhContacted++;
+            if (sold) bhContactedSold++;
+            if (l.response_time_minutes !== null && l.response_time_minutes > 0) {
+              bhResponseTimes.push(l.response_time_minutes);
+            }
+          } else {
+            bhNeverContacted++;
+            if (sold) bhNeverSold++;
+          }
+        }
+        bhResponseTimes.sort((a, b) => a - b);
+        const bhMedian = bhResponseTimes.length > 0 ? bhResponseTimes[Math.floor(bhResponseTimes.length / 2)] : 0;
+        const bhAvg = bhResponseTimes.length > 0 ? bhResponseTimes.reduce((a, b) => a + b, 0) / bhResponseTimes.length : 0;
+
         // Response time distribution buckets — digital only
         const rtBins = [
           { key: "lt_5",    label: "Under 5 min",     minM: 0,      maxM: 5 },
@@ -1464,6 +1497,16 @@ export async function GET(req: NextRequest) {
             unique_customers: phoneUpCustomers.size,
             sold_customers: phoneUpSoldCustomers.size,
             sold_pct: phoneUpCustomers.size > 0 ? Math.round((phoneUpSoldCustomers.size / phoneUpCustomers.size) * 1000) / 10 : 0,
+          },
+          business_hours: {
+            total_leads: bhLeads,
+            contacted_leads: bhContacted,
+            never_contacted_leads: bhNeverContacted,
+            never_contacted_pct: bhLeads > 0 ? Math.round((bhNeverContacted / bhLeads) * 1000) / 10 : 0,
+            contacted_sold_pct: bhContacted > 0 ? Math.round((bhContactedSold / bhContacted) * 1000) / 10 : 0,
+            never_contacted_sold_pct: bhNeverContacted > 0 ? Math.round((bhNeverSold / bhNeverContacted) * 1000) / 10 : 0,
+            avg_response_min: Math.round(bhAvg * 10) / 10,
+            median_response_min: Math.round(bhMedian * 10) / 10,
           },
           avg_response_min: Math.round(avgResponseMin * 10) / 10,
           median_response_min: Math.round(medianResponseMin * 10) / 10,
