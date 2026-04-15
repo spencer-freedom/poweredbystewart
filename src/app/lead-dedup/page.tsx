@@ -271,13 +271,9 @@ function ResponseTimeView({ data }: { data: ResponseTimeData }) {
       {/* Headline */}
       <div className="stewart-card p-5 border-l-4 border-stewart-accent">
         <div className="text-sm font-semibold text-stewart-accent uppercase tracking-wide mb-2">
-          Speed-to-contact = money
+          Speed-to-contact = money (digital leads only)
         </div>
         <div className="text-lg text-stewart-text leading-relaxed">
-          <strong>Walk-ins and phone ups</strong> ({num(data.instant_leads)} leads) close at{" "}
-          <span className="text-green-400 font-bold">{pct(data.instant_sold_pct)}</span>{" "}
-          — instant contact is the highest-converting channel you have.
-          <br />
           Digital leads contacted in <strong>under 15 minutes</strong> close at{" "}
           <span className="text-stewart-accent font-bold">{pct(fastPct)}</span>.
           Waited <strong>over 4 hours</strong>: <span className="text-red-400 font-bold">{pct(slowPct)}</span>.
@@ -292,12 +288,47 @@ function ResponseTimeView({ data }: { data: ResponseTimeData }) {
           <span className="text-red-400 font-bold">
             {pct(data.never_contacted_pct)}
           </span>{" "}
-          of leads were never contacted at all.
+          of digital leads were never contacted at all.
           They close at{" "}
           <span className="text-red-400 font-bold">{pct(data.never_contacted_sold_pct)}</span>{" "}
           vs.{" "}
           <span className="text-stewart-accent font-bold">{pct(data.contacted_sold_pct)}</span>{" "}
           when a rep reaches them.
+        </div>
+      </div>
+
+      {/* Phone Up standalone */}
+      <div className="stewart-card p-4 border-l-4 border-yellow-600/60">
+        <div className="flex items-baseline justify-between mb-1">
+          <h3 className="text-base font-semibold text-stewart-text">
+            Phone Up (standalone)
+          </h3>
+          <span className="text-xs text-stewart-muted">
+            Separated from digital metrics — Fresh Up/Walk-In excluded as unreliable
+          </span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3">
+          <StatCard
+            label="Phone Up Leads"
+            value={num(data.phone_up.leads)}
+            sub={`${num(data.phone_up.unique_customers)} unique customers`}
+          />
+          <StatCard
+            label="Close Rate"
+            value={pct(data.phone_up.sold_pct)}
+            sub={`${num(data.phone_up.sold_customers)} sold`}
+            color="bg-stewart-accent/10 border-stewart-accent"
+          />
+          <StatCard
+            label="Digital Baseline"
+            value={pct(data.contacted_sold_pct)}
+            sub="Contacted digital leads"
+          />
+          <StatCard
+            label="Phone Up Lift"
+            value={data.contacted_sold_pct > 0 ? `${(data.phone_up.sold_pct / data.contacted_sold_pct).toFixed(1)}×` : "—"}
+            sub="Phone Up vs. digital contacted"
+          />
         </div>
       </div>
 
@@ -326,56 +357,145 @@ function ResponseTimeView({ data }: { data: ResponseTimeData }) {
         />
       </div>
 
-      {/* Response time → conversion correlation */}
+      {/* Per-bucket sold % — absolute scale with baseline line */}
       <div className="stewart-card p-4 space-y-3">
         <div>
           <h3 className="text-base font-semibold text-stewart-text">
-            Response time vs. closing rate
+            Closing rate by response time
           </h3>
           <p className="text-xs text-stewart-muted mt-1">
-            For every contacted lead, time between lead submission and first
-            rep response. Each bar shows how many leads fell in that window
-            and what % closed.
+            Sold % for each response-time bucket, on an absolute scale
+            (0% to the chart max). The dotted line is the{" "}
+            <span className="text-stewart-accent font-mono">{pct(data.contacted_sold_pct)}</span>{" "}
+            contacted baseline — bars to the right of it are above average,
+            to the left are below.
           </p>
         </div>
 
-        <div className="grid grid-cols-12 gap-2 text-xs text-stewart-muted border-b border-stewart-border pb-2">
-          <div className="col-span-2">Response time</div>
-          <div className="col-span-4">Leads (volume)</div>
-          <div className="col-span-4">Sold % (closing rate)</div>
-          <div className="col-span-1 text-right">Leads</div>
-          <div className="col-span-1 text-right">Sold %</div>
+        <div className="space-y-2">
+          {(() => {
+            const chartMax = Math.ceil(Math.max(...data.distribution.map((b) => b.sold_pct), data.contacted_sold_pct) * 1.15);
+            return data.distribution.map((b) => {
+              const widthPct = chartMax > 0 ? (b.sold_pct / chartMax) * 100 : 0;
+              const baselinePos = chartMax > 0 ? (data.contacted_sold_pct / chartMax) * 100 : 0;
+              const liftVsBase = b.sold_pct - data.contacted_sold_pct;
+              const color = liftVsBase > 1 ? "bg-green-500" : liftVsBase < -1 ? "bg-red-500" : "bg-stewart-accent";
+              const textColor = liftVsBase > 1 ? "text-green-400" : liftVsBase < -1 ? "text-red-400" : "text-stewart-text";
+              return (
+                <div key={b.key} className="grid grid-cols-12 gap-2 items-center text-xs">
+                  <div className="col-span-3 text-stewart-text font-medium">{b.label}</div>
+                  <div className="col-span-6 relative">
+                    <div className="h-6 bg-stewart-bg rounded overflow-hidden relative">
+                      <div className={`h-full ${color}`} style={{ width: `${widthPct}%` }} />
+                    </div>
+                    {/* Baseline marker */}
+                    <div
+                      className="absolute top-0 bottom-0 border-l-2 border-dotted border-stewart-muted pointer-events-none"
+                      style={{ left: `${baselinePos}%` }}
+                      title={`Baseline ${pct(data.contacted_sold_pct)}`}
+                    />
+                  </div>
+                  <div className="col-span-1 text-right font-mono text-stewart-muted">{num(b.lead_count)}</div>
+                  <div className={`col-span-2 text-right font-mono font-bold ${textColor}`}>{pct(b.sold_pct)}</div>
+                </div>
+              );
+            });
+          })()}
         </div>
 
-        {data.distribution.map((b) => {
-          const volWidth = maxLeadCount > 0 ? (b.lead_count / maxLeadCount) * 100 : 0;
-          const soldWidth = maxSoldPct > 0 ? (b.sold_pct / maxSoldPct) * 100 : 0;
-          const liftVsBase = b.sold_pct - data.contacted_sold_pct;
-          const soldColor = liftVsBase > 2 ? "bg-green-500" : liftVsBase < -2 ? "bg-red-500" : "bg-stewart-accent";
-          const soldTextColor = liftVsBase > 2 ? "text-green-400" : liftVsBase < -2 ? "text-red-400" : "text-stewart-text";
+        <div className="pt-3 text-xs text-stewart-muted border-t border-stewart-border">
+          <span className="text-stewart-text font-semibold">Watch for small samples.</span>{" "}
+          Buckets with few leads produce noisy close rates. The cumulative
+          chart below is usually the more honest read.
+        </div>
+      </div>
+
+      {/* Cumulative: "Answered within X → close rate" — the honest chart */}
+      <div className="stewart-card p-4 space-y-3">
+        <div>
+          <h3 className="text-base font-semibold text-stewart-text">
+            If reps answer within X, closing rate is Y
+          </h3>
+          <p className="text-xs text-stewart-muted mt-1">
+            Cumulative view — rolls up every lead answered by each cutoff.
+            This is the honest speed-to-contact curve, because each row
+            shares a larger sample with the rows below it. If the top rows
+            (fast response) close higher than the bottom rows, speed matters.
+          </p>
+        </div>
+
+        {(() => {
+          // First compute all rows, then identify peak
+          let cumLeads = 0;
+          let cumSold = 0;
+          const rows = data.distribution.map((b) => {
+            cumLeads += b.lead_count;
+            cumSold += b.sold_count;
+            const cumPct = cumLeads > 0 ? (cumSold / cumLeads) * 100 : 0;
+            return { ...b, cumLeads, cumSold, cumPct };
+          });
+          const peakPct = Math.max(...rows.map((r) => r.cumPct));
+          const peakIdx = rows.findIndex((r) => r.cumPct === peakPct);
+          const peakRow = rows[peakIdx];
+
           return (
-            <div key={b.key} className="grid grid-cols-12 gap-2 items-center text-xs">
-              <div className="col-span-2 text-stewart-text font-medium">{b.label}</div>
-              <div className="col-span-4">
-                <div className="h-5 bg-stewart-bg rounded overflow-hidden">
-                  <div className="h-full bg-stewart-accent/60" style={{ width: `${volWidth}%` }} />
-                </div>
+            <>
+              <div className="bg-green-900/20 border border-green-700/40 rounded p-3 text-sm">
+                <span className="text-green-400 font-semibold">Peak conversion:</span>{" "}
+                <span className="text-stewart-text">
+                  Leads answered within{" "}
+                  <span className="font-bold">{peakRow.label.toLowerCase()}</span> close at{" "}
+                  <span className="font-mono font-bold">{pct(peakRow.cumPct)}</span>.
+                </span>{" "}
+                <span className="text-stewart-muted">
+                  ({num(peakRow.cumLeads)} leads, {num(peakRow.cumSold)} sold.) After this point, every additional slower-response lead drags the closing rate down.
+                </span>
               </div>
-              <div className="col-span-4">
-                <div className="h-5 bg-stewart-bg rounded overflow-hidden">
-                  <div className={`h-full ${soldColor}`} style={{ width: `${soldWidth}%` }} />
-                </div>
-              </div>
-              <div className="col-span-1 text-right font-mono text-stewart-muted">{num(b.lead_count)}</div>
-              <div className={`col-span-1 text-right font-mono font-bold ${soldTextColor}`}>{pct(b.sold_pct)}</div>
-            </div>
+
+              <table className="w-full text-xs mt-3">
+                <thead className="text-stewart-muted border-b border-stewart-border">
+                  <tr>
+                    <th className="text-left py-2">Cutoff</th>
+                    <th className="text-right py-2">Leads answered by cutoff</th>
+                    <th className="text-right py-2">Sold</th>
+                    <th className="text-right py-2">Sold %</th>
+                    <th className="text-right py-2">Drop from peak</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((r, i) => {
+                    const isPeak = i === peakIdx;
+                    const dropFromPeak = r.cumPct - peakPct;
+                    const afterPeak = i > peakIdx;
+                    return (
+                      <tr key={r.key} className={`border-b border-stewart-border/50 ${isPeak ? "bg-green-900/20" : ""}`}>
+                        <td className="py-2 text-stewart-text font-medium">
+                          {isPeak && <span className="text-green-400 mr-1">▶</span>}
+                          Answered within {r.label.toLowerCase()}
+                        </td>
+                        <td className="py-2 text-right font-mono">{num(r.cumLeads)}</td>
+                        <td className="py-2 text-right font-mono text-stewart-muted">{num(r.cumSold)}</td>
+                        <td className={`py-2 text-right font-mono font-bold ${isPeak ? "text-green-400" : "text-stewart-text"}`}>
+                          {pct(r.cumPct)}
+                        </td>
+                        <td className={`py-2 text-right font-mono ${afterPeak ? "text-red-400" : "text-stewart-muted"}`}>
+                          {isPeak ? "—" : `${dropFromPeak.toFixed(1)} pts`}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </>
           );
-        })}
+        })()}
 
         <div className="pt-3 text-xs text-stewart-muted border-t border-stewart-border">
-          Green = above {pct(data.contacted_sold_pct)} contacted baseline.
-          Red = below. If closing rate drops as response time rises, that&apos;s
-          the speed-to-contact correlation showing up directly in your data.
+          Each row is the running total of every lead answered by that point.
+          If &ldquo;answered within 15 min&rdquo; closes at a higher rate
+          than &ldquo;answered within 24 hours,&rdquo; faster is genuinely
+          better. If the rates look flat, the effect is weaker than the
+          conventional wisdom suggests in your data.
         </div>
       </div>
 
@@ -926,8 +1046,12 @@ interface ResponseTimeData {
   never_contacted_pct: number;
   contacted_sold_pct: number;
   never_contacted_sold_pct: number;
-  instant_leads: number;
-  instant_sold_pct: number;
+  phone_up: {
+    leads: number;
+    unique_customers: number;
+    sold_customers: number;
+    sold_pct: number;
+  };
   avg_response_min: number;
   median_response_min: number;
   distribution: Array<{

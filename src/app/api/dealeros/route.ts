@@ -535,7 +535,8 @@ export async function GET(req: NextRequest) {
             .select("customer, lead_origination_date, lead_source, lead_id")
             .eq("tenant_id", tenantId)
             .not("customer", "in", '("","Name","Wireless")')
-            .neq("lead_source_type", "Service");
+            .neq("lead_source_type", "Service")
+            .not("lead_source", "in", '("Fresh Up/Walk-In","Phone Up")');
           if (startDate) q = q.gte("lead_origination_date", startDate);
           if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
           return q;
@@ -611,7 +612,8 @@ export async function GET(req: NextRequest) {
             .select("customer, lead_origination_date, lead_source")
             .eq("tenant_id", tenantId)
             .not("customer", "in", '("","Name","Wireless")')
-            .neq("lead_source_type", "Service");
+            .neq("lead_source_type", "Service")
+            .not("lead_source", "in", '("Fresh Up/Walk-In","Phone Up")');
           if (startDate) q = q.gte("lead_origination_date", startDate);
           if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
           return q;
@@ -664,7 +666,8 @@ export async function GET(req: NextRequest) {
             .select("customer, lead_source, lead_status_type, lead_origination_date")
             .eq("tenant_id", tenantId)
             .not("customer", "in", '("","Name","Wireless")')
-            .neq("lead_source_type", "Service");
+            .neq("lead_source_type", "Service")
+            .not("lead_source", "in", '("Fresh Up/Walk-In","Phone Up")');
           if (startDate) q = q.gte("lead_origination_date", startDate);
           if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
           return q;
@@ -748,6 +751,7 @@ export async function GET(req: NextRequest) {
             .eq("tenant_id", tenantId)
             .not("customer", "in", '("","Name","Wireless")')
             .neq("lead_source_type", "Service")
+            .not("lead_source", "in", '("Fresh Up/Walk-In","Phone Up")')
             .order("lead_origination_date", { ascending: false });
           if (startDate) q = q.gte("lead_origination_date", startDate);
           if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
@@ -837,6 +841,7 @@ export async function GET(req: NextRequest) {
             .eq("tenant_id", tenantId)
             .not("customer", "in", '("","Name","Wireless")')
             .neq("lead_source_type", "Service")
+            .not("lead_source", "in", '("Fresh Up/Walk-In","Phone Up")')
             .order("lead_origination_date", { ascending: false });
           if (startDate) q = q.gte("lead_origination_date", startDate);
           if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
@@ -889,7 +894,8 @@ export async function GET(req: NextRequest) {
             .select("customer, lead_origination_date, lead_source, lead_status_type")
             .eq("tenant_id", tenantId)
             .not("customer", "in", '("","Name","Wireless")')
-            .neq("lead_source_type", "Service");
+            .neq("lead_source_type", "Service")
+            .not("lead_source", "in", '("Fresh Up/Walk-In","Phone Up")');
           if (startDate) q = q.gte("lead_origination_date", startDate);
           if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
           return q;
@@ -1015,7 +1021,8 @@ export async function GET(req: NextRequest) {
             .select("customer, lead_origination_date, lead_source, lead_status_type")
             .eq("tenant_id", tenantId)
             .not("customer", "in", '("","Name","Wireless")')
-            .neq("lead_source_type", "Service");
+            .neq("lead_source_type", "Service")
+            .not("lead_source", "in", '("Fresh Up/Walk-In","Phone Up")');
           if (startDate) q = q.gte("lead_origination_date", startDate);
           if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
           return q;
@@ -1147,7 +1154,8 @@ export async function GET(req: NextRequest) {
             .select("customer, lead_origination_date, lead_source, lead_status_type, response_time_minutes, first_customer_contact")
             .eq("tenant_id", tenantId)
             .not("customer", "in", '("","Name","Wireless")')
-            .neq("lead_source_type", "Service");
+            .neq("lead_source_type", "Service")
+            .not("lead_source", "in", '("Fresh Up/Walk-In","Phone Up")');
           if (startDate) q = q.gte("lead_origination_date", startDate);
           if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
           return q;
@@ -1164,13 +1172,10 @@ export async function GET(req: NextRequest) {
         if (error) return errorResponse(error);
 
         const SOLD = new Set(["Sold", "Sold Delivered", "Delivered"]);
-        const INSTANT_SOURCES = new Set(["Phone Up", "Fresh Up/Walk-In"]);
 
-        const isInstant = (l: { lead_source: string }) => INSTANT_SOURCES.has(l.lead_source);
-
-        // A lead was contacted if instant, response_time_minutes > 0, or first_customer_contact is populated
-        const isContacted = (l: { lead_source: string; first_customer_contact: string | null; response_time_minutes: number | null }) => {
-          if (isInstant(l)) return true;
+        // Phone Up and Fresh Up/Walk-In are already excluded at query level.
+        // This endpoint only analyzes digital leads with measurable response time.
+        const isContacted = (l: { first_customer_contact: string | null; response_time_minutes: number | null }) => {
           if (l.response_time_minutes !== null && l.response_time_minutes > 0) return true;
           const fcc = (l.first_customer_contact || "").trim();
           return fcc !== "" && fcc !== "0" && fcc.toLowerCase() !== "null";
@@ -1181,19 +1186,11 @@ export async function GET(req: NextRequest) {
         let neverContactedLeads = 0;
         let contactedSold = 0;
         let neverContactedSold = 0;
-        let instantLeads = 0;
-        let instantSold = 0;
         const responseTimes: number[] = [];
 
         for (const l of leads) {
           const sold = SOLD.has(l.lead_status_type || "");
-          if (isInstant(l)) {
-            instantLeads++;
-            if (sold) instantSold++;
-            contactedLeads++;
-            if (sold) contactedSold++;
-            // Don't push 0 into responseTimes — keep median/avg digital-only
-          } else if (isContacted(l)) {
+          if (isContacted(l)) {
             contactedLeads++;
             if (sold) contactedSold++;
             if (l.response_time_minutes !== null && l.response_time_minutes > 0) {
@@ -1205,9 +1202,8 @@ export async function GET(req: NextRequest) {
           }
         }
 
-        // Response time distribution buckets — "instant" bucket at top for walk-ins/phone ups
+        // Response time distribution buckets — digital only
         const rtBins = [
-          { key: "instant", label: "Instant (walk-in / phone up)", minM: -1,   maxM: 0 },
           { key: "lt_5",    label: "Under 5 min",     minM: 0,      maxM: 5 },
           { key: "5_15",    label: "5–15 min",        minM: 5,      maxM: 15 },
           { key: "15_30",   label: "15–30 min",       minM: 15,     maxM: 30 },
@@ -1218,17 +1214,10 @@ export async function GET(req: NextRequest) {
         ];
         const distribution = rtBins.map((b) => ({ ...b, lead_count: 0, sold_count: 0 }));
         for (const l of leads) {
-          const sold = SOLD.has(l.lead_status_type || "");
-          if (isInstant(l)) {
-            const bucket = distribution.find((b) => b.key === "instant")!;
-            bucket.lead_count++;
-            if (sold) bucket.sold_count++;
-            continue;
-          }
           if (!isContacted(l) || l.response_time_minutes === null || l.response_time_minutes <= 0) continue;
           const rt = l.response_time_minutes;
+          const sold = SOLD.has(l.lead_status_type || "");
           for (const b of distribution) {
-            if (b.key === "instant") continue;
             if (rt >= b.minM && rt < b.maxM) {
               b.lead_count++;
               if (sold) b.sold_count++;
@@ -1306,6 +1295,24 @@ export async function GET(req: NextRequest) {
           };
         });
 
+        // Phone Up standalone — fetch separately so it doesn't pollute digital metrics
+        const phoneUpQuery = () => {
+          let q = supabase
+            .from("vin_leads")
+            .select("customer, lead_status_type")
+            .eq("tenant_id", tenantId)
+            .eq("lead_source", "Phone Up")
+            .not("customer", "in", '("","Name","Wireless")');
+          if (startDate) q = q.gte("lead_origination_date", startDate);
+          if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
+          return q;
+        };
+        const { data: phoneUpLeads } = await fetchAllRows<{ customer: string; lead_status_type: string | null }>(phoneUpQuery);
+        const phoneUpCustomers = new Set(phoneUpLeads.map((l) => l.customer));
+        const phoneUpSoldCustomers = new Set(
+          phoneUpLeads.filter((l) => SOLD.has(l.lead_status_type || "")).map((l) => l.customer),
+        );
+
         return NextResponse.json({
           total_leads: totalLeads,
           contacted_leads: contactedLeads,
@@ -1313,8 +1320,12 @@ export async function GET(req: NextRequest) {
           never_contacted_pct: totalLeads > 0 ? Math.round((neverContactedLeads / totalLeads) * 1000) / 10 : 0,
           contacted_sold_pct: contactedLeads > 0 ? Math.round((contactedSold / contactedLeads) * 1000) / 10 : 0,
           never_contacted_sold_pct: neverContactedLeads > 0 ? Math.round((neverContactedSold / neverContactedLeads) * 1000) / 10 : 0,
-          instant_leads: instantLeads,
-          instant_sold_pct: instantLeads > 0 ? Math.round((instantSold / instantLeads) * 1000) / 10 : 0,
+          phone_up: {
+            leads: phoneUpLeads.length,
+            unique_customers: phoneUpCustomers.size,
+            sold_customers: phoneUpSoldCustomers.size,
+            sold_pct: phoneUpCustomers.size > 0 ? Math.round((phoneUpSoldCustomers.size / phoneUpCustomers.size) * 1000) / 10 : 0,
+          },
           avg_response_min: Math.round(avgResponseMin * 10) / 10,
           median_response_min: Math.round(medianResponseMin * 10) / 10,
           distribution: distributionOut,
