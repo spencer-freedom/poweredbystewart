@@ -1381,7 +1381,9 @@ export async function GET(req: NextRequest) {
           { key: "15_30",   label: "15–30 min",       minM: 15,     maxM: 30 },
           { key: "30_60",   label: "30–60 min",       minM: 30,     maxM: 60 },
           { key: "1_4h",    label: "1–4 hours",       minM: 60,     maxM: 240 },
-          { key: "4_24h",   label: "4–24 hours",      minM: 240,    maxM: 1440 },
+          { key: "4_8h",    label: "4–8 hours",       minM: 240,    maxM: 480 },
+          { key: "8_12h",   label: "8–12 hours",      minM: 480,    maxM: 720 },
+          { key: "12_24h",  label: "12–24 hours",     minM: 720,    maxM: 1440 },
           { key: "24h_plus",label: "24+ hours",       minM: 1440,   maxM: Infinity },
         ];
         const distribution = rtBins.map((b) => ({ ...b, lead_count: 0, sold_count: 0 }));
