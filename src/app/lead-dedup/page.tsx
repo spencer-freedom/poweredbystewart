@@ -564,49 +564,45 @@ function ResponseTimeView({ data, phoneJourney }: { data: ResponseTimeData; phon
         </div>
       </div>
 
-      {/* ── OPTION 3: Dual bars — volume vs. deals closed ── */}
+      {/* ── Nested bar: one bar per bucket, length = leads, red = deals inside ── */}
       <div className="stewart-card p-4 space-y-3">
         <div>
           <h3 className="text-base font-semibold text-stewart-text">
-            Lead volume vs. deals closed
+            Where the deals actually close
           </h3>
           <p className="text-xs text-stewart-muted mt-1">
-            For each response-time bucket, the gray bar is how many leads
-            we had there; the colored bar is how many of those actually
-            closed. The gap between them is the waste. Where the deal bar
-            is longest relative to the volume bar = best conversion.
+            One bar per response-time bucket. Bar length = number of leads in that
+            window (same scale across all rows). The{" "}
+            <span className="text-red-400 font-semibold">red portion inside</span>{" "}
+            = deals closed. The gray remainder = leads that never closed.
+            Taller red fill ratio = better conversion.
           </p>
         </div>
 
         {(() => {
           const maxLeads = Math.max(...data.distribution.map((b) => b.lead_count)) || 1;
-          const maxSold = Math.max(...data.distribution.map((b) => b.sold_count)) || 1;
           return (
-            <div className="space-y-3">
+            <div className="space-y-2">
               {data.distribution.map((b) => {
-                const volWidth = (b.lead_count / maxLeads) * 100;
-                const soldWidth = (b.sold_count / maxSold) * 100;
+                const totalWidth = (b.lead_count / maxLeads) * 100;
+                // Red portion is sold_count on the SAME scale so visual proportion within bar = close rate
+                const redWidth = (b.sold_count / maxLeads) * 100;
                 const lift = b.sold_pct - data.contacted_sold_pct;
-                const soldColor = lift > 1 ? "bg-green-500" : lift < -1 ? "bg-red-500" : "bg-stewart-accent";
                 const textColor = lift > 1 ? "text-green-400" : lift < -1 ? "text-red-400" : "text-stewart-text";
                 return (
-                  <div key={b.key} className="space-y-1">
-                    <div className="flex items-baseline justify-between text-xs">
-                      <span className="text-stewart-text font-medium">{b.label}</span>
-                      <span className="text-stewart-muted font-mono">
-                        {num(b.lead_count)} leads → {num(b.sold_count)} sold ·{" "}
-                        <span className={`font-bold ${textColor}`}>{pct(b.sold_pct)}</span>
-                      </span>
-                    </div>
-                    <div className="relative">
-                      <div className="h-4 bg-stewart-bg rounded overflow-hidden">
-                        <div className="h-full bg-stewart-muted/40" style={{ width: `${volWidth}%` }} />
+                  <div key={b.key} className="grid grid-cols-12 gap-2 items-center text-xs">
+                    <div className="col-span-2 text-stewart-text font-medium">{b.label}</div>
+                    <div className="col-span-7">
+                      <div className="h-7 rounded overflow-hidden relative" style={{ width: `${totalWidth}%`, minWidth: totalWidth > 0 ? "2%" : "0" }}>
+                        <div className="absolute inset-0 bg-stewart-muted/30" />
+                        <div className="absolute inset-y-0 left-0 bg-red-500" style={{ width: `${b.sold_pct}%` }} />
+                        <div className="absolute inset-0 flex items-center justify-end pr-2 text-xs font-mono text-white mix-blend-difference pointer-events-none">
+                          {num(b.sold_count)} / {num(b.lead_count)}
+                        </div>
                       </div>
                     </div>
-                    <div className="relative">
-                      <div className="h-4 bg-stewart-bg rounded overflow-hidden">
-                        <div className={`h-full ${soldColor}`} style={{ width: `${soldWidth}%` }} />
-                      </div>
+                    <div className={`col-span-3 text-right font-mono font-bold ${textColor}`}>
+                      {pct(b.sold_pct)} closed
                     </div>
                   </div>
                 );
@@ -615,22 +611,17 @@ function ResponseTimeView({ data, phoneJourney }: { data: ResponseTimeData; phon
           );
         })()}
 
-        <div className="pt-2 text-xs text-stewart-muted border-t border-stewart-border flex items-center gap-4 flex-wrap">
+        <div className="pt-3 text-xs text-stewart-muted border-t border-stewart-border flex items-center gap-4 flex-wrap">
           <span className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-sm bg-stewart-muted/40" />
-            Leads (volume)
-          </span>
-          <span className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-sm bg-stewart-accent" />
+            <span className="w-3 h-3 rounded-sm bg-red-500" />
             Deals closed
           </span>
           <span className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-sm bg-green-500" />
-            Above baseline
+            <span className="w-3 h-3 rounded-sm bg-stewart-muted/30" />
+            Leads that didn&apos;t close
           </span>
-          <span className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-sm bg-red-500" />
-            Below baseline
+          <span className="text-stewart-muted">
+            Bar length = total leads in that bucket (all bars on the same scale).
           </span>
         </div>
       </div>
