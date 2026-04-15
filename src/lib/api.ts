@@ -413,6 +413,33 @@ export const api = {
     }>(params);
   },
 
+  getDedupPhoneJourney: (tenantId: string, startDate?: string, endDate?: string) => {
+    const params: Record<string, string> = { action: "dedup_phone_journey", tenant: tenantId };
+    if (startDate) params.start_date = startDate;
+    if (endDate) params.end_date = endDate;
+    return apiGet<{
+      total_customers: number;
+      segments: {
+        internet_only: { label: string; customer_count: number; sold_count: number; sold_pct: number };
+        phone_only: { label: string; customer_count: number; sold_count: number; sold_pct: number };
+        called_back: {
+          label: string;
+          customer_count: number;
+          sold_count: number;
+          sold_pct: number;
+          median_gap_hours: number | null;
+          avg_gap_hours: number | null;
+          never_responded_count: number;
+          never_responded_pct: number;
+          slow_responded_count: number;
+          slow_responded_pct: number;
+          never_responded_sold_pct: number;
+        };
+        pre_phoned: { label: string; customer_count: number; sold_count: number; sold_pct: number };
+      };
+    }>(params);
+  },
+
   getDedupResponseTime: (tenantId: string, startDate?: string, endDate?: string) => {
     const params: Record<string, string> = { action: "dedup_response_time", tenant: tenantId };
     if (startDate) params.start_date = startDate;

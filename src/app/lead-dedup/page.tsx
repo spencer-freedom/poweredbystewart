@@ -251,7 +251,7 @@ function fmtMinutes(m: number | null): string {
   return `${(m / 1440).toFixed(1)} days`;
 }
 
-function ResponseTimeView({ data }: { data: ResponseTimeData }) {
+function ResponseTimeView({ data, phoneJourney }: { data: ResponseTimeData; phoneJourney: PhoneJourney | null }) {
   const maxLeadCount = Math.max(...data.distribution.map((b) => b.lead_count));
   const maxSoldPct = Math.max(...data.distribution.map((b) => b.sold_pct), 1);
 
@@ -372,36 +372,70 @@ function ResponseTimeView({ data }: { data: ResponseTimeData }) {
           </p>
         </div>
 
-        <div className="space-y-2">
-          {(() => {
-            const chartMax = Math.ceil(Math.max(...data.distribution.map((b) => b.sold_pct), data.contacted_sold_pct) * 1.15);
-            return data.distribution.map((b) => {
-              const widthPct = chartMax > 0 ? (b.sold_pct / chartMax) * 100 : 0;
-              const baselinePos = chartMax > 0 ? (data.contacted_sold_pct / chartMax) * 100 : 0;
-              const liftVsBase = b.sold_pct - data.contacted_sold_pct;
-              const color = liftVsBase > 1 ? "bg-green-500" : liftVsBase < -1 ? "bg-red-500" : "bg-stewart-accent";
-              const textColor = liftVsBase > 1 ? "text-green-400" : liftVsBase < -1 ? "text-red-400" : "text-stewart-text";
-              return (
-                <div key={b.key} className="grid grid-cols-12 gap-2 items-center text-xs">
-                  <div className="col-span-3 text-stewart-text font-medium">{b.label}</div>
-                  <div className="col-span-6 relative">
-                    <div className="h-6 bg-stewart-bg rounded overflow-hidden relative">
-                      <div className={`h-full ${color}`} style={{ width: `${widthPct}%` }} />
-                    </div>
-                    {/* Baseline marker */}
-                    <div
-                      className="absolute top-0 bottom-0 border-l-2 border-dotted border-stewart-muted pointer-events-none"
-                      style={{ left: `${baselinePos}%` }}
-                      title={`Baseline ${pct(data.contacted_sold_pct)}`}
-                    />
-                  </div>
-                  <div className="col-span-1 text-right font-mono text-stewart-muted">{num(b.lead_count)}</div>
-                  <div className={`col-span-2 text-right font-mono font-bold ${textColor}`}>{pct(b.sold_pct)}</div>
+        {(() => {
+          const chartMax = Math.ceil(Math.max(...data.distribution.map((b) => b.sold_pct), data.contacted_sold_pct) * 1.15);
+          // Find the biggest drop between consecutive per-bucket rates — that's the cliff
+          let biggestDrop = 0;
+          let cliffIdx = -1;
+          for (let i = 1; i < data.distribution.length; i++) {
+            const drop = data.distribution[i - 1].sold_pct - data.distribution[i].sold_pct;
+            if (drop > biggestDrop && data.distribution[i].lead_count >= 20) {
+              biggestDrop = drop;
+              cliffIdx = i;
+            }
+          }
+          return (
+            <>
+              {cliffIdx >= 0 && biggestDrop > 1 && (
+                <div className="bg-red-900/20 border border-red-700/40 rounded p-3 text-sm mb-2">
+                  <span className="text-red-400 font-semibold">Cliff detected:</span>{" "}
+                  <span className="text-stewart-text">
+                    Close rate drops{" "}
+                    <span className="font-mono font-bold">{biggestDrop.toFixed(1)} pts</span>{" "}
+                    from <strong>{data.distribution[cliffIdx - 1].label}</strong>{" "}
+                    ({pct(data.distribution[cliffIdx - 1].sold_pct)}) to <strong>{data.distribution[cliffIdx].label}</strong>{" "}
+                    ({pct(data.distribution[cliffIdx].sold_pct)}).
+                  </span>{" "}
+                  <span className="text-stewart-muted">
+                    That&apos;s the SLA target — past this window, performance falls off.
+                  </span>
                 </div>
-              );
-            });
-          })()}
-        </div>
+              )}
+              <div className="space-y-2">
+                {data.distribution.map((b, i) => {
+                  const widthPct = chartMax > 0 ? (b.sold_pct / chartMax) * 100 : 0;
+                  const baselinePos = chartMax > 0 ? (data.contacted_sold_pct / chartMax) * 100 : 0;
+                  const liftVsBase = b.sold_pct - data.contacted_sold_pct;
+                  const color = liftVsBase > 1 ? "bg-green-500" : liftVsBase < -1 ? "bg-red-500" : "bg-stewart-accent";
+                  const textColor = liftVsBase > 1 ? "text-green-400" : liftVsBase < -1 ? "text-red-400" : "text-stewart-text";
+                  const isCliffBefore = i === cliffIdx - 1;
+                  const isCliffAfter = i === cliffIdx;
+                  return (
+                    <div key={b.key} className="grid grid-cols-12 gap-2 items-center text-xs">
+                      <div className={`col-span-3 font-medium ${isCliffBefore ? "text-green-400" : isCliffAfter ? "text-red-400" : "text-stewart-text"}`}>
+                        {isCliffBefore && "▲ "}
+                        {isCliffAfter && "▼ "}
+                        {b.label}
+                      </div>
+                      <div className="col-span-6 relative">
+                        <div className="h-6 bg-stewart-bg rounded overflow-hidden relative">
+                          <div className={`h-full ${color}`} style={{ width: `${widthPct}%` }} />
+                        </div>
+                        <div
+                          className="absolute top-0 bottom-0 border-l-2 border-dotted border-stewart-muted pointer-events-none"
+                          style={{ left: `${baselinePos}%` }}
+                          title={`Baseline ${pct(data.contacted_sold_pct)}`}
+                        />
+                      </div>
+                      <div className="col-span-1 text-right font-mono text-stewart-muted">{num(b.lead_count)}</div>
+                      <div className={`col-span-2 text-right font-mono font-bold ${textColor}`}>{pct(b.sold_pct)}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          );
+        })()}
 
         <div className="pt-3 text-xs text-stewart-muted border-t border-stewart-border">
           <span className="text-stewart-text font-semibold">Watch for small samples.</span>{" "}
@@ -498,6 +532,84 @@ function ResponseTimeView({ data }: { data: ResponseTimeData }) {
           conventional wisdom suggests in your data.
         </div>
       </div>
+
+      {/* ── Phone Up Journey — did slow response drive the call-in? ── */}
+      {phoneJourney && (() => {
+        const cb = phoneJourney.segments.called_back;
+        const io = phoneJourney.segments.internet_only;
+        const po = phoneJourney.segments.phone_only;
+        const calledBackLift = io.sold_pct > 0 ? cb.sold_pct / io.sold_pct : 0;
+        return (
+          <div className="stewart-card p-4 space-y-4 border-l-4 border-yellow-600/60">
+            <div>
+              <h3 className="text-base font-semibold text-stewart-text">
+                Did slow response drive the phone up?
+              </h3>
+              <p className="text-xs text-stewart-muted mt-1">
+                Customers who submitted an internet lead <em>and</em> later
+                phoned in themselves. If they called back because we were too
+                slow, that&apos;s the most fixable revenue leak here.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-stewart-bg rounded p-3">
+                <div className="text-xs text-stewart-muted">Internet lead, never called in</div>
+                <div className="text-2xl font-bold text-stewart-text">{pct(io.sold_pct)}</div>
+                <div className="text-xs text-stewart-muted">{num(io.customer_count)} customers, {num(io.sold_count)} sold</div>
+              </div>
+              <div className="bg-stewart-bg rounded p-3">
+                <div className="text-xs text-stewart-muted">Phone Up only (no prior internet lead)</div>
+                <div className="text-2xl font-bold text-stewart-text">{pct(po.sold_pct)}</div>
+                <div className="text-xs text-stewart-muted">{num(po.customer_count)} customers, {num(po.sold_count)} sold</div>
+              </div>
+              <div className="bg-yellow-900/20 border border-yellow-700/40 rounded p-3 md:col-span-2">
+                <div className="text-xs text-yellow-400 uppercase tracking-wide font-semibold mb-1">
+                  The Called-Back Segment
+                </div>
+                <div className="text-xs text-stewart-muted mb-1">{cb.label}</div>
+                <div className="text-2xl font-bold text-green-400">{pct(cb.sold_pct)}</div>
+                <div className="text-xs text-stewart-muted">
+                  {num(cb.customer_count)} customers, {num(cb.sold_count)} sold
+                  {calledBackLift > 1 && (
+                    <>
+                      {" "}—{" "}
+                      <span className="text-green-400 font-bold">{calledBackLift.toFixed(1)}×</span>{" "}
+                      the conversion rate of internet-only customers
+                    </>
+                  )}
+                </div>
+
+                <div className="mt-3 pt-3 border-t border-yellow-700/40 grid grid-cols-2 gap-3 text-xs">
+                  <div>
+                    <div className="text-stewart-muted">Median time before self-calling</div>
+                    <div className="text-base font-mono text-stewart-text">
+                      {cb.median_gap_hours !== null ? fmtMinutes(cb.median_gap_hours * 60) : "—"}
+                    </div>
+                    <div className="text-stewart-muted">Avg: {cb.avg_gap_hours !== null ? fmtMinutes(cb.avg_gap_hours * 60) : "—"}</div>
+                  </div>
+                  <div>
+                    <div className="text-stewart-muted">Had no rep reply before calling</div>
+                    <div className="text-base font-mono text-red-400 font-bold">
+                      {pct(cb.never_responded_pct)}
+                    </div>
+                    <div className="text-stewart-muted">{num(cb.never_responded_count)} customers — reps never replied before the customer gave up and phoned in</div>
+                  </div>
+                </div>
+
+                <div className="mt-3 text-xs text-stewart-text leading-relaxed">
+                  <span className="font-semibold text-yellow-400">Interpretation:</span>{" "}
+                  {cb.never_responded_pct >= 30 ? (
+                    <>These customers had to call themselves because reps never replied. That&apos;s your strongest automation case — every one is a near-miss the store already paid for.</>
+                  ) : (
+                    <>Most called-back customers did get a digital reply — they chose to call anyway. Still higher-intent than pure internet leads.</>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Intensity × response time — the bombshell */}
       <div className="stewart-card p-4 space-y-3">
@@ -1039,6 +1151,28 @@ function BehaviorView({ data }: { data: TimeGapResponse }) {
 
 type Tab = "summary" | "behavior" | "action" | "response" | "sources" | "journeys" | "clean";
 
+interface PhoneJourney {
+  total_customers: number;
+  segments: {
+    internet_only: { label: string; customer_count: number; sold_count: number; sold_pct: number };
+    phone_only: { label: string; customer_count: number; sold_count: number; sold_pct: number };
+    called_back: {
+      label: string;
+      customer_count: number;
+      sold_count: number;
+      sold_pct: number;
+      median_gap_hours: number | null;
+      avg_gap_hours: number | null;
+      never_responded_count: number;
+      never_responded_pct: number;
+      slow_responded_count: number;
+      slow_responded_pct: number;
+      never_responded_sold_pct: number;
+    };
+    pre_phoned: { label: string; customer_count: number; sold_count: number; sold_pct: number };
+  };
+}
+
 interface ResponseTimeData {
   total_leads: number;
   contacted_leads: number;
@@ -1119,6 +1253,7 @@ export default function LeadDedupPage() {
   const [timeGaps, setTimeGaps] = useState<TimeGapResponse | null>(null);
   const [actionWindow, setActionWindow] = useState<ActionWindow | null>(null);
   const [responseTime, setResponseTime] = useState<ResponseTimeData | null>(null);
+  const [phoneJourney, setPhoneJourney] = useState<PhoneJourney | null>(null);
   const [expandedCustomer, setExpandedCustomer] = useState<string | null>(null);
   const [roiSort, setRoiSort] = useState<"total" | "conversion" | "noise">("total");
 
@@ -1158,8 +1293,12 @@ export default function LeadDedupPage() {
         const aw = await api.getDedupActionWindow(tenantId, startDate || undefined, endDate || undefined);
         setActionWindow(aw);
       } else if (tab === "response") {
-        const rt = await api.getDedupResponseTime(tenantId, startDate || undefined, endDate || undefined);
+        const [rt, pj] = await Promise.all([
+          api.getDedupResponseTime(tenantId, startDate || undefined, endDate || undefined),
+          api.getDedupPhoneJourney(tenantId, startDate || undefined, endDate || undefined),
+        ]);
         setResponseTime(rt);
+        setPhoneJourney(pj);
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load");
@@ -1298,7 +1437,7 @@ export default function LeadDedupPage() {
 
       {/* ─── RESPONSE TIME TAB ─── */}
       {!loading && tab === "response" && responseTime && (
-        <ResponseTimeView data={responseTime} />
+        <ResponseTimeView data={responseTime} phoneJourney={phoneJourney} />
       )}
 
       {/* ─── SUMMARY TAB ─── */}

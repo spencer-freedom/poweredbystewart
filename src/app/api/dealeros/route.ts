@@ -1143,6 +1143,145 @@ export async function GET(req: NextRequest) {
         });
       }
 
+      // ── Lead Dedup: Phone Up Journey — did slow response drive the call-in? ──
+      case "dedup_phone_journey": {
+        const startDate = searchParams.get("start_date") || "";
+        const endDate = searchParams.get("end_date") || "";
+
+        // Include Phone Up but exclude Service and Walk-in
+        const buildQuery = () => {
+          let q = supabase
+            .from("vin_leads")
+            .select("customer, lead_origination_date, lead_source, lead_status_type, response_time_minutes, first_customer_contact")
+            .eq("tenant_id", tenantId)
+            .not("customer", "in", '("","Name","Wireless")')
+            .neq("lead_source_type", "Service")
+            .neq("lead_source", "Fresh Up/Walk-In");
+          if (startDate) q = q.gte("lead_origination_date", startDate);
+          if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
+          return q;
+        };
+
+        const { data: leads, error } = await fetchAllRows<{
+          customer: string;
+          lead_origination_date: string;
+          lead_source: string;
+          lead_status_type: string | null;
+          response_time_minutes: number | null;
+          first_customer_contact: string | null;
+        }>(buildQuery);
+        if (error) return errorResponse(error);
+
+        const SOLD = new Set(["Sold", "Sold Delivered", "Delivered"]);
+
+        const isResponded = (l: { response_time_minutes: number | null; first_customer_contact: string | null }) => {
+          if (l.response_time_minutes !== null && l.response_time_minutes > 0) return true;
+          const fcc = (l.first_customer_contact || "").trim();
+          return fcc !== "" && fcc !== "0" && fcc.toLowerCase() !== "null";
+        };
+
+        // Group by customer
+        const byCustomer: Record<string, typeof leads> = {};
+        for (const l of leads) (byCustomer[l.customer] ||= []).push(l);
+
+        interface CustProfile {
+          customer: string;
+          hadPhoneUp: boolean;
+          hadInternet: boolean;
+          firstInternetTs: number | null;
+          firstPhoneUpTs: number | null;
+          firstInternetResponded: boolean;
+          firstInternetResponseMin: number | null;
+          sold: boolean;
+        }
+        const profiles: CustProfile[] = [];
+
+        for (const [customer, custLeads] of Object.entries(byCustomer)) {
+          custLeads.sort((a, b) => a.lead_origination_date.localeCompare(b.lead_origination_date));
+          const phoneUps = custLeads.filter((l) => l.lead_source === "Phone Up");
+          const internet = custLeads.filter((l) => l.lead_source !== "Phone Up");
+          const firstInternet = internet[0] || null;
+          const firstPhoneUp = phoneUps[0] || null;
+
+          profiles.push({
+            customer,
+            hadPhoneUp: phoneUps.length > 0,
+            hadInternet: internet.length > 0,
+            firstInternetTs: firstInternet ? new Date(firstInternet.lead_origination_date).getTime() : null,
+            firstPhoneUpTs: firstPhoneUp ? new Date(firstPhoneUp.lead_origination_date).getTime() : null,
+            firstInternetResponded: firstInternet ? isResponded(firstInternet) : false,
+            firstInternetResponseMin: firstInternet?.response_time_minutes || null,
+            sold: custLeads.some((l) => SOLD.has(l.lead_status_type || "")),
+          });
+        }
+
+        // Segment customers
+        const phoneOnly = profiles.filter((p) => p.hadPhoneUp && !p.hadInternet);
+        const internetOnly = profiles.filter((p) => !p.hadPhoneUp && p.hadInternet);
+        const both = profiles.filter((p) => p.hadPhoneUp && p.hadInternet);
+
+        // Of the "both" group — did the phone up happen AFTER the first internet lead?
+        const calledBack = both.filter(
+          (p) => p.firstPhoneUpTs !== null && p.firstInternetTs !== null && p.firstPhoneUpTs > p.firstInternetTs,
+        );
+        // "Pre-call" = phone up came first (probably unrelated sequencing)
+        const prePhoned = both.filter(
+          (p) => p.firstPhoneUpTs !== null && p.firstInternetTs !== null && p.firstPhoneUpTs <= p.firstInternetTs,
+        );
+
+        // Of calledBack customers: how many had an unresponded / slow initial internet lead?
+        const neverResponded = calledBack.filter((p) => !p.firstInternetResponded);
+        const slowResponded = calledBack.filter((p) => p.firstInternetResponded && (p.firstInternetResponseMin ?? 0) > 60);
+
+        // Median hours from internet lead to phone up for calledBack segment
+        const gapsHours = calledBack
+          .map((p) => p.firstInternetTs !== null && p.firstPhoneUpTs !== null ? (p.firstPhoneUpTs - p.firstInternetTs) / 3600000 : null)
+          .filter((h): h is number => h !== null)
+          .sort((a, b) => a - b);
+        const medianGap = gapsHours.length > 0 ? gapsHours[Math.floor(gapsHours.length / 2)] : null;
+        const avgGap = gapsHours.length > 0 ? gapsHours.reduce((a, b) => a + b, 0) / gapsHours.length : null;
+
+        const segSold = (arr: CustProfile[]) => arr.filter((p) => p.sold).length;
+        const pct10 = (n: number, d: number) => d > 0 ? Math.round((n / d) * 1000) / 10 : 0;
+
+        return NextResponse.json({
+          total_customers: profiles.length,
+          segments: {
+            internet_only: {
+              label: "Internet lead, never called in",
+              customer_count: internetOnly.length,
+              sold_count: segSold(internetOnly),
+              sold_pct: pct10(segSold(internetOnly), internetOnly.length),
+            },
+            phone_only: {
+              label: "Phone Up only (no prior internet lead)",
+              customer_count: phoneOnly.length,
+              sold_count: segSold(phoneOnly),
+              sold_pct: pct10(segSold(phoneOnly), phoneOnly.length),
+            },
+            called_back: {
+              label: "Internet lead, then called in themselves",
+              customer_count: calledBack.length,
+              sold_count: segSold(calledBack),
+              sold_pct: pct10(segSold(calledBack), calledBack.length),
+              median_gap_hours: medianGap !== null ? Math.round(medianGap * 10) / 10 : null,
+              avg_gap_hours: avgGap !== null ? Math.round(avgGap * 10) / 10 : null,
+              never_responded_count: neverResponded.length,
+              never_responded_pct: pct10(neverResponded.length, calledBack.length),
+              slow_responded_count: slowResponded.length,
+              slow_responded_pct: pct10(slowResponded.length, calledBack.length),
+              never_responded_sold_pct: pct10(segSold(neverResponded), neverResponded.length),
+            },
+            pre_phoned: {
+              label: "Phoned first, then also sent internet lead",
+              customer_count: prePhoned.length,
+              sold_count: segSold(prePhoned),
+              sold_pct: pct10(segSold(prePhoned), prePhoned.length),
+            },
+          },
+        });
+      }
+
       // ── Lead Dedup: Response Time — speed-to-contact vs. conversion ──
       case "dedup_response_time": {
         const startDate = searchParams.get("start_date") || "";
