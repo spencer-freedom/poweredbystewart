@@ -439,131 +439,6 @@ function ResponseTimeView({ data, phoneJourney }: { data: ResponseTimeData; phon
         </div>
       </div>
 
-      {/* ── OPTION 1: Bubble scatter ── */}
-      <div className="stewart-card p-4 space-y-3">
-        <div>
-          <h3 className="text-base font-semibold text-stewart-text">
-            Response time × deals closed × close rate
-          </h3>
-          <p className="text-xs text-stewart-muted mt-1">
-            Each bubble is a response-time bucket.{" "}
-            <strong>Horizontal position</strong> = how fast reps answered.{" "}
-            <strong>Vertical position</strong> = close rate.{" "}
-            <strong>Bubble size</strong> = number of deals closed in that bucket.
-            The sweet spot is the highest bubble that&apos;s also reasonably big.
-          </p>
-        </div>
-
-        {(() => {
-          const n = data.distribution.length;
-          const W = 680, H = 300, PAD_L = 60, PAD_R = 20, PAD_T = 24, PAD_B = 56;
-          const plotW = W - PAD_L - PAD_R;
-          const plotH = H - PAD_T - PAD_B;
-          const maxPct = Math.max(...data.distribution.map((b) => b.sold_pct)) * 1.15 || 1;
-          const maxSold = Math.max(...data.distribution.map((b) => b.sold_count)) || 1;
-          const baselineY = PAD_T + plotH * (1 - data.contacted_sold_pct / maxPct);
-
-          return (
-            <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto">
-              {/* Y-axis gridlines */}
-              {[0, 0.25, 0.5, 0.75, 1].map((t) => (
-                <g key={t}>
-                  <line
-                    x1={PAD_L}
-                    y1={PAD_T + plotH * (1 - t)}
-                    x2={W - PAD_R}
-                    y2={PAD_T + plotH * (1 - t)}
-                    stroke="#374151"
-                    strokeDasharray="2,4"
-                    strokeWidth={0.5}
-                  />
-                  <text
-                    x={PAD_L - 6}
-                    y={PAD_T + plotH * (1 - t) + 4}
-                    textAnchor="end"
-                    fill="#9ca3af"
-                    fontSize={10}
-                    fontFamily="ui-monospace, monospace"
-                  >
-                    {(maxPct * t).toFixed(1)}%
-                  </text>
-                </g>
-              ))}
-
-              {/* Baseline line */}
-              <line
-                x1={PAD_L}
-                y1={baselineY}
-                x2={W - PAD_R}
-                y2={baselineY}
-                stroke="#3b82f6"
-                strokeDasharray="4,4"
-                strokeWidth={1.5}
-              />
-              <text x={W - PAD_R - 4} y={baselineY - 4} textAnchor="end" fill="#3b82f6" fontSize={10}>
-                Baseline {pct(data.contacted_sold_pct)}
-              </text>
-
-              {/* Bubbles */}
-              {data.distribution.map((b, i) => {
-                const cx = PAD_L + plotW * ((i + 0.5) / n);
-                const cy = PAD_T + plotH * (1 - b.sold_pct / maxPct);
-                const r = 6 + Math.sqrt(b.sold_count / maxSold) * 28;
-                const lift = b.sold_pct - data.contacted_sold_pct;
-                const color = lift > 1 ? "#22c55e" : lift < -1 ? "#ef4444" : "#60a5fa";
-                return (
-                  <g key={b.key}>
-                    <circle cx={cx} cy={cy} r={r} fill={color} fillOpacity={0.35} stroke={color} strokeWidth={2} />
-                    <text x={cx} y={cy + 4} textAnchor="middle" fill="white" fontSize={12} fontWeight="bold">
-                      {b.sold_count}
-                    </text>
-                    <text
-                      x={cx}
-                      y={H - PAD_B + 16}
-                      textAnchor="middle"
-                      fill="#e5e7eb"
-                      fontSize={10}
-                    >
-                      {b.label}
-                    </text>
-                    <text
-                      x={cx}
-                      y={H - PAD_B + 30}
-                      textAnchor="middle"
-                      fill="#9ca3af"
-                      fontSize={9}
-                      fontFamily="ui-monospace, monospace"
-                    >
-                      {pct(b.sold_pct)}
-                    </text>
-                  </g>
-                );
-              })}
-
-              {/* Axis labels */}
-              <text x={PAD_L + plotW / 2} y={H - 4} textAnchor="middle" fill="#9ca3af" fontSize={10}>
-                Response time →
-              </text>
-              <text
-                x={14}
-                y={PAD_T + plotH / 2}
-                textAnchor="middle"
-                fill="#9ca3af"
-                fontSize={10}
-                transform={`rotate(-90, 14, ${PAD_T + plotH / 2})`}
-              >
-                Close rate %
-              </text>
-            </svg>
-          );
-        })()}
-
-        <div className="pt-2 text-xs text-stewart-muted border-t border-stewart-border">
-          Number inside each bubble = deals closed. Bigger bubble = more absolute sold. Higher bubble = better close rate per lead.
-          The best bucket balances both — a tall bubble that&apos;s also reasonably sized.
-        </div>
-      </div>
-
       {/* ── Nested bar: one bar per bucket, length = leads, red = deals inside ── */}
       <div className="stewart-card p-4 space-y-3">
         <div>
@@ -601,40 +476,53 @@ function ResponseTimeView({ data, phoneJourney }: { data: ResponseTimeData; phon
                 </span>
               </div>
 
-              <div className="space-y-2">
+              {/* Header row */}
+              <div className="grid grid-cols-12 gap-3 text-[11px] text-stewart-muted uppercase tracking-wide pb-2 border-b border-stewart-border">
+                <div className="col-span-2">Response time</div>
+                <div className="col-span-6">Lead volume → deals</div>
+                <div className="col-span-1 text-right">Leads</div>
+                <div className="col-span-1 text-right text-green-400">Sold</div>
+                <div className="col-span-1 text-right text-yellow-400">Missed</div>
+                <div className="col-span-1 text-right">Close %</div>
+              </div>
+
+              <div className="space-y-3">
                 {data.distribution.map((b) => {
                   const totalWidth = (b.lead_count / maxLeads) * 100;
                   const potentialAtPeak = Math.round(b.lead_count * (peakPct / 100));
                   const missedCount = Math.max(0, potentialAtPeak - b.sold_count);
-                  // Within the bar (which represents the bucket's leads), segment proportions
                   const greenPct = b.lead_count > 0 ? (b.sold_count / b.lead_count) * 100 : 0;
                   const yellowPct = b.lead_count > 0 ? (missedCount / b.lead_count) * 100 : 0;
                   const isPeak = b.sold_pct === peakPct;
                   return (
-                    <div key={b.key} className="grid grid-cols-12 gap-2 items-center text-xs">
+                    <div key={b.key} className="grid grid-cols-12 gap-3 items-center text-xs">
                       <div className={`col-span-2 font-medium ${isPeak ? "text-green-400" : "text-stewart-text"}`}>
                         {isPeak && <span className="mr-1">▶</span>}
                         {b.label}
                       </div>
-                      <div className="col-span-7">
-                        <div className="h-7 rounded overflow-hidden relative" style={{ width: `${totalWidth}%`, minWidth: totalWidth > 0 ? "2%" : "0" }}>
-                          <div className="absolute inset-0 bg-stewart-muted/30" />
-                          <div className="absolute inset-y-0 left-0 bg-green-500" style={{ width: `${greenPct}%` }} />
-                          <div className="absolute inset-y-0 bg-yellow-500" style={{ left: `${greenPct}%`, width: `${yellowPct}%` }} />
-                          <div className="absolute inset-0 flex items-center justify-end pr-2 text-xs font-mono text-white mix-blend-difference pointer-events-none">
-                            {num(b.sold_count)} sold
-                            {missedCount > 0 && <> · <span className="text-yellow-200">{num(missedCount)} missed</span></>}
-                            {" "}/ {num(b.lead_count)}
-                          </div>
+                      <div className="col-span-6">
+                        <div
+                          className="h-9 rounded-sm overflow-hidden relative bg-stewart-muted/25"
+                          style={{ width: `${totalWidth}%`, minWidth: totalWidth > 0 ? "1%" : "0" }}
+                          title={`${num(b.lead_count)} leads`}
+                        >
+                          <div
+                            className="absolute inset-y-0 left-0 bg-green-500"
+                            style={{ width: `${greenPct}%` }}
+                          />
+                          <div
+                            className="absolute inset-y-0 bg-yellow-500"
+                            style={{ left: `${greenPct}%`, width: `${yellowPct}%` }}
+                          />
                         </div>
                       </div>
-                      <div className="col-span-3 text-right font-mono">
-                        <span className={`font-bold ${isPeak ? "text-green-400" : "text-stewart-text"}`}>
-                          {pct(b.sold_pct)}
-                        </span>
-                        {missedCount > 0 && (
-                          <span className="text-yellow-400"> (−{num(missedCount)})</span>
-                        )}
+                      <div className="col-span-1 text-right font-mono text-stewart-muted">{num(b.lead_count)}</div>
+                      <div className="col-span-1 text-right font-mono text-green-400 font-bold">{num(b.sold_count)}</div>
+                      <div className="col-span-1 text-right font-mono text-yellow-400">
+                        {missedCount > 0 ? num(missedCount) : "—"}
+                      </div>
+                      <div className={`col-span-1 text-right font-mono font-bold ${isPeak ? "text-green-400" : "text-stewart-text"}`}>
+                        {pct(b.sold_pct)}
                       </div>
                     </div>
                   );
