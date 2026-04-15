@@ -424,6 +424,8 @@ export const api = {
       never_contacted_pct: number;
       contacted_sold_pct: number;
       never_contacted_sold_pct: number;
+      instant_leads: number;
+      instant_sold_pct: number;
       avg_response_min: number;
       median_response_min: number;
       distribution: Array<{

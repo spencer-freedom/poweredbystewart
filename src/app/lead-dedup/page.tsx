@@ -274,10 +274,13 @@ function ResponseTimeView({ data }: { data: ResponseTimeData }) {
           Speed-to-contact = money
         </div>
         <div className="text-lg text-stewart-text leading-relaxed">
-          Leads contacted in <strong>under 15 minutes</strong> close at{" "}
+          <strong>Walk-ins and phone ups</strong> ({num(data.instant_leads)} leads) close at{" "}
+          <span className="text-green-400 font-bold">{pct(data.instant_sold_pct)}</span>{" "}
+          — instant contact is the highest-converting channel you have.
+          <br />
+          Digital leads contacted in <strong>under 15 minutes</strong> close at{" "}
           <span className="text-stewart-accent font-bold">{pct(fastPct)}</span>.
-          Leads where the rep waited <strong>over 4 hours</strong> close at{" "}
-          <span className="text-red-400 font-bold">{pct(slowPct)}</span>.
+          Waited <strong>over 4 hours</strong>: <span className="text-red-400 font-bold">{pct(slowPct)}</span>.
           {speedLift > 1 && (
             <>
               {" "}That&apos;s{" "}
@@ -294,7 +297,7 @@ function ResponseTimeView({ data }: { data: ResponseTimeData }) {
           <span className="text-red-400 font-bold">{pct(data.never_contacted_sold_pct)}</span>{" "}
           vs.{" "}
           <span className="text-stewart-accent font-bold">{pct(data.contacted_sold_pct)}</span>{" "}
-          when a rep actually reaches them.
+          when a rep reaches them.
         </div>
       </div>
 
@@ -923,6 +926,8 @@ interface ResponseTimeData {
   never_contacted_pct: number;
   contacted_sold_pct: number;
   never_contacted_sold_pct: number;
+  instant_leads: number;
+  instant_sold_pct: number;
   avg_response_min: number;
   median_response_min: number;
   distribution: Array<{
