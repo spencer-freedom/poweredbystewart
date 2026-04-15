@@ -581,47 +581,81 @@ function ResponseTimeView({ data, phoneJourney }: { data: ResponseTimeData; phon
 
         {(() => {
           const maxLeads = Math.max(...data.distribution.map((b) => b.lead_count)) || 1;
+          const peakPct = Math.max(...data.distribution.map((b) => b.sold_pct));
+          const peakBucket = data.distribution.find((b) => b.sold_pct === peakPct);
+          const totalMissed = data.distribution.reduce(
+            (s, b) => s + Math.max(0, Math.round(b.lead_count * (peakPct / 100)) - b.sold_count),
+            0,
+          );
+
           return (
-            <div className="space-y-2">
-              {data.distribution.map((b) => {
-                const totalWidth = (b.lead_count / maxLeads) * 100;
-                // Red portion is sold_count on the SAME scale so visual proportion within bar = close rate
-                const redWidth = (b.sold_count / maxLeads) * 100;
-                const lift = b.sold_pct - data.contacted_sold_pct;
-                const textColor = lift > 1 ? "text-green-400" : lift < -1 ? "text-red-400" : "text-stewart-text";
-                return (
-                  <div key={b.key} className="grid grid-cols-12 gap-2 items-center text-xs">
-                    <div className="col-span-2 text-stewart-text font-medium">{b.label}</div>
-                    <div className="col-span-7">
-                      <div className="h-7 rounded overflow-hidden relative" style={{ width: `${totalWidth}%`, minWidth: totalWidth > 0 ? "2%" : "0" }}>
-                        <div className="absolute inset-0 bg-stewart-muted/30" />
-                        <div className="absolute inset-y-0 left-0 bg-red-500" style={{ width: `${b.sold_pct}%` }} />
-                        <div className="absolute inset-0 flex items-center justify-end pr-2 text-xs font-mono text-white mix-blend-difference pointer-events-none">
-                          {num(b.sold_count)} / {num(b.lead_count)}
+            <>
+              <div className="bg-yellow-900/20 border border-yellow-700/40 rounded p-3 text-sm mb-3">
+                <span className="text-yellow-400 font-semibold">Benchmark:</span>{" "}
+                <span className="text-stewart-text">
+                  <strong>{peakBucket?.label}</strong> is your best-closing window at{" "}
+                  <span className="font-mono font-bold">{pct(peakPct)}</span>. If every bucket closed at that rate,
+                  we would have closed{" "}
+                  <span className="font-mono font-bold text-yellow-400">{num(totalMissed)}</span>{" "}
+                  more deals — the yellow portion of each bar below.
+                </span>
+              </div>
+
+              <div className="space-y-2">
+                {data.distribution.map((b) => {
+                  const totalWidth = (b.lead_count / maxLeads) * 100;
+                  const potentialAtPeak = Math.round(b.lead_count * (peakPct / 100));
+                  const missedCount = Math.max(0, potentialAtPeak - b.sold_count);
+                  // Within the bar (which represents the bucket's leads), segment proportions
+                  const greenPct = b.lead_count > 0 ? (b.sold_count / b.lead_count) * 100 : 0;
+                  const yellowPct = b.lead_count > 0 ? (missedCount / b.lead_count) * 100 : 0;
+                  const isPeak = b.sold_pct === peakPct;
+                  return (
+                    <div key={b.key} className="grid grid-cols-12 gap-2 items-center text-xs">
+                      <div className={`col-span-2 font-medium ${isPeak ? "text-green-400" : "text-stewart-text"}`}>
+                        {isPeak && <span className="mr-1">▶</span>}
+                        {b.label}
+                      </div>
+                      <div className="col-span-7">
+                        <div className="h-7 rounded overflow-hidden relative" style={{ width: `${totalWidth}%`, minWidth: totalWidth > 0 ? "2%" : "0" }}>
+                          <div className="absolute inset-0 bg-stewart-muted/30" />
+                          <div className="absolute inset-y-0 left-0 bg-green-500" style={{ width: `${greenPct}%` }} />
+                          <div className="absolute inset-y-0 bg-yellow-500" style={{ left: `${greenPct}%`, width: `${yellowPct}%` }} />
+                          <div className="absolute inset-0 flex items-center justify-end pr-2 text-xs font-mono text-white mix-blend-difference pointer-events-none">
+                            {num(b.sold_count)} sold
+                            {missedCount > 0 && <> · <span className="text-yellow-200">{num(missedCount)} missed</span></>}
+                            {" "}/ {num(b.lead_count)}
+                          </div>
                         </div>
                       </div>
+                      <div className="col-span-3 text-right font-mono">
+                        <span className={`font-bold ${isPeak ? "text-green-400" : "text-stewart-text"}`}>
+                          {pct(b.sold_pct)}
+                        </span>
+                        {missedCount > 0 && (
+                          <span className="text-yellow-400"> (−{num(missedCount)})</span>
+                        )}
+                      </div>
                     </div>
-                    <div className={`col-span-3 text-right font-mono font-bold ${textColor}`}>
-                      {pct(b.sold_pct)} closed
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            </>
           );
         })()}
 
         <div className="pt-3 text-xs text-stewart-muted border-t border-stewart-border flex items-center gap-4 flex-wrap">
           <span className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-sm bg-red-500" />
+            <span className="w-3 h-3 rounded-sm bg-green-500" />
             Deals closed
           </span>
           <span className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-sm bg-stewart-muted/30" />
-            Leads that didn&apos;t close
+            <span className="w-3 h-3 rounded-sm bg-yellow-500" />
+            Deals missed (would have closed at peak rate)
           </span>
-          <span className="text-stewart-muted">
-            Bar length = total leads in that bucket (all bars on the same scale).
+          <span className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-stewart-muted/30" />
+            Leads that wouldn&apos;t have closed
           </span>
         </div>
       </div>
