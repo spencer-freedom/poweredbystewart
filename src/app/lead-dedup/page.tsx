@@ -241,6 +241,215 @@ function Legend() {
   );
 }
 
+/* ─── Journey Paths view (first → last source flow for 2+ lead journeys) ─── */
+
+function JourneyPathsView({ data }: { data: JourneyPathsData }) {
+  const v = data.velocity_focus;
+  const velocityShare = data.total_journeys > 0
+    ? (v.total_velocity_journeys / data.total_journeys) * 100
+    : 0;
+  const velocityLift = data.sold_pct > 0 && v.velocity_sold_pct > 0
+    ? v.velocity_sold_pct / data.sold_pct
+    : 0;
+
+  return (
+    <div className="space-y-6">
+      {/* Top summary cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <StatCard
+          label="Multi-touch Journeys"
+          value={num(data.total_journeys)}
+          sub={`Customers with 2+ leads in ${data.window_days}d window`}
+        />
+        <StatCard
+          label="Sold Journeys"
+          value={num(data.sold_journeys)}
+          sub={`${pct(data.sold_pct)} converted`}
+          color="bg-stewart-accent/10 border-stewart-accent"
+        />
+        <StatCard
+          label="Avg Leads / Journey"
+          value={data.avg_leads_per_journey.toFixed(1)}
+          sub={`Avg duration: ${data.avg_duration_days.toFixed(1)}d`}
+        />
+        <StatCard
+          label="Velocity Share"
+          value={pct(velocityShare)}
+          sub={`${num(v.total_velocity_journeys)} journeys touched Velocity`}
+        />
+      </div>
+
+      {/* Top first → last paths */}
+      <div className="stewart-card p-4 space-y-3">
+        <div>
+          <h3 className="text-base font-semibold text-stewart-text">
+            Top journey paths — first source → last source
+          </h3>
+          <p className="text-xs text-stewart-muted mt-1">
+            Each row is a unique first-touch source paired with a last-touch
+            source in the same journey ({data.window_days}-day window, 2+ leads,
+            min {data.min_count} customers per path). Sources rolled up by vendor
+            (Team Velocity, Apollo, etc.). Sort by sold % to find the
+            highest-value lanes.
+          </p>
+        </div>
+
+        <table className="w-full text-xs">
+          <thead className="text-stewart-muted border-b border-stewart-border">
+            <tr>
+              <th className="text-left py-2">First touch</th>
+              <th className="text-left py-2">→</th>
+              <th className="text-left py-2">Last touch</th>
+              <th className="text-right py-2">Customers</th>
+              <th className="text-right py-2">Sold</th>
+              <th className="text-right py-2">Sold %</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.top_paths.slice(0, 30).map((p, i) => {
+              const sameSource = p.first_source === p.last_source;
+              const lift = p.sold_pct - data.sold_pct;
+              const soldColor = lift > 2 ? "text-green-400" : lift < -2 ? "text-red-400" : "text-stewart-text";
+              return (
+                <tr key={i} className="border-b border-stewart-border/50">
+                  <td className="py-2 text-stewart-text font-medium">{p.first_source}</td>
+                  <td className="py-2 text-stewart-muted">{sameSource ? "↺" : "→"}</td>
+                  <td className="py-2 text-stewart-text font-medium">{p.last_source}</td>
+                  <td className="py-2 text-right font-mono">{num(p.customer_count)}</td>
+                  <td className="py-2 text-right font-mono text-stewart-muted">{num(p.sold_count)}</td>
+                  <td className={`py-2 text-right font-mono font-bold ${soldColor}`}>{pct(p.sold_pct)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+
+        {data.top_paths.length > 30 && (
+          <div className="text-xs text-stewart-muted">
+            Showing top 30 of {num(data.top_paths.length)} paths. Long tail hidden.
+          </div>
+        )}
+      </div>
+
+      {/* ── Velocity Focus ── */}
+      <div className="stewart-card p-4 space-y-4 border-l-4 border-yellow-600/60">
+        <div>
+          <h3 className="text-base font-semibold text-stewart-text">
+            Velocity focus — what does the Velocity journey look like?
+          </h3>
+          <p className="text-xs text-stewart-muted mt-1">
+            Of all multi-touch journeys, {num(v.total_velocity_journeys)} (
+            {pct(velocityShare)}) touched Team Velocity at some point.
+            They closed at <span className="font-mono">{pct(v.velocity_sold_pct)}</span>
+            {velocityLift > 0 && (
+              <>
+                {" "}vs. <span className="font-mono">{pct(data.sold_pct)}</span> overall
+                journey baseline ({velocityLift.toFixed(1)}× lift).
+              </>
+            )}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <StatCard
+            label="Velocity Journeys"
+            value={num(v.total_velocity_journeys)}
+            sub={`${num(v.sold_velocity_journeys)} sold · ${pct(v.velocity_sold_pct)}`}
+          />
+          <StatCard
+            label="Velocity-Only Journeys"
+            value={num(v.velocity_only_journeys)}
+            sub={`${num(v.velocity_only_sold)} sold · ${pct(v.velocity_only_sold_pct)} (no other source touched)`}
+          />
+          <StatCard
+            label="Multi-Source Velocity"
+            value={num(v.total_velocity_journeys - v.velocity_only_journeys)}
+            sub="Velocity + at least 1 other channel"
+          />
+        </div>
+
+        {/* Velocity sub-source sequences */}
+        <div>
+          <h4 className="text-sm font-semibold text-stewart-text mb-1">
+            Inside Velocity — most common sub-source sequences
+          </h4>
+          <p className="text-xs text-stewart-muted mb-3">
+            Within Velocity-touching journeys, the order Velocity sub-products
+            appear (consecutive duplicates collapsed). Tells you which Velocity
+            offerings actually anchor the customer journey.
+          </p>
+          <table className="w-full text-xs">
+            <thead className="text-stewart-muted border-b border-stewart-border">
+              <tr>
+                <th className="text-left py-2">Sequence</th>
+                <th className="text-right py-2">Steps</th>
+                <th className="text-right py-2">Customers</th>
+                <th className="text-right py-2">Sold</th>
+                <th className="text-right py-2">Sold %</th>
+              </tr>
+            </thead>
+            <tbody>
+              {v.velocity_sub_sequences.slice(0, 20).map((s, i) => {
+                const lift = s.sold_pct - v.velocity_sold_pct;
+                const color = lift > 2 ? "text-green-400" : lift < -2 ? "text-red-400" : "text-stewart-text";
+                return (
+                  <tr key={i} className="border-b border-stewart-border/50">
+                    <td className="py-2 text-stewart-text">{s.sequence}</td>
+                    <td className="py-2 text-right font-mono text-stewart-muted">{s.length}</td>
+                    <td className="py-2 text-right font-mono">{num(s.customer_count)}</td>
+                    <td className="py-2 text-right font-mono text-stewart-muted">{num(s.sold_count)}</td>
+                    <td className={`py-2 text-right font-mono font-bold ${color}`}>{pct(s.sold_pct)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Velocity ↔ external pairings */}
+        <div>
+          <h4 className="text-sm font-semibold text-stewart-text mb-1">
+            Velocity ↔ external — what other sources show up?
+          </h4>
+          <p className="text-xs text-stewart-muted mb-3">
+            Of journeys that include Velocity, how often each other vendor
+            appears alongside, and the close rate when that pairing happens.
+            High % + high sold % = a working partnership. High % + low sold %
+            = a sign Velocity might be cannibalizing or competing with that
+            channel.
+          </p>
+          <table className="w-full text-xs">
+            <thead className="text-stewart-muted border-b border-stewart-border">
+              <tr>
+                <th className="text-left py-2">Paired source</th>
+                <th className="text-right py-2">Velocity journeys touched</th>
+                <th className="text-right py-2">% of Velocity journeys</th>
+                <th className="text-right py-2">Sold</th>
+                <th className="text-right py-2">Sold %</th>
+              </tr>
+            </thead>
+            <tbody>
+              {v.velocity_external_pairings.slice(0, 20).map((p, i) => {
+                const lift = p.sold_pct - v.velocity_sold_pct;
+                const color = lift > 2 ? "text-green-400" : lift < -2 ? "text-red-400" : "text-stewart-text";
+                return (
+                  <tr key={i} className="border-b border-stewart-border/50">
+                    <td className="py-2 text-stewart-text font-medium">{p.source}</td>
+                    <td className="py-2 text-right font-mono">{num(p.journey_count)}</td>
+                    <td className="py-2 text-right font-mono text-stewart-muted">{pct(p.pct_of_velocity_journeys)}</td>
+                    <td className="py-2 text-right font-mono text-stewart-muted">{num(p.sold_count)}</td>
+                    <td className={`py-2 text-right font-mono font-bold ${color}`}>{pct(p.sold_pct)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Response Time view ─── */
 
 function fmtMinutes(m: number | null): string {
@@ -1340,7 +1549,46 @@ function BehaviorView({ data }: { data: TimeGapResponse }) {
 
 /* ─── main page ─── */
 
-type Tab = "summary" | "behavior" | "action" | "response" | "sources" | "journeys" | "clean";
+type Tab = "summary" | "behavior" | "action" | "response" | "paths" | "sources" | "journeys" | "clean";
+
+interface JourneyPathsData {
+  window_days: number;
+  min_count: number;
+  total_journeys: number;
+  sold_journeys: number;
+  sold_pct: number;
+  avg_leads_per_journey: number;
+  avg_duration_days: number;
+  top_paths: Array<{
+    first_source: string;
+    last_source: string;
+    customer_count: number;
+    sold_count: number;
+    sold_pct: number;
+  }>;
+  velocity_focus: {
+    total_velocity_journeys: number;
+    sold_velocity_journeys: number;
+    velocity_sold_pct: number;
+    velocity_only_journeys: number;
+    velocity_only_sold: number;
+    velocity_only_sold_pct: number;
+    velocity_sub_sequences: Array<{
+      sequence: string;
+      length: number;
+      customer_count: number;
+      sold_count: number;
+      sold_pct: number;
+    }>;
+    velocity_external_pairings: Array<{
+      source: string;
+      journey_count: number;
+      sold_count: number;
+      pct_of_velocity_journeys: number;
+      sold_pct: number;
+    }>;
+  };
+}
 
 interface PhoneJourney {
   total_customers: number;
@@ -1455,6 +1703,7 @@ export default function LeadDedupPage() {
   const [actionWindow, setActionWindow] = useState<ActionWindow | null>(null);
   const [responseTime, setResponseTime] = useState<ResponseTimeData | null>(null);
   const [phoneJourney, setPhoneJourney] = useState<PhoneJourney | null>(null);
+  const [journeyPaths, setJourneyPaths] = useState<JourneyPathsData | null>(null);
   const [expandedCustomer, setExpandedCustomer] = useState<string | null>(null);
   const [roiSort, setRoiSort] = useState<"total" | "conversion" | "noise">("total");
 
@@ -1500,6 +1749,9 @@ export default function LeadDedupPage() {
         ]);
         setResponseTime(rt);
         setPhoneJourney(pj);
+      } else if (tab === "paths") {
+        const jp = await api.getDedupJourneys(tenantId, startDate || undefined, endDate || undefined, 30, 3);
+        setJourneyPaths(jp);
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load");
@@ -1526,6 +1778,7 @@ export default function LeadDedupPage() {
     { key: "behavior", label: "Customer Behavior" },
     { key: "action", label: "Action Window" },
     { key: "response", label: "Response Time" },
+    { key: "paths", label: "Journey Paths" },
     { key: "sources", label: "Source ROI" },
     { key: "journeys", label: "Customer Journeys" },
     { key: "clean", label: "Clean View" },
@@ -1639,6 +1892,11 @@ export default function LeadDedupPage() {
       {/* ─── RESPONSE TIME TAB ─── */}
       {!loading && tab === "response" && responseTime && (
         <ResponseTimeView data={responseTime} phoneJourney={phoneJourney} />
+      )}
+
+      {/* ─── JOURNEY PATHS TAB ─── */}
+      {!loading && tab === "paths" && journeyPaths && (
+        <JourneyPathsView data={journeyPaths} />
       )}
 
       {/* ─── SUMMARY TAB ─── */}

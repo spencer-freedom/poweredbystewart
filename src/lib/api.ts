@@ -413,6 +413,55 @@ export const api = {
     }>(params);
   },
 
+  getDedupJourneys: (tenantId: string, startDate?: string, endDate?: string, windowDays = 30, minCount = 3) => {
+    const params: Record<string, string> = {
+      action: "dedup_journeys",
+      tenant: tenantId,
+      window_days: String(windowDays),
+      min_count: String(minCount),
+    };
+    if (startDate) params.start_date = startDate;
+    if (endDate) params.end_date = endDate;
+    return apiGet<{
+      window_days: number;
+      min_count: number;
+      total_journeys: number;
+      sold_journeys: number;
+      sold_pct: number;
+      avg_leads_per_journey: number;
+      avg_duration_days: number;
+      top_paths: Array<{
+        first_source: string;
+        last_source: string;
+        customer_count: number;
+        sold_count: number;
+        sold_pct: number;
+      }>;
+      velocity_focus: {
+        total_velocity_journeys: number;
+        sold_velocity_journeys: number;
+        velocity_sold_pct: number;
+        velocity_only_journeys: number;
+        velocity_only_sold: number;
+        velocity_only_sold_pct: number;
+        velocity_sub_sequences: Array<{
+          sequence: string;
+          length: number;
+          customer_count: number;
+          sold_count: number;
+          sold_pct: number;
+        }>;
+        velocity_external_pairings: Array<{
+          source: string;
+          journey_count: number;
+          sold_count: number;
+          pct_of_velocity_journeys: number;
+          sold_pct: number;
+        }>;
+      };
+    }>(params);
+  },
+
   getDedupPhoneJourney: (tenantId: string, startDate?: string, endDate?: string) => {
     const params: Record<string, string> = { action: "dedup_phone_journey", tenant: tenantId };
     if (startDate) params.start_date = startDate;

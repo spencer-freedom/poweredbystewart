@@ -1143,6 +1143,226 @@ export async function GET(req: NextRequest) {
         });
       }
 
+      // ── Lead Dedup: Journey Paths — first→last source flow ───────────
+      case "dedup_journeys": {
+        const startDate = searchParams.get("start_date") || "";
+        const endDate = searchParams.get("end_date") || "";
+        const windowDays = parseInt(searchParams.get("window_days") || "30");
+        const minPathCount = parseInt(searchParams.get("min_count") || "3");
+
+        const buildQuery = () => {
+          let q = supabase
+            .from("vin_leads")
+            .select("customer, lead_origination_date, lead_source, lead_status_type")
+            .eq("tenant_id", tenantId)
+            .not("customer", "in", '("","Name","Wireless")')
+            .neq("lead_source_type", "Service")
+            .neq("lead_source", "Fresh Up/Walk-In");
+          if (startDate) q = q.gte("lead_origination_date", startDate);
+          if (endDate) q = q.lte("lead_origination_date", endDate + " 23:59:59");
+          return q;
+        };
+
+        const { data: leads, error } = await fetchAllRows<{
+          customer: string;
+          lead_origination_date: string;
+          lead_source: string;
+          lead_status_type: string | null;
+        }>(buildQuery);
+        if (error) return errorResponse(error);
+
+        const SOLD = new Set(["Sold", "Sold Delivered", "Delivered"]);
+        const WINDOW_MS = windowDays * 86400000;
+
+        // Source rollup — collapse vendor sub-sources to vendor name
+        const rollupSource = (s: string): string => {
+          if (!s) return "Unknown";
+          if (/^team velocity/i.test(s)) return "Team Velocity";
+          if (/^apollo/i.test(s)) return "Apollo";
+          if (/^edmunds/i.test(s)) return "Edmunds";
+          if (/^kia digital/i.test(s)) return "Kia Digital";
+          if (/^cargurus/i.test(s)) return "CarGurus";
+          if (/^autobytel/i.test(s)) return "AutoBytel";
+          if (/^autotrader/i.test(s)) return "AutoTrader";
+          if (/^cars\.com/i.test(s)) return "Cars.com";
+          if (/^truecar/i.test(s)) return "TrueCar";
+          if (/^hutton/i.test(s)) return "Hutton";
+          if (/^dealertrack/i.test(s)) return "Dealertrack";
+          if (/^phone up/i.test(s)) return "Phone Up";
+          if (/^manufacturer/i.test(s)) return "Manufacturer";
+          if (/^service appointment/i.test(s)) return "Service Appointment";
+          return s;
+        };
+
+        // Group by customer, compute journeys (consecutive leads within window)
+        const byCustomer: Record<string, typeof leads> = {};
+        for (const l of leads) (byCustomer[l.customer] ||= []).push(l);
+
+        interface Journey {
+          customer: string;
+          firstSource: string;
+          lastSource: string;
+          firstSourceRaw: string;
+          lastSourceRaw: string;
+          allSourcesRolled: string[];
+          velocitySubSources: string[];
+          hasVelocity: boolean;
+          sold: boolean;
+          startTs: number;
+          endTs: number;
+          leadCount: number;
+        }
+        const journeys: Journey[] = [];
+
+        for (const [customer, custLeads] of Object.entries(byCustomer)) {
+          custLeads.sort((a, b) => a.lead_origination_date.localeCompare(b.lead_origination_date));
+
+          let chunk: typeof custLeads = [];
+          const flush = () => {
+            if (chunk.length < 2) return;
+            const first = chunk[0];
+            const last = chunk[chunk.length - 1];
+            const sources = chunk.map((l) => l.lead_source);
+            const rolled = sources.map(rollupSource);
+            const velocitySubs = sources.filter((s) => /^team velocity/i.test(s));
+            journeys.push({
+              customer,
+              firstSource: rollupSource(first.lead_source),
+              lastSource: rollupSource(last.lead_source),
+              firstSourceRaw: first.lead_source,
+              lastSourceRaw: last.lead_source,
+              allSourcesRolled: Array.from(new Set(rolled)),
+              velocitySubSources: velocitySubs,
+              hasVelocity: velocitySubs.length > 0,
+              sold: chunk.some((l) => SOLD.has(l.lead_status_type || "")),
+              startTs: new Date(first.lead_origination_date).getTime(),
+              endTs: new Date(last.lead_origination_date).getTime(),
+              leadCount: chunk.length,
+            });
+          };
+
+          for (let i = 0; i < custLeads.length; i++) {
+            if (chunk.length === 0) {
+              chunk = [custLeads[i]];
+              continue;
+            }
+            const prevTs = new Date(chunk[chunk.length - 1].lead_origination_date).getTime();
+            const currTs = new Date(custLeads[i].lead_origination_date).getTime();
+            if (currTs - prevTs <= WINDOW_MS) {
+              chunk.push(custLeads[i]);
+            } else {
+              flush();
+              chunk = [custLeads[i]];
+            }
+          }
+          flush();
+        }
+
+        const total = journeys.length;
+        const sold = journeys.filter((j) => j.sold).length;
+        const avgLeads = total > 0 ? journeys.reduce((s, j) => s + j.leadCount, 0) / total : 0;
+        const avgDurationDays = total > 0
+          ? journeys.reduce((s, j) => s + (j.endTs - j.startTs) / 86400000, 0) / total
+          : 0;
+
+        // ── Top first → last paths (rolled up) ─────────────────────────
+        const pathMap: Record<string, { first: string; last: string; count: number; sold: number }> = {};
+        for (const j of journeys) {
+          const key = `${j.firstSource}|||${j.lastSource}`;
+          if (!pathMap[key]) pathMap[key] = { first: j.firstSource, last: j.lastSource, count: 0, sold: 0 };
+          pathMap[key].count++;
+          if (j.sold) pathMap[key].sold++;
+        }
+        const top_paths = Object.values(pathMap)
+          .filter((p) => p.count >= minPathCount)
+          .map((p) => ({
+            first_source: p.first,
+            last_source: p.last,
+            customer_count: p.count,
+            sold_count: p.sold,
+            sold_pct: p.count > 0 ? Math.round((p.sold / p.count) * 1000) / 10 : 0,
+          }))
+          .sort((a, b) => b.customer_count - a.customer_count);
+
+        // ── Velocity Focus ─────────────────────────────────────────────
+        const velocityJourneys = journeys.filter((j) => j.hasVelocity);
+        const velTotal = velocityJourneys.length;
+        const velSold = velocityJourneys.filter((j) => j.sold).length;
+
+        // Internal: Velocity sub-source sequences (dedupe consecutive)
+        const subSeqMap: Record<string, { seq: string[]; count: number; sold: number }> = {};
+        for (const j of velocityJourneys) {
+          // Dedupe consecutive duplicates so "Pre-Qual, Pre-Qual, Get Financing" → "Pre-Qual, Get Financing"
+          const cleaned: string[] = [];
+          for (const s of j.velocitySubSources) {
+            const short = s.replace(/^team velocity\s*-\s*/i, "").trim();
+            if (cleaned[cleaned.length - 1] !== short) cleaned.push(short);
+          }
+          if (cleaned.length === 0) continue;
+          const key = cleaned.join(" → ");
+          if (!subSeqMap[key]) subSeqMap[key] = { seq: cleaned, count: 0, sold: 0 };
+          subSeqMap[key].count++;
+          if (j.sold) subSeqMap[key].sold++;
+        }
+        const velocity_sub_sequences = Object.values(subSeqMap)
+          .filter((p) => p.count >= minPathCount)
+          .map((p) => ({
+            sequence: p.seq.join(" → "),
+            length: p.seq.length,
+            customer_count: p.count,
+            sold_count: p.sold,
+            sold_pct: p.count > 0 ? Math.round((p.sold / p.count) * 1000) / 10 : 0,
+          }))
+          .sort((a, b) => b.customer_count - a.customer_count);
+
+        // External: which non-Velocity sources appear in Velocity journeys
+        const extMap: Record<string, { source: string; count: number; sold: number }> = {};
+        for (const j of velocityJourneys) {
+          const externals = j.allSourcesRolled.filter((s) => s !== "Team Velocity");
+          for (const ext of externals) {
+            if (!extMap[ext]) extMap[ext] = { source: ext, count: 0, sold: 0 };
+            extMap[ext].count++;
+            if (j.sold) extMap[ext].sold++;
+          }
+        }
+        const velocity_external_pairings = Object.values(extMap)
+          .filter((p) => p.count >= minPathCount)
+          .map((p) => ({
+            source: p.source,
+            journey_count: p.count,
+            sold_count: p.sold,
+            pct_of_velocity_journeys: velTotal > 0 ? Math.round((p.count / velTotal) * 1000) / 10 : 0,
+            sold_pct: p.count > 0 ? Math.round((p.sold / p.count) * 1000) / 10 : 0,
+          }))
+          .sort((a, b) => b.journey_count - a.journey_count);
+
+        // Solo: Velocity-only journeys (no other source touched)
+        const veloOnlyJourneys = velocityJourneys.filter((j) => j.allSourcesRolled.length === 1 && j.allSourcesRolled[0] === "Team Velocity");
+        const veloOnlyCount = veloOnlyJourneys.length;
+        const veloOnlySold = veloOnlyJourneys.filter((j) => j.sold).length;
+
+        return NextResponse.json({
+          window_days: windowDays,
+          min_count: minPathCount,
+          total_journeys: total,
+          sold_journeys: sold,
+          sold_pct: total > 0 ? Math.round((sold / total) * 1000) / 10 : 0,
+          avg_leads_per_journey: Math.round(avgLeads * 10) / 10,
+          avg_duration_days: Math.round(avgDurationDays * 10) / 10,
+          top_paths,
+          velocity_focus: {
+            total_velocity_journeys: velTotal,
+            sold_velocity_journeys: velSold,
+            velocity_sold_pct: velTotal > 0 ? Math.round((velSold / velTotal) * 1000) / 10 : 0,
+            velocity_only_journeys: veloOnlyCount,
+            velocity_only_sold: veloOnlySold,
+            velocity_only_sold_pct: veloOnlyCount > 0 ? Math.round((veloOnlySold / veloOnlyCount) * 1000) / 10 : 0,
+            velocity_sub_sequences,
+            velocity_external_pairings,
+          },
+        });
+      }
+
       // ── Lead Dedup: Phone Up Journey — did slow response drive the call-in? ──
       case "dedup_phone_journey": {
         const startDate = searchParams.get("start_date") || "";
