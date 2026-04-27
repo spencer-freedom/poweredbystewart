@@ -5,7 +5,7 @@ import { Sidebar } from "@/components/sidebar";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAuthPage = pathname === "/" || pathname.startsWith("/sign-in") || pathname.startsWith("/sign-up") || pathname.startsWith("/sisel") || pathname === "/privacy" || pathname === "/terms";
+  const isAuthPage = pathname === "/" || pathname.startsWith("/sign-in") || pathname.startsWith("/sign-up") || pathname.startsWith("/sisel") || pathname === "/privacy" || pathname === "/terms" || pathname.startsWith("/ion");
 
   if (isAuthPage) {
     return <>{children}</>;
