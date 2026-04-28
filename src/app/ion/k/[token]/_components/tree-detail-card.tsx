@@ -32,11 +32,11 @@ export function TreeDetailCard({
         <blockquote className="text-[15px] italic leading-relaxed text-sky-950">
           &ldquo;{track.verbatim}&rdquo;
         </blockquote>
-        <p className="text-sm text-sky-900/80 mt-4 leading-relaxed">
+        <p className="text-sm text-sky-900/80 mt-3 leading-relaxed">
           <strong className="text-sky-950">Why it works:</strong>{" "}
           {track.why_it_works}
         </p>
-        <div className="text-xs text-sky-900/60 font-mono mt-4 flex flex-wrap gap-x-3 gap-y-1">
+        <div className="text-xs text-sky-900/60 font-mono mt-3 flex flex-wrap gap-x-3 gap-y-1">
           <span>call {track.source_call_id}</span>
           {track.source_setter_id && <span>· rep {track.source_setter_id}</span>}
           <span>· n={track.sample_size}</span>
@@ -45,7 +45,7 @@ export function TreeDetailCard({
         {typeof track.start_seconds === "number" &&
         typeof track.end_seconds === "number" &&
         track.end_seconds > track.start_seconds ? (
-          <div className="mt-5">
+          <div className="mt-3">
             <AudioClip
               token={token}
               callId={track.source_call_id}
@@ -54,7 +54,7 @@ export function TreeDetailCard({
             />
           </div>
         ) : (
-          <p className="text-xs text-sky-900/50 mt-5 italic">
+          <p className="text-xs text-sky-900/50 mt-3 italic">
             Audio clip unavailable for this line.
           </p>
         )}
@@ -79,11 +79,11 @@ export function TreeDetailCard({
       <blockquote className="text-[15px] italic leading-relaxed text-rose-950">
         &ldquo;{losing.verbatim}&rdquo;
       </blockquote>
-      <p className="text-sm text-rose-900/80 mt-4 leading-relaxed">
+      <p className="text-sm text-rose-900/80 mt-3 leading-relaxed">
         <strong className="text-rose-950">Why it lost:</strong>{" "}
         {losing.what_went_wrong}
       </p>
-      <p className="text-xs text-rose-900/60 font-mono mt-4">
+      <p className="text-xs text-rose-900/60 font-mono mt-3">
         from call {losing.source_call_id}
       </p>
     </Frame>
@@ -114,11 +114,11 @@ function Frame({
 
   return (
     <div
-      className={`absolute top-4 right-4 bottom-4 w-1/2 max-w-[640px] z-30 rounded-2xl border-2 shadow-2xl flex flex-col overflow-hidden ${tone}`}
+      className={`absolute top-4 right-4 w-[44%] max-w-[520px] max-h-[calc(100%-2rem)] z-30 rounded-2xl border-2 shadow-2xl flex flex-col overflow-hidden ${tone}`}
       onClick={(e) => e.stopPropagation()}
     >
       <header
-        className={`flex items-center justify-between px-5 py-3 border-b ${
+        className={`flex items-center justify-between px-4 py-2.5 border-b ${
           accent === "sky" ? "border-sky-200" : "border-rose-200"
         }`}
       >
@@ -139,7 +139,7 @@ function Frame({
           ×
         </button>
       </header>
-      <div className="px-5 py-5 overflow-y-auto">{children}</div>
+      <div className="px-4 py-3 overflow-y-auto">{children}</div>
     </div>
   );
 }
