@@ -13,14 +13,12 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 
 import type { DecisionTreePayload } from "@/lib/ion-api";
-import { buildTreeGraph } from "./tree-transform";
+import {
+  buildTreeGraph,
+  type DetailSelection,
+} from "./tree-transform";
 import { layoutGraph } from "./tree-layout";
 import { NODE_TYPES } from "./tree-nodes";
-import {
-  TreeSidePanel,
-  selectionFromNodeId,
-  type Selection,
-} from "./tree-side-panel";
 
 export function DecisionTree({
   data,
@@ -51,14 +49,16 @@ function DecisionTreeInner({
   const [collapsed, setCollapsed] = useState<Set<string>>(
     () => new Set(allClusterIds)
   );
-  const [selection, setSelection] = useState<Selection>(null);
-  const { fitView } = useReactFlow();
+  const [detail, setDetail] = useState<DetailSelection>(null);
+  const { fitBounds } = useReactFlow();
 
   // Focus-mode: clicking a collapsed cluster expands ONLY that one
   // (auto-collapses all others). Clicking an already-expanded cluster
-  // simply collapses it.
+  // simply collapses it. Either way, drop any open detail node since
+  // its parent track/loss may no longer be visible.
   const toggleCluster = useCallback(
     (clusterId: string) => {
+      setDetail(null);
       setCollapsed((prev) => {
         if (prev.has(clusterId)) {
           const next = new Set(allClusterIds);
@@ -71,36 +71,97 @@ function DecisionTreeInner({
     [allClusterIds]
   );
 
+  // Detail nodes can dispatch a close event from their × button.
+  useEffect(() => {
+    const close = () => setDetail(null);
+    window.addEventListener("ion-tree-detail-close", close);
+    return () => window.removeEventListener("ion-tree-detail-close", close);
+  }, []);
+
+  // Esc closes the detail too.
+  useEffect(() => {
+    if (!detail) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setDetail(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [detail]);
+
   const { nodes, edges } = useMemo(() => {
-    const g = buildTreeGraph(data, collapsed);
+    const g = buildTreeGraph(data, collapsed, detail, token);
     const laidOut = layoutGraph(g.nodes, g.edges);
     return { nodes: laidOut, edges: g.edges };
-  }, [data, collapsed]);
+  }, [data, collapsed, detail, token]);
 
-  // Re-fit viewport when the visible node set changes.
+  // Left-anchor the tree by skewing the fit-bounds rectangle wider to the right.
+  // The tree itself only occupies the left ~60% of the bounds, so when fitted
+  // the user sees the tree on the left with empty canvas inviting drill-down.
   useEffect(() => {
     const t = setTimeout(() => {
-      fitView({ padding: 0.1, duration: 350, maxZoom: 1.3 });
+      if (!nodes.length) return;
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      for (const n of nodes) {
+        const w = (n.style?.width as number) ?? 200;
+        const h = (n.style?.height as number) ?? 80;
+        if (n.position.x < minX) minX = n.position.x;
+        if (n.position.y < minY) minY = n.position.y;
+        if (n.position.x + w > maxX) maxX = n.position.x + w;
+        if (n.position.y + h > maxY) maxY = n.position.y + h;
+      }
+      const treeWidth = Math.max(1, maxX - minX);
+      const treeHeight = Math.max(1, maxY - minY);
+      // Stretch fit-rectangle 1.6x rightward → tree lands on left ~62%.
+      fitBounds(
+        { x: minX, y: minY, width: treeWidth * 1.6, height: treeHeight * 1.05 },
+        { padding: 0.05, duration: 350 }
+      );
     }, 30);
     return () => clearTimeout(t);
-  }, [collapsed, fitView]);
+  }, [collapsed, detail, fitBounds, nodes]);
 
   const onNodeClick: NodeMouseHandler = useCallback(
     (_, node) => {
-      if (node.id === "root") return;
-      // Cluster click = drill into the tree (no side panel).
-      // Word-track or losing-pattern click = open side panel for full detail.
+      if (node.id === "root" || node.id === "detail") return;
       if (node.id.startsWith("c:")) {
         toggleCluster(node.id.slice(2));
         return;
       }
-      setSelection(selectionFromNodeId(node.id));
+      if (node.id.startsWith("t:")) {
+        const trackId = node.id.slice(2);
+        setDetail((prev) =>
+          prev && prev.kind === "track" && prev.id === trackId
+            ? null
+            : { kind: "track", id: trackId }
+        );
+        return;
+      }
+      if (node.id.startsWith("l:")) {
+        const rest = node.id.slice(2);
+        const lastColon = rest.lastIndexOf(":");
+        const clusterId = rest.slice(0, lastColon);
+        const index = Number(rest.slice(lastColon + 1)) || 0;
+        setDetail((prev) =>
+          prev &&
+          prev.kind === "losing" &&
+          prev.clusterId === clusterId &&
+          prev.index === index
+            ? null
+            : { kind: "losing", clusterId, index }
+        );
+      }
     },
     [toggleCluster]
   );
 
-  const expandAll = () => setCollapsed(new Set());
-  const collapseAll = () => setCollapsed(new Set(allClusterIds));
+  const expandAll = () => {
+    setDetail(null);
+    setCollapsed(new Set());
+  };
+  const collapseAll = () => {
+    setDetail(null);
+    setCollapsed(new Set(allClusterIds));
+  };
   const allExpanded = collapsed.size === 0;
   const allCollapsed = collapsed.size === allClusterIds.length;
 
@@ -127,12 +188,11 @@ function DecisionTreeInner({
         edges={edges}
         nodeTypes={NODE_TYPES}
         onNodeClick={onNodeClick}
+        onPaneClick={() => setDetail(null)}
         nodesDraggable={false}
         nodesConnectable={false}
         elementsSelectable
         proOptions={{ hideAttribution: true }}
-        fitView
-        fitViewOptions={{ padding: 0.1, includeHiddenNodes: false, maxZoom: 1.3 }}
         minZoom={0.18}
         maxZoom={1.8}
       >
@@ -154,12 +214,6 @@ function DecisionTreeInner({
           className="!bg-stewart-card !border !border-stewart-border"
         />
       </ReactFlow>
-      <TreeSidePanel
-        data={data}
-        selection={selection}
-        token={token}
-        onClose={() => setSelection(null)}
-      />
     </div>
   );
 }
@@ -169,5 +223,6 @@ function miniMapColor(node: { type?: string }): string {
   if (node.type === "cluster") return "#c4b5fd";
   if (node.type === "track") return "#bae6fd";
   if (node.type === "losing") return "#fda4af";
+  if (node.type === "detail") return "#e0f2fe";
   return "#94a3b8";
 }

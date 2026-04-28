@@ -4,10 +4,12 @@ import { Handle, Position, type NodeProps } from "reactflow";
 import { cn } from "@/lib/utils";
 import type {
   ClusterNodeData,
+  DetailNodeData,
   LosingNodeData,
   RootNodeData,
   TrackNodeData,
 } from "./tree-transform";
+import { AudioClip } from "./audio-clip";
 
 const HANDLE_STYLE = { opacity: 0, pointerEvents: "none" as const };
 
@@ -146,11 +148,103 @@ export function LosingPatternNode({
   );
 }
 
+export function DetailNode({ data }: NodeProps<DetailNodeData>) {
+  if (data.detailKind === "track") {
+    const { track, cluster, token } = data;
+    const pct = Math.round(track.win_rate * 100);
+    return (
+      <div className="w-full h-full rounded-2xl bg-sky-50 text-stewart-bg border-2 border-sky-400 shadow-2xl flex flex-col px-5 py-4 overflow-y-auto">
+        <Handle type="target" position={Position.Left} style={HANDLE_STYLE} />
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-[10px] font-mono font-bold rounded bg-sky-700 text-white px-1.5 py-0.5">
+            #{track.rank}
+          </span>
+          <span className="text-[10px] uppercase tracking-wider text-sky-900/60">
+            {cluster.name}
+          </span>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              window.dispatchEvent(new CustomEvent("ion-tree-detail-close"));
+            }}
+            className="ml-auto text-sky-900/50 hover:text-sky-900 text-base leading-none"
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </div>
+        <blockquote className="text-[12px] italic leading-snug text-sky-950">
+          &ldquo;{track.verbatim}&rdquo;
+        </blockquote>
+        <p className="text-[11px] text-sky-900/80 mt-2 leading-snug">
+          <strong>Why it works:</strong> {track.why_it_works}
+        </p>
+        <div className="text-[10px] text-sky-900/60 font-mono mt-2 flex flex-wrap gap-x-2 gap-y-0.5">
+          <span>call {track.source_call_id}</span>
+          {track.source_setter_id && <span>· rep {track.source_setter_id}</span>}
+          <span>· n={track.sample_size}</span>
+          <span>· est. {pct}% win</span>
+        </div>
+        {typeof track.start_seconds === "number" &&
+        typeof track.end_seconds === "number" &&
+        track.end_seconds > track.start_seconds ? (
+          <div className="mt-2 nodrag" onClick={(e) => e.stopPropagation()}>
+            <AudioClip
+              token={token}
+              callId={track.source_call_id}
+              startSec={track.start_seconds}
+              endSec={track.end_seconds}
+            />
+          </div>
+        ) : null}
+      </div>
+    );
+  }
+
+  // losing detail
+  const { losing, cluster, index } = data;
+  return (
+    <div className="w-full h-full rounded-2xl bg-rose-50 text-stewart-bg border-2 border-rose-400 shadow-2xl flex flex-col px-5 py-4 overflow-y-auto">
+      <Handle type="target" position={Position.Left} style={HANDLE_STYLE} />
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-[10px] font-mono font-bold rounded bg-rose-700 text-white px-1.5 py-0.5">
+          ✕ loss {index + 1}
+        </span>
+        <span className="text-[10px] uppercase tracking-wider text-rose-900/60">
+          {cluster.name}
+        </span>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            window.dispatchEvent(new CustomEvent("ion-tree-detail-close"));
+          }}
+          className="ml-auto text-rose-900/50 hover:text-rose-900 text-base leading-none"
+          aria-label="Close"
+        >
+          ×
+        </button>
+      </div>
+      <blockquote className="text-[12px] italic leading-snug text-rose-950">
+        &ldquo;{losing.verbatim}&rdquo;
+      </blockquote>
+      <p className="text-[11px] text-rose-900/80 mt-2 leading-snug">
+        <strong>Why it lost:</strong> {losing.what_went_wrong}
+      </p>
+      <div className="text-[10px] text-rose-900/60 font-mono mt-2">
+        from call {losing.source_call_id}
+      </div>
+    </div>
+  );
+}
+
 export const NODE_TYPES = {
   root: RootNode,
   cluster: ClusterNode,
   track: TrackNode,
   losing: LosingPatternNode,
+  detail: DetailNode,
 };
 
 function winRateTone(pct: number) {
