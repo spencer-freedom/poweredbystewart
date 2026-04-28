@@ -9,11 +9,13 @@ export function TreeDetailCard({
   detail,
   token,
   onClose,
+  topPx,
 }: {
   data: DecisionTreePayload;
   detail: DetailSelection;
   token: string;
   onClose: () => void;
+  topPx: number | null;
 }) {
   if (!detail) return null;
 
@@ -28,6 +30,7 @@ export function TreeDetailCard({
         cluster={cluster?.name}
         kindLabel={`Winning word track #${track.rank}`}
         onClose={onClose}
+        topPx={topPx}
       >
         <blockquote className="text-[15px] italic leading-relaxed text-sky-950">
           &ldquo;{track.verbatim}&rdquo;
@@ -75,6 +78,7 @@ export function TreeDetailCard({
       cluster={cluster?.name}
       kindLabel={`What didn't work · loss ${detail.index + 1}`}
       onClose={onClose}
+      topPx={topPx}
     >
       <blockquote className="text-[15px] italic leading-relaxed text-rose-950">
         &ldquo;{losing.verbatim}&rdquo;
@@ -95,12 +99,14 @@ function Frame({
   cluster,
   kindLabel,
   onClose,
+  topPx,
   children,
 }: {
   accent: "sky" | "rose";
   cluster?: string;
   kindLabel: string;
   onClose: () => void;
+  topPx: number | null;
   children: React.ReactNode;
 }) {
   const tone =
@@ -114,7 +120,8 @@ function Frame({
 
   return (
     <div
-      className={`absolute top-4 right-4 w-[44%] max-w-[520px] max-h-[calc(100%-2rem)] z-30 rounded-2xl border-2 shadow-2xl flex flex-col overflow-hidden ${tone}`}
+      style={{ top: topPx ?? 16 }}
+      className={`absolute right-4 w-[44%] max-w-[520px] max-h-[calc(100%-2rem)] z-30 rounded-2xl border-2 shadow-2xl flex flex-col overflow-hidden transition-[top] duration-200 ease-out ${tone}`}
       onClick={(e) => e.stopPropagation()}
     >
       <header

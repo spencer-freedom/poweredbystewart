@@ -22,13 +22,8 @@ export default async function TreePage({
             <h1 className="text-2xl font-bold text-stewart-text">
               Decision Tree — {clusters.length} Objection Clusters
             </h1>
-            <p className="text-stewart-muted mt-1 text-sm">
-              Click a cluster to drill in. Click a winning track to hear the
-              audio. Pan + scroll to zoom.
-            </p>
-          </div>
+            </div>
           <div className="flex items-center gap-3 text-xs text-stewart-muted">
-            <Legend swatch="bg-amber-300" label="Sample" />
             <Legend swatch="bg-violet-300" label="Objection cluster" />
             <Legend swatch="bg-sky-200" label="Winning word track" />
             <Legend swatch="bg-rose-300" label="What didn't work" />
