@@ -2,11 +2,13 @@ import type { Edge, Node } from "reactflow";
 import type {
   Cluster,
   DecisionTreePayload,
+  LosingPattern,
   Transition,
   WordTrack,
 } from "@/lib/ion-api";
 
 const TOP_TRACKS_PER_CLUSTER = 3;
+const TOP_LOSSES_PER_CLUSTER = 3;
 
 export type RootNodeData = {
   kind: "root";
@@ -31,7 +33,18 @@ export type TrackNodeData = {
   cluster: Cluster;
 };
 
-export type TreeNodeData = RootNodeData | ClusterNodeData | TrackNodeData;
+export type LosingNodeData = {
+  kind: "losing";
+  losing: LosingPattern;
+  cluster: Cluster;
+  index: number;
+};
+
+export type TreeNodeData =
+  | RootNodeData
+  | ClusterNodeData
+  | TrackNodeData
+  | LosingNodeData;
 
 export type TreeGraph = {
   nodes: Node<TreeNodeData>[];
@@ -115,6 +128,26 @@ export function buildTreeGraph(
       });
     }
 
+    const visibleLosing = allLosing
+      .filter((l) => l.cluster_id === cluster.id)
+      .slice(0, TOP_LOSSES_PER_CLUSTER);
+    visibleLosing.forEach((l, idx) => {
+      const id = losingNodeId(cluster.id, idx);
+      nodes.push({
+        id,
+        type: "losing",
+        position: { x: 0, y: 0 },
+        data: { kind: "losing", losing: l, cluster, index: idx },
+      });
+      edges.push({
+        id: `e-${cluster.id}-loss-${idx}`,
+        source: clusterNodeId(cluster.id),
+        target: id,
+        type: "smoothstep",
+        style: { stroke: "#ef4444", strokeOpacity: 0.55 },
+      });
+    });
+
     // Transition edges: parent_track → next_track within visible tracks of the cluster
     const clusterTransitions = allTransitions.filter(
       (tr: Transition) =>
@@ -148,6 +181,10 @@ export function clusterNodeId(clusterId: string): string {
 
 export function trackNodeId(trackId: string): string {
   return `t:${trackId}`;
+}
+
+export function losingNodeId(clusterId: string, index: number): string {
+  return `l:${clusterId}:${index}`;
 }
 
 function humanCohort(c: string | null): string {

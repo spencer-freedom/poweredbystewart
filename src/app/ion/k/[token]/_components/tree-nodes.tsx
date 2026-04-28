@@ -4,6 +4,7 @@ import { Handle, Position, type NodeProps } from "reactflow";
 import { cn } from "@/lib/utils";
 import type {
   ClusterNodeData,
+  LosingNodeData,
   RootNodeData,
   TrackNodeData,
 } from "./tree-transform";
@@ -36,6 +37,7 @@ export function ClusterNode({
 
   return (
     <div
+      title={cluster.description}
       className={cn(
         "w-full h-full rounded-2xl bg-violet-200/95 text-stewart-bg shadow flex flex-col px-4 py-3 cursor-pointer transition-shadow hover:shadow-xl relative overflow-hidden",
         selected && "ring-2 ring-violet-500 ring-offset-2 ring-offset-stewart-bg"
@@ -56,7 +58,7 @@ export function ClusterNode({
           {pct}%
         </span>
       </div>
-      <div className="text-[10px] text-violet-900/70 mt-2 font-mono flex items-center gap-2">
+      <div className="text-[10px] text-violet-900/70 mt-1.5 font-mono flex items-center gap-2">
         <span>{cluster.frequency} calls</span>
         <span>·</span>
         <span className="text-emerald-700">{trackCount} wins</span>
@@ -67,23 +69,14 @@ export function ClusterNode({
           </>
         )}
       </div>
-      {trackCount > 0 && (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            window.dispatchEvent(
-              new CustomEvent("ion-tree-toggle", {
-                detail: { clusterId: cluster.id },
-              })
-            );
-          }}
-          className="absolute bottom-1.5 right-2 text-[10px] font-mono text-violet-900/60 hover:text-violet-900"
-          title={collapsed ? "Show winning tracks" : "Hide winning tracks"}
-        >
-          {collapsed ? "+ drill in" : "− close"}
-        </button>
-      )}
+      <span
+        className={cn(
+          "absolute bottom-1.5 right-2 text-[10px] font-mono",
+          collapsed ? "text-violet-900/60" : "text-violet-900/80"
+        )}
+      >
+        {collapsed ? "click to drill in →" : "↓ expanded"}
+      </span>
       <Handle type="source" position={Position.Right} style={HANDLE_STYLE} />
     </div>
   );
@@ -121,10 +114,43 @@ export function TrackNode({ data, selected }: NodeProps<TrackNodeData>) {
   );
 }
 
+export function LosingPatternNode({
+  data,
+  selected,
+}: NodeProps<LosingNodeData>) {
+  const { losing, index } = data;
+  const snippet = truncate(losing.verbatim, 70);
+
+  return (
+    <div
+      className={cn(
+        "w-full h-full rounded-2xl bg-rose-100/95 text-stewart-bg shadow flex flex-col px-3 py-2 cursor-pointer hover:shadow-xl transition-shadow border border-rose-300",
+        selected && "ring-2 ring-rose-500 ring-offset-2 ring-offset-stewart-bg"
+      )}
+      title={losing.verbatim}
+    >
+      <Handle type="target" position={Position.Left} style={HANDLE_STYLE} />
+      <div className="flex items-center gap-2">
+        <span className="text-[10px] font-mono font-bold rounded bg-rose-700 text-white px-1.5 py-0.5 shrink-0">
+          ✕ loss {index + 1}
+        </span>
+        <span className="text-[10px] text-rose-900/70 truncate">
+          call {losing.source_call_id}
+        </span>
+      </div>
+      <blockquote className="text-[11px] italic leading-snug mt-1.5 text-rose-950 line-clamp-3">
+        &ldquo;{snippet}&rdquo;
+      </blockquote>
+      <Handle type="source" position={Position.Right} style={HANDLE_STYLE} />
+    </div>
+  );
+}
+
 export const NODE_TYPES = {
   root: RootNode,
   cluster: ClusterNode,
   track: TrackNode,
+  losing: LosingPatternNode,
 };
 
 function winRateTone(pct: number) {

@@ -11,6 +11,7 @@ import { AudioClip } from "./audio-clip";
 export type Selection =
   | { kind: "cluster"; clusterId: string }
   | { kind: "track"; trackId: string }
+  | { kind: "losing"; clusterId: string; index: number }
   | null;
 
 export function TreeSidePanel({
@@ -48,7 +49,11 @@ export function TreeSidePanel({
       >
         <div className="sticky top-0 bg-stewart-card border-b border-stewart-border px-5 py-3 flex items-center justify-between z-10">
           <h2 className="text-sm uppercase tracking-wider text-stewart-muted">
-            {selection.kind === "cluster" ? "Cluster" : "Winning word track"}
+            {selection.kind === "cluster"
+              ? "Cluster"
+              : selection.kind === "losing"
+              ? "What didn't work"
+              : "Winning word track"}
           </h2>
           <button
             onClick={onClose}
@@ -62,6 +67,12 @@ export function TreeSidePanel({
         <div className="px-5 py-5">
           {selection.kind === "cluster" ? (
             <ClusterDetail data={data} clusterId={selection.clusterId} token={token} />
+          ) : selection.kind === "losing" ? (
+            <LosingDetail
+              data={data}
+              clusterId={selection.clusterId}
+              index={selection.index}
+            />
           ) : (
             <TrackDetail data={data} trackId={selection.trackId} token={token} />
           )}
@@ -176,6 +187,50 @@ function ClusterDetail({
           </ul>
         </Section>
       )}
+    </div>
+  );
+}
+
+function LosingDetail({
+  data,
+  clusterId,
+  index,
+}: {
+  data: DecisionTreePayload;
+  clusterId: string;
+  index: number;
+}) {
+  const cluster = (data.clusters || []).find((c) => c.id === clusterId);
+  const losses = (data.losing_patterns || []).filter(
+    (l) => l.cluster_id === clusterId
+  );
+  const losing = losses[index];
+  if (!losing) return <p className="text-stewart-muted">Not found.</p>;
+
+  return (
+    <div className="space-y-5">
+      <div>
+        {cluster && (
+          <p className="text-xs uppercase tracking-wider text-stewart-muted">
+            {cluster.name}
+          </p>
+        )}
+        <h3 className="text-base font-semibold text-stewart-text mt-1">
+          What didn&apos;t work
+        </h3>
+      </div>
+      <div className="bg-stewart-danger/5 border border-stewart-danger/30 rounded-lg p-4">
+        <blockquote className="text-stewart-text italic leading-relaxed">
+          &ldquo;{losing.verbatim}&rdquo;
+        </blockquote>
+        <p className="text-sm text-stewart-muted mt-3">
+          <strong className="text-stewart-text">Why it lost:</strong>{" "}
+          {losing.what_went_wrong}
+        </p>
+        <p className="text-xs text-stewart-muted mt-3">
+          From call <code>{losing.source_call_id}</code>
+        </p>
+      </div>
     </div>
   );
 }
@@ -295,6 +350,17 @@ export function selectionFromNodeId(nodeId: string): Selection {
   }
   if (nodeId.startsWith("t:")) {
     return { kind: "track", trackId: nodeId.slice(2) };
+  }
+  if (nodeId.startsWith("l:")) {
+    const rest = nodeId.slice(2);
+    const lastColon = rest.lastIndexOf(":");
+    if (lastColon > -1) {
+      return {
+        kind: "losing",
+        clusterId: rest.slice(0, lastColon),
+        index: Number(rest.slice(lastColon + 1)) || 0,
+      };
+    }
   }
   return null;
 }

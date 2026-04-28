@@ -6,11 +6,13 @@ const NODE_W = {
   root: 240,
   cluster: 240,
   track: 290,
+  losing: 250,
 };
 const NODE_H = {
   root: 96,
   cluster: 96,
   track: 124,
+  losing: 92,
 };
 
 export function layoutGraph(

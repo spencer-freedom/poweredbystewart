@@ -23,14 +23,15 @@ export default async function TreePage({
               Decision Tree — {clusters.length} Objection Clusters
             </h1>
             <p className="text-stewart-muted mt-1 text-sm">
-              Click any node to see verbatim text, audio attribution, and what
-              didn&apos;t work for that objection. Pan + scroll to zoom.
+              Click a cluster to drill in. Click a winning track to hear the
+              audio. Pan + scroll to zoom.
             </p>
           </div>
           <div className="flex items-center gap-3 text-xs text-stewart-muted">
             <Legend swatch="bg-amber-300" label="Sample" />
             <Legend swatch="bg-violet-300" label="Objection cluster" />
             <Legend swatch="bg-sky-200" label="Winning word track" />
+            <Legend swatch="bg-rose-300" label="What didn't work" />
           </div>
         </div>
 

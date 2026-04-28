@@ -54,26 +54,22 @@ function DecisionTreeInner({
   const [selection, setSelection] = useState<Selection>(null);
   const { fitView } = useReactFlow();
 
-  useEffect(() => {
-    const handler = (ev: Event) => {
-      const detail = (ev as CustomEvent<{ clusterId: string }>).detail;
-      if (!detail?.clusterId) return;
+  // Focus-mode: clicking a collapsed cluster expands ONLY that one
+  // (auto-collapses all others). Clicking an already-expanded cluster
+  // simply collapses it.
+  const toggleCluster = useCallback(
+    (clusterId: string) => {
       setCollapsed((prev) => {
-        // Focus-mode: clicking a collapsed cluster expands ONLY that one
-        // (auto-collapses all others). Clicking an already-expanded cluster
-        // simply collapses it.
-        if (prev.has(detail.clusterId)) {
+        if (prev.has(clusterId)) {
           const next = new Set(allClusterIds);
-          next.delete(detail.clusterId);
+          next.delete(clusterId);
           return next;
         }
-        return new Set([...prev, detail.clusterId]);
+        return new Set([...prev, clusterId]);
       });
-    };
-    window.addEventListener("ion-tree-toggle", handler as EventListener);
-    return () =>
-      window.removeEventListener("ion-tree-toggle", handler as EventListener);
-  }, [allClusterIds]);
+    },
+    [allClusterIds]
+  );
 
   const { nodes, edges } = useMemo(() => {
     const g = buildTreeGraph(data, collapsed);
@@ -89,10 +85,19 @@ function DecisionTreeInner({
     return () => clearTimeout(t);
   }, [collapsed, fitView]);
 
-  const onNodeClick: NodeMouseHandler = useCallback((_, node) => {
-    if (node.id === "root") return;
-    setSelection(selectionFromNodeId(node.id));
-  }, []);
+  const onNodeClick: NodeMouseHandler = useCallback(
+    (_, node) => {
+      if (node.id === "root") return;
+      // Cluster click = drill into the tree (no side panel).
+      // Word-track or losing-pattern click = open side panel for full detail.
+      if (node.id.startsWith("c:")) {
+        toggleCluster(node.id.slice(2));
+        return;
+      }
+      setSelection(selectionFromNodeId(node.id));
+    },
+    [toggleCluster]
+  );
 
   const expandAll = () => setCollapsed(new Set());
   const collapseAll = () => setCollapsed(new Set(allClusterIds));
@@ -163,5 +168,6 @@ function miniMapColor(node: { type?: string }): string {
   if (node.type === "root") return "#fcd34d";
   if (node.type === "cluster") return "#c4b5fd";
   if (node.type === "track") return "#bae6fd";
+  if (node.type === "losing") return "#fda4af";
   return "#94a3b8";
 }
