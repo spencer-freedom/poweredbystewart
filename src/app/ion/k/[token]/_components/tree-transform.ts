@@ -40,28 +40,11 @@ export type LosingNodeData = {
   index: number;
 };
 
-export type DetailNodeData =
-  | {
-      kind: "detail";
-      detailKind: "track";
-      track: WordTrack;
-      cluster: Cluster;
-      token: string;
-    }
-  | {
-      kind: "detail";
-      detailKind: "losing";
-      losing: LosingPattern;
-      cluster: Cluster;
-      index: number;
-    };
-
 export type TreeNodeData =
   | RootNodeData
   | ClusterNodeData
   | TrackNodeData
-  | LosingNodeData
-  | DetailNodeData;
+  | LosingNodeData;
 
 export type DetailSelection =
   | { kind: "track"; id: string }
@@ -75,9 +58,7 @@ export type TreeGraph = {
 
 export function buildTreeGraph(
   data: DecisionTreePayload,
-  collapsedClusterIds: Set<string>,
-  detail: DetailSelection,
-  token: string
+  collapsedClusterIds: Set<string>
 ): TreeGraph {
   const nodes: Node<TreeNodeData>[] = [];
   const edges: Edge[] = [];
@@ -196,69 +177,7 @@ export function buildTreeGraph(
     }
   }
 
-  // Detail node — appears to the right of the selected track or losing
-  // pattern, but only if the parent is currently visible in the tree.
-  if (detail) {
-    if (detail.kind === "track") {
-      const track = (allTracks || []).find((t) => t.id === detail.id);
-      const parentId = trackNodeId(detail.id);
-      if (track && nodes.some((n) => n.id === parentId)) {
-        const cluster = clusters.find((c) => c.id === track.cluster_id);
-        if (cluster) {
-          nodes.push({
-            id: detailNodeId(),
-            type: "detail",
-            position: { x: 0, y: 0 },
-            data: { kind: "detail", detailKind: "track", track, cluster, token },
-          });
-          edges.push({
-            id: `e-detail-${track.id}`,
-            source: parentId,
-            target: detailNodeId(),
-            type: "smoothstep",
-            style: { stroke: "#0ea5e9" },
-          });
-        }
-      }
-    } else {
-      const clusterLosing = (allLosing || []).filter(
-        (l) => l.cluster_id === detail.clusterId
-      );
-      const losing = clusterLosing[detail.index];
-      const parentId = losingNodeId(detail.clusterId, detail.index);
-      if (losing && nodes.some((n) => n.id === parentId)) {
-        const cluster = clusters.find((c) => c.id === detail.clusterId);
-        if (cluster) {
-          nodes.push({
-            id: detailNodeId(),
-            type: "detail",
-            position: { x: 0, y: 0 },
-            data: {
-              kind: "detail",
-              detailKind: "losing",
-              losing,
-              cluster,
-              index: detail.index,
-            },
-          });
-          edges.push({
-            id: `e-detail-loss-${detail.clusterId}-${detail.index}`,
-            source: parentId,
-            target: detailNodeId(),
-            type: "smoothstep",
-            style: { stroke: "#f43f5e" },
-          });
-        }
-      }
-    }
-  }
-
   return { nodes, edges };
-}
-
-export const DETAIL_NODE_ID = "detail";
-function detailNodeId(): string {
-  return DETAIL_NODE_ID;
 }
 
 export function clusterNodeId(clusterId: string): string {

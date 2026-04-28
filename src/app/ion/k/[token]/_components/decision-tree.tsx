@@ -13,12 +13,10 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 
 import type { DecisionTreePayload } from "@/lib/ion-api";
-import {
-  buildTreeGraph,
-  type DetailSelection,
-} from "./tree-transform";
+import { buildTreeGraph, type DetailSelection } from "./tree-transform";
 import { layoutGraph } from "./tree-layout";
 import { NODE_TYPES } from "./tree-nodes";
+import { TreeDetailCard } from "./tree-detail-card";
 
 export function DecisionTree({
   data,
@@ -52,10 +50,6 @@ function DecisionTreeInner({
   const [detail, setDetail] = useState<DetailSelection>(null);
   const { fitBounds } = useReactFlow();
 
-  // Focus-mode: clicking a collapsed cluster expands ONLY that one
-  // (auto-collapses all others). Clicking an already-expanded cluster
-  // simply collapses it. Either way, drop any open detail node since
-  // its parent track/loss may no longer be visible.
   const toggleCluster = useCallback(
     (clusterId: string) => {
       setDetail(null);
@@ -71,14 +65,6 @@ function DecisionTreeInner({
     [allClusterIds]
   );
 
-  // Detail nodes can dispatch a close event from their × button.
-  useEffect(() => {
-    const close = () => setDetail(null);
-    window.addEventListener("ion-tree-detail-close", close);
-    return () => window.removeEventListener("ion-tree-detail-close", close);
-  }, []);
-
-  // Esc closes the detail too.
   useEffect(() => {
     if (!detail) return;
     const onKey = (e: KeyboardEvent) => {
@@ -89,14 +75,14 @@ function DecisionTreeInner({
   }, [detail]);
 
   const { nodes, edges } = useMemo(() => {
-    const g = buildTreeGraph(data, collapsed, detail, token);
+    const g = buildTreeGraph(data, collapsed);
     const laidOut = layoutGraph(g.nodes, g.edges);
     return { nodes: laidOut, edges: g.edges };
-  }, [data, collapsed, detail, token]);
+  }, [data, collapsed]);
 
-  // Left-anchor the tree by skewing the fit-bounds rectangle wider to the right.
-  // The tree itself only occupies the left ~60% of the bounds, so when fitted
-  // the user sees the tree on the left with empty canvas inviting drill-down.
+  // Left-anchor the tree: stretch the fit-bounds rectangle 1.6x to the right
+  // so the tree lands on the left ~62% of the canvas and the empty space
+  // visually invites drill-down.
   useEffect(() => {
     const t = setTimeout(() => {
       if (!nodes.length) return;
@@ -109,20 +95,19 @@ function DecisionTreeInner({
         if (n.position.x + w > maxX) maxX = n.position.x + w;
         if (n.position.y + h > maxY) maxY = n.position.y + h;
       }
-      const treeWidth = Math.max(1, maxX - minX);
-      const treeHeight = Math.max(1, maxY - minY);
-      // Stretch fit-rectangle 1.6x rightward → tree lands on left ~62%.
+      const w = Math.max(1, maxX - minX);
+      const h = Math.max(1, maxY - minY);
       fitBounds(
-        { x: minX, y: minY, width: treeWidth * 1.6, height: treeHeight * 1.05 },
+        { x: minX, y: minY, width: w * 1.6, height: h * 1.05 },
         { padding: 0.05, duration: 350 }
       );
     }, 30);
     return () => clearTimeout(t);
-  }, [collapsed, detail, fitBounds, nodes]);
+  }, [collapsed, fitBounds, nodes]);
 
   const onNodeClick: NodeMouseHandler = useCallback(
     (_, node) => {
-      if (node.id === "root" || node.id === "detail") return;
+      if (node.id === "root") return;
       if (node.id.startsWith("c:")) {
         toggleCluster(node.id.slice(2));
         return;
@@ -154,33 +139,21 @@ function DecisionTreeInner({
     [toggleCluster]
   );
 
-  const expandAll = () => {
-    setDetail(null);
-    setCollapsed(new Set());
-  };
   const collapseAll = () => {
     setDetail(null);
     setCollapsed(new Set(allClusterIds));
   };
-  const allExpanded = collapsed.size === 0;
   const allCollapsed = collapsed.size === allClusterIds.length;
 
   return (
     <div className="relative w-full h-[calc(100vh-260px)] min-h-[560px] rounded-lg border border-stewart-border bg-stewart-bg overflow-hidden">
       <div className="absolute top-3 left-3 z-30 flex gap-1 bg-stewart-card/90 border border-stewart-border rounded-md p-1 backdrop-blur-sm">
         <button
-          onClick={expandAll}
-          disabled={allExpanded}
-          className="px-3 py-1.5 text-xs rounded hover:bg-stewart-border/50 text-stewart-text disabled:text-stewart-muted disabled:cursor-not-allowed transition-colors"
-        >
-          Expand all
-        </button>
-        <button
           onClick={collapseAll}
           disabled={allCollapsed}
           className="px-3 py-1.5 text-xs rounded hover:bg-stewart-border/50 text-stewart-text disabled:text-stewart-muted disabled:cursor-not-allowed transition-colors"
         >
-          Collapse all
+          Reset
         </button>
       </div>
       <ReactFlow
@@ -188,7 +161,6 @@ function DecisionTreeInner({
         edges={edges}
         nodeTypes={NODE_TYPES}
         onNodeClick={onNodeClick}
-        onPaneClick={() => setDetail(null)}
         nodesDraggable={false}
         nodesConnectable={false}
         elementsSelectable
@@ -214,6 +186,12 @@ function DecisionTreeInner({
           className="!bg-stewart-card !border !border-stewart-border"
         />
       </ReactFlow>
+      <TreeDetailCard
+        data={data}
+        detail={detail}
+        token={token}
+        onClose={() => setDetail(null)}
+      />
     </div>
   );
 }
@@ -223,6 +201,5 @@ function miniMapColor(node: { type?: string }): string {
   if (node.type === "cluster") return "#c4b5fd";
   if (node.type === "track") return "#bae6fd";
   if (node.type === "losing") return "#fda4af";
-  if (node.type === "detail") return "#e0f2fe";
   return "#94a3b8";
 }

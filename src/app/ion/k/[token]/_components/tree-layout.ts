@@ -7,14 +7,12 @@ const NODE_W = {
   cluster: 240,
   track: 290,
   losing: 250,
-  detail: 380,
 };
 const NODE_H = {
   root: 96,
   cluster: 96,
   track: 124,
   losing: 92,
-  detail: 280,
 };
 
 export function layoutGraph(
