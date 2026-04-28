@@ -21,7 +21,7 @@ export function RootNode({ data }: NodeProps<RootNodeData>) {
         {data.callCount} sales calls · {data.winCount} wins ·{" "}
         {data.clusterCount} objection clusters
       </div>
-      <Handle type="source" position={Position.Bottom} style={HANDLE_STYLE} />
+      <Handle type="source" position={Position.Right} style={HANDLE_STYLE} />
     </div>
   );
 }
@@ -42,7 +42,7 @@ export function ClusterNode({
       )}
     >
       <div className={cn("absolute top-0 left-0 right-0 h-1", tone.bar)} />
-      <Handle type="target" position={Position.Top} style={HANDLE_STYLE} />
+      <Handle type="target" position={Position.Left} style={HANDLE_STYLE} />
       <div className="flex items-start justify-between gap-2">
         <div className="font-semibold text-[13px] leading-tight">
           {cluster.name}
@@ -84,7 +84,7 @@ export function ClusterNode({
           {collapsed ? "+ drill in" : "− close"}
         </button>
       )}
-      <Handle type="source" position={Position.Bottom} style={HANDLE_STYLE} />
+      <Handle type="source" position={Position.Right} style={HANDLE_STYLE} />
     </div>
   );
 }
@@ -102,7 +102,7 @@ export function TrackNode({ data, selected }: NodeProps<TrackNodeData>) {
       )}
       title={track.verbatim}
     >
-      <Handle type="target" position={Position.Top} style={HANDLE_STYLE} />
+      <Handle type="target" position={Position.Left} style={HANDLE_STYLE} />
       <div className="flex items-start gap-2">
         <span className="text-[10px] font-mono font-bold rounded bg-sky-700 text-white px-1.5 py-0.5 shrink-0">
           #{track.rank}
@@ -116,7 +116,7 @@ export function TrackNode({ data, selected }: NodeProps<TrackNodeData>) {
       <blockquote className="text-[12px] italic leading-snug mt-2 text-sky-950 line-clamp-4">
         &ldquo;{snippet}&rdquo;
       </blockquote>
-      <Handle type="source" position={Position.Bottom} style={HANDLE_STYLE} />
+      <Handle type="source" position={Position.Right} style={HANDLE_STYLE} />
     </div>
   );
 }

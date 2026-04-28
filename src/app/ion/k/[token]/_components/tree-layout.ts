@@ -3,14 +3,14 @@ import type { Edge, Node } from "reactflow";
 import type { TreeNodeData } from "./tree-transform";
 
 const NODE_W = {
-  root: 300,
-  cluster: 210,
-  track: 250,
+  root: 240,
+  cluster: 240,
+  track: 290,
 };
 const NODE_H = {
-  root: 92,
-  cluster: 108,
-  track: 136,
+  root: 96,
+  cluster: 96,
+  track: 124,
 };
 
 export function layoutGraph(
@@ -18,7 +18,7 @@ export function layoutGraph(
   edges: Edge[]
 ): Node<TreeNodeData>[] {
   const g = new dagre.graphlib.Graph();
-  g.setGraph({ rankdir: "TB", nodesep: 24, ranksep: 70, marginx: 16, marginy: 16 });
+  g.setGraph({ rankdir: "LR", nodesep: 18, ranksep: 90, marginx: 16, marginy: 16 });
   g.setDefaultEdgeLabel(() => ({}));
 
   for (const n of nodes) {
