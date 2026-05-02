@@ -25,6 +25,8 @@ export type ClusterNodeData = {
   trackCount: number;
   losingCount: number;
   collapsed: boolean;
+  realWins: number;
+  realLosses: number;
 };
 
 export type TrackNodeData = {
@@ -93,6 +95,12 @@ export function buildTreeGraph(
     ).length;
     const collapsed = collapsedClusterIds.has(cluster.id);
 
+    const ob = cluster.outcome_breakdown || {};
+    const winKeys = ["booked", "tentative_appointment", "transferred_to_closer"];
+    const lossKeys = ["declined", "no_interest", "unqualified"];
+    const realWins = Object.entries(ob).filter(([k]) => winKeys.includes(k)).reduce((s, [, n]) => s + n, 0);
+    const realLosses = Object.entries(ob).filter(([k]) => lossKeys.includes(k)).reduce((s, [, n]) => s + n, 0);
+
     nodes.push({
       id: clusterNodeId(cluster.id),
       type: "cluster",
@@ -103,6 +111,8 @@ export function buildTreeGraph(
         trackCount: clusterTracks.length,
         losingCount,
         collapsed,
+        realWins,
+        realLosses,
       },
     });
 
@@ -168,10 +178,6 @@ export function buildTreeGraph(
         target: trackNodeId(tr.next_track_id),
         type: "smoothstep",
         animated: tr.condition === "worked",
-        label: `${tr.condition} · ×${tr.sample_size}`,
-        labelStyle: { fontSize: 10 },
-        labelBgPadding: [4, 2],
-        labelBgBorderRadius: 4,
         style: { stroke: transitionStroke(tr.condition), strokeDasharray: "4 3" },
       });
     }

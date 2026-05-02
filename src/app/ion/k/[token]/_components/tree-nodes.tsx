@@ -31,7 +31,7 @@ export function ClusterNode({
   data,
   selected,
 }: NodeProps<ClusterNodeData>) {
-  const { cluster, trackCount, losingCount, collapsed } = data;
+  const { cluster, collapsed, realWins, realLosses } = data;
   const pct = Math.round(cluster.win_rate * 100);
   const tone = winRateTone(pct);
 
@@ -61,11 +61,11 @@ export function ClusterNode({
       <div className="text-[10px] text-violet-900/70 mt-1.5 font-mono flex items-center gap-2">
         <span>{cluster.frequency} calls</span>
         <span>·</span>
-        <span className="text-emerald-700">{trackCount} wins</span>
-        {losingCount > 0 && (
+        <span className="text-emerald-700 font-bold">{realWins} won</span>
+        {realLosses > 0 && (
           <>
             <span>·</span>
-            <span className="text-rose-700">{losingCount} losses</span>
+            <span className="text-rose-700 font-bold">{realLosses} lost</span>
           </>
         )}
       </div>
@@ -86,6 +86,7 @@ export function TrackNode({ data, selected }: NodeProps<TrackNodeData>) {
   const { track } = data;
   const pct = Math.round(track.win_rate * 100);
   const snippet = truncate(track.verbatim, 85);
+  const exampleCount = (track as unknown as { audio_examples?: unknown[] }).audio_examples?.length || track.sample_size;
 
   return (
     <div
@@ -101,10 +102,11 @@ export function TrackNode({ data, selected }: NodeProps<TrackNodeData>) {
           #{track.rank}
         </span>
         <span className="text-[10px] font-mono text-sky-900/70">
-          est. {pct}% win · {track.sample_size}{" "}
-          example{track.sample_size === 1 ? "" : "s"}
+          {pct}% cluster close rate
         </span>
-        <span className="ml-auto text-[10px] text-sky-700">▶ play</span>
+        <span className="ml-auto text-[10px] text-sky-700">
+          ▶ {exampleCount} example{exampleCount === 1 ? "" : "s"}
+        </span>
       </div>
       <blockquote className="text-[12px] italic leading-snug mt-2 text-sky-950 line-clamp-4">
         &ldquo;{snippet}&rdquo;
