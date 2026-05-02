@@ -23,14 +23,27 @@ export function TreeDetailCard({
     const track = (data.word_tracks || []).find((t) => t.id === detail.id);
     if (!track) return null;
     const cluster = (data.clusters || []).find((c) => c.id === track.cluster_id);
-    const ext = track as unknown as { approach_label?: string; audio_examples?: Array<{ call_id: string; start_seconds: number | null; end_seconds: number | null; outcome: string; outcome_observed: string | null }> };
+    const ext = track as unknown as {
+      approach_label?: string;
+      objection_worked?: number;
+      objection_partial?: number;
+      objection_failed?: number;
+      objection_win_rate?: number | null;
+      audio_examples?: Array<{
+        call_id: string;
+        start_seconds: number | null;
+        end_seconds: number | null;
+        outcome_observed: string;
+        objection_addressed: string | null;
+        call_outcome: string;
+      }>;
+    };
     const approachLabel = ext.approach_label || `#${track.rank}`;
     const audioExamples = ext.audio_examples || [];
-    const winOutcomes = new Set(["booked", "tentative_appointment", "transferred_to_closer"]);
-    const lossOutcomes = new Set(["declined", "no_interest", "unqualified"]);
-    const exWins = audioExamples.filter(e => winOutcomes.has(e.outcome)).length;
-    const exLosses = audioExamples.filter(e => lossOutcomes.has(e.outcome)).length;
-    const exOther = audioExamples.length - exWins - exLosses;
+    const worked = ext.objection_worked || 0;
+    const partial = ext.objection_partial || 0;
+    const failed = ext.objection_failed || 0;
+    const objTotal = worked + partial + failed;
 
     return (
       <Frame
@@ -70,25 +83,41 @@ export function TreeDetailCard({
           </p>
         )}
 
-        {/* Audio examples from other calls */}
-        {audioExamples.length > 0 && (
+        {/* Objection-level results */}
+        {objTotal > 0 && (
           <div className="mt-4 pt-3 border-t border-sky-200">
             <p className="text-xs font-semibold text-sky-950 mb-1">
-              Found in {audioExamples.length} call{audioExamples.length === 1 ? "" : "s"}
-              {exWins > 0 && <span className="text-green-700 ml-2">{exWins} won</span>}
-              {exLosses > 0 && <span className="text-red-700 ml-2">{exLosses} lost</span>}
-              {exOther > 0 && <span className="text-amber-700 ml-2">{exOther} other</span>}
+              Objection outcome ({objTotal} attempt{objTotal === 1 ? "" : "s"})
             </p>
-            <div className="space-y-1.5 mt-2">
+            <div className="flex gap-3 text-xs font-mono mb-2">
+              {worked > 0 && <span className="text-green-700 font-bold">{worked} worked</span>}
+              {partial > 0 && <span className="text-amber-700 font-bold">{partial} partial</span>}
+              {failed > 0 && <span className="text-red-700 font-bold">{failed} failed</span>}
+              {ext.objection_win_rate != null && (
+                <span className="text-sky-900/60">
+                  ({Math.round(ext.objection_win_rate * 100)}% overcame objection)
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Audio examples from matched calls */}
+        {audioExamples.length > 0 && (
+          <div className={objTotal > 0 ? "mt-2" : "mt-4 pt-3 border-t border-sky-200"}>
+            <p className="text-xs font-semibold text-sky-950 mb-1">
+              Listen ({audioExamples.length} clip{audioExamples.length === 1 ? "" : "s"})
+            </p>
+            <div className="space-y-1.5">
               {audioExamples.map((ex, i) => {
-                const isWin = winOutcomes.has(ex.outcome);
-                const isLoss = lossOutcomes.has(ex.outcome);
-                const color = isWin ? "text-green-700" : isLoss ? "text-red-700" : "text-amber-700";
+                const color = ex.outcome_observed === "worked" ? "text-green-700"
+                  : ex.outcome_observed === "failed" ? "text-red-700"
+                  : "text-amber-700";
                 const hasAudio = typeof ex.start_seconds === "number" && typeof ex.end_seconds === "number" && ex.end_seconds > ex.start_seconds;
                 return (
                   <div key={i} className="flex items-center gap-2 text-[11px]">
-                    <span className={`font-mono font-bold ${color} w-20`}>
-                      {ex.outcome?.replace(/_/g, " ")}
+                    <span className={`font-mono font-bold ${color} w-16`}>
+                      {ex.outcome_observed || "?"}
                     </span>
                     <span className="text-sky-900/50 font-mono">{ex.call_id}</span>
                     {hasAudio && (
