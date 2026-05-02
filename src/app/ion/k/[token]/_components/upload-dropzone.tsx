@@ -11,7 +11,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const MAX_BYTES = 100 * 1024 * 1024; // matches backend
-const MAX_BATCH = 250;
+const UPLOAD_CONCURRENCY = 4; // simultaneous in-flight uploads
 
 type Item = {
   id: string;
@@ -55,10 +55,74 @@ export function UploadDropzone({
     return () => clearInterval(id);
   }, [polling, refreshStatus]);
 
+  const uploadOne = useCallback(
+    async (item: Item) => {
+      setItems((prev) =>
+        prev.map((p) =>
+          p.id === item.id ? { ...p, status: "uploading", progress: 0.05 } : p
+        )
+      );
+      try {
+        const res: UploadResult = await uploadCall(token, item.file, cohort);
+        setItems((prev) =>
+          prev.map((p) =>
+            p.id === item.id
+              ? {
+                  ...p,
+                  progress: 1,
+                  status: res.status === "duplicate" ? "duplicate" : "uploaded",
+                  callId: res.call_id,
+                  message:
+                    res.status === "duplicate"
+                      ? "Already received — skipping"
+                      : "Received",
+                }
+              : p
+          )
+        );
+      } catch (e) {
+        setItems((prev) =>
+          prev.map((p) =>
+            p.id === item.id
+              ? {
+                  ...p,
+                  progress: 1,
+                  status: "error",
+                  message: e instanceof Error ? e.message : String(e),
+                }
+              : p
+          )
+        );
+      }
+    },
+    [token, cohort]
+  );
+
+  const drainQueue = useCallback(
+    async (queued: Item[]) => {
+      // Upload N at a time — completes a 480-file batch in ~2 minutes
+      // instead of ~8. Backend handles concurrency + sha256 dedup fine.
+      const queue = [...queued];
+      const workers = Array(UPLOAD_CONCURRENCY)
+        .fill(0)
+        .map(async () => {
+          while (queue.length) {
+            const next = queue.shift();
+            if (!next) break;
+            await uploadOne(next);
+          }
+        });
+      await Promise.all(workers);
+      await refreshStatus();
+    },
+    [uploadOne, refreshStatus]
+  );
+
   const onDrop = useCallback(
     async (accepted: File[], rejected: FileRejection[]) => {
-      const rejectedItems: Item[] = rejected.slice(0, 50).map((r, i) => ({
-        id: `rej-${Date.now()}-${i}`,
+      const stamp = Date.now();
+      const rejectedItems: Item[] = rejected.map((r, i) => ({
+        id: `rej-${stamp}-${i}`,
         file: r.file,
         progress: 0,
         status: "error",
@@ -66,8 +130,8 @@ export function UploadDropzone({
           r.errors[0]?.message ||
           (r.file.size > MAX_BYTES ? "Exceeds 100 MB" : "Rejected"),
       }));
-      const queued: Item[] = accepted.slice(0, MAX_BATCH).map((f, i) => ({
-        id: `q-${Date.now()}-${i}`,
+      const queued: Item[] = accepted.map((f, i) => ({
+        id: `q-${stamp}-${i}`,
         file: f,
         progress: 0,
         status: "queued",
@@ -75,54 +139,20 @@ export function UploadDropzone({
       setItems((prev) => [...prev, ...rejectedItems, ...queued]);
       setPolling(true);
 
-      // Sequential upload — backend transcription is async, so we don't gain
-      // much from parallel POSTs and we get cleaner progress visualization.
-      for (const q of queued) {
-        setItems((prev) =>
-          prev.map((p) =>
-            p.id === q.id ? { ...p, status: "uploading", progress: 0.05 } : p
-          )
-        );
-        try {
-          const res: UploadResult = await uploadCall(token, q.file, cohort);
-          setItems((prev) =>
-            prev.map((p) =>
-              p.id === q.id
-                ? {
-                    ...p,
-                    progress: 1,
-                    status: res.status === "duplicate" ? "duplicate" : "uploaded",
-                    callId: res.call_id,
-                    message:
-                      res.status === "duplicate"
-                        ? "Already received — skipping"
-                        : "Received",
-                  }
-                : p
-            )
-          );
-        } catch (e) {
-          setItems((prev) =>
-            prev.map((p) =>
-              p.id === q.id
-                ? {
-                    ...p,
-                    progress: 1,
-                    status: "error",
-                    message: e instanceof Error ? e.message : String(e),
-                  }
-                : p
-            )
-          );
-        }
-        await refreshStatus();
-      }
+      await drainQueue(queued);
 
-      // Stop polling shortly after the queue drains.
       setTimeout(() => setPolling(false), 12000);
     },
-    [token, cohort, refreshStatus]
+    [drainQueue]
   );
+
+  const retryErrored = useCallback(async () => {
+    const errored = items.filter((it) => it.status === "error");
+    if (errored.length === 0) return;
+    setPolling(true);
+    await drainQueue(errored);
+    setTimeout(() => setPolling(false), 12000);
+  }, [items, drainQueue]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -130,7 +160,6 @@ export function UploadDropzone({
       "audio/*": [".mp3", ".wav", ".m4a", ".aac", ".ogg", ".flac", ".webm"],
     },
     maxSize: MAX_BYTES,
-    maxFiles: MAX_BATCH,
   });
 
   const counts = items.reduce(
@@ -167,7 +196,7 @@ export function UploadDropzone({
           ))}
         </div>
         <span className="text-xs text-stewart-muted">
-          Per-file cap 100 MB · per-batch cap {MAX_BATCH}
+          Per-file cap 100 MB · drop as many as you want, {UPLOAD_CONCURRENCY} upload in parallel
         </span>
       </div>
 
@@ -207,9 +236,18 @@ export function UploadDropzone({
             </span>
           ) : null}
           {counts.error ? (
-            <span className="text-stewart-danger mr-3">
-              × {counts.error} errors
-            </span>
+            <>
+              <span className="text-stewart-danger mr-2">
+                × {counts.error} errors
+              </span>
+              <button
+                onClick={retryErrored}
+                disabled={!!counts.uploading}
+                className="text-xs underline text-stewart-danger hover:text-stewart-text disabled:opacity-50 mr-3"
+              >
+                retry
+              </button>
+            </>
           ) : null}
           {counts.uploading ? (
             <span className="text-stewart-accent mr-3">
