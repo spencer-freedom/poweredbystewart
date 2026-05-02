@@ -7,7 +7,7 @@ import type {
   WordTrack,
 } from "@/lib/ion-api";
 
-const TOP_TRACKS_PER_CLUSTER = 3;
+const TOP_TRACKS_PER_CLUSTER = 5;
 const TOP_LOSSES_PER_CLUSTER = 3;
 
 export type RootNodeData = {
