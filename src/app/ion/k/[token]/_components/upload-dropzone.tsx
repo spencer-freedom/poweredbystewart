@@ -121,6 +121,24 @@ export function UploadDropzone({
   const onDrop = useCallback(
     async (accepted: File[], rejected: FileRejection[]) => {
       const stamp = Date.now();
+      // Diagnostic log — visible in browser DevTools console.
+      console.log(
+        `[ion-upload] drop received: ${accepted.length} accepted, ${rejected.length} rejected (total dropped: ${
+          accepted.length + rejected.length
+        })`
+      );
+      if (rejected.length > 0) {
+        console.log(
+          "[ion-upload] rejected files:",
+          rejected.map((r) => ({
+            name: r.file.name,
+            size: r.file.size,
+            type: r.file.type,
+            reasons: r.errors.map((e) => e.message),
+          }))
+        );
+      }
+
       const rejectedItems: Item[] = rejected.map((r, i) => ({
         id: `rej-${stamp}-${i}`,
         file: r.file,
@@ -128,7 +146,7 @@ export function UploadDropzone({
         status: "error",
         message:
           r.errors[0]?.message ||
-          (r.file.size > MAX_BYTES ? "Exceeds 100 MB" : "Rejected"),
+          (r.file.size > MAX_BYTES ? "Exceeds 100 MB" : "Rejected by browser"),
       }));
       const queued: Item[] = accepted.map((f, i) => ({
         id: `q-${stamp}-${i}`,
@@ -156,9 +174,10 @@ export function UploadDropzone({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      "audio/*": [".mp3", ".wav", ".m4a", ".aac", ".ogg", ".flac", ".webm"],
-    },
+    // No mime/extension accept filter — Salesforce/dialer exports often
+    // arrive as application/octet-stream, which would be rejected here
+    // even though the backend accepts them. Let everything through and
+    // let the backend (or our size cap below) be the validator.
     maxSize: MAX_BYTES,
   });
 
