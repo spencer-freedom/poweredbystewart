@@ -162,6 +162,32 @@ export type UploadResult =
       bytes: number;
     };
 
+// Many call-recording exports (Five9, Genesys, etc.) write every call into
+// a per-call folder with an identical filename like SESSION.MP3. The backend
+// derives call_id from the basename, so identical filenames collide on
+// INSERT (ON CONFLICT (id) DO NOTHING) and silently drop ~half the batch
+// under concurrency. Rename the upload to a unique stem here:
+//   - if the file came in via folder drop with relative-path info, use the
+//     parent directory name (the actual call_id from Five9 / similar)
+//   - otherwise, append a short random suffix to guarantee uniqueness
+function uniqueUploadName(file: File): string {
+  const path =
+    (file as { path?: string }).path ||
+    (file as { webkitRelativePath?: string }).webkitRelativePath ||
+    "";
+  const parts = path.split(/[/\\]/).filter(Boolean);
+  const ext = (file.name.split(".").pop() || "mp3").toLowerCase();
+  if (parts.length >= 2) {
+    const callIdGuess = parts[parts.length - 2];
+    if (/^[A-Za-z0-9_-]{3,}$/.test(callIdGuess)) {
+      return `${callIdGuess}.${ext}`;
+    }
+  }
+  const stem = file.name.replace(/\.[^.]+$/, "") || "upload";
+  const suffix = Math.random().toString(36).slice(2, 10);
+  return `${stem}_${suffix}.${ext}`;
+}
+
 export async function uploadCall(
   token: string,
   file: File,
@@ -169,7 +195,7 @@ export async function uploadCall(
   metadata: Record<string, unknown> = {}
 ): Promise<UploadResult> {
   const form = new FormData();
-  form.append("file", file);
+  form.append("file", file, uniqueUploadName(file));
   form.append("cohort", COHORT_MAP[cohortLabel]);
   form.append("metadata_json", JSON.stringify(metadata));
 
