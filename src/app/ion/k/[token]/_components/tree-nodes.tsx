@@ -85,7 +85,8 @@ export function ClusterNode({
 export function TrackNode({ data, selected }: NodeProps<TrackNodeData>) {
   const { track } = data;
   const snippet = truncate(track.verbatim, 85);
-  const exampleCount = (track as unknown as { audio_examples?: unknown[] }).audio_examples?.length || track.sample_size;
+  const audioExamples = (track as unknown as { audio_examples?: unknown[] }).audio_examples || [];
+  const exampleCount = audioExamples.length;
   const approachLabel = (track as unknown as { approach_label?: string }).approach_label || "";
 
   return (

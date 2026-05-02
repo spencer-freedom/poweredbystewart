@@ -23,12 +23,20 @@ export function TreeDetailCard({
     const track = (data.word_tracks || []).find((t) => t.id === detail.id);
     if (!track) return null;
     const cluster = (data.clusters || []).find((c) => c.id === track.cluster_id);
-    const pct = Math.round(track.win_rate * 100);
+    const ext = track as unknown as { approach_label?: string; audio_examples?: Array<{ call_id: string; start_seconds: number | null; end_seconds: number | null; outcome: string; outcome_observed: string | null }> };
+    const approachLabel = ext.approach_label || `#${track.rank}`;
+    const audioExamples = ext.audio_examples || [];
+    const winOutcomes = new Set(["booked", "tentative_appointment", "transferred_to_closer"]);
+    const lossOutcomes = new Set(["declined", "no_interest", "unqualified"]);
+    const exWins = audioExamples.filter(e => winOutcomes.has(e.outcome)).length;
+    const exLosses = audioExamples.filter(e => lossOutcomes.has(e.outcome)).length;
+    const exOther = audioExamples.length - exWins - exLosses;
+
     return (
       <Frame
         accent="sky"
         cluster={cluster?.name}
-        kindLabel={`Winning word track #${track.rank}`}
+        kindLabel={approachLabel}
         onClose={onClose}
         topPx={topPx}
       >
@@ -40,11 +48,11 @@ export function TreeDetailCard({
           {track.why_it_works}
         </p>
         <div className="text-xs text-sky-900/60 font-mono mt-3 flex flex-wrap gap-x-3 gap-y-1">
-          <span>call {track.source_call_id}</span>
+          <span>source: {track.source_call_id}</span>
           {track.source_setter_id && <span>· rep {track.source_setter_id}</span>}
-          <span>· n={track.sample_size}</span>
-          <span>· est. {pct}% win</span>
         </div>
+
+        {/* Primary audio clip */}
         {typeof track.start_seconds === "number" &&
         typeof track.end_seconds === "number" &&
         track.end_seconds > track.start_seconds ? (
@@ -60,6 +68,42 @@ export function TreeDetailCard({
           <p className="text-xs text-sky-900/50 mt-3 italic">
             Audio clip unavailable for this line.
           </p>
+        )}
+
+        {/* Audio examples from other calls */}
+        {audioExamples.length > 0 && (
+          <div className="mt-4 pt-3 border-t border-sky-200">
+            <p className="text-xs font-semibold text-sky-950 mb-1">
+              Found in {audioExamples.length} call{audioExamples.length === 1 ? "" : "s"}
+              {exWins > 0 && <span className="text-green-700 ml-2">{exWins} won</span>}
+              {exLosses > 0 && <span className="text-red-700 ml-2">{exLosses} lost</span>}
+              {exOther > 0 && <span className="text-amber-700 ml-2">{exOther} other</span>}
+            </p>
+            <div className="space-y-1.5 mt-2">
+              {audioExamples.map((ex, i) => {
+                const isWin = winOutcomes.has(ex.outcome);
+                const isLoss = lossOutcomes.has(ex.outcome);
+                const color = isWin ? "text-green-700" : isLoss ? "text-red-700" : "text-amber-700";
+                const hasAudio = typeof ex.start_seconds === "number" && typeof ex.end_seconds === "number" && ex.end_seconds > ex.start_seconds;
+                return (
+                  <div key={i} className="flex items-center gap-2 text-[11px]">
+                    <span className={`font-mono font-bold ${color} w-20`}>
+                      {ex.outcome?.replace(/_/g, " ")}
+                    </span>
+                    <span className="text-sky-900/50 font-mono">{ex.call_id}</span>
+                    {hasAudio && (
+                      <AudioClip
+                        token={token}
+                        callId={ex.call_id}
+                        startSec={ex.start_seconds!}
+                        endSec={ex.end_seconds!}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         )}
       </Frame>
     );
