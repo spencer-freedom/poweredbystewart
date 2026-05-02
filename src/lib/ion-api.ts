@@ -24,6 +24,16 @@ export type Cluster = {
   description: string;
   frequency: number;
   win_rate: number;
+  outcome_breakdown?: Record<string, number>;
+};
+
+export type AudioExample = {
+  call_id: string;
+  start_seconds: number | null;
+  end_seconds: number | null;
+  outcome: string;
+  attempt_n: number | null;
+  outcome_observed: string | null;
 };
 
 export type WordTrack = {
@@ -38,6 +48,7 @@ export type WordTrack = {
   why_it_works: string;
   start_seconds: number | null;
   end_seconds: number | null;
+  audio_examples?: AudioExample[];
 };
 
 export type Transition = {
@@ -69,6 +80,7 @@ export type DecisionTreePayload = {
   generated_at: string | null;
   cohort: string | null;
   model: string | null;
+  macro_win_rate?: number;
   pipeline_stats: PipelineStats;
   pipeline_cost_usd: number;
   executive_summary: string;

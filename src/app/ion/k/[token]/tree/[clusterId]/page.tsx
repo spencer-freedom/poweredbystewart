@@ -56,10 +56,38 @@ export default async function ClusterDetailPage({
             <span className="text-stewart-success">
               <strong>{Math.round(cluster.win_rate * 100)}%</strong> win rate
             </span>
+            {data.macro_win_rate != null && (
+              <span className={cluster.win_rate > data.macro_win_rate ? "text-green-400" : "text-red-400"}>
+                {cluster.win_rate > data.macro_win_rate ? "+" : ""}
+                {Math.round((cluster.win_rate - data.macro_win_rate) * 100)} pts vs.{" "}
+                {Math.round(data.macro_win_rate * 100)}% macro
+              </span>
+            )}
             <span className="text-stewart-muted">
               <strong>{tracks.length}</strong> winning word tracks
             </span>
           </div>
+
+          {/* Outcome breakdown */}
+          {cluster.outcome_breakdown && Object.keys(cluster.outcome_breakdown).length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-3 text-xs">
+              {Object.entries(cluster.outcome_breakdown)
+                .sort(([, a], [, b]) => b - a)
+                .map(([outcome, count]) => {
+                  const isWin = ["booked", "tentative_appointment", "transferred_to_closer"].includes(outcome);
+                  const isLoss = ["declined", "no_interest", "unqualified"].includes(outcome);
+                  const color = isWin ? "bg-green-900/30 border-green-700 text-green-400"
+                    : isLoss ? "bg-red-900/30 border-red-700 text-red-400"
+                    : "bg-yellow-900/30 border-yellow-700 text-yellow-400";
+                  const label = outcome.replace(/_/g, " ");
+                  return (
+                    <span key={outcome} className={`px-2 py-1 rounded border text-xs font-mono ${color}`}>
+                      {label}: {count}
+                    </span>
+                  );
+                })}
+            </div>
+          )}
         </div>
 
         <section>
@@ -121,6 +149,46 @@ export default async function ClusterDetailPage({
                   <p className="text-xs text-stewart-muted mt-4 italic">
                     Audio clip unavailable for this line.
                   </p>
+                )}
+
+                {/* Audio examples gallery — other calls that used this track */}
+                {w.audio_examples && w.audio_examples.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-stewart-border">
+                    <p className="text-xs uppercase tracking-wider text-stewart-muted mb-2">
+                      {w.audio_examples.length} example{w.audio_examples.length === 1 ? "" : "s"} of this track across calls
+                    </p>
+                    <div className="space-y-2">
+                      {w.audio_examples.map((ex, idx) => {
+                        const isWin = ["booked", "tentative_appointment", "transferred_to_closer"].includes(ex.outcome);
+                        const isLoss = ["declined", "no_interest", "unqualified"].includes(ex.outcome);
+                        const outcomeColor = isWin ? "text-green-400" : isLoss ? "text-red-400" : "text-yellow-400";
+                        const hasAudio = typeof ex.start_seconds === "number" && typeof ex.end_seconds === "number" && ex.end_seconds > ex.start_seconds;
+                        return (
+                          <div key={idx} className="flex items-center gap-3 text-xs bg-stewart-bg rounded px-3 py-2">
+                            <span className={`font-mono font-bold ${outcomeColor}`}>
+                              {ex.outcome?.replace(/_/g, " ") || "unknown"}
+                            </span>
+                            <span className="text-stewart-muted">
+                              call <code>{ex.call_id}</code>
+                            </span>
+                            {ex.outcome_observed && (
+                              <span className="text-stewart-muted">
+                                attempt result: {ex.outcome_observed}
+                              </span>
+                            )}
+                            {hasAudio && (
+                              <AudioClip
+                                token={token}
+                                callId={ex.call_id}
+                                startSec={ex.start_seconds!}
+                                endSec={ex.end_seconds!}
+                              />
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 )}
               </div>
             ))}
