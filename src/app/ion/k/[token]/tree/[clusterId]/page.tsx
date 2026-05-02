@@ -49,45 +49,76 @@ export default async function ClusterDetailPage({
           <p className="text-stewart-muted mt-2 max-w-3xl">
             {cluster.description}
           </p>
-          <div className="flex items-center gap-4 mt-4 text-sm">
-            <span className="text-stewart-text">
-              <strong>{cluster.frequency}</strong> calls
-            </span>
-            <span className="text-stewart-success">
-              <strong>{Math.round(cluster.win_rate * 100)}%</strong> win rate
-            </span>
-            {data.macro_win_rate != null && (
-              <span className={cluster.win_rate > data.macro_win_rate ? "text-green-400" : "text-red-400"}>
-                {cluster.win_rate > data.macro_win_rate ? "+" : ""}
-                {Math.round((cluster.win_rate - data.macro_win_rate) * 100)} pts vs.{" "}
-                {Math.round(data.macro_win_rate * 100)}% macro
-              </span>
-            )}
-            <span className="text-stewart-muted">
-              <strong>{tracks.length}</strong> winning word tracks
-            </span>
-          </div>
+          {/* Outcome breakdown — prominent */}
+          {(() => {
+            const ob = cluster.outcome_breakdown || {};
+            const winKeys = ["booked", "tentative_appointment", "transferred_to_closer"];
+            const lossKeys = ["declined", "no_interest", "unqualified"];
+            const totalCalls = Object.values(ob).reduce((s, n) => s + n, 0) || cluster.frequency;
+            const totalWins = Object.entries(ob).filter(([k]) => winKeys.includes(k)).reduce((s, [, n]) => s + n, 0);
+            const totalLosses = Object.entries(ob).filter(([k]) => lossKeys.includes(k)).reduce((s, [, n]) => s + n, 0);
+            const totalEngaged = totalCalls - totalWins - totalLosses;
+            const winPct = totalCalls > 0 ? Math.round((totalWins / totalCalls) * 100) : 0;
+            const macroPct = data.macro_win_rate != null ? Math.round(data.macro_win_rate * 100) : null;
+            const lift = macroPct != null ? winPct - macroPct : null;
 
-          {/* Outcome breakdown */}
-          {cluster.outcome_breakdown && Object.keys(cluster.outcome_breakdown).length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-3 text-xs">
-              {Object.entries(cluster.outcome_breakdown)
-                .sort(([, a], [, b]) => b - a)
-                .map(([outcome, count]) => {
-                  const isWin = ["booked", "tentative_appointment", "transferred_to_closer"].includes(outcome);
-                  const isLoss = ["declined", "no_interest", "unqualified"].includes(outcome);
-                  const color = isWin ? "bg-green-900/30 border-green-700 text-green-400"
-                    : isLoss ? "bg-red-900/30 border-red-700 text-red-400"
-                    : "bg-yellow-900/30 border-yellow-700 text-yellow-400";
-                  const label = outcome.replace(/_/g, " ");
-                  return (
-                    <span key={outcome} className={`px-2 py-1 rounded border text-xs font-mono ${color}`}>
-                      {label}: {count}
-                    </span>
-                  );
-                })}
-            </div>
-          )}
+            return (
+              <div className="mt-4 bg-stewart-card border border-stewart-border rounded-lg p-4">
+                <div className="flex items-baseline gap-6 flex-wrap">
+                  <div>
+                    <span className="text-3xl font-bold text-stewart-text">{totalCalls}</span>
+                    <span className="text-sm text-stewart-muted ml-2">calls</span>
+                  </div>
+                  <div>
+                    <span className="text-3xl font-bold text-green-400">{totalWins}</span>
+                    <span className="text-sm text-green-400 ml-2">won ({winPct}%)</span>
+                  </div>
+                  {totalLosses > 0 && (
+                    <div>
+                      <span className="text-3xl font-bold text-red-400">{totalLosses}</span>
+                      <span className="text-sm text-red-400 ml-2">lost</span>
+                    </div>
+                  )}
+                  {totalEngaged > 0 && (
+                    <div>
+                      <span className="text-3xl font-bold text-yellow-400">{totalEngaged}</span>
+                      <span className="text-sm text-yellow-400 ml-2">engaged / callback</span>
+                    </div>
+                  )}
+                  {lift != null && (
+                    <div className="ml-auto">
+                      <span className={`text-sm font-mono ${lift > 0 ? "text-green-400" : lift < 0 ? "text-red-400" : "text-stewart-muted"}`}>
+                        {lift > 0 ? "+" : ""}{lift} pts vs. {macroPct}% macro
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {Object.keys(ob).length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-stewart-border flex flex-wrap gap-3 text-xs">
+                    {Object.entries(ob)
+                      .sort(([, a], [, b]) => b - a)
+                      .map(([outcome, count]) => {
+                        const isWin = winKeys.includes(outcome);
+                        const isLoss = lossKeys.includes(outcome);
+                        const color = isWin ? "bg-green-900/30 border-green-700 text-green-400"
+                          : isLoss ? "bg-red-900/30 border-red-700 text-red-400"
+                          : "bg-yellow-900/30 border-yellow-700 text-yellow-400";
+                        return (
+                          <span key={outcome} className={`px-2 py-1 rounded border font-mono ${color}`}>
+                            {outcome.replace(/_/g, " ")}: {count}
+                          </span>
+                        );
+                      })}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+          <div className="mt-3 text-sm text-stewart-muted">
+            <strong>{tracks.length}</strong> winning word tracks · <strong>{losingPatterns.length}</strong> losing patterns
+          </div>
         </div>
 
         <section>
