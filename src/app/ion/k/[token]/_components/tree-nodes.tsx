@@ -84,9 +84,9 @@ export function ClusterNode({
 
 export function TrackNode({ data, selected }: NodeProps<TrackNodeData>) {
   const { track } = data;
-  const pct = Math.round(track.win_rate * 100);
   const snippet = truncate(track.verbatim, 85);
   const exampleCount = (track as unknown as { audio_examples?: unknown[] }).audio_examples?.length || track.sample_size;
+  const approachLabel = (track as unknown as { approach_label?: string }).approach_label || "";
 
   return (
     <div
@@ -98,12 +98,15 @@ export function TrackNode({ data, selected }: NodeProps<TrackNodeData>) {
     >
       <Handle type="target" position={Position.Left} style={HANDLE_STYLE} />
       <div className="flex items-start gap-2">
-        <span className="text-[10px] font-mono font-bold rounded bg-sky-700 text-white px-1.5 py-0.5 shrink-0">
-          #{track.rank}
-        </span>
-        <span className="text-[10px] font-mono text-sky-900/70">
-          {pct}% cluster close rate
-        </span>
+        {approachLabel ? (
+          <span className="text-[10px] font-mono font-bold rounded bg-sky-700 text-white px-1.5 py-0.5 shrink-0">
+            {approachLabel}
+          </span>
+        ) : (
+          <span className="text-[10px] font-mono font-bold rounded bg-sky-700 text-white px-1.5 py-0.5 shrink-0">
+            #{track.rank}
+          </span>
+        )}
         <span className="ml-auto text-[10px] text-sky-700">
           ▶ {exampleCount} example{exampleCount === 1 ? "" : "s"}
         </span>

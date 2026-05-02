@@ -138,7 +138,7 @@ export default async function ClusterDetailPage({
               >
                 <div className="flex items-start gap-3">
                   <span className="text-xs font-mono text-stewart-accent border border-stewart-accent/30 rounded px-2 py-1 mt-1 whitespace-nowrap">
-                    #{w.rank}
+                    {(w as unknown as { approach_label?: string }).approach_label || `#${w.rank}`}
                   </span>
                   <blockquote className="flex-1 text-stewart-text italic leading-relaxed">
                     &ldquo;{w.verbatim}&rdquo;
@@ -162,7 +162,6 @@ export default async function ClusterDetailPage({
                   <span>
                     {w.sample_size} example{w.sample_size === 1 ? "" : "s"}
                   </span>
-                  <span>est. {Math.round(w.win_rate * 100)}% win</span>
                 </div>
 
                 {typeof w.start_seconds === "number" &&
