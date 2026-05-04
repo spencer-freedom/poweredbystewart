@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { fetchDecisionTree, type DecisionTreePayload } from "@/lib/ion-api";
 import { ErrorPanel } from "./_components/error-panel";
-import { StageBBanner } from "./_components/stage-b-banner";
 
 export const dynamic = "force-dynamic";
 
@@ -56,9 +55,6 @@ export default async function IonLandingPage({
             "Decision tree built on your inside-sales calls."
           )}
         </h1>
-        <div className="mt-5">
-          <StageBBanner />
-        </div>
         <p className="mt-5 text-stewart-muted max-w-3xl text-lg">
           {totalTracks} winning word tracks across {clusters.length} objection
           categories. Every line is a verbatim quote from one of your reps.

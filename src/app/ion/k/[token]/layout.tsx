@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { IonNav } from "./_components/ion-nav";
+import { StageBBanner } from "./_components/stage-b-banner";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +33,10 @@ export default async function IonLayout({
         </div>
         <IonNav base={base} />
       </header>
-      <main className="max-w-6xl mx-auto px-6 py-8">{children}</main>
+      <main className="max-w-6xl mx-auto px-6 py-8 space-y-6">
+        <StageBBanner />
+        {children}
+      </main>
       <footer className="max-w-6xl mx-auto px-6 py-6 mt-12 border-t border-stewart-border text-xs text-stewart-muted">
         Built on 47 real Ion Solar inside-sales calls. Patterns are directional
         until replicated on a larger dataset. Powered by Stewart — SalesOS.
