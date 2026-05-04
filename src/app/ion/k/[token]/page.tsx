@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { fetchDecisionTree, type DecisionTreePayload } from "@/lib/ion-api";
 import { ErrorPanel } from "./_components/error-panel";
+import { StageBBanner } from "./_components/stage-b-banner";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +22,17 @@ export default async function IonLandingPage({
   const clusters = [...(data.clusters || [])].sort(
     (a, b) => b.frequency - a.frequency
   );
-  const lead = clusters[0];
+  // Killer-insight headline: surface the strongest signal — highest win-rate
+  // cluster with enough calls to be defensible. Falls back to most-frequent
+  // cluster if nothing meets the threshold.
+  const MIN_CALLS_FOR_HEADLINE = 5;
+  const candidates = clusters.filter(
+    (c) => c.frequency >= MIN_CALLS_FOR_HEADLINE
+  );
+  const lead =
+    candidates.length > 0
+      ? [...candidates].sort((a, b) => b.win_rate - a.win_rate)[0]
+      : clusters[0];
   const totalTracks = data.word_tracks?.length || 0;
   const totalLosing = data.losing_patterns?.length || 0;
   const FLOOR_SIZE = 35; // Kenny's setter floor
@@ -45,15 +56,8 @@ export default async function IonLandingPage({
             "Decision tree built on your inside-sales calls."
           )}
         </h1>
-        <div className="mt-5 inline-flex items-start gap-3 rounded-lg border border-stewart-accent/40 bg-stewart-accent/5 px-4 py-3 max-w-2xl">
-          <span className="relative flex h-2 w-2 mt-1.5 shrink-0">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-stewart-accent opacity-75 animate-ping" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-stewart-accent" />
-          </span>
-          <p className="text-sm text-stewart-text leading-relaxed">
-            Stewart is running deeper analysis on your latest calls. Thanks for
-            your patience — you&apos;ll love what&apos;s coming.
-          </p>
+        <div className="mt-5">
+          <StageBBanner />
         </div>
         <p className="mt-5 text-stewart-muted max-w-3xl text-lg">
           {totalTracks} winning word tracks across {clusters.length} objection

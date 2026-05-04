@@ -86,7 +86,14 @@ export function TrackNode({ data, selected }: NodeProps<TrackNodeData>) {
   const { track } = data;
   const snippet = truncate(track.verbatim, 85);
   const audioExamples = (track as unknown as { audio_examples?: unknown[] }).audio_examples || [];
-  const exampleCount = audioExamples.length;
+  const hasLegacyAudio =
+    typeof track.start_seconds === "number" &&
+    typeof track.end_seconds === "number" &&
+    track.end_seconds > track.start_seconds;
+  // Count the legacy single-clip as 1 when audio_examples isn't populated,
+  // so a track with playable audio never reads "0 examples".
+  const exampleCount =
+    audioExamples.length || (hasLegacyAudio ? 1 : 0);
   const approachLabel = (track as unknown as { approach_label?: string }).approach_label || "";
 
   return (
@@ -108,9 +115,13 @@ export function TrackNode({ data, selected }: NodeProps<TrackNodeData>) {
             #{track.rank}
           </span>
         )}
-        <span className="ml-auto text-[10px] text-sky-700">
-          ▶ {exampleCount} example{exampleCount === 1 ? "" : "s"}
-        </span>
+        {exampleCount > 1 ? (
+          <span className="ml-auto text-[10px] text-sky-700">
+            ▶ {exampleCount} examples
+          </span>
+        ) : exampleCount === 1 ? (
+          <span className="ml-auto text-[10px] text-sky-700">▶ play</span>
+        ) : null}
       </div>
       <blockquote className="text-[12px] italic leading-snug mt-2 text-sky-950 line-clamp-4">
         &ldquo;{snippet}&rdquo;

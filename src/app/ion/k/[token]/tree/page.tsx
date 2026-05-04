@@ -2,6 +2,7 @@ import Link from "next/link";
 import { fetchDecisionTree } from "@/lib/ion-api";
 import { ErrorPanel } from "../_components/error-panel";
 import { DecisionTree } from "../_components/decision-tree";
+import { StageBBanner } from "../_components/stage-b-banner";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,7 @@ export default async function TreePage({
 
     return (
       <div className="space-y-4">
+        <StageBBanner />
         <div className="flex flex-wrap items-baseline justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold text-stewart-text">
