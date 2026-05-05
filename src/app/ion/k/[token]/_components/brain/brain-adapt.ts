@@ -27,6 +27,9 @@ type RealCallData = {
   setter_id?: string | null;
   setter_name?: string | null;
   call_date?: string | null;
+  // New (shipped by /wiki/graph/demo): backend pre-computes these
+  cluster_ids?: string[];
+  is_bridge?: boolean;
 };
 
 type RealEventData = {
@@ -35,6 +38,7 @@ type RealEventData = {
   variant_id?: number;
   encounter_id?: number;
   text?: string;
+  text_full?: string | null;
   cluster_id?: string | null;
   objection_type_id?: string | null;
   solution_type_id?: string | null;
@@ -42,6 +46,7 @@ type RealEventData = {
   end_seconds?: number | null;
   is_canonical?: boolean;
   outcome?: string | null;
+  why_it_works?: string | null;
   classifier_confidence?: number | null;
   reviewer_confidence?: number | null;
 };
@@ -70,6 +75,13 @@ export function adaptWikiGraph(real: WikiGraphPayload): BrainGraphPayload {
     if (n.type === "call") {
       const d = n.data as RealCallData;
       const callId = d.call_id ?? n.label;
+      // Prefer backend-computed cluster_ids when shipped (new /wiki/graph/demo
+      // endpoint); fall back to the local computation from event scanning
+      // (existing /wiki/graph 2D endpoint).
+      const cluster_ids =
+        d.cluster_ids && d.cluster_ids.length > 0
+          ? d.cluster_ids
+          : eventsByCall.get(callId) ?? [];
       calls.push({
         id: n.id,
         type: "call",
@@ -79,7 +91,7 @@ export function adaptWikiGraph(real: WikiGraphPayload): BrainGraphPayload {
         call_date: d.call_date ?? null,
         outcome: d.outcome ?? null,
         duration_seconds: d.duration_seconds ?? null,
-        cluster_ids: eventsByCall.get(callId) ?? [],
+        cluster_ids,
         x: n.x,
         y: n.y,
       });
@@ -90,7 +102,7 @@ export function adaptWikiGraph(real: WikiGraphPayload): BrainGraphPayload {
         type: "objection",
         call_id: d.call_id ?? "",
         cluster_id: clusterFor("objection_event", d) ?? "unknown",
-        verbatim: d.text ?? n.label,
+        verbatim: d.text_full ?? d.text ?? n.label,
         start_seconds: d.start_seconds ?? null,
         end_seconds: d.end_seconds ?? null,
         outcome: d.outcome ?? null,
@@ -105,8 +117,8 @@ export function adaptWikiGraph(real: WikiGraphPayload): BrainGraphPayload {
         type: "solution",
         call_id: d.call_id ?? "",
         cluster_id: clusterFor("solution_event", d) ?? "unknown",
-        verbatim: d.text ?? n.label,
-        why_it_works: null,
+        verbatim: d.text_full ?? d.text ?? n.label,
+        why_it_works: d.why_it_works ?? null,
         start_seconds: d.start_seconds ?? null,
         end_seconds: d.end_seconds ?? null,
         is_canonical: !!d.is_canonical,

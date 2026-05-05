@@ -31,6 +31,11 @@ const ROUTES = [
   { path: `/ion/k/${KENNY_TOKEN}/manager/rep_alex/20000054949`, label: "Coaching prep", mustContain: ["Session ready", "Stewart noticed"] },
   { path: `/ion/k/${KENNY_TOKEN}/leader`,     label: "Sales leader",    mustContain: ["Floor-wide patterns", "Pipeline funnel"] },
   { path: `/ion/k/${KENNY_TOKEN}/wiki`,       label: "Wiki page", mustContain: ["Pattern Wiki", "Archivist"] },
+  // Brain page: passes if either the brain renders OR the denial page does.
+  // No content-marker requirement; just 200 + no error markers. Local dev
+  // with NEXT_PUBLIC_BRAIN_DEV_BYPASS=1 gets the brain; production deploys
+  // (no bypass + non-system_owner token) get the denial.
+  { path: `/ion/k/${KENNY_TOKEN}/wiki/brain`, label: "Brain page",  mustContain: [] },
   { path: `/ion/k/${KENNY_TOKEN}/owner`,      label: "Stub: owner",     mustContain: ["Stewart's still working"] },
 ];
 
