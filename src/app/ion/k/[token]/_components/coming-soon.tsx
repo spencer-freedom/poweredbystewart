@@ -3,6 +3,8 @@
 // any nav. When the dependent endpoint lands, replace ComingSoon with
 // the real surface — same route, no URL changes needed.
 
+import { StewartCallout } from "./stewart-callout";
+
 export function ComingSoon({
   surface,
   blockedOn,
@@ -11,17 +13,14 @@ export function ComingSoon({
   blockedOn: string;
 }) {
   return (
-    <div className="max-w-2xl">
-      <p className="text-xs uppercase tracking-wider text-stewart-muted mb-2">
+    <div className="max-w-2xl space-y-4">
+      <p className="text-xs uppercase tracking-wider text-stewart-muted">
         {surface}
       </p>
-      <h1 className="text-2xl font-bold text-stewart-text mb-3">
-        Stewart&apos;s still working on this part.
-      </h1>
-      <p className="text-stewart-muted leading-relaxed">
+      <StewartCallout kind="wip">
         This surface is part of the v2 build. Lights up when{" "}
         <code className="text-stewart-text">{blockedOn}</code> ships.
-      </p>
+      </StewartCallout>
     </div>
   );
 }

@@ -73,6 +73,25 @@ export type PipelineStats = {
   gate_reasons?: Record<string, number>;
 };
 
+export type Role =
+  | "rep"
+  | "manager"
+  | "leader"
+  | "system_owner"
+  | "tenant_admin";
+
+// Per Spencer/strategy-Claude decision (2026-05-04, token contract): every
+// /api/ion/* response wraps the resolved viewer info server-side. The
+// frontend never decodes tokens — it reads role / rep_id / team from this.
+// `team_rep_ids` is resolved at request time (NOT baked into the token)
+// since 90-day tokens go stale on rep reassignment.
+export type Viewer = {
+  role: Role;
+  rep_id: string | null;
+  team_rep_ids: string[] | null;
+  tenant_id: string;
+};
+
 export type DecisionTreePayload = {
   tenant_id: string;
   kind: string;
@@ -90,6 +109,9 @@ export type DecisionTreePayload = {
   word_tracks: WordTrack[];
   transitions: Transition[];
   losing_patterns: LosingPattern[];
+  // Optional during v1 → v2 transition. Once migration 017 ships,
+  // backend populates this on every response.
+  viewer?: Viewer;
 };
 
 export type UploadStatus = {
