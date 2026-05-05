@@ -12,24 +12,22 @@
 //     events touching that call
 
 import type {
-  AnsweredByOutcome,
   BrainCallNode,
   BrainEdge,
   BrainGraphPayload,
   BrainObjectionNode,
   BrainSolutionNode,
+  OutcomeBucket,
 } from "./brain-types";
+import { callOutcomeBucket, eventOutcomeBucket } from "./brain-types";
 import type { BrainGraphDemoPayload, WikiGraphPayload } from "@/lib/stewart-api";
 
-const OUTCOME_RANK: Record<AnsweredByOutcome, number> = {
-  worked: 3,
-  partial: 2,
-  failed: 1,
+const OUTCOME_RANK: Record<OutcomeBucket, number> = {
+  worked: 4,
+  partial: 3,
+  failed: 2,
+  unknown: 1,
 };
-
-function asOutcome(v: string | null | undefined): AnsweredByOutcome | null {
-  return v === "worked" || v === "partial" || v === "failed" ? v : null;
-}
 
 type RealCallData = {
   call_id?: string;
@@ -80,21 +78,36 @@ export function adaptWikiGraph(
     }
   }
 
-  // Pass 1b: derive each solution event's effective outcome from incoming
-  // answered_by edges. A solution can be tried on multiple objections; we
-  // take the best (worked > partial > failed) so it represents the
-  // solution's track record at a glance.
-  const solutionOutcome = new Map<string, AnsweredByOutcome>();
+  // Pass 1b: derive each solution event's effective outcome bucket from
+  // incoming answered_by edges, plus a "worked count" per solution so we
+  // can crown the top-3 winners with a size bump. A solution can be tried
+  // on multiple objections; we take the best bucket (worked > partial >
+  // failed > unknown) so its sphere reflects its overall track record.
+  const solutionOutcome = new Map<string, OutcomeBucket>();
+  const solutionWorkedCount = new Map<string, number>();
   for (const e of real.edges) {
     if (e.type !== "answered_by") continue;
     const data = (e as { data?: { outcome?: string } }).data;
-    const oc = asOutcome(data?.outcome);
-    if (!oc) continue;
+    const bucket = eventOutcomeBucket(data?.outcome);
+    if (bucket === "unknown") continue;
     const prev = solutionOutcome.get(e.target);
-    if (!prev || OUTCOME_RANK[oc] > OUTCOME_RANK[prev]) {
-      solutionOutcome.set(e.target, oc);
+    if (!prev || OUTCOME_RANK[bucket] > OUTCOME_RANK[prev]) {
+      solutionOutcome.set(e.target, bucket);
+    }
+    if (bucket === "worked") {
+      solutionWorkedCount.set(
+        e.target,
+        (solutionWorkedCount.get(e.target) ?? 0) + 1
+      );
     }
   }
+  // Top-3 solutions by worked-edge count → is_top_winner
+  const topWinners = new Set(
+    [...solutionWorkedCount.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([id]) => id)
+  );
 
   const calls: BrainCallNode[] = [];
   const objections: BrainObjectionNode[] = [];
@@ -124,6 +137,7 @@ export function adaptWikiGraph(
         setter_name: d.setter_name ?? d.setter_id ?? null,
         call_date: d.call_date ?? null,
         outcome: d.outcome ?? null,
+        effective_outcome: callOutcomeBucket(d.outcome),
         duration_seconds: d.duration_seconds ?? null,
         cluster_ids,
         is_bridge,
@@ -142,7 +156,7 @@ export function adaptWikiGraph(
         start_seconds: d.start_seconds ?? null,
         end_seconds: d.end_seconds ?? null,
         outcome: d.outcome ?? null,
-        effective_outcome: asOutcome(d.outcome),
+        effective_outcome: eventOutcomeBucket(d.outcome),
         is_canonical: !!d.is_canonical,
         x: n.x,
         y: n.y,
@@ -160,7 +174,8 @@ export function adaptWikiGraph(
         start_seconds: d.start_seconds ?? null,
         end_seconds: d.end_seconds ?? null,
         is_canonical: !!d.is_canonical,
-        effective_outcome: solutionOutcome.get(n.id) ?? null,
+        effective_outcome: solutionOutcome.get(n.id) ?? "unknown",
+        is_top_winner: topWinners.has(n.id),
         x: n.x,
         y: n.y,
         z,
@@ -168,18 +183,20 @@ export function adaptWikiGraph(
     }
   }
 
-  // Edges: pass through type/weight. For answered_by edges (new in
-  // /wiki/graph/demo), carry the outcome field for outcome-colored
-  // rendering (worked/partial/failed → green/amber/red). For similarity
-  // edges, carry the cosine score for opacity scaling.
+  // Edges: pass through type/weight. For answered_by edges, normalize
+  // outcome strings into the visual bucket (topic_switched → partial,
+  // walked_back → failed) so the canvas renders one consistent palette.
+  // For similarity edges, carry the cosine score for opacity scaling.
   const edges: BrainEdge[] = real.edges.map((e) => {
     const data = (e as { data?: { outcome?: string; similarity?: number } }).data;
+    const bucket =
+      e.type === "answered_by" ? eventOutcomeBucket(data?.outcome) : null;
     return {
       source: e.source,
       target: e.target,
       type: e.type as BrainEdge["type"],
       weight: e.weight,
-      ...(data?.outcome ? { outcome: data.outcome } : {}),
+      ...(bucket ? { outcome: bucket } : {}),
       ...(data?.similarity != null ? { similarity: data.similarity } : {}),
     };
   });

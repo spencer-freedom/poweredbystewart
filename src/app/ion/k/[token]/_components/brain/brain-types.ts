@@ -18,6 +18,9 @@ export type BrainCallNode = {
   setter_name: string | null;
   call_date: string | null; // ISO
   outcome: string | null; // "booked" | "callback" | etc.
+  // Bucket of `outcome` that drives node color (worked/partial/failed/
+  // unknown). Populated by the adapter so the canvas reads one field.
+  effective_outcome: OutcomeBucket;
   duration_seconds: number | null;
   cluster_ids: string[]; // clusters this call touched (1+ → bridge)
   is_bridge: boolean; // pre-computed by backend; legacy adapter falls back to cluster_ids.length > 1
@@ -36,10 +39,7 @@ export type BrainObjectionNode = {
   start_seconds: number | null;
   end_seconds: number | null;
   outcome: string | null; // "worked" | "partial" | "failed" | etc.
-  // Effective outcome used for node coloring. For objections this is
-  // typically `outcome`; populated by the adapter so the canvas doesn't
-  // have to chase edges.
-  effective_outcome: AnsweredByOutcome | null;
+  effective_outcome: OutcomeBucket;
   is_canonical: boolean;
   x: number;
   y: number;
@@ -58,7 +58,9 @@ export type BrainSolutionNode = {
   is_canonical: boolean;
   // Best incoming answered_by outcome — what happened when a rep used
   // this solution. Populated by the adapter from edge metadata.
-  effective_outcome: AnsweredByOutcome | null;
+  effective_outcome: OutcomeBucket;
+  // Top-3 winners get a size bump per the visual encoding pass.
+  is_top_winner: boolean;
   x: number;
   y: number;
   z: number;
@@ -71,10 +73,10 @@ export type BrainEdge = {
   target: string;
   type: BrainEdgeType;
   weight: number; // 0-1
-  // Type-specific payload. answered_by edges carry the encounter outcome
-  // (worked / partial / failed) — useful for outcome-colored rendering.
-  // similarity edges carry the cosine score.
-  outcome?: AnsweredByOutcome | string;
+  // answered_by edges carry the bucketed outcome (worked/partial/failed/
+  // unknown) for outcome-colored rendering. similarity edges carry the
+  // cosine score for opacity scaling.
+  outcome?: OutcomeBucket;
   similarity?: number;
 };
 
@@ -107,17 +109,67 @@ export const CLUSTER_DEFAULT_COLOR = "#94a3b8";
 export const colorForCluster = (clusterId: string | null | undefined): string =>
   (clusterId && CLUSTER_COLORS[clusterId]) || CLUSTER_DEFAULT_COLOR;
 
-// Outcome palette — drives event-node coloring so the win/partial/loss
-// signal reads at any rotation. Same hues as the answered_by edge tints
-// + the rest of the wiki/tree surfaces.
-export const OUTCOME_COLORS: Record<AnsweredByOutcome, string> = {
-  worked: "#34d399", // emerald
-  partial: "#fbbf24", // amber
-  failed: "#f87171", // red
+// ETHEREAL outcome palette (locked 2026-05-05). Each bucket carries a
+// luminous "core" (used as emissive) and a softer "shell" (used as base
+// color) so spheres glow from within against the cosmic background. Tesla
+// ether aesthetic — plasma / aurora / bioluminescence, not industrial UI.
+export type OutcomeBucket = AnsweredByOutcome | "unknown";
+
+export const OUTCOME_PALETTE: Record<
+  OutcomeBucket,
+  { core: string; shell: string; emissive: number }
+> = {
+  worked: { core: "#5EEAD4", shell: "#6EE7B7", emissive: 0.85 }, // luminous cyan-emerald
+  partial: { core: "#FBBF24", shell: "#FCD34D", emissive: 0.7 }, // warm gold pearl-amber
+  failed: { core: "#FB7185", shell: "#F9A8D4", emissive: 0.75 }, // coral-rose ember
+  unknown: { core: "#CBD5E1", shell: "#E2E8F0", emissive: 0.3 }, // translucent moonlight
 };
 
-export const OUTCOME_UNKNOWN_COLOR = "#94a3b8"; // slate gray
+// Single-color helpers for places that need a flat hex (legend, edges).
+export const OUTCOME_COLORS: Record<OutcomeBucket, string> = {
+  worked: "#34D399",
+  partial: "#FBBF24",
+  failed: "#F87171",
+  unknown: "#9CA3AF",
+};
 
-export const colorForOutcome = (
-  outcome: AnsweredByOutcome | null | undefined
-): string => (outcome && OUTCOME_COLORS[outcome]) || OUTCOME_UNKNOWN_COLOR;
+export const colorForOutcome = (outcome: OutcomeBucket | null | undefined): string =>
+  (outcome && OUTCOME_COLORS[outcome]) || OUTCOME_COLORS.unknown;
+
+export const paletteForOutcome = (outcome: OutcomeBucket | null | undefined) =>
+  (outcome && OUTCOME_PALETTE[outcome]) || OUTCOME_PALETTE.unknown;
+
+// Backend ships objection outcomes that aren't in the worked/partial/failed
+// trio. Bucket them into the visual palette so the encoding stays clean:
+//   topic_switched → partial (objection deferred — neither resolved nor lost)
+//   walked_back    → failed  (rep retreated under pressure)
+export function eventOutcomeBucket(
+  outcome: string | null | undefined
+): OutcomeBucket {
+  if (outcome === "worked") return "worked";
+  if (outcome === "failed" || outcome === "walked_back") return "failed";
+  if (outcome === "partial" || outcome === "topic_switched") return "partial";
+  return "unknown";
+}
+
+// Call-level outcome buckets per the brief. Win signals (booked / appt
+// set / transferred) → worked; lost signals → failed; callback or spouse-
+// gate → partial; nulls / "unknown" → unknown.
+export function callOutcomeBucket(
+  outcome: string | null | undefined
+): OutcomeBucket {
+  if (
+    outcome === "booked" ||
+    outcome === "tentative_appointment" ||
+    outcome === "transferred_to_closer"
+  )
+    return "worked";
+  if (
+    outcome === "declined" ||
+    outcome === "no_interest" ||
+    outcome === "unqualified"
+  )
+    return "failed";
+  if (outcome === "callback" || outcome === "spouse_not_present") return "partial";
+  return "unknown";
+}

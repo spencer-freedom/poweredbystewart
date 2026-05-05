@@ -1,69 +1,58 @@
 // Per-node Three.js Object3D construction. Called by react-force-graph-3d's
 // nodeThreeObject callback. Each node returns a Mesh whose material we tag
-// (via userData.pulse) so the pulse loop can mutate emissiveIntensity at
-// 60Hz without another lookup pass.
+// (via userData.pulse) so the pulse loop can mutate emissiveIntensity +
+// scale at 60Hz without an extra lookup pass.
 //
-// Geometry choices (locked in stewart-v2-brain-3d-frontend-port.md):
-//   • Bridge call → R=7 gold-emissive sphere ("standout / valuable")
-//   • Standard call → R=4 muted gray sphere
-//   • Objection event → R=2.5 cluster-colored sphere
-//   • Solution event → R=3 cluster-colored sphere
-//   • Canonical event → emissive=0.5 + white wireframe halo
+// Visual encoding (ethereal palette, locked 2026-05-05):
+//   • Calls — sphere R=4.5 base / R=7 bridge, MeshPhysicalMaterial colored
+//     by call.effective_outcome bucket. Bridge calls add a thin white rim
+//     (extra slightly-larger wireframe child) so they pop against non-
+//     bridges at any rotation.
+//   • Objection / Solution events — sphere R=2.5 base, R=3.0 top winner,
+//     R=3.5 canonical. Cluster-blended outcome color, emissive core.
+//   • Canonical — wireframe halo overlay + persistent ~1.2Hz size pulse
+//     handled by the pulse loop (10% amplitude).
+//   • Baseline 0.78 opacity for depth perception. transparent + depthWrite
+//     false so far / near nodes blend cleanly through one another.
 
 import * as THREE from "three";
 import type { BrainNode } from "./brain-types";
-import { colorForOutcome } from "./brain-types";
+import { paletteForOutcome } from "./brain-types";
 
-const BRIDGE_GOLD = "#facc15";
-const CALL_GRAY = "#475569";
+const BRIDGE_RIM = "#ffffff";
 
-// Baseline transparency for all spheres. Lower opacity → outer nodes
-// reveal inner nodes → depth perception strengthens. Tuned so the
-// emissive glow still reads strongly but you feel the volume.
+// Baseline transparency for all spheres. Low-ish so outer nodes reveal
+// inner ones — depth perception strengthens. Tuned so emissive glow
+// still reads strongly.
 const NODE_OPACITY = 0.78;
 
-// Geometry + material caches — Three.js performs better when we share
-// geometry across instances of the same shape. ~1500 nodes × fresh
-// geometry would chew memory; sharing keeps it cheap.
-let bridgeGeo: THREE.SphereGeometry | null = null;
-let callGeo: THREE.SphereGeometry | null = null;
-let objectionGeo: THREE.SphereGeometry | null = null;
-let solutionGeo: THREE.SphereGeometry | null = null;
-let canonicalRingGeoObj: THREE.SphereGeometry | null = null;
-let canonicalRingGeoSol: THREE.SphereGeometry | null = null;
-
-function getBridgeGeo() {
-  if (!bridgeGeo) bridgeGeo = new THREE.SphereGeometry(7, 20, 20);
-  return bridgeGeo;
-}
-function getCallGeo() {
-  if (!callGeo) callGeo = new THREE.SphereGeometry(4, 16, 16);
-  return callGeo;
-}
-function getObjectionGeo() {
-  if (!objectionGeo) objectionGeo = new THREE.SphereGeometry(2.5, 12, 12);
-  return objectionGeo;
-}
-function getSolutionGeo() {
-  if (!solutionGeo) solutionGeo = new THREE.SphereGeometry(3, 12, 12);
-  return solutionGeo;
-}
-function getCanonicalRingGeo(forSolution: boolean) {
-  if (forSolution) {
-    if (!canonicalRingGeoSol)
-      canonicalRingGeoSol = new THREE.SphereGeometry(3.7, 14, 14);
-    return canonicalRingGeoSol;
-  }
-  if (!canonicalRingGeoObj)
-    canonicalRingGeoObj = new THREE.SphereGeometry(3.2, 14, 14);
-  return canonicalRingGeoObj;
-}
+// Geometry caches — Three.js is happier sharing geometry across many
+// instances of the same shape. ~1500 nodes × fresh geometry would chew
+// memory; the cache keeps it cheap.
+const geos = {
+  callBase: new THREE.SphereGeometry(4.5, 16, 16),
+  callBridge: new THREE.SphereGeometry(7, 24, 24),
+  callBridgeRim: new THREE.SphereGeometry(7.4, 24, 24),
+  eventBase: new THREE.SphereGeometry(2.5, 12, 12),
+  eventTopWinner: new THREE.SphereGeometry(3.0, 14, 14),
+  eventCanonical: new THREE.SphereGeometry(3.5, 14, 14),
+  canonicalRing: new THREE.SphereGeometry(4.1, 16, 16),
+};
 
 const ringMat = new THREE.MeshBasicMaterial({
   color: "#ffffff",
   wireframe: true,
   transparent: true,
-  opacity: 0.3,
+  opacity: 0.32,
+  depthWrite: false,
+});
+
+const bridgeRimMat = new THREE.MeshBasicMaterial({
+  color: BRIDGE_RIM,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.28,
+  depthWrite: false,
 });
 
 export type PulsableMesh = THREE.Mesh & {
@@ -72,98 +61,105 @@ export type PulsableMesh = THREE.Mesh & {
       brainNodeId: string;
       isCanonical: boolean;
       isBridge: boolean;
+      isTopWinner: boolean;
       baseEmissive: number;
       baselineOpacity: number;
+      baseScale: number;
       color: string;
     };
   };
 };
 
-export function buildBrainNode(node: BrainNode): THREE.Object3D {
-  if (node.type === "call") {
-    if (node.is_bridge) {
-      const mat = new THREE.MeshStandardMaterial({
-        color: BRIDGE_GOLD,
-        emissive: BRIDGE_GOLD,
-        emissiveIntensity: 0.4,
-        metalness: 0.5,
-        roughness: 0.35,
-        transparent: true,
-        opacity: NODE_OPACITY,
-        depthWrite: false,
-      });
-      const mesh = new THREE.Mesh(getBridgeGeo(), mat) as PulsableMesh;
-      mesh.userData.pulse = {
-        brainNodeId: node.id,
-        isCanonical: false,
-        isBridge: true,
-        baseEmissive: 0.4,
-        baselineOpacity: NODE_OPACITY,
-        color: BRIDGE_GOLD,
-      };
-      return mesh;
-    }
-    const mat = new THREE.MeshStandardMaterial({
-      color: CALL_GRAY,
-      emissive: "#000000",
-      emissiveIntensity: 0,
-      metalness: 0.2,
-      roughness: 0.6,
-      transparent: true,
-      opacity: NODE_OPACITY,
-      depthWrite: false,
-    });
-    const mesh = new THREE.Mesh(getCallGeo(), mat) as PulsableMesh;
-    mesh.userData.pulse = {
-      brainNodeId: node.id,
-      isCanonical: false,
-      isBridge: false,
-      baseEmissive: 0,
-      baselineOpacity: NODE_OPACITY,
-      color: CALL_GRAY,
-    };
-    return mesh;
-  }
-
-  // Event nodes — colored by outcome (worked=green, partial=amber,
-  // failed=red, unknown=gray) so the win/loss signal carries at any
-  // rotation. Cluster identity still surfaces via the dagre wiki + tooltip.
-  const color = colorForOutcome(node.effective_outcome);
-  const isObjection = node.type === "objection";
-  const baseEmissive = node.is_canonical ? 0.5 : 0.08;
-  const mat = new THREE.MeshStandardMaterial({
-    color,
-    emissive: color,
-    emissiveIntensity: baseEmissive,
-    metalness: 0.1,
-    roughness: 0.7,
+function makeNodeMaterial(args: {
+  shell: string;
+  core: string;
+  emissive: number;
+}): THREE.MeshPhysicalMaterial {
+  return new THREE.MeshPhysicalMaterial({
+    color: args.shell,
+    emissive: args.core,
+    emissiveIntensity: args.emissive,
+    metalness: 0.0,
+    roughness: 0.25,
+    clearcoat: 0.6,
+    clearcoatRoughness: 0.2,
     transparent: true,
     opacity: NODE_OPACITY,
     depthWrite: false,
   });
-  const geo = isObjection ? getObjectionGeo() : getSolutionGeo();
+}
+
+export function buildBrainNode(node: BrainNode): THREE.Object3D {
+  if (node.type === "call") {
+    const palette = paletteForOutcome(node.effective_outcome);
+    const baseEmissive = node.is_bridge ? palette.emissive + 0.15 : palette.emissive;
+    const mat = makeNodeMaterial({
+      shell: palette.shell,
+      core: palette.core,
+      emissive: baseEmissive,
+    });
+    const geo = node.is_bridge ? geos.callBridge : geos.callBase;
+    const mesh = new THREE.Mesh(geo, mat) as PulsableMesh;
+
+    if (node.is_bridge) {
+      // White wireframe rim — "this call cross-pollinates clusters"
+      const rim = new THREE.Mesh(geos.callBridgeRim, bridgeRimMat);
+      mesh.add(rim);
+    }
+
+    mesh.userData.pulse = {
+      brainNodeId: node.id,
+      isCanonical: false,
+      isBridge: node.is_bridge,
+      isTopWinner: false,
+      baseEmissive,
+      baselineOpacity: NODE_OPACITY,
+      baseScale: 1.0,
+      color: palette.core,
+    };
+    return mesh;
+  }
+
+  // Event nodes
+  const palette = paletteForOutcome(node.effective_outcome);
+  const isTopWinner = node.type === "solution" && node.is_top_winner;
+  const baseEmissive = node.is_canonical
+    ? palette.emissive + 0.2
+    : isTopWinner
+    ? palette.emissive + 0.1
+    : palette.emissive * 0.7; // non-canonical events glow softer
+  const mat = makeNodeMaterial({
+    shell: palette.shell,
+    core: palette.core,
+    emissive: baseEmissive,
+  });
+  const geo = node.is_canonical
+    ? geos.eventCanonical
+    : isTopWinner
+    ? geos.eventTopWinner
+    : geos.eventBase;
   const mesh = new THREE.Mesh(geo, mat) as PulsableMesh;
+
+  if (node.is_canonical) {
+    const ring = new THREE.Mesh(geos.canonicalRing, ringMat);
+    mesh.add(ring);
+  }
+
   mesh.userData.pulse = {
     brainNodeId: node.id,
     isCanonical: node.is_canonical,
     isBridge: false,
+    isTopWinner,
     baseEmissive,
     baselineOpacity: NODE_OPACITY,
-    color,
+    baseScale: 1.0,
+    color: palette.core,
   };
-
-  if (node.is_canonical) {
-    const ringGeo = getCanonicalRingGeo(!isObjection);
-    const ring = new THREE.Mesh(ringGeo, ringMat);
-    mesh.add(ring);
-  }
-
   return mesh;
 }
 
-// Visit every PulsableMesh in the scene tree starting at root. We register
-// each scene node we build with the pulse loop, but rfg-3d may swap meshes
-// when graphData updates — `walk` rediscovers them after data changes.
+// Visit every PulsableMesh in the scene tree starting at root. Used by
+// the pulse loop after rfg-3d rebuilds meshes on graphData updates.
 export function walkPulsable(
   root: THREE.Object3D,
   visit: (m: PulsableMesh) => void
