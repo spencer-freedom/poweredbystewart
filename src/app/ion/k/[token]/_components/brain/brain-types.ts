@@ -119,10 +119,13 @@ export const OUTCOME_PALETTE: Record<
   OutcomeBucket,
   { core: string; shell: string; emissive: number }
 > = {
-  worked: { core: "#5EEAD4", shell: "#6EE7B7", emissive: 0.85 }, // luminous cyan-emerald
-  partial: { core: "#FBBF24", shell: "#FCD34D", emissive: 0.7 }, // warm gold pearl-amber
-  failed: { core: "#FB7185", shell: "#F9A8D4", emissive: 0.75 }, // coral-rose ember
-  unknown: { core: "#CBD5E1", shell: "#E2E8F0", emissive: 0.3 }, // translucent moonlight
+  // Emissive values tuned 2026-05-05 after bloom over-blew at zoom-in.
+  // Bloom adds its own halo over the hot pixels; the material itself
+  // only needs enough emissive to clear the bloom threshold (~0.6).
+  worked: { core: "#5EEAD4", shell: "#6EE7B7", emissive: 0.45 },
+  partial: { core: "#FBBF24", shell: "#FCD34D", emissive: 0.4 },
+  failed: { core: "#FB7185", shell: "#F9A8D4", emissive: 0.42 },
+  unknown: { core: "#CBD5E1", shell: "#E2E8F0", emissive: 0.15 },
 };
 
 // Single-color helpers for places that need a flat hex (legend, edges).

@@ -92,7 +92,7 @@ function makeNodeMaterial(args: {
 export function buildBrainNode(node: BrainNode): THREE.Object3D {
   if (node.type === "call") {
     const palette = paletteForOutcome(node.effective_outcome);
-    const baseEmissive = node.is_bridge ? palette.emissive + 0.15 : palette.emissive;
+    const baseEmissive = node.is_bridge ? palette.emissive + 0.08 : palette.emissive;
     const mat = makeNodeMaterial({
       shell: palette.shell,
       core: palette.core,
@@ -124,10 +124,10 @@ export function buildBrainNode(node: BrainNode): THREE.Object3D {
   const palette = paletteForOutcome(node.effective_outcome);
   const isTopWinner = node.type === "solution" && node.is_top_winner;
   const baseEmissive = node.is_canonical
-    ? palette.emissive + 0.2
-    : isTopWinner
     ? palette.emissive + 0.1
-    : palette.emissive * 0.7; // non-canonical events glow softer
+    : isTopWinner
+    ? palette.emissive + 0.05
+    : palette.emissive * 0.6; // non-canonical events glow softer
   const mat = makeNodeMaterial({
     shell: palette.shell,
     core: palette.core,

@@ -189,6 +189,11 @@ export function BrainCanvas({
         return;
       }
 
+      // Pull camera in to a comfortable framing — rfg-3d's default
+      // bounds-fit puts the brain too far out for the demo wow. 250
+      // matches the locked target distance.
+      fg!.cameraPosition({ x: 0, y: 0, z: 250 }, { x: 0, y: 0, z: 0 }, 0);
+
       // Auto-rotate at idle, pause on user interaction, resume after idle window
       ctl.autoRotate = true;
       ctl.autoRotateSpeed = AUTO_ROTATE_SPEED;
@@ -264,9 +269,9 @@ export function BrainCanvas({
           );
           const bloom = new UnrealBloomPass(
             new THREE.Vector2(size.width, size.height),
-            0.85, // strength
-            0.6,  // radius
-            0.5   // threshold
+            0.4,  // strength — lower so zoom-in doesn't blow to white
+            0.45, // radius — tighter halo
+            0.62  // threshold — only true emissive cores trigger bloom
           );
           composer.addPass(bloom);
         }

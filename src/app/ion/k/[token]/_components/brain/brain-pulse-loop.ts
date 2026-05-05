@@ -82,33 +82,32 @@ export function startPulseLoop(getRoot: () => THREE.Object3D | null): PulseLoopH
       let scale = meta.baseScale;
 
       if (meta.isCanonical) {
-        // Persistent breathing — 10% size oscillation + emissive lift
-        intensity = meta.baseEmissive + canonicalLift * 0.4;
+        // Persistent breathing — 10% size oscillation + gentle lift
+        intensity = meta.baseEmissive + canonicalLift * 0.18;
         scale = meta.baseScale * (1 + canonicalLift * 0.10);
       } else if (meta.isBridge) {
-        intensity = meta.baseEmissive * 0.8 + bridgeLift * 0.25;
+        intensity = meta.baseEmissive * 0.85 + bridgeLift * 0.12;
       } else if (meta.isTopWinner) {
-        // Gentler than canonical
-        intensity = meta.baseEmissive + canonicalLift * 0.18;
+        intensity = meta.baseEmissive + canonicalLift * 0.10;
       }
 
-      // Click signal-fire
+      // Click signal-fire — bright, brief, sized
       if (click && click.ids.has(meta.brainNodeId)) {
-        intensity = Math.max(intensity, 0.6 + signalLift * 0.4);
+        intensity = Math.max(intensity, 0.5 + signalLift * 0.25);
         scale = Math.max(scale, meta.baseScale * (1 + signalLift * 0.18));
       }
 
-      // Hover signal — gentler / faster than click
+      // Hover signal — gentler than click
       if (hover && hover.ids.has(meta.brainNodeId)) {
-        intensity = Math.max(intensity, 0.55 + signalLift * 0.30);
-        scale = Math.max(scale, meta.baseScale * (1 + signalLift * 0.15));
+        intensity = Math.max(intensity, 0.42 + signalLift * 0.18);
+        scale = Math.max(scale, meta.baseScale * (1 + signalLift * 0.12));
       }
 
       // Search highlight — matched lift, non-matched fade
       let opacity = meta.baselineOpacity;
       if (searchHighlight.size > 0) {
         if (searchHighlight.has(meta.brainNodeId)) {
-          intensity = Math.max(intensity, 0.65 + canonicalLift * 0.25);
+          intensity = Math.max(intensity, 0.5 + canonicalLift * 0.15);
           opacity = meta.baselineOpacity;
         } else {
           opacity = 0.18;
