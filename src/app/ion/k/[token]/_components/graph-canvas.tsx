@@ -14,6 +14,10 @@ import ReactFlow, {
   type NodeMouseHandler,
   type NodeTypes,
 } from "reactflow";
+
+// Cap the zoom-out so cards never shrink past readable. Below this the
+// user pans rather than seeing everything at once. Tunable per surface.
+const MIN_READABLE_ZOOM = 0.55;
 import "reactflow/dist/style.css";
 
 export type GraphCanvasProps = {
@@ -36,6 +40,9 @@ export type GraphCanvasProps = {
   // cluster tree wants this; the wiki overview (dense graph filling the
   // canvas) does not. Default true for backward compat.
   leftAnchor?: boolean;
+  // Optional legend slot — renders absolutely-positioned in the top-right
+  // of the canvas. Use for explaining edge styles or color codes.
+  legend?: React.ReactNode;
 };
 
 const DEFAULT_COLOR = "#94a3b8";
@@ -59,8 +66,9 @@ function GraphCanvasInner({
   intro,
   miniMapColor = () => DEFAULT_COLOR,
   leftAnchor = true,
+  legend,
 }: GraphCanvasProps) {
-  const { fitBounds } = useReactFlow();
+  const { setViewport } = useReactFlow();
   const viewport = useViewport();
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerHeight, setContainerHeight] = useState(0);
@@ -75,12 +83,16 @@ function GraphCanvasInner({
     return () => ro.disconnect();
   }, []);
 
-  // Auto-fit with a left-anchor rectangle skew (1.6× wider than the actual
-  // tree extent), so the graph lands on the left ~62% of the canvas with
-  // empty space on the right that visually invites drill-down.
+  // Auto-fit with a min-zoom clamp so cards never shrink past readable
+  // even when the graph is dense. Once we hit MIN_READABLE_ZOOM, content
+  // overflows and the user pans — better than auto-shrinking everything
+  // to fit. Left-anchor mode skews the graph onto the left ~62% of the
+  // canvas (cluster-tree drill-down hint); center mode is for the wiki.
   useEffect(() => {
     const t = setTimeout(() => {
-      if (!nodes.length) return;
+      const containerEl = containerRef.current;
+      if (!nodes.length || !containerEl) return;
+
       let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
       for (const n of nodes) {
         const w = (n.style?.width as number) ?? 200;
@@ -90,17 +102,34 @@ function GraphCanvasInner({
         if (n.position.x + w > maxX) maxX = n.position.x + w;
         if (n.position.y + h > maxY) maxY = n.position.y + h;
       }
-      const w = Math.max(1, maxX - minX);
-      const h = Math.max(1, maxY - minY);
-      const widthMult = leftAnchor ? 1.6 : 1.0;
-      const padding = leftAnchor ? 0.05 : 0.08;
-      fitBounds(
-        { x: minX, y: minY, width: w * widthMult, height: h * 1.05 },
-        { padding, duration: 350 }
+      const graphW = Math.max(1, maxX - minX);
+      const graphH = Math.max(1, maxY - minY);
+      const cw = containerEl.clientWidth;
+      const ch = containerEl.clientHeight;
+
+      // Width allotted to the graph: full canvas in center mode, ~62% in
+      // left-anchor mode (so the right ~38% stays empty as drill-down
+      // invitation).
+      const allottedW = leftAnchor ? cw * 0.62 : cw;
+      const allottedH = ch;
+      const padding = leftAnchor ? 32 : 48;
+
+      const naturalZoom = Math.min(
+        (allottedW - padding * 2) / graphW,
+        (allottedH - padding * 2) / graphH
       );
+      const zoom = Math.max(MIN_READABLE_ZOOM, Math.min(1.3, naturalZoom));
+
+      // Center vs left-anchor placement of the graph.
+      const x = leftAnchor
+        ? padding - minX * zoom
+        : (cw - graphW * zoom) / 2 - minX * zoom;
+      const y = (ch - graphH * zoom) / 2 - minY * zoom;
+
+      setViewport({ x, y, zoom }, { duration: 350 });
     }, 30);
     return () => clearTimeout(t);
-  }, [fitBounds, nodes, leftAnchor]);
+  }, [setViewport, nodes, leftAnchor]);
 
   // Vertical position of the overlay detail card — slides to align with the
   // selected node's row. Clamped so it never spills past the canvas bottom.
@@ -124,6 +153,11 @@ function GraphCanvasInner({
         {renderToolbar && (
           <div className="absolute top-3 left-3 z-30 flex gap-1 bg-stewart-card/90 border border-stewart-border rounded-md p-1 backdrop-blur-sm">
             {renderToolbar()}
+          </div>
+        )}
+        {legend && (
+          <div className="absolute top-3 right-3 z-30 bg-stewart-card/90 border border-stewart-border rounded-md p-2.5 backdrop-blur-sm">
+            {legend}
           </div>
         )}
         <ReactFlow

@@ -10,6 +10,7 @@ import { layoutGraph } from "./tree-layout";
 import { NODE_TYPES } from "./tree-nodes";
 import { TreeDetailCard } from "./tree-detail-card";
 import type { DetailSelection } from "./tree-transform";
+import { EdgeLegend, WIKI_LEGEND } from "./edge-legend";
 
 export function WikiGraph({
   data,
@@ -115,13 +116,14 @@ export function WikiGraph({
       selectedNodeId={selectedNodeId}
       miniMapColor={miniMapColor}
       leftAnchor={false}
+      legend={<EdgeLegend items={WIKI_LEGEND} />}
       renderToolbar={() => (
         <button
           onClick={collapseAll}
           disabled={allCollapsed}
           className="px-3 py-1.5 text-xs rounded hover:bg-stewart-border/50 text-stewart-text disabled:text-stewart-muted disabled:cursor-not-allowed transition-colors"
         >
-          Reset
+          Collapse all
         </button>
       )}
       renderDetailCard={(topPx) => (

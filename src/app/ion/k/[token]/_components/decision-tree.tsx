@@ -9,6 +9,7 @@ import { buildTreeGraph, type DetailSelection } from "./tree-transform";
 import { layoutGraph } from "./tree-layout";
 import { NODE_TYPES } from "./tree-nodes";
 import { TreeDetailCard } from "./tree-detail-card";
+import { EdgeLegend, TREE_LEGEND } from "./edge-legend";
 
 export function DecisionTree({
   data,
@@ -120,13 +121,14 @@ export function DecisionTree({
           </p>
         ) : null
       }
+      legend={<EdgeLegend items={TREE_LEGEND} />}
       renderToolbar={() => (
         <button
           onClick={collapseAll}
           disabled={allCollapsed}
           className="px-3 py-1.5 text-xs rounded hover:bg-stewart-border/50 text-stewart-text disabled:text-stewart-muted disabled:cursor-not-allowed transition-colors"
         >
-          Reset
+          Collapse all
         </button>
       )}
       renderDetailCard={(topPx) => (
