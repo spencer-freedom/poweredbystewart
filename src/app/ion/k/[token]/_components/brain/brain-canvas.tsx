@@ -2,39 +2,63 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import * as THREE from "three";
 
-import type {
-  BrainEdge,
-  BrainGraphPayload,
-  BrainNode,
-} from "./brain-types";
-import { CLUSTER_DEFAULT_COLOR, colorForCluster } from "./brain-types";
+import type { BrainEdge, BrainGraphPayload, BrainNode } from "./brain-types";
+import { CLUSTER_DEFAULT_COLOR } from "./brain-types";
+import { buildBrainNode } from "./brain-three-objects";
+import { startPulseLoop, type PulseLoopHandle } from "./brain-pulse-loop";
 
-// react-force-graph-2d uses Canvas — must load client-only to avoid
-// SSR document-undefined errors. dynamic({ ssr: false }) is the wrapper.
-const ForceGraph2D = dynamic(() => import("react-force-graph-2d"), {
+// react-force-graph-3d is WebGL/Three.js — must load client-only to avoid
+// SSR document/window errors. dynamic({ ssr: false }) is the wrapper.
+const ForceGraph3D = dynamic(() => import("react-force-graph-3d"), {
   ssr: false,
 });
 
-const MUTED_ALPHA = 0.15;
-const FULL_ALPHA = 1.0;
-
-type RFGNode = BrainNode & { vx?: number; vy?: number; fx?: number; fy?: number };
+type RFGNode = BrainNode & {
+  vx?: number;
+  vy?: number;
+  vz?: number;
+  fx?: number;
+  fy?: number;
+  fz?: number;
+};
 type RFGLink = {
   source: string | RFGNode;
   target: string | RFGNode;
   type: BrainEdge["type"];
   weight: number;
+  outcome?: string;
+  similarity?: number;
+};
+
+// react-force-graph-3d's runtime ref shape — narrowed to the methods
+// we call. The published types ship as `any`, so we declare locally.
+type ForceGraph3DInstance = {
+  cameraPosition: (
+    pos: { x?: number; y?: number; z?: number },
+    lookAt?: { x: number; y: number; z: number },
+    ms?: number
+  ) => void;
+  controls: () => {
+    autoRotate: boolean;
+    autoRotateSpeed: number;
+    update: () => void;
+    addEventListener: (event: string, fn: () => void) => void;
+  };
+  scene: () => THREE.Scene;
+  zoomToFit: (ms: number, pad: number) => void;
 };
 
 export type BrainCanvasProps = {
   data: BrainGraphPayload;
   onNodeClick?: (node: BrainNode) => void;
   onNodeHover?: (node: BrainNode | null, screenX: number, screenY: number) => void;
-  // Set of node IDs currently matching a search. Empty = no filter,
-  // everything full saturation. Non-empty = matching full, others muted.
   searchHighlight?: ReadonlySet<string>;
 };
+
+const IDLE_RESUME_MS = 8000;
+const AUTO_ROTATE_SPEED = 0.4; // ~2.5 min per full rotation, museum pace
 
 export function BrainCanvas({
   data,
@@ -43,11 +67,10 @@ export function BrainCanvas({
   searchHighlight,
 }: BrainCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const fgRef = useRef<ForceGraph3DInstance | null>(null);
+  const pulseRef = useRef<PulseLoopHandle | null>(null);
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [size, setSize] = useState({ width: 800, height: 600 });
-  const [hoveredNode, setHoveredNode] = useState<BrainNode | null>(null);
-  // Lock layout — the backend (eventually) ships pre-computed positions,
-  // and the mock data also pre-positions nodes. We disable d3-force's
-  // ongoing simulation by setting cooldownTicks=0 in the props below.
 
   useEffect(() => {
     const el = containerRef.current;
@@ -59,228 +82,187 @@ export function BrainCanvas({
     return () => ro.disconnect();
   }, []);
 
-  // Detect whether the payload carries meaningful pre-computed positions.
-  // Backend's /api/stewart/wiki/graph will ship {x, y} per node — that's
-  // the production path. For mock / legacy data without positions, we let
-  // d3-force run a normal simulation on mount and then settle.
-  const hasPrecomputed = useMemo(
-    () =>
-      data.nodes.length > 0 &&
-      data.nodes.some((n) => Math.abs(n.x) + Math.abs(n.y) > 1),
-    [data.nodes]
-  );
-
+  // Pre-positioned nodes from the backend's force layout. Pin them via
+  // fx/fy/fz so d3-force-3d doesn't keep wiggling — the visual signal we
+  // want is calls clustered at center, events orbiting on the rim.
   const graphData = useMemo(() => {
-    const nodes: RFGNode[] = data.nodes.map((n) =>
-      hasPrecomputed ? { ...n, fx: n.x, fy: n.y } : { ...n }
-    );
+    const nodes: RFGNode[] = data.nodes.map((n) => ({
+      ...n,
+      fx: n.x,
+      fy: n.y,
+      fz: n.z,
+    }));
     const links: RFGLink[] = data.edges.map((e) => ({ ...e }));
     return { nodes, links };
-  }, [data, hasPrecomputed]);
+  }, [data]);
 
-  const isHighlighted = useCallback(
-    (id: string) => {
-      if (!searchHighlight || searchHighlight.size === 0) return true;
-      return searchHighlight.has(id);
-    },
-    [searchHighlight]
-  );
+  // Custom Three.js node builder. rfg-3d caches the returned object per
+  // node id, so this only fires when the node first renders or graphData
+  // changes — not every frame.
+  const nodeThreeObject = useCallback((rawNode: object): THREE.Object3D => {
+    const node = rawNode as BrainNode;
+    return buildBrainNode(node);
+  }, []);
 
-  const isBridgeCall = useCallback(
-    (n: BrainNode) => n.type === "call" && n.cluster_ids.length > 1,
-    []
-  );
-
-  // Custom node painter — Canvas operations for max control over
-  // bridge halos, cluster colors, canonical rings, hover effect.
-  // The library passes nodes through its generic shape; we narrow
-  // back to BrainNode at the boundary.
-  const paintNode = useCallback(
-    (
-      rawNode: object,
-      ctx: CanvasRenderingContext2D,
-      _globalScale: number
-    ) => {
-      const node = rawNode as BrainNode & { x?: number; y?: number };
-      const x = node.x ?? 0;
-      const y = node.y ?? 0;
-      const alpha = isHighlighted(node.id) ? FULL_ALPHA : MUTED_ALPHA;
-      const isHover = hoveredNode?.id === node.id;
-
-      if (node.type === "call") {
-        const isBridge = isBridgeCall(node);
-        const radius = isBridge ? 14 : 9;
-        // Gold halo for bridge calls — channel-separated from the violet
-        // similarity edges so "this call is a bridge / skill signal" reads
-        // distinctly from "these events are similar." Per strategy review
-        // 2026-05-05: gold = "valuable / earned / standout."
-        const haloColor = "#facc15";
-        const fill = isBridge ? "#facc15" : "#475569";
-
-        // Bridge halo + hover-pulse (hover only, not constant)
-        if (isBridge) {
-          const pulseR = isHover ? radius + 9 + Math.sin(Date.now() / 200) * 3 : radius + 4;
-          ctx.globalAlpha = alpha * 0.4;
-          ctx.fillStyle = haloColor;
-          ctx.beginPath();
-          ctx.arc(x, y, pulseR, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        ctx.globalAlpha = alpha;
-        ctx.fillStyle = fill;
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Outline on hover
-        if (isHover) {
-          ctx.strokeStyle = "#fff";
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-        }
-        ctx.globalAlpha = 1;
-        return;
-      }
-
-      const isObjection = node.type === "objection";
-      const isCanonical = node.is_canonical;
-      const radius = isCanonical ? 7 : 5;
-      const color = colorForCluster(node.cluster_id);
-
-      // Canonical ring
-      if (isCanonical) {
-        ctx.globalAlpha = alpha * 0.6;
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.arc(x, y, radius + 2, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-
-      ctx.globalAlpha = alpha;
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      // Solutions = filled circle, objections = ring
-      if (isObjection) {
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(15,17,23,0.7)";
-        ctx.fill();
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 1.8;
-        ctx.stroke();
-      } else {
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // Hover outline
-      if (isHover) {
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.arc(x, y, radius + 3, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-
-      ctx.globalAlpha = 1;
-    },
-    [hoveredNode, isHighlighted, isBridgeCall]
-  );
-
-  const linkColor = useCallback(
-    (rawLink: object) => {
-      const link = rawLink as RFGLink;
-      const sId = typeof link.source === "string" ? link.source : link.source.id;
-      const tId = typeof link.target === "string" ? link.target : link.target.id;
-      const matched = isHighlighted(sId) && isHighlighted(tId);
-      const baseAlpha = matched ? 1 : MUTED_ALPHA;
-
-      if (link.type === "similarity") {
-        // Similarity edges — opacity scales with weight (cosine score)
-        const a = baseAlpha * (0.25 + link.weight * 0.55);
-        return `rgba(167, 139, 250, ${a.toFixed(3)})`;
-      }
-      // Containment — solid muted line
-      return `rgba(148, 163, 184, ${(baseAlpha * 0.45).toFixed(3)})`;
-    },
-    [isHighlighted]
-  );
+  const linkColor = useCallback((rawLink: object) => {
+    const link = rawLink as RFGLink;
+    if (link.type === "answered_by") {
+      // Outcome-tinted: green/amber/red for worked/partial/failed
+      const outcome = link.outcome ?? "partial";
+      if (outcome === "worked") return "rgba(52, 211, 153, 0.55)";
+      if (outcome === "failed") return "rgba(248, 113, 113, 0.45)";
+      return "rgba(251, 191, 36, 0.45)"; // partial / unknown
+    }
+    if (link.type === "similarity") {
+      // Opacity scales with weight (cosine score)
+      const a = 0.18 + link.weight * 0.5;
+      return `rgba(167, 139, 250, ${a.toFixed(3)})`;
+    }
+    // Containment — muted gray
+    return "rgba(148, 163, 184, 0.32)";
+  }, []);
 
   const linkWidth = useCallback((rawLink: object) => {
     const link = rawLink as RFGLink;
-    if (link.type === "similarity") return 0.4 + link.weight * 1.2;
-    return 1.0;
+    if (link.type === "similarity") return 0.3 + link.weight * 1.2;
+    if (link.type === "answered_by") return 0.8;
+    return 0.6;
   }, []);
 
+  // Pulse loop boots once, looks up the scene root from the rfg ref every
+  // tick. We don't need to restart it when graphData changes — the loop
+  // re-traverses the scene, so new nodes pick up the pulse automatically.
+  useEffect(() => {
+    pulseRef.current = startPulseLoop(() => fgRef.current?.scene() ?? null);
+    return () => {
+      pulseRef.current?.stop();
+      pulseRef.current = null;
+    };
+  }, []);
+
+  // Push search highlight changes into the pulse loop so it can drive
+  // the alpha-fade + intensity-boost behaviors per frame.
+  useEffect(() => {
+    pulseRef.current?.setSearchHighlight(searchHighlight ?? new Set());
+  }, [searchHighlight]);
+
+  // Boot OrbitControls auto-rotate once the underlying graph mounts.
+  // rfg-3d resolves controls() lazily, so we poll briefly until ready.
+  useEffect(() => {
+    let cancelled = false;
+    let attempts = 0;
+    const tryWire = () => {
+      if (cancelled) return;
+      const fg = fgRef.current;
+      const ctl = fg?.controls?.();
+      if (!ctl) {
+        attempts++;
+        if (attempts < 40) setTimeout(tryWire, 100);
+        return;
+      }
+      ctl.autoRotate = true;
+      ctl.autoRotateSpeed = AUTO_ROTATE_SPEED;
+      // Pause auto-rotate on user interaction; resume after idle window.
+      const onInteract = () => {
+        ctl.autoRotate = false;
+        if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+        idleTimerRef.current = setTimeout(() => {
+          if (!document.hidden) ctl.autoRotate = true;
+        }, IDLE_RESUME_MS);
+      };
+      ctl.addEventListener("start", onInteract);
+    };
+    tryWire();
+    return () => {
+      cancelled = true;
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    };
+  }, []);
+
+  // Pre-build adjacency for click signal-fire (1-hop neighbors).
+  const neighbors = useMemo(() => {
+    const map = new Map<string, Set<string>>();
+    const add = (a: string, b: string) => {
+      const arr = map.get(a) ?? new Set<string>();
+      arr.add(b);
+      map.set(a, arr);
+    };
+    for (const e of data.edges) {
+      add(e.source, e.target);
+      add(e.target, e.source);
+    }
+    return map;
+  }, [data.edges]);
+
   const handleNodeClick = useCallback(
-    (n: object) => {
-      const node = n as BrainNode;
+    (rawNode: object) => {
+      const node = rawNode as BrainNode;
+      // Cinematic camera move: pull back along the vector from origin to
+      // the node. Distance ~ 80 in scene units gives a comfortable framing
+      // without zooming inside other geometry.
+      const fg = fgRef.current;
+      if (fg) {
+        const dist = Math.hypot(node.x, node.y, node.z) || 1;
+        const ratio = 1 + 80 / dist;
+        fg.cameraPosition(
+          { x: node.x * ratio, y: node.y * ratio, z: node.z * ratio },
+          { x: node.x, y: node.y, z: node.z },
+          1500
+        );
+        // Pause auto-rotate during the move; idle timer will resume it.
+        const ctl = fg.controls?.();
+        if (ctl) {
+          ctl.autoRotate = false;
+          if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+          idleTimerRef.current = setTimeout(() => {
+            if (!document.hidden) ctl.autoRotate = true;
+          }, IDLE_RESUME_MS);
+        }
+      }
+      // Signal-fire pulse on the clicked node + 1-hop neighbors
+      const ids = [node.id, ...Array.from(neighbors.get(node.id) ?? [])];
+      pulseRef.current?.fireSignal(ids, 3000);
       onNodeClick?.(node);
     },
-    [onNodeClick]
+    [onNodeClick, neighbors]
   );
 
   const handleNodeHover = useCallback(
-    (n: object | null) => {
-      const node = (n as BrainNode | null) ?? null;
-      setHoveredNode(node);
-      // react-force-graph doesn't give us screen coords directly; the
-      // tooltip positions itself from the canvas mousemove via a ref.
+    (rawNode: object | null) => {
+      const node = (rawNode as BrainNode | null) ?? null;
       onNodeHover?.(node, 0, 0);
     },
     [onNodeHover]
   );
-
-  // Auto-fit to all nodes after the simulation settles. With pre-computed
-  // positions the simulation never runs, so we call zoomToFit on mount.
-  // Without pre-computed positions, we wait for onEngineStop (called when
-  // d3-force cools below alphaMin) and fit then.
-  const fgRef = useRef<{ zoomToFit?: (ms: number, pad: number) => void } | null>(null);
-  useEffect(() => {
-    if (!hasPrecomputed) return;
-    const id = setTimeout(() => {
-      fgRef.current?.zoomToFit?.(400, 80);
-    }, 100);
-    return () => clearTimeout(id);
-  }, [data, hasPrecomputed]);
-
-  const handleEngineStop = useCallback(() => {
-    fgRef.current?.zoomToFit?.(400, 80);
-  }, []);
 
   return (
     <div
       ref={containerRef}
       className="relative w-full h-[calc(100vh-260px)] min-h-[560px] rounded-lg border border-stewart-border bg-stewart-bg overflow-hidden"
     >
-      <ForceGraph2D
+      <ForceGraph3D
         ref={fgRef as unknown as React.MutableRefObject<undefined>}
         width={size.width}
         height={size.height}
         graphData={graphData}
         backgroundColor="#0f1117"
-        nodeRelSize={5}
-        nodeCanvasObject={paintNode}
-        nodePointerAreaPaint={(node: object, color: string, ctx: CanvasRenderingContext2D) => {
-          const n = node as BrainNode & { x?: number; y?: number };
-          const x = n.x ?? 0;
-          const y = n.y ?? 0;
-          ctx.fillStyle = color;
-          ctx.beginPath();
-          ctx.arc(x, y, 12, 0, Math.PI * 2);
-          ctx.fill();
+        nodeThreeObject={nodeThreeObject}
+        nodeThreeObjectExtend={false}
+        nodeLabel={(n: object) => {
+          const node = n as BrainNode;
+          if (node.type === "call") {
+            return `<div style="background:#0f1117;border:1px solid #2d3748;color:#e2e8f0;padding:6px 10px;border-radius:6px;font-family:ui-monospace,monospace;font-size:11px">call · ${node.setter_name ?? node.setter_id ?? "—"}${node.is_bridge ? " · bridge" : ""}</div>`;
+          }
+          return `<div style="background:#0f1117;border:1px solid #2d3748;color:#e2e8f0;padding:6px 10px;border-radius:6px;font-family:ui-monospace,monospace;font-size:11px;max-width:280px">${node.cluster_id.replace(/_/g, " ")} · ${node.type}${node.is_canonical ? " · canonical" : ""}</div>`;
         }}
         linkColor={linkColor}
         linkWidth={linkWidth}
+        linkOpacity={1}
         onNodeClick={handleNodeClick}
         onNodeHover={handleNodeHover}
-        cooldownTicks={hasPrecomputed ? 0 : 200}
-        warmupTicks={hasPrecomputed ? 0 : 80}
-        d3AlphaDecay={hasPrecomputed ? 1 : 0.04}
-        d3VelocityDecay={0.4}
+        cooldownTicks={0}
+        warmupTicks={0}
         enableNodeDrag={false}
-        onEngineStop={handleEngineStop}
       />
     </div>
   );

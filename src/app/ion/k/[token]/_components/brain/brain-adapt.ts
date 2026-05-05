@@ -74,6 +74,9 @@ export function adaptWikiGraph(
   const solutions: BrainSolutionNode[] = [];
 
   for (const n of real.nodes) {
+    // 3D z coord — present on /wiki/graph/demo nodes; legacy /wiki/graph
+    // nodes are 2D so default to 0.
+    const z = (n as { z?: number }).z ?? 0;
     if (n.type === "call") {
       const d = n.data as RealCallData;
       const callId = d.call_id ?? n.label;
@@ -84,6 +87,8 @@ export function adaptWikiGraph(
         d.cluster_ids && d.cluster_ids.length > 0
           ? d.cluster_ids
           : eventsByCall.get(callId) ?? [];
+      const is_bridge =
+        typeof d.is_bridge === "boolean" ? d.is_bridge : cluster_ids.length > 1;
       calls.push({
         id: n.id,
         type: "call",
@@ -94,8 +99,10 @@ export function adaptWikiGraph(
         outcome: d.outcome ?? null,
         duration_seconds: d.duration_seconds ?? null,
         cluster_ids,
+        is_bridge,
         x: n.x,
         y: n.y,
+        z,
       });
     } else if (n.type === "objection_event") {
       const d = n.data as RealEventData;
@@ -111,6 +118,7 @@ export function adaptWikiGraph(
         is_canonical: !!d.is_canonical,
         x: n.x,
         y: n.y,
+        z,
       });
     } else if (n.type === "solution_event") {
       const d = n.data as RealEventData;
@@ -126,6 +134,7 @@ export function adaptWikiGraph(
         is_canonical: !!d.is_canonical,
         x: n.x,
         y: n.y,
+        z,
       });
     }
   }

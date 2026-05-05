@@ -20,9 +20,11 @@ export type BrainCallNode = {
   outcome: string | null; // "booked" | "callback" | etc.
   duration_seconds: number | null;
   cluster_ids: string[]; // clusters this call touched (1+ → bridge)
+  is_bridge: boolean; // pre-computed by backend; legacy adapter falls back to cluster_ids.length > 1
   // Pre-computed layout coords from backend.
   x: number;
   y: number;
+  z: number;
 };
 
 export type BrainObjectionNode = {
@@ -37,6 +39,7 @@ export type BrainObjectionNode = {
   is_canonical: boolean;
   x: number;
   y: number;
+  z: number;
 };
 
 export type BrainSolutionNode = {
@@ -51,6 +54,7 @@ export type BrainSolutionNode = {
   is_canonical: boolean;
   x: number;
   y: number;
+  z: number;
 };
 
 export type BrainNode = BrainCallNode | BrainObjectionNode | BrainSolutionNode;

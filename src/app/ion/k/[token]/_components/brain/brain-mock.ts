@@ -155,8 +155,10 @@ export function buildMockGraph(): BrainGraphPayload {
         outcome: rand(CALL_OUTCOMES),
         duration_seconds: 200 + Math.floor(Math.random() * 600),
         cluster_ids: [cid],
+        is_bridge: false,
         x: cx,
         y: cy,
+        z: 0,
       });
 
       // 2-3 objection events per call, all in this call's cluster
@@ -176,6 +178,7 @@ export function buildMockGraph(): BrainGraphPayload {
           is_canonical: Math.random() < 0.15,
           x: cx + jitter(80),
           y: cy + jitter(80),
+          z: jitter(80),
         });
         edges.push({
           source: callId,
@@ -203,6 +206,7 @@ export function buildMockGraph(): BrainGraphPayload {
           is_canonical: Math.random() < 0.2,
           x: cx + jitter(80),
           y: cy + jitter(80),
+          z: jitter(80),
         });
         edges.push({
           source: callId,
@@ -234,8 +238,10 @@ export function buildMockGraph(): BrainGraphPayload {
       outcome: rand(CALL_OUTCOMES),
       duration_seconds: 400 + Math.floor(Math.random() * 600),
       cluster_ids: touchedClusters,
+      is_bridge: true,
       x: cx,
       y: cy,
+      z: 0,
     });
 
     for (const cid of touchedClusters) {
@@ -252,6 +258,7 @@ export function buildMockGraph(): BrainGraphPayload {
         is_canonical: false,
         x: cx + (clusterAnchor[cid].x - cx) * 0.4 + jitter(40),
         y: cy + (clusterAnchor[cid].y - cy) * 0.4 + jitter(40),
+        z: jitter(40),
       });
       edges.push({
         source: callId,
@@ -273,6 +280,7 @@ export function buildMockGraph(): BrainGraphPayload {
         is_canonical: Math.random() < 0.3,
         x: cx + (clusterAnchor[cid].x - cx) * 0.4 + jitter(40),
         y: cy + (clusterAnchor[cid].y - cy) * 0.4 + jitter(40),
+        z: jitter(40),
       });
       edges.push({
         source: callId,
