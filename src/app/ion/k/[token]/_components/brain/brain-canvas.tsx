@@ -108,14 +108,20 @@ export function BrainCanvas({
       const isHover = hoveredNode?.id === node.id;
 
       if (node.type === "call") {
-        const radius = isBridgeCall(node) ? 14 : 9;
-        const fill = isBridgeCall(node) ? "#a78bfa" : "#475569";
+        const isBridge = isBridgeCall(node);
+        const radius = isBridge ? 14 : 9;
+        // Gold halo for bridge calls — channel-separated from the violet
+        // similarity edges so "this call is a bridge / skill signal" reads
+        // distinctly from "these events are similar." Per strategy review
+        // 2026-05-05: gold = "valuable / earned / standout."
+        const haloColor = "#facc15";
+        const fill = isBridge ? "#facc15" : "#475569";
 
         // Bridge halo + hover-pulse (hover only, not constant)
-        if (isBridgeCall(node)) {
-          const pulseR = isHover ? radius + 8 + Math.sin(Date.now() / 200) * 3 : radius + 4;
-          ctx.globalAlpha = alpha * 0.35;
-          ctx.fillStyle = "#a78bfa";
+        if (isBridge) {
+          const pulseR = isHover ? radius + 9 + Math.sin(Date.now() / 200) * 3 : radius + 4;
+          ctx.globalAlpha = alpha * 0.4;
+          ctx.fillStyle = haloColor;
           ctx.beginPath();
           ctx.arc(x, y, pulseR, 0, Math.PI * 2);
           ctx.fill();
