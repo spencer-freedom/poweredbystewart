@@ -30,6 +30,38 @@ export function canViewOtherReps(viewer: Viewer | undefined | null): boolean {
   return hasRole(viewer, ["manager", "leader", "system_owner"]);
 }
 
+// Best-effort token decode for UX-only gating. We don't verify the HMAC
+// (backend stays authoritative on every data fetch) — this is just to
+// route the user to the right surface. Returns null if the token format
+// is unrecognized; caller treats as "no role / deny privileged routes."
+export function decodeTokenRole(token: string): {
+  role: Role | null;
+  rep_id: string | null;
+  tenant_id: string | null;
+} {
+  try {
+    const payloadB64 = token.split(".")[0];
+    if (!payloadB64) return { role: null, rep_id: null, tenant_id: null };
+    // base64url → standard base64
+    const std = payloadB64.replace(/-/g, "+").replace(/_/g, "/");
+    const pad = std.length % 4 === 0 ? "" : "=".repeat(4 - (std.length % 4));
+    const json = Buffer.from(std + pad, "base64").toString("utf-8");
+    const obj = JSON.parse(json) as {
+      role?: string;
+      rep_id?: string;
+      tenant_id?: string;
+    };
+    const role = (obj.role as Role | undefined) ?? null;
+    return {
+      role,
+      rep_id: obj.rep_id ?? null,
+      tenant_id: obj.tenant_id ?? null,
+    };
+  } catch {
+    return { role: null, rep_id: null, tenant_id: null };
+  }
+}
+
 // Sanity check for rep-scoped surfaces: rep can see their OWN brief; a
 // manager / leader / system_owner can see any rep on their tenant.
 export function canViewRep(
