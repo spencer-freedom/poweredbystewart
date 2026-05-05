@@ -1,4 +1,4 @@
-import { fetchWikiGraph } from "@/lib/stewart-api";
+import { fetchBrainGraphDemo } from "@/lib/stewart-api";
 import { decodeTokenRole } from "@/lib/viewer";
 import { ErrorPanel } from "../../_components/error-panel";
 import { StewartCallout } from "../../_components/stewart-callout";
@@ -36,11 +36,11 @@ export default async function WikiBrainPage({
   // same generic denial. Otherwise adapt the payload to the canvas shape.
   let graph;
   try {
-    const real = await fetchWikiGraph(token, 8);
+    const real = await fetchBrainGraphDemo(token, { limitPerEvent: 8 });
     graph = adaptWikiGraph(real);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    if (/^wiki\/graph 40[13]/.test(msg)) {
+    if (/^wiki\/graph(\/demo)? 40[13]/.test(msg)) {
       return (
         <ErrorPanel error="This view isn't available on your account." />
       );

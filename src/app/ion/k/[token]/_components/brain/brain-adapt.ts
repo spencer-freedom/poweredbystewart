@@ -18,7 +18,7 @@ import type {
   BrainObjectionNode,
   BrainSolutionNode,
 } from "./brain-types";
-import type { WikiGraphPayload } from "@/lib/stewart-api";
+import type { BrainGraphDemoPayload, WikiGraphPayload } from "@/lib/stewart-api";
 
 type RealCallData = {
   call_id?: string;
@@ -51,7 +51,9 @@ type RealEventData = {
   reviewer_confidence?: number | null;
 };
 
-export function adaptWikiGraph(real: WikiGraphPayload): BrainGraphPayload {
+export function adaptWikiGraph(
+  real: WikiGraphPayload | BrainGraphDemoPayload
+): BrainGraphPayload {
   // Pass 1: index events by call_id so we can populate cluster_ids on
   // each call node + count clusters per call (bridge call signal).
   const eventsByCall = new Map<string, string[]>();
@@ -128,13 +130,21 @@ export function adaptWikiGraph(real: WikiGraphPayload): BrainGraphPayload {
     }
   }
 
-  // Edges already have the shape the canvas expects (source/target/type/weight).
-  const edges: BrainEdge[] = real.edges.map((e) => ({
-    source: e.source,
-    target: e.target,
-    type: e.type,
-    weight: e.weight,
-  }));
+  // Edges: pass through type/weight. For answered_by edges (new in
+  // /wiki/graph/demo), carry the outcome field for outcome-colored
+  // rendering (worked/partial/failed → green/amber/red). For similarity
+  // edges, carry the cosine score for opacity scaling.
+  const edges: BrainEdge[] = real.edges.map((e) => {
+    const data = (e as { data?: { outcome?: string; similarity?: number } }).data;
+    return {
+      source: e.source,
+      target: e.target,
+      type: e.type as BrainEdge["type"],
+      weight: e.weight,
+      ...(data?.outcome ? { outcome: data.outcome } : {}),
+      ...(data?.similarity != null ? { similarity: data.similarity } : {}),
+    };
+  });
 
   return {
     generated_at: new Date().toISOString(),

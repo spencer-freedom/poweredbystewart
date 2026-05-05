@@ -7,7 +7,8 @@
 // strength.
 
 export type BrainNodeType = "call" | "objection" | "solution";
-export type BrainEdgeType = "containment" | "similarity";
+export type BrainEdgeType = "containment" | "similarity" | "answered_by";
+export type AnsweredByOutcome = "worked" | "partial" | "failed";
 
 export type BrainCallNode = {
   id: string;
@@ -59,6 +60,11 @@ export type BrainEdge = {
   target: string;
   type: BrainEdgeType;
   weight: number; // 0-1
+  // Type-specific payload. answered_by edges carry the encounter outcome
+  // (worked / partial / failed) — useful for outcome-colored rendering.
+  // similarity edges carry the cosine score.
+  outcome?: AnsweredByOutcome | string;
+  similarity?: number;
 };
 
 export type BrainGraphPayload = {

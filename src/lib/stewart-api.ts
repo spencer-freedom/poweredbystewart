@@ -176,13 +176,20 @@ export type BrainDemoNode =
       z: number;
     };
 
+export type BrainDemoEdgeType = "containment" | "similarity" | "answered_by";
+
 export type BrainDemoEdge = {
   id: string;
   source: string;
   target: string;
-  type: "containment" | "similarity";
+  type: BrainDemoEdgeType;
   weight: number;
-  data?: { similarity?: number };
+  // Type-specific payload. answered_by edges carry the chain outcome
+  // (worked / partial / failed); similarity edges carry the cosine score.
+  data?: {
+    similarity?: number;
+    outcome?: "worked" | "partial" | "failed" | string;
+  };
 };
 
 export type BrainGraphDemoPayload = {
