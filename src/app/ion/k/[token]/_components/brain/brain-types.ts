@@ -36,6 +36,10 @@ export type BrainObjectionNode = {
   start_seconds: number | null;
   end_seconds: number | null;
   outcome: string | null; // "worked" | "partial" | "failed" | etc.
+  // Effective outcome used for node coloring. For objections this is
+  // typically `outcome`; populated by the adapter so the canvas doesn't
+  // have to chase edges.
+  effective_outcome: AnsweredByOutcome | null;
   is_canonical: boolean;
   x: number;
   y: number;
@@ -52,6 +56,9 @@ export type BrainSolutionNode = {
   start_seconds: number | null;
   end_seconds: number | null;
   is_canonical: boolean;
+  // Best incoming answered_by outcome — what happened when a rep used
+  // this solution. Populated by the adapter from edge metadata.
+  effective_outcome: AnsweredByOutcome | null;
   x: number;
   y: number;
   z: number;
@@ -99,3 +106,18 @@ export const CLUSTER_DEFAULT_COLOR = "#94a3b8";
 
 export const colorForCluster = (clusterId: string | null | undefined): string =>
   (clusterId && CLUSTER_COLORS[clusterId]) || CLUSTER_DEFAULT_COLOR;
+
+// Outcome palette — drives event-node coloring so the win/partial/loss
+// signal reads at any rotation. Same hues as the answered_by edge tints
+// + the rest of the wiki/tree surfaces.
+export const OUTCOME_COLORS: Record<AnsweredByOutcome, string> = {
+  worked: "#34d399", // emerald
+  partial: "#fbbf24", // amber
+  failed: "#f87171", // red
+};
+
+export const OUTCOME_UNKNOWN_COLOR = "#94a3b8"; // slate gray
+
+export const colorForOutcome = (
+  outcome: AnsweredByOutcome | null | undefined
+): string => (outcome && OUTCOME_COLORS[outcome]) || OUTCOME_UNKNOWN_COLOR;

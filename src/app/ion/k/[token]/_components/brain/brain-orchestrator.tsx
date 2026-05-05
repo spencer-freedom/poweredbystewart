@@ -157,7 +157,7 @@ export function BrainOrchestrator({
           />
         )}
       </div>
-      <div className="text-xs text-stewart-muted flex flex-wrap gap-x-4 gap-y-1 font-mono">
+      <div className="text-xs text-stewart-muted flex flex-wrap items-center gap-x-4 gap-y-1 font-mono">
         <span>{data.total_calls} calls</span>
         <span>·</span>
         <span>{data.total_objections} objections</span>
@@ -165,7 +165,25 @@ export function BrainOrchestrator({
         <span>{data.total_solutions} solutions</span>
         <span>·</span>
         <span>{data.edges.length} edges</span>
+        <span className="text-stewart-border">|</span>
+        <LegendDot color="#34d399" label="worked" />
+        <LegendDot color="#fbbf24" label="partial" />
+        <LegendDot color="#f87171" label="failed" />
+        <LegendDot color="#94a3b8" label="unknown" />
+        <LegendDot color="#facc15" label="bridge call" />
       </div>
     </div>
+  );
+}
+
+function LegendDot({ color, label }: { color: string; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <span
+        className="inline-block h-2.5 w-2.5 rounded-full"
+        style={{ background: color, boxShadow: `0 0 6px ${color}80` }}
+      />
+      <span>{label}</span>
+    </span>
   );
 }

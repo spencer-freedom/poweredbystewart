@@ -12,10 +12,15 @@
 
 import * as THREE from "three";
 import type { BrainNode } from "./brain-types";
-import { colorForCluster } from "./brain-types";
+import { colorForOutcome } from "./brain-types";
 
 const BRIDGE_GOLD = "#facc15";
 const CALL_GRAY = "#475569";
+
+// Baseline transparency for all spheres. Lower opacity → outer nodes
+// reveal inner nodes → depth perception strengthens. Tuned so the
+// emissive glow still reads strongly but you feel the volume.
+const NODE_OPACITY = 0.78;
 
 // Geometry + material caches — Three.js performs better when we share
 // geometry across instances of the same shape. ~1500 nodes × fresh
@@ -68,6 +73,7 @@ export type PulsableMesh = THREE.Mesh & {
       isCanonical: boolean;
       isBridge: boolean;
       baseEmissive: number;
+      baselineOpacity: number;
       color: string;
     };
   };
@@ -82,6 +88,9 @@ export function buildBrainNode(node: BrainNode): THREE.Object3D {
         emissiveIntensity: 0.4,
         metalness: 0.5,
         roughness: 0.35,
+        transparent: true,
+        opacity: NODE_OPACITY,
+        depthWrite: false,
       });
       const mesh = new THREE.Mesh(getBridgeGeo(), mat) as PulsableMesh;
       mesh.userData.pulse = {
@@ -89,6 +98,7 @@ export function buildBrainNode(node: BrainNode): THREE.Object3D {
         isCanonical: false,
         isBridge: true,
         baseEmissive: 0.4,
+        baselineOpacity: NODE_OPACITY,
         color: BRIDGE_GOLD,
       };
       return mesh;
@@ -99,6 +109,9 @@ export function buildBrainNode(node: BrainNode): THREE.Object3D {
       emissiveIntensity: 0,
       metalness: 0.2,
       roughness: 0.6,
+      transparent: true,
+      opacity: NODE_OPACITY,
+      depthWrite: false,
     });
     const mesh = new THREE.Mesh(getCallGeo(), mat) as PulsableMesh;
     mesh.userData.pulse = {
@@ -106,21 +119,27 @@ export function buildBrainNode(node: BrainNode): THREE.Object3D {
       isCanonical: false,
       isBridge: false,
       baseEmissive: 0,
+      baselineOpacity: NODE_OPACITY,
       color: CALL_GRAY,
     };
     return mesh;
   }
 
-  // Event nodes
-  const color = colorForCluster(node.cluster_id);
+  // Event nodes — colored by outcome (worked=green, partial=amber,
+  // failed=red, unknown=gray) so the win/loss signal carries at any
+  // rotation. Cluster identity still surfaces via the dagre wiki + tooltip.
+  const color = colorForOutcome(node.effective_outcome);
   const isObjection = node.type === "objection";
-  const baseEmissive = node.is_canonical ? 0.5 : 0.05;
+  const baseEmissive = node.is_canonical ? 0.5 : 0.08;
   const mat = new THREE.MeshStandardMaterial({
     color,
     emissive: color,
     emissiveIntensity: baseEmissive,
     metalness: 0.1,
     roughness: 0.7,
+    transparent: true,
+    opacity: NODE_OPACITY,
+    depthWrite: false,
   });
   const geo = isObjection ? getObjectionGeo() : getSolutionGeo();
   const mesh = new THREE.Mesh(geo, mat) as PulsableMesh;
@@ -129,6 +148,7 @@ export function buildBrainNode(node: BrainNode): THREE.Object3D {
     isCanonical: node.is_canonical,
     isBridge: false,
     baseEmissive,
+    baselineOpacity: NODE_OPACITY,
     color,
   };
 

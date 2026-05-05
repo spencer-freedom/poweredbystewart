@@ -12,6 +12,7 @@
 //     events touching that call
 
 import type {
+  AnsweredByOutcome,
   BrainCallNode,
   BrainEdge,
   BrainGraphPayload,
@@ -19,6 +20,16 @@ import type {
   BrainSolutionNode,
 } from "./brain-types";
 import type { BrainGraphDemoPayload, WikiGraphPayload } from "@/lib/stewart-api";
+
+const OUTCOME_RANK: Record<AnsweredByOutcome, number> = {
+  worked: 3,
+  partial: 2,
+  failed: 1,
+};
+
+function asOutcome(v: string | null | undefined): AnsweredByOutcome | null {
+  return v === "worked" || v === "partial" || v === "failed" ? v : null;
+}
 
 type RealCallData = {
   call_id?: string;
@@ -69,6 +80,22 @@ export function adaptWikiGraph(
     }
   }
 
+  // Pass 1b: derive each solution event's effective outcome from incoming
+  // answered_by edges. A solution can be tried on multiple objections; we
+  // take the best (worked > partial > failed) so it represents the
+  // solution's track record at a glance.
+  const solutionOutcome = new Map<string, AnsweredByOutcome>();
+  for (const e of real.edges) {
+    if (e.type !== "answered_by") continue;
+    const data = (e as { data?: { outcome?: string } }).data;
+    const oc = asOutcome(data?.outcome);
+    if (!oc) continue;
+    const prev = solutionOutcome.get(e.target);
+    if (!prev || OUTCOME_RANK[oc] > OUTCOME_RANK[prev]) {
+      solutionOutcome.set(e.target, oc);
+    }
+  }
+
   const calls: BrainCallNode[] = [];
   const objections: BrainObjectionNode[] = [];
   const solutions: BrainSolutionNode[] = [];
@@ -115,6 +142,7 @@ export function adaptWikiGraph(
         start_seconds: d.start_seconds ?? null,
         end_seconds: d.end_seconds ?? null,
         outcome: d.outcome ?? null,
+        effective_outcome: asOutcome(d.outcome),
         is_canonical: !!d.is_canonical,
         x: n.x,
         y: n.y,
@@ -132,6 +160,7 @@ export function adaptWikiGraph(
         start_seconds: d.start_seconds ?? null,
         end_seconds: d.end_seconds ?? null,
         is_canonical: !!d.is_canonical,
+        effective_outcome: solutionOutcome.get(n.id) ?? null,
         x: n.x,
         y: n.y,
         z,

@@ -250,10 +250,13 @@ export function BrainCanvas({
         nodeThreeObjectExtend={false}
         nodeLabel={(n: object) => {
           const node = n as BrainNode;
+          const tipStyle =
+            "background:#0f1117;border:1px solid #2d3748;color:#e2e8f0;padding:6px 10px;border-radius:6px;font-family:ui-monospace,monospace;font-size:11px;max-width:280px";
           if (node.type === "call") {
-            return `<div style="background:#0f1117;border:1px solid #2d3748;color:#e2e8f0;padding:6px 10px;border-radius:6px;font-family:ui-monospace,monospace;font-size:11px">call · ${node.setter_name ?? node.setter_id ?? "—"}${node.is_bridge ? " · bridge" : ""}</div>`;
+            return `<div style="${tipStyle}">call · ${node.setter_name ?? node.setter_id ?? "—"}${node.is_bridge ? " · bridge" : ""}</div>`;
           }
-          return `<div style="background:#0f1117;border:1px solid #2d3748;color:#e2e8f0;padding:6px 10px;border-radius:6px;font-family:ui-monospace,monospace;font-size:11px;max-width:280px">${node.cluster_id.replace(/_/g, " ")} · ${node.type}${node.is_canonical ? " · canonical" : ""}</div>`;
+          const outcome = node.effective_outcome ?? "unknown";
+          return `<div style="${tipStyle}">${node.cluster_id.replace(/_/g, " ")} · ${node.type} · ${outcome}${node.is_canonical ? " · canonical" : ""}</div>`;
         }}
         linkColor={linkColor}
         linkWidth={linkWidth}

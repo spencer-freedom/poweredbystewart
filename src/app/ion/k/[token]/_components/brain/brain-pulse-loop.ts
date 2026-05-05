@@ -82,20 +82,17 @@ export function startPulseLoop(getRoot: () => THREE.Object3D | null): PulseLoopH
         intensity = Math.max(intensity, 0.6 + lift * 0.4); // 0.6 .. 1.0
       }
 
-      // Search highlight — matched nodes get an intensity boost; non-matched
-      // nodes fade to alpha 0.25 (per port plan; 3D depth makes 0.15 too low).
-      let opacity = 1.0;
-      if (searchHighlight.size > 0) {
-        if (searchHighlight.has(meta.brainNodeId)) {
-          intensity = Math.max(intensity, 0.5 + lift * 0.3);
-        } else {
-          opacity = 0.25;
-        }
-      }
-
+      // Search highlight — matched nodes lift back to full baseline,
+      // non-matched fade to ~0.18. With a clear search the baseline
+      // transparency (set at mesh construction) carries depth perception.
       mat.emissiveIntensity = intensity;
-      mat.transparent = opacity < 1.0;
-      mat.opacity = opacity;
+      if (searchHighlight.size > 0) {
+        mat.opacity = searchHighlight.has(meta.brainNodeId)
+          ? meta.baselineOpacity
+          : 0.18;
+      } else {
+        mat.opacity = meta.baselineOpacity;
+      }
     });
 
     frameId = requestAnimationFrame(tick);
