@@ -30,10 +30,13 @@ export function layoutGraph(
       height: NODE_H[t] ?? 80,
     });
   }
-  // Only feed hierarchical edges into dagre; transition edges (track→track within
-  // a cluster) confuse the rank assignment if included.
+  // Only feed hierarchical edges into dagre. Transition edges (track→track
+  // within a cluster) and wiki cross-call edges (track→track across clusters)
+  // both create cycles that confuse rank assignment — dagre lays out the
+  // hierarchy and these edges render on top as visual annotations.
   for (const e of edges) {
     if (e.id.startsWith("e-tr-")) continue;
+    if (e.id.startsWith("wiki-call-")) continue;
     g.setEdge(e.source, e.target);
   }
 

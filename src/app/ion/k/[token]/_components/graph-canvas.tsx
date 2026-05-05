@@ -31,6 +31,11 @@ export type GraphCanvasProps = {
   // Optional intro text shown above the canvas — e.g. "click to drill in".
   intro?: React.ReactNode;
   miniMapColor?: (node: { type?: string }) => string;
+  // Skew the auto-fit rectangle wider so the graph lands on the left ~62%
+  // of the canvas with empty space on the right (invites drill-down). The
+  // cluster tree wants this; the wiki overview (dense graph filling the
+  // canvas) does not. Default true for backward compat.
+  leftAnchor?: boolean;
 };
 
 const DEFAULT_COLOR = "#94a3b8";
@@ -53,6 +58,7 @@ function GraphCanvasInner({
   renderToolbar,
   intro,
   miniMapColor = () => DEFAULT_COLOR,
+  leftAnchor = true,
 }: GraphCanvasProps) {
   const { fitBounds } = useReactFlow();
   const viewport = useViewport();
@@ -86,13 +92,15 @@ function GraphCanvasInner({
       }
       const w = Math.max(1, maxX - minX);
       const h = Math.max(1, maxY - minY);
+      const widthMult = leftAnchor ? 1.6 : 1.0;
+      const padding = leftAnchor ? 0.05 : 0.08;
       fitBounds(
-        { x: minX, y: minY, width: w * 1.6, height: h * 1.05 },
-        { padding: 0.05, duration: 350 }
+        { x: minX, y: minY, width: w * widthMult, height: h * 1.05 },
+        { padding, duration: 350 }
       );
     }, 30);
     return () => clearTimeout(t);
-  }, [fitBounds, nodes]);
+  }, [fitBounds, nodes, leftAnchor]);
 
   // Vertical position of the overlay detail card — slides to align with the
   // selected node's row. Clamped so it never spills past the canvas bottom.

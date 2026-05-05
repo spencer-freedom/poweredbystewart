@@ -29,7 +29,7 @@ const ROUTES = [
   { path: `/ion/k/${KENNY_TOKEN}/rep/r_alex`, label: "Stub: rep daily", mustContain: ["Stewart's still working"] },
   { path: `/ion/k/${KENNY_TOKEN}/manager`,    label: "Stub: manager",   mustContain: ["Stewart's still working"] },
   { path: `/ion/k/${KENNY_TOKEN}/leader`,     label: "Stub: leader",    mustContain: ["Stewart's still working"] },
-  { path: `/ion/k/${KENNY_TOKEN}/wiki`,       label: "Stub: wiki",      mustContain: ["Stewart's still working"] },
+  { path: `/ion/k/${KENNY_TOKEN}/wiki`,       label: "Wiki page", mustContain: ["Pattern Wiki", "Archivist"] },
   { path: `/ion/k/${KENNY_TOKEN}/owner`,      label: "Stub: owner",     mustContain: ["Stewart's still working"] },
 ];
 
