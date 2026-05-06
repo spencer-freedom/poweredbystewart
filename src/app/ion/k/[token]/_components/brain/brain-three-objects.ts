@@ -19,8 +19,6 @@ import * as THREE from "three";
 import type { BrainNode } from "./brain-types";
 import { paletteForOutcome } from "./brain-types";
 
-const BRIDGE_RIM = "#ffffff";
-
 // Baseline transparency for all spheres. Low-ish so outer nodes reveal
 // inner ones — depth perception strengthens. Tuned so emissive glow
 // still reads strongly.
@@ -32,7 +30,6 @@ const NODE_OPACITY = 0.78;
 const geos = {
   callBase: new THREE.SphereGeometry(4.5, 16, 16),
   callBridge: new THREE.SphereGeometry(7, 24, 24),
-  callBridgeRim: new THREE.SphereGeometry(7.4, 24, 24),
   eventBase: new THREE.SphereGeometry(2.5, 12, 12),
   eventTopWinner: new THREE.SphereGeometry(3.0, 14, 14),
   eventCanonical: new THREE.SphereGeometry(3.5, 14, 14),
@@ -44,14 +41,6 @@ const ringMat = new THREE.MeshBasicMaterial({
   wireframe: true,
   transparent: true,
   opacity: 0.32,
-  depthWrite: false,
-});
-
-const bridgeRimMat = new THREE.MeshBasicMaterial({
-  color: BRIDGE_RIM,
-  wireframe: true,
-  transparent: true,
-  opacity: 0.28,
   depthWrite: false,
 });
 
@@ -100,12 +89,10 @@ export function buildBrainNode(node: BrainNode): THREE.Object3D {
     });
     const geo = node.is_bridge ? geos.callBridge : geos.callBase;
     const mesh = new THREE.Mesh(geo, mat) as PulsableMesh;
-
-    if (node.is_bridge) {
-      // White wireframe rim — "this call cross-pollinates clusters"
-      const rim = new THREE.Mesh(geos.callBridgeRim, bridgeRimMat);
-      mesh.add(rim);
-    }
+    // Bridge calls used to wear a permanent white wireframe rim — Spencer
+    // pushed back: rim adds overall luminance + competes for attention.
+    // The size jump (4.5 → 7) plus emissive lift already differentiates
+    // bridges. Hover/click pulse becomes the "rim light" moment.
 
     mesh.userData.pulse = {
       brainNodeId: node.id,

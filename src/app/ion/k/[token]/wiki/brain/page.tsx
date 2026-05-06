@@ -50,8 +50,16 @@ export default async function WikiBrainPage({
     // session. Stewart-voice notice flags the degraded state.
     graph = buildMockGraph();
     return (
-      <div className="space-y-4">
-        <BrainHeader graph={graph} />
+      <div className="space-y-2">
+        <div className="flex items-baseline gap-3">
+          <h1 className="text-xl font-semibold text-stewart-text">
+            Stewart&apos;s Brain
+          </h1>
+          <p className="text-stewart-muted text-xs font-mono">
+            {graph.total_calls} calls · {graph.total_objections} objections ·{" "}
+            {graph.total_solutions} solutions
+          </p>
+        </div>
         <StewartCallout kind="flag">
           The live graph endpoint is hiccuping ({msg}). Falling back to a
           mock for now — refresh in a moment.
@@ -62,35 +70,20 @@ export default async function WikiBrainPage({
   }
 
   return (
-    <div className="space-y-4">
-      <BrainHeader graph={graph} />
+    <div className="space-y-2">
+      {/* Compact one-line title row — chrome reduced so the brain
+          dominates the viewport. Counts moved into the orchestrator
+          footer / overlay. */}
+      <div className="flex items-baseline gap-3">
+        <h1 className="text-xl font-semibold text-stewart-text">
+          Stewart&apos;s Brain
+        </h1>
+        <p className="text-stewart-muted text-xs font-mono">
+          {graph.total_calls} calls · {graph.total_objections} objections ·{" "}
+          {graph.total_solutions} solutions
+        </p>
+      </div>
       <BrainOrchestrator data={graph} token={token} />
-    </div>
-  );
-}
-
-function BrainHeader({ graph }: { graph: ReturnType<typeof adaptWikiGraph> }) {
-  return (
-    <div>
-      <h1 className="text-2xl font-bold text-stewart-text">
-        Stewart&apos;s Brain
-      </h1>
-      <p className="text-stewart-muted mt-1 text-sm">
-        Every call, every objection, every solution as a connected node.
-        {" "}
-        <span className="font-mono text-stewart-text">
-          {graph.total_calls}
-        </span>{" "}
-        calls ·{" "}
-        <span className="font-mono text-stewart-text">
-          {graph.total_objections}
-        </span>{" "}
-        objections ·{" "}
-        <span className="font-mono text-stewart-text">
-          {graph.total_solutions}
-        </span>{" "}
-        solutions.
-      </p>
     </div>
   );
 }

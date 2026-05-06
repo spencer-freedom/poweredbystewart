@@ -212,6 +212,43 @@ export function adaptWikiGraph(
   };
 }
 
+// Connected-component sizes via union-find. Returns Map<nodeId, size>.
+// Used by the canvas to de-emphasize edges in small components (<4 nodes)
+// instead of dropping them — the barbell loudness dissolves while the
+// nodes stay alive in the galaxy.
+export function computeComponentSizes(
+  nodes: Array<{ id: string }>,
+  edges: BrainEdge[]
+): Map<string, number> {
+  const parent = new Map<string, string>();
+  const find = (a: string): string => {
+    let cur = a;
+    while (parent.get(cur) !== cur) {
+      const p = parent.get(cur)!;
+      parent.set(cur, parent.get(p)!);
+      cur = parent.get(cur)!;
+    }
+    return cur;
+  };
+  const union = (a: string, b: string) => {
+    const ra = find(a);
+    const rb = find(b);
+    if (ra !== rb) parent.set(ra, rb);
+  };
+  for (const n of nodes) parent.set(n.id, n.id);
+  for (const e of edges) {
+    if (parent.has(e.source) && parent.has(e.target)) union(e.source, e.target);
+  }
+  const sizeByRoot = new Map<string, number>();
+  for (const n of nodes) {
+    const r = find(n.id);
+    sizeByRoot.set(r, (sizeByRoot.get(r) ?? 0) + 1);
+  }
+  const out = new Map<string, number>();
+  for (const n of nodes) out.set(n.id, sizeByRoot.get(find(n.id)) ?? 1);
+  return out;
+}
+
 // Best-effort cluster derivation. When backend enriches event nodes with
 // cluster_id directly, this gets simpler.
 function clusterFor(

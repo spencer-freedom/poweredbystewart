@@ -6,8 +6,12 @@ import * as THREE from "three";
 
 import type { BrainEdge, BrainGraphPayload, BrainNode } from "./brain-types";
 import { CLUSTER_DEFAULT_COLOR, OUTCOME_COLORS, paletteForOutcome } from "./brain-types";
+import { computeComponentSizes } from "./brain-adapt";
 import { buildBrainNode } from "./brain-three-objects";
 import { startPulseLoop, type PulseLoopHandle } from "./brain-pulse-loop";
+import { startCoreLife, type CoreLifeHandle } from "./brain-core-life";
+import { BrainClusterLabels } from "./brain-cluster-labels";
+import { BrainIntro, shouldPlayIntro } from "./brain-intro";
 
 // react-force-graph-3d is WebGL/Three.js — must load client-only to avoid
 // SSR document/window errors. dynamic({ ssr: false }) is the wrapper.
@@ -78,6 +82,7 @@ export function BrainCanvas({
   const containerRef = useRef<HTMLDivElement>(null);
   const fgRef = useRef<ForceGraph3DInstance | null>(null);
   const pulseRef = useRef<PulseLoopHandle | null>(null);
+  const coreLifeRef = useRef<CoreLifeHandle | null>(null);
   const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [size, setSize] = useState({ width: 800, height: 600 });
 
@@ -113,41 +118,75 @@ export function BrainCanvas({
     return buildBrainNode(node);
   }, []);
 
-  // Edge styling — answered_by becomes the eye-catcher (bold, outcome-
-  // tinted, with directional particles flowing source→target). Similarity
-  // edges are subtle violet threads. Containment is muted gray scaffolding.
-  const linkColor = useCallback((rawLink: object) => {
-    const link = rawLink as RFGLink;
-    if (link.type === "answered_by") {
-      const bucket = link.outcome ?? "unknown";
-      const palette = paletteForOutcome(bucket);
-      return palette.core;
-    }
-    if (link.type === "similarity") {
-      const a = 0.16 + (link.weight ?? 0) * 0.45;
-      return `rgba(167, 139, 250, ${a.toFixed(3)})`;
-    }
-    return "rgba(148, 163, 184, 0.22)";
-  }, []);
+  // Connected-component sizes — let edge styling de-emphasize barbell
+  // pairs / triplets without dropping them from the graph. Threshold 4
+  // separates "real structural density" from "isolated noise we want to
+  // whisper, not shout."
+  const componentSize = useMemo(
+    () => computeComponentSizes(data.nodes, data.edges),
+    [data.nodes, data.edges]
+  );
+  const SMALL_COMPONENT_THRESHOLD = 4;
+  const isSmallComponent = useCallback(
+    (link: RFGLink): boolean => {
+      const sId = typeof link.source === "string" ? link.source : link.source.id;
+      const sz = componentSize.get(sId) ?? 1;
+      return sz < SMALL_COMPONENT_THRESHOLD;
+    },
+    [componentSize]
+  );
 
-  const linkWidth = useCallback((rawLink: object) => {
-    const link = rawLink as RFGLink;
-    if (link.type === "answered_by") return 2.5;
-    if (link.type === "similarity") return 0.4 + (link.weight ?? 0) * 1.0;
-    return 0.5;
-  }, []);
+  // Edge styling — answered_by is the eye-catcher (bold, outcome-tinted,
+  // directional particles); similarity is a subtle violet thread;
+  // containment is muted gray scaffolding. Edges anchored in small
+  // components (<4 nodes) get whisper styling so barbell pairs don't
+  // dominate visually. Computation lives in `isSmallComponent`.
+  // Edge color carries the opacity inline (rfg-3d's linkOpacity prop is
+  // a single global number, so per-edge alpha must come from rgba()).
+  const linkColor = useCallback(
+    (rawLink: object) => {
+      const link = rawLink as RFGLink;
+      const small = isSmallComponent(link);
+      if (link.type === "answered_by") {
+        if (small) {
+          // Desaturated whisper — outcome hue pulled toward gray-moonlight
+          return "rgba(148, 163, 184, 0.35)";
+        }
+        const bucket = link.outcome ?? "unknown";
+        // Hex → rgba @ 0.85
+        return rgbaFromHex(paletteForOutcome(bucket).core, 0.85);
+      }
+      if (link.type === "similarity") {
+        const base = 0.16 + (link.weight ?? 0) * 0.45;
+        const a = small ? base * 0.55 : base;
+        return `rgba(167, 139, 250, ${a.toFixed(3)})`;
+      }
+      return small ? "rgba(148, 163, 184, 0.10)" : "rgba(148, 163, 184, 0.22)";
+    },
+    [isSmallComponent]
+  );
 
-  const linkOpacity = useCallback((rawLink: object) => {
-    const link = rawLink as RFGLink;
-    if (link.type === "answered_by") return 0.85;
-    if (link.type === "similarity") return 0.55;
-    return 0.35;
-  }, []);
+  const linkWidth = useCallback(
+    (rawLink: object) => {
+      const link = rawLink as RFGLink;
+      const small = isSmallComponent(link);
+      if (link.type === "answered_by") return small ? 1.0 : 2.5;
+      if (link.type === "similarity") return 0.4 + (link.weight ?? 0) * 1.0;
+      return 0.5;
+    },
+    [isSmallComponent]
+  );
 
-  const linkParticles = useCallback((rawLink: object) => {
-    const link = rawLink as RFGLink;
-    return link.type === "answered_by" ? 2 : 0;
-  }, []);
+  const linkParticles = useCallback(
+    (rawLink: object) => {
+      const link = rawLink as RFGLink;
+      // No particle trail on de-emphasized edges — small-component
+      // barbells stay quiet, dense components show flow.
+      if (isSmallComponent(link)) return 0;
+      return link.type === "answered_by" ? 2 : 0;
+    },
+    [isSmallComponent]
+  );
 
   const linkParticleColor = useCallback((rawLink: object) => {
     const link = rawLink as RFGLink;
@@ -189,13 +228,23 @@ export function BrainCanvas({
         return;
       }
 
-      // Pull camera in to a comfortable framing — rfg-3d's default
-      // bounds-fit puts the brain too far out for the demo wow. 250
-      // matches the locked target distance.
-      fg!.cameraPosition({ x: 0, y: 0, z: 250 }, { x: 0, y: 0, z: 0 }, 0);
+      // 3/4 view at 35° elevation — disc + core read simultaneously
+      // (edge-on collapses galaxy structure). (200, 140, 200) puts the
+      // camera up-and-to-the-right of origin looking back through the
+      // disc. When the intro plays, BrainIntro positions the camera at
+      // z=900 first; otherwise we set the resting pose immediately.
+      const willIntro = shouldPlayIntro();
+      if (!willIntro) {
+        fg!.cameraPosition(
+          { x: 200, y: 140, z: 200 },
+          { x: 0, y: 0, z: 0 },
+          0
+        );
+      }
 
-      // Auto-rotate at idle, pause on user interaction, resume after idle window
-      ctl.autoRotate = true;
+      // Auto-rotate at idle, pause on user interaction, resume after idle window.
+      // During the intro auto-rotate is held off until t=7s.
+      ctl.autoRotate = !willIntro;
       ctl.autoRotateSpeed = AUTO_ROTATE_SPEED;
       const onInteract = () => {
         ctl.autoRotate = false;
@@ -210,6 +259,18 @@ export function BrainCanvas({
       // nodes pop. Cheap depth signal that doesn't cost frame budget.
       scene.background = new THREE.Color(SCENE_BG);
       scene.fog = new THREE.FogExp2(FOG_NEAR_COLOR, 0.0017);
+
+      // Hemisphere ambient — sky tint above, ground tint below. Spheres
+      // pick up brighter top + shadowed bottom without needing a real
+      // shadow-casting directional light. Adds volumetric feel "for free."
+      const hemi = new THREE.HemisphereLight("#A5B4FC", "#1E1B4B", 0.55);
+      hemi.position.set(0, 200, 0);
+      scene.add(hemi);
+
+      // Center life-source — additive halo plate (slow pulse) + radial
+      // particle emission. Reads as "energy radiating from heart" via
+      // composition + motion, not extra brightness.
+      coreLifeRef.current = startCoreLife(scene);
 
       // Ether particle field — drifts very slowly behind the graph so the
       // void feels like a luminous medium, not pure black. Tuned at 1500
@@ -285,6 +346,8 @@ export function BrainCanvas({
     return () => {
       cancelled = true;
       etherDisposer?.();
+      coreLifeRef.current?.dispose();
+      coreLifeRef.current = null;
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
     };
     // We intentionally only run this once on mount; the wiring is sticky.
@@ -352,7 +415,7 @@ export function BrainCanvas({
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[calc(100vh-260px)] min-h-[560px] rounded-lg border border-stewart-border overflow-hidden"
+      className="relative w-full h-[calc(100vh-150px)] min-h-[560px] rounded-lg border border-stewart-border overflow-hidden"
       style={{ background: SCENE_BG }}
     >
       <ForceGraph3D
@@ -396,6 +459,33 @@ export function BrainCanvas({
         style={{
           background:
             "radial-gradient(circle at center, transparent 55%, rgba(0,0,0,0.55) 100%)",
+        }}
+      />
+      {/* Cluster floating labels — top-3 densest clusters, billboard at
+          centroid via per-frame world→screen projection. */}
+      <BrainClusterLabels
+        data={data}
+        fgRef={fgRef as unknown as React.MutableRefObject<{ camera: () => THREE.Camera; renderer: () => THREE.WebGLRenderer } | null>}
+      />
+      {/* Cinematic intro — runs once per session. Camera + text sequence. */}
+      <BrainIntro
+        onCameraStart={() => {
+          fgRef.current?.cameraPosition(
+            { x: 0, y: 0, z: 900 },
+            { x: 0, y: 0, z: 0 },
+            0
+          );
+        }}
+        onCameraZoom={() => {
+          fgRef.current?.cameraPosition(
+            { x: 200, y: 140, z: 200 },
+            { x: 0, y: 0, z: 0 },
+            4000
+          );
+        }}
+        onComplete={() => {
+          const ctl = fgRef.current?.controls?.();
+          if (ctl) ctl.autoRotate = true;
         }}
       />
       {/* Edge legend — bottom-left fixed panel, auto-faded after 8s
@@ -449,6 +539,12 @@ function BrainLegend() {
       </div>
     </div>
   );
+}
+
+function rgbaFromHex(hex: string, alpha: number): string {
+  const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  if (!m) return `rgba(255,255,255,${alpha})`;
+  return `rgba(${parseInt(m[1], 16)},${parseInt(m[2], 16)},${parseInt(m[3], 16)},${alpha})`;
 }
 
 function Dot({ color }: { color: string }) {
