@@ -2,12 +2,6 @@ import Link from "next/link";
 
 const clients = [
   {
-    name: "Sisel International",
-    slug: "sisel",
-    description: "Email Marketing & Automation",
-    logo: <img src="/sisel-logo.png" alt="Sisel" className="h-10 w-auto" />,
-  },
-  {
     name: "Santa Fe Kia",
     slug: "santa_fe_kia",
     description: "Sales & Marketing Intelligence",
@@ -64,11 +58,11 @@ export default function LandingPage() {
           <p className="text-xs font-medium text-stewart-muted uppercase tracking-widest mb-6">
             Client Access
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl">
             {clients.map((client) => (
               <Link
                 key={client.slug}
-                href={client.slug === "sisel" ? "/sisel" : "/sign-in?redirect_url=/dashboard"}
+                href="/sign-in?redirect_url=/dashboard"
                 className="bg-white rounded-xl p-6 flex flex-col items-center text-center hover:shadow-lg hover:scale-[1.02] transition-all"
               >
                 <div className="h-12 flex items-center justify-center mb-3">
