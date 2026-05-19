@@ -1,6 +1,11 @@
 import Link from "next/link";
-import { IonNav } from "./_components/ion-nav";
 import { StageBBanner } from "./_components/stage-b-banner";
+
+// Layout for the surviving token-gated routes (wiki, manager, leader,
+// owner, rep, tree/[clusterId]). The four tab pages (Methodology /
+// Decision Tree / Next Steps / What's Coming) and their IonNav were
+// retired in the ion-scroll-demo branch — the new canonical Ion pitch
+// surface is the public /ion scroll page.
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +36,6 @@ export default async function IonLayout({
             Inside-Sales Decision Tree · Built on your call data
           </span>
         </div>
-        <IonNav base={base} />
       </header>
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-6">
         <StageBBanner />
