@@ -3,6 +3,26 @@
 Questions surfaced during scaffolding. Spencer or Strategy Claude can
 resolve and the scaffolding Claude (or follow-on pass) will adjust.
 
+## RESOLVED (2026-05-22)
+
+1. **Dark theme** — keep. Strategy Claude's WebFetch flattened styling into
+   content-readable form; the override to match existing pages was right.
+2. **Brain mock data** — keep for V1. Real data ships with Clerk
+   integration.
+3. **Remotion paths locked:** `public/ion/brain-walkthrough.mp4` +
+   `public/ion/brain-walkthrough-poster.jpg`. Wired in
+   `src/app/ion/(public)/page.tsx`. Future per-prospect demos follow the
+   same convention under `public/{tenant}/`.
+
+Items 4 (StageBBanner + dead-CTA scan) and 5 (orphan token routes:
+tree/[clusterId], manager, leader, owner, rep) are pending a follow-up
+brief from Strategy Claude per the 2026-05-22 review. Coding-Claude pick
+is queued and will execute on receipt of that brief.
+
+---
+
+## ORIGINAL OPEN QUESTIONS (for history)
+
 ## 1. Brief said "white background, dark text" but existing pages are dark
 
 The brief's design-system block specified:

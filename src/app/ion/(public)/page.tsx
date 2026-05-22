@@ -64,13 +64,19 @@ export default function IonScrollPage() {
         <div className="space-y-6">
           {/* Static video placeholder — Remotion render lands later. */}
           <div className="rounded-lg border border-stewart-border bg-stewart-card overflow-hidden">
+            {/*
+              Remotion paths locked per scaffolding-decisions § Brain mirror:
+                public/ion/brain-walkthrough.mp4
+                public/ion/brain-walkthrough-poster.jpg
+              Future per-prospect demos follow public/{tenant}/brain-walkthrough.*
+            */}
             <video
               controls
               preload="none"
-              poster="/ion/brain-poster.png"
+              poster="/ion/brain-walkthrough-poster.jpg"
               className="w-full aspect-video bg-black"
             >
-              {/* Source added when Remotion render is delivered. */}
+              <source src="/ion/brain-walkthrough.mp4" type="video/mp4" />
               <track kind="captions" />
             </video>
             <div className="px-4 py-3 border-t border-stewart-border flex items-center justify-between text-xs text-stewart-muted">
