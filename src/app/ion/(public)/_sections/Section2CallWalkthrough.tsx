@@ -1,18 +1,55 @@
+import { promises as fs } from "node:fs";
+import path from "node:path";
 import { ScrollSection } from "./ScrollSection";
+import { CallWalkthrough } from "./session10/CallWalkthrough.client";
+import type {
+  CallBundle,
+  CherryPick,
+  Handoff,
+  ManagerBrief,
+  Metadata,
+} from "./session10/types";
 
-// § 2 content (the worked SESSION10 example: 90-sec manager brief,
-// cherry-pick moment cards, handoff brief for closer) is delivered by
-// the session10-cards brief — JSON files in public/ion/ that this
-// component will consume. Until then we keep the locked-in 3-card grid
-// so layout doesn't shift when the data lands.
+// Server component. Reads the SESSION10 / SESSION18 demo card JSONs
+// from public/ion/ at request time (the files were shipped there by
+// the session10-cards brief) and passes typed bundles to the
+// interactive client component that handles moment selection + audio.
+//
+// Files we expect (8 total):
+//   session10_eb080f7c-manager-brief.json
+//   session10_eb080f7c-cherrypicks.json
+//   session10_eb080f7c-metadata.json
+//   session10_eb080f7c-trajectory-full.json  (consumed by "see more" UI)
+//   session18_fd078269-manager-brief.json
+//   session18_fd078269-cherrypicks.json
+//   session18_fd078269-handoff.json
+//   session18_fd078269-metadata.json
 
-const CARD_LABELS = [
-  "90-second manager brief",
-  "Cherry-pick moments",
-  "Handoff brief for the closer",
-] as const;
+async function loadJson<T>(filename: string): Promise<T> {
+  const filePath = path.join(process.cwd(), "public", "ion", filename);
+  const raw = await fs.readFile(filePath, "utf-8");
+  return JSON.parse(raw) as T;
+}
 
-export function Section2CallWalkthrough() {
+async function loadBundle(
+  prefix: string,
+  withHandoff: boolean
+): Promise<CallBundle> {
+  const [managerBrief, cherryPicks, metadata, handoff] = await Promise.all([
+    loadJson<ManagerBrief>(`${prefix}-manager-brief.json`),
+    loadJson<CherryPick[]>(`${prefix}-cherrypicks.json`),
+    loadJson<Metadata>(`${prefix}-metadata.json`),
+    withHandoff ? loadJson<Handoff>(`${prefix}-handoff.json`) : undefined,
+  ]);
+  return { managerBrief, cherryPicks, metadata, handoff };
+}
+
+export async function Section2CallWalkthrough() {
+  const [session10, session18] = await Promise.all([
+    loadBundle("session10_eb080f7c", false),
+    loadBundle("session18_fd078269", true),
+  ]);
+
   return (
     <ScrollSection id="how-a-call-processes">
       <p className="text-xs uppercase tracking-wider font-semibold text-stewart-accent mb-3">
@@ -23,39 +60,14 @@ export function Section2CallWalkthrough() {
       </h2>
 
       <p className="mt-6 text-lg text-stewart-muted leading-relaxed max-w-3xl">
-        A worked example from one real Ion call: Jake on the phone with
-        Larry, mid-cycle, mixed signals. Stewart turns it into three
-        artifacts in three different shapes &mdash; one for the manager
-        prepping a 1-on-1, one for cherry-picking the moments worth
-        teaching, one for the closer about to take the next call.
+        From transcript to manager-ready coaching artifacts in one Stewart
+        pass. Here&apos;s SESSION 10 &mdash; Jake&apos;s call with Larry
+        &mdash; end to end. Click any cherry-pick to see Stewart&apos;s
+        read.
       </p>
 
-      <div className="mt-10 rounded-lg border border-dashed border-stewart-warning/50 bg-stewart-warning/5 p-4">
-        <p className="text-xs uppercase tracking-wider font-semibold text-stewart-warning mb-1">
-          TODO &middot; SESSION10 demo cards
-        </p>
-        <p className="text-sm text-stewart-muted leading-relaxed">
-          Card internals (manager brief, cherry-picks, handoff) land via
-          the session10-cards brief from Strategy Claude. JSON files drop
-          into <code>public/ion/</code>; this section reads them.
-        </p>
-      </div>
-
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-        {CARD_LABELS.map((label) => (
-          <div
-            key={label}
-            className="rounded-lg border border-stewart-border bg-stewart-card p-5 min-h-[200px] flex items-center justify-center"
-          >
-            <p className="text-sm text-stewart-muted text-center">
-              {label}
-              <br />
-              <span className="text-xs text-stewart-warning">
-                content TODO
-              </span>
-            </p>
-          </div>
-        ))}
+      <div className="mt-10">
+        <CallWalkthrough session10={session10} session18={session18} />
       </div>
     </ScrollSection>
   );
