@@ -15,9 +15,13 @@ resolve and the scaffolding Claude (or follow-on pass) will adjust.
    same convention under `public/{tenant}/`.
 
 Items 4 (StageBBanner + dead-CTA scan) and 5 (orphan token routes:
-tree/[clusterId], manager, leader, owner, rep) are pending a follow-up
-brief from Strategy Claude per the 2026-05-22 review. Coding-Claude pick
-is queued and will execute on receipt of that brief.
+tree/[clusterId], manager, leader, owner, rep, plus wiki/page.tsx)
+were resolved in the cleanup pass per `BRIEF_stream_b_cleanup.md`.
+StageBBanner deleted; 7 orphan pages deleted; 10 orphan components
+deleted; surviving `[token]/layout.tsx` brand-mark href rewired to
+`/ion`. Build clean (`npx tsc --noEmit` + `npx next build`), surviving
+routes serve 200, all deleted routes serve 404. Content captured into
+`legacy-pitch-content-v2.md`.
 
 ---
 
