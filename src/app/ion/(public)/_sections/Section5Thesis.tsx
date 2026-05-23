@@ -1,17 +1,5 @@
 import { ScrollSection } from "./ScrollSection";
-
-const ROI_INPUTS = [
-  { label: "Sets / month", placeholder: "TODO — Kenny" },
-  { label: "Sit % from sets", placeholder: "TODO — Kenny" },
-  { label: "Close % from sits", placeholder: "TODO — Kenny" },
-  { label: "Avg gross / sale", placeholder: "TODO — Kenny" },
-];
-
-const ROI_OUTPUTS = [
-  { label: "$ per sit", placeholder: "calculated" },
-  { label: "$ per missed cross-sell", placeholder: "calculated" },
-  { label: "Recoverable revenue / month", placeholder: "calculated" },
-];
+import { RoiCalculator } from "../_components/RoiCalculator.client";
 
 export function Section5Thesis() {
   return (
@@ -122,31 +110,9 @@ export function Section5Thesis() {
         </p>
       </div>
 
-      {/* ROI MATH PANEL */}
-      <div className="mt-12 rounded-lg border border-dashed border-stewart-warning/50 bg-stewart-warning/5 p-6 sm:p-8 max-w-4xl">
-        <p className="text-xs uppercase tracking-wider font-semibold text-stewart-warning mb-4">
-          ROI math &middot; awaiting Kenny&apos;s conversion data
-        </p>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {ROI_INPUTS.map((stat) => (
-            <RoiStat key={stat.label} {...stat} tone="input" />
-          ))}
-        </div>
-
-        <p className="my-5 text-center text-stewart-muted text-sm">&darr;</p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {ROI_OUTPUTS.map((stat) => (
-            <RoiStat key={stat.label} {...stat} tone="output" />
-          ))}
-        </div>
-
-        <p className="mt-6 text-sm text-stewart-muted leading-relaxed">
-          Numbers Kenny provides. Stewart does the multiplication. The
-          math gets honest when it&apos;s grounded in Ion&apos;s actual
-          conversion data.
-        </p>
+      {/* ROI CALCULATOR — interactive, real-time math */}
+      <div className="mt-12 max-w-4xl">
+        <RoiCalculator />
       </div>
 
       <p className="mt-12 text-xl sm:text-2xl text-stewart-text font-medium leading-snug max-w-3xl">
@@ -154,39 +120,5 @@ export function Section5Thesis() {
         more.
       </p>
     </ScrollSection>
-  );
-}
-
-function RoiStat({
-  label,
-  placeholder,
-  tone,
-}: {
-  label: string;
-  placeholder: string;
-  tone: "input" | "output";
-}) {
-  const isOutput = tone === "output";
-  return (
-    <div
-      className={
-        "rounded border p-3 " +
-        (isOutput
-          ? "border-stewart-accent/30 bg-stewart-accent/5"
-          : "border-stewart-border bg-stewart-card")
-      }
-    >
-      <div className="text-xs uppercase tracking-wider text-stewart-muted mb-1">
-        {label}
-      </div>
-      <div
-        className={
-          "text-base font-mono " +
-          (isOutput ? "text-stewart-accent" : "text-stewart-warning")
-        }
-      >
-        {isOutput ? <>&rarr; {placeholder}</> : placeholder}
-      </div>
-    </div>
   );
 }

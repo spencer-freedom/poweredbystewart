@@ -6,6 +6,7 @@ import {
   type CherryPick,
   type Handoff,
   type Metadata,
+  isBookedOutcome,
   tsToSeconds,
 } from "./types";
 
@@ -35,6 +36,11 @@ const CLASSIFICATION_TONE: Record<
     chip: "border-stewart-danger/50 bg-stewart-danger/10 text-stewart-danger",
     dot: "bg-stewart-danger",
   },
+  cross_sell_signal_caught: {
+    label: "Cross-sell caught",
+    chip: "border-stewart-success/40 bg-stewart-success/10 text-stewart-success",
+    dot: "bg-stewart-success",
+  },
   protocol_violation: {
     label: "Protocol violation",
     chip: "border-stewart-danger/40 bg-stewart-danger/10 text-stewart-danger",
@@ -50,6 +56,21 @@ const CLASSIFICATION_TONE: Record<
     chip: "border-stewart-accent/40 bg-stewart-accent/10 text-stewart-accent",
     dot: "bg-stewart-accent",
   },
+  bill_anchor: {
+    label: "Bill anchor",
+    chip: "border-stewart-accent/40 bg-stewart-accent/10 text-stewart-accent",
+    dot: "bg-stewart-accent",
+  },
+  empathy_miss: {
+    label: "Empathy miss",
+    chip: "border-stewart-danger/40 bg-stewart-danger/10 text-stewart-danger",
+    dot: "bg-stewart-danger",
+  },
+  micro_trade: {
+    label: "Micro trade",
+    chip: "border-stewart-accent/40 bg-stewart-accent/10 text-stewart-accent",
+    dot: "bg-stewart-accent",
+  },
   other: {
     label: "Other",
     chip: "border-stewart-border bg-stewart-card text-stewart-muted",
@@ -58,67 +79,204 @@ const CLASSIFICATION_TONE: Record<
 };
 
 function classTone(c: string) {
-  return CLASSIFICATION_TONE[c] || CLASSIFICATION_TONE.other;
+  return (
+    CLASSIFICATION_TONE[c] ||
+    {
+      label: (c || "other").replace(/_/g, " "),
+      chip: CLASSIFICATION_TONE.other.chip,
+      dot: CLASSIFICATION_TONE.other.dot,
+    }
+  );
+}
+
+const OUTCOME_TONE: Record<string, string> = {
+  booked: "text-stewart-success",
+  tentative_appointment: "text-stewart-warning",
+  callback: "text-stewart-accent",
+  no_interest: "text-stewart-danger",
+  declined: "text-stewart-danger",
+};
+
+function outcomeTone(o: string) {
+  return OUTCOME_TONE[(o || "").toLowerCase()] || "text-stewart-muted";
+}
+
+function outcomeLabel(o: string) {
+  return (o || "unknown").replace(/_/g, " ");
+}
+
+function shortCallId(cid: string) {
+  // SESSION10_eb080f7c → "SESSION 10". Strip the hash for the thumb.
+  const m = cid.match(/^SESSION(\d+)/i);
+  if (m) return `SESSION ${m[1]}`;
+  return cid;
 }
 
 export function CallWalkthrough({
-  session10,
-  session18,
+  bundles,
 }: {
-  session10: CallBundle;
-  session18: CallBundle;
+  bundles: CallBundle[];
 }) {
-  // Default-select the priority-1 moment (the manager brief's primary
-  // coaching focus). For SESSION10 that's the 06:34 cross-sell miss
-  // Spencer sent to Kenny.
-  const priorityTs = session10.managerBrief.primary_coaching_focus.ts;
-  const priorityIdx = Math.max(
-    0,
-    session10.cherryPicks.findIndex((m) => m.ts === priorityTs)
+  const [selectedCallId, setSelectedCallId] = useState<string>(
+    () => bundles[0]?.metadata.call_id ?? ""
   );
-  const [selectedIdx, setSelectedIdx] = useState(priorityIdx);
-  const [showTrajectory, setShowTrajectory] = useState(false);
-  const [showSession18, setShowSession18] = useState(false);
 
-  const selected = session10.cherryPicks[selectedIdx];
+  const selectedBundle =
+    bundles.find((b) => b.metadata.call_id === selectedCallId) ?? bundles[0];
 
   return (
     <div className="space-y-8">
-      <CallMetadataStrip meta={session10.metadata} />
+      <ThumbnailStrip
+        bundles={bundles}
+        selectedCallId={selectedCallId}
+        onSelect={setSelectedCallId}
+      />
 
-      <DoubleMissCallout cherryPicks={session10.cherryPicks} />
+      {selectedBundle ? (
+        <SelectedCallView
+          bundle={selectedBundle}
+          // Key forces remount when the selected call changes — wipes
+          // the moment-selection state cleanly.
+          key={selectedBundle.metadata.call_id}
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function ThumbnailStrip({
+  bundles,
+  selectedCallId,
+  onSelect,
+}: {
+  bundles: CallBundle[];
+  selectedCallId: string;
+  onSelect: (id: string) => void;
+}) {
+  return (
+    <div>
+      <p className="text-xs uppercase tracking-wider font-semibold text-stewart-muted mb-3">
+        Pick a call to walk through
+      </p>
+      <div className="-mx-2 px-2 overflow-x-auto">
+        <div className="flex gap-3 snap-x snap-mandatory pb-2 min-w-max">
+          {bundles.map((bundle) => {
+            const cid = bundle.metadata.call_id;
+            const isSel = cid === selectedCallId;
+            return (
+              <button
+                key={cid}
+                onClick={() => onSelect(cid)}
+                title={bundle.tagline}
+                className={
+                  "snap-start text-left rounded-lg border p-4 w-52 shrink-0 transition-all " +
+                  (isSel
+                    ? "border-stewart-accent bg-stewart-accent/10 shadow-lg shadow-stewart-accent/20 scale-[1.02]"
+                    : "border-stewart-border bg-stewart-card hover:border-stewart-accent/40 hover:bg-stewart-bg/40")
+                }
+              >
+                <div className="flex items-baseline justify-between gap-2 mb-2">
+                  <span className="text-xs font-mono text-stewart-accent">
+                    {shortCallId(cid)}
+                  </span>
+                  {bundle.grayMatterSection ? (
+                    <span
+                      title={`Presumptive gray-matter exemplar for ${bundle.grayMatterSection}`}
+                      className="text-[9px] uppercase tracking-wider font-mono text-amber-400"
+                    >
+                      ⬢ gray
+                    </span>
+                  ) : null}
+                </div>
+                <p className="text-sm font-semibold text-stewart-text leading-tight mb-2">
+                  {bundle.metadata.rep_id || "—"}
+                </p>
+                <p
+                  className={
+                    "text-[11px] font-mono uppercase tracking-wider mb-1 " +
+                    outcomeTone(bundle.metadata.outcome)
+                  }
+                >
+                  {outcomeLabel(bundle.metadata.outcome)}
+                </p>
+                <p className="text-[11px] text-stewart-muted font-mono">
+                  {(bundle.metadata.duration_min || 0).toFixed(0)} min
+                </p>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SelectedCallView({ bundle }: { bundle: CallBundle }) {
+  const priorityTs = bundle.managerBrief.primary_coaching_focus.ts;
+  const priorityIdx = Math.max(
+    0,
+    bundle.cherryPicks.findIndex((m) => m.ts === priorityTs)
+  );
+  const [selectedIdx, setSelectedIdx] = useState(priorityIdx);
+  const [showTrajectory, setShowTrajectory] = useState(false);
+
+  const selected = bundle.cherryPicks[selectedIdx];
+  const showHandoff =
+    bundle.handoff && isBookedOutcome(bundle.metadata.outcome);
+
+  return (
+    <div className="space-y-6">
+      <Tagline bundle={bundle} />
+      <CallMetadataStrip meta={bundle.metadata} />
+
+      <DoubleMissCallout cherryPicks={bundle.cherryPicks} />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         <CherryPickList
-          cherryPicks={session10.cherryPicks}
+          cherryPicks={bundle.cherryPicks}
           selectedIdx={selectedIdx}
           onSelect={setSelectedIdx}
           priorityTs={priorityTs}
         />
-        <MomentDetail
-          moment={selected}
-          callId={session10.metadata.call_id}
-        />
+        {selected ? (
+          <MomentDetail
+            moment={selected}
+            callId={bundle.metadata.call_id}
+          />
+        ) : null}
       </div>
 
       <ManagerBriefCard
-        brief={session10.managerBrief}
+        brief={bundle.managerBrief}
         onExpandTrajectory={() => setShowTrajectory(true)}
       />
 
       <CriticAuditCallout />
 
-      <Session18Panel
-        bundle={session18}
-        expanded={showSession18}
-        onToggle={() => setShowSession18((v) => !v)}
-      />
+      {showHandoff && bundle.handoff ? (
+        <InlineHandoff handoff={bundle.handoff} />
+      ) : null}
 
       {showTrajectory ? (
         <TrajectoryDrawer
-          brief={session10.managerBrief}
+          brief={bundle.managerBrief}
           onClose={() => setShowTrajectory(false)}
         />
+      ) : null}
+    </div>
+  );
+}
+
+function Tagline({ bundle }: { bundle: CallBundle }) {
+  return (
+    <div className="border-l-2 border-stewart-accent pl-4 py-1">
+      <p className="text-lg sm:text-xl italic text-stewart-text leading-snug">
+        &ldquo;{bundle.tagline}&rdquo;
+      </p>
+      {bundle.grayMatterSection ? (
+        <p className="text-xs text-amber-400 mt-1 font-mono">
+          gray-matter exemplar &middot; {bundle.grayMatterSection}
+        </p>
       ) : null}
     </div>
   );
@@ -135,32 +293,30 @@ function CallMetadataStrip({ meta }: { meta: Metadata }) {
         {meta.duration_min.toFixed(0)} min
       </span>
       <span className="text-stewart-text">
-        <span className="text-stewart-muted">rep:</span> {meta.rep_id}
+        <span className="text-stewart-muted">rep:</span> {meta.rep_id || "—"}
       </span>
       <span className="text-stewart-text">
         <span className="text-stewart-muted">outcome:</span>{" "}
-        <span
-          className={
-            meta.outcome === "no_interest" || meta.outcome === "declined"
-              ? "text-stewart-danger"
-              : "text-stewart-success"
-          }
-        >
-          {meta.outcome}
+        <span className={outcomeTone(meta.outcome)}>
+          {outcomeLabel(meta.outcome)}
         </span>
       </span>
-      <span className="text-stewart-muted basis-full sm:basis-auto">
-        primary objection:{" "}
-        <span className="text-stewart-text italic">
-          {meta.primary_objection}
+      {meta.primary_objection ? (
+        <span className="text-stewart-muted basis-full sm:basis-auto">
+          primary objection:{" "}
+          <span className="text-stewart-text italic">
+            {meta.primary_objection}
+          </span>
         </span>
-      </span>
+      ) : null}
     </div>
   );
 }
 
 function DoubleMissCallout({ cherryPicks }: { cherryPicks: CherryPick[] }) {
-  const misses = cherryPicks.filter((p) => p.classification === "cross_sell_miss");
+  const misses = cherryPicks.filter(
+    (p) => p.classification === "cross_sell_miss"
+  );
   if (misses.length < 2) return null;
   return (
     <div className="rounded-lg border border-stewart-danger/40 bg-stewart-danger/5 p-4 flex items-start gap-3">
@@ -172,7 +328,7 @@ function DoubleMissCallout({ cherryPicks }: { cherryPicks: CherryPick[] }) {
         <span className="text-stewart-danger font-semibold">
           multi-touch cross-sell miss
         </span>{" "}
-        on this call &mdash; the same roofing trigger surfaced at{" "}
+        on this call &mdash; the same trigger surfaced at{" "}
         {misses.map((m, i) => (
           <span key={m.ts}>
             <span className="font-mono text-stewart-danger">{m.ts}</span>
@@ -461,69 +617,23 @@ function CriticAuditCallout() {
       <div className="space-y-1">
         <p className="text-sm text-stewart-text">
           <span className="font-semibold">Stewart&apos;s critic audit</span>{" "}
-          caught 1 fabricated quote in the first Stage 3 pass on this
-          call. Revision pass corrected it before this brief was
-          produced.
+          runs on every call &mdash; verifies every quote, flags
+          fabrications, catches missed moments. The brief above only ships
+          if the critic clears it.
         </p>
         <p className="text-xs text-stewart-muted italic">
-          The cross-vendor critic is what makes the brief trustworthy. It
-          runs on every call, not just spot-checks.
+          The cross-vendor critic is what makes the read trustworthy. Not
+          a spot-check &mdash; a gate on every output.
         </p>
       </div>
     </div>
   );
 }
 
-function Session18Panel({
-  bundle,
-  expanded,
-  onToggle,
-}: {
-  bundle: CallBundle;
-  expanded: boolean;
-  onToggle: () => void;
-}) {
+function InlineHandoff({ handoff }: { handoff: Handoff }) {
   return (
-    <section className="rounded-lg border border-stewart-success/30 bg-stewart-success/5 p-6 sm:p-8">
-      <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <div>
-          <p className="text-xs uppercase tracking-wider font-semibold text-stewart-success mb-1">
-            What about a call that went well?
-          </p>
-          <h3 className="text-lg sm:text-xl font-semibold text-stewart-text leading-snug">
-            SESSION 18 &mdash; Randy&apos;s call with Juan. Booked
-            qualified in 4 minutes.
-          </h3>
-        </div>
-        <button
-          onClick={onToggle}
-          className="text-sm text-stewart-accent hover:underline"
-        >
-          {expanded ? "Hide handoff →" : "Expand handoff brief →"}
-        </button>
-      </div>
-
-      <p className="mt-4 text-sm text-stewart-text leading-relaxed max-w-3xl">
-        Stewart&apos;s manager brief flagged Juan&apos;s spouse-protocol
-        handling as exemplary &mdash; presumptive gray-matter for{" "}
-        <code className="text-stewart-accent text-xs">
-          protocols.spouse_decision
-        </code>
-        . Here&apos;s the closer-facing artifact Stewart produces alongside
-        the manager view.
-      </p>
-
-      {expanded && bundle.handoff ? (
-        <HandoffCard handoff={bundle.handoff} />
-      ) : null}
-    </section>
-  );
-}
-
-function HandoffCard({ handoff }: { handoff: Handoff }) {
-  return (
-    <div className="mt-6 rounded-lg border border-stewart-border bg-stewart-card p-5 sm:p-6 space-y-5">
-      <p className="text-xs uppercase tracking-wider font-semibold text-stewart-accent">
+    <div className="rounded-lg border border-stewart-success/40 bg-stewart-success/5 p-6 sm:p-8 space-y-5">
+      <p className="text-xs uppercase tracking-wider font-semibold text-stewart-success">
         Handoff brief &middot; for the closer
       </p>
 
@@ -537,38 +647,42 @@ function HandoffCard({ handoff }: { handoff: Handoff }) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div>
-          <p className="text-xs uppercase tracking-wider text-stewart-muted mb-2">
-            Unresolved concerns
-          </p>
-          <ul className="space-y-2">
-            {handoff.unresolved_concerns.map((c, i) => (
-              <li
-                key={i}
-                className="flex gap-2 text-sm text-stewart-text leading-relaxed"
-              >
-                <span className="text-stewart-warning mt-1 shrink-0">▸</span>
-                <span>{c}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <p className="text-xs uppercase tracking-wider text-stewart-muted mb-2">
-            Exact promises rep made
-          </p>
-          <ul className="space-y-2">
-            {handoff.exact_promises_rep_made.map((c, i) => (
-              <li
-                key={i}
-                className="flex gap-2 text-sm text-stewart-text leading-relaxed"
-              >
-                <span className="text-stewart-accent mt-1 shrink-0">▸</span>
-                <span>{c}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {handoff.unresolved_concerns?.length ? (
+          <div>
+            <p className="text-xs uppercase tracking-wider text-stewart-muted mb-2">
+              Unresolved concerns
+            </p>
+            <ul className="space-y-2">
+              {handoff.unresolved_concerns.map((c, i) => (
+                <li
+                  key={i}
+                  className="flex gap-2 text-sm text-stewart-text leading-relaxed"
+                >
+                  <span className="text-stewart-warning mt-1 shrink-0">▸</span>
+                  <span>{c}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        {handoff.exact_promises_rep_made?.length ? (
+          <div>
+            <p className="text-xs uppercase tracking-wider text-stewart-muted mb-2">
+              Exact promises rep made
+            </p>
+            <ul className="space-y-2">
+              {handoff.exact_promises_rep_made.map((c, i) => (
+                <li
+                  key={i}
+                  className="flex gap-2 text-sm text-stewart-text leading-relaxed"
+                >
+                  <span className="text-stewart-accent mt-1 shrink-0">▸</span>
+                  <span>{c}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </div>
 
       <div className="rounded border border-stewart-accent/40 bg-stewart-accent/5 p-4">

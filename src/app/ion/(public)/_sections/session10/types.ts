@@ -1,6 +1,11 @@
-// Type shapes for the SESSION10 / SESSION18 demo cards.
-// Loaded from public/ion/*.json at request time by the Section2 server
+// Type shapes for the §2 hero-call carousel. Loaded from
+// public/ion/{slug}-*.json at request time by the Section2 server
 // component; passed to the interactive client component as props.
+//
+// (Folder is named `session10/` for historical reasons — V1 only had
+// SESSION10 as the primary walkthrough + SESSION18 as a secondary
+// panel. The carousel refactor generalized to all 7 hero calls but
+// kept the path stable so imports elsewhere don't churn.)
 
 export type KeyMoment = {
   ts: string;
@@ -61,9 +66,25 @@ export type CallBundle = {
   managerBrief: ManagerBrief;
   cherryPicks: CherryPick[];
   handoff?: Handoff;
+  // Carousel-level meta (curated, not read from disk)
+  tagline: string;
+  grayMatterSection: string | null;
 };
 
 export function tsToSeconds(ts: string): number {
   const [m, s] = ts.split(":").map((v) => parseInt(v, 10) || 0);
   return m * 60 + s;
+}
+
+// Whether a given outcome counts as "booked" for the purposes of
+// rendering the handoff brief inline. Per the §2 carousel brief, the
+// handoff inline render is gated on a successful booking outcome.
+export function isBookedOutcome(outcome: string): boolean {
+  const o = (outcome || "").toLowerCase();
+  return (
+    o === "booked" ||
+    o === "appointment_set" ||
+    o === "transferred_to_closer" ||
+    o === "tentative_appointment_booked"
+  );
 }

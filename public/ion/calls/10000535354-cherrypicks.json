@@ -1,0 +1,38 @@
+[
+  {
+    "ts": "00:00",
+    "quote": "You've reached Steve's voice mail. I can't get to the phone right now, but leave me a message. I'll get back to you as soon as I can. Thanks. Bye.",
+    "classification": "other",
+    "codex_reference": null,
+    "stewart_read": "The call record contains only a voicemail greeting. No rep speech was captured. This is a null-interaction event — there is no setter behavior to evaluate, positively or negatively.",
+    "alternative_hypothesis": null,
+    "coaching_implication": "Remove from rep's coaching queue entirely. There is nothing here to coach. Route to operations."
+  },
+  {
+    "ts": "00:00",
+    "quote": "You've reached Steve's voice mail. I can't get to the phone right now, but leave me a message. I'll get back to you as soon as I can. Thanks. Bye.",
+    "classification": "other",
+    "codex_reference": null,
+    "stewart_read": "The voicemail greeting belongs to 'Steve.' If the lead record for this call_id is assigned to a different customer name, that is a dialer routing error — the wrong number was dialed. If the lead record does show 'Steve,' the call was correctly dialed but not answered, and AMD (answering machine detection) either failed or was not configured to suppress this record from the transcript queue.",
+    "alternative_hypothesis": "Alternatively, AMD fired correctly and suppressed the call from the rep's active queue, but the logging system still generated a transcript record. In that case the rep was never aware of this voicemail and there is no rep action to review.",
+    "coaching_implication": "Manager does not need to open this with the rep. The question to answer is operational: (1) Was the correct number dialed? (2) Did AMD fire? (3) Why did this record enter the coaching transcript queue? Fix the logging filter so null-interaction records do not consume review time."
+  },
+  {
+    "ts": "00:00",
+    "quote": "You've reached Steve's voice mail. I can't get to the phone right now, but leave me a message. I'll get back to you as soon as I can. Thanks. Bye.",
+    "classification": "other",
+    "codex_reference": null,
+    "stewart_read": "If the rep did manually dial this number outside the dialer system and reached voicemail, the transcript would look identical to what is recorded here. However, there is no evidence in this transcript to support that hypothesis — it is equally consistent with a standard dialer voicemail drop. No inference about rep behavior outside the dialer is warranted from this record alone.",
+    "alternative_hypothesis": "The record is a standard dialer voicemail with AMD suppression failure — the more parsimonious explanation requiring no additional assumptions about rep conduct.",
+    "coaching_implication": "Do not raise off-dialer contact with the rep based on this record. If there is a separate pattern of reps making off-system contacts, that investigation requires its own evidence base, not this transcript."
+  },
+  {
+    "ts": "00:00",
+    "quote": "You've reached Steve's voice mail. I can't get to the phone right now, but leave me a message. I'll get back to you as soon as I can. Thanks. Bye.",
+    "classification": "other",
+    "codex_reference": null,
+    "stewart_read": "This record reaching the coaching transcript queue at all is the only actionable signal in the call. If Stewart is processing a material volume of null-interaction records like this one, the manager is spending review time on calls that contain no coachable content — a direct tax on the 30-minute Tuesday review window.",
+    "alternative_hypothesis": null,
+    "coaching_implication": "Audit the transcript ingestion pipeline for AMD suppression failures and voicemail-only records. A simple pre-filter — 'if transcript contains zero rep speech, route to ops log, not coaching queue' — eliminates this class of record before it reaches the manager's desk."
+  }
+]
