@@ -2,6 +2,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { ScrollSection } from "./ScrollSection";
 import { CallWalkthrough } from "./session10/CallWalkthrough.client";
+import { PipelineFlow } from "../_visuals";
 import type {
   CallBundle,
   CherryPick,
@@ -59,12 +60,17 @@ export async function Section2CallWalkthrough() {
         How a call actually gets processed
       </h2>
 
-      <p className="mt-6 text-lg text-stewart-muted leading-relaxed max-w-3xl">
-        From transcript to manager-ready coaching artifacts in one Stewart
-        pass. Here&apos;s SESSION 10 &mdash; Jake&apos;s call with Larry
-        &mdash; end to end. Click any cherry-pick to see Stewart&apos;s
-        read.
-      </p>
+      <div className="mt-6 grid lg:grid-cols-12 gap-8 items-start">
+        <p className="lg:col-span-8 text-lg text-stewart-muted leading-relaxed">
+          From transcript to manager-ready coaching artifacts in one
+          Stewart pass. Here&apos;s SESSION 10 &mdash; Jake&apos;s call
+          with Larry &mdash; end to end. Click any cherry-pick to see
+          Stewart&apos;s read.
+        </p>
+        <div className="lg:col-span-4">
+          <PipelineFlow />
+        </div>
+      </div>
 
       <div className="mt-10">
         <CallWalkthrough session10={session10} session18={session18} />

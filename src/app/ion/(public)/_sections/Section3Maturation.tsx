@@ -1,4 +1,5 @@
 import { ScrollSection } from "./ScrollSection";
+import { MaturationTimeline } from "../_visuals";
 
 type Phase = {
   n: number;
@@ -85,12 +86,11 @@ export function Section3Maturation() {
         &mdash; and the value compounds as Stewart learns your floor.
       </p>
 
-      {/* TODO: horizontal timeline SVG from visual-specs brief
-          (public/ion/maturation-timeline.svg) renders above the cards
-          on lg+ once it lands. Until then the cards carry the story
-          on every viewport. */}
+      <div className="mt-12">
+        <MaturationTimeline />
+      </div>
 
-      <ol className="mt-12 space-y-4">
+      <ol className="mt-8 space-y-4">
         {PHASES.map((phase) => (
           <PhaseCard key={phase.n} phase={phase} />
         ))}

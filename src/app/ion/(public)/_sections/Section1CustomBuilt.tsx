@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { ScrollSection } from "./ScrollSection";
+import { CodexExcerpt } from "../_visuals";
 
 const CONTRAST_ROWS = [
   {
@@ -46,7 +46,7 @@ export function Section1CustomBuilt() {
           </p>
         </div>
 
-        <ProofPanel />
+        <CodexExcerpt />
       </div>
 
       <div className="mt-12 rounded-lg border border-stewart-border overflow-hidden">
@@ -95,84 +95,6 @@ export function Section1CustomBuilt() {
         you. Not bought from a shelf.
       </p>
     </ScrollSection>
-  );
-}
-
-function ProofPanel() {
-  return (
-    <div className="space-y-3">
-      <p className="text-xs uppercase tracking-wider text-stewart-muted">
-        This codex section didn&apos;t exist four days ago.
-      </p>
-
-      <div className="rounded-lg border border-stewart-border bg-stewart-card overflow-hidden">
-        {/*
-          Visual asset (public/ion/codex-excerpt-tesla.png) is being
-          delivered separately by the visual-specs brief. When the file
-          lands the placeholder block below collapses into the Image.
-        */}
-        <CodexExcerptVisual />
-      </div>
-
-      <p className="text-xs text-stewart-muted leading-relaxed">
-        Spencer + Kenny resolved a script-vs-reality gap on a 1-hour call.
-        Stewart&apos;s reads on every Tesla intro across the corpus
-        changed in real time. That&apos;s what &ldquo;custom-built&rdquo;
-        means.
-      </p>
-    </div>
-  );
-}
-
-function CodexExcerptVisual() {
-  return (
-    <div className="relative aspect-[4/3] bg-stewart-bg">
-      {/*
-        Real artwork ships at public/ion/codex-excerpt-tesla.png per the
-        visual-specs brief. Until then we render a styled inline preview
-        of the actual codex section so the section never looks empty in
-        a demo.
-      */}
-      <Image
-        src="/ion/codex-excerpt-tesla.png"
-        alt="Stylized codex excerpt: context.tesla_relationship_clarification, CONFIRMED 2026-05-15 by Kenny direct."
-        fill
-        className="object-cover"
-        // Image won't 500 if the file is missing — it just renders nothing.
-        // The fallback below shows the inline preview underneath until then.
-      />
-      <div className="absolute inset-0 p-6 flex flex-col gap-4 font-mono text-xs text-stewart-text bg-stewart-bg/95">
-        <div className="flex items-baseline justify-between text-stewart-muted">
-          <span className="text-stewart-accent">
-            context.tesla_relationship_clarification
-          </span>
-          <span className="text-[10px] uppercase tracking-wider text-stewart-success">
-            CONFIRMED 2026-05-15 by Kenny direct
-          </span>
-        </div>
-        <pre className="whitespace-pre-wrap text-stewart-text/80 leading-relaxed text-[11px]">
-{`when:
-  - intro_includes_phrase: "Tesla partner"
-  - intro_includes_phrase: "through Tesla"
-
-resolution: |
-  Ion is NOT a Tesla referral partner. The phrasing is a
-  legacy script artifact. Reps using it are creating an
-  expectation Stewart cannot fulfill on the back end.
-
-  Correct framing: "We're an Ion Solar consultant — Tesla
-  doesn't refer to us, we serve the same homeowners."
-
-confirmed_by: kenny
-confirmed_at: 2026-05-15
-source: 1:1 call with spencer`}
-        </pre>
-        <p className="text-[10px] text-stewart-warning mt-auto">
-          Placeholder rendering &mdash; final stylized PNG ships from
-          visual-specs brief.
-        </p>
-      </div>
-    </div>
   );
 }
 
