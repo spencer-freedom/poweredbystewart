@@ -3,6 +3,46 @@
 Questions surfaced during scaffolding. Spencer or Strategy Claude can
 resolve and the scaffolding Claude (or follow-on pass) will adjust.
 
+## Brain V1.5 deferrals (2026-05-23)
+
+V1 brain renderer ships in commits ahead of this note. Per the
+brain-renderer brief, these were explicitly cut from V1 to keep the
+session focused on the three-layer visual + real stats:
+
+1. **Cinematic intro animation (~7s camera move).** V1 has a single
+   pulled-back camera position on engine-ready + auto-rotate. The
+   animated establishing shot the brief described would need a custom
+   tween + scene-ready signal we didn't have time to wire cleanly.
+2. **Search box (top-right, filters by codex section / call_id / rep).**
+   V1 has no search. The data is in the payload; UI was scope risk.
+3. **Click-to-drawer sidebar with full call list.** V1 click pins the
+   existing hover card so the user can read it without holding the
+   mouse still. The sidebar drawer with all calls referencing a core
+   section is the natural V1.5 expansion.
+4. **Cluster floating labels.** Dense core nodes (>20 cherry-picks)
+   don't get labeled tags floating above them. Hover detail card carries
+   the same info on demand.
+5. **Edge rendering on hover.** "Multi-touch" / "answered_by" edges
+   exist in the source data (cherrypicks.json on each call) but aren't
+   loaded or rendered. V1 ships zero edges — proximity does the work,
+   per the brief's "edge de-emphasis" guidance.
+
+Brief also assumed R3F + drei as the stack; existing brain code uses
+`react-force-graph-3d`. V1 stayed on react-force-graph-3d to avoid a
+risky stack migration in one session. R3F+drei migration is its own
+follow-up brief if Spencer wants the custom-scene flexibility.
+
+Stats render real numbers from the 101-file corpus:
+
+- 323 calls processed (brief said 332; my counter dedups across
+  sections + recent_examples — variance lives in the dedup edge cases)
+- 101 codex sections lit (exact)
+- 525 cherry-pick moments (brief said 1,432; V1 only renders the
+  recent_examples top-N per node — V1.5 can load per-call cherrypicks
+  to surface the full ~1.4K)
+- 3 gray-matter exemplars (matches the 3 presumptive; the other 4
+  awaiting-Kenny entries aren't in the data yet)
+
 ## RESOLVED (2026-05-22)
 
 1. **Dark theme** — keep. Strategy Claude's WebFetch flattened styling into
