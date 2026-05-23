@@ -3,6 +3,78 @@
 Questions surfaced during scaffolding. Spencer or Strategy Claude can
 resolve and the scaffolding Claude (or follow-on pass) will adjust.
 
+## Brain V2.1 deferrals (2026-05-23)
+
+V2 brain shipped per `BRIEF_stream_b_brain_v2.md` + the 2026-05-24
+correction (quantity-per-section absorption; uniform-radius + jitter).
+Per the brief's SCOPE DISCIPLINE block, the one deferred item is
+flagged here BEFORE the commit:
+
+**1. Card-explosion animation choreography is deferred to V2.1.**
+
+The brief specified that clicking a node (core / tile / planet / moon)
+animates cards OUT from the clicked node toward a margin space, with
+thin connecting lines from each card back to the clicked source. V2
+ships the same data model and the same card content (CoreMeta /
+TileDetail / PlanetDetail) — but in a side-docked panel rather than
+node-anchored animated cards.
+
+Why deferred:
+- The animation choreography requires projecting the clicked node's
+  world position into screen coordinates per frame (R3F provides this
+  via `useThree(state => state.camera).project(...)`, but the panel
+  cards live in DOM space — bridging the two coordinate systems for
+  animated connector lines is non-trivial)
+- Card stack layout adjacent to the brain canvas would need a
+  measured viewport bridge so the cards don't overlap the canvas while
+  the canvas shrinks to make room — another coordinate sync layer
+- Framer-motion can carry the FLIP-style enter animation, but the
+  connecting lines must be redrawn each frame as both endpoints
+  potentially move (camera rotation moves the source; layout reflow
+  moves the target)
+- Honest call: this is ~6–10 hours of careful work to ship well; the
+  rest of V2 was the priority for this session
+
+Everything else from the V2 brief shipped:
+- Crystal core (MeshPhysicalMaterial translucent sphere + lat/long
+  grid + 108 tiles, 101 active + 7 inactive, colored by domain,
+  saturation_boost driving emissive intensity)
+- 332 call planets at uniform radius + jitter, deterministic per
+  call_id, sized by planet_size, tinted by outcome
+- 2,405 moons orbiting their planets at varying radii and phases,
+  colored by codex_reference domain
+- Grounding vector from each planet to (0,0,0), low-opacity baseline,
+  brightens on hover
+- Gray-matter override: 3 presumptive exemplars stuck near their
+  exemplifying tiles (r_gray_matter = 52), gold halo with pulse,
+  always-visible EXEMPLAR label floating above the planet
+- Absorption: opacity = 1 - absorption_factor; size *= 1 - 0.5 *
+  absorption_factor; planets with absorption_factor >= 0.95 don't
+  render
+- Stat strip with payload counts (332 / 101 / 2405 / 3 / 8)
+- Legend with 13 domain swatches + hover-to-highlight (tiles + moons
+  of that domain brighten in unison)
+- Hover tooltips on planets (call_id / rep / outcome / duration) and
+  moons (ts / classification / quote excerpt)
+- Click → side detail panel with appropriate card content per kind
+  (core meta, tile detail, planet folder, moon highlights matching
+  cherry-pick in its parent planet's card)
+- Idle slow scene rotation; OrbitControls for drag-orbit + scroll-zoom
+- Mobile: friendly "open on desktop for full visual" message; canvas
+  hidden below sm breakpoint
+- Both routes wired (/ion/brain public + /ion/k/[token]/wiki/brain
+  with role gate preserved)
+
+Verification:
+- npx tsc --noEmit clean
+- npx next build clean
+- /ion/brain 200, payload streams (~1.3MB raw, gzip ~250KB), no
+  runtime errors during dev compile
+- /ion/k/[token]/wiki/brain 200 with DEV_BYPASS=1 (role gate blocks
+  without it)
+
+---
+
 ## Brain V1.5 deferrals (2026-05-23)
 
 V1 brain renderer ships in commits ahead of this note. Per the

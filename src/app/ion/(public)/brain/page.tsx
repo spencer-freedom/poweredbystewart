@@ -1,26 +1,28 @@
 import Link from "next/link";
-import { loadBrainV1 } from "./_brain-v1/load";
-import { BrainRendererV1 } from "./_brain-v1/BrainRendererV1.client";
+import { loadBrainV2 } from "./_brain-v2/load";
+import { BrainV2Scene } from "./_brain-v2/BrainV2Scene.client";
+import { StatStrip } from "./_brain-v2/StatStrip";
 
-// Public mirror of the Stewart brain. No auth (Clerk integration later).
-// Reads the 101 codex-section JSONs server-side at request time and
-// passes a single typed payload to the V1 renderer.
+// Public mirror of Stewart's brain. V2 — crystal core + planets +
+// moons + grounding vectors + gray-matter stickiness + quantity-per-
+// section absorption.
 
 export const dynamic = "force-dynamic";
 
 export default async function PublicBrainPage() {
-  const payload = await loadBrainV1();
+  const payload = await loadBrainV2();
   return (
-    <div className="space-y-3">
-      <div className="flex items-baseline justify-end">
+    <div className="space-y-4">
+      <div className="flex items-baseline justify-between">
+        <StatStrip payload={payload} />
         <Link
           href="/ion"
-          className="text-sm text-stewart-muted hover:text-stewart-text transition-colors"
+          className="text-sm text-stewart-muted hover:text-stewart-text transition-colors shrink-0 ml-4"
         >
           &larr; Back to the demo
         </Link>
       </div>
-      <BrainRendererV1 payload={payload} />
+      <BrainV2Scene payload={payload} />
     </div>
   );
 }

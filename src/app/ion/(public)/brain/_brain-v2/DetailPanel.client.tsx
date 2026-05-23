@@ -1,0 +1,386 @@
+"use client";
+
+import type {
+  BrainV2Payload,
+  Moon,
+  Planet,
+  Tile,
+} from "./types";
+
+export type Selection =
+  | { kind: "core" }
+  | { kind: "tile"; tile: Tile }
+  | { kind: "planet"; planet: Planet }
+  | {
+      kind: "moon";
+      planet: Planet;
+      moon: Moon;
+      planetSelectedFromMoon: boolean;
+    };
+
+// Side-docked detail panel. Renders the card stack for whichever node
+// the user clicked. Per the V2 brief, the spec called for cards that
+// "explode" out of the clicked node with connecting lines — see
+// notes/open-questions.md § Brain V2.1 for the animated-choreography
+// deferral. V2 ships the same data model as a docked panel.
+
+export function DetailPanel({
+  payload,
+  selection,
+  onClose,
+}: {
+  payload: BrainV2Payload;
+  selection: Selection | null;
+  onClose: () => void;
+}) {
+  if (!selection) return null;
+  return (
+    <div className="pointer-events-none absolute top-3 right-3 bottom-3 z-30 w-full sm:w-[28rem] max-w-[calc(100%-1.5rem)]">
+      <div className="pointer-events-auto h-full overflow-y-auto bg-stewart-card/95 backdrop-blur-md border border-stewart-border rounded-lg shadow-2xl">
+        <header className="sticky top-0 bg-stewart-card border-b border-stewart-border px-5 py-3 flex items-center justify-between z-10">
+          <span className="text-[10px] uppercase tracking-wider font-mono text-stewart-muted">
+            {labelFor(selection)}
+          </span>
+          <button
+            onClick={onClose}
+            className="text-stewart-muted hover:text-stewart-text text-sm"
+          >
+            close ✕
+          </button>
+        </header>
+        <div className="px-5 py-5">
+          {selection.kind === "core" ? (
+            <CoreMeta payload={payload} />
+          ) : selection.kind === "tile" ? (
+            <TileDetail tile={selection.tile} />
+          ) : selection.kind === "planet" ? (
+            <PlanetDetail planet={selection.planet} />
+          ) : (
+            <PlanetDetail
+              planet={selection.planet}
+              highlightedMoonTs={selection.moon.ts}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function labelFor(s: Selection): string {
+  if (s.kind === "core") return "Codex meta · click anywhere on the core";
+  if (s.kind === "tile") return `Codex tile · ${s.tile.codex_section}`;
+  if (s.kind === "planet") return `Call · ${s.planet.call_id}`;
+  return `Cherry-pick @ ${s.moon.ts} · ${s.planet.call_id}`;
+}
+
+function CoreMeta({ payload }: { payload: BrainV2Payload }) {
+  const s = payload.stats;
+  const domainCounts: Record<string, number> = {};
+  for (const t of payload.core.tiles) {
+    if (!t.is_active) continue;
+    domainCounts[t.domain] = (domainCounts[t.domain] || 0) + 1;
+  }
+  const topDomains = Object.entries(domainCounts)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 8);
+
+  // Top-referenced sections by call_count (extract from section_data if present)
+  const topReferenced = payload.core.tiles
+    .filter(
+      (t): t is Tile & { section_data: { call_ids: string[] } } =>
+        t.is_active && Array.isArray(t.section_data?.call_ids)
+    )
+    .sort(
+      (a, b) => (b.section_data.call_ids?.length || 0) - (a.section_data.call_ids?.length || 0)
+    )
+    .slice(0, 6);
+
+  return (
+    <div className="space-y-6">
+      <Card title="The codex at a glance">
+        <p className="text-sm text-stewart-text leading-relaxed">
+          {s.sections_lit} codex sections lit by Stewart&apos;s reads
+          across {s.calls_total.toLocaleString()} processed calls.{" "}
+          {s.tbds_remaining} TBDs Spencer + Kenny still own.{" "}
+          {s.proposed_pending} new categories pending Kenny approval.
+        </p>
+      </Card>
+
+      <Card title="Domains lit">
+        <ul className="space-y-1 text-xs font-mono">
+          {topDomains.map(([d, n]) => (
+            <li key={d} className="flex items-center justify-between gap-2">
+              <span className="text-stewart-text">
+                {d.replace(/_/g, " ")}
+              </span>
+              <span className="text-stewart-muted">{n}</span>
+            </li>
+          ))}
+        </ul>
+      </Card>
+
+      <Card title="Most referenced sections">
+        <ul className="space-y-2 text-xs">
+          {topReferenced.map((t) => (
+            <li key={t.tile_index} className="flex items-baseline justify-between gap-3">
+              <code className="text-stewart-accent font-mono truncate">
+                {t.codex_section}
+              </code>
+              <span className="text-stewart-muted font-mono">
+                {t.section_data.call_ids.length} calls
+              </span>
+            </li>
+          ))}
+        </ul>
+      </Card>
+
+      <Card title="Pending Kenny">
+        <p className="text-sm text-stewart-text leading-relaxed">
+          {s.tbds_remaining} open TBDs marked in the codex.{" "}
+          {s.proposed_pending} new categories proposed by Stewart&apos;s
+          pattern analyzer (plus Spencer&apos;s softener catch). All
+          surface on the codex page.
+        </p>
+      </Card>
+    </div>
+  );
+}
+
+function TileDetail({ tile }: { tile: Tile }) {
+  const sd = (tile.section_data || {}) as {
+    call_ids?: string[];
+    pattern_counts_by_classification?: Record<string, number>;
+    outcomes?: Record<string, number>;
+    gray_matter_exemplars?: Array<{
+      call_id: string;
+      exemplifies: string;
+      reason?: string;
+    }>;
+    recent_examples?: Array<{
+      call_id: string;
+      ts: string;
+      quote: string;
+      classification: string;
+    }>;
+  };
+  const callCount = sd.call_ids?.length || 0;
+  const classifications = Object.entries(
+    sd.pattern_counts_by_classification || {}
+  ).sort(([, a], [, b]) => b - a);
+  const outcomes = Object.entries(sd.outcomes || {}).sort(
+    ([, a], [, b]) => b - a
+  );
+  const grays = sd.gray_matter_exemplars || [];
+  const examples = (sd.recent_examples || []).slice(0, 4);
+
+  return (
+    <div className="space-y-5">
+      <Card title="Section">
+        <code className="text-sm font-mono text-stewart-accent break-all">
+          {tile.codex_section}
+        </code>
+        <p className="text-xs text-stewart-muted mt-1">
+          Domain: <span className="text-stewart-text">{tile.domain}</span>
+        </p>
+      </Card>
+
+      {callCount > 0 ? (
+        <Card title="From your corpus">
+          <p className="text-xs text-stewart-muted">
+            <span className="text-stewart-text font-mono">{callCount}</span>{" "}
+            calls reference this section
+          </p>
+          {classifications.length > 0 ? (
+            <ul className="mt-2 space-y-1 text-xs">
+              {classifications.slice(0, 4).map(([k, n]) => (
+                <li
+                  key={k}
+                  className="flex items-center justify-between gap-2"
+                >
+                  <span className="text-stewart-text">
+                    {k.replace(/_/g, " ")}
+                  </span>
+                  <span className="text-stewart-muted font-mono">{n}</span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {outcomes.length > 0 ? (
+            <div className="mt-3 flex flex-wrap gap-1">
+              {outcomes.map(([k, n]) => (
+                <span
+                  key={k}
+                  className="text-[10px] font-mono px-1.5 py-0.5 rounded border border-stewart-border bg-stewart-bg/50 text-stewart-muted"
+                >
+                  {k.replace(/_/g, " ")}:{" "}
+                  <span className="text-stewart-text">{n}</span>
+                </span>
+              ))}
+            </div>
+          ) : null}
+        </Card>
+      ) : (
+        <Card title="From your corpus">
+          <p className="text-xs text-stewart-muted">
+            No calls reference this section yet.
+          </p>
+        </Card>
+      )}
+
+      {grays.length > 0 ? (
+        <Card title="Gray-matter exemplars">
+          <ul className="space-y-2">
+            {grays.map((g, i) => (
+              <li
+                key={i}
+                className="rounded border border-amber-400/30 bg-amber-400/5 p-2 text-xs"
+              >
+                <code className="text-stewart-accent font-mono">
+                  {g.call_id}
+                </code>
+                {g.reason ? (
+                  <p className="text-stewart-text mt-1 leading-snug">
+                    {g.reason}
+                  </p>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </Card>
+      ) : null}
+
+      {examples.length > 0 ? (
+        <Card title="Recent moments">
+          <ul className="space-y-3">
+            {examples.map((ex, i) => (
+              <li
+                key={i}
+                className="rounded border border-stewart-border bg-stewart-bg/40 p-2 text-xs"
+              >
+                <p className="font-mono text-stewart-muted mb-1">
+                  {ex.call_id} @ {ex.ts}{" "}
+                  <span className="text-stewart-muted/70">
+                    ({ex.classification.replace(/_/g, " ")})
+                  </span>
+                </p>
+                <blockquote className="text-stewart-text italic leading-snug">
+                  &ldquo;{ex.quote}&rdquo;
+                </blockquote>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      ) : null}
+    </div>
+  );
+}
+
+function PlanetDetail({
+  planet,
+  highlightedMoonTs,
+}: {
+  planet: Planet;
+  highlightedMoonTs?: string;
+}) {
+  return (
+    <div className="space-y-5">
+      <Card title="Call header">
+        <div className="flex flex-wrap items-baseline gap-3 mb-2">
+          <code className="text-sm font-mono text-stewart-accent">
+            {planet.call_id}
+          </code>
+          {planet.is_hero ? (
+            <span className="text-[10px] uppercase tracking-wider font-mono text-stewart-accent border border-stewart-accent/40 rounded px-1.5 py-0.5">
+              ⭐ hero
+            </span>
+          ) : null}
+          {planet.is_gray_matter ? (
+            <span className="text-[10px] uppercase tracking-wider font-mono text-amber-400 border border-amber-400/40 rounded px-1.5 py-0.5">
+              ⬢ gray-matter
+            </span>
+          ) : null}
+        </div>
+        <p className="text-xs text-stewart-muted">
+          <span className="text-stewart-text">
+            {planet.rep_id || "—"}
+          </span>{" "}
+          &middot;{" "}
+          <span style={{ color: planet.outcome_tint_color }}>
+            {planet.outcome.replace(/_/g, " ")}
+          </span>
+          {planet.duration_min ? (
+            <>
+              {" "}
+              &middot; {planet.duration_min.toFixed(0)} min
+            </>
+          ) : null}
+        </p>
+        {planet.gray_matter_section ? (
+          <p className="text-[11px] text-amber-400 mt-2 font-mono">
+            EXEMPLAR for {planet.gray_matter_section}
+          </p>
+        ) : null}
+      </Card>
+
+      <Card title={`Cherry-picks · ${planet.moons.length} moments`}>
+        <ul className="space-y-3">
+          {planet.moons.map((m, i) => {
+            const highlight = highlightedMoonTs === m.ts;
+            return (
+              <li
+                key={i}
+                className={
+                  "rounded border p-2 text-xs " +
+                  (highlight
+                    ? "border-stewart-accent bg-stewart-accent/10"
+                    : "border-stewart-border bg-stewart-bg/40")
+                }
+              >
+                <div className="flex flex-wrap items-baseline gap-2 mb-1">
+                  <span className="font-mono text-stewart-text">{m.ts}</span>
+                  <span
+                    className="text-[10px] font-mono px-1.5 py-0.5 rounded"
+                    style={{ background: m.moon_color + "22", color: m.moon_color }}
+                  >
+                    {m.classification.replace(/_/g, " ")}
+                  </span>
+                  {m.codex_reference ? (
+                    <code className="text-[10px] font-mono text-stewart-accent">
+                      {m.codex_reference.split(" / ")[0]}
+                    </code>
+                  ) : null}
+                </div>
+                <blockquote className="text-stewart-text italic leading-snug">
+                  &ldquo;{m.quote_excerpt}&rdquo;
+                </blockquote>
+              </li>
+            );
+          })}
+        </ul>
+      </Card>
+
+      <Card title="In Stewart's brain">
+        <p className="text-xs text-stewart-muted leading-relaxed">
+          Absorption factor:{" "}
+          <span className="text-stewart-text font-mono">
+            {planet.absorption_factor.toFixed(2)}
+          </span>{" "}
+          (gray-matter never absorbs; otherwise quantity-per-section
+          rank gates visibility).
+        </p>
+      </Card>
+    </div>
+  );
+}
+
+function Card({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section>
+      <p className="text-[10px] uppercase tracking-wider font-semibold text-stewart-accent mb-2">
+        {title}
+      </p>
+      {children}
+    </section>
+  );
+}
