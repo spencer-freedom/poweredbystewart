@@ -38,16 +38,7 @@ export async function GET(
 
   if (!supabaseUrl || !serviceKey) {
     return NextResponse.json(
-      {
-        error: "Supabase env not configured",
-        runtime_env_presence: {
-          SUPABASE_URL: Boolean(process.env.SUPABASE_URL),
-          NEXT_PUBLIC_SUPABASE_URL: Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL),
-          SUPABASE_SERVICE_ROLE_KEY: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
-          SUPABASE_SERVICE_KEY: Boolean(process.env.SUPABASE_SERVICE_KEY),
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
-        },
-      },
+      { error: "Supabase env not configured" },
       { status: 500 }
     );
   }

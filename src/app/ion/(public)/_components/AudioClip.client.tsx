@@ -141,15 +141,43 @@ export function AudioClip({
       </button>
     );
   }
+  // V2.1.15 — context label above the native player. The browser
+  // reads duration from the MP3 header (full call), so the controls
+  // show e.g. "1:20 / 11:14" even though our JS pauses at the clip
+  // end. The label tells the user what range they're actually hearing
+  // so the misleading total time has context.
+  const isClip =
+    typeof startSec === "number" && typeof endSec === "number";
   return (
-    <audio
-      ref={audioRef}
-      src={url}
-      controls
-      preload="auto"
-      className="h-9 w-full max-w-xs"
-    />
+    <div className="w-full max-w-xs">
+      {isClip ? (
+        <p className="text-[10px] font-mono text-stewart-muted mb-1">
+          <span className="text-stewart-accent">▸ clip</span>{" "}
+          {fmtSec(startSec!)} &rarr; {fmtSec(endSec!)} &middot;{" "}
+          {Math.max(0, endSec! - startSec!).toFixed(0)}s
+          <span className="text-stewart-muted/70">
+            {" "}
+            (player shows full call duration)
+          </span>
+        </p>
+      ) : null}
+      <audio
+        ref={audioRef}
+        src={url}
+        controls
+        preload="auto"
+        className="h-9 w-full"
+      />
+    </div>
   );
+}
+
+function fmtSec(sec: number): string {
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${m}:${s}`;
 }
 
 function PlayIcon() {
