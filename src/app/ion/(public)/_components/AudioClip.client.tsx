@@ -118,8 +118,8 @@ export function AudioClip({
   const fallbackLabel =
     variant === "full"
       ? "Play full call audio"
-      : typeof startSec === "number" && typeof endSec === "number"
-      ? `Play clip (${Math.max(0, endSec - startSec).toFixed(0)}s)`
+      : typeof startSec === "number"
+      ? "Play clip"
       : "Play";
 
   if (!active) {
