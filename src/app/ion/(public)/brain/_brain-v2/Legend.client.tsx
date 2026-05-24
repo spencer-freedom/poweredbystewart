@@ -132,30 +132,39 @@ const ITEMS: LegendItem[] = [
   },
 ];
 
+// V2.1.5 — Legend lives in the page flow above the brain canvas
+// (not as an overlay inside it). Plus a one-line "click the center of
+// any atom for Stewart's full read" hint footer.
+
 export function Legend() {
   return (
-    <div className="absolute bottom-3 left-3 right-3 sm:right-auto sm:max-w-[28rem] z-20 pointer-events-auto">
-      <div className="bg-stewart-bg/85 backdrop-blur-sm border border-stewart-border rounded-lg px-3 py-2 space-y-1.5">
-        <p className="text-[9px] uppercase tracking-wider font-mono text-stewart-muted">
-          Anatomy of Stewart&apos;s brain
-        </p>
-        <ul className="space-y-1">
-          {ITEMS.map((item) => (
-            <li
-              key={item.label}
-              className="flex items-baseline gap-2.5 text-[11px] leading-snug"
-            >
-              <span className="flex items-center h-3.5 shrink-0">
-                {item.swatch}
-              </span>
-              <span className="text-stewart-text font-semibold whitespace-nowrap">
-                {item.label}
-              </span>
-              <span className="text-stewart-muted">{item.description}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+    <div className="w-full bg-stewart-card/50 border border-stewart-border rounded-lg px-4 py-3 space-y-2">
+      <p className="text-[10px] uppercase tracking-wider font-mono text-stewart-muted">
+        Anatomy of Stewart&apos;s brain
+      </p>
+      <ul className="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-1.5">
+        {ITEMS.map((item) => (
+          <li
+            key={item.label}
+            className="flex items-baseline gap-2.5 text-[11px] leading-snug"
+          >
+            <span className="flex items-center h-3.5 shrink-0">
+              {item.swatch}
+            </span>
+            <span className="text-stewart-text font-semibold whitespace-nowrap">
+              {item.label}
+            </span>
+            <span className="text-stewart-muted">{item.description}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="pt-2 border-t border-stewart-border/60 text-[11px] leading-snug text-stewart-muted">
+        <span className="text-stewart-accent font-semibold">
+          Click the center of any atom
+        </span>{" "}
+        &mdash; the call planet at the heart of each orbit &mdash; to
+        see Stewart&apos;s full breakdown of that call and listen to
+        the cherry-pick clips.
+      </p>
   );
 }

@@ -14,7 +14,6 @@ import {
   tileToSpherical,
 } from "./types";
 import { type Selection } from "./DetailPanel.client";
-import { Legend } from "./Legend.client";
 
 // ───── Tuning ─────────────────────────────────────────────────────────
 
@@ -248,8 +247,6 @@ export function BrainV2Scene({
           />
         </Canvas>
       </div>
-
-      <Legend />
     </div>
   );
 }
