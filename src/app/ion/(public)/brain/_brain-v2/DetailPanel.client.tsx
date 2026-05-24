@@ -7,6 +7,7 @@ import type {
   Tile,
 } from "./types";
 import { AudioClip, tsToSeconds } from "../../_components/AudioClip.client";
+import { FullCallDetail } from "../../_components/FullCallDetail.client";
 
 const CLIP_DURATION_SEC = 20;
 
@@ -59,13 +60,11 @@ export function DetailPanel({
           <CoreMeta payload={payload} />
         ) : selection.kind === "tile" ? (
           <TileDetail tile={selection.tile} />
-        ) : selection.kind === "planet" ? (
-          <PlanetDetail planet={selection.planet} />
         ) : (
-          <PlanetDetail
-            planet={selection.planet}
-            highlightedMoonTs={selection.moon.ts}
-          />
+          // planet OR moon: same view — the moon click is just an
+          // entry point into its parent call's folder. The full-detail
+          // fetch hits the same JSONs either way.
+          <PlanetDetail planet={selection.planet} />
         )}
       </div>
     </div>
@@ -291,101 +290,24 @@ function TileDetail({ tile }: { tile: Tile }) {
   );
 }
 
-function PlanetDetail({
-  planet,
-  highlightedMoonTs,
-}: {
-  planet: Planet;
-  highlightedMoonTs?: string;
-}) {
+function PlanetDetail({ planet }: { planet: Planet }) {
+  // Brain V2.0.2: PlanetDetail now mirrors the /ion/calls drawer
+  // depth via the shared <FullCallDetail/>. Planet metadata from the
+  // payload feeds the summary header; manager-brief + cherrypicks +
+  // handoff + critic audit lazy-fetch from public/ion/calls/*.json.
   return (
     <div className="space-y-5">
-      <Card title="Call header">
-        <div className="flex flex-wrap items-baseline gap-3 mb-2">
-          <code className="text-sm font-mono text-stewart-accent">
-            {planet.call_id}
-          </code>
-          {planet.is_hero ? (
-            <span className="text-[10px] uppercase tracking-wider font-mono text-stewart-accent border border-stewart-accent/40 rounded px-1.5 py-0.5">
-              ⭐ hero
-            </span>
-          ) : null}
-          {planet.is_gray_matter ? (
-            <span className="text-[10px] uppercase tracking-wider font-mono text-amber-400 border border-amber-400/40 rounded px-1.5 py-0.5">
-              ⬢ gray-matter
-            </span>
-          ) : null}
-        </div>
-        <p className="text-xs text-stewart-muted">
-          <span className="text-stewart-text">
-            {planet.rep_id || "—"}
-          </span>{" "}
-          &middot;{" "}
-          <span style={{ color: planet.outcome_tint_color }}>
-            {planet.outcome.replace(/_/g, " ")}
-          </span>
-          {planet.duration_min ? (
-            <>
-              {" "}
-              &middot; {planet.duration_min.toFixed(0)} min
-            </>
-          ) : null}
-        </p>
-        {planet.gray_matter_section ? (
-          <p className="text-[11px] text-amber-400 mt-2 font-mono">
-            EXEMPLAR for {planet.gray_matter_section}
-          </p>
-        ) : null}
-        <div className="mt-3">
-          <AudioClip callId={planet.call_id} variant="full" />
-        </div>
-      </Card>
-
-      <Card title={`Cherry-picks · ${planet.moons.length} moments`}>
-        <ul className="space-y-3">
-          {planet.moons.map((m, i) => {
-            const highlight = highlightedMoonTs === m.ts;
-            const start = tsToSeconds(m.ts);
-            return (
-              <li
-                key={i}
-                className={
-                  "rounded border p-2 text-xs " +
-                  (highlight
-                    ? "border-stewart-accent bg-stewart-accent/10"
-                    : "border-stewart-border bg-stewart-bg/40")
-                }
-              >
-                <div className="flex flex-wrap items-baseline gap-2 mb-1">
-                  <span className="font-mono text-stewart-text">{m.ts}</span>
-                  <span
-                    className="text-[10px] font-mono px-1.5 py-0.5 rounded"
-                    style={{ background: m.moon_color + "22", color: m.moon_color }}
-                  >
-                    {m.classification.replace(/_/g, " ")}
-                  </span>
-                  {m.codex_reference ? (
-                    <code className="text-[10px] font-mono text-stewart-accent">
-                      {m.codex_reference.split(" / ")[0]}
-                    </code>
-                  ) : null}
-                </div>
-                <blockquote className="text-stewart-text italic leading-snug">
-                  &ldquo;{m.quote_excerpt}&rdquo;
-                </blockquote>
-                <div className="mt-2">
-                  <AudioClip
-                    callId={planet.call_id}
-                    startSec={start}
-                    endSec={start + CLIP_DURATION_SEC}
-                  />
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </Card>
-
+      <FullCallDetail
+        callId={planet.call_id}
+        summary={{
+          rep_id: planet.rep_id,
+          outcome: planet.outcome,
+          duration_min: planet.duration_min,
+          is_hero: planet.is_hero,
+          is_gray_matter: planet.is_gray_matter,
+          gray_matter_section: planet.gray_matter_section,
+        }}
+      />
       <Card title="In Stewart's brain">
         <p className="text-xs text-stewart-muted leading-relaxed">
           Absorption factor:{" "}

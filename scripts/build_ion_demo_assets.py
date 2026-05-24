@@ -137,11 +137,12 @@ def build_calls(spencer_os: Path) -> dict[str, Any]:
         cherrypicks_p = call_dir / "cherrypicks.json"
         manager_brief_p = call_dir / "manager-brief.json"
         handoff_p = call_dir / "handoff.json"
+        critic_audit_p = call_dir / "critic-audit.json"
 
         cherry = read_json(cherrypicks_p) if cherrypicks_p.exists() else []
         manager_brief = read_json(manager_brief_p) if manager_brief_p.exists() else None
 
-        # Detail-drawer copies (for /ion/calls drawer + carousel fallback)
+        # Detail-drawer copies (for /ion/calls drawer + brain PlanetDetail)
         slug = slugify_call_id(call_id)
         write_json(PUBLIC_CALLS / f"{slug}-metadata.json", meta)
         if manager_brief is not None:
@@ -150,6 +151,26 @@ def build_calls(spencer_os: Path) -> dict[str, Any]:
         if handoff_p.exists():
             handoff = read_json(handoff_p)
             write_json(PUBLIC_CALLS / f"{slug}-handoff.json", handoff)
+        if critic_audit_p.exists():
+            critic = read_json(critic_audit_p)
+            # Slim down — full audit objects are large; for the demo
+            # we only need the count headlines + verdict + summary.
+            slim = {
+                "verdict": critic.get("verdict"),
+                "fabricated_quotes": len(critic.get("fabricated_quotes") or [])
+                if isinstance(critic.get("fabricated_quotes"), list)
+                else critic.get("fabricated_quotes"),
+                "weak_reasoning": len(critic.get("weak_reasoning") or [])
+                if isinstance(critic.get("weak_reasoning"), list)
+                else critic.get("weak_reasoning"),
+                "revision_summary": critic.get("revision_summary"),
+                "flags_count": (
+                    critic.get("verification", {}).get("quotes_failed")
+                    if isinstance(critic.get("verification"), dict)
+                    else None
+                ),
+            }
+            write_json(PUBLIC_CALLS / f"{slug}-critic-audit.json", slim)
 
         # Hero calls also land in public/ion/{slug}-*.json directly
         # so the existing §2 carousel paths keep working.

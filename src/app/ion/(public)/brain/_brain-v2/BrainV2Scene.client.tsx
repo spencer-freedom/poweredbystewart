@@ -1,8 +1,9 @@
 "use client";
 
-import { Suspense, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Html, Line, OrbitControls } from "@react-three/drei";
+import { Environment, Html, Line, OrbitControls } from "@react-three/drei";
+import { MeshTransmissionMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import {
   type BrainV2Payload,
@@ -30,12 +31,47 @@ const MOON_BASE_SIZE = 0.35;
 const GRAY_HALO_COLOR = "#fde68a";
 const GRAY_HALO_BASE_SCALE = 1.9;
 
+// V2.0.2.1 — Strategy Claude desaturated the domain palette in the
+// payload to give the core sphere a "frosted crystal" feel, but that
+// muted the orbiting moons too. Spencer wants the moons to keep
+// their original vivid colors; only the core should read as
+// crystal-pastel. Renderer-side override: moons resolve their color
+// from this saturated palette by domain instead of using the
+// payload's softened moon_color.
+const VIVID_DOMAIN_COLORS: Record<string, string> = {
+  context: "#5dd8e6",            // light cyan
+  intros: "#4ca8e6",             // medium blue
+  call_shape: "#74e683",         // light green
+  verify: "#3dc18f",             // teal-green
+  qualifiers: "#8de6c4",         // mint
+  bill_collection: "#e6c478",    // sand / yellow
+  rebuttals: "#e69a4d",          // orange
+  protocols: "#e65c5c",          // warm red
+  coaching_philosophy: "#b67ce6", // light purple
+  cross_sell_signals: "#e6e64d", // yellow
+  outcomes: "#e67cd8",           // pink
+  dq_rules: "#909090",           // neutral gray
+  analysis_directives: "#c87ce6", // magenta
+  _unclassified: "#5a5a5a",
+  _unknown: "#7d7d7d",
+  _reserved: "#3c3540",
+};
+
+function vividMoonColor(codexReference: string | null, fallback: string): string {
+  if (!codexReference) return fallback;
+  const domain = codexReference.split(".")[0];
+  return VIVID_DOMAIN_COLORS[domain] || fallback;
+}
+
 // ───── Canvas-only component (state lifted to BrainPageShell) ─────────
 //
 // V2.0.1: selection + hoveredDomain state moved up to BrainPageShell
 // so the detail panel can render in a side-docked column instead of as
 // an overlay on top of the brain. This component now just owns the
 // canvas + the bottom-of-canvas legend; the shell composes the rest.
+
+const AUTO_ROTATE_RESUME_MS = 2000;
+const AUTO_ROTATE_SPEED = 0.45;
 
 export function BrainV2Scene({
   payload,
@@ -49,12 +85,30 @@ export function BrainV2Scene({
   onSelect: (sel: Selection) => void;
 }) {
   const coreRadius = payload.core.core_radius * CORE_RADIUS_SCALE;
+  const [autoRotate, setAutoRotate] = useState(true);
+  const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(
+    () => () => {
+      if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    },
+    []
+  );
+
+  const handleInteractStart = () => {
+    if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    setAutoRotate(false);
+  };
+  const handleInteractEnd = () => {
+    if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    resumeTimer.current = setTimeout(
+      () => setAutoRotate(true),
+      AUTO_ROTATE_RESUME_MS
+    );
+  };
 
   return (
-    <div
-      className="relative w-full rounded-lg overflow-hidden border border-stewart-border"
-      style={{ height: "78vh", minHeight: 540 }}
-    >
+    <div className="relative w-full h-full rounded-lg overflow-hidden border border-stewart-border">
       {/* Mobile fallback notice */}
       <div className="absolute inset-0 sm:hidden flex items-center justify-center p-6 text-center text-stewart-muted text-sm bg-stewart-bg/95 z-30">
         Stewart&apos;s brain is best viewed on desktop. Open this page on
@@ -75,6 +129,9 @@ export function BrainV2Scene({
             coreRadius={coreRadius}
             hoveredDomain={hoveredDomain}
             onSelect={onSelect}
+            autoRotate={autoRotate}
+            onInteractStart={handleInteractStart}
+            onInteractEnd={handleInteractEnd}
           />
         </Canvas>
       </div>
@@ -95,51 +152,63 @@ function Scene({
   coreRadius,
   hoveredDomain,
   onSelect,
+  autoRotate,
+  onInteractStart,
+  onInteractEnd,
 }: {
   payload: BrainV2Payload;
   coreRadius: number;
   hoveredDomain: string | null;
   onSelect: (sel: Selection) => void;
+  autoRotate: boolean;
+  onInteractStart: () => void;
+  onInteractEnd: () => void;
 }) {
-  // Idle rotation of the whole scene (slow, museum-pace)
-  const groupRef = useRef<THREE.Group>(null);
-  useFrame((_, dt) => {
-    if (groupRef.current) groupRef.current.rotation.y += dt * 0.04;
-  });
-
   return (
     <>
-      <ambientLight intensity={0.55} />
-      <pointLight position={[0, 0, 0]} intensity={1.4} distance={400} color="#ffffff" />
-      <directionalLight position={[180, 220, 240]} intensity={0.55} />
-      <directionalLight position={[-220, -90, -180]} intensity={0.25} />
+      <ambientLight intensity={0.45} />
+      <pointLight
+        position={[0, 0, 0]}
+        intensity={1.6}
+        distance={400}
+        color="#ffffff"
+      />
+      <directionalLight position={[180, 220, 240]} intensity={0.45} />
+      <directionalLight position={[-220, -90, -180]} intensity={0.22} />
+
+      {/* Environment provides the IBL contribution that makes the
+          transmission material's refraction read as real glass.
+          background={false} keeps the void backdrop intact. */}
+      <Environment preset="studio" background={false} />
 
       <Suspense fallback={null}>
-        <group ref={groupRef}>
-          <CrystalCore
-            core={payload.core}
-            coreRadius={coreRadius}
-            hoveredDomain={hoveredDomain}
-            onSelect={onSelect}
-          />
-          <CallPlanets
-            planets={payload.planets}
-            radialConfig={payload.radial_config}
-            tiles={payload.core.tiles}
-            coreRadius={coreRadius}
-            hoveredDomain={hoveredDomain}
-            onSelect={onSelect}
-          />
-        </group>
+        <CrystalCore
+          core={payload.core}
+          coreRadius={coreRadius}
+          hoveredDomain={hoveredDomain}
+          onSelect={onSelect}
+        />
+        <CallPlanets
+          planets={payload.planets}
+          radialConfig={payload.radial_config}
+          tiles={payload.core.tiles}
+          coreRadius={coreRadius}
+          hoveredDomain={hoveredDomain}
+          onSelect={onSelect}
+        />
       </Suspense>
 
       <OrbitControls
         enablePan={false}
         minDistance={120}
         maxDistance={620}
-        autoRotate={false}
+        autoRotate={autoRotate}
+        autoRotateSpeed={AUTO_ROTATE_SPEED}
+        enableDamping
         target={[0, 0, 0]}
         makeDefault
+        onStart={onInteractStart}
+        onEnd={onInteractEnd}
       />
     </>
   );
@@ -175,33 +244,56 @@ function CrystalCore({
 
   return (
     <group>
-      {/* Backstop: a subtle glassy substrate behind the colored shell,
-          so the sphere reads as solid in silhouette and the inner glow
-          has somewhere to live. */}
+      {/* Crystal substrate — drei MeshTransmissionMaterial for real
+          glass refraction. Sits just inside the colored shell; depth
+          + chromatic aberration + clearcoat sells "tinted leaded
+          crystal orb". V2.0.2.1: subtle pearl-white tint via warm
+          attenuation color so the orb reads pearl-glass instead of
+          plain clear, per Spencer's note. */}
       <mesh
         onClick={(e) => {
           e.stopPropagation();
           onSelect({ kind: "core" });
         }}
       >
-        <sphereGeometry args={[coreRadius * 0.985, 48, 48]} />
-        <meshPhysicalMaterial
-          color="#1e293b"
-          transmission={0.4}
-          thickness={0.6}
-          roughness={0.25}
-          metalness={0.0}
-          clearcoat={0.3}
-          ior={1.45}
-          transparent
-          opacity={0.55}
-          emissive="#0f172a"
+        <sphereGeometry args={[coreRadius * 0.985, 64, 64]} />
+        <MeshTransmissionMaterial
+          transmission={1.0}
+          thickness={2.4}
+          roughness={0.05}
+          ior={1.52}
+          chromaticAberration={0.035}
+          attenuationDistance={0.6}
+          attenuationColor="#fff5e6"
+          clearcoat={1.0}
+          clearcoatRoughness={0.0}
+          samples={6}
+          resolution={256}
+          backside={false}
+          anisotropicBlur={0.1}
+        />
+      </mesh>
+
+      {/* Pearl-white inner sheen — subtle iridescent layer that
+          gives the crystal a hint of opal/pearl rather than reading
+          as plain clear glass. */}
+      <mesh>
+        <sphereGeometry args={[coreRadius * 0.95, 48, 48]} />
+        <meshStandardMaterial
+          color="#fff8ec"
+          emissive="#fef3d6"
           emissiveIntensity={0.18}
+          roughness={0.85}
+          metalness={0.0}
+          transparent
+          opacity={0.12}
+          depthWrite={false}
         />
       </mesh>
 
       {/* Colored shell — single mesh, vertex colors carry the tile
-          palette and saturation boost. */}
+          palette + saturation boost. Lower opacity so the underlying
+          crystal + pearl layers read through. */}
       <mesh
         geometry={geometry}
         onClick={(e) => {
@@ -212,12 +304,12 @@ function CrystalCore({
         <meshStandardMaterial
           vertexColors
           emissive="#0a0f1a"
-          emissiveIntensity={0.45}
-          roughness={0.55}
+          emissiveIntensity={0.32}
+          roughness={0.6}
           metalness={0.0}
           transparent
-          opacity={0.82}
-          depthWrite
+          opacity={0.48}
+          depthWrite={false}
         />
       </mesh>
 
@@ -662,6 +754,9 @@ function MoonNode({
 }) {
   const ref = useRef<THREE.Mesh>(null);
   const orbitRadius = moon.orbit_radius + parentRadius * 0.4;
+  // Fallback to the payload's softened color only if the codex
+  // reference doesn't map cleanly into the vivid palette.
+  const moonColor = vividMoonColor(moon.codex_reference, "#94a3b8");
 
   // Precompute the orbital plane basis once per moon. orbit_normal_phi
   // and orbit_normal_theta come from the V2.0.1 payload — deterministic
@@ -696,7 +791,7 @@ function MoonNode({
         u={u}
         v={v}
         radius={orbitRadius}
-        color={moon.moon_color}
+        color={moonColor}
         opacity={domainHit ? ORBIT_LINE_OPACITY * 2.2 : ORBIT_LINE_OPACITY}
       />
       <mesh
@@ -713,8 +808,8 @@ function MoonNode({
       >
         <sphereGeometry args={[MOON_BASE_SIZE, 12, 12]} />
         <meshStandardMaterial
-          color={moon.moon_color}
-          emissive={moon.moon_color}
+          color={moonColor}
+          emissive={moonColor}
           emissiveIntensity={(hover ? 0.9 : 0.45) + (domainHit ? 0.3 : 0)}
           roughness={0.45}
         />

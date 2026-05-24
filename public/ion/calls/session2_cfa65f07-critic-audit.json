@@ -1,0 +1,7 @@
+{
+  "verdict": "revisions_required",
+  "fabricated_quotes": 0,
+  "weak_reasoning": 4,
+  "revision_summary": "Four targeted fixes required: (1) cherry_pick_moments[1] — remove the assertion that this is a paid lead. Lead type is unknown; the codex explicitly flags lead_type as required metadata Stewart does not have per call. Reframe the coaching implication as conditional ('if this is a paid lead...') and cite context.lead_types_and_bill_collection_rules, not bill_collection.stewart_automated_bill_capture. (2) rep_intent — do not assign 'reactive' as a meaningful enum value when no rep speech exists. Instead flag the schema gap: the rep_intent field has no valid value for a voicemail non-contact; downstream aggregation should exclude this record from rep_intent metrics. (3) starting_state.tone — 'cold' is not a codex-defined enum. Replace with an explicit null or 'not_applicable' and note that customer_state_delta (the codex's actual metric, numeric range [-10,10]) cannot be scored on a null-contact call. (4) Add a second coaching_focus entry specifically for the transcription pipeline truncation issue, distinct from the voicemail follow-up coaching point — these have different owners and should not be collapsed into one item.",
+  "flags_count": 0
+}
