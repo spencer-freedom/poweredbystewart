@@ -41,7 +41,7 @@ export function PipelineFlow() {
         icon={<Brain size={14} />}
         title="Stage 3 · Trajectory Synthesis"
         meta="Claude Sonnet 4.6"
-        body="Reads transcript + codex. Cites every claim with ts + literal quote + reason."
+        body="Reads transcript + schema. Cites every claim with ts + literal quote + reason."
         emphasis
       />
       <Arrow />

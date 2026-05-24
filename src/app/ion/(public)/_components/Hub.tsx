@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 // Public landing hub for the Ion surface. The three production-ready
-// pieces (brain, calls, codex) live behind one-line cards here.
+// pieces (brain, calls, schema) live behind one-line cards here.
 // /ion and /ion/whats-next both render this — the scroll demo + Scope
 // of Work are still being polished and live at /ion/demo and /ion/sow
 // respectively (unlinked from this hub on purpose).
@@ -18,18 +18,18 @@ const CARDS: Card[] = [
     href: "/ion/brain",
     title: "Stewart's brain",
     tagline: "Atomic structure of your sales floor",
-    body: "Crystal-core codex at the center. Each of your 332 processed calls orbits as a walnut nucleus. Cherry-pick moments orbit each call as ions colored by the codex domain they touched. Gray-matter exemplars stay near their codex section.",
+    body: "Crystal-core schema at the center. Each of your 332 processed calls orbits as a walnut nucleus. Cherry-pick moments orbit each call as ions colored by the schema domain they touched. Gray-matter exemplars stay near their schema section.",
   },
   {
     href: "/ion/calls",
     title: "Every call we processed",
     tagline: "Browse all 332 — search, filter, drill down",
-    body: "Search by call_id / rep / objection / codex reference. Filter by outcome, rep, pattern, or tier (hero / gray-matter / standard). Click any call to open Stewart's full coaching folder: manager brief, cherry-picks, handoff brief, critic audit.",
+    body: "Search by call_id / rep / objection / schema reference. Filter by outcome, rep, pattern, or tier (hero / gray-matter / standard). Click any call to open Stewart's full coaching folder: manager brief, cherry-picks, handoff brief, critic audit.",
   },
   {
-    href: "/ion/codex",
+    href: "/ion/schema",
     title: "Your floor's textbook",
-    tagline: "The codex — browseable, with what's TBD vs RESOLVED",
+    tagline: "The schema — browseable, with what's TBD vs RESOLVED",
     body: "1,173 lines. 101 sections actively lit by Stewart's reads. 14 TBDs Spencer + Kenny work through together. 8 new categories pending Kenny's approval — including the bombshell.",
   },
 ];
@@ -47,7 +47,7 @@ export function Hub() {
         <p className="mt-4 text-lg text-stewart-muted leading-relaxed max-w-3xl">
           Pick where to start. Each surface is the same underlying
           corpus &mdash; the brain is the visual, the calls page is the
-          tabular browse, the codex is your floor&apos;s textbook.
+          tabular browse, the schema is your floor&apos;s textbook.
         </p>
       </header>
 

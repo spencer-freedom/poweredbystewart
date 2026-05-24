@@ -1,3 +1,3 @@
 export { MaturationTimeline } from "./MaturationTimeline";
-export { CodexExcerpt } from "./CodexExcerpt";
+export { SchemaExcerpt } from "./SchemaExcerpt";
 export { PipelineFlow } from "./PipelineFlow";

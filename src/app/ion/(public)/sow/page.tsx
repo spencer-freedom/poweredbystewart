@@ -78,11 +78,11 @@ function SectionA() {
             "Spencer in the building 1–1.5 days per week",
             "Stewart pipeline processing your calls in real time",
             "Daily manager briefs as Stewart's reads stabilize",
-            "Codex iteration with Kenny — TBD-fill, gray-matter exemplar validation",
+            "Schema iteration with Kenny — TBD-fill, gray-matter exemplar validation",
             "Weekly synthesis call with Kenny + leadership",
           ]}
           cutoff="when managers can sit down with any rep, pull up Stewart, and run a 1-on-1 with zero prep. Same standard for daily 4-call team trainings."
-          duration="12–26 weeks depending on codex velocity."
+          duration="12–26 weeks depending on schema velocity."
         />
 
         <PhaseTier
@@ -92,7 +92,7 @@ function SectionA() {
           bullets={[
             "Stewart access for each team manager, with all their team's reps grouped under their subscription",
             "Daily 90-second manager briefs continue",
-            "Manager-facing wiki: search any rep, any codex section, any pattern",
+            "Manager-facing wiki: search any rep, any schema section, any pattern",
             "Per-rep aggregates and trend reporting",
             "Ongoing schema refinement (Kenny + Spencer light-touch)",
           ]}
@@ -240,7 +240,7 @@ function SectionC() {
     },
     {
       term: "Data ownership.",
-      body: "Your calls, your codex, your wiki — yours. If we part ways, you keep the data structure Stewart built around your floor.",
+      body: "Your calls, your schema, your wiki — yours. If we part ways, you keep the data structure Stewart built around your floor.",
     },
     {
       term: "Spencer time discipline.",
@@ -282,7 +282,7 @@ function SectionD() {
         </p>
         <p>
           You&apos;re not paying for compute. You&apos;re paying for the
-          codex Spencer + Kenny build together, plus the trust the critic
+          schema Spencer + Kenny build together, plus the trust the critic
           produces. The compute is the cheap part.
         </p>
       </div>
@@ -294,7 +294,7 @@ function SectionE() {
   const NEEDS = [
     "Five9 API access (gated on contract signature — we operate on prior export until then)",
     "The four conversion numbers (sets/month, sit%, close%, avg gross per sale) — for honest ROI math",
-    "Kenny's red-pen pass on the codex's 22 open TBDs",
+    "Kenny's red-pen pass on the schema's 22 open TBDs",
     "1 hour with Kenny per week during build phase",
   ];
 

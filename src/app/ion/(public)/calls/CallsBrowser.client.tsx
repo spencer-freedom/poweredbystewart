@@ -98,7 +98,7 @@ export function CallsBrowser({ index }: { index: CallsIndex }) {
           " " +
           (c.top_classifications || []).join(" ") +
           " " +
-          (c.codex_references || []).join(" ");
+          (c.schema_references || []).join(" ");
         if (!hay.toLowerCase().includes(q)) return false;
       }
       return true;
@@ -218,7 +218,7 @@ function FilterStrip({
           type="text"
           value={search}
           onChange={(e) => onSearch(e.target.value)}
-          placeholder="Search call_id, rep, codex section, primary objection…"
+          placeholder="Search call_id, rep, schema section, primary objection…"
           className="flex-1 bg-stewart-card border border-stewart-border rounded-md px-3 py-2 text-sm text-stewart-text placeholder:text-stewart-muted focus:border-stewart-accent focus:outline-none"
         />
         <span className="text-xs font-mono text-stewart-muted whitespace-nowrap">

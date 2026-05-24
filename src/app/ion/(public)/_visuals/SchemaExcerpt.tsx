@@ -1,5 +1,5 @@
-// Stylized rendering of a real codex section
-// (context.tesla_relationship_clarification). Proves Stewart's codex is
+// Stylized rendering of a real schema section
+// (context.tesla_relationship_clarification). Proves Stewart's schema is
 // version-controlled, gets refined based on operator input, and
 // reflects an explicit Kenny resolution.
 //
@@ -31,11 +31,11 @@ const YAML_BLOCK: { key: string; value: string; tone?: "highlight" }[] = [
   },
 ];
 
-export function CodexExcerpt() {
+export function SchemaExcerpt() {
   return (
     <figure className="space-y-3">
       <figcaption className="text-xs uppercase tracking-wider text-stewart-muted">
-        This codex section didn&apos;t exist four days ago.
+        This schema section didn&apos;t exist four days ago.
       </figcaption>
 
       <div className="rounded-lg border border-stewart-border bg-slate-950/80 overflow-hidden font-mono text-[12px] sm:text-[13px] leading-relaxed">
@@ -49,7 +49,7 @@ export function CodexExcerpt() {
         </div>
         <pre className="px-4 py-4 text-stewart-text/85 overflow-x-auto">
           {YAML_BLOCK.map((entry, i) => (
-            <CodexLine key={i} entry={entry} />
+            <SchemaLine key={i} entry={entry} />
           ))}
         </pre>
       </div>
@@ -64,7 +64,7 @@ export function CodexExcerpt() {
   );
 }
 
-function CodexLine({
+function SchemaLine({
   entry,
 }: {
   entry: { key: string; value: string; tone?: "highlight" };

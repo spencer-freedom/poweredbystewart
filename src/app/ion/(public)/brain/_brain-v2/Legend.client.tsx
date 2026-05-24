@@ -3,7 +3,7 @@
 // V2.0.14 — anatomy legend (replaces the 13-domain swatch key).
 // First-time viewers need to understand WHAT they're looking at
 // before WHAT each color means. The domain meanings still encode in
-// the moon colors; the dedicated codex page at /ion/codex covers
+// the moon colors; the dedicated schema page at /ion/schema covers
 // the per-domain semantics in depth.
 //
 // Domain hover-to-highlight was tied to the old legend and goes away
@@ -97,12 +97,12 @@ function OrbitSwatch() {
 const ITEMS: LegendItem[] = [
   {
     label: "Crystal core",
-    description: "Your codex. The hard layer. Doesn't change unless you change it.",
+    description: "Your schema. The hard layer. Doesn't change unless you change it.",
     swatch: <CoreSwatch />,
   },
   {
-    label: "Codex tile",
-    description: "One codex section colored by domain. 101 tiles light up across the core.",
+    label: "Schema tile",
+    description: "One schema section colored by domain. 101 tiles light up across the core.",
     swatch: <TileSwatch />,
   },
   {
@@ -112,7 +112,7 @@ const ITEMS: LegendItem[] = [
   },
   {
     label: "Moon (ion)",
-    description: "One cherry-pick moment from that call. Colored by which codex domain it touched.",
+    description: "One cherry-pick moment from that call. Colored by which schema domain it touched.",
     swatch: <MoonSwatch />,
   },
   {
@@ -122,12 +122,12 @@ const ITEMS: LegendItem[] = [
   },
   {
     label: "Gray-matter exemplar",
-    description: "Kenny-validated “what good looks like” call. Stuck near its codex section.",
+    description: "Kenny-validated “what good looks like” call. Stuck near its schema section.",
     swatch: <GraySwatch />,
   },
   {
     label: "Grounding vector",
-    description: "Tether from each call back to the codex.",
+    description: "Tether from each call back to the schema.",
     swatch: <VectorSwatch />,
   },
 ];

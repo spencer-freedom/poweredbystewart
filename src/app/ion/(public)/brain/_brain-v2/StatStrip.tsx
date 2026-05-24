@@ -19,7 +19,7 @@ export function StatStrip({ payload }: { payload: BrainV2Payload }) {
           <span className="text-stewart-text font-mono">
             {s.sections_lit}
           </span>{" "}
-          codex sections lit ({payload.core.lat_count}&times;
+          schema sections lit ({payload.core.lat_count}&times;
           {payload.core.lon_count} lat/long grid; {s.inactive_tiles}{" "}
           reserved)
         </span>
@@ -46,7 +46,7 @@ export function StatStrip({ payload }: { payload: BrainV2Payload }) {
         <span className="text-stewart-accent not-italic font-medium">
           Ion-orbital architecture
         </span>{" "}
-        &mdash; the codex at the core, your calls in orbit, coaching
+        &mdash; the schema at the core, your calls in orbit, coaching
         moments as ions around them.
       </p>
     </div>

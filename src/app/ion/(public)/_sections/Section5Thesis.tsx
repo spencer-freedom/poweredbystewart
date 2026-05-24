@@ -39,7 +39,7 @@ export function Section5Thesis() {
             Stewart read 332 of your calls.
           </p>
           <p className="text-xl sm:text-2xl text-stewart-text leading-snug">
-            The codex&apos;s highest-leverage coaching move &mdash; the{" "}
+            The schema&apos;s highest-leverage coaching move &mdash; the{" "}
             <span className="text-stewart-accent font-semibold">
               bill-as-villain inversion
             </span>{" "}

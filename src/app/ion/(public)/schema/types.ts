@@ -1,8 +1,8 @@
-// Mirror of scripts/build_ion_demo_assets.py codex-payload.json shape.
+// Mirror of scripts/build_ion_demo_assets.py schema-payload.json shape.
 
-export type CodexStatus = "resolved" | "tbd" | "lit" | "stub";
+export type SchemaStatus = "resolved" | "tbd" | "lit" | "stub";
 
-export type CodexCorpusStats = {
+export type SchemaCorpusStats = {
   call_count?: number;
   classifications?: Record<string, number>;
   outcomes?: Record<string, number>;
@@ -19,14 +19,14 @@ export type CodexCorpusStats = {
   }>;
 };
 
-export type CodexSection = {
+export type SchemaSection = {
   path: string;
   domain: string;
   leaf: string;
-  status: CodexStatus;
+  status: SchemaStatus;
   resolved_at: string | null;
   tbd_items: string[];
-  corpus_stats: CodexCorpusStats;
+  corpus_stats: SchemaCorpusStats;
   raw_yaml: string;
 };
 
@@ -48,7 +48,7 @@ export type ProposedCategory = {
   spencers_catch?: boolean;
 };
 
-export type CodexPayload = {
+export type SchemaPayload = {
   version: string;
   total_lines: number;
   stats: {
@@ -59,7 +59,7 @@ export type CodexPayload = {
     presumptive_gray_matter: number;
     proposed_pending: number;
   };
-  sections: CodexSection[];
+  sections: SchemaSection[];
   proposed_categories: ProposedCategory[];
   domain_order: string[];
 };

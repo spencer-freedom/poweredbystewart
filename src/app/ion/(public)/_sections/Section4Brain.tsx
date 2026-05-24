@@ -15,15 +15,15 @@ export function Section4Brain() {
         <p>
           Stewart&apos;s brain has three layers: the{" "}
           <strong className="text-stewart-text">core</strong> is your
-          codex &mdash; your scripts, protocols, coaching philosophy.
+          schema &mdash; your scripts, protocols, coaching philosophy.
           It&apos;s hard. It only changes when you change it. The{" "}
           <strong className="text-stewart-text">gray matter</strong> is
           the calls Kenny validates as exemplary &mdash; &ldquo;this is
-          what good looks like for that codex section.&rdquo; Sticky.
+          what good looks like for that schema section.&rdquo; Sticky.
           Always lit. The{" "}
           <strong className="text-stewart-text">soft brain</strong> is
           the calls cycling through &mdash; every Stewart-processed call
-          leaves a satellite in orbit around the codex sections it
+          leaves a satellite in orbit around the schema sections it
           activated. Recent calls flow; old calls age out (text artifacts
           retained forever; audio archived to Five9 after Stewart&apos;s
           hot-tier window).
@@ -67,7 +67,7 @@ export function Section4Brain() {
             </span>
           </p>
           <p className="text-sm text-stewart-muted mt-3 leading-relaxed">
-            101 codex sections lit. 1,432 cherry-pick moments mapped.
+            101 schema sections lit. 1,432 cherry-pick moments mapped.
             Click to explore.
           </p>
         </Link>

@@ -32,7 +32,7 @@ export type CherryPick = {
   ts: string;
   quote: string;
   classification: string;
-  codex_reference: string | null;
+  schema_reference: string | null;
   stewart_read: string;
   alternative_hypothesis: string | null;
   coaching_implication: string;

@@ -38,7 +38,7 @@ type CherryPick = {
   ts: string;
   quote: string;
   classification: string;
-  codex_reference: string | null;
+  schema_reference: string | null;
   stewart_read: string;
   alternative_hypothesis: string | null;
   coaching_implication: string;
@@ -291,9 +291,9 @@ function CherryPicksBlock({
                 <span className="text-stewart-muted">
                   {p.classification.replace(/_/g, " ")}
                 </span>
-                {p.codex_reference ? (
+                {p.schema_reference ? (
                   <code className="text-stewart-accent font-mono">
-                    {p.codex_reference}
+                    {p.schema_reference}
                   </code>
                 ) : null}
               </div>

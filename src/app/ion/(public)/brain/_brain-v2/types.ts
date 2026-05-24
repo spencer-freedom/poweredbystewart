@@ -6,7 +6,7 @@ export type Moon = {
   ts: string;
   quote_excerpt: string;
   classification: string;
-  codex_reference: string | null;
+  schema_reference: string | null;
   moon_color: string;
   orbit_radius: number;
   orbit_phase: number;
@@ -40,7 +40,7 @@ export type Tile = {
   lat_index: number;
   lon_index: number;
   is_active: boolean;
-  codex_section: string | null;
+  schema_section: string | null;
   domain: string;
   color: string;
   saturation_boost: number;
