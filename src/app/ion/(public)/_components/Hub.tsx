@@ -41,8 +41,8 @@ export function Hub() {
         <p className="text-xs uppercase tracking-wider font-semibold text-stewart-accent mb-3">
           Stewart on Ion Solar
         </p>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
-          Three views of the same 332 calls
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-accent leading-tight">
+          The Brain, the Calls, the Schema
         </h1>
         <p className="mt-4 text-sm text-stewart-text leading-relaxed">
           Pick where to start. Each surface is the same underlying
