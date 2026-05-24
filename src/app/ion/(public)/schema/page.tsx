@@ -1,23 +1,23 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import Link from "next/link";
-import { CodexBrowser } from "./CodexBrowser.client";
-import type { CodexPayload } from "./types";
+import { SchemaBrowser } from "./SchemaBrowser.client";
+import type { SchemaPayload } from "./types";
 
 export const dynamic = "force-dynamic";
 
-async function loadPayload(): Promise<CodexPayload> {
+async function loadPayload(): Promise<SchemaPayload> {
   const filePath = path.join(
     process.cwd(),
     "public",
     "ion",
-    "codex-payload.json"
+    "schema-payload.json"
   );
   const raw = await fs.readFile(filePath, "utf-8");
-  return JSON.parse(raw) as CodexPayload;
+  return JSON.parse(raw) as SchemaPayload;
 }
 
-export default async function IonCodexPage() {
+export default async function IonSchemaPage() {
   const payload = await loadPayload();
   return (
     <div className="space-y-8">
@@ -34,13 +34,13 @@ export default async function IonCodexPage() {
           </Link>
         </div>
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
-          Ion Solar &mdash; the codex Stewart reads every call against
+          Ion Solar &mdash; the schema Stewart reads every call against
         </h1>
         <p className="mt-4 text-lg text-stewart-muted leading-relaxed max-w-3xl">
           <span className="text-stewart-text font-mono">
             {payload.stats.total_lines.toLocaleString()}
           </span>{" "}
-          lines of codex.{" "}
+          lines of schema.{" "}
           <span className="text-stewart-text font-mono">
             {payload.stats.sections_lit}
           </span>{" "}
@@ -61,7 +61,7 @@ export default async function IonCodexPage() {
         </p>
       </header>
 
-      <CodexBrowser payload={payload} />
+      <SchemaBrowser payload={payload} />
     </div>
   );
 }

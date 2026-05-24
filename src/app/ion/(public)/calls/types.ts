@@ -10,7 +10,7 @@ export type CallSummary = {
   primary_objection: string | null;
   cherrypick_count: number;
   top_classifications: string[];
-  codex_references: string[];
+  schema_references: string[];
   aging_tier: string;
   is_hero: boolean;
   tagline: string | null;

@@ -306,7 +306,7 @@ function BombshellCard({
       <p className="text-base sm:text-lg text-stewart-text leading-snug">
         Stewart read{" "}
         <span className="font-bold">{fmtNum(FINDING_TOTAL_CALLS)}</span> of your
-        calls. The codex&apos;s highest-leverage move was executed in:
+        calls. The schema&apos;s highest-leverage move was executed in:
       </p>
       <p className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-warning text-center">
         ZERO of them.

@@ -431,9 +431,9 @@ function MomentDetail({
             {tone.label}
           </span>
         </div>
-        {moment.codex_reference ? (
+        {moment.schema_reference ? (
           <code className="text-[11px] text-stewart-accent font-mono">
-            codex &middot; {moment.codex_reference}
+            schema &middot; {moment.schema_reference}
           </code>
         ) : null}
       </div>

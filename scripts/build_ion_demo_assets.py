@@ -2,7 +2,7 @@
 """Build static JSON assets for the Ion demo surface.
 
 Reads the canonical SpencerOS dataset (~332 processed Ion calls + brain
-aggregates + codex YAML) and produces the static files the Next.js demo
+aggregates + schema YAML) and produces the static files the Next.js demo
 fetches at runtime:
 
   public/ion/
@@ -14,7 +14,7 @@ fetches at runtime:
     sessionN_hash-*.json                   (carousel-targeted copies for the
                                             7 hero calls — backward compatible
                                             with the prior §2 wiring)
-    codex-payload.json                     (codex YAML parsed + brain stats
+    schema-payload.json                     (schema YAML parsed + brain stats
                                             merged + proposed-pending entries)
 
 Idempotent. Safe to run multiple times. Designed to run as a one-shot:
@@ -189,15 +189,15 @@ def build_calls(spencer_os: Path) -> dict[str, Any]:
         # Build index entry
         cherry_count = len(cherry) if isinstance(cherry, list) else 0
         classifications: dict[str, int] = {}
-        codex_refs: set[str] = set()
+        schema_refs: set[str] = set()
         if isinstance(cherry, list):
             for c in cherry:
                 k = (c.get("classification") or "").strip()
                 if k:
                     classifications[k] = classifications.get(k, 0) + 1
-                ref = c.get("codex_reference")
+                ref = c.get("schema_reference")
                 if ref:
-                    codex_refs.add(ref)
+                    schema_refs.add(ref)
 
         top_classifications = sorted(
             classifications.items(), key=lambda kv: -kv[1]
@@ -215,7 +215,7 @@ def build_calls(spencer_os: Path) -> dict[str, Any]:
                 "primary_objection": meta.get("primary_objection"),
                 "cherrypick_count": cherry_count,
                 "top_classifications": [k for k, _ in top_classifications],
-                "codex_references": sorted(codex_refs),
+                "schema_references": sorted(schema_refs),
                 "aging_tier": (meta.get("aging") or {}).get("tier") or "unknown",
                 "is_hero": hero is not None,
                 "tagline": hero["tagline"] if hero else None,
@@ -250,9 +250,9 @@ def build_calls(spencer_os: Path) -> dict[str, Any]:
     return index
 
 
-# ─── Step 2 — codex payload ─────────────────────────────────────────────
+# ─── Step 2 — schema payload ─────────────────────────────────────────────
 
-CODEX_DOMAIN_ORDER = [
+SCHEMA_DOMAIN_ORDER = [
     "context",
     "intros",
     "verify",
@@ -277,8 +277,8 @@ CODEX_DOMAIN_ORDER = [
 
 TBD_PATTERN = re.compile(r"#\s*TBD\b", re.IGNORECASE)
 # Match `# RESOLVED YYYY-MM-DD`, `# CONFIRMED YYYY-MM-DD`, or
-# `kenny_resolved_YYYY_MM_DD:` key (the codex uses the last form for
-# Tesla — see line 216 of codex_v1.0_solar_skeleton.yaml).
+# `kenny_resolved_YYYY_MM_DD:` key (the schema uses the last form for
+# Tesla — see line 216 of schema_v1.0_solar_skeleton.yaml).
 RESOLVED_PATTERN = re.compile(
     r"(?:#\s*(?:RESOLVED|CONFIRMED)\s+([0-9]{4}-[0-9]{2}-[0-9]{2}))"
     r"|(?:kenny_resolved_([0-9]{4})_([0-9]{2})_([0-9]{2}))",
@@ -294,12 +294,12 @@ def _resolved_date(match: re.Match[str]) -> str | None:
     return None
 
 
-def parse_codex_yaml(codex_path: Path, codex_text: str) -> dict[str, Any]:
-    """Scan codex YAML text for section paths + status markers.
-    Avoids yaml.safe_load — the canonical codex contains a few stylistic
+def parse_schema_yaml(schema_path: Path, schema_text: str) -> dict[str, Any]:
+    """Scan schema YAML text for section paths + status markers.
+    Avoids yaml.safe_load — the canonical schema contains a few stylistic
     quirks (anchors mixed with lists) that don't round-trip cleanly, and
     we don't actually need the parsed object for the demo payload."""
-    lines = codex_text.splitlines()
+    lines = schema_text.splitlines()
 
     # Walk all lines, accumulating an indent-stack of current section path.
     # When we hit a TBD or RESOLVED comment, attach it to the most recent
@@ -357,7 +357,7 @@ RAW_YAML_MAX_CHARS = 1500
 def extract_raw_yaml_block(text: str, start_line_1based: int) -> str:
     """Capture the YAML block starting at start_line. Stops at the first
     sibling or shallower key, or at the line/char caps — whichever first.
-    Caps keep the codex payload tractable; full YAML viewer can fetch
+    Caps keep the schema payload tractable; full YAML viewer can fetch
     the raw file separately if a deeper view is ever needed."""
     lines = text.splitlines()
     if start_line_1based - 1 >= len(lines):
@@ -375,7 +375,7 @@ def extract_raw_yaml_block(text: str, start_line_1based: int) -> str:
         out.append(line)
         char_count += len(line) + 1
         if len(out) >= RAW_YAML_MAX_LINES or char_count >= RAW_YAML_MAX_CHARS:
-            out.append(f"# … (truncated; see codex YAML for full block)")
+            out.append(f"# … (truncated; see schema YAML for full block)")
             break
     return "\n".join(out)
 
@@ -384,15 +384,15 @@ def domain_of(path: str) -> str:
     return path.split(".")[0]
 
 
-def build_codex(spencer_os: Path) -> None:
-    codex_path = REPO_ROOT / "data" / "ion_solar" / "codex" / "codex_v1.0_solar_skeleton.yaml"
-    if not codex_path.exists():
-        sys.exit(f"codex not found: {codex_path}")
-    codex_text = codex_path.read_text(encoding="utf-8")
-    parsed = parse_codex_yaml(codex_path, codex_text)
+def build_schema(spencer_os: Path) -> None:
+    schema_path = REPO_ROOT / "data" / "ion_solar" / "schema" / "schema_v1.0_solar_skeleton.yaml"
+    if not schema_path.exists():
+        sys.exit(f"schema not found: {schema_path}")
+    schema_text = schema_path.read_text(encoding="utf-8")
+    parsed = parse_schema_yaml(schema_path, schema_text)
     statuses = parsed["statuses"]
     line_starts = parsed["line_starts"]
-    total_lines = len(codex_text.splitlines())
+    total_lines = len(schema_text.splitlines())
 
     # Brain aggregates per section
     nodes_dir = REPO_ROOT / "data" / "ion_solar" / "brain" / "nodes"
@@ -400,7 +400,7 @@ def build_codex(spencer_os: Path) -> None:
     for f in nodes_dir.glob("*.json"):
         try:
             j = read_json(f)
-            path = j.get("codex_section") or f.stem
+            path = j.get("schema_section") or f.stem
             brain_by_section[path] = {
                 "call_count": len(j.get("call_ids") or []),
                 "classifications": j.get("pattern_counts_by_classification") or {},
@@ -424,7 +424,7 @@ def build_codex(spencer_os: Path) -> None:
         brain_meta = brain_by_section.get(path, {})
         raw_yaml = ""
         if path in line_starts:
-            raw_yaml = extract_raw_yaml_block(codex_text, line_starts[path])
+            raw_yaml = extract_raw_yaml_block(schema_text, line_starts[path])
 
         # Drop super-shallow paths (parent + child) where the path's
         # last segment is something the YAML doesn't actually nest under.
@@ -453,7 +453,7 @@ def build_codex(spencer_os: Path) -> None:
 
     # Proposed-pending categories
     pending_path = (
-        REPO_ROOT / "data" / "ion_solar" / "proposed_schema_edits" / "codex_additions_pending.yaml"
+        REPO_ROOT / "data" / "ion_solar" / "proposed_schema_edits" / "schema_additions_pending.yaml"
     )
     proposed_categories: list[dict[str, Any]] = []
     if pending_path.exists():
@@ -520,11 +520,11 @@ def build_codex(spencer_os: Path) -> None:
         },
         "sections": sections_out,
         "proposed_categories": proposed_categories,
-        "domain_order": CODEX_DOMAIN_ORDER,
+        "domain_order": SCHEMA_DOMAIN_ORDER,
     }
-    write_json(PUBLIC_ION / "codex-payload.json", payload)
+    write_json(PUBLIC_ION / "schema-payload.json", payload)
     print(
-        f"codex: {total_lines} lines · {len(sections_out)} sections "
+        f"schema: {total_lines} lines · {len(sections_out)} sections "
         f"({sections_lit} lit · {tbd_count} TBD · {resolved_count} resolved · "
         f"{gray_matter_count} gray-matter · {len(proposed_categories)} proposed)"
     )
@@ -543,12 +543,12 @@ def main() -> int:
     ap.add_argument(
         "--skip-calls",
         action="store_true",
-        help="skip the 332-call walk (useful during codex iteration)",
+        help="skip the 332-call walk (useful during schema iteration)",
     )
     ap.add_argument(
-        "--skip-codex",
+        "--skip-schema",
         action="store_true",
-        help="skip codex payload regen",
+        help="skip schema payload regen",
     )
     args = ap.parse_args()
 
@@ -563,8 +563,8 @@ def main() -> int:
 
     if not args.skip_calls:
         build_calls(spencer_os)
-    if not args.skip_codex:
-        build_codex(spencer_os)
+    if not args.skip_schema:
+        build_schema(spencer_os)
 
     print("done.")
     return 0

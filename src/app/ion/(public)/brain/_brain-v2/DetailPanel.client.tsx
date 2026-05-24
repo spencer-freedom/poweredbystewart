@@ -74,8 +74,8 @@ export function DetailPanel({
 }
 
 function labelFor(s: Selection): string {
-  if (s.kind === "core") return "Codex meta · click anywhere on the core";
-  if (s.kind === "tile") return `Codex tile · ${s.tile.codex_section}`;
+  if (s.kind === "core") return "Schema meta · click anywhere on the core";
+  if (s.kind === "tile") return `Schema tile · ${s.tile.schema_section}`;
   if (s.kind === "planet") return `Call · ${s.planet.call_id}`;
   return `Cherry-pick @ ${s.moon.ts} · ${s.planet.call_id}`;
 }
@@ -104,9 +104,9 @@ function CoreMeta({ payload }: { payload: BrainV2Payload }) {
 
   return (
     <div className="space-y-6">
-      <Card title="The codex at a glance">
+      <Card title="The schema at a glance">
         <p className="text-sm text-stewart-text leading-relaxed">
-          {s.sections_lit} codex sections lit by Stewart&apos;s reads
+          {s.sections_lit} schema sections lit by Stewart&apos;s reads
           across {s.calls_total.toLocaleString()} processed calls.{" "}
           {s.tbds_remaining} TBDs Spencer + Kenny still own.{" "}
           {s.proposed_pending} new categories pending Kenny approval.
@@ -131,7 +131,7 @@ function CoreMeta({ payload }: { payload: BrainV2Payload }) {
           {topReferenced.map((t) => (
             <li key={t.tile_index} className="flex items-baseline justify-between gap-3">
               <code className="text-stewart-accent font-mono truncate">
-                {t.codex_section}
+                {t.schema_section}
               </code>
               <span className="text-stewart-muted font-mono">
                 {t.section_data.call_ids.length} calls
@@ -143,10 +143,10 @@ function CoreMeta({ payload }: { payload: BrainV2Payload }) {
 
       <Card title="Pending Kenny">
         <p className="text-sm text-stewart-text leading-relaxed">
-          {s.tbds_remaining} open TBDs marked in the codex.{" "}
+          {s.tbds_remaining} open TBDs marked in the schema.{" "}
           {s.proposed_pending} new categories proposed by Stewart&apos;s
           pattern analyzer (plus Spencer&apos;s softener catch). All
-          surface on the codex page.
+          surface on the schema page.
         </p>
       </Card>
     </div>
@@ -184,7 +184,7 @@ function TileDetail({ tile }: { tile: Tile }) {
     <div className="space-y-5">
       <Card title="Section">
         <code className="text-sm font-mono text-stewart-accent break-all">
-          {tile.codex_section}
+          {tile.schema_section}
         </code>
         <p className="text-xs text-stewart-muted mt-1">
           Domain: <span className="text-stewart-text">{tile.domain}</span>

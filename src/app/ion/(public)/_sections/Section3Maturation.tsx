@@ -18,7 +18,7 @@ const PHASES: Phase[] = [
     meta: "weeks 1–12",
     body: [
       "Spencer is in the building 1–1.5 days per week. Kenny's TBDs get filled. Gray-matter exemplars get tagged. Stewart's reads get sharper week over week.",
-      "Stewart processes your calls in real time. Manager briefs land daily. Quality improves with every codex refinement.",
+      "Stewart processes your calls in real time. Manager briefs land daily. Quality improves with every schema refinement.",
     ],
     exitTrigger: "the manager-trust threshold (see Phase 2)",
   },
@@ -29,7 +29,7 @@ const PHASES: Phase[] = [
     body: [
       "Hard cutoff for Phase 1: managers can sit down for a 1-on-1 with any rep, pull up Stewart, and run the coaching with zero prep. Same standard for daily 4-call team trainings.",
       "This is an operator criterion, not a usage metric. You'll feel it when it lands.",
-      "Stewart is no longer in active build. The codex is mature. Spencer steps off the weekly retainer.",
+      "Stewart is no longer in active build. The schema is mature. Spencer steps off the weekly retainer.",
     ],
   },
   {
@@ -64,7 +64,7 @@ const PHASES: Phase[] = [
     title: "Ongoing platform",
     pricing: "Stewart evolves with Ion",
     body: [
-      "As Ion's scripts, products, and market evolve, Stewart evolves with them. The codex becomes a living document of Ion's actual sales philosophy — Kenny's brain made queryable.",
+      "As Ion's scripts, products, and market evolve, Stewart evolves with them. The schema becomes a living document of Ion's actual sales philosophy — Kenny's brain made queryable.",
       "A year in, Stewart's reads are sharper than they were on day 1. Two years in, sharper still. This is the compound interest of the engagement.",
     ],
   },

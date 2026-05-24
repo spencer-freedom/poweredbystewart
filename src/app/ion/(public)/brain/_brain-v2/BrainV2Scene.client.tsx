@@ -167,9 +167,9 @@ const VIVID_DOMAIN_COLORS: Record<string, string> = {
   _reserved: "#3c3540",
 };
 
-function vividMoonColor(codexReference: string | null, fallback: string): string {
-  if (!codexReference) return fallback;
-  const domain = codexReference.split(".")[0];
+function vividMoonColor(schemaReference: string | null, fallback: string): string {
+  if (!schemaReference) return fallback;
+  const domain = schemaReference.split(".")[0];
   return VIVID_DOMAIN_COLORS[domain] || fallback;
 }
 
@@ -430,7 +430,7 @@ function CrystalCore({
           for the detail panel. Inactive (_reserved) tiles get no
           target — per V2.0.1 spec they render but don't interact. */}
       {core.tiles
-        .filter((t) => t.is_active && t.codex_section)
+        .filter((t) => t.is_active && t.schema_section)
         .map((tile) => (
           <TileClickTarget
             key={tile.tile_index}
@@ -587,12 +587,12 @@ function CallPlanets({
   onSelect: (sel: Selection) => void;
   planetPalette: PlanetPalette;
 }) {
-  // Precompute tile centers keyed by codex_section so gray-matter
+  // Precompute tile centers keyed by schema_section so gray-matter
   // planets can be parented near their exemplar tile.
   const tileCenters = useMemo(() => {
     const map = new Map<string, [number, number, number]>();
     for (const t of tiles) {
-      if (!t.codex_section) continue;
+      if (!t.schema_section) continue;
       const { theta, phi } = tileToSpherical(
         t.lat_index,
         t.lon_index,
@@ -601,7 +601,7 @@ function CallPlanets({
         9
       );
       const c = sphericalToCartesian(theta, phi, coreRadius * 1.05);
-      map.set(t.codex_section, c);
+      map.set(t.schema_section, c);
     }
     return map;
   }, [tiles, coreRadius]);
@@ -681,7 +681,7 @@ function SinglePlanet({
   const domainHit =
     hoveredDomain &&
     planet.moons.some((m) => {
-      const ref = m.codex_reference || "";
+      const ref = m.schema_reference || "";
       return ref.split(".")[0] === hoveredDomain;
     });
 
@@ -877,9 +877,9 @@ function MoonNode({
 }) {
   const ref = useRef<THREE.Mesh>(null);
   const orbitRadius = moon.orbit_radius + parentRadius * 0.4;
-  // Fallback to the payload's softened color only if the codex
+  // Fallback to the payload's softened color only if the schema
   // reference doesn't map cleanly into the vivid palette.
-  const moonColor = vividMoonColor(moon.codex_reference, "#94a3b8");
+  const moonColor = vividMoonColor(moon.schema_reference, "#94a3b8");
 
   // Precompute the orbital plane basis once per moon. orbit_normal_phi
   // and orbit_normal_theta come from the V2.0.1 payload — deterministic
@@ -904,7 +904,7 @@ function MoonNode({
 
   const [hover, setHover] = useState(false);
 
-  const ref_domain = (moon.codex_reference || "").split(".")[0];
+  const ref_domain = (moon.schema_reference || "").split(".")[0];
   const domainHit =
     hoveredDomain && hoveredDomain !== "" && ref_domain === hoveredDomain;
 

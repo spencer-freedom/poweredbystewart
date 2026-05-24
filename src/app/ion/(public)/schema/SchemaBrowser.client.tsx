@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from "react";
 import type {
-  CodexPayload,
-  CodexSection,
+  SchemaPayload,
+  SchemaSection,
   ProposedCategory,
 } from "./types";
 
@@ -38,9 +38,9 @@ const PROPOSED_BADGE = {
 
 const PROPOSED_ID_PREFIX = "proposed:";
 
-type SelectableId = string; // either a real codex path OR "proposed:<name>"
+type SelectableId = string; // either a real schema path OR "proposed:<name>"
 
-export function CodexBrowser({ payload }: { payload: CodexPayload }) {
+export function SchemaBrowser({ payload }: { payload: SchemaPayload }) {
   const [filter, setFilter] = useState<FilterKey>("all");
   const [search, setSearch] = useState("");
 
@@ -49,7 +49,7 @@ export function CodexBrowser({ payload }: { payload: CodexPayload }) {
   // Apply search + filter to top-level sections (proposed handled separately).
   const visibleByDomain = useMemo(() => {
     const q = search.trim().toLowerCase();
-    const out: Record<string, CodexSection[]> = {};
+    const out: Record<string, SchemaSection[]> = {};
     for (const [domain, sections] of Object.entries(grouped)) {
       const passing = sections.filter((s) => {
         if (filter === "tbd" && s.status !== "tbd") return false;
@@ -112,8 +112,8 @@ export function CodexBrowser({ payload }: { payload: CodexPayload }) {
   );
 }
 
-function groupByDomain(payload: CodexPayload): Record<string, CodexSection[]> {
-  const map: Record<string, CodexSection[]> = {};
+function groupByDomain(payload: SchemaPayload): Record<string, SchemaSection[]> {
+  const map: Record<string, SchemaSection[]> = {};
   for (const s of payload.sections) {
     (map[s.domain] ||= []).push(s);
   }
@@ -121,7 +121,7 @@ function groupByDomain(payload: CodexPayload): Record<string, CodexSection[]> {
     list.sort((a, b) => a.path.localeCompare(b.path));
   }
   // Order domains per payload.domain_order; trailing for any not in the list.
-  const ordered: Record<string, CodexSection[]> = {};
+  const ordered: Record<string, SchemaSection[]> = {};
   const seen = new Set<string>();
   for (const d of payload.domain_order) {
     if (map[d]) {
@@ -146,8 +146,8 @@ function Sidebar({
   selectedId,
   onSelect,
 }: {
-  payload: CodexPayload;
-  visibleByDomain: Record<string, CodexSection[]>;
+  payload: SchemaPayload;
+  visibleByDomain: Record<string, SchemaSection[]>;
   visibleProposed: ProposedCategory[];
   filter: FilterKey;
   onFilter: (f: FilterKey) => void;
@@ -284,7 +284,7 @@ function SelectedDetail({
   payload,
 }: {
   selectedId: SelectableId | null;
-  payload: CodexPayload;
+  payload: SchemaPayload;
 }) {
   if (!selectedId) {
     return (
@@ -304,7 +304,7 @@ function SelectedDetail({
   return <SectionDetail section={section} />;
 }
 
-function SectionDetail({ section }: { section: CodexSection }) {
+function SectionDetail({ section }: { section: SchemaSection }) {
   const badge = STATUS_BADGES[section.status] || STATUS_BADGES.stub;
   const stats = section.corpus_stats || {};
   const callCount = stats.call_count ?? 0;
@@ -385,7 +385,7 @@ function SectionDetail({ section }: { section: CodexSection }) {
         <section className="rounded border border-stewart-border bg-stewart-card p-4">
           <p className="text-xs text-stewart-muted">
             No calls in the processed corpus reference this section yet.
-            That&apos;s normal for newer codex entries.
+            That&apos;s normal for newer schema entries.
           </p>
         </section>
       )}
@@ -413,7 +413,7 @@ function SectionDetail({ section }: { section: CodexSection }) {
           </p>
           <p className="text-sm text-stewart-text leading-relaxed">
             This section was a TBD until Kenny&apos;s direct call with
-            Spencer on {section.resolved_at}. The codex entry below
+            Spencer on {section.resolved_at}. The schema entry below
             reflects the resolution &mdash; Stewart now reads every
             related call through this lens.
           </p>

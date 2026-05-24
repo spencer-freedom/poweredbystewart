@@ -1,11 +1,11 @@
 import { ScrollSection } from "./ScrollSection";
-import { CodexExcerpt } from "../_visuals";
+import { SchemaExcerpt } from "../_visuals";
 
 const CONTRAST_ROWS = [
   {
     generic: "Same closed-taxonomy classification across all customers",
     stewart:
-      "Your codex IS the classification — Ion's intros, your protocols, Kenny's coaching philosophy, the Tesla relationship truth",
+      "Your schema IS the classification — Ion's intros, your protocols, Kenny's coaching philosophy, the Tesla relationship truth",
   },
   {
     generic:
@@ -17,7 +17,7 @@ const CONTRAST_ROWS = [
     generic:
       "~12-week utilization curve drops below 30%. Managers stop trusting the briefings.",
     stewart:
-      "Stewart's reads improve every week as the codex matures + Kenny validates exemplars",
+      "Stewart's reads improve every week as the schema matures + Kenny validates exemplars",
   },
 ];
 
@@ -46,7 +46,7 @@ export function Section1CustomBuilt() {
           </p>
         </div>
 
-        <CodexExcerpt />
+        <SchemaExcerpt />
       </div>
 
       <div className="mt-12 rounded-lg border border-stewart-border overflow-hidden">
@@ -82,10 +82,10 @@ export function Section1CustomBuilt() {
       </div>
 
       <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <Stat number="1,153" label="lines of Ion-specific codex" />
+        <Stat number="1,153" label="lines of Ion-specific schema" />
         <Stat
           number="101"
-          label="codex sections actively lit across your corpus"
+          label="schema sections actively lit across your corpus"
         />
         <Stat number="332" label="of your calls processed" />
       </div>
