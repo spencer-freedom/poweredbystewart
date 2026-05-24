@@ -118,7 +118,7 @@ const GROUNDING_LINE_OPACITY_HOVER = 0.8;
 // V2.0.13 — moon orbit paths lifted in brightness + thickness so the
 // per-domain ion-orbital traces stay legible at the pulled-back default
 // camera. Previous 0.22 / lineWidth 0.5 read as ghost-faint.
-const ORBIT_LINE_OPACITY = 0.55;
+const ORBIT_LINE_OPACITY = 0.44;
 const ORBIT_LINE_WIDTH = 0.5;
 const PLANET_FADE_FLOOR = 0.08;
 const PLANET_SIZE_FLOOR = 0.55;
