@@ -19,9 +19,7 @@ export function StatStrip({ payload }: { payload: BrainV2Payload }) {
           <span className="text-stewart-text font-mono">
             {s.sections_lit}
           </span>{" "}
-          schema sections lit ({payload.core.lat_count}&times;
-          {payload.core.lon_count} lat/long grid; {s.inactive_tiles}{" "}
-          reserved)
+          schema sections lit
         </span>
         <span className="text-stewart-muted">
           <span className="text-stewart-text font-mono">
