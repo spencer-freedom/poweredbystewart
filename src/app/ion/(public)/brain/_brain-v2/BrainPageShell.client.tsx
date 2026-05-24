@@ -53,25 +53,27 @@ function ScrollHint({ selection }: { selection: Selection }) {
       ? selection.planet.call_id
       : "details";
   return (
-    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex flex-col items-center gap-1 motion-safe:animate-bounce">
-      <p className="text-base sm:text-lg text-stewart-accent font-semibold leading-none px-3 py-1.5 rounded-full bg-stewart-bg/85 border border-stewart-accent/40 backdrop-blur-sm whitespace-nowrap">
-        Scroll down for {label}
-      </p>
-      <svg
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="text-stewart-accent drop-shadow"
-        aria-hidden
-      >
-        <path d="M7 13l5 5 5-5" />
-        <path d="M7 6l5 5 5-5" opacity="0.6" />
-      </svg>
+    <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center">
+      <div className="flex flex-col items-center gap-1 motion-safe:animate-bounce">
+        <p className="text-base sm:text-lg text-stewart-accent font-semibold leading-none whitespace-nowrap drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]">
+          Scroll down for {label}
+        </p>
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="text-stewart-accent drop-shadow"
+          aria-hidden
+        >
+          <path d="M7 13l5 5 5-5" />
+          <path d="M7 6l5 5 5-5" opacity="0.6" />
+        </svg>
+      </div>
     </div>
   );
 }
