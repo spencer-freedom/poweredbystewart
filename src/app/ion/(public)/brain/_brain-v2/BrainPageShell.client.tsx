@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { BrainV2Scene } from "./BrainV2Scene.client";
 import { DetailPanel, type Selection } from "./DetailPanel.client";
+import { Legend } from "./Legend.client";
 import { StatStrip } from "./StatStrip";
 import type { BrainV2Payload } from "./types";
 
@@ -15,6 +16,10 @@ export function BrainPageShell({ payload }: { payload: BrainV2Payload }) {
   return (
     <div className="space-y-4">
       <StatStrip payload={payload} />
+
+      <div className="w-full mx-auto" style={{ maxWidth: BRAIN_MAX_WIDTH }}>
+        <Legend />
+      </div>
 
       <div
         className="aspect-square mx-auto w-full"
