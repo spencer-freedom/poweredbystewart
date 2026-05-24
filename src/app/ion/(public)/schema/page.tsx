@@ -2,6 +2,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import Link from "next/link";
 import { SchemaBrowser } from "./SchemaBrowser.client";
+import { loadHeroOverrides } from "./heroOverrides";
 import type { SchemaPayload } from "./types";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +19,10 @@ async function loadPayload(): Promise<SchemaPayload> {
 }
 
 export default async function IonSchemaPage() {
-  const payload = await loadPayload();
+  const [payload, overrides] = await Promise.all([
+    loadPayload(),
+    loadHeroOverrides(),
+  ]);
   return (
     <div className="space-y-8">
       <header>
@@ -36,32 +40,15 @@ export default async function IonSchemaPage() {
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
           Ion Solar &mdash; the schema Stewart reads every call against
         </h1>
-        <p className="mt-4 text-lg text-stewart-muted leading-relaxed max-w-3xl">
-          <span className="text-stewart-text font-mono">
-            {payload.stats.total_lines.toLocaleString()}
-          </span>{" "}
-          lines of schema.{" "}
-          <span className="text-stewart-text font-mono">
-            {payload.stats.sections_lit}
-          </span>{" "}
-          sections actively lit by Stewart&apos;s reads.{" "}
-          <span className="text-stewart-text font-mono">
-            {payload.stats.tbds}
-          </span>{" "}
-          TBDs Spencer + Kenny work through together during embedded
-          build.{" "}
-          <span className="text-stewart-text font-mono">
-            {payload.stats.resolved}
-          </span>{" "}
-          RESOLVED already.{" "}
-          <span className="text-stewart-text font-mono">
-            {payload.stats.proposed_pending}
-          </span>{" "}
-          new categories pending Kenny&apos;s approval.
+        <p className="mt-4 text-base text-stewart-muted leading-relaxed max-w-3xl">
+          Every section Stewart reads, in one canvas. Live cards are the
+          coaching the floor gets today. Scaffolded cards are the
+          sections we&apos;ve mapped — the embedded build converts them
+          into live ones.
         </p>
       </header>
 
-      <SchemaBrowser payload={payload} />
+      <SchemaBrowser payload={payload} overrides={overrides} />
     </div>
   );
 }

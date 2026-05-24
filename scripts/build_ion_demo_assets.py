@@ -440,6 +440,12 @@ def build_schema(spencer_os: Path) -> None:
         # last segment is something the YAML doesn't actually nest under.
         # Conservative: keep them — Strategy Claude wanted full visibility.
 
+        # TODO(spencer/codex): expose `description` as a structured
+        # field on the section dict here, parsed from raw_yaml. The
+        # frontend currently regex-parses raw_yaml at render time
+        # (see descriptionFromYaml in src/app/ion/(public)/schema/types.ts)
+        # which is brittle to YAML formatting drift. Move that parse
+        # here so the payload carries a stable string.
         sections_out.append(
             {
                 "path": path,
