@@ -3,9 +3,9 @@
 import { useState } from "react";
 import {
   BrainV2Scene,
-  CORE_PALETTES,
-  DEFAULT_PALETTE,
-  type CorePalette,
+  PLANET_PALETTES,
+  DEFAULT_PLANET_PALETTE,
+  type PlanetPalette,
 } from "./BrainV2Scene.client";
 import { DetailPanel, type Selection } from "./DetailPanel.client";
 import { StatStrip } from "./StatStrip";
@@ -16,7 +16,9 @@ const BRAIN_MAX_WIDTH = "min(80vh, 100%)";
 export function BrainPageShell({ payload }: { payload: BrainV2Payload }) {
   const [selection, setSelection] = useState<Selection | null>(null);
   const [hoveredDomain, setHoveredDomain] = useState<string | null>(null);
-  const [palette, setPalette] = useState<CorePalette>(DEFAULT_PALETTE);
+  const [planetPalette, setPlanetPalette] = useState<PlanetPalette>(
+    DEFAULT_PLANET_PALETTE
+  );
 
   return (
     <div className="space-y-4">
@@ -31,9 +33,9 @@ export function BrainPageShell({ payload }: { payload: BrainV2Payload }) {
           hoveredDomain={hoveredDomain}
           onHoverDomain={setHoveredDomain}
           onSelect={setSelection}
-          palette={palette}
+          planetPalette={planetPalette}
         />
-        <PalettePicker active={palette} onPick={setPalette} />
+        <PlanetPalettePicker active={planetPalette} onPick={setPlanetPalette} />
       </div>
 
       <DetailSlot
@@ -45,20 +47,20 @@ export function BrainPageShell({ payload }: { payload: BrainV2Payload }) {
   );
 }
 
-function PalettePicker({
+function PlanetPalettePicker({
   active,
   onPick,
 }: {
-  active: CorePalette;
-  onPick: (p: CorePalette) => void;
+  active: PlanetPalette;
+  onPick: (p: PlanetPalette) => void;
 }) {
   return (
     <div className="absolute top-3 right-3 z-20 bg-stewart-bg/85 backdrop-blur-sm border border-stewart-border rounded-lg p-2 space-y-1 pointer-events-auto">
       <p className="text-[9px] uppercase tracking-wider text-stewart-muted font-mono px-1">
-        Core palette
+        Call-node palette
       </p>
       <div className="flex flex-col gap-1">
-        {CORE_PALETTES.map((p) => {
+        {PLANET_PALETTES.map((p) => {
           const isActive = p.id === active.id;
           return (
             <button
@@ -73,7 +75,7 @@ function PalettePicker({
             >
               <span
                 className="w-3 h-3 rounded-full border border-stewart-border shrink-0"
-                style={{ background: p.attenuationColor }}
+                style={{ background: p.swatch }}
               />
               <span className="whitespace-nowrap">{p.label}</span>
             </button>

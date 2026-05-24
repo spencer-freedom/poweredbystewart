@@ -22,67 +22,93 @@ const SCENE_BG = "#020617";
 const CORE_RADIUS_SCALE = 1.4; // bigger than payload core_radius for presence
 const TILE_INACTIVE_COLOR = "#1a1d27";
 
-// V2.0.11 — switchable core palettes (Spencer is comparing four). Once
-// he picks, lock the chosen one and rip the picker. Each palette
-// controls the substrate's attenuation, the pearl-sheen layer's tint,
-// the colored shell's emissive undertone, and the shell opacity (darker
-// palettes can afford slightly more opacity since they don't wash out
-// passing planets).
-export type CorePalette = {
+// V2.0.12 — switchable PLANET (call nucleus) palettes. Spencer wants
+// the nodes to read as natural materials (brown / bronze / copper)
+// for better visibility against the pearl crystal core. Each palette
+// overrides the payload's outcome_tint_color with a hardcoded natural
+// tone. Once Spencer picks, lock the chosen one + rip the picker.
+//
+// Core itself stays pearl — only the planet bodies change palette.
+export type PlanetPalette = {
   id: string;
   label: string;
-  attenuationColor: string;
-  sheenColor: string;
-  sheenEmissive: string;
-  sheenOpacity: number;
-  shellEmissive: string;
-  shellOpacity: number;
+  // Color picker swatch (one representative tone for the picker UI)
+  swatch: string;
+  // Per-outcome bucket tints applied to the planet sphere material
+  outcomes: Record<string, string>;
 };
 
-export const CORE_PALETTES: CorePalette[] = [
+// Resolve a payload outcome string to the palette's bucket. Anything
+// outside the named buckets falls back to "unknown".
+function bucketOf(outcome: string): string {
+  const o = (outcome || "").toLowerCase();
+  if (o === "booked" || o === "appointment_set" || o === "transferred_to_closer")
+    return "booked";
+  if (o === "no_interest" || o === "lost") return "no_interest";
+  if (o === "declined" || o === "unqualified") return "declined";
+  if (o === "callback" || o === "conditional_booking") return "callback";
+  if (o.startsWith("tentative") || o === "fragile") return "tentative";
+  return "unknown";
+}
+
+export const PLANET_PALETTES: PlanetPalette[] = [
   {
-    id: "pearl",
-    label: "Pearl (current)",
-    attenuationColor: "#fff5e6",
-    sheenColor: "#fff8ec",
-    sheenEmissive: "#fef3d6",
-    sheenOpacity: 0.12,
-    shellEmissive: "#0a0f1a",
-    shellOpacity: 0.48,
+    id: "current",
+    label: "Current (payload)",
+    swatch: "#9a9a9a",
+    outcomes: {}, // empty → falls through to payload outcome_tint_color
   },
   {
     id: "bronze",
-    label: "Smoked bronze",
-    attenuationColor: "#8b6f47",
-    sheenColor: "#b89970",
-    sheenEmissive: "#5c4530",
-    sheenOpacity: 0.18,
-    shellEmissive: "#1a1208",
-    shellOpacity: 0.55,
+    label: "Bronze foundry",
+    swatch: "#cd7f32",
+    outcomes: {
+      booked: "#cd7f32",      // copper
+      no_interest: "#5c2e10", // dark coffee
+      declined: "#5c2e10",
+      callback: "#b8860b",    // dark goldenrod
+      tentative: "#a0522d",   // sienna
+      unknown: "#6b5e4f",     // taupe
+    },
   },
   {
-    id: "cognac",
-    label: "Antique cognac",
-    attenuationColor: "#c4904a",
-    sheenColor: "#d4b896",
-    sheenEmissive: "#8b5a2b",
-    sheenOpacity: 0.16,
-    shellEmissive: "#2a1c0a",
-    shellOpacity: 0.52,
+    id: "leather",
+    label: "Aged leather",
+    swatch: "#8b6f47",
+    outcomes: {
+      booked: "#8b6f47",      // warm tan
+      no_interest: "#5c3317", // burnt umber
+      declined: "#5c3317",
+      callback: "#c19a6b",    // camel
+      tentative: "#a0522d",   // sienna
+      unknown: "#7d6e58",     // mushroom
+    },
   },
   {
-    id: "wood",
-    label: "Petrified wood",
-    attenuationColor: "#8b7355",
-    sheenColor: "#a89072",
-    sheenEmissive: "#5c4a35",
-    sheenOpacity: 0.15,
-    shellEmissive: "#1a1410",
-    shellOpacity: 0.55,
+    id: "walnut",
+    label: "Polished walnut",
+    swatch: "#8b5a2b",
+    outcomes: {
+      booked: "#8b5a2b",      // saddle brown
+      no_interest: "#3d2817", // espresso
+      declined: "#3d2817",
+      callback: "#a08060",    // walnut
+      tentative: "#b8860b",   // goldenrod
+      unknown: "#5d4e3a",     // driftwood
+    },
   },
 ];
 
-export const DEFAULT_PALETTE: CorePalette = CORE_PALETTES[0];
+export const DEFAULT_PLANET_PALETTE: PlanetPalette = PLANET_PALETTES[0];
+
+export function planetColor(
+  outcome: string,
+  payloadTint: string,
+  palette: PlanetPalette
+): string {
+  const overrideColor = palette.outcomes[bucketOf(outcome)];
+  return overrideColor || payloadTint;
+}
 const GROUNDING_LINE_COLOR = "#e2e8f0";
 const GROUNDING_LINE_OPACITY = 0.22;
 const GROUNDING_LINE_OPACITY_HOVER = 0.8;
@@ -151,13 +177,13 @@ export function BrainV2Scene({
   hoveredDomain,
   onHoverDomain,
   onSelect,
-  palette = DEFAULT_PALETTE,
+  planetPalette = DEFAULT_PLANET_PALETTE,
 }: {
   payload: BrainV2Payload;
   hoveredDomain: string | null;
   onHoverDomain: (d: string | null) => void;
   onSelect: (sel: Selection) => void;
-  palette?: CorePalette;
+  planetPalette?: PlanetPalette;
 }) {
   const coreRadius = payload.core.core_radius * CORE_RADIUS_SCALE;
   const [autoRotate, setAutoRotate] = useState(true);
@@ -207,7 +233,7 @@ export function BrainV2Scene({
             autoRotate={autoRotate}
             onInteractStart={handleInteractStart}
             onInteractEnd={handleInteractEnd}
-            palette={palette}
+            planetPalette={planetPalette}
           />
         </Canvas>
       </div>
@@ -231,7 +257,7 @@ function Scene({
   autoRotate,
   onInteractStart,
   onInteractEnd,
-  palette,
+  planetPalette,
 }: {
   payload: BrainV2Payload;
   coreRadius: number;
@@ -240,7 +266,7 @@ function Scene({
   autoRotate: boolean;
   onInteractStart: () => void;
   onInteractEnd: () => void;
-  palette: CorePalette;
+  planetPalette: PlanetPalette;
 }) {
   return (
     <>
@@ -265,7 +291,6 @@ function Scene({
           coreRadius={coreRadius}
           hoveredDomain={hoveredDomain}
           onSelect={onSelect}
-          palette={palette}
         />
         <CallPlanets
           planets={payload.planets}
@@ -274,6 +299,7 @@ function Scene({
           coreRadius={coreRadius}
           hoveredDomain={hoveredDomain}
           onSelect={onSelect}
+          planetPalette={planetPalette}
         />
       </Suspense>
 
@@ -309,13 +335,11 @@ function CrystalCore({
   coreRadius,
   hoveredDomain,
   onSelect,
-  palette,
 }: {
   core: BrainV2Payload["core"];
   coreRadius: number;
   hoveredDomain: string | null;
   onSelect: (sel: Selection) => void;
-  palette: CorePalette;
 }) {
   // Build the per-vertex-color sphere geometry once per (core + radius)
   const geometry = useMemo(
@@ -345,7 +369,7 @@ function CrystalCore({
           ior={1.52}
           chromaticAberration={0.035}
           attenuationDistance={0.6}
-          attenuationColor={palette.attenuationColor}
+          attenuationColor="#fff5e6"
           clearcoat={1.0}
           clearcoatRoughness={0.0}
           samples={6}
@@ -355,18 +379,18 @@ function CrystalCore({
         />
       </mesh>
 
-      {/* Inner sheen — iridescent layer that gives the crystal a hint
-          of pearl/bronze/cognac/wood depending on the active palette. */}
+      {/* Pearl inner sheen — gives the crystal an opal/pearl hint
+          rather than reading as plain clear glass. */}
       <mesh>
         <sphereGeometry args={[coreRadius * 0.95, 48, 48]} />
         <meshStandardMaterial
-          color={palette.sheenColor}
-          emissive={palette.sheenEmissive}
+          color="#fff8ec"
+          emissive="#fef3d6"
           emissiveIntensity={0.18}
           roughness={0.85}
           metalness={0.0}
           transparent
-          opacity={palette.sheenOpacity}
+          opacity={0.12}
           depthWrite={false}
         />
       </mesh>
@@ -382,12 +406,12 @@ function CrystalCore({
       >
         <meshStandardMaterial
           vertexColors
-          emissive={palette.shellEmissive}
+          emissive="#0a0f1a"
           emissiveIntensity={0.32}
           roughness={0.6}
           metalness={0.0}
           transparent
-          opacity={palette.shellOpacity}
+          opacity={0.48}
           depthWrite={false}
         />
       </mesh>
@@ -546,6 +570,7 @@ function CallPlanets({
   coreRadius,
   hoveredDomain,
   onSelect,
+  planetPalette,
 }: {
   planets: Planet[];
   radialConfig: BrainV2Payload["radial_config"];
@@ -553,6 +578,7 @@ function CallPlanets({
   coreRadius: number;
   hoveredDomain: string | null;
   onSelect: (sel: Selection) => void;
+  planetPalette: PlanetPalette;
 }) {
   // Precompute tile centers keyed by codex_section so gray-matter
   // planets can be parented near their exemplar tile.
@@ -588,6 +614,7 @@ function CallPlanets({
           coreRadius={coreRadius}
           hoveredDomain={hoveredDomain}
           onSelect={onSelect}
+          planetPalette={planetPalette}
         />
       ))}
     </group>
@@ -601,6 +628,7 @@ function SinglePlanet({
   coreRadius,
   hoveredDomain,
   onSelect,
+  planetPalette,
 }: {
   planet: Planet;
   radialConfig: BrainV2Payload["radial_config"];
@@ -608,6 +636,7 @@ function SinglePlanet({
   coreRadius: number;
   hoveredDomain: string | null;
   onSelect: (sel: Selection) => void;
+  planetPalette: PlanetPalette;
 }) {
   // Gray-matter planets never absorb regardless of rank.
   const absorption = planet.is_gray_matter ? 0 : planet.absorption_factor;
@@ -678,8 +707,16 @@ function SinglePlanet({
       >
         <sphereGeometry args={[baseSize, 16, 16]} />
         <meshStandardMaterial
-          color={planet.outcome_tint_color}
-          emissive={planet.outcome_tint_color}
+          color={planetColor(
+            planet.outcome,
+            planet.outcome_tint_color,
+            planetPalette
+          )}
+          emissive={planetColor(
+            planet.outcome,
+            planet.outcome_tint_color,
+            planetPalette
+          )}
           emissiveIntensity={
             (planet.is_gray_matter ? PLANET_EMISSIVE_GRAY_BASE : PLANET_EMISSIVE_BASE) +
             (hover ? PLANET_EMISSIVE_HOVER_BOOST : 0) +
