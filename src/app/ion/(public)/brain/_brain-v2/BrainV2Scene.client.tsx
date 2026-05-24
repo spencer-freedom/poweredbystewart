@@ -245,11 +245,7 @@ export function BrainV2Scene({
         </Canvas>
       </div>
 
-      <Legend
-        domainColors={payload.domain_colors}
-        hoveredDomain={hoveredDomain}
-        onHoverDomain={onHoverDomain}
-      />
+      <Legend />
     </div>
   );
 }
