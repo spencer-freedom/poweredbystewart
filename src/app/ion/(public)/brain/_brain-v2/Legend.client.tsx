@@ -166,5 +166,6 @@ export function Legend() {
         see Stewart&apos;s full breakdown of that call and listen to
         the cherry-pick clips.
       </p>
+    </div>
   );
 }
