@@ -27,9 +27,20 @@ const GROUNDING_LINE_OPACITY_HOVER = 0.7;
 const ORBIT_LINE_OPACITY = 0.22;
 const PLANET_FADE_FLOOR = 0.08;
 const PLANET_SIZE_FLOOR = 0.55;
-const MOON_BASE_SIZE = 0.35;
+const MOON_BASE_SIZE = 0.5;
 const GRAY_HALO_COLOR = "#fde68a";
 const GRAY_HALO_BASE_SCALE = 1.9;
+
+// V2.0.4 — bumped emissive levels so domain hues stay legible at the
+// pulled-back default camera distance. Pearl core can dominate the
+// brightness budget if these are too low.
+const MOON_EMISSIVE_BASE = 0.95;
+const MOON_EMISSIVE_HOVER_BOOST = 0.6;
+const MOON_EMISSIVE_DOMAIN_BOOST = 0.35;
+const PLANET_EMISSIVE_BASE = 0.55;
+const PLANET_EMISSIVE_GRAY_BASE = 0.85;
+const PLANET_EMISSIVE_HOVER_BOOST = 0.45;
+const PLANET_EMISSIVE_DOMAIN_BOOST = 0.3;
 
 // V2.0.2.1 — Strategy Claude desaturated the domain palette in the
 // payload to give the core sphere a "frosted crystal" feel, but that
@@ -598,11 +609,11 @@ function SinglePlanet({
           color={planet.outcome_tint_color}
           emissive={planet.outcome_tint_color}
           emissiveIntensity={
-            (planet.is_gray_matter ? 0.55 : 0.25) +
-            (hover ? 0.35 : 0) +
-            (domainHit ? 0.25 : 0)
+            (planet.is_gray_matter ? PLANET_EMISSIVE_GRAY_BASE : PLANET_EMISSIVE_BASE) +
+            (hover ? PLANET_EMISSIVE_HOVER_BOOST : 0) +
+            (domainHit ? PLANET_EMISSIVE_DOMAIN_BOOST : 0)
           }
-          roughness={0.5}
+          roughness={0.35}
           transparent
           opacity={opacity}
         />
@@ -810,8 +821,12 @@ function MoonNode({
         <meshStandardMaterial
           color={moonColor}
           emissive={moonColor}
-          emissiveIntensity={(hover ? 0.9 : 0.45) + (domainHit ? 0.3 : 0)}
-          roughness={0.45}
+          emissiveIntensity={
+            MOON_EMISSIVE_BASE +
+            (hover ? MOON_EMISSIVE_HOVER_BOOST : 0) +
+            (domainHit ? MOON_EMISSIVE_DOMAIN_BOOST : 0)
+          }
+          roughness={0.3}
         />
         {hover ? <MoonTooltip moon={moon} /> : null}
       </mesh>
