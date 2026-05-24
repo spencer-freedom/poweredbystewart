@@ -34,15 +34,14 @@ export function AudioClip({
   const [active, setActive] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // V2.1.11 — base URL precedence:
-  //   1. NEXT_PUBLIC_API_URL  (V1 production var, set on Vercel,
-  //      points at the Railway audio backend that was playing
-  //      audio under demo 1 before our cutover)
-  //   2. NEXT_PUBLIC_API_BASE_URL / NEXT_PUBLIC_BASE_URL (V2 names
-  //      I introduced — kept for any future deploy that sets them)
-  //   3. "" — falls through to same-origin Next.js /api/ion/audio-clip
-  //      route, which requires SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY
-  //      env on Vercel
+  // V2.1.12 — same-origin by default. The audio API route at
+  // /api/ion/audio-clip/[callId] signs Supabase URLs and redirects.
+  // Only need to override baseUrl if Spencer ever wants to point the
+  // client at a different host (e.g., a staging server or the
+  // Railway backend). NEXT_PUBLIC_API_URL was never set on the
+  // poweredbystewart Vercel project, so it stays empty here and we
+  // route same-origin — works with the existing Vercel env
+  // (NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY).
   const baseUrl =
     process.env.NEXT_PUBLIC_API_URL ||
     process.env.NEXT_PUBLIC_API_BASE_URL ||

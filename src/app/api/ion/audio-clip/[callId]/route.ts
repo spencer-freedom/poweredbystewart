@@ -23,12 +23,20 @@ export async function GET(
     return NextResponse.json({ error: "invalid callId" }, { status: 400 });
   }
 
-  const supabaseUrl = process.env.SUPABASE_URL;
+  // Accept either the server-only var name or the public one — the
+  // poweredbystewart Vercel project sets NEXT_PUBLIC_SUPABASE_URL for
+  // client-side Supabase access; reusing it server-side here is fine
+  // (the URL prefix isn't secret; only SUPABASE_SERVICE_ROLE_KEY is).
+  const supabaseUrl =
+    process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !serviceKey) {
     return NextResponse.json(
-      { error: "Supabase env not configured (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY)" },
+      {
+        error:
+          "Supabase env not configured (need SUPABASE_URL or NEXT_PUBLIC_SUPABASE_URL, plus SUPABASE_SERVICE_ROLE_KEY)",
+      },
       { status: 500 }
     );
   }
