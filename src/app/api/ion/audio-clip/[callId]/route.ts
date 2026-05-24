@@ -23,18 +23,20 @@ export async function GET(
     return NextResponse.json({ error: "invalid callId" }, { status: 400 });
   }
 
-  // Accept either the server-only var name or the public one — the
-  // poweredbystewart Vercel project sets NEXT_PUBLIC_SUPABASE_URL for
-  // client-side Supabase access; reusing it server-side here is fine
-  // (the URL prefix isn't secret; only SUPABASE_SERVICE_ROLE_KEY is).
+  // Accept any of the var names Spencer's projects use for these two:
+  //   URL  : SUPABASE_URL  OR  NEXT_PUBLIC_SUPABASE_URL
+  //   KEY  : SUPABASE_SERVICE_ROLE_KEY  OR  SUPABASE_SERVICE_KEY
+  // Falling back to the public URL name is safe (URL isn't secret;
+  // only the service key is). SUPABASE_SERVICE_KEY is the legacy
+  // name on the poweredbystewart project; SUPABASE_SERVICE_ROLE_KEY
+  // is Supabase's current canonical name.
   const supabaseUrl =
     process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const serviceKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_KEY;
 
   if (!supabaseUrl || !serviceKey) {
-    // Non-leaky diagnostic — booleans only, no values exposed. Tells us
-    // exactly which env vars the runtime is or isn't getting. This is
-    // safe to ship to prod: it reveals presence, not content.
     return NextResponse.json(
       {
         error: "Supabase env not configured",
@@ -42,9 +44,9 @@ export async function GET(
           SUPABASE_URL: Boolean(process.env.SUPABASE_URL),
           NEXT_PUBLIC_SUPABASE_URL: Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL),
           SUPABASE_SERVICE_ROLE_KEY: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+          SUPABASE_SERVICE_KEY: Boolean(process.env.SUPABASE_SERVICE_KEY),
           NEXT_PUBLIC_SUPABASE_ANON_KEY: Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
         },
-        hint: "If any expected key shows false here, that var isn't reaching the production route handler. Check Vercel project Settings → Environment Variables, confirm the var has Production scope, then force a fresh redeploy.",
       },
       { status: 500 }
     );
