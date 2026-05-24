@@ -42,9 +42,11 @@ export function DetailPanel({
   onClose: () => void;
 }) {
   if (!selection) return null;
+  // V2.0.3: card flows naturally below the brain — no internal
+  // scroll. Page scroll carries any long content.
   return (
-    <div className="bg-stewart-card border border-stewart-border rounded-lg shadow-2xl overflow-hidden flex flex-col max-h-[calc(100vh-2rem)]">
-      <header className="bg-stewart-card border-b border-stewart-border px-4 py-3 flex items-center justify-between gap-3 shrink-0">
+    <div className="bg-stewart-card border border-stewart-border rounded-lg shadow-2xl">
+      <header className="bg-stewart-card border-b border-stewart-border px-4 py-3 flex items-center justify-between gap-3">
         <span className="text-[10px] uppercase tracking-wider font-mono text-stewart-muted truncate">
           {labelFor(selection)}
         </span>
@@ -55,7 +57,7 @@ export function DetailPanel({
           close ✕
         </button>
       </header>
-      <div className="px-5 py-5 overflow-y-auto">
+      <div className="px-5 py-5">
         {selection.kind === "core" ? (
           <CoreMeta payload={payload} />
         ) : selection.kind === "tile" ? (

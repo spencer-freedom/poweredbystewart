@@ -6,13 +6,11 @@ import { DetailPanel, type Selection } from "./DetailPanel.client";
 import { StatStrip } from "./StatStrip";
 import type { BrainV2Payload } from "./types";
 
-// V2.0.2 layout: vertical stack, brain canvas is a 1:1 square sized
-// off the viewport height, detail cards live ABOVE the brain in a
-// fixed-min-height slot so the layout doesn't jump when cards open.
-// (Was V2.0.1 side-by-side grid; Spencer's preference is square brain
-// front-and-center.)
+// V2.0.3 layout: brain on top (square, sized off viewport height),
+// detail card BELOW the brain so it scrolls naturally with the page
+// instead of fighting an internal cap. Full call detail can be as
+// long as it wants — Spencer scrolls.
 
-const SLOT_MIN_HEIGHT = "8rem";
 const BRAIN_MAX_WIDTH = "min(80vh, 100%)";
 
 export function BrainPageShell({ payload }: { payload: BrainV2Payload }) {
@@ -22,12 +20,6 @@ export function BrainPageShell({ payload }: { payload: BrainV2Payload }) {
   return (
     <div className="space-y-4">
       <StatStrip payload={payload} />
-
-      <DetailSlot
-        payload={payload}
-        selection={selection}
-        onClose={() => setSelection(null)}
-      />
 
       <div
         className="aspect-square mx-auto w-full"
@@ -40,6 +32,12 @@ export function BrainPageShell({ payload }: { payload: BrainV2Payload }) {
           onSelect={setSelection}
         />
       </div>
+
+      <DetailSlot
+        payload={payload}
+        selection={selection}
+        onClose={() => setSelection(null)}
+      />
     </div>
   );
 }
@@ -56,28 +54,19 @@ function DetailSlot({
   return (
     <div
       className="w-full mx-auto"
-      style={{ maxWidth: BRAIN_MAX_WIDTH, minHeight: SLOT_MIN_HEIGHT }}
+      style={{ maxWidth: BRAIN_MAX_WIDTH }}
     >
       {selection ? (
-        <div className="max-h-[42vh] overflow-y-auto">
-          <DetailPanel
-            payload={payload}
-            selection={selection}
-            onClose={onClose}
-          />
-        </div>
+        <DetailPanel
+          payload={payload}
+          selection={selection}
+          onClose={onClose}
+        />
       ) : (
-        <div
-          className="h-full flex items-center justify-center rounded-lg border border-dashed border-stewart-border bg-stewart-card/30 p-4 text-center"
-          style={{ minHeight: SLOT_MIN_HEIGHT }}
-        >
-          <p className="text-sm text-stewart-muted leading-relaxed max-w-md">
-            <span className="text-stewart-text font-medium">
-              Click a planet, moon, tile, or the crystal core
-            </span>{" "}
-            to see Stewart&apos;s full read for that node.
-          </p>
-        </div>
+        <p className="text-center text-xs text-stewart-muted py-3">
+          Click a planet, moon, tile, or the crystal core to load that
+          node&apos;s full coaching folder here.
+        </p>
       )}
     </div>
   );
