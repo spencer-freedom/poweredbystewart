@@ -1,0 +1,268 @@
+# Codex additions — PENDING Kenny approval
+#
+# These are the proposed new sections to add to config/codex/codex_v1.0_solar_skeleton.yaml
+# once Kenny signs off on the CODEX_REVIEW_FOR_KENNY.md document.
+#
+# Source: Stewart's pattern-analyzer pass on 332-call curated corpus (2026-05-22) +
+# Spencer's operator catch on softener overuse.
+#
+# To merge: each section below gets inserted into the appropriate parent section in
+# the main codex. Specific insertion locations noted per-section.
+
+# ============================================================================
+# Insert into `classifications:` section of codex (if it exists, else create)
+# OR fold into the cherry-pick `classification` enum documentation
+# ============================================================================
+
+proposed_classifications:
+
+  setter_scope_creep:
+    description: |
+      Rep volunteers closer-tier content (product features, financial mechanisms,
+      warranty/cost rationales, panel specs) before the customer asks, or in response
+      to a question that should be redirected to the specialist.
+    distinct_from: protocol_violation
+    distinction: |
+      protocol_violation breaks a procedural rule. setter_scope_creep gives away
+      appointment value by being accurate-but-premature. Content correctness isn't
+      the issue; sequencing is.
+    universal_escape_hatch: |
+      "That's exactly what the specialist will walk you through."
+    coaching_drill: |
+      Identify the moment of drift (the first technical question the rep should
+      have redirected). Replay the clip. Have the rep deliver the escape hatch
+      twice. Watch for the pattern across that rep's other calls.
+    example_call_ids:
+      - {call_id: session15_c55febbd, ts: "02:39"}
+      - {call_id: session8_c1f36478, ts: "01:18"}
+      - {call_id: "10000587120", ts: "01:33"}
+    sample_frequency_in_corpus: 12  # of 80 sample, extrapolates to ~120 of 775 total "other"
+
+  intro_legitimacy_omission:
+    description: |
+      Rep opens the call without establishing company identity, lead source, OR
+      credibility anchor in the first 30 seconds. Includes cases where the company
+      name is mentioned but no context (state, referral source, certified-installer
+      framing) follows.
+    distinct_from: protocol_violation
+    distinction: |
+      protocol_violation could be many things. intro_legitimacy_omission is
+      specifically the failure of the intro's primary job — answering
+      "is this a scam?" before the customer can ask.
+    coaching_principle: |
+      Cooperative customers tolerate a weak intro. Skeptical customers — the
+      demographic majority in Ion's curated corpus — drop here.
+    fix: |
+      Two-sentence anchor: company + state + lead source. Adds under 10 seconds,
+      materially changes the call's trust baseline.
+    example_call_ids:
+      - {call_id: session4_3d4e75c7, ts: "00:35"}
+      - {call_id: session2_77086e3f, ts: "00:03"}
+      - {call_id: session27_2b25735d, ts: "00:05"}
+    sample_frequency_in_corpus: 9
+
+  objection_inversion_miss:
+    description: |
+      Customer states a cost / skepticism / prior-experience objection that maps
+      to the codex's objection_inversion trigger. Rep accepts the objection at
+      face value, validates it, OR pivots to feature explanation instead of
+      deploying the bill-as-villain reframe.
+    distinct_from: empathy_miss
+    distinction: |
+      empathy_miss is emotional. objection_inversion_miss is strategic — missing
+      the structural reframe move where the customer's stated reason against
+      solar is the same financial situation that justifies solar.
+    coaching_priority: floor_wide_training_gap
+    critical_finding: |
+      Stewart's corpus analysis found ZERO instances of the objection_inversion
+      move being executed across the full 332-call curated corpus. This is the
+      codex's highest-leverage daily coaching contribution and it is completely
+      absent from the floor. This is a floor-wide training gap, not a per-rep
+      coaching note.
+    coaching_drill: |
+      The inversion concept — "the financial argument against solar is the same
+      financial argument FOR it" — needs to be drilled until reflex. The
+      objection_inversion_miss moments in the corpus are the clearest teaching
+      examples available.
+    example_call_ids:
+      - {call_id: session22_8d5e19a7, ts: "00:16"}
+      - {call_id: session28_23812db1, ts: "02:11"}
+      - {call_id: session26_3f71f076, ts: "05:12"}
+    sample_frequency_in_corpus: 8
+    detected_in_corpus_actually_executed: 0   # ⚠️ THE BOMBSHELL
+
+  prior_contact_probe_miss:
+    description: |
+      Customer discloses a prior solar conversation, quote, design, or promise
+      from another company OR a previous Ion touch. Rep acknowledges but does
+      NOT probe for competitive intelligence (which company, what was shown,
+      what happened, customer reaction).
+    distinct_from: knowledge_gap
+    distinction: |
+      knowledge_gap is missing PRODUCT knowledge. prior_contact_probe_miss is
+      missing the competitive-context EXTRACTION that would sharpen the closer's
+      opening frame.
+    coaching_principle: |
+      Every prior-contact disclosure is free competitive intelligence. A single
+      follow-up question costs 15 seconds and gives the closer a material
+      advantage at the proposal.
+    fix: |
+      Drill as verify.prior_designs reflex: hear "I talked to someone" → ask
+      one probe question before moving on. "Did they show you a design?
+      What did you think?"
+    example_call_ids:
+      - {call_id: "30000166799", ts: "04:41"}
+      - {call_id: session22_8b7fac1d, ts: "01:14"}
+      - {call_id: session2_22486ddd, ts: "01:00"}
+    sample_frequency_in_corpus: 7
+
+  unanchored_soft_exit:
+    description: |
+      Call ends without a locked appointment time, a verbal "is that fair?"
+      handshake, OR a confirmed next-step OWNED BY the rep. Includes passive
+      closes like "look forward to hearing from you" instead of active closes
+      like "I'll send you a text confirming Thursday at 2."
+    distinct_from: conditional_booking
+    distinction: |
+      conditional_booking has a real unresolved customer barrier. unanchored_soft_exit
+      is procedural fragility — missing the handshake mechanics that convert
+      passive agreement into active yes.
+    coaching_principle: |
+      The "is that fair?" handshake is the single highest-leverage button-up
+      mechanic because it converts passive agreement into active yes — and an
+      active yes predicts the sit.
+    metric_to_track: |
+      Sit rate by rep, correlated with button-up execution quality. Reps
+      substituting passive language are systematically producing appointments
+      that won't hold.
+    example_call_ids:
+      - {call_id: session8_d20b746b, ts: "07:55"}
+      - {call_id: session2_31dbc423, ts: "00:53"}
+      - {call_id: "10000811924", ts: "05:03"}
+    sample_frequency_in_corpus: 8
+
+  non_standard_scenario_hold:
+    description: |
+      Rep places customer on hold mid-call to consult a supervisor because the
+      customer's situation falls outside the standard new-solar-install script:
+      off-grid, battery-only, manufactured / mobile home, removal / reinstall,
+      cash-buyer.
+    distinct_from: knowledge_gap
+    distinction: |
+      knowledge_gap is general product unknowns. non_standard_scenario_hold is
+      specifically the gap in non-standard scenario RECOGNITION and ROUTING.
+    coaching_principle: |
+      Two or more supervisor holds in a single call with a warm, motivated
+      buyer erodes credibility at the worst possible moment.
+    fix: |
+      Build a non-standard scenario quick-reference for setters covering the
+      five most common edge cases (off-grid, battery-only, manufactured home,
+      removal/reinstall, cash buyer) with a defined routing action for each.
+      Goal: not eliminate escalation, but reduce holds that stem from missing
+      basic routing pattern.
+    example_call_ids:
+      - {call_id: session12_bc3b204c, ts: "06:31"}
+      - {call_id: session1_718cbcf3, ts: "00:28"}
+      - {call_id: session4_6c84da86, ts: "00:55"}
+    sample_frequency_in_corpus: 5
+
+  curiosity_creation_failure:
+    description: |
+      Customer hands the rep an anchor (kWh number, bill amount, prior quote,
+      neighbor's system). Rep either files the data silently, delivers a generic
+      feature-adjacent comment, OR moves to the next verify item without using
+      the moment as a forward-pulling hook.
+    distinct_from: bill_anchor
+    distinction: |
+      bill_anchor covers failure to COLLECT the bill. curiosity_creation_failure
+      catches when the data has already been disclosed — the failure is
+      converting disclosed data into appointment motivation.
+    coaching_principle: |
+      The codex's curiosity_over_features principle is the setter's primary
+      value-creation tool. It requires the rep to recognize when a customer
+      has handed them anchor material.
+    fix: |
+      Drill the reflect-and-forward-pull habit. When a customer gives you a
+      number, say it back with a forward frame.
+      Example: "13,000 kWh a year — that's exactly the kind of usage where the
+      design gets interesting. Let's get you on the calendar."
+    example_call_ids:
+      - {call_id: "20000445648", ts: "02:46"}
+      - {call_id: "10000538705", ts: "00:40"}
+      - {call_id: "10000348391", ts: "03:28"}
+    sample_frequency_in_corpus: 7
+
+
+# ============================================================================
+# Insert under `coaching_philosophy:` as a new sub-section
+# ============================================================================
+
+coaching_philosophy_addition:
+
+  verbal_discipline:
+    description: |
+      The vocabulary patterns that separate professional reps from amateur ones.
+      Different from rapport_repair / curiosity_over_features — this is about
+      the WORDS reps default to under pressure or in routine delivery.
+
+    softener_overuse:
+      description: |
+        Rep uses uncertainty-softeners ("kinda", "kind of", "I guess", "maybe",
+        "I think") repeatedly in declarative statements about Ion's program,
+        products, or process.
+      attribution: |
+        Spencer-identified pattern from 13 years of sales operator experience,
+        sharpened by observing his son onboard at Ion. "Softeners make reps
+        sound unprofessional — they say it to soften direct statements, but
+        it just signals uncertainty. Drop them and the call's quality goes way
+        up. So does the rep's confidence."
+      detection_threshold: |
+        Flag at 3+ instances in a single conversation segment (not isolated
+        uses — everyone occasionally says "kind of"). Flag at high per-1K-words
+        rate across a rep's full call history.
+      corpus_data_2026_05_22:
+        total_rep_kinda_instances: 207
+        total_rep_kind_of_instances: 107
+        total_rep_softener_instances: 314
+        rep_per_1k_words_rate: 2.23
+        customer_for_comparison: 163  # roughly half the per-word rate of reps
+        top_offender_rep: Parker
+        top_offender_count: 74
+        top_offender_calls: 26
+        top_offender_per_1k_rate: 6.11
+        worst_single_call: {call_id: session24_672c78b5, rep: Parker, softener_count: 12, duration_min: 9}
+      coaching_drill: |
+        Pull the rep's top-5 softener-density moments. Replay them. Have the
+        rep deliver the same line WITHOUT the softener. Compare audibly. The
+        difference in confidence and authority is immediate and obvious.
+        Reps fix this fast once they hear it.
+      benchmark_floor_baseline: |
+        Bucky (one of Kenny's top setters per his curation choices) runs at
+        1.19 softener instances per 1K words. Use this as the floor target —
+        not zero (some softening is conversational normalcy) but well under
+        2.0 per 1K.
+
+
+# ============================================================================
+# How to merge into main codex (instructions for Spencer + future Claude)
+# ============================================================================
+
+merge_instructions: |
+  When Kenny approves:
+
+  1. Each entry under `proposed_classifications:` becomes a sub-section under
+     a new top-level `classification_categories:` section in the main codex
+     (OR fold into the cherry-pick documentation if no such section exists).
+
+  2. `coaching_philosophy_addition.verbal_discipline` gets pasted under the
+     existing `coaching_philosophy:` section as a new sibling sub-section
+     (alongside bill_anchoring, curiosity_over_features, multi_angle_resilience,
+     setter_scope_discipline).
+
+  3. The classification enum in `scripts/stewart_demo_pipeline/tools.py`
+     STAGE3_TRAJECTORY_TOOL already has all 8 new categories (added 2026-05-22).
+     No code change needed when codex updates.
+
+  4. Optional: rerun a sample (50 calls?) against the expanded codex to verify
+     the new categories are getting picked up and the "other" classification
+     rate drops from current ~20% to a more reasonable ~5-10%.

@@ -1,0 +1,38 @@
+[
+  {
+    "ts": "00:00",
+    "quote": "Your call has been forwarded to voice mail. The per",
+    "classification": "other",
+    "codex_reference": "bill_collection.stewart_automated_bill_capture",
+    "stewart_read": "The call reached voicemail and the transcript ends mid-word. There is no evidence of what the rep did next — whether they left a voicemail, hung up, or attempted a follow-up. The absence of any rep utterance means the follow-up protocol (if any exists at Ion for voicemail non-contacts) cannot be evaluated from this record alone.",
+    "alternative_hypothesis": null,
+    "coaching_implication": "Use this record to audit whether Ion has a defined voicemail protocol for setters. Does the rep leave a scripted voicemail? Do they attempt a callback at a different time? Do they log the attempt in CRM? The transcript gives no evidence either way. If this is a paid lead, the stakes are higher — a missed live contact on a paid lead is a direct cost (see context.lead_types_and_bill_collection_rules). Manager should ask the rep: 'Walk me through what you did after this went to voicemail.'"
+  },
+  {
+    "ts": "00:00",
+    "quote": "Your call has been forwarded to voice mail. The per",
+    "classification": "other",
+    "codex_reference": "context.lead_types_and_bill_collection_rules",
+    "stewart_read": "Lead type for this session is unknown. If this is a paid lead, a voicemail non-contact represents a direct cost with no recovery path unless a structured follow-up protocol exists. If this is an organic lead, the urgency is lower but the missed contact still represents a lost opportunity. Stewart cannot determine lead type from this transcript — that metadata must be injected per call.",
+    "alternative_hypothesis": null,
+    "coaching_implication": "Conditional on lead type: if this is a paid lead, the manager should verify whether the rep logged the attempt and scheduled a callback. Ion's lead_type metadata is not present in this record — until Stewart receives lead_type per call (as flagged in context.lead_types_and_bill_collection_rules), coaching urgency on voicemail non-contacts cannot be correctly calibrated. Raise with Kenny: what is the floor's protocol for paid-lead voicemail non-contacts, and how is it tracked?"
+  },
+  {
+    "ts": "00:00",
+    "quote": "Your call has been forwarded to voice mail. The per",
+    "classification": "other",
+    "codex_reference": null,
+    "stewart_read": "The transcript is truncated mid-word ('The per'). This is a transcription pipeline failure, not a call content issue. The Deepgram capture either stopped recording prematurely or the file was not fully ingested. This is a data-quality signal, not a rep-coaching signal.",
+    "alternative_hypothesis": null,
+    "coaching_implication": "This is an ops/engineering issue, not a rep issue. Flag to whoever owns the transcription pipeline: SESSION2_cfa65f07 has a truncated capture. If this pattern recurs across other sessions, Stewart's analysis corpus is degraded — missed content means missed coaching signals. Manager should not spend 1-on-1 time on this record until a clean transcript is available."
+  },
+  {
+    "ts": "00:00",
+    "quote": "Your call has been forwarded to voice mail. The per",
+    "classification": "other",
+    "codex_reference": "outcomes",
+    "stewart_read": "The v1 outcome tag 'unknown' is insufficient for a voicemail non-contact. The codex defines outcomes including appointment_booked, appointment_held, and deal_closed — but has no explicit 'voicemail_no_contact' category. This record will pollute rep-performance aggregation if treated as an ambiguous outcome rather than a structural non-event.",
+    "alternative_hypothesis": null,
+    "coaching_implication": "Raise with Kenny and the ops team: the outcome taxonomy needs a 'voicemail_no_contact' tag distinct from 'unknown.' Without it, Stewart cannot correctly exclude null-contact records from rep_intent, customer_state_delta, and verify_completion_rate metrics. This is a schema gap, not a rep gap — but it affects every rep's performance read if left unresolved."
+  }
+]

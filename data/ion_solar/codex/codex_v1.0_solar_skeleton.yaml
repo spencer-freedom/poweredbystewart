@@ -1,0 +1,1173 @@
+# ============================================================================
+# STEWART CODEX — ION SOLAR v1.0 (SKELETON)
+# ============================================================================
+#
+# Status: SKELETON. Populated from Ion's setter script + 7 deep-read calls
+# (SESSION20, SESSION8, SESSION6, SESSION10, SESSION14, SESSION18_fcbf33c1,
+# SESSION18_fd078269). Several sections explicitly marked TBD — these are
+# the pages of the textbook that require Kenny + team manager input in the
+# building.
+#
+# This is the artifact Spencer shows Kenny: "here's Stewart's structure,
+# here's what we have, here's what we build together."
+#
+# Drafted: 2026-05-14 by Strategy Claude during the demo-prep calibration loop.
+# Curator: Spencer Colby. Source of truth for the Stewart-for-Solar instance.
+#
+# Schema discipline:
+# - POPULATED sections = ready to drive Stage 3 analysis
+# - PARTIAL sections = enough to use; sharper with Kenny's calibration
+# - TBD sections = explicit gaps the retainer phase fills in
+#
+# Source-of-truth approach for TBD sections:
+# Any section marked TBD can be populated EITHER by:
+#   (a) Kenny's recorded coaching sessions — Spencer captures Kenny explaining
+#       the principle, Stewart structures from his words, OR
+#   (b) Real Ion calls Kenny + team management designate as "source of truth"
+#       exemplars — "this call is what good looks like at our floor" / "this
+#       call is the failure mode we want Stewart to catch."
+# Both methods produce schema content grounded in Ion's actual voice and
+# Ion's actual call patterns. Stewart references the exemplar calls by ID
+# so coaching alternatives can quote real Ion language, not generic theory.
+#
+# ============================================================================
+
+client_id: ion-solar
+client_name: ION Solar
+industry: residential_solar
+call_type: appointment_setter
+config_version: 1.0.0-skeleton
+status: skeleton
+
+# ============================================================================
+# 1. CONTEXT  —  Injected into every analysis prompt as background
+# ============================================================================
+
+context:
+  industry: residential_solar
+  call_purpose: book_appointment_with_closer
+
+  customer_demographics:
+    typical_age_range: [45, 70]
+    typical_role: homeowner
+    typical_concerns:
+      - bill_pain
+      - scam_skepticism
+      - spouse_decision
+      - already_pitched_by_competitors
+      - door_knocker_anxiety   # surfaced from SESSION6 (Tanya's scam encounter)
+    # TBD with Kenny — Ion-specific demographic patterns,
+    # regional variation across markets, fixed-income subset frequency
+
+  competitive_landscape:
+    common_competitors: [Sunrun, Pink Solar, Tesla direct, local installers]
+    typical_quote_count: "2-3 quotes already received before this call"
+    differentiation_angle: "Tesla-certified installer status; in-house roofing"
+    # TBD with Kenny — full competitor list per region,
+    # specific positioning vs each, recent competitive intel
+
+  seasonality:
+    high_season: [June, July, August, September]
+    rationale: "Summer bills high → bill pain is fresh → receptivity higher"
+    # TBD with Kenny — winter heating-bill spike pattern (saw $621 in SESSION6)
+
+  ion_offerings_beyond_setter_call:
+    # CONFIRMED 2026-05-15 by Kenny direct.
+    - residential_solar_install
+        # Ion-branded solar panels (Ion's own product line, not Tesla panels).
+    - tesla_powerwall_battery_install
+        # Tesla Powerwall is the ONLY battery brand Ion carries. If a
+        # customer wants battery backup, Powerwall is the answer.
+    - roofing_in_house
+        # CRITICAL — surfaced in SESSION10 missed cross-sell. Roofing both
+        # standalone AND as solar-install prep.
+    ion_does_NOT_sell:
+      - tesla_solar_panels       # Ion sells its own panels, not Tesla's
+      - tesla_solar_roof_tiles   # The integrated shingle product
+      - non_tesla_batteries      # Powerwall is the only battery brand
+    # TBD with Kenny — full service catalog (warranties, financing, etc.)
+
+  setter_compensation_model:
+    # ADDED 2026-05-14 — surfaced by Spencer.
+    # CRITICAL CONTEXT: changes how Stewart reads booking outcomes.
+    paid_on: sits   # appointments that make it through the closer's full proposal
+    NOT_paid_on:
+      - bookings_alone
+      - appointments_that_no_show
+      - appointments_disqualified_at_proposal
+
+    known_structure:
+      # From Spencer's son working the floor (2026-05-14):
+      pay_period_length: 2_weeks
+      per_sit_floor: 10   # dollars at start of pay period
+      per_sit_ceiling: 50 # dollars at top of stair-step
+      structure_type: stair_step_accelerator
+      mechanic: |
+        Setters start each pay period at $10/sit. As they hit volume
+        thresholds within the period, the per-sit rate steps up
+        progressively. Top performers max out at $50/sit. This means
+        the marginal value of any single sit varies by where the
+        setter is in their current pay-period tier.
+
+    stewart_coaching_capability_unlocked:
+      # NEW capability the stair-step structure makes possible:
+      description: |
+        Stewart can surface coaching urgency calibrated to each setter's
+        CURRENT tier position. Example: "Marcus is 2 sits away from
+        his $30 tier — the next sit is worth $20 more to him than the
+        last three were." The same missed-sit pattern generates
+        different urgency for different setters depending on their
+        tier position. No generic AI tool can do this.
+      requires_from_kenny:
+        - full_pay_plan_document (tier thresholds, rates per tier)
+        - per_setter_current_tier_data (or how Stewart pulls it)
+        - pay_period_start_date (so Stewart knows where each setter is)
+
+    coaching_implication: |
+      Quality > quantity is baked into the comp model. A "booked but
+      fragile" appointment that won't hold doesn't pay the setter. This
+      makes the handoff brief a paycheck-protection tool, not just a
+      coaching artifact. Stewart's read on conditional/fragile bookings
+      (e.g., SESSION6 Tanya likely-ghost, SESSION20 Ashley fragile-win)
+      should reflect this urgency — AND should be tier-aware once Stewart
+      has access to the pay plan.
+
+    # TBD with Kenny:
+    # - Request full pay plan document (tier thresholds, all rates)
+    # - Confirm sit-only vs sit-and-qualified rate distinction
+    # - Confirm clawback rules if appointment disqualifies at proposal
+    # - Confirm how Stewart receives per-setter tier position data
+
+  lead_types_and_bill_collection_rules:
+    # ADDED 2026-05-14 — surfaced by Spencer.
+    # CRITICAL CONTEXT: changes how Stewart reads bill-collection effort.
+    types:
+      - id: paid_lead
+        bill_required_for_appointment: true
+        rep_must_have_bill_before_booking: true
+        coaching_implication: |
+          The 8-15 minute bill slog is doing required work. Inefficient
+          paths (SESSION6 landline / SESSION14 Android struggle) are still
+          coachable for SPEED, but the underlying effort is mandatory.
+          Stewart flags efficiency gaps differently here vs organic leads.
+
+      - id: organic_lead
+        bill_required_for_appointment: false
+        bill_preferred: true
+        coaching_implication: |
+          Setter can book a sit-eligible appointment WITHOUT the bill on
+          this lead type. Long bill struggles here are pure inefficiency —
+          rep should pivot to "specialist will collect the bill on site"
+          much earlier.
+
+      - id: recycled_lead
+        bill_on_file: possibly
+        coaching_implication: |
+          Ion may already have this customer's bill data from a prior
+          touch. Repeating bill collection on this lead type is redundant
+          time-burn. Stewart needs lead-type metadata per call to surface
+          this correctly.
+
+    needed_for_stewart_per_call:
+      - lead_type (paid / organic / recycled)
+      - existing_bill_on_file (yes / no / unknown)
+      - prior_touchpoint_count (first call / repeat / nth-touch)
+
+    # TBD with Kenny:
+    # - Full lead-type taxonomy at Ion (are there subtypes within paid?)
+    # - How Stewart receives the lead-type metadata per call
+    # - How "bill on file" status is checked before the call
+    # - Recycled lead routing rules (who gets them, when, why)
+
+  tesla_relationship_clarification:
+    # ADDED 2026-05-14, CONFIRMED 2026-05-15 by Kenny direct.
+    actual_relationship: |
+      Tesla is a LEAD SOURCE for Ion. Tesla forwards solar-interested
+      customers to Ion as a referral partner. On a Tesla-sourced lead,
+      the setter's job is identical to any other inbound: qualify the
+      lead and schedule the closer. Product selection happens at the
+      closer / proposal stage, not at setter stage.
+
+      What Ion CAN sell into a Tesla lead:
+        - Ion-branded solar panels (Ion's own product line)
+        - Tesla Powerwall battery (only battery brand Ion carries)
+        - In-house roofing (standalone or solar-prep)
+
+      What Ion CANNOT sell:
+        - Tesla solar panels (Ion sells its own panels, not Tesla's)
+        - Tesla solar roof tiles (integrated shingles — not Ion's product)
+    customer_expectation_gap: |
+      A small slice of Tesla-sourced customers may expect Tesla-branded
+      solar product (most often the roof tiles). When that comes up,
+      reframe cleanly: Tesla referred the lead to Ion as their installer
+      partner, Ion carries its own panels plus the Tesla Powerwall battery
+      option, but Tesla roof tiles aren't part of Ion's catalog.
+      SESSION10 (Jake/Larry) shows the failure mode when the rep doesn't
+      reframe at all — but the gap is narrower than a "bait-and-switch."
+      Setter does NOT need to over-explain the relationship at intro.
+    correct_framing_for_setter: |
+      Default: treat Tesla lead like any inbound lead. Acknowledge the
+      referral, move to qualifier, schedule the closer.
+
+      ONLY if customer pushes ("I thought this was Tesla"): "Tesla
+      referred your inquiry to us — we're their installer partner in
+      {state}. We install our own panels plus Tesla's Powerwall battery
+      if you want backup. The closer will walk through the options."
+    kenny_resolved_2026_05_15: |
+      Tesla = lead source. Setter treats it like any inbound. Closer
+      handles product mix. Script's existing "certified solar installer
+      for Tesla" framing stays — it works for legitimacy. Bait-and-switch
+      perception is real but narrower than first framed (roof tiles, not
+      whole-product expectation).
+
+  what_good_looks_like:
+    # TBD — populated by Kenny's recorded coaching sessions OR by real Ion
+    # calls Ion management selects as "source of truth" exemplars
+    # ("this call is what good looks like"). Need real examples from Kenny.
+    # Once exemplars are designated, Stewart references them by call_id so
+    # coaching alternatives can quote real Ion language, not generic theory.
+    # Current placeholders observed from positive calls (not Kenny-validated):
+    placeholders:
+      - calm_neighbor_like_energy
+      - legitimacy_established_first_30_seconds
+      - bill_pain_anchored_within_4_minutes
+      - protocols_followed_not_argued
+      - curiosity_created_not_features_explained
+      - structural_beats_completed_in_order
+      - personalized_text_followup_sent
+      - cross_sell_signals_routed
+      - setter_scope_held
+
+# ============================================================================
+# 2. CALL SHAPE  —  Structural beats every call should hit
+# ============================================================================
+
+call_shape:
+  required_beats:
+    - {id: intro, order: 1, hard_required: true}
+    - {id: verify_section, order: 2, hard_required: true}
+    - {id: program_pitch, order: 3, hard_required: true}
+    - {id: bill_collection, order: 4, hard_required: true}
+    - {id: orphaned_check, order: 5, hard_required: false}
+    - {id: button_up, order: 6, hard_required: true}
+
+  # NOTE: short calls (< 6 min) may legitimately compress these beats if
+  # existing records cover qualification (see SESSION18_fd078269). Stewart
+  # checks for context-justified compression vs cut-corner truncation.
+
+# ============================================================================
+# 3. INTROS  —  Opening variants (from Ion script)
+# ============================================================================
+
+intros:
+  - id: tesla
+    description: |
+      Used when Tesla forwarded a solar-interested lead to Ion as its
+      installer partner. CONFIRMED 2026-05-15 by Kenny: Tesla is a lead
+      source. On Tesla-sourced calls the setter does the same job as
+      any inbound — qualify, schedule closer. Product mix (Ion panels,
+      Tesla Powerwall battery, Ion roofing) is the closer's conversation,
+      not the setter's. See context.tesla_relationship_clarification.
+    legitimacy_weight: high
+    template: |
+      Hey {name}, this is {agent} with ION. We're the certified solar installer
+      for Tesla in {state}. How are you doing today?
+    success_signals:
+      - clear_company_introduction
+      - state_mention
+      - tesla_certified_framing
+      - human_pause_for_response
+    coaching_notes:
+      - "Tesla framing answers 'is this a scam?' immediately."
+      - "Wait for customer to answer 'how are you doing' — don't talk over."
+      - |
+        EXPECTATION GAP (rare, but real): a small subset of Tesla-sourced
+        leads expect Tesla-branded product, most often the roof tiles. If
+        the customer pushes ("I thought this was Tesla"), reframe cleanly:
+        Tesla referred the lead to Ion as their installer partner; Ion
+        sells its own panels plus the Tesla Powerwall battery option; the
+        closer walks through the package. Do NOT over-explain at intro —
+        only reframe when the customer raises it. SESSION10 (Jake/Larry)
+        shows the failure mode when the rep doesn't reframe at all.
+
+  - id: standard
+    description: Used for online form-fill leads
+    legitimacy_weight: medium
+    template: |
+      Hi {first_name}, this is {agent} with ION. I'm reaching out about the
+      solar form you filled out online. How are you doing today?
+    success_signals:
+      - clear_company_introduction
+      - reference_to_form_submission
+      - human_pause_for_response
+    coaching_notes:
+      - "Reference the form to legitimize the call."
+      - "Customer may be hostile about contact frequency — resolve via action, not defense (SESSION20 lesson)."
+
+# ============================================================================
+# 4. VERIFY  —  Qualification gathering disguised as conversation
+# ============================================================================
+
+verify:
+  description: Qualification disguised as rapport
+  required_completion_threshold: 6_of_8
+  coaching_principle: |
+    Should sound like a friendly chat. Top setters weave these naturally;
+    bottom setters check boxes mechanically.
+
+  items:
+    - id: address_homeowner_confirmed
+      label: "Confirm address, home type, ownership"
+      required: true
+      hard_dq_if_missing: not_homeowner
+      coaching_notes: ["Renters cannot buy solar — hard DQ"]
+
+    - id: title_co_owners
+      label: "Anyone else on the title?"
+      required: true
+      coaching_notes:
+        - "CRITICAL for spouse coordination at button-up"
+        - "If spouse on title, they MUST be on the appointment — see protocols.spouse_decision"
+
+    - id: residence_length
+      label: "How long have they lived at this home?"
+      required: false
+      coaching_notes: ["New residents may not know bill patterns"]
+
+    - id: interest_in_solar
+      label: "What interested you in solar?"
+      required: true
+      expand_to_validate: true
+      depth_grading: true
+      coaching_notes:
+        - "THE EMOTIONAL ANCHOR. Depth matters more than the answer."
+        - "Top setters spend 60+ seconds here. Bottom setters check the box and move on."
+        - "Listen for: bill pain, environmental motive, neighbor influence, news/marketing"
+
+    - id: utility_company
+      label: "Utility company is...?"
+      required: true
+      coaching_notes: ["Different utilities have different net metering rules"]
+
+    - id: average_bill
+      label: "Do you know how much you're paying on average?"
+      required: true
+      coaching_notes:
+        - "THE anchor for the entire pitch — see coaching_philosophy.bill_anchoring"
+        - "Capture is necessary but not sufficient. Top setters then FLIP the bill into emotional alignment-against-utility (see coaching_philosophy.objection_inversion)."
+
+    - id: roof_type_age
+      label: "Roof type / how old is it?"
+      required: true
+      hard_dq_if: roof_age_over_15_no_replacement_planned
+      coaching_notes:
+        - "Roof over 15 years often means re-roof required first"
+        - "If customer mentions planned roof replacement — see cross_sell_signals.roof_replacement_planned"
+
+    - id: prior_designs
+      label: "Have you seen a solar design for this home?"
+      required: true
+      coaching_notes:
+        - "Surfaces competitive context"
+        - "Customer probably has 1-3 quotes already"
+
+# ============================================================================
+# 5. QUALIFIERS  —  Hard requirements
+# ============================================================================
+
+qualifiers:
+  - id: credit_qualifier
+    threshold: 670
+    hard_dq: true   # NOTE: see policy question below; may be reconsidered
+    template: |
+      We have a solar program that saves you money immediately. The only
+      requirement is that you have a credit score above 670. Is that the case for you?
+
+    drift_observed:
+      - call: SESSION18_fcbf33c1 (Meg)
+        stated_threshold: 650
+        observation: "Rep stated 650 instead of 670. Either current policy varies or rep is wrong."
+
+    spencer_operator_note:
+      # ADDED 2026-05-14 — Spencer brings 13-year car-sales experience.
+      # Cross-vertical insight worth Ion considering.
+      observation: |
+        Stated credit ≠ pulled credit. Three bureaus often differ by 30-50
+        points (TransUnion typically highest). Customers see Vantage scores
+        on credit-card apps, not FICO. A customer who says "I'm a 650" may
+        actually be a 690 on the bureau Ion pulls.
+      operator_concern: |
+        Setter unilaterally DQ'ing on stated credit is potentially killing
+        real deals on unreliable customer self-reporting. In car sales the
+        rule was "never DQ on stated; let the credit pull decide."
+      policy_question_for_kenny: |
+        Should the setter make the credit-qualification decision based on
+        the customer's stated number? Or should the setter pass anyone
+        through to the closer's actual credit pull?
+        - If setter DQs on stated: current schema is correct (hard_dq=true)
+        - If closer's pull is the only DQ: schema changes to hard_dq=false
+          and the setter's job becomes "ask + book regardless of answer +
+          flag for closer's credit run"
+      coaching_implication: |
+        Until Kenny resolves this, Stewart's coaching read on credit-DQ
+        moments has two possible directions. If the policy is "let closer
+        decide", every setter DQ on stated credit becomes a coaching gap
+        (lost deal). If the policy is "setter DQs on stated", every
+        setter DQ is correct procedure.
+
+    notes:
+      tax_credit_disclosure: |
+        We can no longer guarantee the Tax Credit on purchased systems. It's possible
+        they can still claim it if we install it prior to the end of the year. We do
+        have purchase options available without the Tax Credit if needed.
+
+# ============================================================================
+# 6. BILL COLLECTION
+# ============================================================================
+
+bill_collection:
+  required: depends_on_lead_type   # see context.lead_types_and_bill_collection_rules
+  # - paid_lead: required before appointment can be set
+  # - organic_lead: preferred but not required
+  # - recycled_lead: check if bill already on file before extracting
+  template: |
+    The way we design these systems is based on how much energy your home uses.
+    We can get everything we need off of your utility bill to build this. There
+    is a graph on the bill that shows how many kilowatt hours you use each month.
+
+  branching:
+    - condition: bill_format == mail
+      response: "Perfect, would you rather text or email that to me?"
+    - condition: bill_format == online
+      response: "Perfect, would you rather text or email that to me?"
+
+  alternative_paths:
+    # SURFACED FROM SESSION6 + SESSION14 — both burned 8-15 min on bad paths
+    - id: elderly_low_tech_protocol
+      trigger: "customer cannot navigate smartphone within 1-2 attempts"
+      pivot_action: "Switch to verbal read-back. Have customer read kWh numbers off paper bill aloud."
+      time_budget: "Pivot within 2 minutes of friction, NOT 10."
+
+    - id: landline_protocol
+      trigger: "customer is on landline / cannot send photo"
+      pivot_action: "Verbal read-back OR defer bill collection to specialist site visit. Don't waste call time on impossible photo path."
+
+    - id: shopping_customer_protocol
+      # FROM SESSION18_fcbf33c1 — efficient handling at Walmart
+      trigger: "customer is mobile / away from home / phone-only"
+      pivot_action: "Walk customer through utility website on phone, capture via screenshot text."
+
+  stewart_automated_bill_capture:
+    # PROPOSED V1.5 / V2 CAPABILITY — surfaced 2026-05-14 by Spencer
+    status: roadmap
+    priority: high  # Quantified revenue impact (see below)
+
+    problem_observed:
+      - "Setters give out personal phone numbers for bill follow-up (SESSION20 example: 'It will just be me from my personal line'). Privacy + scale exposure."
+      - "Paid leads REQUIRE the utility bill before appointment can be set (see lead_types_and_bill_collection_rules)."
+      - "No systematic follow-up means missed sits when customer can't send bill on the call."
+      - "Spencer's son data point (2026-05-14): MISSED 5 SITS IN ONE DAY on paid leads where bill couldn't be captured live."
+
+    revenue_impact_questions_for_kenny:
+      # Stewart doesn't fabricate numbers. These are questions Kenny answers.
+      - "Roughly how many sits per setter per day are missed because the bill couldn't be captured live? Spencer's son missed 5 in one day on paid leads."
+      - "At your average setter's current pay-plan tier ($10-$50 stair-step), what's the per-sit value being lost on a typical missed-bill day?"
+      - "What's your appointment-to-close conversion rate, and your average deal margin? Multiplying missed-sits × conversion × margin = the downstream revenue Stewart's automated bill capture recovers."
+      - "What's your floor-wide volume of paid leads per week where bill-collection is the gating factor?"
+      coaching_note: |
+        Kenny owns these numbers. Stewart's job is to frame the question
+        cleanly and let Kenny do the multiplication. The math gets
+        powerful when HE does it, not when Spencer pretends to.
+
+    capability_spec:
+      trigger: "setter clicks 'follow up for bill' in Stewart UI at end of call"
+      flow:
+        - Stewart sends Twilio SMS to customer with utility-specific instructions
+        - Step-by-step instructions per utility provider (Potomac Edison, Northern Virginia Electric, ComEd, Ameren, Colorado Springs Utilities, etc.)
+        - Customer replies with bill photo to Stewart's number (NOT setter's personal phone)
+        - Stewart captures bill, ties to lead record
+        - Stewart notifies setter: "Customer's bill came through. You can book the sit now."
+      eliminates:
+        - Personal phone number exposure across the floor
+        - Setters chasing customers manually for bill photos
+        - The "I have to call you back tomorrow once you have the bill" cooling-off period
+
+    schema_population_needed:
+      - utility_providers_in_ion_service_area
+      - per_utility_bill_retrieval_instructions
+      - which_utilities_have_app_vs_web_vs_paper_only
+
+    detection_today:
+      # Stewart can flag the anti-pattern even before the capability ships
+      anti_pattern: "rep gives out personal phone number for bill follow-up"
+      detection_signal: "rep verbatim contains 'from my personal line' or 'text me at [number]' in context of bill collection"
+      coaching_note: |
+        Until Stewart's automated bill capture ships, this is the floor's
+        workaround. Flag for security/privacy review. Once V1.5 ships,
+        this anti-pattern becomes the coaching trigger to migrate the rep
+        onto the automated flow.
+
+    # TBD with Kenny:
+    # - Actual miss-rate data for paid-lead bill-collection friction
+    # - Utility provider list for Ion's full service area
+    # - How "bill captured" status feeds back into Salesforce / Ion's CRM
+    # - Whether setters get attribution for sits captured via Stewart's follow-up
+    #   (compensation question — they should, otherwise the tool's adoption suffers)
+
+# ============================================================================
+# 7. ORPHANED FLOW  —  Customer already has solar
+# ============================================================================
+
+orphaned_flow:
+  trigger_condition: customer_has_existing_solar
+  steps:
+    - {question: "Do you own your system or did you lease it?", hard_dq_answers: [PPA, lease_with_no_buyout]}
+    - {question: "What company did you go with originally?", hard_dq_answers: [Sunrun, Pink Solar]}
+    - {question: "Do you know the size of the panels you got?", capture: panel_size_watts}
+    - {question: "Is your system working?", hard_dq_answers: [not_working, broken],
+       coaching_note: "We cannot service the existing system right now"}
+
+# ============================================================================
+# 8. BUTTON UP  —  Appointment confirmation protocol
+# ============================================================================
+
+button_up:
+  required_elements:
+    - id: appointment_datetime_confirmed
+      template: "Alright, {customer_name}, I've got you on our schedule for {date} at {time}."
+      required: true
+    - id: one_hour_block_stated
+      template: "I blocked off that time for an hour to ensure you don't feel rushed."
+      required: true
+    - id: phone_appointment_specified
+      required: true
+    - id: no_driving_at_computer
+      template: "The only thing we ask is that you aren't driving and that you'll be able to sit down to review the design on your computer."
+      required: true
+      coaching_note: "If skipped, no-show rate climbs"
+    - id: is_that_fair_handshake
+      template: "Is that fair?"
+      required: true
+      coaching_note: "Verbal handshake. Predictive of show rate. Don't skip it."
+    - id: text_followup_promise
+      template: "Inform them you'll send a text with appointment details after the call"
+      required: true
+
+# ============================================================================
+# 9. TEXT AFTER CALL
+# ============================================================================
+
+text_after_call:
+  template: |
+    Hey {customer}, this is {agent} with ION Solar.
+    I have you on the calendar for {day}, the {date} at {time} to review
+    {tieback_to_interests_or_concerns}.
+    Looking forward to it, see you then!
+  required_elements: [tieback_to_interests_or_concerns]
+  coaching_note: |
+    The tieback personalizes — must reference something specific the customer
+    said on the call. Generic texts ("looking forward to chatting!") fail.
+
+# ============================================================================
+# 10. REBUTTALS  —  Canonical objection responses
+# (Populated from Ion script; pending Kenny review on phrasing + completeness)
+# ============================================================================
+
+rebuttals:
+  - id: send_proposal_before_meeting
+    trigger_phrases:
+      - "can you send me the proposal"
+      - "email me the design"
+      - "send it before we meet"
+      - "just send me a quote"
+    canonical_response: |
+      Our policy is that we don't email out the proposals. The biggest reason
+      is our proposals require full explanation otherwise they're confusing.
+      Our consultants will explain everything so it makes sense.
+    hard_rule: true
+    coaching_note: "STICK TO YOUR GUNS. No one will purchase if we send the design beforehand."
+    deviation_grades:
+      caved_and_promised_to_send: critical_failure
+      offered_to_check_with_manager: medium_failure
+      held_line_with_script: success
+      held_line_with_improvisation: evaluate_by_outcome
+
+  - id: changed_mind
+    trigger_phrases:
+      - "I changed my mind"
+      - "I'm not interested anymore"
+      - "we decided against it"
+      - "I'm not interested"   # SESSION18_fd078269 used variant phrasing
+    canonical_response: |
+      I totally understand, {first_name}! Just curious though — did you get a
+      chance to look at the actual design with the numbers yet?
+      Most people tell me they're not interested until they see how much they
+      could actually save — then it's a whole different convo.
+    hard_rule: false
+    strategy: curiosity_creation
+    coaching_note: "Don't argue. Create curiosity. Strategy matters; verbatim doesn't."
+
+  - id: already_saw_design
+    trigger_phrases: ["I already saw a design", "got a quote already", "another company showed me"]
+    canonical_response: |
+      No worries, it's always best to get a couple looks so you have something
+      to compare against. We offer different equipment than most companies and
+      our price points can be different.
+    hard_rule: false
+    strategy: comparison_framing
+
+  - id: signed_with_someone
+    trigger_phrases: ["I signed up with someone", "we already went with another company"]
+    canonical_response: |
+      No worries, I'd recommend getting a design from us to compare against
+      what you have. Solar systems last more than 30 years so it makes sense
+      to evaluate against a few companies. Worst case scenario, it will show
+      you that you got a great deal!
+    hard_rule: false
+    strategy: validation_framing
+
+  - id: home_disqualified
+    trigger_phrases: ["I was told my home doesn't work for solar", "another company said no"]
+    canonical_response: "Do you know why it was disqualified?"
+    hard_rule: false
+    strategy: investigate_first
+
+  - id: price_estimate_before_design
+    trigger_phrases: ["what does it cost", "give me a ballpark", "rough price", "how much am I looking at"]
+    canonical_response: |
+      Totally fair to ask! The thing is, solar isn't one-size-fits-all. The
+      cost depends on your roof, shading, power usage, and how much you want
+      to offset. If you've got 30 seconds, I can grab the info I need to get
+      you an actual design with real numbers — not just a random ballpark.
+    hard_rule: false
+    strategy: redirect_to_design
+
+  # TBD with Kenny — Ion-specific rebuttals not in the script:
+  # - hidden_costs_anxiety  (surfaced in SESSION20)
+  # - data_mining_concern  (surfaced in SESSION10)
+  # - tesla_expectation_gap_reframe  (rare; see intros.tesla coaching_notes)
+  # - scammer_anecdote_reframe  (surfaced in SESSION6)
+
+# ============================================================================
+# 11. PROTOCOLS  —  Things that look like objections but are NOT
+# (Graded on procedure, not persuasion)
+# ============================================================================
+
+protocols:
+  - id: spouse_decision
+    trigger_phrases: ["I need to talk to my spouse", "let me ask my wife", "have to discuss with my husband", "ain't convinced her yet"]
+    correct_response_pattern: include_spouse_in_appointment
+    incorrect_response_pattern: overcome_as_objection
+    template: |
+      Absolutely — this is the kind of decision both of you should be part of.
+      What time works for both of you to be on the call together?
+    coaching_note: |
+      DO NOT try to overcome this. Include the spouse. Setters who 'win' this
+      objection lose the deal. POSITIVE EXAMPLE: SESSION18_fd078269 (Randy/Juan
+      booked in 4 min by reframing the appointment AS the spouse-inclusion
+      venue). NEGATIVE EXAMPLE: SESSION20 (Meg/Ashley booked but Andy excluded
+      — appointment structurally vulnerable).
+
+  - id: adult_child_decision_maker
+    # NEW from SESSION14 (Holland/James) — adult child as co-decision-maker
+    trigger_phrases: ["my daughter is on the title", "my son helps me with decisions", "my [adult child] handles the finances"]
+    correct_response_pattern: include_adult_child_in_appointment
+    template: "Let's make sure [name] is on the appointment with us. What time works for both of you?"
+    coaching_note: "Same logic as spouse_decision — co-decision-maker MUST be present for the close."
+
+  - id: time_constraint
+    trigger_phrases: ["how long will this take", "I don't have much time", "is this going to be quick"]
+    correct_response_pattern: firm_time_anchor
+    template: "It's a 30-minute call — we'll get you in and out."
+    coaching_note: "Anchor the time confidently. Vagueness = no-show."
+
+  - id: how_did_you_get_my_number
+    trigger_phrases: ["how did you get my number", "how do you know me", "where did you get my info"]
+    correct_response_pattern: honest_specificity
+    template: |
+      You filled out a form online about solar — that's how I have your info.
+      (For Tesla leads): Tesla redirected your inquiry to us as their certified installer in {state}.
+    coaching_note: "Specificity reduces suspicion. Vagueness increases it."
+
+  - id: hello_objection_not_interested
+    trigger_phrases: ["I'm not interested"]
+    timing_constraint: first_30_seconds_only
+    correct_response_pattern: acknowledge_then_small_ask
+    template: |
+      I totally get that — and you don't know me from anyone. Can I have just
+      30 seconds to tell you why I'm calling, and if it's not relevant, I'll
+      leave you alone?
+    coaching_note: "Don't argue. Ask for a small commitment."
+
+  # TBD with Kenny — additional protocols observed but not script-defined:
+  # - excessive_contact_complaint  (SESSION20 — "I've gotten 45 emails")
+  # - vulnerability_disclosure  (SESSION6, SESSION14)
+  # - scam_encounter_reference  (SESSION6 — door-knocker yesterday)
+
+# ============================================================================
+# 12. CROSS-SELL SIGNALS  —  Ion offers more than solar
+# (NEW SECTION — surfaced from reads. Critical for revenue capture.)
+# ============================================================================
+
+cross_sell_signals:
+  - id: roof_replacement_planned
+    trigger_phrases:
+      - "I need a new roof"
+      - "I'm getting a new roof"
+      - "my roof needs to be replaced"
+      - "I'm scheduled to get a new roof"
+      - "garage roof would need to be redone"
+    correct_response_pattern: bridge_to_roofing_team
+    template: |
+      Wait — you're getting a roof done? Ion actually does roofing in-house,
+      both standalone AND as the first phase of a solar install. We could
+      potentially do both for you — get the roof done right with solar
+      planned into it from day one. Want me to have our roofing team take a look?
+    coaching_note: |
+      Solar disqualified by roof timing = potential roof sale + future solar sale.
+      ALWAYS BRIDGE. Co-route to roofing team. POSITIVE EXAMPLE: SESSION18_fcbf33c1
+      (Meg/Kelly bridged in 4 seconds, captured roof material for the roofing team).
+      NEGATIVE EXAMPLE: SESSION10 (Jake/Larry walked away from BOTH the roofing sale
+      AND the solar lead).
+    revenue_impact: "high — captures both immediate roofing revenue AND future solar revenue"
+    routing_recommendation: "co-route to roofing team in real time"
+
+  # TBD with Kenny — full cross-sell catalog:
+  # - battery_storage_inquiry  (SESSION10 Tesla discussion)
+  # - solar_for_secondary_structure  (e.g., barn, detached garage)
+  # - net_metering_interest  (educated customer engagement signal)
+  # - any other Ion services not yet documented
+
+# ============================================================================
+# 13. COACHING PHILOSOPHY  —  Source of Truth #2 (Kenny's brain)
+# ============================================================================
+
+coaching_philosophy:
+
+  # POPULATED — locked from corpus reads + Spencer's expertise
+  setter_scope_discipline:
+    description: |
+      The setter's job is to verify qualification, gather basic info, and set
+      the appointment. NOT to sell solar. Technical questions, pricing,
+      product specs — all are closer-tier content. The setter who tries to
+      answer them ends up failing both jobs.
+    universal_escape_hatch: |
+      "That's exactly the kind of question our specialist is built to answer.
+      I'm scheduling, they're solving. Let me get you on the calendar."
+    scope_creep_signals:
+      - rep explaining panel technology, inverter design, equipment specs
+      - rep debating company operations (lead sourcing, satellite imaging cost)
+      - rep quoting prices or savings ranges
+      - rep justifying company practices that customer questions
+      - rep getting drawn into technical debates with customer
+    positive_example: "SESSION18_fd078269 (Randy/Juan) — 4 min, scope held, booked"
+    negative_example: "SESSION10 (Jake/Larry) — 12 min scope creep, lost the deal and the roofing sale"
+
+  # POPULATED — locked from Spencer's playbook (the move from his son's success)
+  objection_inversion:
+    description: |
+      When the customer raises a cost-, time-, or interest-based objection,
+      the high-leverage move is often to FLIP the objection — use their framing
+      to redirect, not address the objection on its terms. The flip doesn't
+      have to be logically airtight; it's a pattern interrupt that pulls the
+      customer off-script and opens a crack for the real conversation.
+    mechanism: |
+      Breaks customer's autopilot. The "what?" moment is the crack the rep enters.
+    triggers_and_flips:
+      - {trigger: "I can't afford it", flip: "What you can't afford is your current bill"}
+      - {trigger: "It's too expensive", flip: "What's expensive is NOT switching"}
+      - {trigger: "I'm not interested", flip: "What you're not interested in is staying with what you have"}
+      - {trigger: "$X is high", flip: "Quote their number back as the actual expense — solar replaces the expense"}
+    when_to_use: "Any cost/time/interest objection in the first 5 minutes"
+    detection_finding: |
+      ZERO instances of this technique observed across 335-call corpus. This is
+      Stewart's #1 daily coaching contribution — surface flip opportunities on
+      every call where the rep made the safe move instead.
+
+  bill_anchoring:
+    description: |
+      The entire pitch should anchor to the customer's actual bill pain.
+      If you don't know their bill within 4 minutes, you've lost the call.
+      But capture alone is not enough — the bill must be FLIPPED into
+      emotional alignment-against-the-utility (see objection_inversion).
+    capture_pattern: "ask + acknowledge + flip"
+    failure_pattern_observed: "ask + acknowledge + move on"  # universal across corpus
+    coaching_note: |
+      Across all 7 deep-read calls, every rep captured the bill anchor and NONE
+      flipped it. Universal coaching priority for the floor.
+
+  # PARTIAL — populated by Spencer's interpretation, pending Kenny's calibration
+  energy_match:
+    description: |
+      Solar customers skew 45-70, suburban, often retired-or-near.
+      Energy that converts: calm, knowledgeable, neighbor-like.
+      Energy that fails: excited-young-salesperson.
+    audio_signals:
+      target_pace_wpm: [140, 170]
+      pitch_preference: lower_register
+      pause_tolerance: longer_okay
+    coaching_note: "Match the customer's tempo. Don't lead with high energy."
+    # TBD with Kenny — specific examples from top-performer recordings OR
+    # from real Ion calls Kenny designates as source-of-truth exemplars.
+
+  curiosity_over_features:
+    description: |
+      Setters should sell almost nothing about solar. Make customers curious
+      to see their specific math.
+    anti_patterns:
+      - explaining_panel_efficiency
+      - listing_environmental_benefits
+      - selling_features_unprompted
+      - debating_inverter_design  # SESSION10 example
+    coaching_note: "Resist the urge to explain. Focus on their bill."
+
+  multi_angle_resilience:
+    description: |
+      Good setters approach an objection from 3-5 angles before giving up.
+      Average setters give up after 1.
+    measurement: attempt_depth_per_objection
+    target: "3+ angles per objection"
+    # TBD with Kenny — what does 3+ angles look like at Ion specifically?
+    # Surface from real calls Kenny designates as source-of-truth exemplars
+    # where a top setter cycled an objection multiple ways successfully.
+
+  protocol_discipline:
+    description: |
+      Some 'objections' are protocols. Don't argue them — follow the procedure.
+    examples:
+      - spouse_request_means_include_spouse
+      - time_question_means_anchor_time
+      - hello_objection_means_small_ask
+
+  empathy_on_vulnerability_disclosure:
+    # NEW — surfaced from SESSION6 (Tanya) and SESSION14 (James)
+    description: |
+      When customer discloses vulnerability (health, financial, family loss,
+      recent injury, medical procedure, fixed income), the disclosure is a
+      TRUST GIFT, not an interruption to procedure. Empathy + bridge to value
+      is the move. Skipping past it costs more than any single coaching gap.
+    trigger_categories:
+      - spousal_loss / divorce
+      - job_loss / fixed_income / retirement
+      - health_issues / recent_injury / medical_procedure
+      - family_situation (caregiver, recent death)
+      - scam_encounter_reference
+    response_pattern: |
+      Acknowledge specifically. Bridge to how solar specifically helps this
+      situation. No fabricated numbers, no platitudes. Real human moment +
+      real value bridge.
+    # TBD with Kenny — Ion's exemplar phrasings for each vulnerability
+    # category, sourced from Kenny's recorded sessions OR real Ion calls
+    # Kenny designates as source-of-truth handling of these moments.
+
+  handoff_brief_discipline:
+    # POPULATED — locked from Spencer's discussion
+    description: |
+      The handoff brief is context for the closer, not a script. Customers
+      change between setter and closer calls. The brief MUST distinguish
+      stable facts from volatile state and leave room for the closer to read
+      the customer fresh.
+    structure:
+      - stable_facts (unchanged between calls)
+      - volatile_context (may have shifted)
+      - promises_made (must honor or address)
+      - approach_orientation (not script — orientation)
+      - leverage_moves_setter_missed (closer can pick up)
+    discipline: "Never frame the brief in a way that locks the closer's approach"
+
+# ============================================================================
+# 14. OUTCOMES  —  What defines success
+# ============================================================================
+
+outcomes:
+  primary:
+    - {id: appointment_booked, type: boolean, source: setter_call}
+    - {id: appointment_held, type: boolean, source: closer_or_calendar}
+    - {id: appointment_qualified, type: boolean, source: closer_feedback,
+       definition: "Closer confirms lead met all qualification criteria"}
+    - {id: deal_closed, type: boolean, source: closer_post_appointment}
+
+  secondary:
+    - {id: customer_state_delta, type: numeric, range: [-10, 10],
+       definition: "Change in customer warmth from start to end of call"}
+    - {id: handoff_contract_kept, type: boolean,
+       definition: "Did closer fulfill setter's promises?"}
+    - {id: verify_completion_rate, type: numeric, range: [0, 1],
+       definition: "Fraction of required Verify items captured"}
+    - {id: cross_sell_signals_caught, type: integer,
+       definition: "Cross-sell signals surfaced AND routed (e.g., roofing)"}
+    - {id: scope_creep_count, type: integer,
+       definition: "Instances of setter engaging in closer-tier content"}
+    - {id: flip_opportunities_deployed, type: integer,
+       definition: "Inversion moves actually used vs available"}
+
+# ============================================================================
+# 15. DQ RULES  —  Hard disqualifiers
+# ============================================================================
+
+dq_rules:
+  - {id: not_homeowner, severity: hard}
+  - {id: ppa_existing_system, severity: hard}
+  - {id: sunrun_existing, severity: hard}
+  - {id: pink_solar_existing, severity: hard}
+  - {id: roof_too_old_no_replacement, severity: hard,
+     note: "EXCEPTION: if customer wants roof replacement, route to roofing team — see cross_sell_signals.roof_replacement_planned"}
+  - {id: credit_below_670_no_alternative, severity: hard}
+  - {id: existing_system_broken, severity: hard}
+
+# ============================================================================
+# 16. LLM CONTEXT INJECTION  —  Shapes how the model interprets calls
+# ============================================================================
+
+llm_context_injection:
+
+  industry_briefing: |
+    This is a residential solar appointment-setter call at ION Solar. The
+    setter's job is to book a 30-minute phone appointment with a closer
+    (called a "consultant"). The setter is NOT trying to sell solar — they're
+    trying to gather qualification info and create curiosity. Customers typically:
+    - Are 45-70 year old homeowners
+    - Are skeptical (solar has a scam reputation due to door-to-door)
+    - Have 1-3 competing quotes already
+    - Are motivated primarily by bill pain
+    - Often need spouse/co-decider involved
+    - Need legitimacy established quickly
+
+  what_great_looks_like: |
+    # PARTIAL — populated from corpus + script. TBD with Kenny.
+    # Final version sources from Kenny's recorded coaching sessions OR
+    # real Ion calls Kenny designates as source-of-truth exemplars.
+    A great ION setter call:
+    - Establishes legitimacy in first 30 seconds (often via Tesla framing)
+    - Completes verify section gracefully
+    - Anchors AND flips the bill into emotional alignment-against-utility
+    - Creates curiosity instead of explaining solar
+    - Identifies and includes spouse/co-decider in appointment
+    - Follows protocols correctly (does not argue spouse request)
+    - Holds firm on hard rules (proposal-before-meeting)
+    - Sets clear expectations for the appointment
+    - Routes cross-sell signals (roofing) to the appropriate team
+    - Holds setter scope — bridges to specialist for closer-tier questions
+    - Sends personalized text follow-up with tieback
+
+  what_failure_looks_like: |
+    # PARTIAL — populated from corpus. TBD with Kenny.
+    A failing ION setter call:
+    - Rushes past the intro / fails to establish legitimacy
+    - Skips Verify checkboxes or interrogates instead of conversing
+    - Captures the bill as data but doesn't flip emotionally
+    - Over-explains solar features (creates objections to handle)
+    - Argues with spouse-coordination protocol
+    - Caves on proposal-before-meeting hard rule
+    - Scope creep — debates technical content the specialist handles
+    - Misses cross-sell signals (roof replacement → no bridge)
+    - Books appointment without time/computer/no-driving anchor
+    - Sends generic text without tieback
+
+  # POPULATED — locked from Spencer's discussion
+  numeric_discipline: |
+    You may quote numbers spoken by the customer or rep in the call.
+    You may quote numbers in this schema's context section.
+    You may NOT invent, estimate, range, or imply savings, percentages,
+    timeframes, or any quantitative claim not grounded above.
+    Prescriptive alternatives use INTENT and EMOTION as leverage,
+    NOT numbers. The pain the number represents is the leverage.
+    The number itself has no feelings.
+    When a flip or alternative would be sharper with a number that isn't
+    grounded, FLAG it: "this leverage point would land harder if the rep
+    knew the actual range — coaching gap on financials." Don't fill the
+    gap with fiction.
+
+  strategy_recognition: |
+    When evaluating rep responses, look for STRATEGY MATCH, not VERBATIM MATCH.
+    Reps may execute a schema-defined strategy (curiosity_creation,
+    bill_swap_reframe, spouse_inclusion, objection_inversion, etc.) using
+    their own phrasing. Mark strategy-aligned variants as schema-compliant.
+    Only mark as deviation when the strategy itself is wrong, not when the
+    words differ.
+
+  handoff_brief_discipline: |
+    The handoff brief is context for the closer, NOT a script. Mark which
+    facts are stable vs volatile. Mark which promises the closer must
+    honor. Identify leverage moves the setter left on the table that the
+    closer can pick up. NEVER frame the brief in a way that locks the
+    closer's approach — they read the customer fresh; the brief informs
+    but does not dictate.
+
+# ============================================================================
+# 17. ANALYSIS DIRECTIVES  —  What Stage 3 looks for
+# (NEW SECTION — built up through corpus reads.
+#  Each directive surfaces a Stewart capability.)
+# ============================================================================
+
+analysis_directives:
+
+  # Trajectory and intent reading
+  - id: customer_state_trajectory
+    instruction: "Walk through the call in 5 phases. Identify customer's starting state, rep's apparent intent, customer state changes with timestamps + quotes, recurring patterns, trajectory verdict."
+
+  - id: strategic_vs_reactive
+    instruction: "For each moment that looks like failed objection handling, generate two hypotheses: (a) the rep failed; (b) the rep is intentionally deferring to set up a later move. Choose with evidence."
+
+  # Schema adherence and gaps
+  - id: scope_creep_detection
+    instruction: "Count instances where setter engages in closer-tier content beyond what's needed to schedule. High count = top training priority."
+
+  - id: protocol_adherence
+    instruction: "Per the protocols section, were procedures followed? Specifically: spouse-on-title coordination, hello-objection small-ask, time-question anchor, adult-child decision-maker inclusion."
+
+  - id: rebuttal_strategy_match
+    instruction: "When rep handles a script-defined objection, score at the STRATEGY level, not verbatim. Mark strategy-aligned variants as compliant."
+
+  - id: schema_drift_detection
+    instruction: "When rep states numbers/thresholds that don't match the schema (e.g., credit threshold), flag for reconciliation."
+
+  # Leverage moves (positive AND negative signals)
+  - id: friction_resolution_speed
+    instruction: "Non-business complaints (emails, contact frequency, harassment perception): did rep solve, defend, or dismiss? Time-from-complaint to resolved-state."
+
+  - id: trust_building_micro_trades
+    instruction: "Moments where rep substitutes an impersonal/automated process for a personal commitment. High-leverage on suspicious customers."
+
+  - id: bill_anchor_depth
+    instruction: "Was the bill captured AND emotionally flipped (alignment-against-utility), or captured-and-dropped? Bill capture alone is necessary but not sufficient."
+
+  - id: flip_opportunity_detection
+    instruction: "Cost/time/interest objection raised, rep handled safely, but flip was available per coaching_philosophy.objection_inversion. Flag and generate the alternative (no fabricated numbers)."
+
+  - id: cross_sell_signal_detection
+    instruction: "Customer mentions a need for any service Ion offers beyond solar (roofing, batteries, etc.). Flag for cross-routing AND assess whether rep bridged correctly."
+
+  - id: knowledge_gap_handling
+    instruction: "When rep doesn't have an answer: did they (a) dodge and redirect, (b) admit and recover with transparency, (c) fabricate? Each has different coaching implications."
+
+  - id: vulnerability_disclosure_handling
+    instruction: "Customer shares health, financial, family, or life vulnerability. Was response empathetic + bridged, acknowledged-and-moved-on, or ignored? This is a TRUST GIFT classification."
+
+  - id: tech_friction_handling
+    instruction: "Customer can't navigate phone/can't send photo. Did rep pivot to verbal readback within 2 minutes or burn 8-15 minutes? Schema gap if not pivoted."
+
+  - id: scam_anxiety_signal
+    instruction: "Customer references being scammed / suspicious of door-knockers. Generate appointment-reframe to anchor as customer-initiated."
+
+  - id: guilt_as_objection_detection
+    instruction: "Polite 'I don't want to waste your time' is a soft refusal. Reframe as customer-in-control."
+
+  - id: time_burn_detection
+    instruction: "Disproportionate time on low-value activity. Flag efficiency gap."
+
+  - id: conditional_booking_detection
+    instruction: "Appointments scheduled with explicit constraints (anxiety, channel preferences, decision-maker exclusions). Generate handoff brief covering these."
+
+  - id: soft_outcome_distinction
+    instruction: "Callbacks WITH locked times vs 'we'll touch base.' Major delta on no-show rate."
+
+  # Output generation
+  - id: handoff_brief_generation
+    instruction: "For every tentative_appointment or booked outcome, generate a brief per handoff_brief_discipline structure."
+
+  - id: outcome_reclassification
+    instruction: "If v1 outcome tag doesn't match observed trajectory, flag reclassification with reasoning."
+
+  - id: per_rep_pattern_aggregation
+    instruction: "Track per-rep patterns over time. Same rep may be strong on one move and weak on another. Coaching becomes targeted, not blanket."
+
+# ============================================================================
+# 18. METADATA & VERSIONING
+# ============================================================================
+
+metadata:
+  schema_version: 1.0.0-skeleton
+  active_from: 2026-05-14T00:00:00Z
+  last_modified_by: spencer
+  change_log:
+    - date: 2026-05-14
+      author: spencer + strategy_claude
+      summary: "Initial skeleton from Ion script + 7 deep-read calls"
+      changes:
+        - populated: [intros, verify, qualifiers, bill_collection, orphaned_flow, button_up, text_after_call, rebuttals, protocols, dq_rules]
+        - added: [cross_sell_signals, setter_scope_discipline, objection_inversion, empathy_on_vulnerability_disclosure, handoff_brief_discipline]
+        - added: [analysis_directives (full set)]
+        - added: [llm_context_injection (numeric_discipline, strategy_recognition, handoff_brief_discipline)]
+        - tbd: [coaching_philosophy.energy_match calibration, what_good_looks_like (Kenny's voice), what_failure_looks_like (Kenny's voice), customer_demographics specifics, full cross_sell catalog, multi_angle_resilience examples, vulnerability_disclosure exemplar phrasings]
+
+# ============================================================================
+# WHAT KENNY + TEAM MANAGERS POPULATE DURING RETAINER PHASE
+# ============================================================================
+#
+# These are the pages of the textbook that REQUIRE Kenny's input. Each one
+# becomes a calibration session topic during the weekly on-site visits.
+#
+# Sources: Kenny's recorded coaching sessions OR real Ion calls Kenny + team
+# management designate as "source of truth" exemplars.
+#
+# ───────────────────────────────────────────────────────────────────────────
+# A. OPERATIONAL TRUTH — what Stewart literally cannot read from outside
+# ───────────────────────────────────────────────────────────────────────────
+#
+# A1. Tesla relationship truth — RESOLVED 2026-05-15 by Kenny direct:
+#     Tesla = lead source. Ion sells its own panels + Tesla Powerwall
+#     (only battery brand) + in-house roofing. Ion does NOT sell Tesla
+#     solar panels or Tesla roof tiles. Setter treats Tesla leads like
+#     any inbound — qualify + schedule closer. Closer handles product
+#     mix. Script's existing framing stays. See
+#     context.tesla_relationship_clarification for full record.
+#
+# A2. Setter compensation model — paid on SITS (appointments that proceed
+#     through full proposal). Confirm exact structure: rate per sit-only vs
+#     sit-and-qualified? Clawback on appointments disqualified at proposal?
+#
+# A3. Lead types — full taxonomy:
+#     - paid_lead — bill REQUIRED before appointment
+#     - organic_lead — bill preferred, not required
+#     - recycled_lead — possibly bill on file already
+#     - other subtypes Stewart doesn't know about yet
+#
+# A4. How Stewart receives lead_type + bill_on_file metadata per call.
+#     Without this, Stewart misreads bill-collection effort on every call.
+#
+# A5. Recycled lead routing — who gets them, when, under what rules?
+#
+# A6. Credit threshold — schema says 670; SESSION18_fcbf33c1 rep said 650.
+#     Which is the active number? Are there alternative financing paths
+#     for sub-670 customers?
+#
+# ───────────────────────────────────────────────────────────────────────────
+# B. COACHING PHILOSOPHY — Kenny's voice
+# ───────────────────────────────────────────────────────────────────────────
+#
+# B1. coaching_philosophy.energy_match — exemplar calls or recorded sessions
+# B2. coaching_philosophy.what_great_looks_like — Kenny's voice, not generic
+# B3. coaching_philosophy.what_failure_looks_like — same
+# B4. coaching_philosophy.multi_angle_resilience — examples from top performers
+# B5. coaching_philosophy.vulnerability_disclosure — Ion's exemplar phrasings
+#     per category (loss, financial, health, scam encounter, etc.)
+# B6. team_manager_coaching_styles — each manager populates their own (post-V1)
+#
+# ───────────────────────────────────────────────────────────────────────────
+# C. CONTENT EXPANSION — beyond what's in the script
+# ───────────────────────────────────────────────────────────────────────────
+#
+# C1. customer_demographics — Ion-specific regional + cohort patterns
+# C2. competitive_landscape — full competitor list, current positioning intel
+# C3. seasonality — winter heating-bill spike pattern (Tanya was $621),
+#     summer pool patterns
+# C4. cross_sell_signals — full catalog beyond roofing (batteries, secondary
+#     structures, etc.)
+# C5. rebuttals — Ion-specific phrasings beyond script:
+#     - hidden_costs_anxiety (SESSION20)
+#     - data_mining_concern (SESSION10)
+#     - tesla_bait_and_switch_perception (SESSION10)
+#     - scammer_anecdote_reframe (SESSION6)
+# C6. protocols — additional patterns observed but not script-defined:
+#     - excessive_contact_complaint (SESSION20)
+#     - vulnerability_disclosure (SESSION6, SESSION14)
+#     - scam_encounter_reference (SESSION6)
+# C7. dq_rules — Kenny's edge cases from real experience
+#
+# ───────────────────────────────────────────────────────────────────────────
+#
+# These aren't gaps in the product. They're the work that justifies the
+# retainer. Section A items in particular are operational truth Stewart
+# literally cannot determine from outside Ion — only Kenny + team managers
+# know the real answers.
