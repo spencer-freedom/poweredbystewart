@@ -517,6 +517,7 @@ function CallPlanets({
               ? tileCenters.get(p.gray_matter_section) || null
               : null
           }
+          coreRadius={coreRadius}
           hoveredDomain={hoveredDomain}
           onSelect={onSelect}
         />
@@ -529,12 +530,14 @@ function SinglePlanet({
   planet,
   radialConfig,
   tileCenter,
+  coreRadius,
   hoveredDomain,
   onSelect,
 }: {
   planet: Planet;
   radialConfig: BrainV2Payload["radial_config"];
   tileCenter: [number, number, number] | null;
+  coreRadius: number;
   hoveredDomain: string | null;
   onSelect: (sel: Selection) => void;
 }) {
@@ -582,6 +585,7 @@ function SinglePlanet({
     <group position={pos}>
       <GroundingLine
         from={pos}
+        coreRadius={coreRadius}
         opacity={
           hover || domainHit
             ? GROUNDING_LINE_OPACITY_HOVER
@@ -636,14 +640,31 @@ function SinglePlanet({
 
 function GroundingLine({
   from,
+  coreRadius,
   opacity,
 }: {
   from: [number, number, number];
+  coreRadius: number;
   opacity: number;
 }) {
-  // Line from planet (which is at this group's origin = from) back to
-  // (0,0,0) in world. Inside the planet group, world (0,0,0) is at -from.
-  const target: [number, number, number] = [-from[0], -from[1], -from[2]];
+  // V2.0.10: line truncates at the crystal surface instead of running
+  // all the way to (0,0,0). Without this, brightened lines were
+  // visible THROUGH the transparent core — read as visual noise.
+  // Stop at distance coreRadius from origin, in the direction of the
+  // planet. Inside the planet group, world (0,0,0) sits at -from, so
+  // the stop point is -from scaled by ((dist - coreRadius) / dist).
+  const dist = Math.sqrt(
+    from[0] * from[0] + from[1] * from[1] + from[2] * from[2]
+  );
+  // Gray-matter planets can sit inside the core radius — no line to
+  // render in that case.
+  if (dist <= coreRadius) return null;
+  const t = (dist - coreRadius) / dist;
+  const target: [number, number, number] = [
+    -from[0] * t,
+    -from[1] * t,
+    -from[2] * t,
+  ];
   return (
     <Line
       points={[[0, 0, 0], target]}
