@@ -142,7 +142,7 @@ export function Legend() {
           </li>
         ))}
       </ul>
-      <p className="pt-2 border-t border-stewart-border/60 text-[11px] leading-snug text-stewart-muted">
+      <p className="pt-3 border-t border-stewart-border/60 text-center text-[19px] leading-snug text-stewart-muted">
         <span className="text-stewart-accent font-semibold">
           Click the nucleus of any atom
         </span>{" "}

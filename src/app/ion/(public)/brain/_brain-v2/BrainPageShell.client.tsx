@@ -22,7 +22,7 @@ export function BrainPageShell({ payload }: { payload: BrainV2Payload }) {
       </div>
 
       <div
-        className="aspect-square mx-auto w-full"
+        className="aspect-square mx-auto w-full relative"
         style={{ maxWidth: BRAIN_MAX_WIDTH }}
       >
         <BrainV2Scene
@@ -31,9 +31,8 @@ export function BrainPageShell({ payload }: { payload: BrainV2Payload }) {
           onHoverDomain={setHoveredDomain}
           onSelect={setSelection}
         />
+        {selection ? <ScrollHint selection={selection} /> : null}
       </div>
-
-      {selection ? <ScrollHint selection={selection} /> : null}
 
       <DetailSlot
         payload={payload}
@@ -54,24 +53,24 @@ function ScrollHint({ selection }: { selection: Selection }) {
       ? selection.planet.call_id
       : "details";
   return (
-    <div className="flex flex-col items-center gap-1 py-3 motion-safe:animate-bounce">
-      <p className="text-sm text-stewart-accent font-semibold leading-none">
+    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex flex-col items-center gap-1 motion-safe:animate-bounce">
+      <p className="text-base sm:text-lg text-stewart-accent font-semibold leading-none px-3 py-1.5 rounded-full bg-stewart-bg/85 border border-stewart-accent/40 backdrop-blur-sm whitespace-nowrap">
         Scroll down for {label}
       </p>
       <svg
-        width="18"
-        height="18"
+        width="22"
+        height="22"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="2.4"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-stewart-accent"
+        className="text-stewart-accent drop-shadow"
         aria-hidden
       >
         <path d="M7 13l5 5 5-5" />
-        <path d="M7 6l5 5 5-5" opacity="0.5" />
+        <path d="M7 6l5 5 5-5" opacity="0.6" />
       </svg>
     </div>
   );
