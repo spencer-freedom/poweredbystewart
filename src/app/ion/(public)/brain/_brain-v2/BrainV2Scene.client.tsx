@@ -125,6 +125,10 @@ const PLANET_SIZE_FLOOR = 0.55;
 const MOON_BASE_SIZE = 0.5;
 const GRAY_HALO_COLOR = "#fde68a";
 const GRAY_HALO_BASE_SCALE = 1.9;
+// V2.1.1 — gray-matter exemplars get a warm-gray body in the walnut
+// palette family so they're visibly different from regular call
+// nuclei before the halo/pulse even register. Halo stays gold.
+const GRAY_MATTER_BODY_COLOR = "#8b7f6b";
 
 // V2.0.4 — bumped emissive levels so domain hues stay legible at the
 // pulled-back default camera distance. Pearl core can dominate the
@@ -710,16 +714,24 @@ function SinglePlanet({
       >
         <sphereGeometry args={[baseSize, 16, 16]} />
         <meshStandardMaterial
-          color={planetColor(
-            planet.outcome,
-            planet.outcome_tint_color,
-            planetPalette
-          )}
-          emissive={planetColor(
-            planet.outcome,
-            planet.outcome_tint_color,
-            planetPalette
-          )}
+          color={
+            planet.is_gray_matter
+              ? GRAY_MATTER_BODY_COLOR
+              : planetColor(
+                  planet.outcome,
+                  planet.outcome_tint_color,
+                  planetPalette
+                )
+          }
+          emissive={
+            planet.is_gray_matter
+              ? GRAY_MATTER_BODY_COLOR
+              : planetColor(
+                  planet.outcome,
+                  planet.outcome_tint_color,
+                  planetPalette
+                )
+          }
           emissiveIntensity={
             (planet.is_gray_matter ? PLANET_EMISSIVE_GRAY_BASE : PLANET_EMISSIVE_BASE) +
             (hover ? PLANET_EMISSIVE_HOVER_BOOST : 0) +
