@@ -85,20 +85,14 @@ function DetailSlot({
   selection: Selection | null;
   onClose: () => void;
 }) {
+  if (!selection) return null;
   return (
     <div className="w-full mx-auto" style={{ maxWidth: BRAIN_MAX_WIDTH }}>
-      {selection ? (
-        <DetailPanel
-          payload={payload}
-          selection={selection}
-          onClose={onClose}
-        />
-      ) : (
-        <p className="text-center text-xs text-stewart-muted py-3">
-          Click a planet, moon, tile, or the crystal core to load that
-          node&apos;s full coaching folder here.
-        </p>
-      )}
+      <DetailPanel
+        payload={payload}
+        selection={selection}
+        onClose={onClose}
+      />
     </div>
   );
 }
