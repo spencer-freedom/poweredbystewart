@@ -21,6 +21,68 @@ import { Legend } from "./Legend.client";
 const SCENE_BG = "#020617";
 const CORE_RADIUS_SCALE = 1.4; // bigger than payload core_radius for presence
 const TILE_INACTIVE_COLOR = "#1a1d27";
+
+// V2.0.11 — switchable core palettes (Spencer is comparing four). Once
+// he picks, lock the chosen one and rip the picker. Each palette
+// controls the substrate's attenuation, the pearl-sheen layer's tint,
+// the colored shell's emissive undertone, and the shell opacity (darker
+// palettes can afford slightly more opacity since they don't wash out
+// passing planets).
+export type CorePalette = {
+  id: string;
+  label: string;
+  attenuationColor: string;
+  sheenColor: string;
+  sheenEmissive: string;
+  sheenOpacity: number;
+  shellEmissive: string;
+  shellOpacity: number;
+};
+
+export const CORE_PALETTES: CorePalette[] = [
+  {
+    id: "pearl",
+    label: "Pearl (current)",
+    attenuationColor: "#fff5e6",
+    sheenColor: "#fff8ec",
+    sheenEmissive: "#fef3d6",
+    sheenOpacity: 0.12,
+    shellEmissive: "#0a0f1a",
+    shellOpacity: 0.48,
+  },
+  {
+    id: "bronze",
+    label: "Smoked bronze",
+    attenuationColor: "#8b6f47",
+    sheenColor: "#b89970",
+    sheenEmissive: "#5c4530",
+    sheenOpacity: 0.18,
+    shellEmissive: "#1a1208",
+    shellOpacity: 0.55,
+  },
+  {
+    id: "cognac",
+    label: "Antique cognac",
+    attenuationColor: "#c4904a",
+    sheenColor: "#d4b896",
+    sheenEmissive: "#8b5a2b",
+    sheenOpacity: 0.16,
+    shellEmissive: "#2a1c0a",
+    shellOpacity: 0.52,
+  },
+  {
+    id: "wood",
+    label: "Petrified wood",
+    attenuationColor: "#8b7355",
+    sheenColor: "#a89072",
+    sheenEmissive: "#5c4a35",
+    sheenOpacity: 0.15,
+    shellEmissive: "#1a1410",
+    shellOpacity: 0.55,
+  },
+];
+
+export const DEFAULT_PALETTE: CorePalette = CORE_PALETTES[0];
 const GROUNDING_LINE_COLOR = "#e2e8f0";
 const GROUNDING_LINE_OPACITY = 0.22;
 const GROUNDING_LINE_OPACITY_HOVER = 0.8;
@@ -89,11 +151,13 @@ export function BrainV2Scene({
   hoveredDomain,
   onHoverDomain,
   onSelect,
+  palette = DEFAULT_PALETTE,
 }: {
   payload: BrainV2Payload;
   hoveredDomain: string | null;
   onHoverDomain: (d: string | null) => void;
   onSelect: (sel: Selection) => void;
+  palette?: CorePalette;
 }) {
   const coreRadius = payload.core.core_radius * CORE_RADIUS_SCALE;
   const [autoRotate, setAutoRotate] = useState(true);
@@ -143,6 +207,7 @@ export function BrainV2Scene({
             autoRotate={autoRotate}
             onInteractStart={handleInteractStart}
             onInteractEnd={handleInteractEnd}
+            palette={palette}
           />
         </Canvas>
       </div>
@@ -166,6 +231,7 @@ function Scene({
   autoRotate,
   onInteractStart,
   onInteractEnd,
+  palette,
 }: {
   payload: BrainV2Payload;
   coreRadius: number;
@@ -174,6 +240,7 @@ function Scene({
   autoRotate: boolean;
   onInteractStart: () => void;
   onInteractEnd: () => void;
+  palette: CorePalette;
 }) {
   return (
     <>
@@ -198,6 +265,7 @@ function Scene({
           coreRadius={coreRadius}
           hoveredDomain={hoveredDomain}
           onSelect={onSelect}
+          palette={palette}
         />
         <CallPlanets
           planets={payload.planets}
@@ -241,11 +309,13 @@ function CrystalCore({
   coreRadius,
   hoveredDomain,
   onSelect,
+  palette,
 }: {
   core: BrainV2Payload["core"];
   coreRadius: number;
   hoveredDomain: string | null;
   onSelect: (sel: Selection) => void;
+  palette: CorePalette;
 }) {
   // Build the per-vertex-color sphere geometry once per (core + radius)
   const geometry = useMemo(
@@ -275,7 +345,7 @@ function CrystalCore({
           ior={1.52}
           chromaticAberration={0.035}
           attenuationDistance={0.6}
-          attenuationColor="#fff5e6"
+          attenuationColor={palette.attenuationColor}
           clearcoat={1.0}
           clearcoatRoughness={0.0}
           samples={6}
@@ -285,26 +355,24 @@ function CrystalCore({
         />
       </mesh>
 
-      {/* Pearl-white inner sheen — subtle iridescent layer that
-          gives the crystal a hint of opal/pearl rather than reading
-          as plain clear glass. */}
+      {/* Inner sheen — iridescent layer that gives the crystal a hint
+          of pearl/bronze/cognac/wood depending on the active palette. */}
       <mesh>
         <sphereGeometry args={[coreRadius * 0.95, 48, 48]} />
         <meshStandardMaterial
-          color="#fff8ec"
-          emissive="#fef3d6"
+          color={palette.sheenColor}
+          emissive={palette.sheenEmissive}
           emissiveIntensity={0.18}
           roughness={0.85}
           metalness={0.0}
           transparent
-          opacity={0.12}
+          opacity={palette.sheenOpacity}
           depthWrite={false}
         />
       </mesh>
 
       {/* Colored shell — single mesh, vertex colors carry the tile
-          palette + saturation boost. Lower opacity so the underlying
-          crystal + pearl layers read through. */}
+          palette + saturation boost. */}
       <mesh
         geometry={geometry}
         onClick={(e) => {
@@ -314,12 +382,12 @@ function CrystalCore({
       >
         <meshStandardMaterial
           vertexColors
-          emissive="#0a0f1a"
+          emissive={palette.shellEmissive}
           emissiveIntensity={0.32}
           roughness={0.6}
           metalness={0.0}
           transparent
-          opacity={0.48}
+          opacity={palette.shellOpacity}
           depthWrite={false}
         />
       </mesh>
