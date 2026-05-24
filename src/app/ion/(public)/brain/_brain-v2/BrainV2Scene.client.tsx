@@ -326,12 +326,6 @@ function CrystalCore({
 
       <CoreInnerGlow radius={coreRadius * 0.93} />
 
-      {/* V2.0.7 — Ion Earth crosshair. One equator + one meridian
-          rendered prominently on the crystal surface so the core
-          reads as the "globe with crosshair" from Ion's own logo
-          (ION EARTH = circle with + center + orbital rings). */}
-      <CoreCrosshair radius={coreRadius * 1.012} />
-
       {/* Invisible click/hover targets for the 101 active tiles. The
           shell mesh is one piece, so we still need per-tile pickables
           for the detail panel. Inactive (_reserved) tiles get no
@@ -434,50 +428,6 @@ function CoreInnerGlow({ radius }: { radius: number }) {
         depthWrite={false}
       />
     </mesh>
-  );
-}
-
-function CoreCrosshair({ radius }: { radius: number }) {
-  // One equator (constant theta = π/2 — circle on the XZ plane) and
-  // one meridian (constant phi = 0 — circle on the XY plane). Echoes
-  // the "+" inside Ion Earth's logo at the crystal surface.
-  const equator = useMemo(() => {
-    const pts: [number, number, number][] = [];
-    const segments = 96;
-    for (let i = 0; i <= segments; i++) {
-      const a = (i / segments) * Math.PI * 2;
-      pts.push([Math.cos(a) * radius, 0, Math.sin(a) * radius]);
-    }
-    return pts;
-  }, [radius]);
-  const meridian = useMemo(() => {
-    const pts: [number, number, number][] = [];
-    const segments = 96;
-    for (let i = 0; i <= segments; i++) {
-      const a = (i / segments) * Math.PI * 2;
-      pts.push([Math.cos(a) * radius, Math.sin(a) * radius, 0]);
-    }
-    return pts;
-  }, [radius]);
-  return (
-    <group>
-      <Line
-        points={equator}
-        color="#fff8ec"
-        opacity={0.55}
-        transparent
-        lineWidth={1.2}
-        depthWrite={false}
-      />
-      <Line
-        points={meridian}
-        color="#fff8ec"
-        opacity={0.55}
-        transparent
-        lineWidth={1.2}
-        depthWrite={false}
-      />
-    </group>
   );
 }
 
