@@ -37,7 +37,7 @@ export default async function IonSchemaPage() {
             &larr; Back to the demo
           </Link>
         </div>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-stewart-text leading-tight">
           Ion Solar &mdash; the schema Stewart reads every call against
         </h1>
         <p className="mt-4 text-base text-stewart-muted leading-relaxed max-w-3xl">
