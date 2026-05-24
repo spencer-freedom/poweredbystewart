@@ -695,7 +695,10 @@ function GrayMatterHalo({ size }: { size: number }) {
 // architecture is the visual identity that no generic AI sales tool
 // can match.
 
-const BASE_ORBITAL_SPEED = 0.22; // multiplier on per-moon orbit_speed
+// V2.0.6: bumped to atomic-electron pace after Spencer spotted Ion's
+// own ION EARTH logo (globe + three orbital rings = atom). The brain
+// IS Ion Solar's brand mark. Moons whip around their planet now.
+const BASE_ORBITAL_SPEED = 1.5; // multiplier on per-moon orbit_speed
 
 function buildOrbitBasis(
   normalPhi: number,
