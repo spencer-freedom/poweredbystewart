@@ -19,7 +19,7 @@ import { AudioClip, tsToSeconds } from "./AudioClip.client";
 // can render whatever metadata they happen to have on hand without
 // the component re-fetching.
 
-const CLIP_DURATION_SEC = 20;
+const DEFAULT_CLIP_DURATION_SEC = 20;
 
 type ManagerBrief = {
   call_id: string;
@@ -42,6 +42,7 @@ type CherryPick = {
   stewart_read: string;
   alternative_hypothesis: string | null;
   coaching_implication: string;
+  duration_seconds?: number;
 };
 
 type Handoff = {
@@ -318,7 +319,7 @@ function CherryPicksBlock({
                 <AudioClip
                   callId={callId}
                   startSec={start}
-                  endSec={start + CLIP_DURATION_SEC}
+                  endSec={start + (p.duration_seconds || DEFAULT_CLIP_DURATION_SEC)}
                 />
               </div>
             </li>

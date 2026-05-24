@@ -10,7 +10,7 @@ import {
   tsToSeconds,
 } from "./types";
 
-const CLIP_DURATION_SEC = 20;
+const DEFAULT_CLIP_DURATION_SEC = 20;
 
 const CLASSIFICATION_TONE: Record<
   string,
@@ -445,7 +445,10 @@ function MomentDetail({
       <AudioPlayer
         callId={callId}
         startSec={tsToSeconds(moment.ts)}
-        endSec={tsToSeconds(moment.ts) + CLIP_DURATION_SEC}
+        endSec={
+          tsToSeconds(moment.ts) +
+          (moment.duration_seconds || DEFAULT_CLIP_DURATION_SEC)
+        }
       />
 
       <div>

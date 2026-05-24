@@ -36,6 +36,7 @@ export type CherryPick = {
   stewart_read: string;
   alternative_hypothesis: string | null;
   coaching_implication: string;
+  duration_seconds?: number;
 };
 
 export type Metadata = {

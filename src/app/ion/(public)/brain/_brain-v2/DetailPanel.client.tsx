@@ -9,7 +9,7 @@ import type {
 import { AudioClip, tsToSeconds } from "../../_components/AudioClip.client";
 import { FullCallDetail } from "../../_components/FullCallDetail.client";
 
-const CLIP_DURATION_SEC = 20;
+const DEFAULT_CLIP_DURATION_SEC = 20;
 
 export type Selection =
   | { kind: "core" }
@@ -279,7 +279,7 @@ function TileDetail({ tile }: { tile: Tile }) {
                     <AudioClip
                       callId={ex.call_id}
                       startSec={start}
-                      endSec={start + CLIP_DURATION_SEC}
+                      endSec={start + DEFAULT_CLIP_DURATION_SEC}
                     />
                   </div>
                 </li>

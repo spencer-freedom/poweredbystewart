@@ -142,6 +142,16 @@ def build_calls(spencer_os: Path) -> dict[str, Any]:
         cherry = read_json(cherrypicks_p) if cherrypicks_p.exists() else []
         manager_brief = read_json(manager_brief_p) if manager_brief_p.exists() else None
 
+        # Ensure every cherrypick has a duration_seconds field. Default is
+        # 20 (the V1 fixed clip length); upstream pipeline can override
+        # per moment when it has signal — e.g., shorter for one-liners,
+        # longer for protracted exchanges. The renderer reads this field
+        # to size each clip's <audio> request.
+        if isinstance(cherry, list):
+            for pick in cherry:
+                if isinstance(pick, dict) and "duration_seconds" not in pick:
+                    pick["duration_seconds"] = 20
+
         # Detail-drawer copies (for /ion/calls drawer + brain PlanetDetail)
         slug = slugify_call_id(call_id)
         write_json(PUBLIC_CALLS / f"{slug}-metadata.json", meta)

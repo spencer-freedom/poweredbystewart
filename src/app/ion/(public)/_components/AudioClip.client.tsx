@@ -1,22 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
-// Shared audio-clip player for the public Ion surfaces.
-//
-// V2.1.10 — the /api/ion/audio-clip endpoint accepts start/end query
-// params but returns the full MP3 (server-side slicing is a TODO).
-// Client compensates: seek on `canplay`, pause + reset on `timeupdate`
-// when end is reached. canplay is more reliable than loadedmetadata
-// across browsers because it fires once the element has buffered
-// enough to actually start playback — so setting currentTime sticks.
-//
-// We DON'T use the `autoPlay` attribute. autoPlay racing with our
-// imperative play() was the V2.1.3 → V2.1.6 regression that broke
-// playback entirely. The user-gesture (button click flipping
-// `active` to true) propagates through the React commit; calling
-// .play() inside the `canplay` listener is still treated as a
-// user-initiated action by Chrome/Safari.
+// Shared audio-clip player. V2.1.17 — server-side ffmpeg slicing now
+// returns just the requested window, so the native <audio> duration
+// is accurate and we don't need client-side seek/pause hacks anymore.
+// The component just builds the URL, renders a play button, and on
+// click swaps to a native <audio controls /> element. No more refs,
+// no canplay listener, no timeupdate trim.
 
 export function AudioClip({
   callId,
@@ -32,16 +23,7 @@ export function AudioClip({
   variant?: "clip" | "full";
 }) {
   const [active, setActive] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
 
-  // V2.1.12 — same-origin by default. The audio API route at
-  // /api/ion/audio-clip/[callId] signs Supabase URLs and redirects.
-  // Only need to override baseUrl if Spencer ever wants to point the
-  // client at a different host (e.g., a staging server or the
-  // Railway backend). NEXT_PUBLIC_API_URL was never set on the
-  // poweredbystewart Vercel project, so it stays empty here and we
-  // route same-origin — works with the existing Vercel env
-  // (NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY).
   const baseUrl =
     process.env.NEXT_PUBLIC_API_URL ||
     process.env.NEXT_PUBLIC_API_BASE_URL ||
@@ -50,70 +32,9 @@ export function AudioClip({
   const qs = new URLSearchParams();
   if (typeof startSec === "number") qs.set("start", startSec.toFixed(3));
   if (typeof endSec === "number") qs.set("end", endSec.toFixed(3));
-  // Media Fragment URI hint — browsers that honor this seek natively
-  // before our useEffect runs. The JS seek below is the fallback.
-  const fragment =
-    typeof startSec === "number"
-      ? `#t=${startSec.toFixed(1)}${
-          typeof endSec === "number" ? "," + endSec.toFixed(1) : ""
-        }`
-      : "";
   const url =
     `${baseUrl}/api/ion/audio-clip/${encodeURIComponent(callId)}` +
-    (qs.toString() ? `?${qs.toString()}` : "") +
-    fragment;
-
-  useEffect(() => {
-    if (!active) return;
-    const el = audioRef.current;
-    if (!el) return;
-
-    const start = typeof startSec === "number" ? startSec : 0;
-    const end = typeof endSec === "number" ? endSec : null;
-
-    const seek = () => {
-      if (start > 0 && Math.abs(el.currentTime - start) > 0.5) {
-        try {
-          el.currentTime = start;
-        } catch {
-          // Some browsers throw if duration isn't ready; we'll
-          // retry via the next canplay tick.
-        }
-      }
-    };
-
-    const tryPlay = () => {
-      el.play().catch(() => {
-        // Autoplay blocked or unsupported — user can hit the
-        // play icon on the visible controls instead.
-      });
-    };
-
-    const onCanPlay = () => {
-      seek();
-      tryPlay();
-    };
-
-    const onTime = () => {
-      if (end !== null && el.currentTime >= end) {
-        el.pause();
-        try {
-          el.currentTime = start;
-        } catch {
-          // ignore
-        }
-      }
-    };
-
-    el.addEventListener("canplay", onCanPlay);
-    el.addEventListener("timeupdate", onTime);
-    // If already buffered, fire immediately.
-    if (el.readyState >= 3) onCanPlay();
-    return () => {
-      el.removeEventListener("canplay", onCanPlay);
-      el.removeEventListener("timeupdate", onTime);
-    };
-  }, [active, startSec, endSec]);
+    (qs.toString() ? `?${qs.toString()}` : "");
 
   const fallbackLabel =
     variant === "full"
@@ -141,43 +62,15 @@ export function AudioClip({
       </button>
     );
   }
-  // V2.1.15 — context label above the native player. The browser
-  // reads duration from the MP3 header (full call), so the controls
-  // show e.g. "1:20 / 11:14" even though our JS pauses at the clip
-  // end. The label tells the user what range they're actually hearing
-  // so the misleading total time has context.
-  const isClip =
-    typeof startSec === "number" && typeof endSec === "number";
   return (
-    <div className="w-full max-w-xs">
-      {isClip ? (
-        <p className="text-[10px] font-mono text-stewart-muted mb-1">
-          <span className="text-stewart-accent">▸ clip</span>{" "}
-          {fmtSec(startSec!)} &rarr; {fmtSec(endSec!)} &middot;{" "}
-          {Math.max(0, endSec! - startSec!).toFixed(0)}s
-          <span className="text-stewart-muted/70">
-            {" "}
-            (player shows full call duration)
-          </span>
-        </p>
-      ) : null}
-      <audio
-        ref={audioRef}
-        src={url}
-        controls
-        preload="auto"
-        className="h-9 w-full"
-      />
-    </div>
+    <audio
+      src={url}
+      controls
+      autoPlay
+      preload="auto"
+      className="h-9 w-full max-w-xs"
+    />
   );
-}
-
-function fmtSec(sec: number): string {
-  const m = Math.floor(sec / 60);
-  const s = Math.floor(sec % 60)
-    .toString()
-    .padStart(2, "0");
-  return `${m}:${s}`;
 }
 
 function PlayIcon() {
