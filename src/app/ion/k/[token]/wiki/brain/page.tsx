@@ -1,8 +1,7 @@
 import { decodeTokenRole } from "@/lib/viewer";
 import { ErrorPanel } from "../../_components/error-panel";
 import { loadBrainV2 } from "@/app/ion/(public)/brain/_brain-v2/load";
-import { BrainV2Scene } from "@/app/ion/(public)/brain/_brain-v2/BrainV2Scene.client";
-import { StatStrip } from "@/app/ion/(public)/brain/_brain-v2/StatStrip";
+import { BrainPageShell } from "@/app/ion/(public)/brain/_brain-v2/BrainPageShell.client";
 
 export const dynamic = "force-dynamic";
 
@@ -10,8 +9,8 @@ export const dynamic = "force-dynamic";
 // in .env.local. Production deploys don't have this var.
 const DEV_BYPASS = process.env.NEXT_PUBLIC_BRAIN_DEV_BYPASS === "1";
 
-// System-owner-gated mirror of /ion/brain. Same renderer, same payload
-// — the only difference is the upstream role gate. UX-only check via
+// System-owner-gated mirror of /ion/brain. Same shell, same payload —
+// the only difference is the upstream role gate. UX-only check via
 // token base64 decode (HMAC stays backend-verified on every data
 // fetch in the API layer).
 
@@ -29,10 +28,5 @@ export default async function WikiBrainPage({
   }
 
   const payload = await loadBrainV2();
-  return (
-    <div className="space-y-4">
-      <StatStrip payload={payload} />
-      <BrainV2Scene payload={payload} />
-    </div>
-  );
+  return <BrainPageShell payload={payload} />;
 }

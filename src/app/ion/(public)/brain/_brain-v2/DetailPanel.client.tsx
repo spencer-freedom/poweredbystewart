@@ -6,6 +6,9 @@ import type {
   Planet,
   Tile,
 } from "./types";
+import { AudioClip, tsToSeconds } from "../../_components/AudioClip.client";
+
+const CLIP_DURATION_SEC = 20;
 
 export type Selection =
   | { kind: "core" }
@@ -24,6 +27,10 @@ export type Selection =
 // notes/open-questions.md § Brain V2.1 for the animated-choreography
 // deferral. V2 ships the same data model as a docked panel.
 
+// V2.0.1: rendered as a side-docked panel by BrainPageShell, no longer
+// overlaid on the brain canvas. Layout uses a flex column so the
+// header sticks while the card stack scrolls.
+
 export function DetailPanel({
   payload,
   selection,
@@ -35,33 +42,31 @@ export function DetailPanel({
 }) {
   if (!selection) return null;
   return (
-    <div className="pointer-events-none absolute top-3 right-3 bottom-3 z-30 w-full sm:w-[28rem] max-w-[calc(100%-1.5rem)]">
-      <div className="pointer-events-auto h-full overflow-y-auto bg-stewart-card/95 backdrop-blur-md border border-stewart-border rounded-lg shadow-2xl">
-        <header className="sticky top-0 bg-stewart-card border-b border-stewart-border px-5 py-3 flex items-center justify-between z-10">
-          <span className="text-[10px] uppercase tracking-wider font-mono text-stewart-muted">
-            {labelFor(selection)}
-          </span>
-          <button
-            onClick={onClose}
-            className="text-stewart-muted hover:text-stewart-text text-sm"
-          >
-            close ✕
-          </button>
-        </header>
-        <div className="px-5 py-5">
-          {selection.kind === "core" ? (
-            <CoreMeta payload={payload} />
-          ) : selection.kind === "tile" ? (
-            <TileDetail tile={selection.tile} />
-          ) : selection.kind === "planet" ? (
-            <PlanetDetail planet={selection.planet} />
-          ) : (
-            <PlanetDetail
-              planet={selection.planet}
-              highlightedMoonTs={selection.moon.ts}
-            />
-          )}
-        </div>
+    <div className="bg-stewart-card border border-stewart-border rounded-lg shadow-2xl overflow-hidden flex flex-col max-h-[calc(100vh-2rem)]">
+      <header className="bg-stewart-card border-b border-stewart-border px-4 py-3 flex items-center justify-between gap-3 shrink-0">
+        <span className="text-[10px] uppercase tracking-wider font-mono text-stewart-muted truncate">
+          {labelFor(selection)}
+        </span>
+        <button
+          onClick={onClose}
+          className="text-stewart-muted hover:text-stewart-text text-sm shrink-0"
+        >
+          close ✕
+        </button>
+      </header>
+      <div className="px-5 py-5 overflow-y-auto">
+        {selection.kind === "core" ? (
+          <CoreMeta payload={payload} />
+        ) : selection.kind === "tile" ? (
+          <TileDetail tile={selection.tile} />
+        ) : selection.kind === "planet" ? (
+          <PlanetDetail planet={selection.planet} />
+        ) : (
+          <PlanetDetail
+            planet={selection.planet}
+            highlightedMoonTs={selection.moon.ts}
+          />
+        )}
       </div>
     </div>
   );
@@ -253,22 +258,32 @@ function TileDetail({ tile }: { tile: Tile }) {
       {examples.length > 0 ? (
         <Card title="Recent moments">
           <ul className="space-y-3">
-            {examples.map((ex, i) => (
-              <li
-                key={i}
-                className="rounded border border-stewart-border bg-stewart-bg/40 p-2 text-xs"
-              >
-                <p className="font-mono text-stewart-muted mb-1">
-                  {ex.call_id} @ {ex.ts}{" "}
-                  <span className="text-stewart-muted/70">
-                    ({ex.classification.replace(/_/g, " ")})
-                  </span>
-                </p>
-                <blockquote className="text-stewart-text italic leading-snug">
-                  &ldquo;{ex.quote}&rdquo;
-                </blockquote>
-              </li>
-            ))}
+            {examples.map((ex, i) => {
+              const start = tsToSeconds(ex.ts);
+              return (
+                <li
+                  key={i}
+                  className="rounded border border-stewart-border bg-stewart-bg/40 p-2 text-xs"
+                >
+                  <p className="font-mono text-stewart-muted mb-1">
+                    {ex.call_id} @ {ex.ts}{" "}
+                    <span className="text-stewart-muted/70">
+                      ({ex.classification.replace(/_/g, " ")})
+                    </span>
+                  </p>
+                  <blockquote className="text-stewart-text italic leading-snug">
+                    &ldquo;{ex.quote}&rdquo;
+                  </blockquote>
+                  <div className="mt-2">
+                    <AudioClip
+                      callId={ex.call_id}
+                      startSec={start}
+                      endSec={start + CLIP_DURATION_SEC}
+                    />
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </Card>
       ) : null}
@@ -321,12 +336,16 @@ function PlanetDetail({
             EXEMPLAR for {planet.gray_matter_section}
           </p>
         ) : null}
+        <div className="mt-3">
+          <AudioClip callId={planet.call_id} variant="full" />
+        </div>
       </Card>
 
       <Card title={`Cherry-picks · ${planet.moons.length} moments`}>
         <ul className="space-y-3">
           {planet.moons.map((m, i) => {
             const highlight = highlightedMoonTs === m.ts;
+            const start = tsToSeconds(m.ts);
             return (
               <li
                 key={i}
@@ -354,6 +373,13 @@ function PlanetDetail({
                 <blockquote className="text-stewart-text italic leading-snug">
                   &ldquo;{m.quote_excerpt}&rdquo;
                 </blockquote>
+                <div className="mt-2">
+                  <AudioClip
+                    callId={planet.call_id}
+                    startSec={start}
+                    endSec={start + CLIP_DURATION_SEC}
+                  />
+                </div>
               </li>
             );
           })}

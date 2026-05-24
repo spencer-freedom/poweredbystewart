@@ -10,6 +10,10 @@ export type Moon = {
   moon_color: string;
   orbit_radius: number;
   orbit_phase: number;
+  // V2.0.1 per-moon orbital plane (ion-around-nucleus visual)
+  orbit_normal_phi: number;
+  orbit_normal_theta: number;
+  orbit_speed: number;
 };
 
 export type Planet = {
@@ -41,6 +45,9 @@ export type Tile = {
   color: string;
   saturation_boost: number;
   section_data: Record<string, unknown> | null;
+  // V2.0.1 — reserved (inactive) tiles render their color but skip
+  // hover/click. Optional tooltip label when hovered.
+  placeholder_label?: string;
 };
 
 export type Core = {

@@ -2,7 +2,7 @@
 
 import { Suspense, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Html, Line, OrbitControls, Text } from "@react-three/drei";
+import { Html, Line, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import {
   type BrainV2Payload,
@@ -12,7 +12,7 @@ import {
   sphericalToCartesian,
   tileToSpherical,
 } from "./types";
-import { DetailPanel, type Selection } from "./DetailPanel.client";
+import { type Selection } from "./DetailPanel.client";
 import { Legend } from "./Legend.client";
 
 // ───── Tuning ─────────────────────────────────────────────────────────
@@ -30,18 +30,33 @@ const MOON_BASE_SIZE = 0.35;
 const GRAY_HALO_COLOR = "#fde68a";
 const GRAY_HALO_BASE_SCALE = 1.9;
 
-// ───── Top-level wrapper ──────────────────────────────────────────────
+// ───── Canvas-only component (state lifted to BrainPageShell) ─────────
+//
+// V2.0.1: selection + hoveredDomain state moved up to BrainPageShell
+// so the detail panel can render in a side-docked column instead of as
+// an overlay on top of the brain. This component now just owns the
+// canvas + the bottom-of-canvas legend; the shell composes the rest.
 
-export function BrainV2Scene({ payload }: { payload: BrainV2Payload }) {
-  const [selection, setSelection] = useState<Selection | null>(null);
-  const [hoveredDomain, setHoveredDomain] = useState<string | null>(null);
-
+export function BrainV2Scene({
+  payload,
+  hoveredDomain,
+  onHoverDomain,
+  onSelect,
+}: {
+  payload: BrainV2Payload;
+  hoveredDomain: string | null;
+  onHoverDomain: (d: string | null) => void;
+  onSelect: (sel: Selection) => void;
+}) {
   const coreRadius = payload.core.core_radius * CORE_RADIUS_SCALE;
 
   return (
-    <div className="relative w-full" style={{ height: "78vh", minHeight: 540 }}>
+    <div
+      className="relative w-full rounded-lg overflow-hidden border border-stewart-border"
+      style={{ height: "78vh", minHeight: 540 }}
+    >
       {/* Mobile fallback notice */}
-      <div className="absolute inset-0 sm:hidden flex items-center justify-center p-6 text-center text-stewart-muted text-sm bg-stewart-bg/95 z-30 rounded-lg border border-stewart-border">
+      <div className="absolute inset-0 sm:hidden flex items-center justify-center p-6 text-center text-stewart-muted text-sm bg-stewart-bg/95 z-30">
         Stewart&apos;s brain is best viewed on desktop. Open this page on
         a larger screen to explore the {payload.stats.sections_lit}-section
         structure interactively.
@@ -59,21 +74,15 @@ export function BrainV2Scene({ payload }: { payload: BrainV2Payload }) {
             payload={payload}
             coreRadius={coreRadius}
             hoveredDomain={hoveredDomain}
-            onSelect={setSelection}
+            onSelect={onSelect}
           />
         </Canvas>
       </div>
 
-      <DetailPanel
-        payload={payload}
-        selection={selection}
-        onClose={() => setSelection(null)}
-      />
-
       <Legend
         domainColors={payload.domain_colors}
         hoveredDomain={hoveredDomain}
-        onHoverDomain={setHoveredDomain}
+        onHoverDomain={onHoverDomain}
       />
     </div>
   );
@@ -136,7 +145,16 @@ function Scene({
   );
 }
 
-// ───── Crystal core: sphere + lat/long lines + tiles ──────────────────
+// ───── Crystal core: continuous sphere with per-vertex coloring ───────
+//
+// V2.0.1 rebuild: replaces the 108-separate-tile-mesh layout with one
+// high-poly sphere whose vertex colors are sampled from the tile each
+// vertex lies in. Adjacent vertices across tile boundaries get smooth
+// interpolation, so the core reads as one continuous lit crystal with
+// colored regions melting into each other — no visible grout.
+//
+// Click/hover targets are still per-tile, but rendered as invisible
+// raycaster-hittable spheres at each active tile's center.
 
 function CrystalCore({
   core,
@@ -149,50 +167,150 @@ function CrystalCore({
   hoveredDomain: string | null;
   onSelect: (sel: Selection) => void;
 }) {
-  // Glass sphere — translucent prismatic appearance
+  // Build the per-vertex-color sphere geometry once per (core + radius)
+  const geometry = useMemo(
+    () => buildCoreGeometry(core, coreRadius, hoveredDomain),
+    [core, coreRadius, hoveredDomain]
+  );
+
   return (
     <group>
+      {/* Backstop: a subtle glassy substrate behind the colored shell,
+          so the sphere reads as solid in silhouette and the inner glow
+          has somewhere to live. */}
       <mesh
         onClick={(e) => {
           e.stopPropagation();
           onSelect({ kind: "core" });
         }}
       >
-        <sphereGeometry args={[coreRadius, 64, 64]} />
+        <sphereGeometry args={[coreRadius * 0.985, 48, 48]} />
         <meshPhysicalMaterial
           color="#1e293b"
-          transmission={0.6}
-          thickness={0.5}
-          roughness={0.18}
+          transmission={0.4}
+          thickness={0.6}
+          roughness={0.25}
           metalness={0.0}
-          clearcoat={0.4}
+          clearcoat={0.3}
           ior={1.45}
           transparent
-          opacity={0.6}
+          opacity={0.55}
           emissive="#0f172a"
           emissiveIntensity={0.18}
         />
       </mesh>
 
-      <CoreInnerGlow radius={coreRadius * 0.93} />
-      <LatLongGrid
-        radius={coreRadius * 1.005}
-        latCount={core.lat_count}
-        lonCount={core.lon_count}
-      />
-
-      {core.tiles.map((tile) => (
-        <Tile3D
-          key={tile.tile_index}
-          tile={tile}
-          core={core}
-          coreRadius={coreRadius * 1.02}
-          hoveredDomain={hoveredDomain}
-          onSelect={onSelect}
+      {/* Colored shell — single mesh, vertex colors carry the tile
+          palette and saturation boost. */}
+      <mesh
+        geometry={geometry}
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelect({ kind: "core" });
+        }}
+      >
+        <meshStandardMaterial
+          vertexColors
+          emissive="#0a0f1a"
+          emissiveIntensity={0.45}
+          roughness={0.55}
+          metalness={0.0}
+          transparent
+          opacity={0.82}
+          depthWrite
         />
-      ))}
+      </mesh>
+
+      <CoreInnerGlow radius={coreRadius * 0.93} />
+
+      {/* Invisible click/hover targets for the 101 active tiles. The
+          shell mesh is one piece, so we still need per-tile pickables
+          for the detail panel. Inactive (_reserved) tiles get no
+          target — per V2.0.1 spec they render but don't interact. */}
+      {core.tiles
+        .filter((t) => t.is_active && t.codex_section)
+        .map((tile) => (
+          <TileClickTarget
+            key={tile.tile_index}
+            tile={tile}
+            core={core}
+            coreRadius={coreRadius}
+            onSelect={onSelect}
+          />
+        ))}
     </group>
   );
+}
+
+function buildCoreGeometry(
+  core: BrainV2Payload["core"],
+  radius: number,
+  hoveredDomain: string | null
+): THREE.SphereGeometry {
+  // Mesh resolution. Higher = smoother boundaries between tile colors,
+  // larger geometry payload. 128×80 is plenty for a 12×9 tile grid.
+  const widthSegments = 128;
+  const heightSegments = 80;
+  const geom = new THREE.SphereGeometry(
+    radius,
+    widthSegments,
+    heightSegments
+  );
+
+  // Index tiles by (lat, lon) cell.
+  const byCell = new Map<string, Tile>();
+  for (const t of core.tiles) {
+    byCell.set(`${t.lat_index}:${t.lon_index}`, t);
+  }
+
+  const pos = geom.attributes.position;
+  const colors = new Float32Array(pos.count * 3);
+
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    const y = pos.getY(i);
+    const z = pos.getZ(i);
+    const r = Math.sqrt(x * x + y * y + z * z) || 1;
+
+    // theta (polar) ∈ [0, π], phi (azimuth) ∈ [0, 2π)
+    const theta = Math.acos(Math.min(1, Math.max(-1, y / r)));
+    let phi = Math.atan2(z, x);
+    if (phi < 0) phi += Math.PI * 2;
+
+    const latIdx = Math.min(
+      core.lat_count - 1,
+      Math.floor((theta / Math.PI) * core.lat_count)
+    );
+    const lonIdx = Math.min(
+      core.lon_count - 1,
+      Math.floor((phi / (Math.PI * 2)) * core.lon_count)
+    );
+    const tile = byCell.get(`${latIdx}:${lonIdx}`);
+
+    const baseHex = tile?.color || "#3c3540";
+    const c = new THREE.Color(baseHex);
+
+    // Saturation boost lifts brightness on heavily-referenced tiles
+    // (quantity-per-section rule baked into the payload).
+    const boost = (tile?.saturation_boost || 0) * 0.65;
+
+    // Legend hover: brighten the tile's domain across the whole sphere
+    // by ~25% lift on r/g/b. Implementation only applies if tile is
+    // active (matches the click-target gating).
+    const domainHit =
+      hoveredDomain &&
+      tile?.is_active &&
+      tile?.domain === hoveredDomain;
+    const hoverLift = domainHit ? 0.35 : 0;
+
+    const scale = 1 + boost + hoverLift;
+    colors[i * 3] = Math.min(1.4, c.r * scale);
+    colors[i * 3 + 1] = Math.min(1.4, c.g * scale);
+    colors[i * 3 + 2] = Math.min(1.4, c.b * scale);
+  }
+
+  geom.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  return geom;
 }
 
 function CoreInnerGlow({ radius }: { radius: number }) {
@@ -202,7 +320,7 @@ function CoreInnerGlow({ radius }: { radius: number }) {
       <meshBasicMaterial
         color="#a5f3fc"
         transparent
-        opacity={0.07}
+        opacity={0.05}
         blending={THREE.AdditiveBlending}
         depthWrite={false}
       />
@@ -210,75 +328,15 @@ function CoreInnerGlow({ radius }: { radius: number }) {
   );
 }
 
-function LatLongGrid({
-  radius,
-  latCount,
-  lonCount,
-}: {
-  radius: number;
-  latCount: number;
-  lonCount: number;
-}) {
-  // Latitude rings (constant theta)
-  const latRings = useMemo(() => {
-    const rings: [number, number, number][][] = [];
-    for (let i = 1; i < latCount; i++) {
-      const theta = (i / latCount) * Math.PI;
-      const r = radius * Math.sin(theta);
-      const y = radius * Math.cos(theta);
-      const pts: [number, number, number][] = [];
-      const segments = 64;
-      for (let s = 0; s <= segments; s++) {
-        const phi = (s / segments) * Math.PI * 2;
-        pts.push([r * Math.cos(phi), y, r * Math.sin(phi)]);
-      }
-      rings.push(pts);
-    }
-    return rings;
-  }, [radius, latCount]);
-
-  // Longitude arcs (constant phi)
-  const lonArcs = useMemo(() => {
-    const arcs: [number, number, number][][] = [];
-    for (let i = 0; i < lonCount; i++) {
-      const phi = (i / lonCount) * Math.PI * 2;
-      const pts: [number, number, number][] = [];
-      const segments = 64;
-      for (let s = 0; s <= segments; s++) {
-        const theta = (s / segments) * Math.PI;
-        const x = radius * Math.sin(theta) * Math.cos(phi);
-        const y = radius * Math.cos(theta);
-        const z = radius * Math.sin(theta) * Math.sin(phi);
-        pts.push([x, y, z]);
-      }
-      arcs.push(pts);
-    }
-    return arcs;
-  }, [radius, lonCount]);
-
-  return (
-    <group>
-      {latRings.map((pts, i) => (
-        <Line key={`lat-${i}`} points={pts} color="#475569" opacity={0.45} transparent lineWidth={0.6} />
-      ))}
-      {lonArcs.map((pts, i) => (
-        <Line key={`lon-${i}`} points={pts} color="#475569" opacity={0.45} transparent lineWidth={0.6} />
-      ))}
-    </group>
-  );
-}
-
-function Tile3D({
+function TileClickTarget({
   tile,
   core,
   coreRadius,
-  hoveredDomain,
   onSelect,
 }: {
   tile: Tile;
   core: BrainV2Payload["core"];
   coreRadius: number;
-  hoveredDomain: string | null;
   onSelect: (sel: Selection) => void;
 }) {
   const { theta, phi } = tileToSpherical(
@@ -287,50 +345,23 @@ function Tile3D({
     core.lat_count,
     core.lon_count
   );
-  const center = sphericalToCartesian(theta, phi, coreRadius);
+  const center = sphericalToCartesian(theta, phi, coreRadius * 1.02);
 
-  // Normal at this tile (outward)
-  const normal = new THREE.Vector3(...center).normalize();
-  const quat = new THREE.Quaternion().setFromUnitVectors(
-    new THREE.Vector3(0, 0, 1),
-    normal
-  );
-
-  // Tile dimensions (small patches that sit on the surface)
-  const dLat = (Math.PI / core.lat_count) * 0.85;
-  const dLon = ((Math.PI * 2) / core.lon_count) * 0.85;
-  const w = coreRadius * dLon * Math.sin(theta);
-  const h = coreRadius * dLat;
-
-  const baseColor = tile.is_active ? tile.color : TILE_INACTIVE_COLOR;
-  const saturationBoost = tile.saturation_boost || 0;
-
-  const domainMatch =
-    hoveredDomain && tile.domain === hoveredDomain && tile.is_active;
-  const emissiveIntensity =
-    (tile.is_active ? 0.35 : 0.05) +
-    saturationBoost * 0.85 +
-    (domainMatch ? 0.5 : 0);
+  // Small invisible sphere — sized so adjacent tile targets don't
+  // overlap on the 12×9 grid. Raycaster still picks it cleanly.
+  const targetRadius =
+    (coreRadius * Math.PI) / Math.max(core.lat_count * 2, core.lon_count * 2);
 
   return (
     <mesh
       position={center}
-      quaternion={quat}
       onClick={(e) => {
         e.stopPropagation();
-        if (tile.is_active) onSelect({ kind: "tile", tile });
+        onSelect({ kind: "tile", tile });
       }}
     >
-      <planeGeometry args={[w, h]} />
-      <meshStandardMaterial
-        color={baseColor}
-        emissive={baseColor}
-        emissiveIntensity={emissiveIntensity}
-        side={THREE.DoubleSide}
-        transparent
-        opacity={tile.is_active ? 0.7 + saturationBoost * 0.25 : 0.35}
-        depthWrite={false}
-      />
+      <sphereGeometry args={[targetRadius * 0.9, 8, 8]} />
+      <meshBasicMaterial transparent opacity={0} depthWrite={false} />
     </mesh>
   );
 }
@@ -584,7 +615,39 @@ function PlanetTooltip({ planet, y }: { planet: Planet; y: number }) {
   );
 }
 
-// ───── Moons ──────────────────────────────────────────────────────────
+// ───── Moons (ion-orbital — atom, not Saturn) ─────────────────────────
+//
+// V2.0.1: each moon orbits its planet on its own 3D plane defined by
+// (orbit_normal_phi, orbit_normal_theta). Result: planet + moons reads
+// as a nucleus with electrons/ions in 3D orbit, not as a Saturn-ring.
+// The Ion Solar brand tie-in is intentional — Stewart's ion-orbital
+// architecture is the visual identity that no generic AI sales tool
+// can match.
+
+const BASE_ORBITAL_SPEED = 0.22; // multiplier on per-moon orbit_speed
+
+function buildOrbitBasis(
+  normalPhi: number,
+  normalTheta: number
+): { u: THREE.Vector3; v: THREE.Vector3 } {
+  // Normal from spherical coords (matches Strategy Claude's payload
+  // convention: phi azimuth + theta polar)
+  const n = new THREE.Vector3(
+    Math.sin(normalTheta) * Math.cos(normalPhi),
+    Math.sin(normalTheta) * Math.sin(normalPhi),
+    Math.cos(normalTheta)
+  ).normalize();
+
+  // Pick any vector not parallel to n, then Gram-Schmidt.
+  const worldUp = new THREE.Vector3(0, 1, 0);
+  const seed =
+    Math.abs(n.dot(worldUp)) > 0.99
+      ? new THREE.Vector3(1, 0, 0)
+      : worldUp.clone();
+  const u = new THREE.Vector3().crossVectors(seed, n).normalize();
+  const v = new THREE.Vector3().crossVectors(n, u).normalize();
+  return { u, v };
+}
 
 function MoonNode({
   moon,
@@ -600,14 +663,24 @@ function MoonNode({
   const ref = useRef<THREE.Mesh>(null);
   const orbitRadius = moon.orbit_radius + parentRadius * 0.4;
 
+  // Precompute the orbital plane basis once per moon. orbit_normal_phi
+  // and orbit_normal_theta come from the V2.0.1 payload — deterministic
+  // per call+cherry-pick so renders are byte-identical across loads.
+  const { u, v } = useMemo(
+    () => buildOrbitBasis(moon.orbit_normal_phi, moon.orbit_normal_theta),
+    [moon.orbit_normal_phi, moon.orbit_normal_theta]
+  );
+
   useFrame((state) => {
     if (!ref.current) return;
     const t = state.clock.getElapsedTime();
-    const phase = moon.orbit_phase + t * 0.18; // ~35s/rotation
+    const angle = moon.orbit_phase + t * moon.orbit_speed * BASE_ORBITAL_SPEED;
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
     ref.current.position.set(
-      Math.cos(phase) * orbitRadius,
-      Math.sin(phase * 0.4) * orbitRadius * 0.25,
-      Math.sin(phase) * orbitRadius
+      u.x * cos * orbitRadius + v.x * sin * orbitRadius,
+      u.y * cos * orbitRadius + v.y * sin * orbitRadius,
+      u.z * cos * orbitRadius + v.z * sin * orbitRadius
     );
   });
 
@@ -619,8 +692,9 @@ function MoonNode({
 
   return (
     <>
-      {/* Orbit ring */}
       <OrbitRing
+        u={u}
+        v={v}
         radius={orbitRadius}
         color={moon.moon_color}
         opacity={domainHit ? ORBIT_LINE_OPACITY * 2.2 : ORBIT_LINE_OPACITY}
@@ -651,23 +725,35 @@ function MoonNode({
 }
 
 function OrbitRing({
+  u,
+  v,
   radius,
   color,
   opacity,
 }: {
+  u: THREE.Vector3;
+  v: THREE.Vector3;
   radius: number;
   color: string;
   opacity: number;
 }) {
+  // Trace an ellipse on the (u, v) plane so the ring sits exactly
+  // where the moon orbits.
   const pts = useMemo(() => {
     const out: [number, number, number][] = [];
-    const segments = 32;
+    const segments = 48;
     for (let i = 0; i <= segments; i++) {
       const a = (i / segments) * Math.PI * 2;
-      out.push([Math.cos(a) * radius, 0, Math.sin(a) * radius]);
+      const cos = Math.cos(a);
+      const sin = Math.sin(a);
+      out.push([
+        u.x * cos * radius + v.x * sin * radius,
+        u.y * cos * radius + v.y * sin * radius,
+        u.z * cos * radius + v.z * sin * radius,
+      ]);
     }
     return out;
-  }, [radius]);
+  }, [u, v, radius]);
   return (
     <Line
       points={pts}
