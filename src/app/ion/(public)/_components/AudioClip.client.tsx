@@ -1,18 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Shared audio-clip player for the public Ion surfaces (§2 carousel
-// walkthrough, brain page detail panel). Renders a play button that
-// reveals a native <audio> on click — keeps the network request lazy
-// so 7-call carousels don't preload 7 MP3s.
+// walkthrough, brain page detail panel, /ion/calls drawer).
 //
-// The audio URL points at the existing /api/ion/audio-clip/{call_id}
-// endpoint. When no start/end is supplied, the full call MP3 streams.
-// When supplied, the endpoint slices a clip.
-//
-// Per the §2 carousel original wiring: NEXT_PUBLIC_API_BASE_URL gates
-// where the backend lives. Empty base = same origin.
+// V2.1.2 — the /api/ion/audio-clip endpoint accepts start/end query
+// params but currently returns the full MP3 regardless (server-side
+// ffmpeg slicing is a TODO). Client compensates: seek to start on
+// metadata-loaded, pause + reset to start when currentTime >= end.
+// Native HTML5 audio handles this fine; no server change needed.
 
 export function AudioClip({
   callId,
@@ -28,6 +25,7 @@ export function AudioClip({
   variant?: "clip" | "full";
 }) {
   const [active, setActive] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const baseUrl =
     process.env.NEXT_PUBLIC_API_BASE_URL ||
     process.env.NEXT_PUBLIC_BASE_URL ||
@@ -38,6 +36,52 @@ export function AudioClip({
   const url =
     `${baseUrl}/api/ion/audio-clip/${encodeURIComponent(callId)}` +
     (qs.toString() ? `?${qs.toString()}` : "");
+
+  // Client-side trimming. Only kicks in when both start and end are
+  // provided (clip mode) — full-call mode lets the audio play through.
+  useEffect(() => {
+    if (!active) return;
+    if (typeof startSec !== "number" || typeof endSec !== "number") return;
+    const el = audioRef.current;
+    if (!el) return;
+
+    const seekToStart = () => {
+      try {
+        el.currentTime = startSec;
+      } catch {
+        // Some browsers throw if duration isn't ready yet; the
+        // canplay handler will retry.
+      }
+    };
+
+    const onLoaded = () => {
+      seekToStart();
+      el.play().catch(() => {});
+    };
+
+    const onCanPlay = () => {
+      // Safari sometimes ignores currentTime set before canplay.
+      if (Math.abs(el.currentTime - startSec) > 0.5) seekToStart();
+    };
+
+    const onTime = () => {
+      if (el.currentTime >= endSec) {
+        el.pause();
+        el.currentTime = startSec;
+      }
+    };
+
+    el.addEventListener("loadedmetadata", onLoaded);
+    el.addEventListener("canplay", onCanPlay);
+    el.addEventListener("timeupdate", onTime);
+    // If metadata already loaded (cached), prime it directly.
+    if (el.readyState >= 1) seekToStart();
+    return () => {
+      el.removeEventListener("loadedmetadata", onLoaded);
+      el.removeEventListener("canplay", onCanPlay);
+      el.removeEventListener("timeupdate", onTime);
+    };
+  }, [active, startSec, endSec]);
 
   const fallbackLabel =
     variant === "full"
@@ -67,6 +111,7 @@ export function AudioClip({
   }
   return (
     <audio
+      ref={audioRef}
       src={url}
       controls
       autoPlay
