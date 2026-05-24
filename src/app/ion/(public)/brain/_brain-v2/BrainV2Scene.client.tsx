@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, Html, Line, OrbitControls } from "@react-three/drei";
+import { Environment, Line, OrbitControls } from "@react-three/drei";
 import { MeshTransmissionMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import {
@@ -619,10 +619,6 @@ function SinglePlanet({
         />
       </mesh>
 
-      {planet.is_gray_matter && planet.gray_matter_section ? (
-        <ExemplarLabel section={planet.gray_matter_section} y={baseSize * 2.4} />
-      ) : null}
-
       {planet.moons.map((m, i) => (
         <MoonNode
           key={`${planet.call_id}-${i}`}
@@ -634,8 +630,6 @@ function SinglePlanet({
           }
         />
       ))}
-
-      {hover ? <PlanetTooltip planet={planet} y={baseSize * 1.7} /> : null}
     </group>
   );
 }
@@ -685,38 +679,12 @@ function GrayMatterHalo({ size }: { size: number }) {
   );
 }
 
-function ExemplarLabel({ section, y }: { section: string; y: number }) {
-  // Text always faces camera (drei Text + billboard via parent group's
-  // orientation isn't trivial here; using Html for crispness).
-  return (
-    <Html position={[0, y, 0]} center distanceFactor={170} zIndexRange={[1, 0]} pointerEvents="none">
-      <div className="pointer-events-none whitespace-nowrap text-[10px] uppercase tracking-wider text-amber-300 bg-stewart-bg/70 border border-amber-300/30 rounded px-1.5 py-0.5 font-mono">
-        EXEMPLAR &middot; {section}
-      </div>
-    </Html>
-  );
-}
-
-function PlanetTooltip({ planet, y }: { planet: Planet; y: number }) {
-  return (
-    <Html position={[0, y, 0]} center distanceFactor={120} zIndexRange={[10, 0]} pointerEvents="none">
-      <div className="pointer-events-none whitespace-nowrap text-[10px] font-mono bg-stewart-bg/90 border border-stewart-border rounded px-2 py-1 text-stewart-text">
-        {planet.call_id}
-        {planet.rep_id ? <> &middot; {planet.rep_id}</> : null}{" "}
-        &middot;{" "}
-        <span style={{ color: planet.outcome_tint_color }}>
-          {planet.outcome.replace(/_/g, " ")}
-        </span>
-        {planet.duration_min ? (
-          <>
-            {" "}
-            &middot; {planet.duration_min.toFixed(0)} min
-          </>
-        ) : null}
-      </div>
-    </Html>
-  );
-}
+// V2.0.5: floating labels removed (ExemplarLabel / PlanetTooltip /
+// MoonTooltip). With the crystal core transparent, far-side labels
+// bled through the front hemisphere and read as visual noise.
+// Identity is recovered via click → PlanetDetail card below the
+// brain. Gray-matter exemplars still carry their pulsing gold halo
+// for at-a-glance identification.
 
 // ───── Moons (ion-orbital — atom, not Saturn) ─────────────────────────
 //
@@ -828,7 +796,6 @@ function MoonNode({
           }
           roughness={0.3}
         />
-        {hover ? <MoonTooltip moon={moon} /> : null}
       </mesh>
     </>
   );
@@ -876,18 +843,3 @@ function OrbitRing({
   );
 }
 
-function MoonTooltip({ moon }: { moon: Moon }) {
-  return (
-    <Html position={[0, 0.7, 0]} center distanceFactor={90} zIndexRange={[10, 0]} pointerEvents="none">
-      <div className="pointer-events-none max-w-[220px] text-[10px] font-mono bg-stewart-bg/90 border border-stewart-border rounded px-2 py-1 text-stewart-text">
-        <div className="text-stewart-accent">{moon.ts}</div>
-        <div className="text-stewart-muted truncate">
-          {moon.classification.replace(/_/g, " ")}
-        </div>
-        <div className="text-stewart-text mt-1 line-clamp-2 italic">
-          “{moon.quote_excerpt}”
-        </div>
-      </div>
-    </Html>
-  );
-}
