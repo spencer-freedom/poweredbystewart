@@ -99,7 +99,10 @@ export const PLANET_PALETTES: PlanetPalette[] = [
   },
 ];
 
-export const DEFAULT_PLANET_PALETTE: PlanetPalette = PLANET_PALETTES[0];
+// Locked: Polished walnut. The other PLANET_PALETTES entries stay in
+// the file as documentation of alternates we considered.
+export const DEFAULT_PLANET_PALETTE: PlanetPalette =
+  PLANET_PALETTES.find((p) => p.id === "walnut") || PLANET_PALETTES[0];
 
 export function planetColor(
   outcome: string,
@@ -112,7 +115,11 @@ export function planetColor(
 const GROUNDING_LINE_COLOR = "#e2e8f0";
 const GROUNDING_LINE_OPACITY = 0.22;
 const GROUNDING_LINE_OPACITY_HOVER = 0.8;
-const ORBIT_LINE_OPACITY = 0.22;
+// V2.0.13 — moon orbit paths lifted in brightness + thickness so the
+// per-domain ion-orbital traces stay legible at the pulled-back default
+// camera. Previous 0.22 / lineWidth 0.5 read as ghost-faint.
+const ORBIT_LINE_OPACITY = 0.55;
+const ORBIT_LINE_WIDTH = 1.0;
 const PLANET_FADE_FLOOR = 0.08;
 const PLANET_SIZE_FLOOR = 0.55;
 const MOON_BASE_SIZE = 0.5;
@@ -966,7 +973,7 @@ function OrbitRing({
       color={color}
       opacity={opacity}
       transparent
-      lineWidth={0.5}
+      lineWidth={ORBIT_LINE_WIDTH}
       depthWrite={false}
     />
   );
