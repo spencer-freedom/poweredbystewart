@@ -38,13 +38,12 @@ export default async function IonSchemaPage() {
           </Link>
         </div>
         <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-stewart-text leading-tight">
-          Ion Solar &mdash; the schema Stewart reads every call against
+          The Ion Solar Schema
         </h1>
         <p className="mt-4 text-base text-stewart-muted leading-relaxed max-w-3xl">
-          Every section Stewart reads, in one canvas. Live cards are the
-          coaching the floor gets today. Scaffolded cards are the
-          sections we&apos;ve mapped — the embedded build converts them
-          into live ones.
+          The operational intelligence framework Stewart uses to evaluate
+          every call against Ion&rsquo;s coaching standards, sales
+          philosophy, and processes.
         </p>
       </header>
 
