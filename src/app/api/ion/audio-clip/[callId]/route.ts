@@ -32,10 +32,19 @@ export async function GET(
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !serviceKey) {
+    // Non-leaky diagnostic — booleans only, no values exposed. Tells us
+    // exactly which env vars the runtime is or isn't getting. This is
+    // safe to ship to prod: it reveals presence, not content.
     return NextResponse.json(
       {
-        error:
-          "Supabase env not configured (need SUPABASE_URL or NEXT_PUBLIC_SUPABASE_URL, plus SUPABASE_SERVICE_ROLE_KEY)",
+        error: "Supabase env not configured",
+        runtime_env_presence: {
+          SUPABASE_URL: Boolean(process.env.SUPABASE_URL),
+          NEXT_PUBLIC_SUPABASE_URL: Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL),
+          SUPABASE_SERVICE_ROLE_KEY: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
+        },
+        hint: "If any expected key shows false here, that var isn't reaching the production route handler. Check Vercel project Settings → Environment Variables, confirm the var has Production scope, then force a fresh redeploy.",
       },
       { status: 500 }
     );
