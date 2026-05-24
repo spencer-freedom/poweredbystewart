@@ -74,17 +74,6 @@ function GraySwatch() {
   );
 }
 
-function VectorSwatch() {
-  return (
-    <span className="w-4 h-3 shrink-0 inline-flex items-center">
-      <span
-        className="w-full h-px"
-        style={{ background: "#e2e8f0", opacity: 0.7 }}
-      />
-    </span>
-  );
-}
-
 function OrbitSwatch() {
   return (
     <span
@@ -106,29 +95,24 @@ const ITEMS: LegendItem[] = [
     swatch: <TileSwatch />,
   },
   {
-    label: "Call planet",
+    label: "Nucleus",
     description: "One of the 332 processed Ion calls. The nucleus of its own atom.",
     swatch: <CallSwatch />,
   },
   {
-    label: "Moon (ion)",
+    label: "Ion",
     description: "One cherry-pick moment from that call. Colored by which schema domain it touched.",
     swatch: <MoonSwatch />,
   },
   {
     label: "Orbit path",
-    description: "The trace each ion follows around its call. Different inclinations per moon.",
+    description: "The trace each ion follows around its nucleus. Different inclinations per ion.",
     swatch: <OrbitSwatch />,
   },
   {
     label: "Gray-matter exemplar",
-    description: "Kenny-validated “what good looks like” call. Stuck near its schema section.",
+    description: "What Ion defines as good.",
     swatch: <GraySwatch />,
-  },
-  {
-    label: "Grounding vector",
-    description: "Tether from each call back to the schema.",
-    swatch: <VectorSwatch />,
   },
 ];
 
@@ -160,11 +144,10 @@ export function Legend() {
       </ul>
       <p className="pt-2 border-t border-stewart-border/60 text-[11px] leading-snug text-stewart-muted">
         <span className="text-stewart-accent font-semibold">
-          Click the center of any atom
+          Click the nucleus of any atom
         </span>{" "}
-        &mdash; the call planet at the heart of each orbit &mdash; to
-        see Stewart&apos;s full breakdown of that call and listen to
-        the cherry-pick clips.
+        to see Stewart&apos;s full breakdown of that call and listen
+        to the cherry-pick clips.
       </p>
     </div>
   );
