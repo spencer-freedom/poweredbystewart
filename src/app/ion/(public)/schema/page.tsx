@@ -40,7 +40,7 @@ export default async function IonSchemaPage() {
         <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-stewart-text leading-tight">
           The Ion Solar Schema
         </h1>
-        <p className="mt-4 text-base text-stewart-muted leading-relaxed max-w-3xl">
+        <p className="mt-4 text-base text-stewart-text leading-relaxed">
           The operational intelligence framework Stewart uses to evaluate
           every call against Ion&rsquo;s coaching standards, sales
           philosophy, and processes.

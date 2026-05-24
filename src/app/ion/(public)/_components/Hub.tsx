@@ -44,7 +44,7 @@ export function Hub() {
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
           Three views of the same 332 calls
         </h1>
-        <p className="mt-4 text-lg text-stewart-muted leading-relaxed max-w-3xl">
+        <p className="mt-4 text-sm text-stewart-text leading-relaxed">
           Pick where to start. Each surface is the same underlying
           corpus &mdash; the brain is the visual, the calls page is the
           tabular browse, the schema is your floor&apos;s textbook.
