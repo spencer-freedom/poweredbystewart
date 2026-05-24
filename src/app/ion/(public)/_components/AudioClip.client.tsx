@@ -2,14 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Shared audio-clip player for the public Ion surfaces (§2 carousel
-// walkthrough, brain page detail panel, /ion/calls drawer).
+// Shared audio-clip player for the public Ion surfaces.
 //
-// V2.1.2 — the /api/ion/audio-clip endpoint accepts start/end query
-// params but currently returns the full MP3 regardless (server-side
-// ffmpeg slicing is a TODO). Client compensates: seek to start on
-// metadata-loaded, pause + reset to start when currentTime >= end.
-// Native HTML5 audio handles this fine; no server change needed.
+// V2.1.10 — the /api/ion/audio-clip endpoint accepts start/end query
+// params but returns the full MP3 (server-side slicing is a TODO).
+// Client compensates: seek on `canplay`, pause + reset on `timeupdate`
+// when end is reached. canplay is more reliable than loadedmetadata
+// across browsers because it fires once the element has buffered
+// enough to actually start playback — so setting currentTime sticks.
+//
+// We DON'T use the `autoPlay` attribute. autoPlay racing with our
+// imperative play() was the V2.1.3 → V2.1.6 regression that broke
+// playback entirely. The user-gesture (button click flipping
+// `active` to true) propagates through the React commit; calling
+// .play() inside the `canplay` listener is still treated as a
+// user-initiated action by Chrome/Safari.
 
 export function AudioClip({
   callId,
@@ -26,6 +33,7 @@ export function AudioClip({
 }) {
   const [active, setActive] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+
   const baseUrl =
     process.env.NEXT_PUBLIC_API_BASE_URL ||
     process.env.NEXT_PUBLIC_BASE_URL ||
@@ -33,51 +41,66 @@ export function AudioClip({
   const qs = new URLSearchParams();
   if (typeof startSec === "number") qs.set("start", startSec.toFixed(3));
   if (typeof endSec === "number") qs.set("end", endSec.toFixed(3));
+  // Media Fragment URI hint — browsers that honor this seek natively
+  // before our useEffect runs. The JS seek below is the fallback.
+  const fragment =
+    typeof startSec === "number"
+      ? `#t=${startSec.toFixed(1)}${
+          typeof endSec === "number" ? "," + endSec.toFixed(1) : ""
+        }`
+      : "";
   const url =
     `${baseUrl}/api/ion/audio-clip/${encodeURIComponent(callId)}` +
-    (qs.toString() ? `?${qs.toString()}` : "");
+    (qs.toString() ? `?${qs.toString()}` : "") +
+    fragment;
 
-  // Client-side trimming. Only kicks in when both start and end are
-  // provided (clip mode) — full-call mode lets the audio play through.
   useEffect(() => {
     if (!active) return;
-    if (typeof startSec !== "number" || typeof endSec !== "number") return;
     const el = audioRef.current;
     if (!el) return;
 
-    const seekToStart = () => {
-      try {
-        el.currentTime = startSec;
-      } catch {
-        // Some browsers throw if duration isn't ready yet; the
-        // canplay handler will retry.
+    const start = typeof startSec === "number" ? startSec : 0;
+    const end = typeof endSec === "number" ? endSec : null;
+
+    const seek = () => {
+      if (start > 0 && Math.abs(el.currentTime - start) > 0.5) {
+        try {
+          el.currentTime = start;
+        } catch {
+          // Some browsers throw if duration isn't ready; we'll
+          // retry via the next canplay tick.
+        }
       }
     };
 
-    const onLoaded = () => {
-      seekToStart();
-      el.play().catch(() => {});
+    const tryPlay = () => {
+      el.play().catch(() => {
+        // Autoplay blocked or unsupported — user can hit the
+        // play icon on the visible controls instead.
+      });
     };
 
     const onCanPlay = () => {
-      // Safari sometimes ignores currentTime set before canplay.
-      if (Math.abs(el.currentTime - startSec) > 0.5) seekToStart();
+      seek();
+      tryPlay();
     };
 
     const onTime = () => {
-      if (el.currentTime >= endSec) {
+      if (end !== null && el.currentTime >= end) {
         el.pause();
-        el.currentTime = startSec;
+        try {
+          el.currentTime = start;
+        } catch {
+          // ignore
+        }
       }
     };
 
-    el.addEventListener("loadedmetadata", onLoaded);
     el.addEventListener("canplay", onCanPlay);
     el.addEventListener("timeupdate", onTime);
-    // If metadata already loaded (cached), prime it directly.
-    if (el.readyState >= 1) seekToStart();
+    // If already buffered, fire immediately.
+    if (el.readyState >= 3) onCanPlay();
     return () => {
-      el.removeEventListener("loadedmetadata", onLoaded);
       el.removeEventListener("canplay", onCanPlay);
       el.removeEventListener("timeupdate", onTime);
     };
@@ -114,7 +137,6 @@ export function AudioClip({
       ref={audioRef}
       src={url}
       controls
-      autoPlay
       preload="auto"
       className="h-9 w-full max-w-xs"
     />
