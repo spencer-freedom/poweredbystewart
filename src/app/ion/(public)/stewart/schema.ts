@@ -53,22 +53,22 @@ export const INVARIANTS: Invariant[] = [
     number: 1,
     title: "Intro",
     core_question:
-      "Did the customer choose to keep listening after the first 10 seconds?",
+      "What was the customer's reaction or state after the intro — roughly the first 10 seconds?",
     job: "Earn the right to keep talking. Get the customer to lean in instead of brace for a pitch.",
     failure_state:
-      'Customer wrote the rep off as "another solar call" before the introduction finished. They\'re either still on the line being polite or already gone. Rehashed leads — the ones who\'ve been called five times — bail before they get asked anything.',
+      'Customer wrote the rep off as "another solar call" before the introduction finished. They\'re either still on the line being polite or already gone. Rehashed leads — the ones who\'ve been called multiple times — bail before they get asked anything.',
     maturity: {
       l1: {
         label: "Mechanical execution",
-        body: "Names rep + Ion + lead source cleanly. Steady pace. Reads the standard opener without sounding nervous. Works on warm leads who picked up expecting the call; loses rehashed leads because there's no move for \"not interested.\"",
+        body: "Names rep + Ion + lead source cleanly. Steady pace. Reads the standard opener without sounding nervous. Works on warm leads who picked up expecting the call; loses rehashed leads because there's no move for \"not interested\" — no attempted movement, accepts it, and ends the call.",
       },
       l2: {
         label: "Adaptive execution",
-        body: 'Reads the customer in the first three seconds and adjusts. On a rehashed lead, names what the customer is already thinking — *"I know you\'ve probably gotten a few of these calls — I\'ll keep it quick."*',
+        body: 'Reads the customer in the first three seconds and adjusts. On a rehashed lead, the rep attempts to overcome the objection by naming what the customer is already thinking — *"I know you\'ve probably gotten a few of these calls — I\'ll keep it quick."* (Kenny — how do you want this handled?)',
       },
       l3: {
         label: "Advanced salesmanship",
-        body: 'Pattern interrupt using the customer\'s own words back, then a bridge to the bill in one breath — *"You\'re right, solar is not very interesting. But I bet you\'re interested in lowering your monthly utility bill with nothing out of pocket."*',
+        body: 'Mirror, then a bridge to the bill pain in one breath using the same mirror or a value add. Customer: *"I\'m not **interested**."* Rep: *"You\'re right, solar is not very **interesting**. But I bet you\'re **interested** in lowering your monthly utility bill with nothing out of pocket."*',
       },
     },
     stewart_detection:
@@ -84,26 +84,27 @@ export const INVARIANTS: Invariant[] = [
     id: "anchor",
     number: 2,
     title: "Anchor",
-    core_question: "What pain are we organizing this conversation around?",
-    job: "Capture the customer's utility bill AND position it as the call's central pain point — the villain frame the rest of the call references back to.",
+    core_question:
+      "What pain/excitement are we anchoring this conversation around — preferably multiple anchors?",
+    job: "Capture two anchors — the customer's utility bill AND whatever has them interested in solar. Pain on one side, excitement on the other; both become the frames the rest of the call references back to. The script asks 'what has you interested in solar' for a reason. For a smaller % of customers the excitement is the bigger anchor than the bill swap — don't stop at the bill and assume that's everything.",
     failure_state:
-      "Bill becomes a checklist data point instead of leverage. Customer feels processed, not heard. Reframe opportunities downstream collapse because there's no anchor to point back to. Ion corpus: 0 of 332 calls flipped the bill.",
+      "Bill becomes a checklist data point instead of leverage. The 'what interested you in solar' answer gets captured once and never referenced again — reps gloss over it and move on. Customer feels processed, not heard. Reframe opportunities downstream collapse because there's no anchor to point back to. Ion corpus: 0 of 332 calls flipped the bill.",
     maturity: {
       l1: {
         label: "Mechanical execution",
-        body: 'Captures the dollar amount of the customer\'s monthly utility bill. Acknowledges it back — *"$388, okay, that\'s significant."*',
+        body: 'Captures the dollar amount of the customer\'s monthly utility bill. Asks the script question — "what has you interested in solar" — and notes the answer. Acknowledges the bill back — *"$388, okay, that\'s significant."*',
       },
       l2: {
         label: "Adaptive execution",
-        body: 'Pain Amplification — restates the bill in customer-relatable terms — *"$388 a month — that\'s not a power bill, that\'s a car payment going to the utility."* Asks one follow-up that lets the customer vent.',
+        body: 'Amplifies both anchors. Bill side — pain amplification, restates in customer-relatable terms — *"$388 a month — that\'s not a power bill, that\'s a car payment going to the utility."* Excitement side — digs into the why-solar answer with one follow-up that lets the customer vent or get excited.',
       },
       l3: {
         label: "Advanced salesmanship",
-        body: 'Bill-flip — converts monthly to annual, names what the customer is NOT getting (equity), contrasts with what solar IS — *"$388 a month is $4,656 a year going to the utility for power that doesn\'t build any equity, versus a solar payment that\'d be lower and lock your rate."*',
+        body: 'Anchors get reused throughout the call as the most important reference points — bill comes back every time the conversation drifts; excitement comes back every time it\'s relevant. Three L3 moves layered on top of L2\'s amplification. First, validation — name the pain back AND affirm the customer\'s judgment for considering this: *"Wow — $388 a month, that alone is a reason to be looking at solar. You\'re smart to really consider this. That\'s a car payment going somewhere you can\'t get back."* Second, bill-flip — converts monthly to annual, names what they\'re NOT getting (equity), contrasts with what solar IS: *"$388 a month is $4,656 a year going to the utility for power that doesn\'t build any equity, versus a solar payment that\'d be lower and lock your rate."* Third, excitement-reinforcement — names the why-solar answer back multiple times and ties it to the appointment ask: *"You said you want to take control of your energy bill — that\'s exactly what Tuesday\'s call shows you with your specific numbers."* (Kenny — are these the three L3 moves you\'d want, and is the validation phrasing right?)',
       },
     },
     stewart_detection:
-      "Bill amount captured in transcript + acknowledgment phrase within 3 turns + (L2) customer-life vocabulary tie-back + (L3) annual-conversion phrase OR equity-language flip.",
+      "Bill amount captured in transcript + 'what interested you in solar' question asked + customer answer captured + acknowledgment phrase within 3 turns + (L2) customer-life vocabulary tie-back + follow-up on the excitement answer + (L3) bill referenced ≥2 times across the call + excitement referenced ≥2 times across the call + validation phrasing + annual-conversion OR equity-language flip + excitement tied to the appointment ask.",
     economic_impact: {
       primary_kpi: "Set rate.",
       secondary_kpi: "Sit rate (the bill pain carries from setter call into appointment).",
@@ -178,8 +179,9 @@ export const INVARIANTS: Invariant[] = [
   {
     id: "qualifier",
     number: 5,
-    title: "Qualifier",
-    core_question: "Will this appointment hold up at signing?",
+    title: "Qualified",
+    core_question:
+      "How well is this customer a qualified match for solar — will the appointment hold to a showed appointment, and is there strong reasoning to convert to a buying customer?",
     job: "Capture the structural gates (title, co-owner, credit threshold, tax incentive, military, decision-maker, timing) without burning trust — AND include co-decision-makers ON the appointment as participants, not obstacles.",
     failure_state:
       'Co-owner kills the deal at signing because nobody asked. Credit fuzz-answer ("around there") logged as qualified when it isn\'t. Spouse-mentioned appointments scheduled solo and convert at a fraction of paired rate. Closer arrives to a structurally broken setup.',
@@ -212,7 +214,8 @@ export const INVARIANTS: Invariant[] = [
     id: "button_up",
     number: 6,
     title: "Button-Up",
-    core_question: "Has the customer committed, or merely agreed?",
+    core_question:
+      "How well did the rep rephrase the button up — will this customer hold to a sit, and convert to a sale?",
     job: "Convert the appointment into a real COMMITMENT, not just a calendar slot. Surface real intent before scheduling.",
     failure_state:
       'Soft appointment that no-shows. Customer "says yes" without committing. Closer arrives to an empty calendar. Floor capacity wasted. Open-ended "when\'s good for you?" is a known Ion-floor losing pattern.',

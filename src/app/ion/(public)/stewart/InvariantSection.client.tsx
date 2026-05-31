@@ -163,19 +163,48 @@ function MaturityCard({
       <div className="text-sm text-stewart-text leading-relaxed space-y-2">
         {segments.map((seg, i) =>
           seg.kind === "prose" ? (
-            <span key={i}>{seg.text}</span>
+            <span key={i}>{highlightWords(seg.text)}</span>
           ) : (
             <blockquote
               key={i}
               className="block border-l-2 border-stewart-accent/60 pl-3 my-2 italic text-stewart-accent"
             >
-              &ldquo;{seg.text}&rdquo;
+              &ldquo;{highlightWords(seg.text)}&rdquo;
             </blockquote>
           )
         )}
       </div>
     </div>
   );
+}
+
+// `**word**` markers in maturity bodies render as bold red — used to
+// visualize mirror words (e.g. customer says "interested," rep
+// mirrors back "interesting" / "interested"). Applies to both prose
+// and quote segments so highlighted text reads consistently no matter
+// where it sits.
+function highlightWords(text: string): React.ReactNode {
+  const parts: React.ReactNode[] = [];
+  const re = /\*\*([^*]+)\*\*/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let i = 0;
+  while ((match = re.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    parts.push(
+      <span
+        key={`h${i++}`}
+        className="text-stewart-danger font-semibold not-italic"
+      >
+        {match[1]}
+      </span>
+    );
+    lastIndex = re.lastIndex;
+  }
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex));
+  return parts;
 }
 
 function KpiCell({ label, value }: { label: string; value: string }) {

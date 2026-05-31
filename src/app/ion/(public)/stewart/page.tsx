@@ -102,18 +102,27 @@ export default async function IonStewartReviewPage({
           &apos;s notes welcome.
         </p>
         <div className="rounded-lg border border-stewart-border bg-stewart-card p-4 sm:p-5 mt-4">
-          <p className="text-sm text-stewart-text leading-relaxed">
-            This is the new schema structure. Each section answers a
-            different question and ties to a specific revenue lever.
-            Type whatever rings true, what&apos;s wrong, what you&apos;d
-            add &mdash; autosaved. Spencer will fold your notes back in
-            after.
-          </p>
+          <div className="text-sm text-stewart-text leading-relaxed space-y-2">
+            <p>This is the new schema structure.</p>
+            <p>
+              Each section answers a different question and ties to a
+              specific revenue lever.
+            </p>
+            <p>
+              Type whatever rings true, what&apos;s wrong, what you&apos;d
+              add &mdash; autosaved.
+            </p>
+            <p>Spencer will fold your notes back in after.</p>
+          </div>
           <p className="mt-3 text-xs text-stewart-muted leading-relaxed">
             {LIFT_MATH}
           </p>
         </div>
       </header>
+
+      <Anatomy />
+
+      <TableOfContents />
 
       <StewartSchemaPage reviewer={reviewer} initialNotes={initialNotes} />
 
@@ -123,6 +132,96 @@ export default async function IonStewartReviewPage({
         Full edit history preserved — Spencer queries the table directly.
       </footer>
     </div>
+  );
+}
+
+// Anatomy legend — explains the seven subsections that every
+// invariant follows, in operator-language. Kenny shouldn't need
+// Spencer to explain what each label means before he can dig in.
+function Anatomy() {
+  const rows: Array<{ label: string; body: string }> = [
+    {
+      label: "Core Question",
+      body: "The one thing the section answers.",
+    },
+    {
+      label: "Job",
+      body: "What this stage of the call must accomplish.",
+    },
+    {
+      label: "Failure state",
+      body: "What goes wrong when the job isn't done.",
+    },
+    {
+      label: "Maturity ladder",
+      body: "Three levels of execution. L1 — mechanical (rep follows the script). L2 — adaptive (rep reads the customer and adjusts). L3 — advanced salesmanship (rep is inside the customer's head).",
+    },
+    {
+      label: "Detection signals",
+      body: "What Stewart looks for in the transcript to score the call. Collapsed by default — engineer view; skip if you don't need it.",
+    },
+    {
+      label: "Economic Impact",
+      body: "What improving this section should move on the business — KPI + dollar-grounded hypothesis.",
+    },
+    {
+      label: "Your notes box",
+      body: "What rings true, what's wrong, what you'd add. Autosaved a few seconds after you stop typing — no save button.",
+    },
+  ];
+  return (
+    <section className="rounded-lg border border-stewart-border bg-stewart-card p-5 sm:p-6">
+      <p className="text-xs uppercase tracking-wider font-semibold text-stewart-accent mb-3">
+        How each section is laid out
+      </p>
+      <dl className="space-y-2.5">
+        {rows.map(({ label, body }) => (
+          <div
+            key={label}
+            className="sm:grid sm:grid-cols-[10rem_1fr] sm:gap-4"
+          >
+            <dt className="text-sm font-semibold text-stewart-text">
+              {label}
+            </dt>
+            <dd className="text-sm text-stewart-muted leading-relaxed">
+              {body}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
+}
+
+// Table of contents — six invariants by number + name + the Core
+// Question that section answers. Gives Kenny the full arc in one
+// scan before he starts deep-reading. Names link to the section
+// anchor so a tap jumps straight there.
+function TableOfContents() {
+  return (
+    <section>
+      <p className="text-xs uppercase tracking-wider font-semibold text-stewart-accent mb-3">
+        The six invariants
+      </p>
+      <ol className="space-y-2.5">
+        {INVARIANTS.map((inv) => (
+          <li
+            key={inv.id}
+            className="rounded border border-stewart-border bg-stewart-bg/40 p-3 sm:p-4 flex flex-col sm:flex-row sm:items-baseline sm:gap-4"
+          >
+            <span className="font-mono text-xs text-stewart-muted sm:w-16 shrink-0">
+              Invariant {inv.number}
+            </span>
+            <span className="font-semibold text-stewart-text sm:w-32 shrink-0">
+              {inv.title}
+            </span>
+            <span className="text-sm text-stewart-muted italic leading-snug">
+              {inv.core_question}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </section>
   );
 }
 
