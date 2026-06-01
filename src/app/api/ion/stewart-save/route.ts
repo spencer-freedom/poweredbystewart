@@ -17,6 +17,8 @@ type SaveBody = {
   invariant?: string;
   reviewer?: string;
   content?: string;
+  kind?: string;
+  subsection?: string;
 };
 
 // Tight allowlist — anything else is a schema mismatch or bad client
@@ -28,6 +30,31 @@ const VALID_INVARIANTS = new Set([
   "reframe",
   "qualifier",
   "button_up",
+]);
+
+// Per the two-box split:
+//   stewart = rubric feedback (judgment / grading)
+//   atlas   = playbook feedback (knowledge / examples)
+// Missing kind defaults to "stewart" — preserves back-compat with any
+// older client still POSTing without the field.
+const VALID_KINDS = new Set(["stewart", "atlas"]);
+
+// Feedback attaches to the subsection a reviewer is reading. Eight
+// subsections per invariant, matching the rendered structure:
+//   core_question, job, failure_state, l1, l2, l3, detection,
+//   economic_impact
+// Missing subsection defaults to "overall" — same back-compat note
+// as above (older clients posting without the field).
+const VALID_SUBSECTIONS = new Set([
+  "core_question",
+  "job",
+  "failure_state",
+  "l1",
+  "l2",
+  "l3",
+  "detection",
+  "economic_impact",
+  "overall",
 ]);
 
 const MAX_CONTENT_BYTES = 100_000; // sanity cap — Kenny's longest note imaginable
@@ -43,10 +70,24 @@ export async function POST(req: NextRequest) {
   const invariant = (body.invariant || "").trim();
   const reviewer = sanitizeReviewer(body.reviewer);
   const content = typeof body.content === "string" ? body.content : "";
+  const kind = (body.kind || "stewart").trim().toLowerCase();
+  const subsection = (body.subsection || "overall").trim().toLowerCase();
 
   if (!VALID_INVARIANTS.has(invariant)) {
     return NextResponse.json(
       { error: "invalid invariant", got: invariant },
+      { status: 400 }
+    );
+  }
+  if (!VALID_KINDS.has(kind)) {
+    return NextResponse.json(
+      { error: "invalid kind", got: kind },
+      { status: 400 }
+    );
+  }
+  if (!VALID_SUBSECTIONS.has(subsection)) {
+    return NextResponse.json(
+      { error: "invalid subsection", got: subsection },
       { status: 400 }
     );
   }
@@ -76,7 +117,7 @@ export async function POST(req: NextRequest) {
 
   const { data, error } = await supabase
     .from("ion_schema_notes")
-    .insert({ invariant, reviewer, content })
+    .insert({ invariant, reviewer, content, kind, subsection })
     .select("id, written_at")
     .single();
 

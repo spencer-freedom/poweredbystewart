@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { INVARIANTS, LIFT_MATH } from "./schema";
 import type { InvariantId } from "./schema";
+import type { SubsectionId } from "./NoteBox.client";
 import { StewartSchemaPage } from "./StewartSchemaPage.client";
 
 // Server-side Supabase client. We build it inline (instead of using
@@ -30,15 +31,38 @@ type PageProps = {
   searchParams: Promise<{ reviewer?: string }>;
 };
 
+// Per-(invariant, subsection) hydration. Each invariant has 8
+// subsections; each subsection has a stewart + atlas note slot.
+export type NotesByKind = { stewart: string; atlas: string };
+export type NotesByKindBySubsection = Record<SubsectionId, NotesByKind>;
+
+const SUBSECTIONS: SubsectionId[] = [
+  "core_question",
+  "job",
+  "failure_state",
+  "l1",
+  "l2",
+  "l3",
+  "detection",
+  "economic_impact",
+];
+
+function emptyNotesForInvariant(): NotesByKindBySubsection {
+  return SUBSECTIONS.reduce((acc, s) => {
+    acc[s] = { stewart: "", atlas: "" };
+    return acc;
+  }, {} as NotesByKindBySubsection);
+}
+
 async function loadInitialNotes(
   reviewer: string
-): Promise<Record<InvariantId, string>> {
+): Promise<Record<InvariantId, NotesByKindBySubsection>> {
   const empty = INVARIANTS.reduce(
     (acc, inv) => {
-      acc[inv.id] = "";
+      acc[inv.id] = emptyNotesForInvariant();
       return acc;
     },
-    {} as Record<InvariantId, string>
+    {} as Record<InvariantId, NotesByKindBySubsection>
   );
 
   const supabase = serverSupabase();
@@ -48,20 +72,17 @@ async function loadInitialNotes(
   }
 
   // Pull every row for this reviewer and reduce to the latest content
-  // per invariant. We can't use Postgres `DISTINCT ON` through the
-  // supabase-js builder, so we dedupe in memory. Volume is small
-  // (6 invariants × 1 user × autosave-per-paragraph cadence) so the
-  // cost is negligible.
+  // per (invariant, subsection, kind). Pre-column rows come back with
+  // legacy defaults ("overall" subsection, "stewart" kind) — those
+  // don't map to any of the 8 rendered subsections so they silently
+  // drop off the UI, which is the intended migration behavior.
   const { data, error } = await supabase
     .from("ion_schema_notes")
-    .select("invariant, content, written_at")
+    .select("invariant, subsection, kind, content, written_at")
     .eq("reviewer", reviewer)
     .order("written_at", { ascending: false });
 
   if (error || !data) {
-    // Missing migration / RLS error / network blip → empty state.
-    // Render the page anyway; user can still leave notes (those
-    // saves will surface a clearer error in the NoteBox status line).
     if (error) {
       console.warn(
         "[stewart] loadInitialNotes error — rendering empty:",
@@ -74,8 +95,14 @@ async function loadInitialNotes(
   const latest = { ...empty };
   for (const row of data) {
     const inv = row.invariant as InvariantId;
-    if (inv in latest && !latest[inv]) {
-      latest[inv] = row.content as string;
+    const sub = (row.subsection as SubsectionId) || "overall";
+    const k = (row.kind as "stewart" | "atlas") || "stewart";
+    if (
+      inv in latest &&
+      sub in latest[inv] &&
+      !latest[inv][sub as SubsectionId][k]
+    ) {
+      latest[inv][sub as SubsectionId][k] = row.content as string;
     }
   }
   return latest;
@@ -165,8 +192,16 @@ function Anatomy() {
       body: "What improving this section should move on the business — KPI + dollar-grounded hypothesis.",
     },
     {
-      label: "Your notes box",
-      body: "What rings true, what's wrong, what you'd add. Autosaved a few seconds after you stop typing — no save button.",
+      label: "Stewart feedback",
+      body: "How should Stewart evaluate this? Rubric-level — is L1/L2/L3 right, what should Stewart detect, does this belong here or in a different invariant. Judgment stabilizes over time.",
+    },
+    {
+      label: "Atlas feedback",
+      body: "How would you teach this? Playbook-level — word tracks, stories, best practices, exceptions, “my best rep does this by…” Knowledge compounds.",
+    },
+    {
+      label: "Where they appear",
+      body: "A Stewart + Atlas feedback pair sits after every subsection (Core Question, Job, Failure state, each L level, Detection, Economic Impact). Leave a note wherever a thought lands — it attaches to that block, not the whole invariant.",
     },
   ];
   return (

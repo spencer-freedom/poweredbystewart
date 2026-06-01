@@ -27,6 +27,13 @@ export const runtime = "nodejs";
 type NotifyBody = {
   invariant?: string;
   reviewer?: string;
+  // 'stewart' = rubric feedback box, 'atlas' = playbook feedback box.
+  kind?: string;
+  // Which subsection of the invariant the note attaches to (core_question,
+  // job, failure_state, l1, l2, l3, detection, economic_impact). The
+  // follow-up Telegram body uses this to describe what Kenny is reacting
+  // to in the ping ("...on Anchor → Failure State").
+  subsection?: string;
 };
 
 export async function POST(req: NextRequest) {
@@ -42,7 +49,7 @@ export async function POST(req: NextRequest) {
   // Useful to confirm the route fires while the body is still a stub.
   if (body.invariant && body.reviewer) {
     console.log(
-      `[stewart-notify] stub fired · invariant=${body.invariant} reviewer=${body.reviewer}`
+      `[stewart-notify] stub fired · invariant=${body.invariant} subsection=${body.subsection || "overall"} kind=${body.kind || "stewart"} reviewer=${body.reviewer}`
     );
   }
 

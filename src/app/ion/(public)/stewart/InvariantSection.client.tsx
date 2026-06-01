@@ -1,25 +1,37 @@
 "use client";
 
 import { parseBody } from "./schema";
-import type { Invariant } from "./schema";
-import { NoteBox } from "./NoteBox.client";
+import type { Invariant, InvariantId } from "./schema";
+import { NoteBox, type SubsectionId } from "./NoteBox.client";
 
-// Renders one invariant in the locked schema. Subsection order is
-// fixed per brief:
-//   Core Question → Job → Failure State → Maturity Ladder (L1/L2/L3)
-//   → Stewart Detection (collapsed) → Economic Impact → NoteBox
+type NotesByKind = { stewart: string; atlas: string };
+export type NotesByKindBySubsection = Record<SubsectionId, NotesByKind>;
+
+// Renders one invariant in the locked schema. After each subsection
+// (Core Question, Job, Failure State, L1, L2, L3, Detection, Economic
+// Impact), a paired Stewart+Atlas NoteBox attaches so reviewer
+// feedback lands at the block it's about.
 
 export function InvariantSection({
   invariant,
   reviewer,
-  initialContent,
+  initialNotes,
 }: {
   invariant: Invariant;
   reviewer: string;
-  initialContent: string;
+  initialNotes: NotesByKindBySubsection;
 }) {
+  // Small helper so the eight feedback-pair call sites stay DRY.
+  const Feedback = ({ subsection }: { subsection: SubsectionId }) => (
+    <FeedbackPair
+      invariantId={invariant.id}
+      subsection={subsection}
+      reviewer={reviewer}
+      initial={initialNotes[subsection]}
+    />
+  );
   return (
-    <section className="space-y-6 sm:space-y-7">
+    <section className="space-y-6 sm:space-y-7 rounded-2xl border border-stewart-text/20 bg-stewart-card/40 p-5 sm:p-8">
       <header className="space-y-1">
         <p className="text-xs uppercase tracking-wider font-mono text-stewart-muted">
           Invariant {invariant.number} of 6
@@ -31,24 +43,27 @@ export function InvariantSection({
 
       {/* Core Question — the hook. Big callout. */}
       <blockquote className="rounded-lg border border-stewart-accent/30 bg-stewart-accent/5 px-5 sm:px-6 py-5">
-        <p className="text-[10px] uppercase tracking-wider font-semibold text-stewart-accent mb-2">
+        <p className="text-sm uppercase tracking-wider font-semibold text-stewart-accent mb-2">
           Core Question
         </p>
         <p className="text-lg sm:text-xl italic text-stewart-text leading-snug">
           {invariant.core_question}
         </p>
       </blockquote>
+      <Feedback subsection="core_question" />
 
       <FieldBlock label="Job" tone="default">
         {invariant.job}
       </FieldBlock>
+      <Feedback subsection="job" />
 
       <FieldBlock label="Failure state" tone="muted">
         {invariant.failure_state}
       </FieldBlock>
+      <Feedback subsection="failure_state" />
 
       <section className="space-y-3">
-        <p className="text-[10px] uppercase tracking-wider font-semibold text-stewart-accent">
+        <p className="text-sm uppercase tracking-wider font-semibold text-stewart-accent">
           Maturity Ladder
         </p>
         <div className="space-y-3">
@@ -57,22 +72,25 @@ export function InvariantSection({
             level={invariant.maturity.l1}
             tone="border-stewart-border bg-stewart-card"
           />
+          <Feedback subsection="l1" />
           <MaturityCard
             tier="L2"
             level={invariant.maturity.l2}
             tone="border-stewart-warning/40 bg-stewart-warning/5"
           />
+          <Feedback subsection="l2" />
           <MaturityCard
             tier="L3"
             level={invariant.maturity.l3}
             tone="border-stewart-success/40 bg-stewart-success/5"
           />
+          <Feedback subsection="l3" />
         </div>
       </section>
 
       {/* Stewart Detection — engineer lens, collapsed by default. */}
       <details className="group rounded-lg border border-stewart-border bg-stewart-bg/30 px-4 py-3">
-        <summary className="text-xs uppercase tracking-wider text-stewart-muted cursor-pointer select-none flex items-center gap-2">
+        <summary className="text-sm uppercase tracking-wider font-semibold text-stewart-accent cursor-pointer select-none flex items-center gap-2">
           <span className="text-stewart-accent">▸</span>
           <span className="group-open:hidden">
             Show detection signals (engineer view)
@@ -85,10 +103,11 @@ export function InvariantSection({
           {invariant.stewart_detection}
         </p>
       </details>
+      <Feedback subsection="detection" />
 
       {/* Economic Impact — visually distinct so VP eyes land here. */}
       <section className="rounded-r-lg border-l-4 border-stewart-accent bg-stewart-card p-5">
-        <p className="text-[10px] uppercase tracking-wider font-semibold text-stewart-accent mb-3">
+        <p className="text-sm uppercase tracking-wider font-semibold text-stewart-accent mb-3">
           Economic Impact
         </p>
         <div className="grid sm:grid-cols-2 gap-3 mb-4">
@@ -107,15 +126,47 @@ export function InvariantSection({
           </p>
         </div>
       </section>
-
-      <NoteBox
-        invariantId={invariant.id}
-        reviewer={reviewer}
-        initialContent={initialContent}
-      />
-
-      <hr className="border-stewart-border/40 mt-2" />
+      <Feedback subsection="economic_impact" />
     </section>
+  );
+}
+
+// Eight of these per invariant — one after each subsection. Compact
+// mode (smaller padding, shorter min-height, no prompt body) keeps
+// the per-subsection density manageable since the page now carries
+// 96 boxes (6 invariants × 8 subsections × 2 kinds) when fully
+// rendered. Both boxes are always present even when empty —
+// reviewers can leave rubric or playbook feedback on any block.
+function FeedbackPair({
+  invariantId,
+  subsection,
+  reviewer,
+  initial,
+}: {
+  invariantId: InvariantId;
+  subsection: SubsectionId;
+  reviewer: string;
+  initial: NotesByKind;
+}) {
+  return (
+    <div className="grid sm:grid-cols-2 gap-2 sm:gap-3">
+      <NoteBox
+        invariantId={invariantId}
+        subsection={subsection}
+        reviewer={reviewer}
+        initialContent={initial.stewart}
+        kind="stewart"
+        compact
+      />
+      <NoteBox
+        invariantId={invariantId}
+        subsection={subsection}
+        reviewer={reviewer}
+        initialContent={initial.atlas}
+        kind="atlas"
+        compact
+      />
+    </div>
   );
 }
 
@@ -130,7 +181,7 @@ function FieldBlock({
 }) {
   return (
     <section>
-      <p className="text-[10px] uppercase tracking-wider font-semibold text-stewart-accent mb-1.5">
+      <p className="text-sm uppercase tracking-wider font-semibold text-stewart-accent mb-1.5">
         {label}
       </p>
       <p
@@ -151,7 +202,7 @@ function MaturityCard({
   tone,
 }: {
   tier: "L1" | "L2" | "L3";
-  level: { label: string; body: string };
+  level: { label: string; descriptor?: string; body: string };
   tone: string;
 }) {
   const segments = parseBody(level.body);
@@ -159,6 +210,12 @@ function MaturityCard({
     <div className={"rounded-lg border p-4 sm:p-5 " + tone}>
       <p className="text-[10px] uppercase tracking-wider font-mono font-semibold text-stewart-text mb-2">
         {tier} · {level.label}
+        {level.descriptor ? (
+          <>
+            {" · "}
+            <span className="text-stewart-accent">{level.descriptor}</span>
+          </>
+        ) : null}
       </p>
       <div className="text-sm text-stewart-text leading-relaxed space-y-2">
         {segments.map((seg, i) =>

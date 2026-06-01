@@ -16,6 +16,10 @@ export type InvariantId =
 
 export type MaturityLevel = {
   label: "Mechanical execution" | "Adaptive execution" | "Advanced salesmanship";
+  // Optional named-move tag appended to the tier label
+  // (e.g. "pattern interruption" on Intro L3). Renders as
+  // "L3 · Advanced salesmanship · pattern interruption".
+  descriptor?: string;
   body: string;
 };
 
@@ -68,7 +72,8 @@ export const INVARIANTS: Invariant[] = [
       },
       l3: {
         label: "Advanced salesmanship",
-        body: 'Mirror, then a bridge to the bill pain in one breath using the same mirror or a value add. Customer: *"I\'m not **interested**."* Rep: *"You\'re right, solar is not very **interesting**. But I bet you\'re **interested** in lowering your monthly utility bill with nothing out of pocket."*',
+        descriptor: "pattern interruption",
+        body: 'Mirror a word, then a bridge to the bill pain in one breath using the same mirrored word or a value add. Customer: *"I\'m not **interested**."* Rep: *"You\'re right, solar is not very **interesting**. But I bet you\'re **interested** in lowering your monthly utility bill with nothing out of pocket."*',
       },
     },
     stewart_detection:

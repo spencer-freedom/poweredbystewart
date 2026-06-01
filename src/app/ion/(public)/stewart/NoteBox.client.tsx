@@ -20,15 +20,71 @@ const RELATIVE_TIME_TICK_MS = 30_000;
 
 type SaveStatus = "idle" | "saving" | "saved" | "error";
 
+// Two distinct feedback streams per (invariant, subsection) — see
+// the page anatomy legend for the split logic.
+//   stewart = rubric feedback (judgment / grading model). Stabilizes.
+//   atlas   = playbook feedback (knowledge / examples). Compounds.
+export type NoteKind = "stewart" | "atlas";
+
+// Eight subsections per invariant — mirrors the rendered structure
+// of InvariantSection. Feedback attaches to whichever block a
+// reviewer is reading.
+export type SubsectionId =
+  | "core_question"
+  | "job"
+  | "failure_state"
+  | "l1"
+  | "l2"
+  | "l3"
+  | "detection"
+  | "economic_impact";
+
+type KindMeta = {
+  header: string;
+  prompt: string;
+  compactPlaceholder: string;
+  accentClass: string;
+  borderClass: string;
+};
+
+const KIND_META: Record<NoteKind, KindMeta> = {
+  stewart: {
+    header: "Stewart feedback · rubric",
+    prompt:
+      "How should Stewart evaluate this? Is L1 / L2 / L3 correct? What should Stewart detect? Does this belong here or in a different invariant?",
+    compactPlaceholder: "Stewart — how should this be evaluated?",
+    accentClass: "text-stewart-accent",
+    borderClass: "border-stewart-accent/30",
+  },
+  atlas: {
+    header: "Atlas feedback · playbook",
+    prompt:
+      "How would you teach this? Word tracks, stories, best practices, exceptions. “My best rep does this by…” Whatever you’d want a new hire to learn.",
+    compactPlaceholder: "Atlas — how would you teach this?",
+    accentClass: "text-stewart-success",
+    borderClass: "border-stewart-success/30",
+  },
+};
+
 export function NoteBox({
   invariantId,
+  subsection,
   reviewer,
   initialContent,
+  kind,
+  compact = false,
 }: {
   invariantId: InvariantId;
+  subsection: SubsectionId;
   reviewer: string;
   initialContent: string;
+  kind: NoteKind;
+  // Per-subsection boxes use compact mode (8 boxes per invariant
+  // adds up fast). Set to false for the legacy "one box per
+  // invariant" call site if we ever bring it back.
+  compact?: boolean;
 }) {
+  const meta = KIND_META[kind];
   const [local, setLocal] = useState(initialContent);
   const [saved, setSaved] = useState(initialContent);
   const [status, setStatus] = useState<SaveStatus>("idle");
@@ -46,13 +102,18 @@ export function NoteBox({
   const inFlightValue = useRef<string | null>(null);
 
   const fireNotify = useCallback(
-    (invariant: InvariantId, rev: string) => {
+    (invariant: InvariantId, sub: SubsectionId, rev: string, k: NoteKind) => {
       // Fire-and-forget. We deliberately don't await this; Telegram
       // failures never block the save.
       fetch("/api/ion/stewart-notify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ invariant, reviewer: rev }),
+        body: JSON.stringify({
+          invariant,
+          subsection: sub,
+          reviewer: rev,
+          kind: k,
+        }),
         keepalive: true,
       }).catch(() => {
         // Stub today, real Telegram tomorrow. Either way, swallow.
@@ -77,8 +138,10 @@ export function NoteBox({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             invariant: invariantId,
+            subsection,
             reviewer,
             content: value,
+            kind,
           }),
         });
         if (!res.ok) saveFailed = true;
@@ -119,9 +182,9 @@ export function NoteBox({
       setSavedAt(new Date());
       setStatus("saved");
       inFlightValue.current = null;
-      fireNotify(invariantId, reviewer);
+      fireNotify(invariantId, subsection, reviewer, kind);
     },
-    [invariantId, reviewer, saved, fireNotify]
+    [invariantId, subsection, reviewer, saved, kind, fireNotify]
   );
 
   // Debounce. Every keystroke resets the 3s timer.
@@ -163,24 +226,40 @@ export function NoteBox({
   }, [local, saved, attemptSave]);
 
   return (
-    <div className="rounded-lg border border-stewart-border/60 bg-stewart-card p-5">
+    <div
+      className={
+        "rounded-lg border bg-stewart-card " +
+        meta.borderClass +
+        " " +
+        (compact ? "p-3" : "p-5")
+      }
+    >
       <div className="flex items-baseline justify-between gap-3 mb-1">
-        <p className="text-sm font-semibold text-stewart-accent">
-          {reviewer === "anonymous"
-            ? "Notes"
-            : `${capitalize(reviewer)}'s notes`}
+        <p
+          className={
+            "font-semibold " +
+            meta.accentClass +
+            " " +
+            (compact ? "text-xs" : "text-sm")
+          }
+        >
+          {meta.header}
         </p>
         <StatusLabel status={status} savedAt={savedAt} />
       </div>
-      <p className="text-xs text-stewart-muted mb-3 leading-relaxed">
-        What rings true? What&apos;s wrong? What would you add? Autosaves
-        a few seconds after you stop typing.
-      </p>
+      {!compact ? (
+        <p className="text-xs text-stewart-muted mb-3 leading-relaxed">
+          {meta.prompt}
+        </p>
+      ) : null}
       <textarea
         value={local}
         onChange={(e) => setLocal(e.target.value)}
-        placeholder="Type here…"
-        className="w-full min-h-32 sm:min-h-36 bg-stewart-bg border border-stewart-border rounded p-3 text-sm text-stewart-text placeholder:text-stewart-muted/60 focus:border-stewart-accent focus:outline-none leading-relaxed resize-y"
+        placeholder={compact ? meta.compactPlaceholder : "Type here…"}
+        className={
+          "w-full bg-stewart-bg border border-stewart-border rounded p-3 text-sm text-stewart-text placeholder:text-stewart-muted/60 focus:border-stewart-accent focus:outline-none leading-relaxed resize-y " +
+          (compact ? "min-h-20 sm:min-h-24" : "min-h-32 sm:min-h-36")
+        }
         spellCheck={true}
       />
     </div>
@@ -231,7 +310,3 @@ function relativeTime(when: Date): string {
   return when.toLocaleString();
 }
 
-function capitalize(s: string): string {
-  if (!s) return s;
-  return s[0].toUpperCase() + s.slice(1);
-}
