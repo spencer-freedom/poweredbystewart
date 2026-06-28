@@ -1,4 +1,6 @@
 import { AtomHero } from "./_components/AtomHero.client";
+import { AboutSpencer } from "./_components/AboutSpencer.client";
+import { CupOfWater } from "./_components/CupOfWater.client";
 import { SectionHowItWorks } from "./_sections/SectionHowItWorks";
 import { SectionBrain } from "./_sections/SectionBrain";
 import { SectionCoaching } from "./_sections/SectionCoaching";
@@ -24,6 +26,9 @@ export default function IonPresentPage() {
   return (
     <>
       <AtomHero />
+      {/* Scroll down to "About Spencer" (dismissable), then the cup of water */}
+      <AboutSpencer />
+      <CupOfWater />
       <SectionHowItWorks />
       {/* Brain is an async server component (loads payload) */}
       <SectionBrain />

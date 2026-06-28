@@ -1,32 +1,76 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Line } from "@react-three/drei";
+import { Line, Environment, MeshTransmissionMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
 // Self-contained hero atom. Decoupled from /ion/brain data on purpose —
 // this is a decorative, always-moving visual base, not a data render.
-// A central nucleus with electrons sweeping tilted orbital rings, the
-// whole assembly drifting slowly. The "ion" tie-in (Stewart's atomic
-// brand) is intentional but the geometry is hand-tuned, not loaded.
+// A pearl crystal core (round, frosted — matched to Stewart's brain core)
+// with electron "ions" sweeping tilted orbital rings, the whole assembly
+// drifting slowly. Node colors are pulled from the brain's vivid domain
+// palette (BrainV2Scene VIVID_DOMAIN_COLORS) so the atom reads as the
+// same material family as the brain.
 
-const ACCENT = "#3b82f6";
-const CORE = "#e2e8f0";
+// Brain ion palette — the vivid schema-domain colors that make up
+// Stewart's brain. The electron nodes cycle through these.
+const ION_COLORS = [
+  "#5dd8e6", // context — light cyan
+  "#4ca8e6", // intros — medium blue
+  "#74e683", // call_shape — light green
+  "#3dc18f", // verify — teal-green
+  "#e6c478", // bill_collection — sand
+  "#e69a4d", // rebuttals — orange
+  "#e65c5c", // protocols — warm red
+  "#b67ce6", // coaching_philosophy — light purple
+  "#e67cd8", // outcomes — pink
+];
+
+type Electron = { phase: number; color: string };
 
 type Orbit = {
   radius: number;
   // Euler tilt (radians) applied to the orbit plane.
   tilt: [number, number, number];
   speed: number;
-  // Starting angles for each electron on this ring.
-  electrons: number[];
+  // Ring line tint.
+  ringColor: string;
+  electrons: Electron[];
 };
 
 const ORBITS: Orbit[] = [
-  { radius: 2.0, tilt: [1.4, 0.2, 0.0], speed: 0.6, electrons: [0, Math.PI] },
-  { radius: 2.5, tilt: [0.3, 1.2, 0.5], speed: -0.45, electrons: [1.1] },
-  { radius: 3.0, tilt: [0.9, -0.6, 1.1], speed: 0.35, electrons: [0.4, 3.7] },
+  {
+    radius: 2.0,
+    tilt: [1.4, 0.2, 0.0],
+    speed: 0.6,
+    ringColor: "#4ca8e6",
+    electrons: [
+      { phase: 0, color: ION_COLORS[0] },
+      { phase: Math.PI, color: ION_COLORS[2] },
+    ],
+  },
+  {
+    radius: 2.5,
+    tilt: [0.3, 1.2, 0.5],
+    speed: -0.45,
+    ringColor: "#3dc18f",
+    electrons: [
+      { phase: 1.1, color: ION_COLORS[3] },
+      { phase: 4.0, color: ION_COLORS[4] },
+    ],
+  },
+  {
+    radius: 3.0,
+    tilt: [0.9, -0.6, 1.1],
+    speed: 0.35,
+    ringColor: "#b67ce6",
+    electrons: [
+      { phase: 0.4, color: ION_COLORS[5] },
+      { phase: 2.6, color: ION_COLORS[7] },
+      { phase: 4.7, color: ION_COLORS[8] },
+    ],
+  },
 ];
 
 function ringPoints(radius: number): [number, number, number][] {
@@ -45,10 +89,10 @@ function OrbitRing({ orbit }: { orbit: Orbit }) {
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime() * orbit.speed;
-    orbit.electrons.forEach((phase, i) => {
+    orbit.electrons.forEach((electron, i) => {
       const mesh = electronRefs.current[i];
       if (!mesh) return;
-      const a = t + phase;
+      const a = t + electron.phase;
       mesh.position.set(
         Math.cos(a) * orbit.radius,
         Math.sin(a) * orbit.radius,
@@ -59,16 +103,29 @@ function OrbitRing({ orbit }: { orbit: Orbit }) {
 
   return (
     <group rotation={orbit.tilt}>
-      <Line points={points} color={ACCENT} transparent opacity={0.28} lineWidth={1} />
-      {orbit.electrons.map((_, i) => (
+      <Line
+        points={points}
+        color={orbit.ringColor}
+        transparent
+        opacity={0.25}
+        lineWidth={1}
+      />
+      {orbit.electrons.map((electron, i) => (
         <mesh
           key={i}
           ref={(el) => {
             electronRefs.current[i] = el;
           }}
         >
-          <sphereGeometry args={[0.11, 16, 16]} />
-          <meshBasicMaterial color={ACCENT} />
+          {/* Round, smooth nodes */}
+          <sphereGeometry args={[0.12, 32, 32]} />
+          <meshStandardMaterial
+            color={electron.color}
+            emissive={electron.color}
+            emissiveIntensity={0.9}
+            roughness={0.3}
+            metalness={0.1}
+          />
         </mesh>
       ))}
     </group>
@@ -78,21 +135,26 @@ function OrbitRing({ orbit }: { orbit: Orbit }) {
 function Nucleus() {
   return (
     <group>
-      {/* Glowing core */}
+      {/* Pearl crystal core — round, frosted, matched to the brain core.
+          MeshTransmissionMaterial + the scene Environment give it the same
+          glassy refraction the brain's core has. */}
       <mesh>
-        <icosahedronGeometry args={[0.55, 1]} />
-        <meshStandardMaterial
-          color={CORE}
-          emissive={ACCENT}
-          emissiveIntensity={0.5}
-          roughness={0.25}
-          metalness={0.1}
+        <sphereGeometry args={[0.6, 64, 64]} />
+        <MeshTransmissionMaterial
+          color="#ffffff"
+          thickness={0.8}
+          roughness={0.15}
+          transmission={1}
+          ior={1.4}
+          chromaticAberration={0.04}
+          backside
+          backsideThickness={0.4}
         />
       </mesh>
-      {/* Soft halo */}
+      {/* Soft pearl halo */}
       <mesh>
-        <sphereGeometry args={[0.78, 24, 24]} />
-        <meshBasicMaterial color={ACCENT} transparent opacity={0.08} />
+        <sphereGeometry args={[0.82, 32, 32]} />
+        <meshBasicMaterial color="#cbd5e1" transparent opacity={0.06} />
       </mesh>
     </group>
   );
@@ -125,110 +187,43 @@ function AtomCanvas() {
       gl={{ antialias: true, alpha: true }}
       dpr={[1, 2]}
     >
-      <ambientLight intensity={0.4} />
-      <pointLight position={[0, 0, 0]} intensity={2.2} color={ACCENT} />
-      <pointLight position={[6, 6, 6]} intensity={0.6} />
+      {/* Lighting + IBL matched to the brain scene so the core's
+          transmission material refracts like real glass. */}
+      <ambientLight intensity={0.45} />
+      <pointLight position={[0, 0, 0]} intensity={1.8} color="#ffffff" />
+      <directionalLight position={[6, 7, 8]} intensity={0.45} />
+      <directionalLight position={[-7, -3, -6]} intensity={0.22} />
+      <Environment preset="studio" background={false} />
       <Atom />
     </Canvas>
   );
 }
 
-const DISMISS_KEY = "ion-present-about-dismissed";
-
-function AboutCard({ onDismiss }: { onDismiss: () => void }) {
-  return (
-    <div className="absolute inset-0 z-20 flex items-center justify-center px-6">
-      <button
-        type="button"
-        onClick={onDismiss}
-        aria-label="Begin the walkthrough"
-        className="group max-w-xl w-full text-left rounded-2xl border border-white/15 bg-black/70 backdrop-blur-md p-8 sm:p-10 shadow-2xl cursor-pointer hover:border-white/25 transition-colors"
-      >
-        <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-accent mb-4">
-          A note before we start
-        </p>
-
-        {/*
-          ABOUT_SPENCER_COPY — placeholder. Spencer provides the final
-          about-Spencer card text at handoff (distilled from the bear-hunt
-          origin + Brent Brown #5→#1 + the 13-year sales-DNA write-up).
-          Replace the paragraphs below with that copy; keep the dismiss
-          affordance and the markup shape.
-          <!-- ABOUT_SPENCER_COPY -->
-        */}
-        <div className="space-y-4 text-base sm:text-lg text-stewart-text leading-relaxed">
-          <p>
-            [ABOUT_SPENCER_COPY placeholder — Spencer&apos;s about-me copy
-            lands here. A few sentences on who built Stewart and why:
-            thirteen years on the floor, the bear-hunt origin, and the
-            #5&rarr;#1 turnaround that taught him what good actually looks
-            like.]
-          </p>
-          <p className="text-stewart-muted text-base">
-            This is the warm-up frame, not the pitch. The pitch is below.
-          </p>
-        </div>
-
-        <p className="mt-8 text-sm font-medium text-stewart-accent group-hover:translate-x-1 inline-block transition-transform">
-          Click anywhere to begin &rarr;
-        </p>
-      </button>
-    </div>
-  );
-}
-
 export function AtomHero() {
-  // mounted gate avoids SSR/localStorage hydration mismatch. Card starts
-  // hidden until we've checked localStorage on the client, then shows
-  // unless it was previously dismissed. The atom always renders.
-  const [mounted, setMounted] = useState(false);
-  const [showCard, setShowCard] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    try {
-      const dismissed = window.localStorage.getItem(DISMISS_KEY) === "1";
-      setShowCard(!dismissed);
-    } catch {
-      setShowCard(true);
-    }
-  }, []);
-
-  const dismiss = () => {
-    setShowCard(false);
-    try {
-      window.localStorage.setItem(DISMISS_KEY, "1");
-    } catch {
-      // ignore — dismissal just won't persist
-    }
-  };
-
+  // The atom is the clean, full-screen hero visual — always moving, no
+  // overlay. "About Spencer" lives in its own section below (scroll to
+  // it); see AboutSpencer.client.tsx.
   return (
     <section className="relative h-[100svh] min-h-[600px] w-full overflow-hidden bg-black">
-      {/* Atom is the persistent visual base — keeps moving after dismiss. */}
       <div className="absolute inset-0 z-0">
         <AtomCanvas />
       </div>
 
-      {/* Radial vignette so the floating card reads against the atom. */}
+      {/* Subtle vignette to settle the atom against the black. */}
       <div
         className="absolute inset-0 z-10 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.75) 100%)",
+            "radial-gradient(ellipse at center, rgba(0,0,0,0.0) 35%, rgba(0,0,0,0.6) 100%)",
         }}
       />
 
-      {mounted && showCard && <AboutCard onDismiss={dismiss} />}
-
-      {/* Scroll cue, only once the card is gone. */}
-      {mounted && !showCard && (
-        <div className="absolute bottom-8 inset-x-0 z-20 flex justify-center pointer-events-none">
-          <span className="text-xs uppercase tracking-[0.2em] text-stewart-muted animate-pulse">
-            Scroll
-          </span>
-        </div>
-      )}
+      {/* Persistent scroll cue. */}
+      <div className="absolute bottom-8 inset-x-0 z-20 flex justify-center pointer-events-none">
+        <span className="text-xs uppercase tracking-[0.2em] text-stewart-muted animate-pulse">
+          Scroll
+        </span>
+      </div>
     </section>
   );
 }
