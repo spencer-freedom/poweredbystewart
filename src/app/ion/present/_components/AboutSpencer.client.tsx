@@ -38,42 +38,21 @@ export function AboutSpencer() {
 
   return (
     <section className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-20 border-b border-white/10">
+      {/*
+        ABOUT_SPENCER_COPY — per Spencer, this box says only "About
+        Spencer" for now. When the final copy is ready (bear-hunt origin +
+        Brent Brown #5→#1 + 13-year sales DNA), add it here; keep the
+        click-to-dismiss button wrapper.
+        <!-- ABOUT_SPENCER_COPY -->
+      */}
       <button
         type="button"
         onClick={dismiss}
         aria-label="Dismiss About Spencer"
-        className="group max-w-xl w-full text-left rounded-2xl border border-white/15 bg-stewart-card/60 backdrop-blur-md p-8 sm:p-10 shadow-2xl cursor-pointer hover:border-white/25 transition-colors"
+        className="max-w-xl w-full rounded-2xl border border-white/15 bg-stewart-card/60 backdrop-blur-md p-10 sm:p-12 shadow-2xl cursor-pointer hover:border-white/25 transition-colors"
       >
-        <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-accent mb-4">
+        <p className="text-2xl sm:text-3xl font-semibold text-stewart-text text-center">
           About Spencer
-        </p>
-
-        {/*
-          ABOUT_SPENCER_COPY — placeholder. Spencer provides the final
-          about-Spencer copy (distilled from the bear-hunt origin + Brent
-          Brown #5→#1 + the 13-year sales-DNA write-up). Replace the
-          paragraphs below; keep the dismiss affordance and markup shape.
-          <!-- ABOUT_SPENCER_COPY -->
-        */}
-        <div className="space-y-4 text-base sm:text-lg text-stewart-text leading-relaxed">
-          <p>
-            [ABOUT_SPENCER_COPY placeholder — Spencer&apos;s about-me copy
-            lands here. A few sentences on who built Stewart and why:
-            thirteen years on the floor, the bear-hunt origin, and the
-            #5&rarr;#1 turnaround that taught him what good actually looks
-            like.]
-          </p>
-          <p className="text-stewart-muted text-base">
-            This is the warm-up frame, not the pitch. The pitch is below.
-          </p>
-        </div>
-
-        <p className="mt-8 text-sm font-medium text-stewart-muted">
-          Keep scrolling, or{" "}
-          <span className="text-stewart-accent group-hover:underline">
-            click to dismiss
-          </span>
-          .
         </p>
       </button>
     </section>

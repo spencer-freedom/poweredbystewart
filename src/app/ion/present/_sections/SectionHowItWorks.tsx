@@ -11,7 +11,7 @@ export function SectionHowItWorks() {
     <SectionFrame
       id="how-stewart-works"
       index={2}
-      eyebrow="How Stewart Works"
+      eyebrow="Goal"
       title="Stewart sits across your entire sales machine."
       question="Why hasn't existing software solved this?"
       highlight={["Observe", "Understand", "Classify", "Route", "Remember"]}
