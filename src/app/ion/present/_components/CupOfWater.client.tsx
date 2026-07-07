@@ -36,13 +36,44 @@ const GLASS_BODY =
 const GLASS_OUTLINE =
   "M36 30 L46 295 Q46 338 100 338 Q154 338 154 295 L164 30";
 
-// Four sellable segments, light → deep so they read as stacked layers.
+// Three sellable segments (one per reason-to-buy), light → deep so they
+// read as stacked layers.
 const SEGMENTS = [
   "rgba(103,232,249,0.52)", // cyan
-  "rgba(56,189,248,0.58)", // sky
   "rgba(59,130,246,0.62)", // blue
   "rgba(37,99,235,0.68)", // deep blue
 ];
+
+// Thin "skim" layer at the top of the water: leads Ion CAN sell but does
+// NOT want to. Sits between the water surface and the four wanted-segment
+// bands. Slate so it reads as sellable-but-set-aside, not blue water.
+const SKIM_BOTTOM = 131;
+const SKIM_COLOR = "rgba(148,163,184,0.5)";
+const BAND_H = (BOTTOM - SKIM_BOTTOM) / 3;
+
+// Amber highlight for whichever cup region a slide calls out.
+const HL_FILL = "rgba(251,191,36,0.24)";
+const HL_STROKE = "rgba(251,191,36,0.9)";
+
+// Vertical [top, bottom] of a highlightable region, by key:
+//   empty = the air (can't be sold), skim = the slate layer (don't want),
+//   seg0..seg3 = the four wanted reason-to-buy sections, top → bottom.
+function highlightBounds(key?: string): [number, number] | null {
+  switch (key) {
+    case "empty":
+      return [RIM_Y, FILL_TOP];
+    case "skim":
+      return [FILL_TOP, SKIM_BOTTOM];
+    case "seg0":
+      return [SKIM_BOTTOM, SKIM_BOTTOM + BAND_H];
+    case "seg1":
+      return [SKIM_BOTTOM + BAND_H, SKIM_BOTTOM + 2 * BAND_H];
+    case "seg2":
+      return [SKIM_BOTTOM + 2 * BAND_H, BOTTOM];
+    default:
+      return null;
+  }
+}
 
 // Moment 1 — the simple cup, offset left, with a click-to-advance text box
 // on its right: "Sell me this cup of water" → "Telling isn't selling."
@@ -78,6 +109,28 @@ const CUP_SLIDES: Slide[] = [
       </p>
     ),
   },
+  { title: "There are two important takeaways." },
+  {
+    kicker: "Takeaway 1",
+    title: "They have to want it.",
+    body: (
+      <p>
+        We can only sell the cup of water to someone who{" "}
+        <span className="text-stewart-text font-medium">wants to buy it.</span>
+      </p>
+    ),
+  },
+  {
+    kicker: "Takeaway 2",
+    title: "Know why they want it.",
+    body: (
+      <p>
+        If we understand{" "}
+        <span className="text-stewart-text font-medium">why</span> they want
+        to buy it, we can do a much better job selling them the cup of water.
+      </p>
+    ),
+  },
 ];
 
 export function CupOfWater() {
@@ -93,20 +146,23 @@ export function CupOfWater() {
 
 // The segmented "cup chart" as a standalone visual (empty top = can't be
 // sold; the water = the sellable share, split by why they buy). Reused in
-// the narrative — no section wrapper, so callers place it.
-export function SegmentedCup() {
-  return <GlassCup idPrefix="segmented-cup" segmented />;
+// the narrative — no section wrapper, so callers place it. `highlight`
+// lets a caller call out a region (e.g. "empty" = the unsellable top).
+export function SegmentedCup({ highlight }: { highlight?: string }) {
+  return <GlassCup idPrefix="segmented-cup" segmented highlight={highlight} />;
 }
 
 function GlassCup({
   idPrefix,
   segmented,
+  highlight,
 }: {
   idPrefix: string;
   segmented: boolean;
+  highlight?: string;
 }) {
   const clipId = `${idPrefix}-glass-inner`;
-  const bandH = (BOTTOM - FILL_TOP) / 4;
+  const bandH = BAND_H;
 
   return (
     <svg
@@ -133,8 +189,25 @@ function GlassCup({
       <g clipPath={`url(#${clipId})`}>
         {segmented ? (
           <>
+            {/* Skim layer — painted first, from the surface down; the
+                sellable sections below overwrite it from SKIM_BOTTOM. */}
+            <rect
+              x="0"
+              y={FILL_TOP}
+              width="200"
+              height={BOTTOM - FILL_TOP}
+              fill={SKIM_COLOR}
+            />
+            <ellipse
+              cx={CX}
+              cy={FILL_TOP}
+              rx={halfWidth(FILL_TOP)}
+              ry="6"
+              fill={SKIM_COLOR}
+            />
+            {/* Four wanted segments below the skim */}
             {SEGMENTS.map((color, i) => {
-              const topY = FILL_TOP + i * bandH;
+              const topY = SKIM_BOTTOM + i * bandH;
               return (
                 <g key={i}>
                   <rect
@@ -154,22 +227,22 @@ function GlassCup({
                 </g>
               );
             })}
-            {/* Curved oval lines on the surface + each divider */}
-            {SEGMENTS.map((_, i) => {
-              const topY = FILL_TOP + i * bandH;
-              return (
-                <ellipse
-                  key={`line-${i}`}
-                  cx={CX}
-                  cy={topY}
-                  rx={halfWidth(topY)}
-                  ry="6"
-                  fill="none"
-                  stroke="rgba(255,255,255,0.28)"
-                  strokeWidth="1.3"
-                />
-              );
-            })}
+            {/* Curved oval lines: surface, skim boundary, section tops */}
+            {[
+              FILL_TOP,
+              ...SEGMENTS.map((_, i) => SKIM_BOTTOM + i * bandH),
+            ].map((y, i) => (
+              <ellipse
+                key={`line-${i}`}
+                cx={CX}
+                cy={y}
+                rx={halfWidth(y)}
+                ry="6"
+                fill="none"
+                stroke="rgba(255,255,255,0.28)"
+                strokeWidth="1.3"
+              />
+            ))}
           </>
         ) : (
           <>
@@ -220,6 +293,45 @@ function GlassCup({
         stroke="rgba(226,232,240,0.65)"
         strokeWidth="2.5"
       />
+
+      {/* Region highlight — amber, pulsing, drawn on top of whichever region
+          the current slide calls out (air / skim / one of the 4 sections). */}
+      {(() => {
+        const bounds = highlightBounds(highlight);
+        if (!bounds) return null;
+        const [topY, botY] = bounds;
+        return (
+          <g className="animate-pulse">
+            <g clipPath={`url(#${clipId})`}>
+              <rect
+                x="0"
+                y={topY}
+                width="200"
+                height={botY - topY}
+                fill={HL_FILL}
+              />
+            </g>
+            <ellipse
+              cx={CX}
+              cy={topY}
+              rx={halfWidth(topY)}
+              ry="6"
+              fill="none"
+              stroke={HL_STROKE}
+              strokeWidth="2"
+            />
+            <ellipse
+              cx={CX}
+              cy={botY}
+              rx={halfWidth(botY)}
+              ry="6"
+              fill="none"
+              stroke={HL_STROKE}
+              strokeWidth="2"
+            />
+          </g>
+        );
+      })()}
     </svg>
   );
 }

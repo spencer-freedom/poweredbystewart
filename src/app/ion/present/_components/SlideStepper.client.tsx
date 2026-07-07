@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Reusable click-to-advance "slide" text box (PowerPoint-style). The
 // caller places it beside whatever visual stays put (e.g. a cup). Clicking
@@ -8,9 +8,24 @@ import { useState } from "react";
 // mis-click. Step dots + a "continue" hint show progress. Each swap fades
 // (see the cupFade keyframe in globals.css).
 
-export type Slide = { title: string; body?: React.ReactNode };
+export type Slide = {
+  kicker?: string;
+  title: string;
+  body?: React.ReactNode;
+  // Optional hint the parent can act on (e.g. highlight a cup region).
+  highlight?: string;
+};
 
-export function SlideStepper({ slides }: { slides: Slide[] }) {
+export function SlideStepper({
+  slides,
+  onStepChange,
+  centered = false,
+}: {
+  slides: Slide[];
+  onStepChange?: (step: number) => void;
+  // centered = no visual beside it (text-center, controls centered).
+  centered?: boolean;
+}) {
   const [step, setStep] = useState(0);
   const isFirst = step === 0;
   const isLast = step === slides.length - 1;
@@ -18,16 +33,30 @@ export function SlideStepper({ slides }: { slides: Slide[] }) {
   const back = () => setStep((s) => Math.max(s - 1, 0));
   const current = slides[step];
 
+  useEffect(() => {
+    onStepChange?.(step);
+  }, [step, onStepChange]);
+
+  const alignText = centered ? "text-center" : "text-center lg:text-left";
+  const alignRow = centered
+    ? "justify-center"
+    : "justify-center lg:justify-start";
+
   return (
-    <div className="max-w-md">
+    <div className={centered ? "max-w-2xl" : "max-w-md"}>
       <button
         type="button"
         onClick={advance}
         disabled={isLast}
         aria-label={isLast ? undefined : "Continue"}
-        className="block w-full text-center lg:text-left group cursor-pointer disabled:cursor-default"
+        className={`block w-full ${alignText} group cursor-pointer disabled:cursor-default`}
       >
         <div key={step} style={{ animation: "cupFade 0.35s ease" }}>
+          {current.kicker ? (
+            <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-accent mb-4">
+              {current.kicker}
+            </p>
+          ) : null}
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
             {current.title}
           </h2>
@@ -39,7 +68,7 @@ export function SlideStepper({ slides }: { slides: Slide[] }) {
         </div>
       </button>
 
-      <div className="mt-10 flex items-center gap-4 justify-center lg:justify-start">
+      <div className={`mt-10 flex items-center gap-4 ${alignRow}`}>
         {/* Back — hidden (but space kept) on the first slide */}
         <button
           type="button"
