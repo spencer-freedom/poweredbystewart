@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AudioClip } from "../../(public)/_components/AudioClip.client";
 
 // The proof beat — "show, don't tell." Ion's script asks two anchor
@@ -124,6 +125,12 @@ export function SectionTheMiss() {
           It asks them for a reason — they&apos;re the anchors the whole call
           is built on. Listen to what happens to both.
         </p>
+        <Link
+          href="/ion/present/script"
+          className="inline-block mt-4 text-sm text-stewart-accent hover:underline"
+        >
+          See your script, annotated &rarr;
+        </Link>
 
         <div className="mt-12 space-y-6">
           {CALLS.map((call) => (
