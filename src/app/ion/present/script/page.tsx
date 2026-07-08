@@ -23,16 +23,19 @@ function Pull({
   children: React.ReactNode;
 }) {
   return (
-    <div id={id} className="hl-target my-3 -mx-3 px-3 py-2">
-      <p className="text-stewart-text leading-relaxed">{children}</p>
-      <div className="mt-2 flex flex-wrap gap-2">
+    <div
+      id={id}
+      className="hl-target -mx-3 my-2 flex items-baseline gap-4 rounded-md px-3 py-1"
+    >
+      <p className="flex-1 text-stewart-muted leading-relaxed">{children}</p>
+      <div className="flex shrink-0 flex-wrap justify-end gap-x-3 gap-y-1">
         {chips.map((c) => (
           <Link
             key={c.label}
             href={c.href}
-            className="text-[11px] uppercase tracking-wider font-mono text-stewart-accent border border-stewart-accent/40 rounded px-2 py-0.5 hover:bg-stewart-accent/10 transition-colors"
+            className="whitespace-nowrap text-[10px] uppercase tracking-wider font-mono text-stewart-accent/70 hover:text-stewart-accent transition-colors"
           >
-            {c.label} &rarr;
+            {c.label}&nbsp;&rarr;
           </Link>
         ))}
       </div>
