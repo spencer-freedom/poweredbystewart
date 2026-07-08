@@ -3,6 +3,8 @@ import { AboutSpencer } from "./_components/AboutSpencer.client";
 import { CupOfWater } from "./_components/CupOfWater.client";
 import { SectionDiveDeeper } from "./_sections/SectionDiveDeeper";
 import { SectionWhatIsStewart } from "./_sections/SectionWhatIsStewart";
+import { SectionTheMiss } from "./_sections/SectionTheMiss";
+import { SectionImagine } from "./_sections/SectionImagine";
 import { SectionCoaching } from "./_sections/SectionCoaching";
 import { SectionLeakAtlas } from "./_sections/SectionLeakAtlas";
 import { SectionEconomics } from "./_sections/SectionEconomics";
@@ -34,6 +36,10 @@ export default function IonPresentPage() {
       <SectionDiveDeeper />
       {/* Clean break from the cup → Stewart (what it does + the pain) */}
       <SectionWhatIsStewart />
+      {/* Proof: real Ion calls where both script anchors were dropped → 0/332 */}
+      <SectionTheMiss />
+      {/* The upside flip: set rate → sit rate → close */}
+      <SectionImagine />
       {/* --- old pitch below, pending rework --- */}
       <SectionCoaching />
       <SectionLeakAtlas />
