@@ -3,29 +3,39 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 // Ion's own setting script (v1), shown CLEAN — their document, no Stewart
-// commentary. The only overlay is the highlight: the lines the pitch pulls
-// from glow amber and pulse (like the cup regions), and clicking one jumps
-// back to that spot in the presentation. Each carries an id so the
-// presentation can deep-link into it too (round trip).
+// commentary. The lines the pitch pulls from carry small back-labels (Meg /
+// Joel / Carter 1-3); clicking one round-trips to that exact clip moment in
+// the presentation. When you arrive here from the presentation, only the
+// line you clicked to lights up + pulses (via :target / .hl-target).
 
-// A pulsing amber, clickable script line — round-trips to the presentation.
+type Chip = { label: string; href: string };
+
+// A script line the pitch pulls from. `id` is the deep-link target; `chips`
+// are the round-trip links back to specific clip moments.
 function Pull({
   id,
-  href,
+  chips,
   children,
 }: {
   id: string;
-  href: string;
+  chips: Chip[];
   children: React.ReactNode;
 }) {
   return (
-    <Link
-      id={id}
-      href={href}
-      className="block my-3 scroll-mt-24 rounded-md border-l-2 border-stewart-warning bg-stewart-warning/15 pl-4 pr-3 py-2 text-stewart-text animate-pulse hover:bg-stewart-warning/25 transition-colors"
-    >
-      {children}
-    </Link>
+    <div id={id} className="hl-target my-3 -mx-3 px-3 py-2">
+      <p className="text-stewart-text leading-relaxed">{children}</p>
+      <div className="mt-2 flex flex-wrap gap-2">
+        {chips.map((c) => (
+          <Link
+            key={c.label}
+            href={c.href}
+            className="text-[11px] uppercase tracking-wider font-mono text-stewart-accent border border-stewart-accent/40 rounded px-2 py-0.5 hover:bg-stewart-accent/10 transition-colors"
+          >
+            {c.label} &rarr;
+          </Link>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -41,12 +51,13 @@ function P({ children }: { children: React.ReactNode }) {
   return <p className="text-stewart-muted leading-relaxed my-2">{children}</p>;
 }
 
+const P_ = "/ion/present";
+
 export default function IonScriptPage() {
-  const back = "/ion/present#proof";
   return (
     <div className="max-w-3xl mx-auto px-6 py-16">
       <Link
-        href="/ion/present"
+        href={P_}
         className="text-sm text-stewart-muted hover:text-stewart-text transition-colors"
       >
         &larr; Back to the walkthrough
@@ -56,8 +67,8 @@ export default function IonScriptPage() {
         Ion Solar — Setting Script (v1)
       </h1>
       <p className="mt-3 text-sm text-stewart-muted">
-        Your own training material. Highlighted lines are live — tap one to
-        jump back to it in the walkthrough.
+        Your own training material. The tagged lines round-trip to the clips
+        in the walkthrough.
       </p>
 
       <div className="mt-10 text-sm">
@@ -77,14 +88,26 @@ export default function IonScriptPage() {
           title? How long at this home?
         </P>
 
-        <Pull id="s-why" href={back}>
+        <Pull
+          id="s-why"
+          chips={[
+            { label: "Joel", href: `${P_}#clip-joel-0` },
+            { label: "Carter 1", href: `${P_}#clip-carter-0` },
+          ]}
+        >
           <strong className="text-stewart-text">What interested you in solar?</strong>{" "}
           — <em>Expand into that to validate.</em>
         </Pull>
 
         <P>Utility company is…?</P>
 
-        <Pull id="s-bill" href={back}>
+        <Pull
+          id="s-bill"
+          chips={[
+            { label: "Meg", href: `${P_}#clip-meg-0` },
+            { label: "Carter 2", href: `${P_}#clip-carter-1` },
+          ]}
+        >
           <strong className="text-stewart-text">
             Do you know how much you&apos;re paying on average?
           </strong>
@@ -92,7 +115,7 @@ export default function IonScriptPage() {
 
         <P>Roof type / how old is it? Have you seen a solar design for this home?</P>
 
-        <Pull id="s-credit" href={back}>
+        <Pull id="s-credit" chips={[{ label: "Carter 3", href: `${P_}#clip-carter-2` }]}>
           We have a solar program that saves you money immediately. The only
           requirement is that you have a{" "}
           <strong className="text-stewart-text">credit score above 670.</strong>{" "}
@@ -103,11 +126,8 @@ export default function IonScriptPage() {
         <P>
           Last thing before we schedule. The way we design these systems is
           based on how much energy your home uses — we get what we need off
-          your utility bill.
-        </P>
-        <P>
-          Do you get those bills in the mail or online?{" "}
-          <em>Perfect, would you rather text or email that to me?</em>
+          your utility bill. Do you get those bills in the mail or online?
+          <em> Perfect, would you rather text or email that to me?</em>
         </P>
 
         <H>Button Up</H>
@@ -119,14 +139,11 @@ export default function IonScriptPage() {
         </P>
 
         <H>Text After Call</H>
-        <Pull id="s-tieback" href={back}>
+        <P>
           Hey [Customer], this is [Agent] with ION Solar. I have you on the
-          calendar for [Day/Date/Time] to review{" "}
-          <strong className="text-stewart-text">
-            (tieback to interests and/or concerns)
-          </strong>
-          . Looking forward to it!
-        </Pull>
+          calendar for [Day/Date/Time] to review (tieback to interests and/or
+          concerns). Looking forward to it!
+        </P>
 
         <H>Rebuttals (excerpt)</H>
         <P>

@@ -21,6 +21,8 @@ type Moment = {
   miss: string;
   start: number;
   end: number;
+  // The script line this moment pulls from (anchor id on /ion/present/script).
+  scriptAnchor?: string;
 };
 
 type Call = {
@@ -53,6 +55,7 @@ const CALLS: Call[] = [
         miss: "Holy smokes… okay. Now the only requirement is a credit score above 670.",
         start: 138,
         end: 164,
+        scriptAnchor: "s-bill",
       },
     ],
   },
@@ -71,6 +74,7 @@ const CALLS: Call[] = [
         miss: "Okay, gotcha — with the incentives and programs right now, you're not paying anything out of pocket, it's just a bill swap… I've got a couple questions to make sure you qualify.",
         start: 30,
         end: 74,
+        scriptAnchor: "s-why",
       },
     ],
   },
@@ -90,6 +94,7 @@ const CALLS: Call[] = [
         miss: "Get your bill down? How much are you paying a month?",
         start: 15,
         end: 33,
+        scriptAnchor: "s-why",
       },
       {
         label: "The bill",
@@ -98,6 +103,7 @@ const CALLS: Call[] = [
         miss: "Hundred and twenty… pretty expensive for you. Okay, and you're at 1508 South 2nd Avenue?",
         start: 26,
         end: 57,
+        scriptAnchor: "s-bill",
       },
       {
         label: "The call dies",
@@ -106,6 +112,7 @@ const CALLS: Call[] = [
         miss: "I'll shoot you a text — let me know once you've sent it over. …And it fizzles. No appointment.",
         start: 144,
         end: 178,
+        scriptAnchor: "s-credit",
       },
     ],
   },
@@ -209,6 +216,7 @@ function CallCard({ call }: { call: Call }) {
             moment={m}
             callId={call.callId}
             divide={i > 0}
+            id={`clip-${call.rep.toLowerCase()}-${i}`}
           />
         ))}
       </div>
@@ -242,13 +250,20 @@ function MomentBlock({
   moment,
   callId,
   divide,
+  id,
 }: {
   moment: Moment;
   callId: string;
   divide: boolean;
+  id: string;
 }) {
   return (
-    <div className={divide ? "pt-5 border-t border-stewart-border/60" : ""}>
+    <div
+      id={id}
+      className={
+        "hl-target " + (divide ? "pt-5 border-t border-stewart-border/60" : "")
+      }
+    >
       {moment.label ? (
         <p className="text-[11px] uppercase tracking-[0.15em] font-semibold text-stewart-accent mb-2">
           {moment.label}
@@ -259,13 +274,21 @@ function MomentBlock({
         <Line role="Customer" tone="text" text={moment.answer} />
         <Line role="Rep — the miss" tone="warning" text={moment.miss} />
       </dl>
-      <div className="mt-3">
+      <div className="mt-3 flex items-center gap-3">
         <AudioClip
           callId={callId}
           startSec={moment.start}
           endSec={moment.end}
           label="Play the moment"
         />
+        {moment.scriptAnchor ? (
+          <Link
+            href={`/ion/present/script#${moment.scriptAnchor}`}
+            className="text-xs font-medium text-stewart-accent hover:underline"
+          >
+            script &rarr;
+          </Link>
+        ) : null}
       </div>
     </div>
   );
