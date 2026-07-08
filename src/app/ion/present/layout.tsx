@@ -29,7 +29,7 @@ export default function IonPresentLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-black text-stewart-text">
+    <div className="min-h-screen bg-black text-stewart-text scroll-smooth">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
           <Link href="/ion" className="flex items-baseline gap-2 shrink-0">

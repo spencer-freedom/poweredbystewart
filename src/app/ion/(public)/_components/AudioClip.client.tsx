@@ -24,16 +24,15 @@ export function AudioClip({
 }) {
   const [active, setActive] = useState(false);
 
-  const baseUrl =
-    process.env.NEXT_PUBLIC_API_URL ||
-    process.env.NEXT_PUBLIC_API_BASE_URL ||
-    process.env.NEXT_PUBLIC_BASE_URL ||
-    "";
+  // The audio-clip endpoint is a route in THIS Next app
+  // (/api/ion/audio-clip) — always same-origin, so use a RELATIVE URL. Do
+  // NOT prepend NEXT_PUBLIC_API_URL: that points at the separate SpencerOS
+  // backend, which has no such route (clips would silently fail).
   const qs = new URLSearchParams();
   if (typeof startSec === "number") qs.set("start", startSec.toFixed(3));
   if (typeof endSec === "number") qs.set("end", endSec.toFixed(3));
   const url =
-    `${baseUrl}/api/ion/audio-clip/${encodeURIComponent(callId)}` +
+    `/api/ion/audio-clip/${encodeURIComponent(callId)}` +
     (qs.toString() ? `?${qs.toString()}` : "");
 
   const fallbackLabel =
