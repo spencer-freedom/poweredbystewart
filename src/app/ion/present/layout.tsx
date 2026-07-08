@@ -17,6 +17,7 @@ export const dynamic = "force-dynamic";
 // Sticky top-nav tabs — deep-dive escape hatches for Q&A. Each links to
 // an existing /ion page; they are NOT in-page scroll anchors.
 const NAV_TABS: { href: string; label: string }[] = [
+  { href: "/ion/present/script", label: "Script" },
   { href: "/ion/brain", label: "Brain" },
   { href: "/ion/schema", label: "Schema" },
   { href: "/ion/calls", label: "Calls" },

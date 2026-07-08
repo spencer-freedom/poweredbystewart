@@ -113,13 +113,30 @@ const CALLS: Call[] = [
 
 export function SectionTheMiss() {
   return (
-    <section className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-24 border-b border-white/10">
+    <section
+      id="proof"
+      className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-24 border-b border-white/10 scroll-mt-20"
+    >
       <div className="max-w-3xl w-full">
         <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-accent mb-4">
           Your own calls
         </p>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
-          Your script asks two things: the bill, and why they want solar.
+          Your script asks two things:{" "}
+          <Link
+            href="/ion/present/script#s-bill"
+            className="underline decoration-stewart-accent/50 decoration-2 underline-offset-4 hover:decoration-stewart-accent"
+          >
+            the bill
+          </Link>
+          , and{" "}
+          <Link
+            href="/ion/present/script#s-why"
+            className="underline decoration-stewart-accent/50 decoration-2 underline-offset-4 hover:decoration-stewart-accent"
+          >
+            why they want solar
+          </Link>
+          .
         </h2>
         <p className="mt-5 text-lg text-stewart-muted leading-relaxed">
           It asks them for a reason — they&apos;re the anchors the whole call
@@ -129,7 +146,7 @@ export function SectionTheMiss() {
           href="/ion/present/script"
           className="inline-block mt-4 text-sm text-stewart-accent hover:underline"
         >
-          See your script, annotated &rarr;
+          See your full script &rarr;
         </Link>
 
         <div className="mt-12 space-y-6">
