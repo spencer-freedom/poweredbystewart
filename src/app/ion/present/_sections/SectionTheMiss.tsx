@@ -28,7 +28,11 @@ type Call = {
   anchor: string;
   set: boolean;
   outcome: string;
+  // coach = the gap in Ion's own terms. coaching = a suggested move that
+  // fits Ion's model (part grounded, part guess) — always framed as "how
+  // does Ion want to coach this," which then gets encoded into Stewart.
   coach: string;
+  coaching: string;
   moments: Moment[];
 };
 
@@ -40,6 +44,7 @@ const CALLS: Call[] = [
     set: true,
     outcome: "Appointment set",
     coach: "Both anchors were on the table — the $262 got spent on a credit check.",
+    coaching: "Use the $262 as the reason to act — tie it to the goal of lowering the bill — before moving to qualify. (Suggested — how does Ion want to coach it?)",
     moments: [
       {
         ask: "How much are you paying on average for power?",
@@ -51,12 +56,31 @@ const CALLS: Call[] = [
     ],
   },
   {
+    rep: "Joel",
+    callId: "10000160568",
+    anchor: "Telling, not selling",
+    set: true,
+    outcome: "Appointment set",
+    coach: "The customer said solar was expensive. Joel sold the program instead of using it — telling, not selling.",
+    coaching: "Don't pitch the program. Acknowledge the cost, restate the goal — lower your bill — then qualify for the specialist. (Suggested — how does Ion want to coach it?)",
+    moments: [
+      {
+        ask: "What got you interested in solar?",
+        answer: "I figured it'd be expensive to do.",
+        miss: "Okay, gotcha — with the incentives and programs right now, you're not paying anything out of pocket, it's just a bill swap… I've got a couple questions to make sure you qualify.",
+        start: 30,
+        end: 74,
+      },
+    ],
+  },
+  {
     rep: "Carter",
     callId: "20000555055",
     anchor: "Both anchors",
     set: false,
     outcome: "No appointment set",
-    coach: "Qualified customer. Reason and bill both spent on qualifying — and the call dies when he can't get the bill.",
+    coach: "A qualified-looking lead that slipped — both anchors spent on qualifying, and the call fizzles on the bill hand-off. DQ or a save? Nobody at Ion can even see the question.",
+    coaching: "Confirm the market + credit (670, not 650), build value from the bill before the ask, and collect it live so a shaky lead stays with you. (Suggested — how does Ion want to coach it?)",
     moments: [
       {
         label: "The reason",
@@ -81,23 +105,6 @@ const CALLS: Call[] = [
         miss: "I'll shoot you a text — let me know once you've sent it over. …And it fizzles. No appointment.",
         start: 144,
         end: 178,
-      },
-    ],
-  },
-  {
-    rep: "Joel",
-    callId: "10000160568",
-    anchor: "Telling, not selling",
-    set: true,
-    outcome: "Appointment set",
-    coach: "The customer said solar was expensive. Joel sold the program instead of using it — telling, not selling.",
-    moments: [
-      {
-        ask: "What got you interested in solar?",
-        answer: "I figured it'd be expensive to do.",
-        miss: "Okay, gotcha — with the incentives and programs right now, you're not paying anything out of pocket, it's just a bill swap… I've got a couple questions to make sure you qualify.",
-        start: 30,
-        end: 74,
       },
     ],
   },
@@ -189,13 +196,19 @@ function CallCard({ call }: { call: Call }) {
         </span>
       </div>
 
-      <div className="mt-4 flex gap-3">
-        <span className="text-[11px] uppercase tracking-wider text-stewart-muted shrink-0 mt-0.5">
-          In a call review
-        </span>
-        <span className="text-sm text-stewart-text leading-relaxed">
+      <div className="mt-4 pt-4 border-t border-stewart-border">
+        <p className="text-[11px] uppercase tracking-[0.15em] font-semibold text-stewart-accent mb-2">
+          Coachable moment
+        </p>
+        <p className="text-sm text-stewart-text leading-relaxed">
           {call.coach}
-        </span>
+        </p>
+        <p className="mt-2 text-sm text-stewart-muted leading-relaxed">
+          {call.coaching}
+        </p>
+        <p className="mt-3 text-xs italic text-stewart-muted/80">
+          How does Ion want to coach this? We encode the answer into Stewart.
+        </p>
       </div>
     </div>
   );
