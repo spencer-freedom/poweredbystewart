@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HashHighlight } from "../_components/HashHighlight.client";
 
 export const dynamic = "force-dynamic";
 
@@ -56,6 +57,7 @@ const P_ = "/ion/present";
 export default function IonScriptPage() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-16">
+      <HashHighlight />
       <Link
         href={P_}
         className="text-sm text-stewart-muted hover:text-stewart-text transition-colors"

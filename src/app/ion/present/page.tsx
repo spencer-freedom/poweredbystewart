@@ -1,4 +1,5 @@
 import { AtomHero } from "./_components/AtomHero.client";
+import { HashHighlight } from "./_components/HashHighlight.client";
 import { AboutSpencer } from "./_components/AboutSpencer.client";
 import { CupOfWater } from "./_components/CupOfWater.client";
 import { SectionDiveDeeper } from "./_sections/SectionDiveDeeper";
@@ -29,6 +30,7 @@ export const dynamic = "force-dynamic";
 export default function IonPresentPage() {
   return (
     <>
+      <HashHighlight />
       <AtomHero />
       {/* Scroll down to "About Spencer" (dismissable), then the cup of water */}
       <AboutSpencer />
