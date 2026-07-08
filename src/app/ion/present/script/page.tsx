@@ -1,166 +1,134 @@
 import Link from "next/link";
 import { HashHighlight } from "../_components/HashHighlight.client";
+import { SCRIPT_PARAS, type ScriptPara, type ScriptRun } from "./scriptData";
 
 export const dynamic = "force-dynamic";
 
-// Ion's own setting script (v1), shown CLEAN — their document, no Stewart
-// commentary. The lines the pitch pulls from carry small back-labels (Meg /
-// Joel / Carter 1-3); clicking one round-trips to that exact clip moment in
-// the presentation. When you arrive here from the presentation, only the
-// line you clicked to lights up + pulses (via :target / .hl-target).
-
-type Chip = { label: string; href: string };
-
-// A script line the pitch pulls from. `id` is the deep-link target; `chips`
-// are the round-trip links back to specific clip moments.
-function Pull({
-  id,
-  chips,
-  children,
-}: {
-  id: string;
-  chips: Chip[];
-  children: React.ReactNode;
-}) {
-  return (
-    <div
-      id={id}
-      className="hl-target -mx-3 my-2 flex items-baseline gap-4 rounded-md px-3 py-1"
-    >
-      <p className="flex-1 text-stewart-muted leading-relaxed">{children}</p>
-      <div className="flex shrink-0 flex-wrap justify-end gap-x-3 gap-y-1">
-        {chips.map((c) => (
-          <Link
-            key={c.label}
-            href={c.href}
-            className="whitespace-nowrap text-[10px] uppercase tracking-wider font-mono text-stewart-accent/70 hover:text-stewart-accent transition-colors"
-          >
-            {c.label}&nbsp;&rarr;
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function H({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="mt-10 mb-3 text-xs uppercase tracking-[0.2em] font-semibold text-stewart-muted">
-      {children}
-    </h2>
-  );
-}
-
-function P({ children }: { children: React.ReactNode }) {
-  return <p className="text-stewart-muted leading-relaxed my-2">{children}</p>;
-}
+// Ion's own v2 Master Paid Lead Setting Script, verbatim, rendered as a
+// white document (their doc — red coaching notes preserved) inside the dark
+// pitch page. The lines the pitch pulls from carry round-trip labels and
+// light up when navigated to. Goal: they recognize it as THEIR script.
 
 const P_ = "/ion/present";
 
+type Chip = { label: string; href: string };
+
+// Anchor lines the pitch pulls from — matched by a substring of the line.
+const ANCHORS: { match: string; id: string; chips: Chip[] }[] = [
+  {
+    match: "interested in solar",
+    id: "s-why",
+    chips: [
+      { label: "Joel", href: `${P_}#clip-joel-0` },
+      { label: "Carter 1", href: `${P_}#clip-carter-0` },
+    ],
+  },
+  {
+    match: "spending on average",
+    id: "s-bill",
+    chips: [
+      { label: "Meg", href: `${P_}#clip-meg-0` },
+      { label: "Carter 2", href: `${P_}#clip-carter-1` },
+    ],
+  },
+  {
+    match: "bills in the mail or online",
+    id: "s-collect",
+    chips: [{ label: "Carter 3", href: `${P_}#clip-carter-2` }],
+  },
+];
+
+function Runs({ runs }: { runs: ScriptRun[] }) {
+  return (
+    <>
+      {runs.map((r, i) => {
+        const cls =
+          (r.red ? "text-red-600 " : "") + (r.bold ? "font-semibold" : "");
+        return cls.trim() ? (
+          <span key={i} className={cls.trim()}>
+            {r.t}
+          </span>
+        ) : (
+          <span key={i}>{r.t}</span>
+        );
+      })}
+    </>
+  );
+}
+
+function anchorFor(text: string) {
+  return ANCHORS.find((a) => text.includes(a.match));
+}
+
+function Para({ para }: { para: ScriptPara }) {
+  const text = para.runs.map((r) => r.t).join("");
+
+  if (para.head) {
+    return (
+      <h3 className="mt-9 mb-3 border-t border-neutral-300 pt-6 text-sm font-bold uppercase tracking-[0.15em] text-neutral-800">
+        <Runs runs={para.runs} />
+      </h3>
+    );
+  }
+
+  const anchor = anchorFor(text);
+  if (anchor) {
+    return (
+      <div
+        id={anchor.id}
+        className="hl-target -mx-2 my-2 flex items-baseline gap-4 rounded px-2 py-1"
+      >
+        <p className="flex-1 leading-relaxed text-neutral-800">
+          <Runs runs={para.runs} />
+        </p>
+        <div className="flex shrink-0 flex-wrap justify-end gap-x-3 gap-y-1">
+          {anchor.chips.map((c) => (
+            <Link
+              key={c.label}
+              href={c.href}
+              className="whitespace-nowrap text-[10px] font-mono uppercase tracking-wider text-blue-600 hover:text-blue-800"
+            >
+              {c.label}&nbsp;&rarr;
+            </Link>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <p className="my-2 leading-relaxed text-neutral-800">
+      <Runs runs={para.runs} />
+    </p>
+  );
+}
+
 export default function IonScriptPage() {
   return (
-    <div className="max-w-3xl mx-auto px-6 py-16">
+    <div className="max-w-3xl mx-auto px-6 py-12">
       <HashHighlight />
-      <Link
-        href={P_}
-        className="text-sm text-stewart-muted hover:text-stewart-text transition-colors"
-      >
-        &larr; Back to the walkthrough
-      </Link>
 
-      <h1 className="mt-8 text-3xl sm:text-4xl font-bold text-stewart-text leading-tight">
-        Ion Solar — Setting Script (v1)
-      </h1>
-      <p className="mt-3 text-sm text-stewart-muted">
-        Your own training material. The tagged lines round-trip to the clips
-        in the walkthrough.
-      </p>
-
-      <div className="mt-10 text-sm">
-        <H>Standard Intro</H>
-        <P>
-          Hi [First Name], this is [Agent] with ION. I&apos;m reaching out
-          about the solar form you filled out online. How are you doing today?
-        </P>
-        <P>
-          Great! I have a few questions so we can get started on your solar
-          design.
-        </P>
-
-        <H>Verify</H>
-        <P>
-          Confirm address / home type / property owner. Anyone else on the
-          title? How long at this home?
-        </P>
-
-        <Pull
-          id="s-why"
-          chips={[
-            { label: "Joel", href: `${P_}#clip-joel-0` },
-            { label: "Carter 1", href: `${P_}#clip-carter-0` },
-          ]}
+      <div className="flex items-center justify-between gap-4">
+        <Link
+          href={P_}
+          className="text-sm text-stewart-muted hover:text-stewart-text transition-colors"
         >
-          <strong className="text-stewart-text">What interested you in solar?</strong>{" "}
-          — <em>Expand into that to validate.</em>
-        </Pull>
+          &larr; Back to the walkthrough
+        </Link>
+        <span className="text-xs text-stewart-muted/70">
+          Ion&apos;s own training material — tagged lines round-trip to the
+          clips
+        </span>
+      </div>
 
-        <P>Utility company is…?</P>
-
-        <Pull
-          id="s-bill"
-          chips={[
-            { label: "Meg", href: `${P_}#clip-meg-0` },
-            { label: "Carter 2", href: `${P_}#clip-carter-1` },
-          ]}
-        >
-          <strong className="text-stewart-text">
-            Do you know how much you&apos;re paying on average?
-          </strong>
-        </Pull>
-
-        <P>Roof type / how old is it? Have you seen a solar design for this home?</P>
-
-        <Pull id="s-credit" chips={[{ label: "Carter 3", href: `${P_}#clip-carter-2` }]}>
-          We have a solar program that saves you money immediately. The only
-          requirement is that you have a{" "}
-          <strong className="text-stewart-text">credit score above 670.</strong>{" "}
-          Is that the case for you?
-        </Pull>
-
-        <H>Bill Collection</H>
-        <P>
-          Last thing before we schedule. The way we design these systems is
-          based on how much energy your home uses — we get what we need off
-          your utility bill. Do you get those bills in the mail or online?
-          <em> Perfect, would you rather text or email that to me?</em>
-        </P>
-
-        <H>Button Up</H>
-        <P>
-          Alright, [Customer], I&apos;ve got you on the schedule for [Date/Time].
-          I blocked off an hour so you don&apos;t feel rushed. The only thing we
-          ask is that you aren&apos;t driving and can sit down at your computer.
-          Is that fair?
-        </P>
-
-        <H>Text After Call</H>
-        <P>
-          Hey [Customer], this is [Agent] with ION Solar. I have you on the
-          calendar for [Day/Date/Time] to review (tieback to interests and/or
-          concerns). Looking forward to it!
-        </P>
-
-        <H>Rebuttals (excerpt)</H>
-        <P>
-          &ldquo;Can you send me the proposal before I meet?&rdquo; ·
-          &ldquo;I changed my mind…&rdquo; · &ldquo;I already saw a design…&rdquo;
-          · &ldquo;I signed up with someone…&rdquo; · &ldquo;My home
-          doesn&apos;t work for solar&rdquo; — each with its own word track.
-        </P>
-
-        <p className="mt-12 text-xs text-stewart-muted/70 italic border-t border-stewart-border pt-6">
-          Source: Ion training material provided by Spencer, 2026-05-11.
+      {/* The document itself — white sheet on the dark theme */}
+      <div className="mt-6 rounded-lg bg-white text-neutral-800 shadow-2xl px-6 py-8 sm:px-10 sm:py-12 text-sm">
+        <p className="mb-6 text-center text-lg font-bold text-neutral-900">
+          ION Solar — Master Paid Lead Setting Script
         </p>
+        {SCRIPT_PARAS.map((para, i) => (
+          <Para key={i} para={para} />
+        ))}
       </div>
     </div>
   );

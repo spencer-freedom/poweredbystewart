@@ -84,8 +84,8 @@ const CALLS: Call[] = [
     anchor: "Both anchors",
     set: false,
     outcome: "No appointment set",
-    coach: "A qualified-looking lead that slipped — both anchors spent on qualifying, and the call fizzles on the bill hand-off. DQ or a save? Nobody at Ion can even see the question.",
-    coaching: "Confirm the market + credit (670, not 650), build value from the bill before the ask, and collect it live so a shaky lead stays with you. (Suggested — how does Ion want to coach it?)",
+    coach: "A qualified-looking lead that slipped — both anchors spent on qualifying, and the call fizzles at the bill hand-off. DQ or a save? Nobody at Ion can even see the question.",
+    coaching: "Build value from the bill before the ask, and collect it live so a shaky lead stays with you. (Suggested — how does Ion want to coach it?)",
     moments: [
       {
         label: "The reason",
@@ -112,7 +112,7 @@ const CALLS: Call[] = [
         miss: "I'll shoot you a text — let me know once you've sent it over. …And it fizzles. No appointment.",
         start: 144,
         end: 178,
-        scriptAnchor: "s-credit",
+        scriptAnchor: "s-collect",
       },
     ],
   },
