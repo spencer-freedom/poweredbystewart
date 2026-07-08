@@ -6,69 +6,100 @@ import { AudioClip } from "../../(public)/_components/AudioClip.client";
 // glossed it into a qualifying checkbox. Grounded entirely in Ion's own
 // script — zero Spencer. Lands on 0-of-332.
 //
-// Clip windows capture all three parts (ask → answer → gloss). Audio is
-// served by /api/ion/audio-clip from the Supabase ion-call-audio bucket;
-// fine-tune start/end by ear (audio.mp3 is in each call folder).
+// A call can hold multiple MOMENTS (Carter shows three: the reason, the
+// bill, and the call dying). Each moment has its own clip window; the full
+// call is available once per card. Audio is served by /api/ion/audio-clip
+// from the Supabase ion-call-audio bucket. Windows for calls with a
+// word-level transcript (Meg) are exact; the rest are from line-level
+// [MM:SS] timestamps — fine-tune by ear.
 
-type Clip = {
-  rep: string;
-  callId: string;
-  start: number;
-  end: number;
-  anchor: string;
+type Moment = {
+  label?: string;
   ask: string;
   answer: string;
-  gloss: string;
-  // The coachable moment — what a team lead sees in the review. Describes
-  // the gap in Ion's own terms; the coaching itself is Ion's to define.
-  coach: string;
-  // Real outcome of the call (from Stewart's classification).
-  set: boolean;
-  outcome: string;
+  miss: string;
+  start: number;
+  end: number;
 };
 
-const CLIPS: Clip[] = [
+type Call = {
+  rep: string;
+  callId: string;
+  anchor: string;
+  set: boolean;
+  outcome: string;
+  coach: string;
+  moments: Moment[];
+};
+
+const CALLS: Call[] = [
   {
     rep: "Meg",
     callId: "SESSION20_2b61f758",
-    start: 138,
-    end: 164,
     anchor: "The bill",
-    ask: "How much are you paying on average for power?",
-    answer: "$262 a month.",
-    gloss:
-      "Holy smokes… okay. Now the only requirement is a credit score above 670.",
-    coach: "Both anchors were on the table — the $262 got spent on a credit check.",
     set: true,
     outcome: "Appointment set",
+    coach: "Both anchors were on the table — the $262 got spent on a credit check.",
+    moments: [
+      {
+        ask: "How much are you paying on average for power?",
+        answer: "$262 a month.",
+        miss: "Holy smokes… okay. Now the only requirement is a credit score above 670.",
+        start: 138,
+        end: 164,
+      },
+    ],
   },
   {
     rep: "Carter",
     callId: "20000555055",
-    start: 14,
-    end: 68,
     anchor: "Both anchors",
-    ask: "Why are you interested in solar?",
-    answer: "To get my bills down. …About $120 a month.",
-    gloss:
-      "Pretty expensive for you. And you're at 1508 South 2nd Avenue? … And you're the property owner?",
-    coach: "Reason and bill, back to back — both spent qualifying, neither selling.",
     set: false,
     outcome: "No appointment set",
+    coach: "Qualified customer. Reason and bill both spent on qualifying — and the call dies when he can't get the bill.",
+    moments: [
+      {
+        label: "The reason",
+        ask: "Why are you interested in solar?",
+        answer: "I was interested in getting my bills down.",
+        miss: "Get your bill down? How much are you paying a month?",
+        start: 15,
+        end: 33,
+      },
+      {
+        label: "The bill",
+        ask: "How much are you paying a month?",
+        answer: "About $120 a month.",
+        miss: "Hundred and twenty… pretty expensive for you. Okay, and you're at 1508 South 2nd Avenue?",
+        start: 26,
+        end: 57,
+      },
+      {
+        label: "The call dies",
+        ask: "Last thing I need before we get you on the schedule is your current utility bill — mail or online?",
+        answer: "I get those through the mail.",
+        miss: "I'll shoot you a text — let me know once you've sent it over. …And it fizzles. No appointment.",
+        start: 144,
+        end: 178,
+      },
+    ],
   },
   {
     rep: "Joel",
     callId: "10000160568",
-    start: 30,
-    end: 74,
-    anchor: "Why solar + the bill",
-    ask: "What got you interested in solar?",
-    answer: "I figured it'd be expensive to do.",
-    gloss:
-      "Okay, gotcha. With the programs it's just a bill swap — I do have a couple questions to make sure you qualify.",
-    coach: "He named his own objection. It got a “gotcha” and a credit question.",
+    anchor: "Telling, not selling",
     set: true,
     outcome: "Appointment set",
+    coach: "The customer said solar was expensive. Joel sold the program instead of using it — telling, not selling.",
+    moments: [
+      {
+        ask: "What got you interested in solar?",
+        answer: "I figured it'd be expensive to do.",
+        miss: "Okay, gotcha — with the incentives and programs right now, you're not paying anything out of pocket, it's just a bill swap… I've got a couple questions to make sure you qualify.",
+        start: 30,
+        end: 74,
+      },
+    ],
   },
 ];
 
@@ -88,8 +119,8 @@ export function SectionTheMiss() {
         </p>
 
         <div className="mt-12 space-y-6">
-          {CLIPS.map((clip) => (
-            <ClipCard key={clip.callId} clip={clip} />
+          {CALLS.map((call) => (
+            <CallCard key={call.callId} call={call} />
           ))}
         </div>
 
@@ -116,54 +147,88 @@ export function SectionTheMiss() {
   );
 }
 
-function ClipCard({ clip }: { clip: Clip }) {
+function CallCard({ call }: { call: Call }) {
   return (
     <div className="rounded-xl border border-stewart-border bg-stewart-card p-5 sm:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <span className="text-sm font-semibold text-stewart-text">
-          {clip.rep} — a real Ion call
+          {call.rep} — a real Ion call
         </span>
         <div className="flex items-center gap-2">
           <span
             className={
               "text-[10px] uppercase tracking-wider font-mono rounded px-1.5 py-0.5 border " +
-              (clip.set
+              (call.set
                 ? "text-stewart-success border-stewart-success/40"
                 : "text-stewart-danger border-stewart-danger/40")
             }
           >
-            {clip.outcome}
+            {call.outcome}
           </span>
           <span className="text-[10px] uppercase tracking-wider font-mono text-stewart-accent border border-stewart-accent/40 rounded px-1.5 py-0.5">
-            {clip.anchor}
+            {call.anchor}
           </span>
         </div>
       </div>
 
-      <dl className="space-y-3 text-sm">
-        <Line role="Rep asks" tone="muted" text={clip.ask} />
-        <Line role="Customer" tone="text" text={clip.answer} />
-        <Line role="Rep — the miss" tone="warning" text={clip.gloss} />
-      </dl>
-
-      <div className="mt-4 flex flex-wrap items-center gap-2">
-        <AudioClip
-          callId={clip.callId}
-          startSec={clip.start}
-          endSec={clip.end}
-          label="Play the moment"
-        />
-        <AudioClip callId={clip.callId} variant="full" label="Play full call" />
+      <div className="space-y-5">
+        {call.moments.map((m, i) => (
+          <MomentBlock
+            key={i}
+            moment={m}
+            callId={call.callId}
+            divide={i > 0}
+          />
+        ))}
       </div>
 
-      {/* The coachable moment — what a team lead sees in a Stewart review */}
-      <div className="mt-4 pt-4 border-t border-stewart-border flex gap-3">
+      <div className="mt-5 flex items-center gap-2 pt-4 border-t border-stewart-border">
+        <AudioClip callId={call.callId} variant="full" label="Play full call" />
+        <span className="text-xs text-stewart-muted">
+          — the whole call, if you want it
+        </span>
+      </div>
+
+      <div className="mt-4 flex gap-3">
         <span className="text-[11px] uppercase tracking-wider text-stewart-muted shrink-0 mt-0.5">
           In a call review
         </span>
         <span className="text-sm text-stewart-text leading-relaxed">
-          {clip.coach}
+          {call.coach}
         </span>
+      </div>
+    </div>
+  );
+}
+
+function MomentBlock({
+  moment,
+  callId,
+  divide,
+}: {
+  moment: Moment;
+  callId: string;
+  divide: boolean;
+}) {
+  return (
+    <div className={divide ? "pt-5 border-t border-stewart-border/60" : ""}>
+      {moment.label ? (
+        <p className="text-[11px] uppercase tracking-[0.15em] font-semibold text-stewart-accent mb-2">
+          {moment.label}
+        </p>
+      ) : null}
+      <dl className="space-y-2 text-sm">
+        <Line role="Rep asks" tone="muted" text={moment.ask} />
+        <Line role="Customer" tone="text" text={moment.answer} />
+        <Line role="Rep — the miss" tone="warning" text={moment.miss} />
+      </dl>
+      <div className="mt-3">
+        <AudioClip
+          callId={callId}
+          startSec={moment.start}
+          endSec={moment.end}
+          label="Play the moment"
+        />
       </div>
     </div>
   );
