@@ -46,6 +46,7 @@ const DIVE_SLIDES: Slide[] = [
   {
     kicker: "Reason 1 · Save money",
     title: "“My utility bill is too high.”",
+    titleSize: "text-2xl sm:text-3xl",
     highlight: "seg0",
     body: (
       <Reason
@@ -57,6 +58,7 @@ const DIVE_SLIDES: Slide[] = [
   {
     kicker: "Reason 2 · Reliability",
     title: "“The power keeps going out.”",
+    titleSize: "text-2xl sm:text-3xl",
     highlight: "seg1",
     body: (
       <Reason
@@ -68,6 +70,7 @@ const DIVE_SLIDES: Slide[] = [
   {
     kicker: "Reason 3 · New usage",
     title: "“Our usage just jumped.”",
+    titleSize: "text-2xl sm:text-3xl",
     highlight: "seg2",
     body: (
       <Reason

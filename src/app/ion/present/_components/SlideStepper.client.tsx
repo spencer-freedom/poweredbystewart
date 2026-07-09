@@ -14,6 +14,9 @@ export type Slide = {
   body?: React.ReactNode;
   // Optional hint the parent can act on (e.g. highlight a cup region).
   highlight?: string;
+  // Optional override for the title size (e.g. short quotes that should
+  // stay on one line in the narrow box).
+  titleSize?: string;
 };
 
 export function SlideStepper({
@@ -57,7 +60,11 @@ export function SlideStepper({
               {current.kicker}
             </p>
           ) : null}
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
+          <h2
+            className={`${
+              current.titleSize ?? "text-3xl sm:text-4xl lg:text-5xl"
+            } font-bold text-stewart-text leading-tight`}
+          >
             {current.title}
           </h2>
           {current.body ? (
