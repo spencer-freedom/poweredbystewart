@@ -121,7 +121,10 @@ const CUP_SLIDES: Slide[] = [
             They have to want it.
           </p>
           <p className="mt-1 text-base text-stewart-muted">
-            We can only sell the cup of water to someone who wants to buy it.
+            We can only sell the cup of water to someone who{" "}
+            <span className="text-stewart-text font-medium">
+              actually wants to buy it.
+            </span>
           </p>
         </div>
         <div>
@@ -132,8 +135,12 @@ const CUP_SLIDES: Slide[] = [
             Know why they want it.
           </p>
           <p className="mt-1 text-base text-stewart-muted">
-            If we understand why they want to buy it, we can do a much better
-            job selling them the cup of water.
+            If we understand <span className="text-stewart-text font-medium">why</span> they
+            want to buy it.
+          </p>
+          <p className="mt-1 text-base text-stewart-muted">
+            We can do a much better job selling them the cup of water using
+            their whys in our pitch.
           </p>
         </div>
       </div>
