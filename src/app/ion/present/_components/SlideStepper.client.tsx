@@ -96,12 +96,6 @@ export function SlideStepper({
             />
           ))}
         </div>
-
-        {!isLast && (
-          <span className="text-sm font-medium text-stewart-accent">
-            click to continue &rarr;
-          </span>
-        )}
       </div>
     </div>
   );
