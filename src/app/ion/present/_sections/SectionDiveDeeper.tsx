@@ -28,20 +28,19 @@ function Reason({ water, move }: { water: string; move: string }) {
 
 const DIVE_SLIDES: Slide[] = [
   { title: "Let's dive deeper into the cup of water." },
-  { title: "This cup of water represents your customers — your leads." },
+  { title: "This cup of water represents your leads — your customers." },
   {
     title: "These are the people who can't be sold.",
-    body: <p>DQ, no interest, never answer the phone.</p>,
+    body: <p>DQ, no interest, never answer the phone, etc.</p>,
     highlight: "empty",
   },
-  { title: "The water is everyone who can be sold." },
+  { title: "The water is all of your customers who can be sold." },
   {
-    title: "But some of them, Ion doesn't want to sell to.",
-    body: <p>The ones that aren&apos;t a fit.</p>,
+    title: "Some of them, Ion doesn't want to sell to.",
     highlight: "skim",
   },
   {
-    title: "The rest each want it — for a different reason.",
+    title: "The rest each want it — for different reasons.",
     body: <p>Find the reason they already have, and sell to that.</p>,
   },
   {
