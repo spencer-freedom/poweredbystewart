@@ -4,6 +4,7 @@ import { AboutSpencer } from "./_components/AboutSpencer.client";
 import { CupOfWater } from "./_components/CupOfWater.client";
 import { SectionDiveDeeper } from "./_sections/SectionDiveDeeper";
 import { SectionWhatIsStewart } from "./_sections/SectionWhatIsStewart";
+import { SectionMeaning } from "./_sections/SectionMeaning";
 import { SectionTheMiss } from "./_sections/SectionTheMiss";
 import { SectionImagine } from "./_sections/SectionImagine";
 import { SectionCoaching } from "./_sections/SectionCoaching";
@@ -38,6 +39,8 @@ export default function IonPresentPage() {
       <SectionDiveDeeper />
       {/* Clean break from the cup → Stewart (what it does + the pain) */}
       <SectionWhatIsStewart />
+      {/* Why not just another call tool: keyword vs meaning (Google vs ChatGPT) */}
+      <SectionMeaning />
       {/* Proof: real Ion calls where both script anchors were dropped → 0/332 */}
       <SectionTheMiss />
       {/* The upside flip: set rate → sit rate → close */}
