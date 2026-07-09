@@ -34,8 +34,7 @@ export function SectionWhatIsStewart() {
     <section className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-20 border-b border-white/10">
       <div className="max-w-3xl">
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
-          <span className="block">What is Powered by Stewart?</span>
-          <span className="block text-stewart-accent">What does Stewart do?</span>
+          <span className="block">What does Stewart do?</span>
         </h2>
 
         <div className="mt-10 space-y-8">
