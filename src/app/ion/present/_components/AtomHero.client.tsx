@@ -351,8 +351,8 @@ export function AtomHero() {
         <AtomCanvas />
       </div>
 
-      {/* ION title — seated near the top of the atom, centered. */}
-      <div className="absolute inset-x-0 top-[26%] z-20 flex justify-center pointer-events-none">
+      {/* ION title — bottom-right, outside the atom. */}
+      <div className="absolute bottom-[12%] right-[8%] z-20 pointer-events-none">
         <h1 className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-[0.35em] pl-[0.35em] text-white/90 [text-shadow:0_0_40px_rgba(59,130,246,0.4)]">
           ION
         </h1>
