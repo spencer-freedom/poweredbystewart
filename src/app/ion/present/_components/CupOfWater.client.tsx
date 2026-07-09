@@ -163,18 +163,33 @@ export function CupOfWater() {
 // sold; the water = the sellable share, split by why they buy). Reused in
 // the narrative — no section wrapper, so callers place it. `highlight`
 // lets a caller call out a region (e.g. "empty" = the unsellable top).
-export function SegmentedCup({ highlight }: { highlight?: string }) {
-  return <GlassCup idPrefix="segmented-cup" segmented highlight={highlight} />;
+export function SegmentedCup({
+  highlight,
+  labels,
+}: {
+  highlight?: string;
+  labels?: string[];
+}) {
+  return (
+    <GlassCup
+      idPrefix="segmented-cup"
+      segmented
+      highlight={highlight}
+      labels={labels}
+    />
+  );
 }
 
 function GlassCup({
   idPrefix,
   segmented,
   highlight,
+  labels,
 }: {
   idPrefix: string;
   segmented: boolean;
   highlight?: string;
+  labels?: string[];
 }) {
   const clipId = `${idPrefix}-glass-inner`;
   const bandH = BAND_H;
@@ -326,6 +341,7 @@ function GlassCup({
                 fill={HL_FILL}
               />
             </g>
+            {/* Top ring of the highlighted region */}
             <ellipse
               cx={CX}
               cy={topY}
@@ -335,18 +351,45 @@ function GlassCup({
               stroke={HL_STROKE}
               strokeWidth="2"
             />
-            <ellipse
-              cx={CX}
-              cy={botY}
-              rx={halfWidth(botY)}
-              ry="6"
-              fill="none"
-              stroke={HL_STROKE}
-              strokeWidth="2"
-            />
+            {/* Bottom ring — skipped when the region reaches the base, so
+                there's no ring sitting under the cup. */}
+            {botY < BOTTOM - 1 ? (
+              <ellipse
+                cx={CX}
+                cy={botY}
+                rx={halfWidth(botY)}
+                ry="6"
+                fill="none"
+                stroke={HL_STROKE}
+                strokeWidth="2"
+              />
+            ) : null}
           </g>
         );
       })()}
+
+      {/* Section labels — one per wanted segment (e.g. Utility bill). White
+          with a dark outline so they read on any band. */}
+      {segmented && labels
+        ? labels.map((lbl, i) => (
+            <text
+              key={i}
+              x={CX}
+              y={SKIM_BOTTOM + (i + 0.5) * BAND_H}
+              textAnchor="middle"
+              dominantBaseline="middle"
+              fontSize="12"
+              fontWeight="700"
+              fill="#ffffff"
+              stroke="rgba(2,6,23,0.6)"
+              strokeWidth="2.5"
+              paintOrder="stroke"
+              style={{ pointerEvents: "none" }}
+            >
+              {lbl}
+            </text>
+          ))
+        : null}
     </svg>
   );
 }
