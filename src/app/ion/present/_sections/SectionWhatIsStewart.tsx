@@ -5,18 +5,28 @@
 // DRAFT copy in Spencer's voice — refine freely. Positioning stays plain:
 // no "AI / graph / LLM" language.
 
-const PAIN = [
-  "Your team leads can't listen to every call.",
-  "There's never enough time or bandwidth to review the right calls before a one-on-one call review with the setters.",
-  "Inconsistent coaching and training. Only a few calls ever get reviewed — and randomly selected calls may or may not be worth reviewing, or miss the part a setter is really struggling with.",
-  "Bad habits stick. A rep drifts from Ion's way, no one catches it, and the same mistake gets used and reused — call after call.",
-];
-
-const DOES = [
-  "Stewart reviews every call. Every rep, every call, every day — the one thing no team lead could ever do by hand.",
-  "Then it hands your team managers only the calls worth reviewing — with the exact moments that need coaching already highlighted.",
-  "Managers jump straight to the clip that matters, instead of sitting through the whole call.",
-  "So every one-on-one starts from what actually happened. Not a guess. Not a sample. The whole floor, reviewed.",
+// Each pain point (blue) is answered by what Stewart does (white) right
+// beneath it. `answer: null` = pain stated, Stewart side still to be written.
+const PAIRS: { pain: string; answer: string | null }[] = [
+  {
+    pain: "Your team leads can't listen to every call.",
+    answer: "Stewart listens to every call.",
+  },
+  {
+    pain: "There's never enough time or bandwidth to review the right calls before one-on-one call reviews.",
+    answer:
+      "Stewart identifies and feeds your managers the calls they should review, and highlights the parts that need coaching — with clips to listen to and Ion's coachable recommendations.",
+  },
+  {
+    pain: "Inconsistent coaching and training. Only a few calls ever get reviewed — and randomly selected calls may or may not be worth reviewing, or miss the part a setter is really struggling with.",
+    answer:
+      "Stewart reviews every rep, every day, and surfaces the moments that actually need work — so every setter gets coached on what they're really struggling with, not on a random sample.",
+  },
+  {
+    pain: "Bad habits stick. A rep drifts from Ion's way, no one catches it, and the same mistake gets used and reused — call after call.",
+    answer:
+      "Stewart catches the drift the first time it shows up — measured against Ion's own script — so it gets corrected before it becomes a habit.",
+  },
 ];
 
 export function SectionWhatIsStewart() {
@@ -28,46 +38,22 @@ export function SectionWhatIsStewart() {
           <span className="block">What does Stewart do?</span>
         </h2>
 
-        <div className="mt-10">
-          <ul className="space-y-4">
-            {PAIN.map((item) => (
-              <Bullet key={item} tone="muted">
-                {item}
-              </Bullet>
-            ))}
-          </ul>
-        </div>
-
-        <div className="mt-10">
-          <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-accent mb-4">
-            What Stewart does
-          </p>
-          <ul className="space-y-4">
-            {DOES.map((item) => (
-              <Bullet key={item} tone="text">
-                {item}
-              </Bullet>
-            ))}
-          </ul>
+        <div className="mt-10 space-y-8">
+          {PAIRS.map((p) => (
+            <div key={p.pain}>
+              <p className="flex gap-3 text-lg sm:text-xl leading-relaxed text-stewart-accent">
+                <span className="shrink-0 mt-1">•</span>
+                <span>{p.pain}</span>
+              </p>
+              {p.answer ? (
+                <p className="mt-2 pl-6 text-lg sm:text-xl leading-relaxed text-stewart-text font-medium">
+                  {p.answer}
+                </p>
+              ) : null}
+            </div>
+          ))}
         </div>
       </div>
     </section>
-  );
-}
-
-function Bullet({
-  children,
-  tone,
-}: {
-  children: React.ReactNode;
-  tone: "muted" | "text";
-}) {
-  return (
-    <li className="flex gap-3 text-lg sm:text-xl leading-relaxed">
-      <span className="text-stewart-accent shrink-0 mt-1">•</span>
-      <span className={tone === "text" ? "text-stewart-text" : "text-stewart-muted"}>
-        {children}
-      </span>
-    </li>
   );
 }
