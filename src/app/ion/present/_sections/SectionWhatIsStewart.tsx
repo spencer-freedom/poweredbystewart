@@ -6,7 +6,8 @@
 // no "AI / graph / LLM" language.
 
 const PAIN = [
-  "Your team leads can't hear every call — there's never enough time or bandwidth to review them before a one-on-one.",
+  "Your team leads can't listen to every call.",
+  "There's never enough time or bandwidth to review the right calls before a one-on-one call review with the setters.",
   "Inconsistent coaching and training. Only a few calls ever get reviewed — and randomly selected calls may or may not be worth reviewing, or miss the part a setter is really struggling with.",
   "Bad habits stick. A rep drifts from Ion's way, no one catches it, and the same mistake gets used and reused — call after call.",
 ];
