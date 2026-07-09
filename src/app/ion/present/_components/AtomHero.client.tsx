@@ -352,7 +352,7 @@ export function AtomHero() {
       </div>
 
       {/* ION title — bottom-right, outside the atom. */}
-      <div className="absolute bottom-[15%] right-[22%] z-20 pointer-events-none">
+      <div className="absolute bottom-[14%] right-[22%] z-20 pointer-events-none">
         <h1 className="text-[4.875rem] sm:text-[5.85rem] lg:text-[7.8rem] font-bold tracking-[0.35em] pl-[0.35em] text-white/90 [text-shadow:0_0_40px_rgba(59,130,246,0.4)]">
           ION
         </h1>
