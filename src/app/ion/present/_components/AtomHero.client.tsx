@@ -102,7 +102,7 @@ const ORBITS: Orbit[] = [
     // OUTSIDE the spinning group so the ring itself stays fixed while its
     // ions still orbit it.
     radius: ORBIT_RADIUS,
-    tilt: [1.39, 0, 0],
+    tilt: [0.695, 0, 0],
     speed: SPEED,
     ringColor: "#22c55e",
     electrons: [
