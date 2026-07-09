@@ -41,12 +41,12 @@ export function SectionWhatIsStewart() {
         <div className="mt-10 space-y-8">
           {PAIRS.map((p) => (
             <div key={p.pain}>
-              <p className="flex gap-3 text-lg sm:text-xl leading-relaxed text-stewart-accent">
-                <span className="shrink-0 mt-1">•</span>
+              <p className="flex gap-3 text-lg sm:text-xl leading-relaxed text-stewart-text">
+                <span className="text-stewart-accent shrink-0 mt-1">•</span>
                 <span>{p.pain}</span>
               </p>
               {p.answer ? (
-                <p className="mt-2 pl-6 text-lg sm:text-xl leading-relaxed text-stewart-text font-medium">
+                <p className="mt-2 pl-6 text-lg sm:text-xl leading-relaxed text-stewart-accent font-medium">
                   {p.answer}
                 </p>
               ) : null}
