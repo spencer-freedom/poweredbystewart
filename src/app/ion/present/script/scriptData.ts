@@ -1,9 +1,8 @@
-// Ion Solar — v1 Master Paid Lead Setting Script (through Rebuttals),
-// extracted verbatim from Kenny's .docx (the version the floor runs).
-// red = Ion's own red coaching notes; bold = bold; head = section header.
-// NOTE: v1 has NO 'what interested you in solar' question — that was
-// added in v2. The bill anchor ('how much you're spending on average')
-// IS present. Internal scheduling/checklist appendix omitted.
+// Ion Solar — v2 Master Paid Lead Setting Script (the version the floor
+// actually runs — confirmed via photos of setter Bentley's printed copy).
+// Extracted verbatim from Kenny's .docx through Rebuttals. red = Ion's own
+// red coaching notes; bold = bold; head = section header. Internal
+// scheduling/checklist appendix omitted.
 export type ScriptRun = { t: string; red?: boolean; bold?: boolean };
 export type ScriptPara = { head?: boolean; runs: ScriptRun[] };
 export const SCRIPT_PARAS: ScriptPara[] = [
@@ -51,7 +50,7 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "bold": false
 },
 {
-"t": " with Ion Solar. I got a request that you're looking at solar for your home. How are you doing today?",
+"t": " with ION. I got a request that you're looking at solar for your home. How are you doing today?",
 "red": false,
 "bold": true
 }
@@ -62,16 +61,6 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "runs": [
 {
 "t": "Glad to hear it. Well, I'll keep this call really short for you. I work directly with our design team to create the solar design for your home. I have a couple of questions real quick. The first question is about your address...",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "DISCOVERY",
 "red": false,
 "bold": true
 }
@@ -101,7 +90,7 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "bold": false
 },
 {
-"t": "Can I start by grabbing your home address?",
+"t": "Can I start by grabbing your home address? (PULL UP ON GOOGLE MAPS ASAP!!!)",
 "red": true,
 "bold": true
 }
@@ -111,7 +100,7 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "head": false,
 "runs": [
 {
-"t": "Okay, and is this a single-family home?",
+"t": "Awesome, that's a really busy area for us! Ok, I'm going to pull up your address real quick on google maps to check out your roof. While I'm doing that, I'm just curious... What has you interested in solar?",
 "red": false,
 "bold": true
 }
@@ -121,17 +110,7 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "head": false,
 "runs": [
 {
-"t": "Are you the homeowner? ",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "Is there anyone else on the title?",
+"t": "I have you down as the property owner, is there anyone else? ",
 "red": false,
 "bold": true
 }
@@ -146,12 +125,12 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "bold": false
 },
 {
-"t": "Would they like to be involved with this?",
+"t": "Ok perfect, what's their name? ",
 "red": false,
 "bold": true
 },
 {
-"t": " (If yes, make sure you schedule a time where both parties can be there.)",
+"t": "(Make sure you schedule a time where both parties can be there unless they refuse to both meet.)",
 "red": true,
 "bold": false
 }
@@ -186,7 +165,7 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "head": false,
 "runs": [
 {
-"t": "I just pulled up your home on google maps.",
+"t": "Let's see here... I'm looking at your home on google maps right now. Looks like a single family home. Is that right?",
 "red": false,
 "bold": true
 }
@@ -201,7 +180,17 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "bold": false
 },
 {
-"t": "Good looking home... That's exactly what we are looking for. ",
+"t": "(",
+"red": false,
+"bold": true
+},
+{
+"t": "Make a comment about the area, the homes beauty, or how ideal the home is because it gets blasted by sun ALL day",
+"red": true,
+"bold": false
+},
+{
+"t": ") ",
 "red": false,
 "bold": true
 }
@@ -216,17 +205,7 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "bold": false
 },
 {
-"t": "It looks like you have some trees shading your home. Are all of those still there?",
-"red": false,
-"bold": true
-},
-{
-"t": " ",
-"red": false,
-"bold": false
-},
-{
-"t": "(If they are, ask them if they're open to trimming them back and/or cutting them down)",
+"t": "(Ask questions about whatever makes this home not qualify and see if we can workshop a solution)",
 "red": true,
 "bold": false
 }
@@ -236,277 +215,152 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "head": false,
 "runs": [
 {
-"t": "Just a few more questions here and we will be set...",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "What utility company are you with?",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "Do you know how much you're spending on average each month?",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "Have you seen a solar design for this home yet? ",
+"t": "What kind of roof do you have? Asphalt shingle? How old is the roof? (",
 "red": false,
 "bold": true
 },
 {
-"t": "(Indicate this in notes)",
-"red": true,
-"bold": false
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "(Yes)",
-"red": false,
-"bold": false
-},
-{
-"t": " Oh perfect, all I need to finish this up for you is your energy usage. Do you get your bills online or in the mail? ",
-"red": false,
-"bold": true
-},
-{
-"t": "(",
-"red": true,
-"bold": false
-},
-{
-"t": "Grab PDF",
-"red": true,
-"bold": true
-},
-{
-"t": " of bill and ",
-"red": true,
-"bold": false
-},
-{
-"t": "SKIP ahead to setting the APPOINTMENT",
-"red": true,
-"bold": true
-},
-{
-"t": ")",
-"red": true,
-"bold": false
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "(No) ",
-"red": false,
-"bold": false
-},
-{
-"t": "Okay, no problem. ",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": " ",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "And just so you know, the government does help out with the cost of this. The only thing you need to qualify is that you pay income taxes. Do you pay income tax?",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "(Yes)",
-"red": false,
-"bold": false
-},
-{
-"t": " Awesome, you qualify for the government incentive. ",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "(No)",
-"red": false,
-"bold": false
-},
-{
-"t": " Okay no problem. That means the government won't be helping with the solar system cost. Do you have money set aside for something like this? ",
-"red": false,
-"bold": true
-},
-{
-"t": "(No) ",
-"red": true,
-"bold": false
-},
-{
-"t": "Are you open to solar if it costs more than you spend for power right now? ",
-"red": true,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "(Yes)",
-"red": true,
-"bold": false
-},
-{
-"t": " Ok, sounds great. ",
-"red": true,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "(No)",
-"red": true,
-"bold": false
-},
-{
-"t": " Ok, it doesn't sound like solar would be a good fit for you at this time. Thank you for your time and I hope you have a wonderful day!",
-"red": true,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "Do you have a credit score above 650?",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "(",
-"red": false,
-"bold": true
-},
-{
-"t": "Yes",
-"red": false,
-"bold": false
-},
-{
-"t": ") Ok, perfect. ",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "(",
-"red": false,
-"bold": true
-},
-{
-"t": "No",
-"red": false,
-"bold": false
-},
-{
-"t": ") Does anyone on the title have a score above 650?",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "(",
-"red": false,
-"bold": true
-},
-{
-"t": "Yes",
-"red": false,
-"bold": false
-},
-{
-"t": ") Ok, perfect. ",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
-{
-"t": "(",
-"red": true,
-"bold": true
-},
-{
-"t": "No",
+"t": "We cannot install on wood shake, solid concrete, concrete tile, slate, and membrane roofs. If the roof is 20+ years old, ask if they're open to a replacement if it is needed",
 "red": true,
 "bold": false
 },
 {
 "t": ")",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "Ok and what utility company are you with? ",
+"red": false,
+"bold": true
+},
+{
+"t": "(Use cheat sheet list to make comment about them-COMING SOON)",
+"red": true,
+"bold": false
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "Do you have an idea on how much you're spending on average each month?",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "Just so you know, there is a federal tax incentive to go solar. You just need to pay income taxes and a credit score above 650 to qualify for that. Is that the case for you?",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "(YES) Qualified, move on. ",
+"red": true,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "(NO) - Check to see if it is a PPA state. If not, this is a DQ unless they want to pay cash for a system or get one without the tax incentive. ",
+"red": true,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "Are you active duty or retired military?",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "(YES) Great, we have a military incentive that our energy advisor will go over with you as well!",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "(NO) No worries :)",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "Now, have you seen a solar design for this home?",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "(Yes) I guess a question I have for you is... What is most important to you when considering a solar company?",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "(No) (",
+"red": false,
+"bold": true
+},
+{
+"t": "Move on",
+"red": true,
+"bold": false
+},
+{
+"t": ")",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "(If they say yes to previous question, validate what they say and add whatever bullet points fit best)",
 "red": true,
 "bold": true
 },
@@ -514,14 +368,54 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "t": " ",
 "red": false,
 "bold": true
+}
+]
 },
 {
-"t": "We wouldn't be able to provide financing. Do you have cash set aside to buy solar outright?",
-"red": true,
+"head": false,
+"runs": [
+{
+"t": "Over 90,000 installs",
+"red": false,
 "bold": true
+}
+]
 },
 {
-"t": " (If they don't, Disqualify the lead)",
+"head": false,
+"runs": [
+{
+"t": "Everything is done IN HOUSE",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "US made equipment (Panels Washington / Inverters California)",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "Debt free & backed by Blackstone",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "Going on 12 years in business",
 "red": false,
 "bold": true
 }
@@ -601,7 +495,7 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "head": false,
 "runs": [
 {
-"t": "Ok the last thing we need to do is schedule your appointment. Our consultant will be reviewing a few things with you such as: The design, the cost, your estimated ROI, warranties, equipment, etc... Our first step is to review this information with you and if you love it, we can schedule a technician to come out to inspect the home further!",
+"t": "Ok the last thing we need to do is schedule your appointment with our energy advisor. ",
 "red": false,
 "bold": true
 }
@@ -631,17 +525,7 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "bold": false
 },
 {
-"t": " Are there any upcoming appointments we need to schedule around?",
-"red": false,
-"bold": true
-},
-{
-"t": "(If they have more solar appts, try to schedule us last) ",
-"red": true,
-"bold": true
-},
-{
-"t": "It looks like we have a guy in your area DAY and again on DATE. Which day works best for you?",
+"t": " It looks like we have a guy in your area DAY and again on DATE. Which day works best for you and (Other owner)?",
 "red": false,
 "bold": true
 },
@@ -776,25 +660,10 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "bold": false
 },
 {
-"t": " I blocked off that time for an hour to ensure you don't feel rushed. It normally doesn't take that long though. If you need to reschedule for any reason, please let me know as soon as possible. ",
+"t": " I blocked off that time for an hour to ensure you don't feel rushed. It just depends on how many questions that you have.  ",
 "red": false,
 "bold": true
-}
-]
 },
-{
-"head": false,
-"runs": [
-{
-"t": "We'll give you a call or shoot you a text a couple hours before the appointment to reconfirm your availability. I'd suggest writing down any questions or concerns about going solar prior to the appointment so you don't forget to ask your Solar Specialist anything important. ",
-"red": false,
-"bold": true
-}
-]
-},
-{
-"head": false,
-"runs": [
 {
 "t": "(Phone appt)",
 "red": true,
@@ -811,7 +680,27 @@ export const SCRIPT_PARAS: ScriptPara[] = [
 "head": false,
 "runs": [
 {
-"t": "Other than that, we'll see you at (",
+"t": "We'll give you a call or shoot you a text a couple hours before the appointment to reconfirm your availability.",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "Well that's everything today. We're going to get to work on the design for your home.  We have some new cutting edge technology that I really believe will set us apart from everyone else and I can't wait for you to see it!",
+"red": false,
+"bold": true
+}
+]
+},
+{
+"head": false,
+"runs": [
+{
+"t": "We'll see you at (",
 "red": false,
 "bold": true
 },

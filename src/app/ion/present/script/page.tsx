@@ -14,9 +14,15 @@ const P_ = "/ion/present";
 type Chip = { label: string; href: string };
 
 // Anchor lines the pitch pulls from — matched by a substring of the line.
-// NOTE: v1 has no "why solar" question, so the s-why anchor is omitted here
-// (pending Spencer's decision on how to frame that gap).
 const ANCHORS: { match: string; id: string; chips: Chip[] }[] = [
+  {
+    match: "interested in solar",
+    id: "s-why",
+    chips: [
+      { label: "Joel", href: `${P_}#clip-joel-0` },
+      { label: "Carter 1", href: `${P_}#clip-carter-0` },
+    ],
+  },
   {
     match: "spending on average",
     id: "s-bill",

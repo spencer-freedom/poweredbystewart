@@ -74,7 +74,7 @@ const CALLS: Call[] = [
         miss: "Okay, gotcha — with the incentives and programs right now, you're not paying anything out of pocket, it's just a bill swap… I've got a couple questions to make sure you qualify.",
         start: 30,
         end: 74,
-        // scriptAnchor pending: v1 script has no "why solar" line
+        scriptAnchor: "s-why",
       },
     ],
   },
@@ -94,7 +94,7 @@ const CALLS: Call[] = [
         miss: "Get your bill down? How much are you paying a month?",
         start: 15,
         end: 33,
-        // scriptAnchor pending: v1 script has no "why solar" line
+        scriptAnchor: "s-why",
       },
       {
         label: "The bill",
@@ -136,7 +136,14 @@ export function SectionTheMiss() {
           >
             the bill
           </Link>
-          , and why they want solar.
+          , and{" "}
+          <Link
+            href="/ion/present/script#s-why"
+            className="underline decoration-stewart-accent/50 decoration-2 underline-offset-4 hover:decoration-stewart-accent"
+          >
+            why they want solar
+          </Link>
+          .
         </h2>
         <p className="mt-5 text-lg text-stewart-muted leading-relaxed">
           It asks them for a reason — they&apos;re the anchors the whole call
