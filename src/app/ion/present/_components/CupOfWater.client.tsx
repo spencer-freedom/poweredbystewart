@@ -109,26 +109,34 @@ const CUP_SLIDES: Slide[] = [
       </>
     ),
   },
-  { title: "There are two important takeaways." },
   {
-    kicker: "Takeaway 1",
-    title: "They have to want it.",
+    title: "There are two important takeaways.",
     body: (
-      <p>
-        We can only sell the cup of water to someone who{" "}
-        <span className="text-stewart-text font-medium">wants to buy it.</span>
-      </p>
-    ),
-  },
-  {
-    kicker: "Takeaway 2",
-    title: "Know why they want it.",
-    body: (
-      <p>
-        If we understand{" "}
-        <span className="text-stewart-text font-medium">why</span> they want
-        to buy it, we can do a much better job selling them the cup of water.
-      </p>
+      <div className="space-y-6">
+        <div>
+          <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-accent">
+            Takeaway 1
+          </p>
+          <p className="mt-1 text-stewart-text font-medium">
+            They have to want it.
+          </p>
+          <p className="mt-1 text-base text-stewart-muted">
+            We can only sell the cup of water to someone who wants to buy it.
+          </p>
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-accent">
+            Takeaway 2
+          </p>
+          <p className="mt-1 text-stewart-text font-medium">
+            Know why they want it.
+          </p>
+          <p className="mt-1 text-base text-stewart-muted">
+            If we understand why they want to buy it, we can do a much better
+            job selling them the cup of water.
+          </p>
+        </div>
+      </div>
     ),
   },
 ];
