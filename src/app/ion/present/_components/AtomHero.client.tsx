@@ -97,11 +97,12 @@ const ORBITS: Orbit[] = [
     ],
   },
   {
-    // Equatorial ring — perpendicular to the four longitude rings, but
-    // tilted forward from edge-on (π/2) so it reads as a foreshortened
-    // ellipse with depth, symmetric front-to-back, instead of a flat line.
+    // Equatorial ring — perpendicular to the four longitude rings, tilted
+    // forward from edge-on (π/2) just enough for a little depth. Rendered
+    // OUTSIDE the spinning group so the ring itself stays fixed while its
+    // ions still orbit it.
     radius: ORBIT_RADIUS,
-    tilt: [1.2, 0, 0],
+    tilt: [1.39, 0, 0],
     speed: SPEED,
     ringColor: "#22c55e",
     electrons: [
@@ -299,14 +300,18 @@ function Atom() {
   });
 
   return (
-    // Poles fixed and vertical (no cant). The Y-spin rotates all the rings
-    // to the right around that fixed axis; the ions sweep their rings.
-    <group ref={group} rotation={[0, 0, 0]}>
-      <Nucleus />
-      {ORBITS.map((orbit, i) => (
-        <OrbitRing key={i} orbit={orbit} />
-      ))}
-    </group>
+    <>
+      {/* Spinning assembly — nucleus + the 4 longitude rings rotate around
+          the fixed vertical poles; their ions sweep with them. */}
+      <group ref={group} rotation={[0, 0, 0]}>
+        <Nucleus />
+        {ORBITS.slice(0, 4).map((orbit, i) => (
+          <OrbitRing key={i} orbit={orbit} />
+        ))}
+      </group>
+      {/* Equatorial ring — fixed (does NOT spin), but its ions still orbit. */}
+      <OrbitRing orbit={ORBITS[4]} />
+    </>
   );
 }
 
