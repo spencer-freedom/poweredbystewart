@@ -97,11 +97,11 @@ const ORBITS: Orbit[] = [
     ],
   },
   {
-    // Equatorial ring — rotated onto the XZ plane so it's perpendicular to
-    // the four pole-sharing longitude rings. Its two ions sit opposite each
-    // other and don't pass the poles.
+    // Equatorial ring — perpendicular to the four longitude rings, but
+    // tilted forward from edge-on (π/2) so it reads as a foreshortened
+    // ellipse with depth, symmetric front-to-back, instead of a flat line.
     radius: ORBIT_RADIUS,
-    tilt: [Math.PI / 2, 0, 0],
+    tilt: [1.2, 0, 0],
     speed: SPEED,
     ringColor: "#22c55e",
     electrons: [
