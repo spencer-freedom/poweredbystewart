@@ -100,13 +100,13 @@ const CUP_SLIDES: Slide[] = [
   {
     title: "But the panic was never about the water.",
     body: (
-      <p>
-        It comes from one fear: that the person you&apos;re supposed to sell
-        to{" "}
-        <span className="text-stewart-text font-medium">
-          doesn&apos;t want to buy it.
-        </span>
-      </p>
+      <>
+        <p>It comes from one fear:</p>
+        <p className="text-stewart-text font-medium">
+          What if the person you are trying to sell it to doesn&apos;t want
+          it?
+        </p>
+      </>
     ),
   },
   { title: "There are two important takeaways." },
