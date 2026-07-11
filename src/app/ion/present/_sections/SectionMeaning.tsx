@@ -11,7 +11,7 @@ export function SectionMeaning() {
           Most call tools find the words.
           <br />
           <span className="text-stewart-accent">
-            Stewart understands the meaning.
+            Stewart understands the meaning and intent.
           </span>
         </h2>
 
