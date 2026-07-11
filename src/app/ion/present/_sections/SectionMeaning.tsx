@@ -8,7 +8,7 @@ export function SectionMeaning() {
     <section className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-20 border-b border-white/10">
       <div className="max-w-4xl w-full">
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
-          Most call tools find the words.
+          Most call tools search keywords and key phrases.
           <br />
           <span className="text-stewart-accent">
             Stewart understands the meaning and intent.
@@ -19,9 +19,9 @@ export function SectionMeaning() {
           <CompareCard
             kicker="Like Google search"
             tone="muted"
-            heading="Finds the words you said"
+            heading="Keyword & key-phrase search"
             example='Query: "another company Thursday"'
-            result="Returns every call where those words appear. A keyword match. No idea what it meant."
+            result="It matches keywords and key phrases — the way most AI call-review software works. It finds where the words appear, not what the customer meant."
           />
           <CompareCard
             kicker="Like asking ChatGPT"

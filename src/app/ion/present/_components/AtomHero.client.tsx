@@ -228,7 +228,7 @@ function makeOpalGeometry(radius: number): THREE.SphereGeometry {
 // substrate INSIDE, a pearl inner sheen, then the marbled vertex-colored
 // opal shell OUTERMOST and semi-transparent — that outer colored shell is
 // what makes it read as colored pearl instead of flat white glass.
-const CORE_R = 1.35;
+const CORE_R = 0.9;
 
 function Nucleus() {
   const opalGeo = useMemo(() => makeOpalGeometry(CORE_R), []);
