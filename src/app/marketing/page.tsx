@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useUser, useAuth } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { getDemandSignals } from "@/lib/stewart-api";
 import type {
@@ -10,11 +10,9 @@ import type {
   DemandSignalItem,
 } from "@/lib/stewart-api";
 import { PageInfo } from "@/components/page-info";
-import type { UserRole } from "@/lib/types";
 
 export default function MarketingPage() {
   const { isSignedIn, isLoaded } = useAuth();
-  const { user } = useUser();
   const router = useRouter();
 
   const [data, setData] = useState<DemandSignalsPayload | null>(null);
@@ -44,26 +42,9 @@ export default function MarketingPage() {
     if (isLoaded && isSignedIn) load();
   }, [isLoaded, isSignedIn, load]);
 
-  // Auth guard — after all hooks (mirrors dashboard/page.tsx)
+  // Auth guard — any signed-in user (single-user site; no role gating needed).
   if (!isLoaded || !isSignedIn) {
     return <div className="text-center text-stewart-muted py-12 text-sm">Loading...</div>;
-  }
-
-  // ── Access scoping ────────────────────────────────────────────────────────
-  // Demand Signals is for the owner/marketing role (Jamie), not the BDC reps.
-  // This repo's UserRole is "admin" | "rep"; elevated pages are gated to
-  // "admin" (see src/lib/roles.ts ROLE_ACCESS + adminOnly nav). Jamie's Clerk
-  // user must have publicMetadata.role === "admin".
-  const role = (user?.publicMetadata?.role as UserRole) || "rep";
-  if (role !== "admin") {
-    return (
-      <div className="bg-stewart-card border border-stewart-border rounded-lg p-12 text-center">
-        <p className="text-stewart-text text-sm font-medium">Restricted</p>
-        <p className="text-stewart-muted text-xs mt-2">
-          Demand Signals is available to marketing admins only.
-        </p>
-      </div>
-    );
   }
 
   return (

@@ -3,7 +3,7 @@ import type { UserRole } from "./types";
 // Pages accessible by role
 const ROLE_ACCESS: Record<UserRole, string[]> = {
   admin: ["/dashboard", "/leads", "/kpi", "/vendors", "/sources", "/vinsync", "/compass", "/gauge", "/sentry", "/service", "/lead-dedup", "/marketing"],
-  rep: ["/dashboard", "/leads", "/compass", "/gauge", "/lead-dedup"],
+  rep: ["/dashboard", "/leads", "/compass", "/gauge", "/lead-dedup", "/marketing"],
 };
 
 export function canAccess(role: UserRole, path: string): boolean {
@@ -36,7 +36,7 @@ export function getNavItems(role: UserRole): NavItem[] {
     { href: "/service", label: "Service", icon: "SV", context: "kia", adminOnly: true },
     { href: "/lead-dedup", label: "Lead Dedup", icon: "DD", context: "kia" },
     // ── Provo's Vintage Groove (record store) ──
-    { href: "/marketing", label: "Demand Signals", icon: "DS", context: "pvg", adminOnly: true },
+    { href: "/marketing", label: "Demand Signals", icon: "DS", context: "pvg" },
   ];
 
   return allItems.filter((item) => canAccess(role, item.href));
