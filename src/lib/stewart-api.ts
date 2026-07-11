@@ -244,3 +244,36 @@ export async function fetchBrainGraphDemo(
   }
   return res.json();
 }
+
+// ─── Demand signals (Provo's Vintage Groove / UsefulWax record-store velocity) ─
+// Read-only marketing view of the shared SpencerOS backend. /api/velocity/signals
+// is OPEN (no token) and CORS already allows poweredbystewart.com. Powers /marketing.
+
+export type DemandSignalItem = {
+  rank: number;
+  title: string;
+  image: string | null;
+};
+
+export type DemandSignalGroup = {
+  vinyl: DemandSignalItem[];
+  cd: DemandSignalItem[];
+};
+
+export type DemandSignalsPayload = {
+  trending: DemandSignalGroup;
+  hot: DemandSignalGroup;
+  momentum: DemandSignalGroup;
+  windows: { trending: string; hot: string; momentum: string };
+  missing: string[];
+};
+
+export async function getDemandSignals(first = 50): Promise<DemandSignalsPayload> {
+  const url = `${BASE_URL}/api/velocity/signals?first=${first}`;
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`velocity/signals ${res.status}: ${body || res.statusText}`);
+  }
+  return res.json();
+}

@@ -2,7 +2,7 @@ import type { UserRole } from "./types";
 
 // Pages accessible by role
 const ROLE_ACCESS: Record<UserRole, string[]> = {
-  admin: ["/dashboard", "/leads", "/kpi", "/vendors", "/sources", "/vinsync", "/compass", "/gauge", "/sentry", "/service", "/lead-dedup"],
+  admin: ["/dashboard", "/leads", "/kpi", "/vendors", "/sources", "/vinsync", "/compass", "/gauge", "/sentry", "/service", "/lead-dedup", "/marketing"],
   rep: ["/dashboard", "/leads", "/compass", "/gauge", "/lead-dedup"],
 };
 
@@ -23,6 +23,7 @@ export function getNavItems(role: UserRole) {
     { href: "/sentry", label: "Sentry", icon: "SE", adminOnly: true },
     { href: "/service", label: "Service", icon: "SV", adminOnly: true },
     { href: "/lead-dedup", label: "Lead Dedup", icon: "DD" },
+    { href: "/marketing", label: "Demand Signals", icon: "DS", adminOnly: true },
   ];
 
   return allItems.filter((item) => canAccess(role, item.href));
