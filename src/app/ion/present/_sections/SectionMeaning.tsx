@@ -1,7 +1,7 @@
-// The intent-vs-keyword beat — moved up out of SectionHowItWorks so it sits
-// right after "What does Stewart do?" and before the proof (The Miss).
-// Why Stewart isn't just another call tool: keyword tools find the words;
-// Stewart understands the meaning. Google vs ChatGPT, then applied to a call.
+// The intent-vs-keyword beat — sits right after "What does Stewart do?" and
+// before the proof (The Miss). Why Stewart isn't just another call tool:
+// keyword tools search words; Stewart understands meaning + intent. One real
+// customer line does the heavy lifting — read two ways, side by side.
 
 export function SectionMeaning() {
   return (
@@ -15,73 +15,52 @@ export function SectionMeaning() {
           </span>
         </h2>
 
-        <div className="mt-12 grid md:grid-cols-2 gap-5">
-          <CompareCard
+        {/* The one line — front and center. */}
+        <div className="mt-12">
+          <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-muted mb-3">
+            On the call, the customer says
+          </p>
+          <blockquote className="text-2xl sm:text-3xl font-semibold text-stewart-text leading-snug border-l-2 border-stewart-accent pl-5">
+            &ldquo;My bill hit almost $300 last month.&rdquo;
+          </blockquote>
+        </div>
+
+        {/* Two readings of that same line. */}
+        <div className="mt-8 grid md:grid-cols-2 gap-5">
+          <ReadCard
             kicker="Like Google search"
             tone="muted"
             heading="Keyword & key-phrase search"
-            example='Query: "another company Thursday"'
-            result="It matches keywords and key phrases — the way most AI call-review software works. It finds where the words appear, not what the customer meant."
+            body="Catches “$300” and logs it as the bill amount — a data field. The way most AI call-review software works: it hears the words, not what they meant."
           />
-          <CompareCard
+          <ReadCard
             kicker="Like asking ChatGPT"
             tone="accent"
-            heading="Understands what you meant"
-            example='Question: "What is this customer telling us?"'
-            result="An active buyer is comparing options and deciding soon. Same input, very different output."
+            heading="Understands meaning & intent"
+            body="The customer just handed you their reason to buy. That's pain about the bill — the exact why to sell into. Speak to it."
           />
-        </div>
-
-        <div className="mt-8 rounded-xl border border-white/15 bg-stewart-card/60 p-5 sm:p-6">
-          <p className="text-xs uppercase tracking-wider font-semibold text-stewart-accent mb-3">
-            The same logic, applied to a call
-          </p>
-          <blockquote className="text-lg sm:text-xl text-stewart-text leading-snug border-l-2 border-stewart-accent pl-4">
-            &ldquo;I&apos;ve got another company coming Thursday.&rdquo;
-          </blockquote>
-          <div className="mt-5 grid sm:grid-cols-2 gap-4 text-sm">
-            <div className="rounded-lg border border-white/10 bg-black/40 p-4">
-              <p className="text-xs uppercase tracking-wider text-stewart-muted mb-1">
-                What the keyword catches
-              </p>
-              <p className="text-stewart-text">
-                &ldquo;another company&rdquo; · &ldquo;Thursday&rdquo;
-              </p>
-            </div>
-            <div className="rounded-lg border border-stewart-accent/40 bg-stewart-accent/5 p-4">
-              <p className="text-xs uppercase tracking-wider text-stewart-accent mb-1">
-                What Stewart catches
-              </p>
-              <p className="text-stewart-text">
-                An active buyer comparing options, deciding soon. Escalate,
-                don&apos;t let it cool.
-              </p>
-            </div>
-          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function CompareCard({
+function ReadCard({
   kicker,
   heading,
-  example,
-  result,
+  body,
   tone,
 }: {
   kicker: string;
   heading: string;
-  example: string;
-  result: string;
+  body: string;
   tone: "muted" | "accent";
 }) {
   const accent = tone === "accent";
   return (
     <div
       className={
-        "rounded-xl border p-5 " +
+        "rounded-xl border p-5 sm:p-6 " +
         (accent
           ? "border-stewart-accent/40 bg-stewart-accent/5"
           : "border-white/15 bg-black/40")
@@ -95,9 +74,15 @@ function CompareCard({
       >
         {kicker}
       </p>
-      <p className="text-lg font-bold text-stewart-text">{heading}</p>
-      <p className="mt-3 font-mono text-sm text-stewart-muted">{example}</p>
-      <p className="mt-3 text-sm text-stewart-text leading-relaxed">{result}</p>
+      <p className="text-lg sm:text-xl font-bold text-stewart-text">{heading}</p>
+      <p
+        className={
+          "mt-3 text-base leading-relaxed " +
+          (accent ? "text-stewart-text" : "text-stewart-muted")
+        }
+      >
+        {body}
+      </p>
     </div>
   );
 }
