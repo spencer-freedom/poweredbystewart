@@ -16,6 +16,19 @@ import type {
 } from "@/lib/stewart-api";
 import { PageInfo } from "@/components/page-info";
 
+function fmtK(n: number): string {
+  return n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
+}
+
+function PressingHint({ count, units }: { count: number | null; units: number | null }) {
+  if (!count || count <= 1) return null;
+  return (
+    <span className="text-[10px] text-sky-400/70 shrink-0" title="Combined demand across all pressings of this album">
+      · {count} pressings · {fmtK(units ?? 0)} album
+    </span>
+  );
+}
+
 export default function MarketingPage() {
   const { isSignedIn, isLoaded } = useAuth();
   const router = useRouter();
@@ -202,6 +215,7 @@ function ArtistSearch() {
                     <span className="flex items-center gap-1.5">
                       <span className="text-sm text-stewart-text truncate">{it.title}</span>
                       {it.indie_exclusive && <span className="px-1 py-0.5 rounded bg-purple-500/15 text-purple-400 font-semibold text-[9px] shrink-0">IE</span>}
+                      <PressingHint count={it.pressing_count} units={it.release_units_90d} />
                     </span>
                     {it.buy && <span className="text-[11px] text-red-400/90">{it.buy_reason}</span>}
                   </div>
@@ -301,6 +315,7 @@ function BuyBoardSection() {
                 <span className="flex items-center gap-1.5">
                   <span className="text-sm text-stewart-text truncate">{it.title}</span>
                   {it.indie_exclusive && <span className="px-1 py-0.5 rounded bg-purple-500/15 text-purple-400 font-semibold text-[9px] shrink-0">IE</span>}
+                  <PressingHint count={it.pressing_count} units={it.release_units_90d} />
                 </span>
                 {it.buy_reason && <span className="text-[11px] text-red-400/90">{it.buy_reason}</span>}
               </div>

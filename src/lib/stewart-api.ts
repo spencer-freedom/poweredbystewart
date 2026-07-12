@@ -325,6 +325,8 @@ export type CatalogSearchItem = {
   edition: string;
   indie_exclusive: boolean;
   color: string | null;
+  release_units_90d: number;
+  pressing_count: number;
 };
 
 export type CatalogSearchPayload = {
@@ -362,6 +364,9 @@ export type BuyBoardItem = {
   buy_reason: string | null;
   edition: string | null;
   indie_exclusive: boolean;
+  release_units_90d: number | null;
+  pressing_count: number | null;
+  release_best_rank: number | null;
   computed_at: string | null;
 };
 
