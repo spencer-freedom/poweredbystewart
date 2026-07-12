@@ -325,8 +325,13 @@ export type CatalogSearchItem = {
   edition: string;
   indie_exclusive: boolean;
   color: string | null;
+  alliance_qty: number;
+  orderable: boolean;
   release_units_90d: number;
   pressing_count: number;
+  release_key: string;
+  album: string;
+  artist: string;
 };
 
 export type CatalogSearchPayload = {

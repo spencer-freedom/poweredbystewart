@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { getDemandSignals, getPreorders, searchCatalog, getBuyBoard } from "@/lib/stewart-api";
@@ -26,6 +26,89 @@ function PressingHint({ count, units }: { count: number | null; units: number | 
     <span className="text-[10px] text-sky-400/70 shrink-0" title="Combined demand across all pressings of this album">
       · {count} pressings · {fmtK(units ?? 0)} album
     </span>
+  );
+}
+
+type ReleaseGroup = {
+  key: string; album: string; artist: string; total: number; pressingCount: number;
+  onHand: number; bestRank: number | null; hasIndie: boolean; items: CatalogSearchItem[];
+};
+
+function groupReleases(results: CatalogSearchItem[]): ReleaseGroup[] {
+  const map = new Map<string, ReleaseGroup>();
+  for (const it of results) {
+    const k = it.release_key || it.upc || it.title;
+    let g = map.get(k);
+    if (!g) {
+      g = { key: k, album: it.album || it.title, artist: it.artist || "", total: it.release_units_90d,
+            pressingCount: it.pressing_count, onHand: 0, bestRank: null, hasIndie: false, items: [] };
+      map.set(k, g);
+    }
+    g.items.push(it);
+    g.onHand += it.on_hand;
+    if (it.sales_rank != null) g.bestRank = g.bestRank == null ? it.sales_rank : Math.min(g.bestRank, it.sales_rank);
+    if (it.indie_exclusive) g.hasIndie = true;
+  }
+  return [...map.values()].sort((a, b) => b.total - a.total || (a.bestRank ?? 1e9) - (b.bestRank ?? 1e9));
+}
+
+function ReleaseGroups({ results }: { results: CatalogSearchItem[] }) {
+  const groups = useMemo(() => groupReleases(results), [results]);
+  const [open, setOpen] = useState<Record<string, boolean>>({});
+  const grand = useMemo(() => ({
+    units: groups.reduce((s, g) => s + g.total, 0),
+    pressings: results.length,
+    onHand: results.reduce((s, it) => s + it.on_hand, 0),
+    releases: groups.length,
+  }), [groups, results]);
+
+  return (
+    <div className="border border-stewart-border rounded-lg overflow-hidden">
+      <div className="flex items-center justify-between px-3 py-2 bg-stewart-bg/60 border-b border-stewart-border text-xs">
+        <span className="text-stewart-muted">{grand.releases} releases · {grand.pressings} pressings</span>
+        <span className="font-mono">
+          <span className="text-stewart-muted">on-hand</span> <b className="text-stewart-text">{grand.onHand}</b>
+          {" · "}<span className="text-stewart-muted">grand total</span> <b className="text-emerald-400">{fmtK(grand.units)}u</b>
+        </span>
+      </div>
+      {groups.map((g) => {
+        const isOpen = open[g.key] ?? false;
+        return (
+          <div key={g.key} className="border-b border-stewart-border/50 last:border-0">
+            <button
+              onClick={() => setOpen((o) => ({ ...o, [g.key]: !isOpen }))}
+              className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-stewart-border/20"
+            >
+              <span className={`text-stewart-muted text-xs transition-transform ${isOpen ? "rotate-90" : ""}`}>▸</span>
+              <span className="flex-1 min-w-0 text-sm text-stewart-text truncate">
+                {g.album}{g.artist ? <span className="text-stewart-muted"> — {g.artist}</span> : null}
+              </span>
+              {g.hasIndie && <span className="px-1 py-0.5 rounded bg-purple-500/15 text-purple-400 font-semibold text-[9px] shrink-0">IE</span>}
+              <span className="text-[11px] text-stewart-muted shrink-0 w-8 text-right">{g.pressingCount}p</span>
+              <span className="text-xs font-mono text-stewart-muted shrink-0 w-14 text-right">{g.onHand} on</span>
+              <span className="text-xs font-mono font-bold text-emerald-400 shrink-0 w-14 text-right">{fmtK(g.total)}u</span>
+              <span className="text-xs font-mono text-stewart-muted shrink-0 w-16 text-right">{g.bestRank != null ? `#${g.bestRank.toLocaleString()}` : "—"}</span>
+            </button>
+            {isOpen && (
+              <div className="bg-stewart-bg/30">
+                {g.items.map((it) => (
+                  <div key={it.upc || it.title} className={`flex items-center gap-2 pl-8 pr-3 py-1.5 text-xs border-t border-stewart-border/30 ${it.buy ? "bg-red-500/[0.05]" : ""}`}>
+                    <Thumb src={it.image} alt={it.title} />
+                    <span className="flex-1 min-w-0 truncate text-stewart-text">{it.title}</span>
+                    {it.indie_exclusive && <span className="px-1 py-0.5 rounded bg-purple-500/15 text-purple-400 font-semibold text-[9px] shrink-0">IE</span>}
+                    {it.buy && <span className="px-1 py-0.5 rounded bg-red-500/15 text-red-400 font-semibold text-[9px] shrink-0">BUY</span>}
+                    <span className="text-[10px] text-stewart-muted uppercase w-10 text-right shrink-0">{it.format || "—"}</span>
+                    <span className={`font-mono font-semibold w-12 text-right shrink-0 ${it.stock_status === "out" ? "text-red-400" : it.stock_status === "low" ? "text-amber-400" : "text-stewart-text"}`} title="On hand">{it.on_hand}</span>
+                    <span className="font-mono font-semibold text-emerald-400 w-14 text-right shrink-0" title="Units 90d">{it.units_90d}u</span>
+                    <span className="font-mono text-stewart-muted w-16 text-right shrink-0" title="Sales rank">{it.sales_rank != null ? `#${it.sales_rank.toLocaleString()}` : "—"}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
@@ -207,33 +290,7 @@ function ArtistSearch() {
           {results.length === 0 ? (
             <p className="text-sm text-stewart-muted py-2">No restock gaps — stocked on the movers.</p>
           ) : (
-            <ul className="divide-y divide-stewart-border/50">
-              {results.map((it) => (
-                <li key={it.upc || it.title} className={`flex items-center gap-3 py-2 ${it.buy ? "-mx-2 px-2 rounded bg-red-500/[0.05]" : ""}`}>
-                  <Thumb src={it.image} alt={it.title} />
-                  <div className="flex-1 min-w-0">
-                    <span className="flex items-center gap-1.5">
-                      <span className="text-sm text-stewart-text truncate">{it.title}</span>
-                      {it.indie_exclusive && <span className="px-1 py-0.5 rounded bg-purple-500/15 text-purple-400 font-semibold text-[9px] shrink-0">IE</span>}
-                      <PressingHint count={it.pressing_count} units={it.release_units_90d} />
-                    </span>
-                    {it.buy && <span className="text-[11px] text-red-400/90">{it.buy_reason}</span>}
-                  </div>
-                  {it.buy && <span className="px-1.5 py-0.5 rounded bg-red-500/15 text-red-400 font-semibold text-[10px]">BUY</span>}
-                  <span
-                    className={`text-sm font-mono font-semibold w-14 text-right ${
-                      it.stock_status === "out" ? "text-red-400" : it.stock_status === "low" ? "text-amber-400" : "text-stewart-text"
-                    }`}
-                    title="On hand (Square)"
-                  >{it.on_hand} on
-                  </span>
-                  <span className="text-sm font-mono font-semibold text-emerald-400 w-16 text-right" title="Trailing-90d units">{it.units_90d}u</span>
-                  <span className="text-xs font-mono text-stewart-muted w-20 text-right" title="Alliance sales rank">
-                    {it.sales_rank != null ? `#${it.sales_rank.toLocaleString()}` : "—"}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <ReleaseGroups results={results} />
           )}
         </>
       )}
