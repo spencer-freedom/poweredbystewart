@@ -318,16 +318,21 @@ export type CatalogSearchItem = {
   format: string | null;
   sales_rank: number | null;
   units_90d: number;
+  on_hand: number;
+  stock_status: "out" | "low" | "ok";
+  buy: boolean;
+  buy_reason: string | null;
 };
 
 export type CatalogSearchPayload = {
   query: string;
   count: number;
+  gap_count: number;
   results: CatalogSearchItem[];
 };
 
-export async function searchCatalog(q: string, limit = 60): Promise<CatalogSearchPayload> {
-  const url = `${BASE_URL}/api/velocity/search?q=${encodeURIComponent(q)}&limit=${limit}`;
+export async function searchCatalog(q: string, limit = 60, gapsOnly = false): Promise<CatalogSearchPayload> {
+  const url = `${BASE_URL}/api/velocity/search?q=${encodeURIComponent(q)}&limit=${limit}&gaps_only=${gapsOnly}`;
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) {
     const body = await res.text().catch(() => "");

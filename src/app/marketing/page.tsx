@@ -100,66 +100,101 @@ function ArtistSearch() {
   const [results, setResults] = useState<CatalogSearchItem[] | null>(null);
   const [busy, setBusy] = useState(false);
   const [searched, setSearched] = useState("");
+  const [gapsOnly, setGapsOnly] = useState(false);
+  const [gapCount, setGapCount] = useState(0);
 
-  const run = useCallback(async () => {
+  const run = useCallback(async (gaps: boolean) => {
     const term = q.trim();
     if (!term) return;
     setBusy(true);
     try {
-      const res = await searchCatalog(term, 60);
+      const res = await searchCatalog(term, 80, gaps);
       setResults(res.results);
+      setGapCount(res.gap_count);
       setSearched(res.query);
     } catch {
       setResults([]);
+      setGapCount(0);
       setSearched(term);
     } finally {
       setBusy(false);
     }
   }, [q]);
 
+  const toggleGaps = () => {
+    const next = !gapsOnly;
+    setGapsOnly(next);
+    if (results !== null) run(next);
+  };
+
   return (
     <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 space-y-4">
       <div>
-        <h2 className="text-sm font-medium text-stewart-muted uppercase tracking-wider">Artist / Album Search</h2>
+        <h2 className="text-sm font-medium text-stewart-muted uppercase tracking-wider">Artist / Album Search — Buy View</h2>
         <p className="text-xs text-stewart-muted/70 mt-1">
-          Search a band or album — every title carried, ranked best-seller-first (trailing-90-day units)
-          with the Alliance sales rank.
+          Search a band or album — every title carried, ranked best-seller-first, with the live Square
+          shelf count. <span className="text-red-400 font-medium">BUY</span> flags the hits you&apos;re out of or low on.
         </p>
       </div>
       <div className="flex gap-2">
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && run()}
+          onKeyDown={(e) => e.key === "Enter" && run(gapsOnly)}
           placeholder="e.g. Radiohead, Taylor Swift, Miles Davis…"
           className="flex-1 bg-stewart-bg border border-stewart-border rounded-md px-3 py-2 text-sm text-stewart-text placeholder:text-stewart-muted focus:outline-none focus:border-stewart-accent"
         />
         <button
-          onClick={run}
+          onClick={() => run(gapsOnly)}
           disabled={busy || !q.trim()}
           className="px-4 py-2 rounded-md bg-stewart-accent/15 text-stewart-accent text-sm font-medium hover:bg-stewart-accent/25 disabled:opacity-40"
         >
           {busy ? "Searching…" : "Search"}
         </button>
       </div>
-      {results !== null && (
-        results.length === 0 ? (
-          <p className="text-sm text-stewart-muted py-2">No matches for &ldquo;{searched}&rdquo;.</p>
-        ) : (
-          <ul className="divide-y divide-stewart-border/50">
-            {results.map((it) => (
-              <li key={it.upc || it.title} className="flex items-center gap-3 py-2">
-                <Thumb src={it.image} alt={it.title} />
-                <span className="flex-1 text-sm text-stewart-text truncate">{it.title}</span>
-                <span className="text-xs text-stewart-muted/70 uppercase w-12 text-right">{it.format || "—"}</span>
-                <span className="text-sm font-mono font-semibold text-emerald-400 w-16 text-right">{it.units_90d}u</span>
-                <span className="text-xs font-mono text-stewart-muted w-20 text-right">
-                  {it.sales_rank != null ? `#${it.sales_rank.toLocaleString()}` : "—"}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )
+      {results !== null && !(results.length === 0 && !gapsOnly) && (
+        <>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-stewart-muted">
+              <span className="text-red-400 font-semibold">{gapCount}</span> restock gap{gapCount === 1 ? "" : "s"} for &ldquo;{searched}&rdquo;
+            </p>
+            <button
+              onClick={toggleGaps}
+              className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                gapsOnly ? "bg-red-500/15 text-red-400" : "text-stewart-muted hover:text-stewart-text"
+              }`}
+            >
+              {gapsOnly ? "Showing gaps only" : "Show buy gaps only"}
+            </button>
+          </div>
+          {results.length === 0 ? (
+            <p className="text-sm text-stewart-muted py-2">No restock gaps — stocked on the movers.</p>
+          ) : (
+            <ul className="divide-y divide-stewart-border/50">
+              {results.map((it) => (
+                <li key={it.upc || it.title} className={`flex items-center gap-3 py-2 ${it.buy ? "-mx-2 px-2 rounded bg-red-500/[0.05]" : ""}`}>
+                  <Thumb src={it.image} alt={it.title} />
+                  <div className="flex-1 min-w-0">
+                    <span className="block text-sm text-stewart-text truncate">{it.title}</span>
+                    {it.buy && <span className="text-[11px] text-red-400/90">{it.buy_reason}</span>}
+                  </div>
+                  {it.buy && <span className="px-1.5 py-0.5 rounded bg-red-500/15 text-red-400 font-semibold text-[10px]">BUY</span>}
+                  <span
+                    className={`text-sm font-mono font-semibold w-14 text-right ${
+                      it.stock_status === "out" ? "text-red-400" : it.stock_status === "low" ? "text-amber-400" : "text-stewart-text"
+                    }`}
+                    title="On hand (Square)"
+                  >{it.on_hand} on
+                  </span>
+                  <span className="text-sm font-mono font-semibold text-emerald-400 w-16 text-right" title="Trailing-90d units">{it.units_90d}u</span>
+                  <span className="text-xs font-mono text-stewart-muted w-20 text-right" title="Alliance sales rank">
+                    {it.sales_rank != null ? `#${it.sales_rank.toLocaleString()}` : "—"}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
       )}
     </div>
   );
