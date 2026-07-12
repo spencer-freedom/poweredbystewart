@@ -3,11 +3,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { getDemandSignals } from "@/lib/stewart-api";
+import { getDemandSignals, getPreorders, searchCatalog } from "@/lib/stewart-api";
 import type {
   DemandSignalsPayload,
   DemandSignalGroup,
   DemandSignalItem,
+  PreordersPayload,
+  PreorderItem,
+  CatalogSearchItem,
 } from "@/lib/stewart-api";
 import { PageInfo } from "@/components/page-info";
 
@@ -16,6 +19,7 @@ export default function MarketingPage() {
   const router = useRouter();
 
   const [data, setData] = useState<DemandSignalsPayload | null>(null);
+  const [preorders, setPreorders] = useState<PreordersPayload | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,8 +33,9 @@ export default function MarketingPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await getDemandSignals(50);
+      const [res, pre] = await Promise.all([getDemandSignals(50), getPreorders(250)]);
       setData(res);
+      setPreorders(pre);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load demand signals");
     } finally {
@@ -69,6 +74,10 @@ export default function MarketingPage() {
         <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-md text-red-400 text-sm">{error}</div>
       )}
 
+      <ArtistSearch />
+
+      {preorders && <PreordersSection report={preorders} />}
+
       {loading ? (
         <div className="text-center text-stewart-muted py-12 text-sm">Loading demand signals...</div>
       ) : !data ? (
@@ -81,6 +90,122 @@ export default function MarketingPage() {
           <SignalSection title="Hot" windowLabel={data.windows.hot} group={data.hot} />
           <SignalSection title="Momentum" windowLabel={data.windows.momentum} group={data.momentum} />
         </>
+      )}
+    </div>
+  );
+}
+
+function ArtistSearch() {
+  const [q, setQ] = useState("");
+  const [results, setResults] = useState<CatalogSearchItem[] | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [searched, setSearched] = useState("");
+
+  const run = useCallback(async () => {
+    const term = q.trim();
+    if (!term) return;
+    setBusy(true);
+    try {
+      const res = await searchCatalog(term, 60);
+      setResults(res.results);
+      setSearched(res.query);
+    } catch {
+      setResults([]);
+      setSearched(term);
+    } finally {
+      setBusy(false);
+    }
+  }, [q]);
+
+  return (
+    <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 space-y-4">
+      <div>
+        <h2 className="text-sm font-medium text-stewart-muted uppercase tracking-wider">Artist / Album Search</h2>
+        <p className="text-xs text-stewart-muted/70 mt-1">
+          Search a band or album — every title carried, ranked best-seller-first (trailing-90-day units)
+          with the Alliance sales rank.
+        </p>
+      </div>
+      <div className="flex gap-2">
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && run()}
+          placeholder="e.g. Radiohead, Taylor Swift, Miles Davis…"
+          className="flex-1 bg-stewart-bg border border-stewart-border rounded-md px-3 py-2 text-sm text-stewart-text placeholder:text-stewart-muted focus:outline-none focus:border-stewart-accent"
+        />
+        <button
+          onClick={run}
+          disabled={busy || !q.trim()}
+          className="px-4 py-2 rounded-md bg-stewart-accent/15 text-stewart-accent text-sm font-medium hover:bg-stewart-accent/25 disabled:opacity-40"
+        >
+          {busy ? "Searching…" : "Search"}
+        </button>
+      </div>
+      {results !== null && (
+        results.length === 0 ? (
+          <p className="text-sm text-stewart-muted py-2">No matches for &ldquo;{searched}&rdquo;.</p>
+        ) : (
+          <ul className="divide-y divide-stewart-border/50">
+            {results.map((it) => (
+              <li key={it.upc || it.title} className="flex items-center gap-3 py-2">
+                <Thumb src={it.image} alt={it.title} />
+                <span className="flex-1 text-sm text-stewart-text truncate">{it.title}</span>
+                <span className="text-xs text-stewart-muted/70 uppercase w-12 text-right">{it.format || "—"}</span>
+                <span className="text-sm font-mono font-semibold text-emerald-400 w-16 text-right">{it.units_90d}u</span>
+                <span className="text-xs font-mono text-stewart-muted w-20 text-right">
+                  {it.sales_rank != null ? `#${it.sales_rank.toLocaleString()}` : "—"}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )
+      )}
+    </div>
+  );
+}
+
+function PreordersSection({ report }: { report: PreordersPayload }) {
+  const [active, setActive] = useState(report.collections[0]?.handle ?? "");
+  const current = report.collections.find((c) => c.handle === active) ?? report.collections[0];
+  if (!current) return null;
+
+  return (
+    <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 space-y-4">
+      <div className="flex items-baseline justify-between">
+        <h2 className="text-sm font-medium text-stewart-muted uppercase tracking-wider">Pre-Orders</h2>
+        <span className="text-xs text-stewart-muted/70">ranked by Alliance demand</span>
+      </div>
+      <div className="flex flex-wrap gap-1">
+        {report.collections.map((c) => (
+          <button
+            key={c.handle}
+            onClick={() => setActive(c.handle)}
+            className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+              c.handle === active
+                ? "bg-stewart-accent/15 text-stewart-accent"
+                : "text-stewart-muted hover:text-stewart-text"
+            }`}
+          >
+            {c.label} <span className="opacity-60">({c.count})</span>
+          </button>
+        ))}
+      </div>
+      {current.items.length === 0 ? (
+        <p className="text-sm text-stewart-muted py-2">No pre-orders in this collection.</p>
+      ) : (
+        <ul className="divide-y divide-stewart-border/50">
+          {current.items.map((it: PreorderItem) => (
+            <li key={`${it.position}-${it.title}`} className="flex items-center gap-3 py-2">
+              <span className="w-6 text-right text-sm font-mono text-stewart-muted flex-shrink-0">{it.position}</span>
+              <Thumb src={it.image} alt={it.title} />
+              <span className="flex-1 text-sm text-stewart-text truncate">{it.title}</span>
+              <span className="text-sm font-mono font-semibold text-stewart-accent w-20 text-right">
+                {it.sales_rank != null ? `#${it.sales_rank.toLocaleString()}` : "—"}
+              </span>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

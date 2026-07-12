@@ -277,3 +277,61 @@ export async function getDemandSignals(first = 50): Promise<DemandSignalsPayload
   }
   return res.json();
 }
+
+// ─── Pre-orders (upcoming releases ranked by Alliance pre-order demand) ──────
+
+export type PreorderItem = {
+  position: number;
+  title: string;
+  image: string | null;
+  sales_rank: number | null;
+};
+
+export type PreorderCollection = {
+  handle: string;
+  label: string;
+  count: number;
+  items: PreorderItem[];
+};
+
+export type PreordersPayload = {
+  collections: PreorderCollection[];
+  missing: string[];
+};
+
+export async function getPreorders(first = 250): Promise<PreordersPayload> {
+  const url = `${BASE_URL}/api/velocity/preorders?first=${first}`;
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`velocity/preorders ${res.status}: ${body || res.statusText}`);
+  }
+  return res.json();
+}
+
+// ─── Artist / album search (best-seller-first, for ordering decisions) ───────
+
+export type CatalogSearchItem = {
+  title: string;
+  image: string | null;
+  upc: string;
+  format: string | null;
+  sales_rank: number | null;
+  units_90d: number;
+};
+
+export type CatalogSearchPayload = {
+  query: string;
+  count: number;
+  results: CatalogSearchItem[];
+};
+
+export async function searchCatalog(q: string, limit = 60): Promise<CatalogSearchPayload> {
+  const url = `${BASE_URL}/api/velocity/search?q=${encodeURIComponent(q)}&limit=${limit}`;
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`velocity/search ${res.status}: ${body || res.statusText}`);
+  }
+  return res.json();
+}
