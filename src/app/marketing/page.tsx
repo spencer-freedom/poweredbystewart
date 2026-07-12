@@ -106,19 +106,23 @@ function ArtistSearch() {
   const [searched, setSearched] = useState("");
   const [gapsOnly, setGapsOnly] = useState(false);
   const [gapCount, setGapCount] = useState(0);
+  const [indieOnly, setIndieOnly] = useState(false);
+  const [indieCount, setIndieCount] = useState(0);
 
-  const run = useCallback(async (gaps: boolean) => {
+  const run = useCallback(async (gaps: boolean, indie: boolean) => {
     const term = q.trim();
     if (!term) return;
     setBusy(true);
     try {
-      const res = await searchCatalog(term, 80, gaps);
+      const res = await searchCatalog(term, 80, gaps, indie);
       setResults(res.results);
       setGapCount(res.gap_count);
+      setIndieCount(res.indie_count);
       setSearched(res.query);
     } catch {
       setResults([]);
       setGapCount(0);
+      setIndieCount(0);
       setSearched(term);
     } finally {
       setBusy(false);
@@ -128,7 +132,12 @@ function ArtistSearch() {
   const toggleGaps = () => {
     const next = !gapsOnly;
     setGapsOnly(next);
-    if (results !== null) run(next);
+    if (results !== null) run(next, indieOnly);
+  };
+  const toggleIndie = () => {
+    const next = !indieOnly;
+    setIndieOnly(next);
+    if (results !== null) run(gapsOnly, next);
   };
 
   return (
@@ -144,12 +153,12 @@ function ArtistSearch() {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && run(gapsOnly)}
+          onKeyDown={(e) => e.key === "Enter" && run(gapsOnly, indieOnly)}
           placeholder="e.g. Radiohead, Taylor Swift, Miles Davis…"
           className="flex-1 bg-stewart-bg border border-stewart-border rounded-md px-3 py-2 text-sm text-stewart-text placeholder:text-stewart-muted focus:outline-none focus:border-stewart-accent"
         />
         <button
-          onClick={() => run(gapsOnly)}
+          onClick={() => run(gapsOnly, indieOnly)}
           disabled={busy || !q.trim()}
           className="px-4 py-2 rounded-md bg-stewart-accent/15 text-stewart-accent text-sm font-medium hover:bg-stewart-accent/25 disabled:opacity-40"
         >
@@ -160,16 +169,27 @@ function ArtistSearch() {
         <>
           <div className="flex items-center justify-between">
             <p className="text-xs text-stewart-muted">
-              <span className="text-red-400 font-semibold">{gapCount}</span> restock gap{gapCount === 1 ? "" : "s"} for &ldquo;{searched}&rdquo;
+              <span className="text-red-400 font-semibold">{gapCount}</span> restock gap{gapCount === 1 ? "" : "s"}
+              {" · "}<span className="text-purple-400 font-semibold">{indieCount}</span> indie for &ldquo;{searched}&rdquo;
             </p>
-            <button
-              onClick={toggleGaps}
-              className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-                gapsOnly ? "bg-red-500/15 text-red-400" : "text-stewart-muted hover:text-stewart-text"
-              }`}
-            >
-              {gapsOnly ? "Showing gaps only" : "Show buy gaps only"}
-            </button>
+            <div className="flex gap-1">
+              <button
+                onClick={toggleIndie}
+                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                  indieOnly ? "bg-purple-500/15 text-purple-400" : "text-stewart-muted hover:text-stewart-text"
+                }`}
+              >
+                Indie only
+              </button>
+              <button
+                onClick={toggleGaps}
+                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
+                  gapsOnly ? "bg-red-500/15 text-red-400" : "text-stewart-muted hover:text-stewart-text"
+                }`}
+              >
+                Buy gaps only
+              </button>
+            </div>
           </div>
           {results.length === 0 ? (
             <p className="text-sm text-stewart-muted py-2">No restock gaps — stocked on the movers.</p>
@@ -179,7 +199,10 @@ function ArtistSearch() {
                 <li key={it.upc || it.title} className={`flex items-center gap-3 py-2 ${it.buy ? "-mx-2 px-2 rounded bg-red-500/[0.05]" : ""}`}>
                   <Thumb src={it.image} alt={it.title} />
                   <div className="flex-1 min-w-0">
-                    <span className="block text-sm text-stewart-text truncate">{it.title}</span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="text-sm text-stewart-text truncate">{it.title}</span>
+                      {it.indie_exclusive && <span className="px-1 py-0.5 rounded bg-purple-500/15 text-purple-400 font-semibold text-[9px] shrink-0">IE</span>}
+                    </span>
                     {it.buy && <span className="text-[11px] text-red-400/90">{it.buy_reason}</span>}
                   </div>
                   {it.buy && <span className="px-1.5 py-0.5 rounded bg-red-500/15 text-red-400 font-semibold text-[10px]">BUY</span>}
@@ -208,12 +231,13 @@ function BuyBoardSection() {
   const [data, setData] = useState<BuyBoardPayload | null>(null);
   const [orderableOnly, setOrderableOnly] = useState(true);
   const [fmt, setFmt] = useState("");
+  const [indieOnly, setIndieOnly] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const load = useCallback(async (ord: boolean, f: string) => {
+  const load = useCallback(async (ord: boolean, f: string, indie: boolean) => {
     setLoading(true);
     try {
-      setData(await getBuyBoard({ limit: 250, orderableOnly: ord, fmt: f || undefined, minUnits: 5 }));
+      setData(await getBuyBoard({ limit: 250, orderableOnly: ord, fmt: f || undefined, minUnits: 5, indieOnly: indie }));
     } catch {
       setData(null);
     } finally {
@@ -221,7 +245,7 @@ function BuyBoardSection() {
     }
   }, []);
 
-  useEffect(() => { load(orderableOnly, fmt); }, [load, orderableOnly, fmt]);
+  useEffect(() => { load(orderableOnly, fmt, indieOnly); }, [load, orderableOnly, fmt, indieOnly]);
 
   const fmtBtn = (label: string, val: string) => (
     <button
@@ -255,6 +279,14 @@ function BuyBoardSection() {
         >
           {orderableOnly ? "Orderable only" : "All"}
         </button>
+        <button
+          onClick={() => setIndieOnly(!indieOnly)}
+          className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
+            indieOnly ? "bg-purple-500/15 text-purple-400" : "text-stewart-muted hover:text-stewart-text"
+          }`}
+        >
+          Indie{data ? ` (${data.indie_gaps})` : ""}
+        </button>
       </div>
       {loading ? (
         <p className="text-sm text-stewart-muted py-2">Loading buy board…</p>
@@ -266,7 +298,10 @@ function BuyBoardSection() {
             <li key={it.shopify_product_id} className="flex items-center gap-3 py-2">
               <Thumb src={it.image} alt={it.title} />
               <div className="flex-1 min-w-0">
-                <span className="block text-sm text-stewart-text truncate">{it.title}</span>
+                <span className="flex items-center gap-1.5">
+                  <span className="text-sm text-stewart-text truncate">{it.title}</span>
+                  {it.indie_exclusive && <span className="px-1 py-0.5 rounded bg-purple-500/15 text-purple-400 font-semibold text-[9px] shrink-0">IE</span>}
+                </span>
                 {it.buy_reason && <span className="text-[11px] text-red-400/90">{it.buy_reason}</span>}
               </div>
               <span

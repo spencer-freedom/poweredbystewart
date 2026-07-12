@@ -322,17 +322,21 @@ export type CatalogSearchItem = {
   stock_status: "out" | "low" | "ok";
   buy: boolean;
   buy_reason: string | null;
+  edition: string;
+  indie_exclusive: boolean;
+  color: string | null;
 };
 
 export type CatalogSearchPayload = {
   query: string;
   count: number;
   gap_count: number;
+  indie_count: number;
   results: CatalogSearchItem[];
 };
 
-export async function searchCatalog(q: string, limit = 60, gapsOnly = false): Promise<CatalogSearchPayload> {
-  const url = `${BASE_URL}/api/velocity/search?q=${encodeURIComponent(q)}&limit=${limit}&gaps_only=${gapsOnly}`;
+export async function searchCatalog(q: string, limit = 60, gapsOnly = false, indieOnly = false): Promise<CatalogSearchPayload> {
+  const url = `${BASE_URL}/api/velocity/search?q=${encodeURIComponent(q)}&limit=${limit}&gaps_only=${gapsOnly}&indie_only=${indieOnly}`;
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) {
     const body = await res.text().catch(() => "");
@@ -356,12 +360,15 @@ export type BuyBoardItem = {
   alliance_qty: number;
   orderable: boolean;
   buy_reason: string | null;
+  edition: string | null;
+  indie_exclusive: boolean;
   computed_at: string | null;
 };
 
 export type BuyBoardPayload = {
   count: number;
   total_gaps: number;
+  indie_gaps: number;
   generated_at: string | null;
   items: BuyBoardItem[];
 };
@@ -371,11 +378,13 @@ export async function getBuyBoard(opts?: {
   orderableOnly?: boolean;
   fmt?: string;
   minUnits?: number;
+  indieOnly?: boolean;
 }): Promise<BuyBoardPayload> {
   const p = new URLSearchParams({ limit: String(opts?.limit ?? 250) });
   if (opts?.orderableOnly) p.set("orderable_only", "true");
   if (opts?.fmt) p.set("fmt", opts.fmt);
   if (opts?.minUnits) p.set("min_units", String(opts.minUnits));
+  if (opts?.indieOnly) p.set("indie_only", "true");
   const res = await fetch(`${BASE_URL}/api/velocity/buy-board?${p.toString()}`, { cache: "no-store" });
   if (!res.ok) {
     const body = await res.text().catch(() => "");
