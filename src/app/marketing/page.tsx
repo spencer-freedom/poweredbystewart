@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { getDemandSignals, getPreorders, searchCatalog } from "@/lib/stewart-api";
+import { getDemandSignals, getPreorders, searchCatalog, getBuyBoard } from "@/lib/stewart-api";
 import type {
   DemandSignalsPayload,
   DemandSignalGroup,
@@ -11,6 +11,8 @@ import type {
   PreordersPayload,
   PreorderItem,
   CatalogSearchItem,
+  BuyBoardPayload,
+  BuyBoardItem,
 } from "@/lib/stewart-api";
 import { PageInfo } from "@/components/page-info";
 
@@ -75,6 +77,8 @@ export default function MarketingPage() {
       )}
 
       <ArtistSearch />
+
+      <BuyBoardSection />
 
       {preorders && <PreordersSection report={preorders} />}
 
@@ -195,6 +199,94 @@ function ArtistSearch() {
             </ul>
           )}
         </>
+      )}
+    </div>
+  );
+}
+
+function BuyBoardSection() {
+  const [data, setData] = useState<BuyBoardPayload | null>(null);
+  const [orderableOnly, setOrderableOnly] = useState(true);
+  const [fmt, setFmt] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const load = useCallback(async (ord: boolean, f: string) => {
+    setLoading(true);
+    try {
+      setData(await getBuyBoard({ limit: 250, orderableOnly: ord, fmt: f || undefined, minUnits: 5 }));
+    } catch {
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { load(orderableOnly, fmt); }, [load, orderableOnly, fmt]);
+
+  const fmtBtn = (label: string, val: string) => (
+    <button
+      key={val}
+      onClick={() => setFmt(val)}
+      className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
+        fmt === val ? "bg-stewart-accent/15 text-stewart-accent" : "text-stewart-muted hover:text-stewart-text"
+      }`}
+    >
+      {label}
+    </button>
+  );
+
+  return (
+    <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 space-y-4">
+      <div className="flex items-baseline justify-between">
+        <h2 className="text-sm font-medium text-stewart-muted uppercase tracking-wider">Buy Board</h2>
+        {data && <span className="text-xs text-stewart-muted/70">{data.total_gaps} restock gaps</span>}
+      </div>
+      <p className="text-xs text-stewart-muted/70 -mt-1">
+        Every title across the catalog out of or low on stock while demand is strong — ranked by demand,
+        with what Alliance can fill.
+      </p>
+      <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex gap-1">{fmtBtn("All", "")}{fmtBtn("Vinyl", "vinyl")}{fmtBtn("CD", "cd")}</div>
+        <button
+          onClick={() => setOrderableOnly(!orderableOnly)}
+          className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
+            orderableOnly ? "bg-emerald-500/15 text-emerald-400" : "text-stewart-muted hover:text-stewart-text"
+          }`}
+        >
+          {orderableOnly ? "Orderable only" : "All"}
+        </button>
+      </div>
+      {loading ? (
+        <p className="text-sm text-stewart-muted py-2">Loading buy board…</p>
+      ) : !data || data.items.length === 0 ? (
+        <p className="text-sm text-stewart-muted py-2">No restock gaps match.</p>
+      ) : (
+        <ul className="divide-y divide-stewart-border/50">
+          {data.items.map((it: BuyBoardItem) => (
+            <li key={it.shopify_product_id} className="flex items-center gap-3 py-2">
+              <Thumb src={it.image} alt={it.title} />
+              <div className="flex-1 min-w-0">
+                <span className="block text-sm text-stewart-text truncate">{it.title}</span>
+                {it.buy_reason && <span className="text-[11px] text-red-400/90">{it.buy_reason}</span>}
+              </div>
+              <span
+                className={`text-sm font-mono font-semibold w-14 text-right ${it.on_hand <= 0 ? "text-red-400" : "text-amber-400"}`}
+                title="On hand (Square)"
+              >{it.on_hand} on</span>
+              <span className="w-16 text-right text-sm font-mono" title="Alliance available to order">
+                {it.orderable ? (
+                  <span className="text-emerald-400 font-semibold">{it.alliance_qty}</span>
+                ) : (
+                  <span className="text-red-400/70 text-xs">none</span>
+                )}
+              </span>
+              <span className="text-sm font-mono font-semibold text-sky-400 w-14 text-right" title="Trailing-90d units">{it.units_90d}u</span>
+              <span className="text-xs font-mono text-stewart-muted w-16 text-right" title="Sales rank">
+                {it.sales_rank != null ? `#${it.sales_rank.toLocaleString()}` : "—"}
+              </span>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

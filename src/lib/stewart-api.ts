@@ -340,3 +340,46 @@ export async function searchCatalog(q: string, limit = 60, gapsOnly = false): Pr
   }
   return res.json();
 }
+
+// ─── Buy Board (catalog-wide restock gaps — the standing order sheet) ────────
+
+export type BuyBoardItem = {
+  shopify_product_id: string;
+  upc: string | null;
+  title: string;
+  artist: string | null;
+  image: string | null;
+  format: string | null;
+  on_hand: number;
+  sales_rank: number | null;
+  units_90d: number;
+  alliance_qty: number;
+  orderable: boolean;
+  buy_reason: string | null;
+  computed_at: string | null;
+};
+
+export type BuyBoardPayload = {
+  count: number;
+  total_gaps: number;
+  generated_at: string | null;
+  items: BuyBoardItem[];
+};
+
+export async function getBuyBoard(opts?: {
+  limit?: number;
+  orderableOnly?: boolean;
+  fmt?: string;
+  minUnits?: number;
+}): Promise<BuyBoardPayload> {
+  const p = new URLSearchParams({ limit: String(opts?.limit ?? 250) });
+  if (opts?.orderableOnly) p.set("orderable_only", "true");
+  if (opts?.fmt) p.set("fmt", opts.fmt);
+  if (opts?.minUnits) p.set("min_units", String(opts.minUnits));
+  const res = await fetch(`${BASE_URL}/api/velocity/buy-board?${p.toString()}`, { cache: "no-store" });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`velocity/buy-board ${res.status}: ${body || res.statusText}`);
+  }
+  return res.json();
+}
