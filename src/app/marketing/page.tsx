@@ -16,15 +16,15 @@ import type {
 } from "@/lib/stewart-api";
 import { PageInfo } from "@/components/page-info";
 
-function fmtK(n: number): string {
-  return n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n);
+function fmtU(n: number): string {
+  return `${n.toLocaleString()}u`;
 }
 
 function PressingHint({ count, units }: { count: number | null; units: number | null }) {
   if (!count || count <= 1) return null;
   return (
-    <span className="text-[10px] text-sky-400/70 shrink-0" title="Combined demand across all pressings of this album">
-      · {count} pressings · {fmtK(units ?? 0)} album
+    <span className="text-[10px] text-sky-400/70 shrink-0" title="Combined trailing-90-day units across all pressings of this album">
+      · {count} pressings · {fmtU(units ?? 0)} album
     </span>
   );
 }
@@ -68,7 +68,7 @@ function ReleaseGroups({ results }: { results: CatalogSearchItem[] }) {
         <span className="text-stewart-muted">{grand.releases} releases · {grand.pressings} pressings</span>
         <span className="font-mono">
           <span className="text-stewart-muted">on-hand</span> <b className="text-stewart-text">{grand.onHand}</b>
-          {" · "}<span className="text-stewart-muted">grand total</span> <b className="text-emerald-400">{fmtK(grand.units)}u</b>
+          {" · "}<span className="text-stewart-muted">grand total</span> <b className="text-emerald-400">{fmtU(grand.units)}</b>
         </span>
       </div>
       {groups.map((g) => {
@@ -86,7 +86,7 @@ function ReleaseGroups({ results }: { results: CatalogSearchItem[] }) {
               {g.hasIndie && <span className="px-1 py-0.5 rounded bg-purple-500/15 text-purple-400 font-semibold text-[9px] shrink-0">IE</span>}
               <span className="text-[11px] text-stewart-muted shrink-0 w-8 text-right">{g.pressingCount}p</span>
               <span className="text-xs font-mono text-stewart-muted shrink-0 w-14 text-right">{g.onHand} on</span>
-              <span className="text-xs font-mono font-bold text-emerald-400 shrink-0 w-14 text-right">{fmtK(g.total)}u</span>
+              <span className="text-xs font-mono font-bold text-emerald-400 shrink-0 w-16 text-right">{fmtU(g.total)}</span>
               <span className="text-xs font-mono text-stewart-muted shrink-0 w-16 text-right">{g.bestRank != null ? `#${g.bestRank.toLocaleString()}` : "—"}</span>
             </button>
             {isOpen && (
