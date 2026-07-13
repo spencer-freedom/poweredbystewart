@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AudioClip } from "../../(public)/_components/AudioClip.client";
+import { AltTake } from "../../(public)/_components/AltTake.client";
 
 // The proof beat — "show, don't tell." Ion's script asks two anchor
 // questions (the bill + "what has you interested in solar"). These are
@@ -23,6 +24,10 @@ type Moment = {
   end: number;
   // The script line this moment pulls from (anchor id on /ion/present/script).
   scriptAnchor?: string;
+  // Voice-mirror: a coached "could've said" line. When set AND the call's rep
+  // has a cloned voice (see REP_VOICES), a "hear it in {rep}'s voice" button
+  // renders next to the real clip. Generated on the fly via /api/ion/alt-take.
+  altText?: string;
 };
 
 type Call = {
@@ -56,6 +61,8 @@ const CALLS: Call[] = [
         start: 138,
         end: 164,
         scriptAnchor: "s-bill",
+        altText:
+          "Two-sixty-two a month — that's real money going out the door every single month. And that's exactly what we're here to fix: the whole goal is getting that bill down for you. So let's make sure you're set up to qualify — I've just got a couple quick questions.",
       },
     ],
   },
@@ -75,6 +82,8 @@ const CALLS: Call[] = [
         start: 30,
         end: 74,
         scriptAnchor: "s-why",
+        altText:
+          "Yeah, honestly a lot of folks assume that. But the way it works, it's really just swapping your power bill for a lower one — so the whole goal is getting that bill down for you. Mind if I ask what you're paying a month right now?",
       },
     ],
   },
@@ -104,6 +113,8 @@ const CALLS: Call[] = [
         start: 26,
         end: 57,
         scriptAnchor: "s-bill",
+        altText:
+          "A hundred and twenty a month — that's around fifteen hundred dollars a year just gone. That's the whole reason people look at this: getting that bill down. Let me grab your details real quick so we can show you exactly what you'd be saving.",
       },
       {
         label: "The call dies",
@@ -214,6 +225,7 @@ function CallCard({ call }: { call: Call }) {
           <MomentBlock
             key={i}
             moment={m}
+            rep={call.rep}
             callId={call.callId}
             divide={i > 0}
             id={`clip-${call.rep.toLowerCase()}-${i}`}
@@ -248,11 +260,13 @@ function CallCard({ call }: { call: Call }) {
 
 function MomentBlock({
   moment,
+  rep,
   callId,
   divide,
   id,
 }: {
   moment: Moment;
+  rep: string;
   callId: string;
   divide: boolean;
   id: string;
@@ -273,14 +287,24 @@ function MomentBlock({
         <Line role="Rep asks" tone="muted" text={moment.ask} />
         <Line role="Customer" tone="text" text={moment.answer} />
         <Line role="Rep — the miss" tone="warning" text={moment.miss} />
+        {moment.altText ? (
+          <Line role="Could've said" tone="accent" text={moment.altText} />
+        ) : null}
       </dl>
-      <div className="mt-3 flex items-center gap-3">
+      <div className="mt-3 flex flex-wrap items-center gap-3">
         <AudioClip
           callId={callId}
           startSec={moment.start}
           endSec={moment.end}
           label="Play the moment"
         />
+        {moment.altText ? (
+          <AltTake
+            rep={rep}
+            text={moment.altText}
+            label={`Hear it in ${rep}'s voice`}
+          />
+        ) : null}
         {moment.scriptAnchor ? (
           <Link
             href={`/ion/present/script#${moment.scriptAnchor}`}
@@ -301,11 +325,13 @@ function Line({
 }: {
   role: string;
   text: string;
-  tone: "muted" | "text" | "warning";
+  tone: "muted" | "text" | "warning" | "accent";
 }) {
   const color =
     tone === "warning"
       ? "text-stewart-warning"
+      : tone === "accent"
+      ? "text-stewart-accent"
       : tone === "text"
       ? "text-stewart-text"
       : "text-stewart-muted";

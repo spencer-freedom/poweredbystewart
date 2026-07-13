@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
   // file in the serverless function bundle.
   outputFileTracingIncludes: {
     "/api/ion/audio-clip/[callId]": ["./node_modules/ffmpeg-static/ffmpeg"],
+    // alt-take runs the same ffmpeg binary for the optional phone-match filter.
+    "/api/ion/alt-take": ["./node_modules/ffmpeg-static/ffmpeg"],
   },
   async redirects() {
     return [

@@ -3,6 +3,49 @@
 // the want and set the appointment. Downstream effects run the schema's own
 // KPI chain: set rate → sit rate → close-from-sit.
 
+import { HearBoth } from "../../(public)/_components/HearBoth.client";
+
+// "Hear the difference" — the same three real calls from The Miss, now with
+// the coached line rendered in each rep's OWN cloned voice (ElevenLabs, via
+// /api/ion/alt-take). actualQuote/start/end/callId mirror SectionTheMiss so
+// the room hears the real miss, then hears what the rep could've said.
+// altText is a draft coaching line — tune wording in /ion/present/voice-studio.
+const AB_CALLS = [
+  {
+    rep: "Meg",
+    setup: "$262 on the table.",
+    callId: "SESSION20_2b61f758",
+    startSec: 138,
+    endSec: 164,
+    actualQuote:
+      "Holy smokes… okay. Now the only requirement is a credit score above 670.",
+    altText:
+      "Two-sixty-two a month — that's real money going out the door every single month. And that's exactly what we're here to fix: the whole goal is getting that bill down for you. So let's make sure you're set up to qualify — I've just got a couple quick questions.",
+  },
+  {
+    rep: "Joel",
+    setup: "“I figured it'd be expensive.”",
+    callId: "10000160568",
+    startSec: 30,
+    endSec: 74,
+    actualQuote:
+      "Okay, gotcha — with the incentives and programs right now, you're not paying anything out of pocket, it's just a bill swap… I've got a couple questions to make sure you qualify.",
+    altText:
+      "Yeah, honestly a lot of folks assume that. But the way it works, it's really just swapping your power bill for a lower one — so the whole goal is getting that bill down for you. Mind if I ask what you're paying a month right now?",
+  },
+  {
+    rep: "Carter",
+    setup: "$120 a month, still browsing.",
+    callId: "20000555055",
+    startSec: 26,
+    endSec: 57,
+    actualQuote:
+      "Hundred and twenty… pretty expensive for you. Okay, and you're at 1508 South 2nd Avenue?",
+    altText:
+      "A hundred and twenty a month — that's around fifteen hundred dollars a year just gone. That's the whole reason people look at this: getting that bill down. Let me grab your details real quick so we can show you exactly what you'd be saving.",
+  },
+];
+
 const EFFECTS = [
   {
     kpi: "Set rate",
@@ -36,7 +79,36 @@ export function SectionImagine() {
           the want, and to set the appointment.
         </p>
 
-        <div className="mt-12 grid sm:grid-cols-3 gap-5">
+        {/* Hear the difference — real miss vs. the coached line in the rep's
+            own (cloned) voice. Same three calls from the section above. */}
+        <div className="mt-12 space-y-6">
+          <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-accent">
+            Hear the difference — in their own voice
+          </p>
+          {AB_CALLS.map((c) => (
+            <div key={c.callId + c.startSec}>
+              <p className="text-sm text-stewart-muted mb-2">
+                <span className="font-semibold text-stewart-text">{c.rep}</span>
+                {" — "}
+                {c.setup}
+              </p>
+              <HearBoth
+                rep={c.rep}
+                callId={c.callId}
+                startSec={c.startSec}
+                endSec={c.endSec}
+                actualQuote={c.actualQuote}
+                altText={c.altText}
+              />
+            </div>
+          ))}
+          <p className="text-xs italic text-stewart-muted/70">
+            The &ldquo;could&apos;ve said&rdquo; lines are generated in each
+            rep&apos;s cloned voice — a coaching illustration, not real call audio.
+          </p>
+        </div>
+
+        <div className="mt-14 grid sm:grid-cols-3 gap-5">
           {EFFECTS.map((e) => (
             <div
               key={e.kpi}
