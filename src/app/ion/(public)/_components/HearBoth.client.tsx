@@ -48,7 +48,7 @@ export function HearBoth({
         <blockquote className="text-base text-stewart-text leading-snug border-l-2 border-stewart-accent pl-3 mb-4">
           &ldquo;{altText}&rdquo;
         </blockquote>
-        <AltTake rep={rep} text={altText} phone={phone} label="Play could've-said" />
+        <AltTake rep={rep} text={altText} phone={phone} label={`If ${rep} said it this way`} />
       </div>
     </div>
   );

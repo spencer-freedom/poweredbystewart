@@ -302,7 +302,7 @@ function MomentBlock({
           <AltTake
             rep={rep}
             text={moment.altText}
-            label={`Hear it in ${rep}'s voice`}
+            label={`If ${rep} said it this way`}
           />
         ) : null}
         {moment.scriptAnchor ? (
