@@ -1,116 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { getDemandSignals, getPreorders, searchCatalog, getBuyBoard } from "@/lib/stewart-api";
+import { getDemandSignals, getPreorders } from "@/lib/stewart-api";
 import type {
   DemandSignalsPayload,
   DemandSignalGroup,
   DemandSignalItem,
   PreordersPayload,
   PreorderItem,
-  CatalogSearchItem,
-  BuyBoardPayload,
-  BuyBoardItem,
 } from "@/lib/stewart-api";
 import { PageInfo } from "@/components/page-info";
-
-function fmtU(n: number): string {
-  return `${n.toLocaleString()}u`;
-}
-
-function PressingHint({ count, units }: { count: number | null; units: number | null }) {
-  if (!count || count <= 1) return null;
-  return (
-    <span className="text-[10px] text-sky-400/70 shrink-0" title="Combined trailing-90-day units across all pressings of this album">
-      · {count} pressings · {fmtU(units ?? 0)} album
-    </span>
-  );
-}
-
-type ReleaseGroup = {
-  key: string; album: string; artist: string; total: number; pressingCount: number;
-  onHand: number; bestRank: number | null; hasIndie: boolean; items: CatalogSearchItem[];
-};
-
-function groupReleases(results: CatalogSearchItem[]): ReleaseGroup[] {
-  const map = new Map<string, ReleaseGroup>();
-  for (const it of results) {
-    const k = it.release_key || it.upc || it.title;
-    let g = map.get(k);
-    if (!g) {
-      g = { key: k, album: it.album || it.title, artist: it.artist || "", total: it.release_units_90d,
-            pressingCount: it.pressing_count, onHand: 0, bestRank: null, hasIndie: false, items: [] };
-      map.set(k, g);
-    }
-    g.items.push(it);
-    g.onHand += it.on_hand;
-    if (it.sales_rank != null) g.bestRank = g.bestRank == null ? it.sales_rank : Math.min(g.bestRank, it.sales_rank);
-    if (it.indie_exclusive) g.hasIndie = true;
-  }
-  return [...map.values()].sort((a, b) => b.total - a.total || (a.bestRank ?? 1e9) - (b.bestRank ?? 1e9));
-}
-
-function ReleaseGroups({ results }: { results: CatalogSearchItem[] }) {
-  const groups = useMemo(() => groupReleases(results), [results]);
-  const [open, setOpen] = useState<Record<string, boolean>>({});
-  const grand = useMemo(() => ({
-    units: groups.reduce((s, g) => s + g.total, 0),
-    pressings: results.length,
-    onHand: results.reduce((s, it) => s + it.on_hand, 0),
-    releases: groups.length,
-  }), [groups, results]);
-
-  return (
-    <div className="border border-stewart-border rounded-lg overflow-hidden">
-      <div className="flex items-center justify-between px-3 py-2 bg-stewart-bg/60 border-b border-stewart-border text-xs">
-        <span className="text-stewart-muted">{grand.releases} releases · {grand.pressings} pressings</span>
-        <span className="font-mono">
-          <span className="text-stewart-muted">on-hand</span> <b className="text-stewart-text">{grand.onHand}</b>
-          {" · "}<span className="text-stewart-muted">grand total</span> <b className="text-emerald-400">{fmtU(grand.units)}</b>
-        </span>
-      </div>
-      {groups.map((g) => {
-        const isOpen = open[g.key] ?? false;
-        return (
-          <div key={g.key} className="border-b border-stewart-border/50 last:border-0">
-            <button
-              onClick={() => setOpen((o) => ({ ...o, [g.key]: !isOpen }))}
-              className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-stewart-border/20"
-            >
-              <span className={`text-stewart-muted text-xs transition-transform ${isOpen ? "rotate-90" : ""}`}>▸</span>
-              <span className="flex-1 min-w-0 text-sm text-stewart-text truncate">
-                {g.album}{g.artist ? <span className="text-stewart-muted"> — {g.artist}</span> : null}
-              </span>
-              {g.hasIndie && <span className="px-1 py-0.5 rounded bg-purple-500/15 text-purple-400 font-semibold text-[9px] shrink-0">IE</span>}
-              <span className="text-[11px] text-stewart-muted shrink-0 w-8 text-right">{g.pressingCount}p</span>
-              <span className="text-xs font-mono text-stewart-muted shrink-0 w-14 text-right">{g.onHand} on</span>
-              <span className="text-xs font-mono font-bold text-emerald-400 shrink-0 w-16 text-right">{fmtU(g.total)}</span>
-              <span className="text-xs font-mono text-stewart-muted shrink-0 w-16 text-right">{g.bestRank != null ? `#${g.bestRank.toLocaleString()}` : "—"}</span>
-            </button>
-            {isOpen && (
-              <div className="bg-stewart-bg/30">
-                {g.items.map((it) => (
-                  <div key={it.upc || it.title} className={`flex items-center gap-2 pl-8 pr-3 py-1.5 text-xs border-t border-stewart-border/30 ${it.buy ? "bg-red-500/[0.05]" : ""}`}>
-                    <Thumb src={it.image} alt={it.title} />
-                    <span className="flex-1 min-w-0 truncate text-stewart-text">{it.title}</span>
-                    {it.indie_exclusive && <span className="px-1 py-0.5 rounded bg-purple-500/15 text-purple-400 font-semibold text-[9px] shrink-0">IE</span>}
-                    {it.buy && <span className="px-1 py-0.5 rounded bg-red-500/15 text-red-400 font-semibold text-[9px] shrink-0">BUY</span>}
-                    <span className="text-[10px] text-stewart-muted uppercase w-10 text-right shrink-0">{it.format || "—"}</span>
-                    <span className={`font-mono font-semibold w-12 text-right shrink-0 ${it.stock_status === "out" ? "text-red-400" : it.stock_status === "low" ? "text-amber-400" : "text-stewart-text"}`} title="On hand">{it.on_hand}</span>
-                    <span className="font-mono font-semibold text-emerald-400 w-14 text-right shrink-0" title="Units 90d">{it.units_90d}u</span>
-                    <span className="font-mono text-stewart-muted w-16 text-right shrink-0" title="Sales rank">{it.sales_rank != null ? `#${it.sales_rank.toLocaleString()}` : "—"}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 export default function MarketingPage() {
   const { isSignedIn, isLoaded } = useAuth();
@@ -155,7 +56,7 @@ export default function MarketingPage() {
       <div>
         <h1 className="text-2xl font-bold text-stewart-text">Demand Signals</h1>
         <p className="text-sm text-stewart-muted">
-          Live record-store velocity from <span className="text-stewart-accent">Provo&apos;s Vintage Groove</span>
+          Live record-store velocity from <span className="text-stewart-accent">Provo&apos;s Vintage Groove</span> — the titles to put ad spend behind
         </p>
       </div>
 
@@ -163,20 +64,14 @@ export default function MarketingPage() {
         <p>
           A live read of what is moving in the record store right now — Trending
           (last 7 days), Hot (last 30 days), and building Momentum (accelerating
-          sell-through) — split by Vinyl and CD. Use it to time promos, features,
-          and inventory pushes around real demand.
+          sell-through) — split by Vinyl and CD, plus the upcoming Pre-Orders.
+          Use it to time promos, features, and ad sets around real demand.
         </p>
       </PageInfo>
 
       {error && (
         <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-md text-red-400 text-sm">{error}</div>
       )}
-
-      <ArtistSearch />
-
-      <BuyBoardSection />
-
-      {preorders && <PreordersSection report={preorders} />}
 
       {loading ? (
         <div className="text-center text-stewart-muted py-12 text-sm">Loading demand signals...</div>
@@ -189,211 +84,8 @@ export default function MarketingPage() {
           <SignalSection title="Trending" windowLabel={data.windows.trending} group={data.trending} />
           <SignalSection title="Hot" windowLabel={data.windows.hot} group={data.hot} />
           <SignalSection title="Momentum" windowLabel={data.windows.momentum} group={data.momentum} />
+          {preorders && <PreordersSection report={preorders} />}
         </>
-      )}
-    </div>
-  );
-}
-
-function ArtistSearch() {
-  const [q, setQ] = useState("");
-  const [results, setResults] = useState<CatalogSearchItem[] | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [searched, setSearched] = useState("");
-  const [gapsOnly, setGapsOnly] = useState(false);
-  const [gapCount, setGapCount] = useState(0);
-  const [indieOnly, setIndieOnly] = useState(false);
-  const [indieCount, setIndieCount] = useState(0);
-
-  const run = useCallback(async (gaps: boolean, indie: boolean) => {
-    const term = q.trim();
-    if (!term) return;
-    setBusy(true);
-    try {
-      const res = await searchCatalog(term, 80, gaps, indie);
-      setResults(res.results);
-      setGapCount(res.gap_count);
-      setIndieCount(res.indie_count);
-      setSearched(res.query);
-    } catch {
-      setResults([]);
-      setGapCount(0);
-      setIndieCount(0);
-      setSearched(term);
-    } finally {
-      setBusy(false);
-    }
-  }, [q]);
-
-  const toggleGaps = () => {
-    const next = !gapsOnly;
-    setGapsOnly(next);
-    if (results !== null) run(next, indieOnly);
-  };
-  const toggleIndie = () => {
-    const next = !indieOnly;
-    setIndieOnly(next);
-    if (results !== null) run(gapsOnly, next);
-  };
-
-  return (
-    <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 space-y-4">
-      <div>
-        <h2 className="text-sm font-medium text-stewart-muted uppercase tracking-wider">Artist / Album Search — Buy View</h2>
-        <p className="text-xs text-stewart-muted/70 mt-1">
-          Search a band or album — every title carried, ranked best-seller-first, with the live Square
-          shelf count. <span className="text-red-400 font-medium">BUY</span> flags the hits you&apos;re out of or low on.
-        </p>
-      </div>
-      <div className="flex gap-2">
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && run(gapsOnly, indieOnly)}
-          placeholder="e.g. Radiohead, Taylor Swift, Miles Davis…"
-          className="flex-1 bg-stewart-bg border border-stewart-border rounded-md px-3 py-2 text-sm text-stewart-text placeholder:text-stewart-muted focus:outline-none focus:border-stewart-accent"
-        />
-        <button
-          onClick={() => run(gapsOnly, indieOnly)}
-          disabled={busy || !q.trim()}
-          className="px-4 py-2 rounded-md bg-stewart-accent/15 text-stewart-accent text-sm font-medium hover:bg-stewart-accent/25 disabled:opacity-40"
-        >
-          {busy ? "Searching…" : "Search"}
-        </button>
-      </div>
-      {results !== null && !(results.length === 0 && !gapsOnly) && (
-        <>
-          <div className="flex items-center justify-between">
-            <p className="text-xs text-stewart-muted">
-              <span className="text-red-400 font-semibold">{gapCount}</span> restock gap{gapCount === 1 ? "" : "s"}
-              {" · "}<span className="text-purple-400 font-semibold">{indieCount}</span> indie for &ldquo;{searched}&rdquo;
-            </p>
-            <div className="flex gap-1">
-              <button
-                onClick={toggleIndie}
-                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-                  indieOnly ? "bg-purple-500/15 text-purple-400" : "text-stewart-muted hover:text-stewart-text"
-                }`}
-              >
-                Indie only
-              </button>
-              <button
-                onClick={toggleGaps}
-                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-                  gapsOnly ? "bg-red-500/15 text-red-400" : "text-stewart-muted hover:text-stewart-text"
-                }`}
-              >
-                Buy gaps only
-              </button>
-            </div>
-          </div>
-          {results.length === 0 ? (
-            <p className="text-sm text-stewart-muted py-2">No restock gaps — stocked on the movers.</p>
-          ) : (
-            <ReleaseGroups results={results} />
-          )}
-        </>
-      )}
-    </div>
-  );
-}
-
-function BuyBoardSection() {
-  const [data, setData] = useState<BuyBoardPayload | null>(null);
-  const [orderableOnly, setOrderableOnly] = useState(true);
-  const [fmt, setFmt] = useState("");
-  const [indieOnly, setIndieOnly] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const load = useCallback(async (ord: boolean, f: string, indie: boolean) => {
-    setLoading(true);
-    try {
-      setData(await getBuyBoard({ limit: 250, orderableOnly: ord, fmt: f || undefined, minUnits: 5, indieOnly: indie }));
-    } catch {
-      setData(null);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => { load(orderableOnly, fmt, indieOnly); }, [load, orderableOnly, fmt, indieOnly]);
-
-  const fmtBtn = (label: string, val: string) => (
-    <button
-      key={val}
-      onClick={() => setFmt(val)}
-      className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
-        fmt === val ? "bg-stewart-accent/15 text-stewart-accent" : "text-stewart-muted hover:text-stewart-text"
-      }`}
-    >
-      {label}
-    </button>
-  );
-
-  return (
-    <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 space-y-4">
-      <div className="flex items-baseline justify-between">
-        <h2 className="text-sm font-medium text-stewart-muted uppercase tracking-wider">Buy Board</h2>
-        {data && <span className="text-xs text-stewart-muted/70">{data.total_gaps} restock gaps</span>}
-      </div>
-      <p className="text-xs text-stewart-muted/70 -mt-1">
-        Every title across the catalog out of or low on stock while demand is strong — ranked by demand,
-        with what Alliance can fill.
-      </p>
-      <div className="flex items-center gap-2 flex-wrap">
-        <div className="flex gap-1">{fmtBtn("All", "")}{fmtBtn("Vinyl", "vinyl")}{fmtBtn("CD", "cd")}</div>
-        <button
-          onClick={() => setOrderableOnly(!orderableOnly)}
-          className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
-            orderableOnly ? "bg-emerald-500/15 text-emerald-400" : "text-stewart-muted hover:text-stewart-text"
-          }`}
-        >
-          {orderableOnly ? "Orderable only" : "All"}
-        </button>
-        <button
-          onClick={() => setIndieOnly(!indieOnly)}
-          className={`px-2.5 py-1 rounded text-xs font-medium transition-colors ${
-            indieOnly ? "bg-purple-500/15 text-purple-400" : "text-stewart-muted hover:text-stewart-text"
-          }`}
-        >
-          Indie{data ? ` (${data.indie_gaps})` : ""}
-        </button>
-      </div>
-      {loading ? (
-        <p className="text-sm text-stewart-muted py-2">Loading buy board…</p>
-      ) : !data || data.items.length === 0 ? (
-        <p className="text-sm text-stewart-muted py-2">No restock gaps match.</p>
-      ) : (
-        <ul className="divide-y divide-stewart-border/50">
-          {data.items.map((it: BuyBoardItem) => (
-            <li key={it.shopify_product_id} className="flex items-center gap-3 py-2">
-              <Thumb src={it.image} alt={it.title} />
-              <div className="flex-1 min-w-0">
-                <span className="flex items-center gap-1.5">
-                  <span className="text-sm text-stewart-text truncate">{it.title}</span>
-                  {it.indie_exclusive && <span className="px-1 py-0.5 rounded bg-purple-500/15 text-purple-400 font-semibold text-[9px] shrink-0">IE</span>}
-                  <PressingHint count={it.pressing_count} units={it.release_units_90d} />
-                </span>
-                {it.buy_reason && <span className="text-[11px] text-red-400/90">{it.buy_reason}</span>}
-              </div>
-              <span
-                className={`text-sm font-mono font-semibold w-14 text-right ${it.on_hand <= 0 ? "text-red-400" : "text-amber-400"}`}
-                title="On hand (Square)"
-              >{it.on_hand} on</span>
-              <span className="w-16 text-right text-sm font-mono" title="Alliance available to order">
-                {it.orderable ? (
-                  <span className="text-emerald-400 font-semibold">{it.alliance_qty}</span>
-                ) : (
-                  <span className="text-red-400/70 text-xs">none</span>
-                )}
-              </span>
-              <span className="text-sm font-mono font-semibold text-sky-400 w-14 text-right" title="Trailing-90d units">{it.units_90d}u</span>
-              <span className="text-xs font-mono text-stewart-muted w-16 text-right" title="Sales rank">
-                {it.sales_rank != null ? `#${it.sales_rank.toLocaleString()}` : "—"}
-              </span>
-            </li>
-          ))}
-        </ul>
       )}
     </div>
   );
