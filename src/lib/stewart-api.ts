@@ -268,6 +268,33 @@ export type DemandSignalsPayload = {
   missing: string[];
 };
 
+// ─── Best-selling artists (velocity rolled up by artist) ─────────────────────
+
+export type TopArtistItem = {
+  artist: string;
+  rank: number;
+  units_90d: number;
+  release_count: number;
+  best_rank: number | null;
+  on_hand_total: number;
+};
+
+export type TopArtistsPayload = {
+  count: number;
+  total: number;
+  generated_at: string | null;
+  items: TopArtistItem[];
+};
+
+export async function getTopArtists(limit = 100): Promise<TopArtistsPayload> {
+  const res = await fetch(`${BASE_URL}/api/velocity/top-artists?limit=${limit}`, { cache: "no-store" });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`velocity/top-artists ${res.status}: ${body || res.statusText}`);
+  }
+  return res.json();
+}
+
 export async function getDemandSignals(first = 50): Promise<DemandSignalsPayload> {
   const url = `${BASE_URL}/api/velocity/signals?first=${first}`;
   const res = await fetch(url, { cache: "no-store" });

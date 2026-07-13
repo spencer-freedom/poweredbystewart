@@ -3,13 +3,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { getDemandSignals, getPreorders } from "@/lib/stewart-api";
+import { getDemandSignals, getPreorders, getTopArtists } from "@/lib/stewart-api";
 import type {
   DemandSignalsPayload,
   DemandSignalGroup,
   DemandSignalItem,
   PreordersPayload,
   PreorderItem,
+  TopArtistsPayload,
 } from "@/lib/stewart-api";
 import { PageInfo } from "@/components/page-info";
 
@@ -19,6 +20,7 @@ export default function MarketingPage() {
 
   const [data, setData] = useState<DemandSignalsPayload | null>(null);
   const [preorders, setPreorders] = useState<PreordersPayload | null>(null);
+  const [artists, setArtists] = useState<TopArtistsPayload | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,9 +34,10 @@ export default function MarketingPage() {
     setLoading(true);
     setError(null);
     try {
-      const [res, pre] = await Promise.all([getDemandSignals(50), getPreorders(250)]);
+      const [res, pre, art] = await Promise.all([getDemandSignals(50), getPreorders(250), getTopArtists(100)]);
       setData(res);
       setPreorders(pre);
+      setArtists(art);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to load demand signals");
     } finally {
@@ -85,8 +88,34 @@ export default function MarketingPage() {
           <SignalSection title="Hot" windowLabel={data.windows.hot} group={data.hot} />
           <SignalSection title="Momentum" windowLabel={data.windows.momentum} group={data.momentum} />
           {preorders && <PreordersSection report={preorders} />}
+          {artists && <BestSellingArtists report={artists} />}
         </>
       )}
+    </div>
+  );
+}
+
+function BestSellingArtists({ report }: { report: TopArtistsPayload }) {
+  const top = report.items.slice(0, 40);
+  return (
+    <div className="bg-stewart-card border border-stewart-border rounded-lg p-6 space-y-4">
+      <div className="flex items-baseline justify-between">
+        <h2 className="text-sm font-medium text-stewart-muted uppercase tracking-wider">Best-Selling Artists</h2>
+        <span className="text-xs text-stewart-muted/70">{report.total.toLocaleString()} artists · by velocity</span>
+      </div>
+      <p className="text-xs text-stewart-muted/70 -mt-1">
+        Who&apos;s moving right now across their whole catalog — for artist-targeted ad sets.
+      </p>
+      <ul className="divide-y divide-stewart-border/50">
+        {top.map((a) => (
+          <li key={a.artist} className="flex items-center gap-3 py-2">
+            <span className="w-6 text-right text-sm font-mono text-stewart-muted flex-shrink-0">{a.rank}</span>
+            <span className="flex-1 text-sm text-stewart-text truncate">{a.artist}</span>
+            <span className="text-xs font-mono text-stewart-muted w-16 text-right" title="Releases carried">{a.release_count} rel</span>
+            <span className="text-sm font-mono font-semibold text-emerald-400 w-20 text-right" title="Combined 90d units">{a.units_90d.toLocaleString()}u</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
