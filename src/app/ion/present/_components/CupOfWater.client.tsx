@@ -367,6 +367,20 @@ function GlassCup({
                 strokeWidth="2"
               />
             ) : null}
+            {/* Whole-water highlight: trace the entire water body in amber. A
+                uniform fill over the full body has no neighboring un-lit water
+                to contrast against, so it washes out — the silhouette outline
+                makes "the whole cup" unmistakably light up. */}
+            {highlight === "water" ? (
+              <path
+                d={`M${CX - halfWidth(FILL_TOP)} ${FILL_TOP} L${BASE_LX} ${JUNC_Y} Q${BASE_LX} ${BASE_Y} ${CX} ${BASE_Y} Q${200 - BASE_LX} ${BASE_Y} ${200 - BASE_LX} ${JUNC_Y} L${CX + halfWidth(FILL_TOP)} ${FILL_TOP}`}
+                fill="none"
+                stroke={HL_STROKE}
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            ) : null}
           </g>
         );
       })()}
