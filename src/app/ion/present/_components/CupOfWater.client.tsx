@@ -56,12 +56,15 @@ const HL_FILL = "rgba(251,191,36,0.24)";
 const HL_STROKE = "rgba(251,191,36,0.9)";
 
 // Vertical [top, bottom] of a highlightable region, by key:
-//   empty = the air (can't be sold), skim = the slate layer (don't want),
+//   empty = the air (can't be sold), water = the whole sellable body,
+//   skim = the slate layer (don't want),
 //   seg0..seg3 = the four wanted reason-to-buy sections, top → bottom.
 function highlightBounds(key?: string): [number, number] | null {
   switch (key) {
     case "empty":
       return [RIM_Y, FILL_TOP];
+    case "water":
+      return [FILL_TOP, BOTTOM];
     case "skim":
       return [FILL_TOP, SKIM_BOTTOM];
     case "seg0":

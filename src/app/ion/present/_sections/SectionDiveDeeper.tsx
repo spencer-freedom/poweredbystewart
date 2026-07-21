@@ -61,7 +61,10 @@ const DIVE_SLIDES: Slide[] = [
     body: <p>DQ, no interest, never answer the phone, etc.</p>,
     highlight: "empty",
   },
-  { title: "The water is all of your customers who can be sold." },
+  {
+    title: "The water is all of your customers who can be sold.",
+    highlight: "water",
+  },
   {
     title: "Some of them, Ion doesn't want to sell to.",
     highlight: "skim",
