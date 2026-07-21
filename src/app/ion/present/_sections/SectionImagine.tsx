@@ -9,7 +9,21 @@ import { HearBoth } from "../../(public)/_components/HearBoth.client";
 // the coached line rendered in each rep's OWN cloned voice (ElevenLabs, via
 // /api/ion/alt-take). actualQuote/start/end/callId mirror SectionTheMiss so
 // the room hears the real miss, then hears what the rep could've said.
-// altText is a draft coaching line — tune wording in /ion/present/voice-studio.
+//
+// GROUNDING RUBRIC for altText (LOCKED — see stewart-ion-pitch.md +
+// memory project_pitch_grounds_in_ion_script). Every "could've said" must be
+// Ion's OWN v2 script step, simply USED — never Spencer's coaching:
+//   • Reflect the customer's stated REASON (WHY anchor: "What interested you in
+//     solar? — Expand to validate") in THEIR own words, and/or their BILL
+//     (BILL anchor: "how much are you paying a month?"), then move to qualify /
+//     set the appointment. That's the script's own step the rep skipped.
+//   • DO NOT dramatize the bill as loss ("money going out the door", "$X a year
+//     just gone", "on the table") — that's Spencer's bill-as-villain flip,
+//     EXCLUDED pre-contract / post-contract only.
+//   • Don't invent motive ("that's why people look at this") — use the
+//     customer's own reason if they gave one.
+// The altText below is PLACEHOLDER mock — refine in /ion/present/voice-studio
+// against this rubric before any live pitch.
 const AB_CALLS = [
   {
     rep: "Meg",

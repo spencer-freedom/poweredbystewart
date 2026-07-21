@@ -9,7 +9,7 @@ import { altTakeUrl } from "../../(public)/_components/AltTake.client";
 // pre-filled with your alt line to drop into a section.
 //
 // Reps here must exist in the server-side REP_VOICES map.
-const REPS = ["Joel"];
+const REPS = ["Joel", "Carter", "Meg"];
 
 export function VoiceStudio() {
   const [rep, setRep] = useState(REPS[0]);
