@@ -21,7 +21,7 @@ const PAIRS: { pain: string; answer: string | null }[] = [
     answer: "Stewart listens to **every** call.",
   },
   {
-    pain: "There's **never** enough time or bandwidth to review the right calls before one-on-one call reviews.",
+    pain: "There's never enough **time or bandwidth** to review the right calls before one-on-one call reviews.",
     answer:
       "Stewart identifies and feeds your managers **the calls they should review**, and highlights the parts that need coaching — with clips to listen to and Ion's coachable recommendations.",
   },
