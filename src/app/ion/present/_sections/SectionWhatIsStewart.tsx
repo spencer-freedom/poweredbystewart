@@ -11,27 +11,46 @@ import { Fragment } from "react";
 // Each pain point (white, left) is answered by what Stewart does (blue,
 // right) on the same row. `answer: null` = pain stated, Stewart side still
 // to be written.
+// Emphasis lives in the copy as **bold** markers (see emphasize()), so the
+// words carrying the pain can be re-picked without touching layout. Keep it
+// to 1–2 per line — emphasis only works by contrast. The pain word and the
+// Stewart word that overturns it are bolded so the eye crosses the gap.
 const PAIRS: { pain: string; answer: string | null }[] = [
   {
-    pain: "Your team leads can't listen to every call.",
-    answer: "Stewart listens to every call.",
+    pain: "Your team leads can't listen to **every** call.",
+    answer: "Stewart listens to **every** call.",
   },
   {
-    pain: "There's never enough time or bandwidth to review the right calls before one-on-one call reviews.",
+    pain: "There's **never** enough time or bandwidth to review the right calls before one-on-one call reviews.",
     answer:
-      "Stewart identifies and feeds your managers the calls they should review, and highlights the parts that need coaching — with clips to listen to and Ion's coachable recommendations.",
+      "Stewart identifies and feeds your managers **the calls they should review**, and highlights the parts that need coaching — with clips to listen to and Ion's coachable recommendations.",
   },
   {
-    pain: "Inconsistent coaching and training. Only a few calls ever get reviewed — and randomly selected calls may or may not be worth reviewing, or miss the part a setter is really struggling with.",
+    pain: "Inconsistent coaching and training. Only **a few** calls ever get reviewed — and **randomly** selected calls may or may not be worth reviewing, or miss the part a setter is really struggling with.",
     answer:
-      "Stewart reviews every rep, every day, and surfaces the moments that actually need work — so every setter gets coached on what they're really struggling with, not on a random sample.",
+      "Stewart reviews **every rep, every day**, and surfaces the moments that actually need work — so every setter gets coached on what they're really struggling with, not on a random sample.",
   },
   {
-    pain: "Bad habits stick. A rep drifts from Ion's way, no one catches it, and the same mistake gets used and reused — call after call.",
+    pain: "Bad habits stick. A rep drifts from Ion's way, no one catches it, and the same mistake gets **used and reused** — call after call.",
     answer:
-      "Stewart catches the drift the first time it shows up — measured against Ion's own script — so it gets corrected before it becomes a habit.",
+      "Stewart catches the drift **the first time** it shows up — measured against Ion's own script — so it gets corrected before it becomes a habit.",
   },
 ];
+
+// Render **bold** spans inside a copy string. Emphasis stays in the text so
+// it can be moved without editing JSX.
+function emphasize(text: string, strongClass: string) {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) => {
+    const m = /^\*\*([^*]+)\*\*$/.exec(part);
+    return m ? (
+      <strong key={i} className={strongClass}>
+        {m[1]}
+      </strong>
+    ) : (
+      <Fragment key={i}>{part}</Fragment>
+    );
+  });
+}
 
 export function SectionWhatIsStewart() {
   return (
@@ -58,12 +77,12 @@ export function SectionWhatIsStewart() {
                 <p
                   className={`text-lg sm:text-xl leading-relaxed text-stewart-text ${rowDivider}`}
                 >
-                  {p.pain}
+                  {emphasize(p.pain, "font-semibold text-white")}
                 </p>
                 <div className={rowDivider}>
                   {p.answer ? (
                     <p className="text-lg sm:text-xl leading-relaxed text-stewart-accent font-medium">
-                      {p.answer}
+                      {emphasize(p.answer, "font-bold text-white")}
                     </p>
                   ) : null}
                 </div>
