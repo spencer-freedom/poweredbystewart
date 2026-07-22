@@ -23,7 +23,7 @@ const PAIRS: { pain: string; answer: string | null }[] = [
   {
     pain: "There's never enough **time or bandwidth** to review the right calls before one-on-one call reviews.",
     answer:
-      "Stewart identifies and feeds your managers **the calls they should review**, and highlights the parts that need coaching — with clips to listen to and Ion's coachable recommendations.",
+      "Stewart reviews the whole call against Ion's own script — Ion's way — flagging each section, where the setter followed it and where they drifted. It feeds the manager the full call plus those highlighted moments, so they pull it up on Powered by Stewart with the one-on-one **ready to go** — full call and clips cued up to share with the rep.",
   },
   {
     pain: "Inconsistent coaching and training. Only **a few** calls ever get reviewed — and **randomly** selected calls may or may not be worth reviewing, or miss the part a setter is really struggling with.",
