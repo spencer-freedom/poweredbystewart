@@ -28,12 +28,17 @@ const PAIRS: { pain: string; answer: string | null }[] = [
   {
     pain: "Inconsistent coaching and training. Only **a few** calls ever get reviewed — and **randomly** selected calls may or may not be worth reviewing, or miss the part a setter is really struggling with.",
     answer:
-      "Stewart reviews **every rep, every day**, and surfaces the moments that actually need work — so every setter gets coached on what they're really struggling with, not on a random sample.",
+      "Stewart reviews the whole floor daily, surfacing **the moments that actually need work** — so every setter gets coached on what they're really struggling with, not on a random sample.",
   },
   {
     pain: "Bad habits stick. A rep drifts from Ion's way, no one catches it, and the same mistake gets **used and reused** — call after call.",
     answer:
       "Stewart catches the drift **the first time** it shows up — measured against Ion's own script — so it gets corrected before it becomes a habit.",
+  },
+  {
+    pain: "Nothing carries over. A lead gets passed from rep to rep and worked again **from scratch** — the last conversation may as well never happened.",
+    answer:
+      "Stewart **remembers** what the customer said — so it's never lost, and the next rep to touch the lead builds on it instead of starting over.",
   },
 ];
 
@@ -77,7 +82,7 @@ export function SectionWhatIsStewart() {
                 <p
                   className={`text-lg sm:text-xl leading-relaxed text-stewart-text ${rowDivider}`}
                 >
-                  {emphasize(p.pain, "font-semibold text-white")}
+                  {emphasize(p.pain, "font-semibold text-stewart-accent")}
                 </p>
                 <div className={rowDivider}>
                   {p.answer ? (
