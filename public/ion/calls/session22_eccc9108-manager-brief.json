@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION22_eccc9108",
-  "trajectory_summary": "The call never left the starting gate. Mustafa opened with a multi-part hostile objection — disputed request, financial constraint, credit anxiety, explicit 'leave me alone' — and the rep had no structured response to any of it. The rep's only substantive move was a features explanation that addressed none of Mustafa's stated concerns, followed by a binary credit question that produced a hard 'no' and ended the call. Energy did not build; it leaked from the first exchange and was gone by 01:44.",
+  "rep_name": "John",
+  "trajectory_summary": "This is a short, largely one-sided call where a customer who denies making the original inquiry states upfront that he cannot afford solar and has poor credit, and repeats this three times with increasing frustration before the rep asks the direct qualifying question. The rep's 'Gotcha, gotcha' acknowledgments never engage the customer's stated objections, and the call ends in a clean, correct disqualification once credit is confirmed below threshold. There was no viable path to a booked appointment here — the outcome is a legitimate hard DQ, not a lost opportunity — but the rep's handling of the lead-up (three unaddressed statements, an unresolved 'it's not free' legitimacy challenge, and a request to be left alone) reflects reactive listening rather than a controlled qualification flow.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 outcome tag is 'unknown.' Based on the transcript, the correct tag is 'DQ / no appointment' — the rep accepted a self-reported credit disqualification and offered only a vague callback with no locked time. No appointment was booked or tentatively set.",
+  "outcome_dispute": "v1 tag is unknown/unclear; the observed outcome should be recorded as dq (hard disqualifier: customer confirms credit below the qualifying threshold at 01:44), not a missed-opportunity or no-appointment call. The DQ itself was procedurally correct per qualifiers.credit_qualifier.",
+  "observed_outcome": {
+    "outcome": "dq",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "01:44",
+    "quote": "This one, I don't have it. No.",
+    "reasoning": "Customer confirms he does not meet the stated credit threshold, triggering the hard disqualifier under qualifiers.credit_qualifier; the call ends immediately after with no appointment set."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The call never reached bill collection — it was cut short by the customer's credit disqualification before the rep got past the credit qualifier question."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never asked what interested the customer in solar; the customer instead used the early part of the call to deny the premise of the inquiry and state financial disqualifiers, so no interest reason was ever established."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:10",
+      "quote": "This is John with ION."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "co_owner",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "roof",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "utility_company",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_amount",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Hostile-open objection handling — acknowledge before redirecting",
+    "topic": "acknowledging stated objections before repeating script",
     "ts": "00:38",
     "quote": "My credit, I don't have no good credit to get financed solar. You gotta leave me alone.",
-    "why": "The rep's entire call arc was determined in the first 40 seconds: Mustafa disclosed financial vulnerability and explicit hostility, and the rep had no structured response. Every subsequent move (features explanation, binary credit question, vague callback) was downstream of this initial failure to acknowledge. This is the rep's highest-leverage coaching gap on this call — not a technique gap but a foundational 'what do I do when someone says leave me alone' gap. The manager should use this moment to walk through the acknowledge-then-bridge structure before any redirect attempt."
+    "why": "The customer states his disqualifying credit situation and a request to disengage three times before the rep asks the direct qualifying question at 01:38 — the rep's repeated 'Gotcha, gotcha' response pattern shows he is not actually processing what the customer is saying, just holding space until he can ask his next scripted line."
   },
   "key_moments": [
+    {
+      "ts": "00:12",
+      "quote": "I'm reaching out really quick because we got a request you were looking into solar for your home here in Beaverton.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The customer immediately disputes making any request. The rep never grounds the lead source with specificity (form name, date, referral channel) which is exactly the protocol move that reduces suspicion per protocols.how_did_you_get_my_number — instead the vague 'we got a request' framing invites exactly the pushback that follows."
+    },
+    {
+      "ts": "00:54",
+      "quote": "is your credit above the credit? Free. You're calling somebody. It's not free.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a legitimacy/scam-anxiety challenge layered on top of a cost objection — the customer is questioning whether 'free' framing is a scam tactic. The rep's response at 01:02 explains installation-fee mechanics but never directly addresses the trust/scam undertone in 'it's not free... you're calling somebody.'"
+    },
     {
       "ts": "00:38",
       "quote": "My credit, I don't have no good credit to get financed solar. You gotta leave me alone.",
       "classification": "empathy_miss",
-      "stewart_read": "Mustafa is disclosing financial vulnerability and frustration simultaneously — 'leave me alone' is not a negotiating position, it is a person who feels cornered. The rep's response ('Gotcha. Gotcha. So,') acknowledges nothing and bridges to nothing. The schema classifies this as a trust gift: the customer is telling the rep exactly what is blocking him. The correct move is to acknowledge the specific concern before attempting any redirect."
+      "stewart_read": "The customer explicitly states a disqualifying financial fact and asks to be left alone in the same breath. The rep's next line is 'Gotcha. Gotcha. So,' which neither acknowledges the request nor moves to close the call respectfully."
     },
     {
-      "ts": "01:02",
-      "quote": "Yeah. I mean, the only free part, Mustafa, is we take care of the installation fee and no down payment, no upfront cost. So the only thing that you're paying for is just, you know, a cheaper solar power payment because we eliminate your current electric bill.",
-      "classification": "other",
-      "stewart_read": "Mustafa's objection is 'it's not free' — a cost/financial frame. The schema's objection_inversion move is directly applicable: the flip available here is to redirect the cost frame toward the ongoing expense of the current electric bill rather than defending the product's cost structure. Instead the rep explains features (installation fee, no down payment) — a defensive move that stays on the customer's terms rather than inverting them. This is the universal coaching gap the schema flags across the corpus: bill capture and cost objections handled safely instead of flipped."
-    },
-    {
-      "ts": "01:20",
-      "quote": "But what's even but you're gonna post some on this. They they didn't run credit to this one. It's just two months.",
-      "classification": "other",
-      "stewart_read": "This is the strongest evidentiary anchor for a prior-contact hypothesis: Mustafa references 'they didn't run credit to this one' and 'just two months,' suggesting a prior Ion (or competitor) touchpoint within the last two months where a credit pull was discussed but not executed. If this is a recycled lead, the rep is treating it as a cold inbound — missing context that could have reframed the conversation ('I see you spoke with someone a couple months ago — I wanted to follow up on that'). The rep does not engage with this disclosure at all."
-    },
-    {
-      "ts": "01:38",
-      "quote": "Gotcha. Is your credit at 650?",
-      "classification": "protocol_violation",
-      "stewart_read": "The rep asks a binary threshold question — 'is your credit at 650?' — after Mustafa has already stated three times that his credit is insufficient. This converts a stated concern into a hard-DQ gate. The schema's spencer_operator_note flags exactly this pattern: stated credit is unreliable (customers see Vantage scores, not FICO; bureaus differ by 30-50 points), and the open policy question is whether the setter should DQ on stated credit at all or pass to the closer's actual pull. By asking the binary question and accepting 'No' as a terminal answer, the rep may have killed a deal that the closer's credit pull would have qualified. Additionally, the threshold stated is 650, not the schema's 670 — a threshold that may differ from the schema's documented figure, an open policy question pending Kenny's resolution."
+      "ts": "01:44",
+      "quote": "This one, I don't have it. No.",
+      "classification": "policy_ambiguity",
+      "stewart_read": "This is the customer's own disqualifying answer, and ending the call here is correct procedure under the schema's current hard_dq=true rule for stated credit. However, per qualifiers.credit_qualifier's spencer_operator_note, self-reported credit is unreliable (bureau scores often run 30-50 points higher than what customers believe), so a policy question remains open: is DQ-on-stated-credit costing Ion real deals on this floor."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 26,
+    "verified": 26,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

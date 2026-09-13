@@ -1,38 +1,164 @@
 {
   "call_id": "10000167001",
-  "trajectory_summary": "The rep recovered a 'we already signed' objection into a booked appointment in under three minutes — a real win on objection handling. However, the booking is structurally fragile: the son drove the competitor decision, is categorically unavailable for the visit, and holds the utility account. The rep booked the sit without surfacing or resolving any of these constraints, leaving the closer to discover them on arrival.",
+  "rep_name": "Joel",
+  "trajectory_summary": "The call opens on a hard objection — customer states the decision is already made — and the rep uses the schema's signed-with-someone comparison strategy to convert a dead-sounding call into a booked in-person visit within about three minutes. But the win is thin: the rep never probes which company the son signed with, what the terms were, or what the design looked like, so the closer walks in blind on the competitive intelligence that would make the apples-to-apples pitch work. The son — who holds the utility account and independently made the competitor decision — is not looped into the new appointment at all, leaving the booking structurally fragile despite the smooth booking mechanics.",
   "shape": "mixed",
-  "outcome_dispute": "The call ends with a booked appointment, so a 'booked' outcome tag would be technically accurate. However, the quality of the booking is materially compromised: the son is the decision-maker and utilities account holder, he will not be present, and no bill collection occurred. A sit without the decision-maker is unlikely to convert, which undermines the value of the booking regardless of whether it technically pays. The outcome tag should reflect 'booked — fragile' rather than a clean book.",
+  "outcome_dispute": "v1 tag unknown; observed outcome is a booked in-person appointment for Saturday the 22nd at 12PM, but it should be flagged as conditional/fragile rather than a clean win — the actual decision-maker (the son, who has utility in his name and already picked a competitor) is explicitly not going to be present.",
+  "observed_outcome": {
+    "outcome": "booked",
+    "appointment_channel": "in_person",
+    "datetime_captured": true,
+    "co_owner_confirmed": false,
+    "ts": "02:36",
+    "quote": "Yeah. 12PM noon.",
+    "reasoning": "A specific day (Saturday the 22nd) and time (12PM noon) were confirmed for an in-person visit, but the son — the co-owner/decision-maker on the utility account — is explicitly confirmed as NOT attending, making this a booked-but-conditional outcome rather than a clean win."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "This call is a re-engagement of a prior missed appointment where a design was already built, not a fresh qualification call — the rep never asks for or discusses the customer's utility bill or usage at any point in this short exchange."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "This is a callback/re-book on an existing design rather than an initial qualification call, so the rep never asks the standard 'what interested you in solar' question and the customer never volunteers a motivating reason."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:12",
+      "quote": "My name is Joel. I'm calling from ION Solar."
+    },
+    {
+      "section": "interest_question",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "01:39",
+      "quote": "Yeah. Because he's the one everything is in his name as for utilities right now."
+    },
+    {
+      "section": "roof",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "utility_company",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_amount",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "01:00",
+      "quote": "How long ago was that?"
+    },
+    {
+      "section": "bill_collection",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "02:36",
+      "quote": "Yeah. 12PM noon."
+    },
+    {
+      "section": "button_up",
+      "status": "asked",
+      "ts": "02:47",
+      "quote": "if you'll if you could have that available to show to our specialist there"
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Decision-maker constraint — surface earlier, escalate before accepting absence",
+    "topic": "decision-maker excluded from booked appointment",
     "ts": "01:31",
-    "quote": "It'll just be me because my son is not would not be here. I mean, whatever day you come because he works like crazy.",
-    "why": "The son's role as decision-maker was visible at 00:41 but the rep didn't surface it until Wilbert raised it at 01:31 — and then accepted the absence without attempting any escalation path. A sit without the decision-maker is unlikely to convert, which undermines the value of the booking. The coaching move is not 'you should have blocked the booking' but 'you should have surfaced the constraint at 00:41 and attempted a lightweight path — phone call with son before Saturday, or son available by phone during the visit — before accepting full absence.'"
+    "quote": "It'll just be me because my son is not would not be here.",
+    "why": "The son independently researched and picked a competitor and holds the utility account, yet the rep books the visit with only the mother present and no concrete plan to involve him — this is the single biggest risk to whether this appointment converts to anything, since the person with signing authority won't be in the room."
   },
   "key_moments": [
     {
-      "ts": "00:51",
-      "quote": "So did you guys sign with them already, or you just signed?",
-      "classification": "other",
-      "stewart_read": "The rep's instinct to probe commitment depth before accepting the objection is the right move. 'Did you sign' vs 'you just picked' is a meaningful distinction — a signed contract is harder to revisit than a verbal decision. This is a strategic probe, not a reactive acceptance. The schema's signed_with_someone rebuttal validates the comparison-framing approach the rep then deploys."
+      "ts": "00:39",
+      "quote": "We have already picked one.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is the canonical signed-with-someone trigger. The rep does deploy the schema's validation/comparison strategy shortly after, so the miss is not total, but the initial response at 00:51 (\"Okay. Gotcha... did you guys sign with them already\") is purely investigative with no framing yet — the comparison pitch doesn't land until 01:07."
+    },
+    {
+      "ts": "01:00",
+      "quote": "How long ago was that?",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "The rep gets the timing of the competitor signing but never asks which company, what the design showed, or what price was quoted. This is exactly the competitive intelligence the closer needs and the setter had a free 15-second window to collect it."
     },
     {
       "ts": "01:31",
       "quote": "It'll just be me because my son is not would not be here. I mean, whatever day you come because he works like crazy.",
-      "classification": "spouse_handling",
-      "stewart_read": "Wilbert's phrasing — 'whatever day you come' — signals this is not a scheduling conflict but a categorical unavailability. The standard protocol move ('What time works for both of you?') was not viable here. However, the rep's 'Yeah. Okay.' acceptance without any attempt to surface an alternative path is a constrained adaptation that accepted the constraint too quickly. A better move would have been to surface the constraint earlier (the son's role was visible at 00:41) and attempt an escalation: 'Is there any way to get him on a quick call before Saturday, even just 10 minutes, so he's in the loop?' The rep's two-step workaround at 01:51 — book Wilbert, then find a way to get info to the son — is not wrong in principle but was never validated with Wilbert as a real path."
+      "classification": "adult_child_decision_maker",
+      "stewart_read": "The customer discloses her son independently researched and selected the competitor and holds the utility account in his name — an analogous pattern to the schema's adult-child-decision-maker trigger, though not a verbatim match, since here the son has already made a decision rather than needing to be consulted or approve one. The rep does not attempt to loop him into the new appointment at all."
     },
     {
       "ts": "01:39",
       "quote": "Yeah. Because he's the one everything is in his name as for utilities right now.",
-      "classification": "bill_anchor",
-      "stewart_read": "Wilbert's disclosure that the son holds the utility account makes bill collection structurally impossible with Wilbert alone. The rep responded with 'Gotcha' and moved to booking logistics without attempting to address this. No bill collection was attempted at any point in the call. For a paid lead, the schema requires bill collection before the appointment can be set. Even for an organic lead, the rep should have flagged this constraint explicitly — either by attempting to reach the son for bill info or by noting it for the closer. The rep's silence here is not strategic; there is no later move that resolves it."
-    },
-    {
-      "ts": "01:51",
-      "quote": "Gotcha. Well, yeah, I mean, we could totally have someone stop by to kinda show you what our design looks like and, yeah, just see if we could kinda compare. And then yeah. If you if you like what we have to show you and you wanna kinda show that to your son, then, yeah, we could definitely find a good time to get that information to him as well.",
-      "classification": "conditional_booking",
-      "stewart_read": "The rep's two-step framing — show Wilbert, then find a way to get info to the son — is a workaround for the absent decision-maker, not a resolution. The son drove the competitor decision (00:41), holds the utility account (01:39), and is categorically unavailable (01:31). The rep's framing implicitly accepts that Wilbert cannot close and positions the visit as a design-show with a deferred second step that has no confirmed path. This is a conditional booking: the closer is being sent to a visit where the decision-maker is absent and the next step is undefined."
+      "classification": "enthusiasm_signal",
+      "stewart_read": "This line clarifies ownership structure (son on utility, mother on premises) rather than signaling increased qualification — it's operationally important but not an enthusiasm signal in the schema's sense (no new usage, tenure, or capacity cue). Recharacterized here as a qualification/ownership detail the rep should have flagged for the closer rather than treated as routine color."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 22,
+    "verified": 22,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

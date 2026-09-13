@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION14_bd557729",
-  "trajectory_summary": "The call traces a cold → conditionally cooperative → skeptical-probing → loosely committed arc. Brandon got a tentative Saturday booking, which is a real outcome, but the appointment is structurally fragile: Scott's core skepticism about solar numbers was never addressed, no verify items were captured, no button-up protocol was executed, and the booking is conditioned on a Friday confirmation call that Scott can easily use as an exit. The energy moved — it did not build.",
+  "rep_name": "Brandon",
+  "trajectory_summary": "The call opens cold with the customer volunteering a negative prior-quote history, and the rep spends the middle of the call in a reactive scheduling negotiation that requires two corrections before landing on a workable date. A tentative appointment is reached, but the loan/financing question at the end is answered thinly, and the confirmed slot and channel (phone vs. in-person) are left ambiguous.",
   "shape": "mixed",
-  "outcome_dispute": "v1 outcome tag is unknown. The call ends with a tentative Saturday appointment, which should be tagged as 'tentative_appointment' — but the fragility of that booking (no verify, no button-up, unresolved prior-experience skepticism, confirmation-call condition) means it carries meaningful no-show risk. If v1 tagged this as a clean booking, that would be an overstatement.",
+  "outcome_dispute": "The rep's own closing line ('Alright. Sounds good. Alright. Saturday the eighteenth at twelve.') suggests a locked day and time, but the customer's request ('ring me next week, make sure everything's good to go') and the rep's own confirmation-call promise indicate the appointment is provisional pending a Friday check-in — this is better read as tentative than a firm booked outcome, and there is no explicit 'is that fair?' handshake per button_up.is_that_fair_handshake.",
+  "observed_outcome": {
+    "outcome": "tentative",
+    "appointment_channel": "unclear",
+    "datetime_captured": true,
+    "co_owner_confirmed": null,
+    "ts": "02:41",
+    "quote": "I'll set a set appointment for next Saturday in the afternoon, like, around twelve, and we'll call you Friday the day before just to confirm with you. If you need to reschedule, not a problem.",
+    "reasoning": "A specific day and time (Saturday the 18th at 12) is stated, but the customer explicitly called it a 'tentative appointment' at 01:20 and the rep's own confirmation-call promise plus built-in reschedule allowance mark this as provisional rather than a firmly locked booking. The appointment channel is ambiguous: the rep's language ('specialist... bring that over') suggests in-person, but Ion's standard button-up structure assumes phone consultations, so this should be flagged rather than resolved with confidence."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The customer references his 'current electrical bill' only in the context of the loan/financing question at 01:34, but no actual bill amount or usage figure is ever captured by the rep on this call."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never asks what interested the customer in solar; the call is framed entirely around re-engaging a missed prior appointment, so this verify item is skipped rather than reached."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:02",
+      "quote": "This is Brandon with Ion Solar."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "co_owner",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "roof",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "utility_company",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_amount",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "00:28",
+      "quote": "I've done a few of them, and none of the numbers ever came back worth shit."
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "02:52",
+      "quote": "Alright. Sounds good. Alright. Saturday the eighteenth at twelve."
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Verify section — zero qualification captured",
-    "ts": "01:20",
-    "quote": "I can set a tentative appointment for next Saturday. Let me just ask you this on the phone. I can probably handle a lot of this.",
-    "why": "Scott opened a door to qualify on the call and Brandon walked through it into a product explanation instead. Zero verify items were captured: no bill, no utility, no roof age, no co-decision-maker, no interest depth. The appointment is booked blind — the closer walks in with no qualification data and no bill. On a paid lead, this may mean the appointment cannot be confirmed at all. This is the single highest-leverage coaching gap on this call because it compounds every other failure: the scope creep, the fragile button-up, and the unresolved skepticism all trace back to Brandon not recognizing Scott's pre-screen attempt as a verify entry point."
+    "topic": "Front-load availability discovery before proposing dates",
+    "ts": "00:16",
+    "quote": "Are you available as soon as tomorrow?",
+    "why": "The rep proposes three separate date/time options (tomorrow, Monday, an incorrect Saturday) before landing on one that works, each requiring a correction from the customer. A single upfront question — work schedule, weekday vs weekend preference — would have collapsed this into one clean offer and avoided the golf-tournament stumble at 02:29."
   },
   "key_moments": [
     {
-      "ts": "00:06",
-      "quote": "Just reaching back out here about that solar evaluation for your home. Looks like we never got a chance to meet with you to go over a few options.",
-      "classification": "other",
-      "stewart_read": "Brandon uses the standard re-engagement opener with medium legitimacy weight. There is no Tesla framing, no state mention, no curiosity hook — just a procedural re-pitch. The schema distinguishes intros.tesla (high legitimacy weight) from intros.standard (medium legitimacy weight) precisely because legitimacy established in the first 30 seconds determines how much skepticism the rep has to fight for the rest of the call. Scott's immediate 'which one is this?' response is the direct downstream consequence of this opener."
-    },
-    {
       "ts": "00:28",
       "quote": "Is this the one which one is this? I've done a few of them, and none of the numbers ever came back worth shit.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Scott's dismissal is a prior-experience-with-no-useful-outcome objection, not a standard 'already have a quote' comparison request. The high-leverage response here is curiosity creation: make Scott want to see what Ion's design shows for his specific home, rather than defending Ion's numbers or pivoting to scheduling. Brandon did neither — he acknowledged the missed appointment and moved to scheduling, leaving Scott's core skepticism untouched. The objection_inversion flip is also available here: 'The numbers never worked because you were looking at the wrong program for your usage' — but Brandon would need Scott's bill to make that land, which he never collected."
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a history of multiple prior solar quotes that didn't pencil out for him. This is exactly the competitive/history intel the prior_designs verify item is meant to surface, and the rep does not ask which companies or what numbers were shown."
+    },
+    {
+      "ts": "00:34",
+      "quote": "We never actually got a chance to meet with you. We missed our appointments, but we can show you what we're offering to see if it'll fit your needs.",
+      "classification": "rapport_repair",
+      "stewart_read": "Rep does not directly acknowledge the customer's frustration about bad past numbers, instead pivoting past it to the logistics of missed appointments. The customer's complaint is left unaddressed in the moment."
+    },
+    {
+      "ts": "01:25",
+      "quote": "Is this one of those ones where, you I'm taking out a loan against my house, and the loan payment essentially is what you're balancing off of what my current electrical bill is?",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a direct financing/skepticism question that maps well to the objection-inversion pattern — the customer is essentially asking whether solar is just a disguised loan against his equity. The rep's answer is short and somewhat garbled rather than using the moment to reframe the customer's current bill as the real financial burden."
     },
     {
       "ts": "01:39",
       "quote": "No loans are announced. No liens.",
       "classification": "knowledge_gap",
-      "stewart_read": "Scott asks a direct, informed question about the financing structure — 'I'm taking out a loan against my house, and the loan payment essentially is what you're balancing off of what my current electrical bill is?' Brandon's flat denial ('No loans are announced. No liens.') is factually contested by his own next sentence, where he confirms financing is available. This is a scope-creep moment: Brandon tried to answer a closer-tier product question and got tangled in it. The schema's universal escape hatch — 'That's exactly the kind of question our specialist is built to answer' — would have held scope and preserved credibility."
-    },
-    {
-      "ts": "01:46",
-      "quote": "Well, there's a few options. If you wanna get financed, then, yeah, we can help you finance. If you wanna use our solar program, there are state and local incentives that would install the panels for your home at no cost to you. And because you're using electricity from the solar panels and not buying them from the electric company, we're able to get you a cheaper energy bill.",
-      "classification": "other",
-      "stewart_read": "Brandon delivers a product explanation covering financing options, state/local incentives, and energy bill mechanics — all closer-tier content. This is the longest continuous rep turn in the call and it produces no qualification data, no curiosity hook, and no emotional anchor. Scott's response is to accept the appointment, but his prior skepticism about numbers was not addressed by this explanation — it was talked past. Scope creep consumed the call's only real engagement window."
+      "stewart_read": "The rep's answer here is unclear and possibly a transcription of a stumble ('No loans are announced' is an odd phrase), and it does not clearly resolve whether financing involves a lien or loan structure, which is a legitimate and common customer question."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 27,
+    "verified": 27,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

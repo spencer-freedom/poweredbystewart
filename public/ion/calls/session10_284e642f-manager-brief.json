@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION10_284e642f",
-  "trajectory_summary": "Steven arrived as a warm, self-qualified buyer with a roof-then-solar plan and a clear travel window — one of the more cooperative opening states in the corpus. Holland converted none of that into qualification baseline, cross-sell routing, or a locked appointment. The call ends with a callback promise and no qualification data captured.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is 'unknown,' but the correct classification is 'callback scheduled — not sit-eligible.' Per schema outcomes.primary and setter_compensation_model.paid_on: sits, Holland is not paid on a callback promise; she is paid on a sit that proceeds through a full closer proposal. No verify items were captured, no bill anchor was established, and no appointment was booked. This call does not meet the sit-eligibility standard and should not be counted toward Holland's pay-period volume.",
+  "rep_name": "Holland",
+  "trajectory_summary": "This is a short, cooperative call where the customer pre-qualifies himself (buying a home, planning a new roof, wants solar after) and the entire conversation becomes a scheduling puzzle around his home closing and travel dates. The rep never runs verify, roof, utility, bill, or any qualification beats — she solves the calendar problem and ends with a promise to call back on the 4th to actually set the appointment. Energy stayed positive throughout, but structurally nothing was locked and no qualification data was captured, leaving this as a fragile callback rather than a real booking.",
+  "shape": "stagnant",
+  "outcome_dispute": "This should not be tagged as booked/tentative in the sense of a locked appointment — no day or time was set for the actual solar consultation; the rep only promised to call back on the 4th to schedule it. The correct read is 'callback,' and even that is contingent on the home purchase closing, per the customer's own words 'I would call you if something went sideways and it didn't close.'",
+  "observed_outcome": {
+    "outcome": "callback",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "01:47",
+    "quote": "K. What if I give you a call on the fourth? Then we can set up an appointment for somebody to be there either the sixth or the seventh.",
+    "reasoning": "No specific day/time was locked for the actual solar consultation — the rep committed only to calling the customer back on the 4th to then schedule an appointment for the 6th or 7th, and the entire plan is contingent on the home purchase closing per the customer's own words."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "No bill or usage figure was ever discussed — the customer doesn't yet own the property, and the rep never asked about utility company or expected usage even in general terms."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": true,
+    "reason_ts": "00:23",
+    "reason_quote": "Mhmm. And I'm gonna put a a new roof on it, and then I wanna put solar on it.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never explicitly asked what interested the customer in solar, but the customer volunteered his reason (new roof, then solar) unprompted; the rep never circled back to reinforce or route this reason, notably missing the roofing cross-sell tie-in."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:05",
+      "quote": "So this is Holland with Ion. I got a a request that you were looking into solar for your home."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "co_owner",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "roof",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "utility_company",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_amount",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "skipped",
+      "ts": "01:47",
+      "quote": "K. What if I give you a call on the fourth? Then we can set up an appointment for somebody to be there either the sixth or the seventh."
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Verify execution on a pre-close lead + cross-sell bridge",
-    "ts": "00:23",
-    "quote": "I'm gonna put a a new roof on it, and then I wanna put solar on it.",
-    "why": "Holland had a warm, self-qualified buyer who named both a roofing need and a solar plan in the first 30 seconds. She captured neither as a verify anchor nor as a cross-sell routing signal. The call ends with zero qualification data and no roofing bridge — two compounding misses on the highest-value opening in the call. This is the single most teachable moment: show Holland what she had and what she did with it."
+    "topic": "missed roofing cross-sell bridge",
+    "ts": "00:29",
+    "quote": "And I'm gonna put a a new roof on it, and then I wanna put solar on it.",
+    "why": "The customer handed the rep the exact roof-replacement-planned trigger in the first 30 seconds and the rep never mentioned Ion's in-house roofing — a clean revenue miss that costs nothing to catch and the schema flags as high-value (cross_sell_signals.roof_replacement_planned)."
   },
   "key_moments": [
     {
-      "ts": "00:23",
-      "quote": "I'm gonna put a a new roof on it, and then I wanna put solar on it.",
-      "classification": "cross_sell_miss",
-      "stewart_read": "Steven names a planned roof replacement and solar install in the same breath. This is the exact trigger condition in cross_sell_signals.roof_replacement_planned. Holland never bridges to Ion's in-house roofing capability at any point. The reactive read is that Holland simply didn't recognize the signal. There is no evidence of a strategic deferral — she never returns to roofing."
+      "ts": "00:05",
+      "quote": "So this is Holland with Ion. I got a a request that you were looking into solar for your home.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The intro names the company but skips state, referral-source specificity, or any credibility anchor beyond 'I got a request.' It works here only because the customer was already primed and warm, not because the intro did the legitimacy work."
     },
     {
-      "ts": "00:48",
-      "quote": "So because I'm in San Diego right now.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Steven's current San Diego residence is an available proxy for bill pain, utility company, and usage patterns. San Diego Gas & Electric is among the highest-rate utilities in the country — a customer currently paying SDG&E rates is a strong bill-pain candidate. Holland could have run partial verify against the San Diego home ('What are you paying on your current bill out there?') to establish a qualification baseline and emotional anchor before the new home closes. She does not attempt it."
-    },
-    {
-      "ts": "01:07",
-      "quote": "Yeah. So I was actually gonna say so I think it would be, better if we scheduled, let's see.",
+      "ts": "00:52",
+      "quote": "So I was thinking if if I could schedule somebody tentatively, fifth through twelfth, but, you know, and I would call you if something went sideways and it didn't close.",
       "classification": "conditional_booking",
-      "stewart_read": "Holland's only scheduling move produces a callback promise, not a locked appointment. No date, time, or duration is confirmed for the actual sit. No button-up elements are executed: no one-hour block stated, no phone-appointment specification, no computer/no-driving anchor, no 'is that fair' handshake. The outcome is structurally a soft callback, not a sit."
+      "stewart_read": "The customer explicitly conditions the entire appointment on his home purchase closing — this is the load-bearing sentence for why the outcome is fragile, not the later scheduling-mechanics exchange."
     },
     {
-      "ts": "02:32",
-      "quote": "Well, thanks, Holland. I appreciate you calling.",
-      "classification": "protocol_violation",
-      "stewart_read": "By end of call, Holland has captured: customer name, general location (Little River), and a travel window. She has not captured: homeowner confirmation on the new property, anyone else on the title, interest-in-solar depth, utility company, average bill, roof type/age, or prior designs. That is zero of eight verify items against a required threshold of six of eight per schema verify.required_completion_threshold. This is a call-wide structural omission, not a single-moment failure."
+      "ts": "01:00",
+      "quote": "but at least I'll have keys by the fifth is what I would think.",
+      "classification": "conditional_booking",
+      "stewart_read": "A second explicit hedge ('is what I would think') on the timeline reinforces that nothing here is locked — the whole plan rests on assumptions about the closing date holding."
+    },
+    {
+      "ts": "01:43",
+      "quote": "K. What if I give you a call on the fourth? Then we can set up an appointment for somebody to be there either the sixth or the seventh.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "The call resolves into a promise for a future callback to schedule, not a locked appointment day/time. There is no 'is that fair?' handshake, no hour-block statement, no confirmation mechanics — this is a plan to make a plan, not a booked appointment."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 20,
+    "verified": 19,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 1
+  }
 }

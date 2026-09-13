@@ -1,38 +1,164 @@
 {
   "call_id": "20000794474",
-  "trajectory_summary": "Carter had a warm, motivated customer and a clean verify run, but the call ends in a conditional callback rather than a locked appointment. The bill-access problem surfaced at 01:32 and was never solved — it became the gating condition that left the slot unbooked. The button-up was stripped of every structural anchor the schema requires: no locked time, no 'is that fair' handshake, no computer/no-driving instruction, no one-hour block stated.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is 'unknown' — the correct classification is 'conditional_callback / tentative_appointment.' A time was verbally negotiated (9AM John's time / 8AM Carter's time, tomorrow morning) but Carter explicitly stated 'I'm not able to put you in the schedule until I get that bill,' meaning no slot was locked. This is a tentative appointment with meaningful no-show risk: bill not received, customer traveling internationally for ~1 week, credit softly confirmed ('I think yes'), and no button-up anchors executed.",
+  "rep_name": "Carter",
+  "trajectory_summary": "This is a short, mechanical verify-and-schedule call where the rep moves through qualification quickly but without depth, then runs into a real logistical snag: the customer is traveling in Mexico without bill access. The appointment gets tentatively slotted but is explicitly gated on the customer sending a bill the rep does not have in hand by the end of the call.",
+  "shape": "mixed",
+  "outcome_dispute": "The call reads as tentative/conditional rather than a clean 'booked' outcome. The rep proposes 9am but explicitly states 'I'm not able to put you in the schedule until I get that' (04:01) referring to the bill, meaning the appointment is not actually locked in the system at call end -- it is contingent on a future action the customer has not yet completed.",
+  "observed_outcome": {
+    "outcome": "tentative",
+    "appointment_channel": "phone",
+    "datetime_captured": true,
+    "co_owner_confirmed": null,
+    "ts": "04:01",
+    "quote": "I'm not able to put you in the schedule until I get that.",
+    "reasoning": "A specific day and time (tomorrow, 9am customer's time) was discussed and agreed in principle, but the rep explicitly states the customer cannot be entered into the schedule until the bill is received, making this a conditional/tentative outcome rather than a fully booked one."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "01:39",
+    "bill_quote": "So I need to look that up. But I think that's around a 130, 150, something like that.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep's response immediately after the bill figure ('32. Okay. Cool.' at 01:42) is a garbled acknowledgment with no reflection of the number back to the customer as a reason to move forward -- the anchor was captured but never used."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "00:20",
+    "reason_given": true,
+    "reason_ts": "00:26",
+    "reason_quote": "Because of obvious reasons, you know, for the economy and for the climate and, we're saving some money.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep asked the interest question early and got a clear multi-part reason (economy, climate, savings), but simply replied 'Perfect. Yeah.' at 00:35 and moved directly into verify questions without ever tying the appointment or the savings framing back to this stated motivation."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:05",
+      "quote": "Hey, John. This is Carter calling from Ion."
+    },
+    {
+      "section": "interest_question",
+      "status": "asked",
+      "ts": "00:20",
+      "quote": "Why are you interested in looking into it?"
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:46",
+      "quote": "227 Meadow Road? / 217. / 217. Okay."
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "00:55",
+      "quote": "Is there anyone else on the title of the home with you?"
+    },
+    {
+      "section": "roof",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "01:04",
+      "quote": "Who's your utility company that you're working with?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "01:23",
+      "quote": "And then how much are you paying a month?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "01:44",
+      "quote": "One of the main requirements for getting solar in Colorado is having a credit score above 650."
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "03:37",
+      "quote": "Are you able to get access to your utility bill?"
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "02:16",
+      "quote": "Would a morning, afternoon, or evening time be best for that?"
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Conditional slot-lock + button-up execution on tentative appointments",
-    "ts": "04:02",
-    "quote": "I'm not able to put you in the schedule until I get that. So I'll just shoot you a text.",
-    "why": "Carter had a warm, willing customer and a verbally negotiated time, then left the call with zero button-up anchors and no locked slot. On a paid lead, the bill requirement before booking is schema-compliant — the coaching gap is not the bill requirement itself but the absence of conditional slot-locking language and any button-up element. With John traveling internationally for ~1 week, every day without a locked slot and a confirmation text is a day the appointment cools. Teach Carter the conditional slot-lock: 'I've got 9AM your time penciled in — the moment I get the bill, you're confirmed. Is that fair?' That single move executes a time anchor, a text promise, and a verbal handshake without violating the paid-lead rule."
+    "topic": "bill anchor captured but never flipped",
+    "ts": "01:42",
+    "quote": "32. Okay. Cool.",
+    "why": "The customer volunteered a bill range under difficult circumstances (traveling, no access to exact number) and the rep's acknowledgment was a low-energy non-response that didn't turn the number into a reason to act -- the single biggest value-creation miss on this call."
   },
   "key_moments": [
     {
-      "ts": "00:26",
-      "quote": "Because of obvious reasons, you know, for the economy and for the climate and, we're saving some money.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "John offered a genuine, three-part motivation unprompted — economy, climate, savings. The schema flags this as the emotional anchor of the entire pitch and explicitly grades depth: 'Top setters spend 60+ seconds here. Bottom setters check the box and move on.' Carter responded with 'Perfect. Yeah.' and pivoted immediately to verify. The motivation was captured but not deepened — no follow-up on which of the three mattered most, no bill-pain bridge, no curiosity creation off the savings angle."
-    },
-    {
-      "ts": "01:32",
-      "quote": "I'm out of town. I'm in Mexico. So I need to look that up.",
+      "ts": "00:46",
+      "quote": "227 Meadow Road?",
       "classification": "other",
-      "stewart_read": "John's travel disclosure is a process signal, not an empathy moment. The schema's shopping_customer_protocol is explicit: 'Walk customer through utility website on phone, capture via screenshot text.' Carter acknowledged the travel context for scheduling (time zone negotiation at 03:02–03:36) but never asked the pivotal question: 'Do you have online access to your utility account from your phone?' John said 'I probably could' at 03:46 — hedged, not definitive — which suggests the path was available but untested. Carter accepted the uncertainty rather than solving it."
+      "stewart_read": "Rep read the address wrong on first pass; customer immediately corrected it to 217 at 00:50, and the rep acknowledged the correct number. This is a minor verify-accuracy slip, quickly self-corrected by the customer, not a substantive miss."
     },
     {
-      "ts": "01:44",
-      "quote": "One of the main requirements for getting solar in Colorado is having a credit score above 650. Is that the case for you?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Two issues compound here. First, the schema threshold is 670; Carter stated 650 — a schema drift that has appeared in prior calls (SESSION18_fcbf33c1) and remains unresolved pending Kenny's confirmation. Second, John's response at 02:00 — 'I think yes' — is a soft, unconfirmed qualification. Spencer's operator note in the schema is directly applicable: customers self-report Vantage scores from credit-card apps, not the FICO bureau Ion pulls; a stated 'I think yes' at 650 (or 670) may or may not survive the closer's actual credit pull. Carter accepted the hedge and moved on without probing."
+      "ts": "01:23",
+      "quote": "Holy Cross Electric? Holy Cross. Yes. Okay. Cool. Yeah. That's what it's pulling.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Rep confirms the utility company purely as a data point with no follow-through into how that utility's rate structure might matter to the customer -- a missed small moment to build relevance, though a minor one given the item's low emotional weight."
     },
     {
-      "ts": "02:38",
-      "quote": "For about a week, and I'll be traveling. So",
-      "classification": "conditional_booking",
-      "stewart_read": "John's 'about a week' travel disclosure compounds the no-show risk beyond the Mexico-today context. The schema's soft_outcome_distinction directive is explicit: 'Callbacks WITH locked times vs we'll touch base — major delta on no-show rate.' Carter negotiated a time (9AM John's time / 8AM Carter's time) but then explicitly declined to lock the slot at 04:02, pending bill receipt. The result is a callback promise — not a locked appointment — against a week of travel disruption, with an unconfirmed credit qualification and no bill in hand."
+      "ts": "01:39",
+      "quote": "So I need to look that up. But I think that's around a 130, 150, something like that.",
+      "classification": "bill_anchor",
+      "stewart_read": "Customer gives an approximate bill range while admitting uncertainty since he's traveling. This is the anchor point the rep needed and got, but the number is soft (a guess, not the actual bill)."
+    },
+    {
+      "ts": "01:42",
+      "quote": "32. Okay. Cool.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Immediately after the customer's bill-range guess, the rep's acknowledgment is a garbled, low-energy filler ('32. Okay. Cool.') that neither confirms the number clearly nor uses it -- the anchor is captured and then dropped in the same breath."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 30,
+    "verified": 30,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION26_e6c7c21c",
-  "trajectory_summary": "The call opens on a structural DQ — Greg already has solar — but Greg himself re-opens a legitimate future opportunity twice: first by expressing interest in integrated solar roofing, then by explicitly connecting future panel replacement to a future roof replacement. Tyke correctly initiates orphaned-flow at 00:42 but fails to pivot when Greg clarifies his actual interest at 01:15, and then drifts through a six-minute technical monologue without anchoring any future action. The call ends with a vague 'reach out to us in a couple years' that captures nothing.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "v1 outcome tag is unknown. The correct classification is: no appointment booked, no cross-sell routed, no structured follow-up captured. The call is a missed cross-sell / future-pipeline miss, not a clean DQ — Greg self-identified as a likely future buyer at 06:14 and Tyke let him walk without any capture mechanism.",
+  "rep_name": "Tyke",
+  "trajectory_summary": "This is a disqualified orphaned-system call that the rep handled correctly at the DQ moment but then let run long as an unstructured technical Q&A. The customer was never a bookable lead — he owns a working SolarEdge system from a defunct installer and was calling out of curiosity about Ion's shingle-roofing product, not to buy anything.",
+  "shape": "stagnant",
+  "outcome_dispute": "v1 tag is unknown; observed outcome should be 'dq', not any booking-adjacent tag. The customer discloses an existing, working solar system with a competitor's install at 00:49, which is a hard DQ per orphaned_flow / dq_rules.ppa_existing_system-adjacent logic, and the rep himself confirms 'we're not able to work on another company's equipment' at 01:00.",
+  "observed_outcome": {
+    "outcome": "dq",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "01:00",
+    "quote": "Unfortunately, my company, we're not we're not able to work on another company's, equipment or anything like that.",
+    "reasoning": "Customer owns a working solar system installed by a now-defunct competitor; per orphaned_flow logic this is a hard disqualification, and the rep confirms Ion cannot service it. No appointment, callback, or booking of any kind resulted."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The customer is an existing solar owner, not a prospect for a new install, so there was never a utility-bill qualification step to run — the call was DQ'd on ownership grounds before bill collection would apply."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": true,
+    "reason_ts": "00:27",
+    "reason_quote": "My curiosity was not so much running solar. I already have that.",
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never explicitly asked 'what interested you in solar' since the intro line already presumed interest; the customer volunteered his reason unprompted (technical curiosity about an existing system), but since he isn't a prospect there was no appointment to tie the reason to."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:05",
+      "quote": "This is, Tyke with Ion. I received your request. You're looking at solar for the home."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "co_owner",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "roof",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "utility_company",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_amount",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "00:42",
+      "quote": "Okay. Who did you, get installed with?"
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Cross-sell routing and future-pipeline capture",
-    "ts": "06:14",
-    "quote": "Maybe by the time my panels go tits up, that'd be something I can look into because I probably will need a roof by then.",
-    "why": "This call demonstrates a gap in Tyke's awareness of Ion's in-house roofing offering and what to do with a warm future-pipeline lead. Greg handed over a future roofing + solar opportunity explicitly, and Tyke exited with no routing, no capture, and no structure. The coaching question for the 1-on-1 is whether Tyke knows Ion does roofing in-house — if not, that is a product knowledge gap to close before the next call. If yes, the coaching is about recognizing the cross-sell trigger and acting on it."
+    "topic": "Fabricating specifics under casual questioning",
+    "ts": "01:25",
+    "quote": "Yeah. We we unfortunately, those are, like, kind of backed up right now. They're, about two years out to to order them or at least to be installed.",
+    "why": "This is the clearest instance on the call of the rep inventing a concrete, checkable fact (a two-year backlog on an unreleased product) with no grounding — a real liability if repeated on a recorded, bookable call, and it directly violates numeric_discipline."
   },
   "key_moments": [
     {
       "ts": "01:00",
       "quote": "Unfortunately, my company, we're not we're not able to work on another company's, equipment or anything like that.",
-      "classification": "other",
-      "stewart_read": "Tyke's orphaned-flow initiation at 00:42 ('Who did you get installed with?') was protocol-compliant — the schema correctly triggers on customer_has_existing_solar. The failure is not the protocol initiation; it is that Tyke reads Greg's disclosure as a service-request DQ and closes the door at 01:00 before understanding what Greg actually wants. The reactive read holds: Tyke pattern-matched 'existing solar' to 'can't help' without listening for the actual ask."
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "The rep correctly identifies the DQ but skips the actual orphaned_flow qualifying questions — own vs. lease, and whether the system is currently working — before delivering the DQ. The DQ conclusion happens to be right, but it's reached by instinct rather than by running the procedure, so it isn't fully clean."
     },
     {
-      "ts": "01:15",
-      "quote": "Well, no. I'm not interested in in replacement per se, but I had the impression your system was a shingle replacement kinda thing.",
-      "classification": "tesla_expectation_gap",
-      "stewart_read": "Greg's clarification reveals he came in expecting an integrated solar-roofing product — the Tesla solar roof tile. This is the expectation gap the schema explicitly documents. Tyke's response confirms the product exists but frames it as unavailable ('two years out,' 'not really super focused on') without reframing what Ion actually offers or what the Tesla relationship actually means. The schema is clear: Ion does NOT sell Tesla solar roof tiles. The correct move is to reframe Ion's product catalog and pivot to what Ion can do for Greg."
-    },
-    {
-      "ts": "01:47",
-      "quote": "We use four four thirties.",
+      "ts": "01:25",
+      "quote": "Yeah. We we unfortunately, those are, like, kind of backed up right now. They're, about two years out to to order them or at least to be installed.",
       "classification": "knowledge_gap",
-      "stewart_read": "Greg asks about panel efficiency — a closer-tier technical question. Tyke answers with a wattage spec ('4 thirties'), which does not address the question, and then admits ignorance of the efficiency rating at 02:02. This is a double failure: scope creep into technical content the setter cannot answer, followed by an admission that undermines credibility. The schema's universal escape hatch ('That's exactly the kind of question our specialist is built to answer') was available and unused."
+      "stewart_read": "The rep invents a specific, unverified timeline ('about two years out') for Ion's shingle-roofing product on the spot. There is no basis in the schema or transcript for this figure — it reads as improvised filler to a curious customer rather than a grounded fact, which is a fabrication risk under numeric_discipline."
     },
     {
-      "ts": "03:38",
-      "quote": "having a panel that's actually part of a roofing system Yeah. Particularly if they can guarantee a traditional roof life, like, twenty five or thirty years, now that would be something",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Greg is articulating his ideal product in detail — integrated solar roofing with a 25-30 year roof life guarantee and 20%+ efficiency. This is not a complaint; it is a specification of what would make him a buyer. Tyke does not acknowledge or anchor on it. The schema's verify.interest_in_solar item calls for depth on what interested the customer in solar — this is Greg handing that depth over unprompted."
+      "ts": "01:42",
+      "quote": "What what, just out of curiosity, what deficiency are you getting out of your panels?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "This is exactly the kind of technical spec question the schema flags as closer-tier content, and the rep engages with it directly (giving a panel model number) instead of using the universal escape hatch."
+    },
+    {
+      "ts": "01:58",
+      "quote": "I'm not entirely too sure on the efficiency rating.",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep admits the gap transparently rather than fabricating a number, which per knowledge_gap_handling is the better of the three response modes (dodge/admit/fabricate) — this is a small positive relative to the invented 'two years out' line eight lines earlier."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 26,
+    "verified": 25,
+    "fuzzy": 1,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

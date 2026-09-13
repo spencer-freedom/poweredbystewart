@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION19",
-  "trajectory_summary": "A warm referral call that books a Saturday appointment with the spouse included — a structurally sound outcome on a cooperative lead. The rep moved efficiently through verify and reached a real booking. The call's weakness is not in what went wrong but in what was left on the table: the referral energy was never anchored, the average bill was never captured, and the community solar complexity was acknowledged twice without resolution. The appointment is conditional on a bill that hasn't arrived, and the button-up is missing the verbal handshake.",
+  "rep_name": "Randy",
+  "trajectory_summary": "The call opens with an already-warm, self-directed customer who sets his own agenda (referral registration, consultation request), and the rep runs the verify sequence competently once past the initial detour, landing a specific day and time. The appointment is real but structurally fragile: the bill was deferred to an unspecified future email and the wife's attendance was discussed but never explicitly locked, leaving two open threads for the closer to inherit.",
   "shape": "mixed",
-  "outcome_dispute": "The call ends with a booked Saturday appointment at 2PM with the spouse included — that is a genuine positive outcome on a warm referral. However, the booking is explicitly conditional: the rep states confirmation will be sent 'once I get that bill from you' (07:10), meaning the appointment is not locked. The outcome should be tagged as tentative/conditional, not a clean booked sit.",
+  "outcome_dispute": "v1 tag is unknown/unclear; observed outcome is best read as tentative rather than a fully clean booked appointment. A day and time were agreed (Saturday the 18th at 2PM) but the bill was not yet sent at call end ('I'll probably just email it to you... it'll probably take a little bit to dig that up') and the wife's confirmed attendance was inferred from the customer's statement, not explicitly re-confirmed by the rep. This combination — real commitment plus an outstanding deliverable and an unconfirmed co-attendee — supports tentative over a fully clean booked read.",
+  "observed_outcome": {
+    "outcome": "tentative",
+    "appointment_channel": "phone",
+    "datetime_captured": true,
+    "co_owner_confirmed": false,
+    "ts": "07:08",
+    "quote": "Yeah. I think 02:00 should work.",
+    "reasoning": "A specific day (Saturday the 18th) and time (2PM) were agreed, but the appointment remains conditional on the customer still needing to send his utility bill and the wife's attendance being inferred rather than explicitly confirmed by the rep — both open threads at call end."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep requested the bill/usage data but the customer did not provide a figure on the call, only committing to email it later ('I'll probably just email it to you... it'll probably take a little bit to dig that up'). Lead type (paid vs. organic/referral) is unknown here, and per context.lead_types_and_bill_collection_rules a referral/organic lead does not require the bill before booking, so this is not a clear-cut schema violation — it's an open item for follow-through rather than a missed flip."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": true,
+    "reason_ts": "00:15",
+    "reason_quote": "Yeah. I was referred from my father-in-law who's gonna be getting it through you guys and just kinda wanted to get a little bit of the rundown and a little bit of maybe a consultation on the on the process.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The customer volunteered his motivation (family referral, wanting a rundown/consultation) unprompted before the rep ever asked a formal interest question; the rep never explicitly asked 'what interested you in solar' and never referenced the referral motivation again later in the call, e.g. when booking or button-up."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:05",
+      "quote": "Hey, Randy. This is I'm Solar?"
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "01:33",
+      "quote": "Awesome. And then, can I get your address here real quick, Nick?"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "04:06",
+      "quote": "Is there anyone else on the, title of the home with you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "03:39",
+      "quote": "Is that a asphalt shingle roof I see on the home?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "04:40",
+      "quote": "Do you know who you're doing your electricity with here?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "05:20",
+      "quote": "We just need to see the last, twelve months of kilowatt hours."
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "04:20",
+      "quote": "You just need to have a credit score above 670."
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "05:13",
+      "quote": "And is this your first time looking into solar for this property, Nick?"
+    },
+    {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "05:41",
+      "quote": "You can either text or email it over to me, whichever one works better for you."
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "07:08",
+      "quote": "So we're looking pretty open in the afternoon, but a two or 3PM work good for you and your wife?"
+    },
+    {
+      "section": "button_up",
+      "status": "asked",
+      "ts": "07:24",
+      "quote": "I'll block off that spot for an hour just to ensure you guys don't feel rushed as well."
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Conditional confirmation — decouple the bill from the booking anchor",
-    "ts": "07:10",
-    "quote": "yeah, once I get that bill from you, I'll just send you a, confirmation text or email with the date and time of the meeting.",
-    "why": "The appointment is booked but not locked. Nick is at work, said the bill would 'take a little bit to dig that up,' and has no confirmation text in his inbox. If the bill doesn't arrive, there is no confirmation, and the Saturday 2PM slot drifts. The fix is simple and immediate: send the confirmation text now with the Saturday 2PM slot, separately follow up for the bill, and add the 'is that fair?' handshake before hanging up. This is the highest-leverage coaching point because it directly protects the sit — and on a warm referral with a cooperative customer, losing this appointment to a no-show is an avoidable outcome."
+    "topic": "closing the co-owner confirmation loop",
+    "ts": "06:48",
+    "quote": "Probably afternoon. I think my wife would wanna be there. She works in a Saturday morning.",
+    "why": "The wife's attendance is inferred, not confirmed by name — a two-second explicit line at booking would convert this from an assumption into a locked commitment, directly affecting whether both decision-makers are actually on the closer's call."
   },
   "key_moments": [
     {
-      "ts": "00:26",
-      "quote": "Yeah. Sounds good. I'd love to help you out with that.",
-      "classification": "rapport_repair",
-      "stewart_read": "Nick has just disclosed a warm referral from an active Ion customer — the highest-trust opening a setter can receive. The rep's response is a generic acknowledgment that immediately pivots to data collection ('So, yeah, we do have referral bonuses... I just need some basic information from you'). The referral energy — why Nick is calling, what his father-in-law told him, what Nick is hoping to learn — is never explored. Strategic read: the rep may have been moving efficiently to qualify before investing time. Reactive read: the rep missed the single best rapport anchor on the call. The reactive read holds — there was no later move that picked this up."
+      "ts": "02:07",
+      "quote": "And then, yeah. Do you wanna give me your, father in law's name and address real quick?",
+      "classification": "other",
+      "stewart_read": "This is a neutral sequencing observation rather than a coaching gap: the customer himself set the referral registration as the call's opening agenda at 00:15-00:26 ('I was referred from my father-in-law... just kinda wanted to get a little bit of the rundown'), so the rep following that thread first is customer-led, not rep-driven scope drift."
     },
     {
-      "ts": "04:50",
-      "quote": "I am tied into one of those, like, solar farms where they give you, like, a percentage of the, you know, they're kind of associated with Excel sort of. I I mean but, like, you get part of your energy is being pulled from a solar farm. Is that I'm sure you've heard of those setups.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Nick is flagging a genuine complexity — a community solar subscription — and explicitly asking whether the rep is familiar with it ('Is that I'm sure you've heard of those setups'). The rep's response ('Okay. Yes. Sounds good. No problem. I'll go ahead and put that down here.') is a social acknowledgment, not an informational one. The rep doesn't probe what this means for Nick's bill, his current offset percentage, or whether it affects the design. This is a knowledge gap: the rep either doesn't know how community solar interacts with rooftop solar, or doesn't know to flag it for the closer. Either way, the closer walks in blind."
+      "ts": "04:06",
+      "quote": "Great. And then I have you down as the property owner. Is there anyone else on the, title of the home with you?",
+      "classification": "spouse_handling",
+      "stewart_read": "Rep correctly surfaces the co-owner (wife Tamara) at the verify stage, setting up the later scheduling moment where her availability becomes relevant."
     },
     {
-      "ts": "05:36",
-      "quote": "You can typically get those in the mail or online?",
+      "ts": "06:48",
+      "quote": "Probably afternoon. I think my wife would wanna be there. She works in a Saturday morning.",
+      "classification": "spouse_handling",
+      "stewart_read": "Customer signals his wife should be present, but the rep never explicitly confirms her by name for the appointment slot — the booking proceeds on the customer's inference rather than a direct handshake ('will Tamara be able to join at 2?')."
+    },
+    {
+      "ts": "05:20",
+      "quote": "So the way that we design these systems is based on how much energy your home uses. And so we get everything we need off of your recent bill from Excel.",
       "classification": "bill_anchor",
-      "stewart_read": "The rep collects the bill format (online) and moves to delivery method. The average monthly bill amount — described in the schema as 'THE anchor for the entire pitch' — was never asked. The rep has Nick's utility company (Xcel), his roof age, his credit, and his address, but has no bill number to anchor the pitch emotionally. The bill collection beat here is purely logistical: get the document, not anchor the pain."
-    },
-    {
-      "ts": "06:02",
-      "quote": "And then, from there, we just need a a good time. We can have a local specialist drop by and kinda go over everything with you.",
-      "classification": "conditional_booking",
-      "stewart_read": "The rep moves to scheduling before the bill has been received, then at 07:10 makes the confirmation explicitly conditional: 'once I get that bill from you, I'll just send you a confirmation text or email.' This means the appointment has no confirmation anchor until the bill arrives. If Nick doesn't send the bill — he's at work, said it would 'take a little bit to dig that up' — there is no confirmation text, and the appointment drifts. Additionally, the button-up is missing the 'is that fair' verbal handshake (schema: button_up.is_that_fair_handshake) and the no-driving/at-computer anchor."
+      "stewart_read": "Rep asks for the bill/usage data but this is a referral-sourced lead of unknown lead-type; per context.lead_types_and_bill_collection_rules, organic/referral leads do not require the bill before booking, so deferring collection to email is not automatically a schema violation here."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 30,
+    "verified": 30,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION8_e3ceb903",
-  "trajectory_summary": "The call opens with an unusually well-qualified, self-disclosing customer and ends with an unstructured callback promise to a lead the rep was not prepared to work. Energy was present in the customer from the start — Liz volunteered detailed technical information, a specific need, and bill figures without prompting. The rep failed to match that energy with preparation: the utility company was not pre-checked, the orphaned-flow checklist was not completed, and the exit was structurally fragile — a vague 'callback later' with no locked time. The call's shape is energy_leaked: the customer brought the energy; the rep let it drain out.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "v1 outcome tag is unknown. Based on the transcript, the correct tag is 'no_appointment_callback_promised' — not a booked sit, not a DQ, but a soft callback with no locked time. Per schema analysis_directives.soft_outcome_distinction, a callback without a locked time has materially higher no-show risk than a scheduled appointment. The lead is not dead but is structurally fragile.",
+  "rep_name": "Kyk",
+  "trajectory_summary": "The customer arrived already highly engaged and informed — high bills, existing undersized system, explicit battery and expansion interest — so the call's energy was strong from the start rather than something the rep had to build. The rep ran a competent, orderly verify pass and to their credit proactively checked utility eligibility before burning the customer's time on bill collection, but the call ends in an unresolved callback after a likely hard DQ (WASCO not accepting solar applications), leaving a strong lead in limbo.",
+  "shape": "mixed",
+  "outcome_dispute": "v1 outcome is unclear from metadata; observed outcome is best read as 'callback' rather than a booked or dq outcome, since the rep explicitly frames it as pending verification with sales/design team rather than a confirmed disqualification or a locked appointment. Given the strength of this lead (existing system, clear expansion/battery need, high consistent bills), the manager should flag this for priority follow-up rather than treating it as a routine DQ.",
+  "observed_outcome": {
+    "outcome": "callback",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "05:03",
+    "quote": "So I'll I'll I'll message them right now, and then I'll give you a callback with an update later. Does that work for you?",
+    "reasoning": "The rep does not book an appointment or issue a hard disqualification; instead they commit to checking with their design team and calling the customer back, but no specific day or time is given, making this a weak/unanchored callback rather than a booked or tentative appointment."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "02:52",
+    "bill_quote": "My summer bills are about $2.20.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The customer gave both a winter figure ($500s) and a summer figure ($220) plus a delivery charge ($51), but the call ends before the actual bill document is collected and before the rep ever verbally reframes these numbers as the reason to act — the rep moves straight into bill-collection logistics and then into the WASCO DQ discussion without flipping the pain into urgency."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "00:32",
+    "reason_given": true,
+    "reason_ts": "00:40",
+    "reason_quote": "the I mean, my winter power bills are, all the way up into the 5 hundreds.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep asked the interest question early and got a strong, specific answer (winter bills in the $500s plus an undersized existing system), but never referenced this pain point again later in the call — no reflection back when discussing the WASCO issue or when framing the callback."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:04",
+      "quote": "This is, Kyk with ION. I have received a request."
+    },
+    {
+      "section": "interest_question",
+      "status": "asked",
+      "ts": "00:32",
+      "quote": "And what was your main interest in looking at solar?"
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:13",
+      "quote": "the address at 3500 Japanese Hollow Road"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "02:17",
+      "quote": "Is there anybody else in the title with you, or is it just you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "02:08",
+      "quote": "is that is the roof an asphalt shingle roof?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "02:17",
+      "quote": "is PGE the utility company, or is it something different?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "02:46",
+      "quote": "do you know how much you're kinda paying on average usually?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "03:16",
+      "quote": "I just wanna take a look at the most recent electrical electric bill."
+    },
+    {
+      "section": "appointment_set",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Pre-call utility eligibility check — preparation discipline",
-    "ts": "04:28",
-    "quote": "Apparently, we're not able to work with WASCO, because as of right now, their the utility company is not accepting any solar applications and does not have any plans to reopen their solar program at the at the moment.",
-    "why": "This is a well-engaged lead with a specific need (add-on panels + battery backup) who ended the call without a booking because the rep discovered a checkable eligibility condition mid-call. WASCO eligibility was accessible in the rep's tools during the call (the rep's own words: 'this looks like it was updated as of a year ago'), which means it was accessible before dialing. The manager should use this call to establish a pre-call prep habit: non-standard utility co-ops get an eligibility check before the dial, not during bill collection."
+    "topic": "unanchored callback on a high-value lead",
+    "ts": "05:03",
+    "quote": "So I'll I'll I'll message them right now, and then I'll give you a callback with an update later. Does that work for you?",
+    "why": "This is a strong, motivated lead (existing undersized system, explicit expansion + battery request, high consistent bills) ending on a vague, timeless callback promise instead of a specific commitment. Given this lead's quality, an unanchored soft exit risks losing a customer who is clearly ready to move if Ion can serve WASCO."
   },
   "key_moments": [
     {
-      "ts": "00:40",
-      "quote": "Just the I mean, my winter power bills are, all the way up into the 5 hundreds.",
-      "classification": "bill_anchor",
-      "stewart_read": "Liz hands the rep a concrete bill-pain anchor in the first 45 seconds — winter bills in the $500s. The rep responds with 'Oh, jeez.' and then immediately moves to address confirmation. The bill is captured but never flipped. Per the schema, capture alone is necessary but not sufficient — the move is to flip the bill into emotional alignment-against-the-utility. The rep had the number and walked past the leverage."
-    },
-    {
-      "ts": "02:22",
-      "quote": "Oh, what I'm surprised you didn't get this information. I've provided all of this information.",
-      "classification": "other",
-      "stewart_read": "This is a process-competence failure signal, not a legitimacy-anxiety moment. Liz expected her prior form data to be on file. The rep's response ('Sometimes, when it gets pulled up, it's not always the right one. I don't know why. It just swaps it with the utility') is a vague deflection that neither resolves the concern nor acknowledges the gap. The correct move is honest specificity: acknowledge the data gap, take ownership briefly, and move forward without dwelling. The deflection leaves the process failure unaddressed and slightly erodes the credibility the intro established."
-    },
-    {
-      "ts": "01:19",
-      "quote": "I'd like battery backup.",
+      "ts": "01:01",
+      "quote": "It's 20, but one's broken. So let's call it nineteen, two hundred and sixty five kilowatt panels.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Liz volunteers a specific product request — battery backup — unprompted. This is a high-value enthusiasm signal: she knows what she wants, she has an existing system, and she is describing a specific gap (undersized system, one broken panel, no storage). The rep acknowledges it ('K. Battery backup. Let me get that down.') and confirms the add-on scope correctly. The procedural handling is adequate. The coaching gap is tonal: the rep treats this as a checkbox item rather than a moment of genuine alignment. A warmer acknowledgment — 'Battery backup is exactly what the Powerwall is built for, and it pairs well with an add-on' — would have elevated the customer's confidence that she called the right company. The rep's flat acknowledgment is a missed warmth moment, not a substantive product failure."
+      "stewart_read": "This is a strong lead-quality signal — an existing system that is broken/undersized and a customer who has already done the math herself. This is not a standard schema section (the schema's enthusiasm examples focus on trees/EV/pool-type signals), but it functions the same way: it materially raises this lead's value and warrants an anchor-back from the rep."
     },
     {
-      "ts": "01:56",
-      "quote": "I've this property was previously owned by a guy that owns an electric company. And so Oh, okay. I'm assuming that things just fell off the truck and landed on his house.",
-      "classification": "other",
-      "stewart_read": "The rep enters orphaned territory (existing solar on property) but does not complete the schema-defined orphaned_flow checklist. Specifically: (1) own-vs-lease was never asked — the rep confirmed it wasn't Pink Solar but did not establish ownership status of the existing system; (2) system operational status was never explicitly confirmed — Liz mentioned one broken panel but the rep never asked 'Is the system currently working?' as the checklist requires. The rep's Pink Solar check is correct procedure, but it is the only orphaned_flow item completed. The ownership and operational-status gaps are schema-defined hard-DQ triggers if the answers are wrong."
+      "ts": "01:34",
+      "quote": "I'm looking to add on to that system. That system is not properly sized for this house.",
+      "classification": "cross_sell_miss",
+      "stewart_read": "This is a distinct, high-value signal separate from the battery-backup mention: the customer is explicitly requesting a system expansion due to undersizing, which is core Ion business but sits in the schema's acknowledged TBD gap (battery_storage_inquiry / system-expansion cross-sell isn't yet codified). The rep captures the fact procedurally but never reflects it back as a value point."
+    },
+    {
+      "ts": "02:17",
+      "quote": "Oh, what I'm surprised you didn't get this information. I've provided all of this information.",
+      "classification": "rapport_repair",
+      "stewart_read": "Customer directly names a process friction (repeated data requests) — this maps to the schema's C6 list of TBD/emerging protocols (excessive_contact_complaint is listed as a placeholder, not a populated protocol), so this should be read as an emerging pattern worth flagging to Kenny rather than a documented procedure the rep violated."
+    },
+    {
+      "ts": "04:44",
+      "quote": "No. They're not accepting that metering. I know that. Yeah.",
+      "classification": "knowledge_gap",
+      "stewart_read": "The customer already knew about the WASCO net-metering freeze before the rep found it. Had the rep checked or asked about utility program status earlier in the utility_company verify step (02:17), this could have surfaced sooner and avoided walking the customer through the full bill-collection discussion before hitting the wall."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 31,
+    "verified": 31,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

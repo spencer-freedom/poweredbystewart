@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION16_4f518fa9",
-  "trajectory_summary": "This call collapses at the interest-in-solar question when Cecilia reveals she already has an existing solar system and is looking for a replacement refrigerator — not a new install. Holland correctly identifies the mismatch but exits immediately without running any orphaned-flow probe. The call ends with a list removal before it's established whether Cecilia's existing system creates a qualifying opportunity or a hard DQ. The trajectory is a premature exit, not a worked lead.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "The v1 outcome tag is unknown, but the call should not be tagged as a clean DQ or a worked lead. Holland exited before the orphaned flow questions could determine whether a qualifying opportunity exists. Cecilia has an existing solar system — orphaned flow protocol requires probing ownership (own vs. lease/PPA), installer identity, system status, and size before a DQ decision is valid. The exit was premature; whether the underlying opportunity would have survived orphaned flow is unconfirmed.",
+  "rep_name": "Holland",
+  "trajectory_summary": "A short, low-friction call where the customer's real ask -- a replacement solar-compatible refrigerator, not a new solar install or a requalification of her existing system -- doesn't match anything Ion sells. The rep loses roughly 40 seconds to her own address/map lookup, then correctly identifies the mismatch and disqualifies cleanly. The DQ outcome itself is very likely correct; the coaching gap is process (orphaned_flow was never run), not outcome.",
+  "shape": "stagnant",
+  "outcome_dispute": "v1 outcome likely already reads as DQ/no_contact-adjacent; that read holds. The call is a legitimate disqualification -- customer wants a specific appliance (solar refrigerator) Ion does not sell, not a new solar design or system service. The miss is that the rep never ran orphaned_flow to confirm system ownership/status, but running it would likely not have changed the outcome given the customer's need is appliance-specific, not solar-service-specific.",
+  "observed_outcome": {
+    "outcome": "dq",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "03:48",
+    "quote": "Okay. We actually don't have solar refrigerators here, so I I do apologize.",
+    "reasoning": "The customer's need (a solar-compatible refrigerator) does not match any Ion offering; the rep correctly identifies this and disqualifies the lead. No appointment or callback was set."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The call was disqualified before reaching bill collection -- the customer's stated need (a replacement appliance) made the bill-anchor step moot."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "02:48",
+    "reason_given": true,
+    "reason_ts": "02:53",
+    "reason_quote": "Well, I do have a solar, that runs, the reason why I wanted was asking because I have a solar, and when the solar was brought to me, the solar on it says, Sacred Power.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep asked the interest question directly and got a real answer, but the answer surfaced an existing-system disclosure that the rep didn't follow up on with orphaned_flow questions before moving straight to the refrigerator-specific DQ."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:11",
+      "quote": "This is Holland with Ion. I got a request you were looking into solar for your home."
+    },
+    {
+      "section": "interest_question",
+      "status": "asked",
+      "ts": "02:48",
+      "quote": "And then I did wanna ask you what kind of got you interested in solar?"
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:40",
+      "quote": "I've got your address here, Cecilia, as 345 Burning Bridge Road"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "02:35",
+      "quote": "Is there anybody else in the title of the home with you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "01:50",
+      "quote": "is your roof just a regular asphalt shingle roof?"
+    },
+    {
+      "section": "utility_company",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_amount",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Orphaned-flow trigger recognition",
+    "topic": "orphaned_flow not run on disclosed existing-system customer",
     "ts": "02:53",
     "quote": "Well, I do have a solar, that runs, the reason why I wanted was asking because I have a solar, and when the solar was brought to me, the solar on it says, Sacred Power.",
-    "why": "Holland exits the call without running a single orphaned-flow question. 'Sacred Power' is not on Ion's hard-DQ installer list, and the ownership/status questions (own vs. lease, system working, system size) take under 60 seconds. The call ends as a list removal when it should have entered the orphaned-flow sequence. This is the only coaching beat that matters for this call — everything else is secondary."
+    "why": "Customer revealed an existing solar system from a named installer, but the rep never asked the standard orphaned_flow questions (ownership, system status, panel size) before disqualifying. This is a documentation/process gap for the record even though it likely doesn't change the outcome here -- worth building as a reflex for calls where it might."
   },
   "key_moments": [
     {
-      "ts": "03:42",
-      "quote": "You were looking for a solar refrigerator?",
+      "ts": "00:41",
+      "quote": "as 345 Burning Bridge Road in Ojo Aniso, New Mexico. Is that correct?",
+      "classification": "other",
+      "stewart_read": "The rep's address record is wrong (customer corrects both the city and the community name), and the rep then spends roughly 40 seconds (00:41-01:44) trying to relocate the address on a map while the customer waits silently. This is rep-side time-burn on a basic verify step, not customer resistance."
+    },
+    {
+      "ts": "02:53",
+      "quote": "Well, I do have a solar, that runs, the reason why I wanted was asking because I have a solar, and when the solar was brought to me, the solar on it says, Sacred Power.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses an existing solar system from a named company (Sacred Power) as part of explaining her ask. The rep never runs any orphaned_flow questions (own vs. lease, system working, panel size) before reaching the DQ decision seconds later."
+    },
+    {
+      "ts": "03:48",
+      "quote": "Okay. We actually don't have solar refrigerators here, so I I do apologize.",
       "classification": "knowledge_gap",
-      "stewart_read": "Holland correctly identifies that Ion doesn't sell solar refrigerators — that's accurate. But she treats the refrigerator ask as the entirety of Cecilia's situation rather than as a surface signal sitting on top of an existing solar installation. The knowledge gap is not about refrigerators; it's about recognizing that 'I already have solar' is the orphaned-flow trigger, not a DQ. Reactive read holds: Holland didn't recognize the trigger and exited on the wrong variable."
+      "stewart_read": "The customer's ask, stated plainly at 03:39 ('I was looking for a refrigerator for for a solar'), is for a specific appliance Ion does not sell. The rep identifies this correctly and quickly. This is not a missed solar-service opportunity -- it is an accurate, fast disqualification on a genuine product mismatch."
     },
     {
       "ts": "03:59",
       "quote": "I'll give you off our list, though, but you have a good rest of your day.",
-      "classification": "empathy_miss",
-      "stewart_read": "Cecilia has just spent 45 seconds describing a corroding refrigerator that came with a solar system she received — a disclosure that suggests she may have limited resources and is dealing with a real appliance problem. Holland's exit is abrupt and transactional: list removal, no acknowledgment of what Cecilia shared, no human close. The 'Pardon me?' at 04:05 confirms the exit landed without warning. This is an exit-quality failure, not a vulnerability-disclosure trigger — Cecilia made no explicit vulnerability disclosure — but the abruptness is still a coaching gap on basic call closure."
-    },
-    {
-      "ts": "02:35",
-      "quote": "I have you, Cecilia, down as the property owner. Is there anybody else in the title of the home with you?",
-      "classification": "other",
-      "stewart_read": "Holland correctly executes the title co-owner check per the verify protocol. This is a positive execution moment — the question is asked cleanly, in the right place in the sequence, and Cecilia's 'No' is confirmed. Worth noting for coaching balance: Holland was running the verify section competently before the call collapsed at the interest question."
-    },
-    {
-      "ts": "01:50",
-      "quote": "And then is your roof just a regular asphalt shingle roof?",
-      "classification": "other",
-      "stewart_read": "Holland correctly captures roof type and follows up with roof age at 01:57. The roof age answer is complex — Cecilia describes multiple sections with different ages, the oldest dating to '95 or '98 — which is a potential DQ flag (roof over 15 years). Holland acknowledges it and moves on without flagging it or probing for replacement plans. Given the call ends before this matters, the roof age is a secondary note, but the cross-sell signal (old roof → roofing conversation) was available and not touched."
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "The call ends with a list-removal offer and a pleasantry but no structured close -- no recap of why she was disqualified, no note of what she should do if her needs change. The schema has no defined DQ-close protocol, so this is a gap in coverage rather than a violation of an existing rule."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 23,
+    "verified": 23,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

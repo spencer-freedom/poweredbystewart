@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION2_5f7271d2",
-  "trajectory_summary": "The call was a hard DQ from the first disclosure — Wendy has an existing leased Vivint system, which is a schema-defined disqualifier. Meg spent roughly two minutes probing for upsell angles and attempting a soft re-engage before arriving at the lease confirmation that ended the call. The energy never built; it stagnated around a customer who was never a viable prospect. The only coaching value is in the sequence Meg used to get to the DQ — she ran it in the wrong order and wasted time on scope-creep diagnostics before asking the one question that mattered.",
-  "shape": "stagnant",
-  "outcome_dispute": "The v1 outcome tag is unknown. The correct classification is hard_DQ. The disqualifier is the lease arrangement under orphaned_flow (hard_dq_answers: lease_with_no_buyout), not a PPA. Wendy explicitly says 'I guess I'm leasing it because I paid them too' and confirms she did not take out a loan — this maps to the lease entry in orphaned_flow, not the PPA entry. The distinction matters for rep coaching: the DQ rule Meg needed to reach first was ownership status, not system type.",
+  "rep_name": "Meg",
+  "trajectory_summary": "This is a short, low-yield call that runs into a hard disqualifier: the customer leases her existing Vivint system with no loan, which Ion's dq_rules cannot service. The rep asks the right orphaned-flow questions to get there, but along the way answers a specs question that belonged to the closer and lets a clear bill-pain disclosure go unaddressed. The call ends cleanly and professionally once the DQ is confirmed.",
+  "shape": "mixed",
+  "outcome_dispute": "v1 tag is unknown; observed outcome is a clean dq — the customer leases through Vivint with no loan, which trips dq_rules.ppa_existing_system logic (leasing = disqualified). This is not a booked or callback outcome.",
+  "observed_outcome": {
+    "outcome": "dq",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "02:20",
+    "quote": "So, yeah, you would be leasing it. And in that case, we actually are not able to help out. So I'll just take you off my list.",
+    "reasoning": "Customer confirms she leases her existing Vivint system with no loan taken out, which trips the existing-system-lease hard disqualifier; the rep closes the call accordingly with no appointment set."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "01:08",
+    "bill_quote": "It sure is. And I got a 200 and somebody dollar electric bill. I wouldn't have to",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The customer gave a specific bill figure and a comparison to her prior ~$150 bill at 01:19, but the rep never acknowledged or flipped it into emotional leverage — the transcript moves directly into address verification without responding to either mention."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": true,
+    "reason_ts": "01:08",
+    "reason_quote": "It sure is. And I got a 200 and somebody dollar electric bill. I wouldn't have to",
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never explicitly asked 'what interested you in solar' — the customer had already disclosed an existing system, so the standard interest question wasn't run. The customer volunteered a bill-pain reason unprompted, but the rep didn't use it before the call moved to DQ verification."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:05",
+      "quote": "Hey, Wendy. My name is Meg. I'm with Ion. I'm reaching out here about the solar form you filled out online."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "01:47",
+      "quote": "the address that I have, 1309 Old Muscat Lane, Fort Washington. Is that correct?"
+    },
+    {
+      "section": "co_owner",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "roof",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "utility_company",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "01:05",
+      "quote": "Do you need more panels? Is your current system not covering your electric bill?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Orphaned-flow sequence discipline",
-    "ts": "00:20",
-    "quote": "Okay. Were you looking for battery backups or additional panels?",
-    "why": "Meg spent nearly two minutes on upsell probing and competitor-system diagnostics before asking the one question — own or lease — that determined the call's outcome. The DQ rule for leased systems is unambiguous in the schema. Drilling the orphaned_flow gate order (ownership first, always) turns a two-minute call into a 30-second call and frees Meg's time for viable leads."
+    "topic": "setter_scope_creep on spec/pricing questions",
+    "ts": "00:47",
+    "quote": "The panels we use, I believe that they are 440 watts.",
+    "why": "The rep answered a technical wattage question directly, which invited a harder follow-up question about house-level power output that she then had to admit she couldn't answer — the scope creep created the exact knowledge-gap moment that followed. Redirecting immediately with the escape hatch avoids both problems."
   },
   "key_moments": [
     {
-      "ts": "00:20",
-      "quote": "Okay. Were you looking for battery backups or additional panels?",
-      "classification": "protocol_violation",
-      "stewart_read": "Meg's first response to the existing-system disclosure is an upsell probe, not the ownership-status question that orphaned_flow requires first. Strategic read: Meg is attempting to find a residual need before DQ'ing — a reasonable instinct. Reactive read: she does not know the DQ sequence and is improvising. The reactive read holds because she later asks the ownership question at 02:03, nearly two minutes later, after burning time on diagnostics that had no booking path. If she had known the DQ rules, the upsell probe would have come only after confirming ownership — or not at all once lease was confirmed."
+      "ts": "00:13",
+      "quote": "Oh, I see. I'm okay. But I I I have solar panels on on my house. I'm with Vivint Solar already.",
+      "classification": "other",
+      "stewart_read": "Customer self-identifies as an orphaned lead (existing solar) at the very top of the call. The rep's next line correctly begins orphaned-flow-style qualification (battery/additional panels), which is the right instinct even though the schema's orphaned_flow steps don't explicitly cover a satisfaction check."
     },
     {
       "ts": "00:47",
       "quote": "The panels we use, I believe that they are 440 watts.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Wendy asks how much the panels cost and how much power they would provide. Meg answers the wattage question with a spec figure ('440 watts') and then correctly defers on the power-output question ('that's something I don't know'). The wattage answer is scope creep — panel specs are closer-tier content — and the 'I believe' hedge signals Meg is not confident in the number. The partial answer creates a credibility dip without advancing the call."
+      "classification": "setter_scope_creep",
+      "stewart_read": "Customer asks a spec/pricing-adjacent question and the rep answers with a technical detail (wattage) instead of using the escape hatch to redirect to the specialist. This is a clearer scope-creep instance than a simple yes/no answer because it invites further technical debate."
     },
     {
-      "ts": "01:15",
-      "quote": "Do you need more panels? Is your current system not covering your electric bill?",
-      "classification": "other",
-      "stewart_read": "Meg is now diagnosing the performance of Vivint's system — asking whether it is covering Wendy's bill. This is a distinct scope-creep instance from the wattage spec: Meg has moved from answering a product question to actively investigating a competitor's system performance. There is no booking path from this line of questioning on a leased system. The orphaned_flow ownership gate has still not been asked."
+      "ts": "00:59",
+      "quote": "Well, that's that's something I don't know. We would need to gather a couple details to see, you know, what it would do for you.",
+      "classification": "knowledge_gap",
+      "stewart_read": "After the 440-watt scope creep, the rep recovers well here — admitting she doesn't know the answer and redirecting to the qualification process rather than guessing or fabricating a savings/output figure. This is the correct knowledge-gap pattern (admit and recover with transparency)."
     },
     {
       "ts": "01:19",
       "quote": "My electric bill used to be, like, $15.20 dollars, and to go from there to, like, 200 and something wasn't gonna happen.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Wendy volunteers a specific, emotionally loaded bill narrative: her bill went from roughly $15-20 to over $200, and she is clearly frustrated. This is the sharpest bill-pain signal in the call — she has magnitude, direction, and emotion all in one line. On a viable lead, this is the anchor for the entire pitch. On this call, it is a signal that Wendy's existing system is not performing as expected, which is a curiosity-creation opening Meg does not pick up."
+      "classification": "objection_inversion_miss",
+      "stewart_read": "The customer hands over a vivid bill-pain anchor — a jump from roughly $150 to $200+ a month — that is exactly the kind of number coaching_philosophy.bill_anchoring says should be flipped into emotional alignment against the utility. The rep says nothing in response and the transcript moves straight to address verification."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 26,
+    "verified": 26,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

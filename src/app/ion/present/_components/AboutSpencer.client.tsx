@@ -4,7 +4,7 @@
 
 export function AboutSpencer() {
   return (
-    <section className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-20 border-b border-white/10">
+    <section id="about" className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-20 border-b border-white/10">
       <div className="max-w-2xl w-full rounded-2xl border border-white/15 bg-stewart-card/60 backdrop-blur-md p-8 sm:p-10 shadow-2xl">
         <p className="text-2xl sm:text-3xl font-semibold text-stewart-text text-center">
           About Spencer Colby

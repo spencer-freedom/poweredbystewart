@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION18_71955680",
-  "trajectory_summary": "The call opens on a workable neutral and briefly improves when Bucky's honest 'I don't wanna give you empty promises' earns a moment of goodwill. But the roof-aversion constraint — stated at 00:57, restated at 04:43, and finalized at 05:03 — was never bridged to Ion's in-house roofing service or explored diagnostically. The appointment that appeared set at 04:22 was structurally fragile from the moment it was booked, and Donald's cancellation at 05:03 was telegraphed 20 seconds earlier. Energy leaked steadily from the first constraint statement and was never recovered.",
+  "rep_name": "Bucky",
+  "trajectory_summary": "The call opens with routine verify-section rapport but derails almost immediately over the customer's refusal to have panels on his roof — a scenario the rep is not equipped to handle. Instead of pausing to get a real answer (from a supervisor or via a clean deferral), the rep improvises reassurances and product claims, and the call ends ambiguously with the rep asking 'Are we canceling?' rather than confirming or closing the appointment cleanly.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 outcome tag is unknown. Based on the transcript, the call ends with an explicit cancellation — Donald withdraws the Monday appointment at 05:03 ('Not if not if we're talking about putting them on the roof. No, sir.'). The correct outcome tag is no_appointment / lost_lead, not booked.",
+  "outcome_dispute": "The transcript ends on the rep's own uncertain question ('Are we canceling?') with no customer reply captured — there is no confirmed appointment, and the earlier 'Monday at 3' time that was set is effectively voided by the customer's final refusal. This should be scored no_appointment, not booked or tentative, despite a specific day/time having been discussed earlier in the call.",
+  "observed_outcome": {
+    "outcome": "no_appointment",
+    "appointment_channel": null,
+    "datetime_captured": true,
+    "co_owner_confirmed": false,
+    "ts": "05:54",
+    "quote": "Okay. Well, you have a good day. Yes, sir. You have a great day. Are we canceling?",
+    "reasoning": "A Monday 3PM time was discussed earlier (04:13-04:21), but the customer's final firm refusal ('Not if not if we're talking about putting them on the roof. No, sir.' at 05:05) followed by the rep's own closing question 'Are we canceling?' with no captured customer confirmation means no appointment survives to the end of the call."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "Customer states he just moved in and doesn't know his bill ('I don't know. We just moved in to the house.' at 00:42), and the rep accepts this and pivots to the credit-score qualifier instead of a bill, consistent with a recycled/new-resident scenario where no bill exists yet."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never asked what interested the customer in solar; the call moved directly from address/title verification into utility company and bill questions, skipping the interest_in_solar verify item entirely."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:05",
+      "quote": "This is Bucky with ION. I'm reaching out about the solar form that goes online."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:16",
+      "quote": "You at 2122 Twinbridge Drive?"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "00:21",
+      "quote": "Is there anybody else on the title but you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "00:53",
+      "quote": "Is your roof type a shingle?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "00:32",
+      "quote": "What you what utility company are you with?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "00:38",
+      "quote": "Duke, how much are you spending on a monthly average?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "04:17",
+      "quote": "if we call you on Monday at 12PM, is that okay? Oh, three? Let me look. Yeah. We can do three."
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Cross-sell bridge reflex — roofing signal to routing action",
-    "ts": "01:17",
-    "quote": "But what if I need to replace the roof?",
-    "why": "Donald stated a roofing need three times across this call and Bucky never deployed the cross_sell_signals.roof_replacement_planned bridge. This is not a one-time miss — it's a pattern across all three touches, including the final cancellation moment where the bridge was the only remaining path to keeping the lead alive. A diagnostic question might have opened a path the specialist could explore, or at minimum surfaced the roofing cross-sell opportunity. Until Bucky can execute this bridge reflexively, he will lose every lead where roof-mounted solar is off the table."
+    "topic": "non-standard scenario recognition and escalation",
+    "ts": "00:57",
+    "quote": "but I I don't want it on the roof.",
+    "why": "The rep had no real answer for a customer who explicitly rejects roof-mounted panels, and improvised an unverified rule ('We only do solar on roofs') rather than pausing to get a real answer. This single unresolved gap drove the entire rest of the call's skepticism and the ambiguous, unconfirmed ending."
   },
   "key_moments": [
     {
-      "ts": "01:17",
-      "quote": "But what if I need to replace the roof?",
-      "classification": "cross_sell_miss",
-      "stewart_read": "Donald is telling Bucky he has a near-term roofing need. The schema is explicit: 'Solar disqualified by roof timing = potential roof sale + future solar sale. ALWAYS BRIDGE.' Bucky's response — 'we have in-house roofing, and we also have warranties' — gestures at the right answer but never executes the bridge. He doesn't offer to route Donald to the roofing team, doesn't frame it as a two-phase opportunity, and moves on. This is the call's highest-value missed moment."
+      "ts": "00:57",
+      "quote": "but I I don't want it on the roof.",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "This is a non-standard scenario (customer wants solar without roof mounting) that the script doesn't cover. Reactive read: rep should have flagged this for a supervisor check or given an honest 'let me find out' rather than inventing a policy on the spot. Strategic read is not supported — the rep's next line invents a categorical rule ('We only do solar on roofs') with no hedge, which reads as improvisation, not a deliberate hold."
     },
     {
-      "ts": "01:24",
-      "quote": "I mean, I need to put new shingles up there.",
-      "classification": "cross_sell_miss",
-      "stewart_read": "Donald makes the roofing need explicit a second time, unprompted. This is the clearest possible trigger for the roofing cross-sell bridge. Bucky's response — 'you could talk to the specialist about that, but I know we have options. I'm just not sure what we got' — is a knowledge-gap deflection that neither captures the roofing lead nor routes it. The moment passes without a routing action."
+      "ts": "01:08",
+      "quote": "Yes, sir. But we have great panels, and they're fantastic, and they won't damage your roof.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "This is the earliest and cleanest scope-creep instance in the call — the rep makes an unprompted product durability claim ('bulletproof'-adjacent) instead of using the universal escape hatch to redirect to the specialist. It answers a question the customer didn't ask (damage) instead of the one he did ask (mounting location)."
+    },
+    {
+      "ts": "02:11",
+      "quote": "Him. I'm sorry. Say that again.",
+      "classification": "other",
+      "stewart_read": "Customer confusion here signals the rep's explanation of why he needs the credit score (in place of a bill) was unclear or poorly sequenced, momentarily breaking the flow of the call."
     },
     {
       "ts": "02:27",
       "quote": "We do. But what does that have to do with what we're talking about?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Bucky introduces the credit qualifier without any legitimizing context — he jumps from 'you just moved in' directly to 'I need to know if you have a credit score over 670.' Donald's pushback is reasonable: the connection between a credit score and a solar conversation has never been explained. Bucky's recovery at 02:33 explains the bill bypass ('you just moved in, so I don't have to') but still doesn't explain why credit matters for a financed solar program. The qualifier lands as a non-sequitur, which erodes trust at a moment when Donald was briefly re-engaged."
-    },
-    {
-      "ts": "02:44",
-      "quote": "So we have, like they're all black. They're a Tesla.",
-      "classification": "other",
-      "stewart_read": "Bucky describes Ion's panels as 'a Tesla' — which is factually incorrect per the schema (Ion sells its own panels, not Tesla's; the only Tesla product Ion carries is the Powerwall battery). This is a product accuracy error compounded by scope creep: Bucky is now selling panel features ('bulletproof,' 'protect your roof') rather than scheduling. The description also sets a false expectation that the closer will have to correct. Donald's follow-up question ('Do they look like tile? Like roof tile?') shows the description created confusion rather than clarity."
+      "classification": "protocol_violation",
+      "stewart_read": "The customer directly challenges the relevance of the credit qualifier mid-conversation, evidence that the earlier roof issue was never resolved and is still occupying his attention. The rep answers the literal question but does not reconnect it to the customer's real concern."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 34,
+    "verified": 34,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

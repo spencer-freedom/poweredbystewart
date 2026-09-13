@@ -153,7 +153,7 @@ const CUP_SLIDES: Slide[] = [
 
 export function CupOfWater() {
   return (
-    <section className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-20 border-b border-white/10">
+    <section id="cup" className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-20 border-b border-white/10">
       <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-20 max-w-5xl">
         <GlassCup idPrefix="hero-cup" segmented={false} />
         <SlideStepper slides={CUP_SLIDES} />

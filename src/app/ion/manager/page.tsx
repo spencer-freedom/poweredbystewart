@@ -1,17 +1,23 @@
-import { ManagerBrief } from "./ManagerBrief.client";
+import { promises as fs } from "node:fs";
+import path from "node:path";
+import type { TriageIndex } from "./types";
+import { ManagerApp } from "./ManagerApp.client";
 
 export const dynamic = "force-dynamic";
 
-// /ion/manager — the manager's Daily Morning View. Lives outside the
-// (public) route group so it renders bare (no pitch chrome): it's
-// embedded as an iframe inside the pitch scroll (SectionMorningView) and
-// also stands alone on a phone for a live device demo. AppShell bypasses
-// its sidebar for any /ion* path, so this is full-bleed under <body>.
+// /ion/manager — the interactive manager surface. Every processed call,
+// ranked by a deterministic triage score whose weights are on screen and
+// editable; a per-rep view; and the full Stewart read one click away.
+// Lives outside the (public) route group so it renders bare (its own
+// header) — it's a product screen, not a pitch page. AppShell already
+// bypasses its sidebar for any /ion* path.
 
-export default function IonManagerPage() {
-  return (
-    <div className="min-h-screen bg-stewart-bg">
-      <ManagerBrief />
-    </div>
-  );
+async function loadTriage(): Promise<TriageIndex> {
+  const filePath = path.join(process.cwd(), "public", "ion", "triage-index.json");
+  return JSON.parse(await fs.readFile(filePath, "utf-8")) as TriageIndex;
+}
+
+export default async function IonManagerPage() {
+  const index = await loadTriage();
+  return <ManagerApp index={index} />;
 }

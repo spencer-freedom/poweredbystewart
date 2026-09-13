@@ -43,8 +43,10 @@ function bucketOf(outcome: string): string {
   const o = (outcome || "").toLowerCase();
   if (o === "booked" || o === "appointment_set" || o === "transferred_to_closer")
     return "booked";
-  if (o === "no_interest" || o === "lost") return "no_interest";
-  if (o === "declined" || o === "unqualified") return "declined";
+  // pipeline v3.1 observed_outcome vocabulary: booked | tentative | callback |
+  // no_appointment | dq | no_contact — folded into the existing buckets.
+  if (o === "no_interest" || o === "lost" || o === "no_appointment") return "no_interest";
+  if (o === "declined" || o === "unqualified" || o === "dq") return "declined";
   if (o === "callback" || o === "conditional_booking") return "callback";
   if (o.startsWith("tentative") || o === "fragile") return "tentative";
   return "unknown";

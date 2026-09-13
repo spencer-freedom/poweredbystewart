@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION16_34e9974a",
-  "trajectory_summary": "A cooperative, warm customer arrived ready to engage and was soft-DQ'd in under two minutes on a stated credit number from a proxy respondent — without the rep ever speaking to the actual requestor, Neil. The partial verify completed (address, home type, roof age) was structurally sound but the sequence terminated prematurely at the credit gate, leaving bill, utility, interest-in-solar, and title/co-owners uncaptured. The call's shape is energy leaked: the customer's opening warmth was never converted into qualification depth or a booked outcome.",
+  "rep_name": null,
+  "trajectory_summary": "This is a short, thin call where the rep runs a partial verify script against a proxy (Lawanda, answering for Neil) and lets an unverified, self-reported credit doubt end the call. The rep never surfaces or names the decision-maker-absence problem, never asks for the bill, interest reason, or utility, and closes with a vague callback instruction instead of an owned next step.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is 'unknown.' Based on the transcript, the correct classification is soft_DQ / no_appointment. The rep issued a passive callback invitation rather than booking a locked time or routing to Neil. This is a lost lead, not a deferred one.",
+  "outcome_dispute": "v1 outcome should be read as no_appointment / soft DQ rather than a clean disqualification. The credit qualifier was never actually resolved for Neil — it was resolved on Lawanda's guess about someone else's credit. The rep also never worked to get Neil on the phone or schedule a specific time when Neil could confirm the number, which means the call ended on structural ambiguity (talking to a non-title, non-account-holder proxy) rather than a hard, confirmed DQ.",
+  "observed_outcome": {
+    "outcome": "no_appointment",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "01:56",
+    "quote": "And then if it's not 650, once it gets to that point, we'd be more than happy to run a quote for you.",
+    "reasoning": "No appointment, date, or time is set. The call ends on a conditional, self-serve callback instruction rather than a confirmed DQ or booked next step; the credit qualifier was answered by a proxy's guess, not by Neil, so this is best read as an unresolved soft exit rather than a clean, confirmed disqualification."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The call never reaches the bill/utility portion of verify — it ends at the credit qualifier stage, so there is no bill figure to capture or flip."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never asks what interested Neil/the household in solar; the call stays confined to address, home type, roof age, and credit before ending."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "skipped",
+      "ts": "00:04",
+      "quote": "Hey. I'm calling for Neil."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:23",
+      "quote": "Is this for the 496 Mixon's Corner Road?"
+    },
+    {
+      "section": "co_owner",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "00:56",
+      "quote": "Okay. How old is the roof on the home?"
+    },
+    {
+      "section": "utility_company",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_amount",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Proxy-respondent routing — ask for the requestor before qualifying",
-    "ts": "00:04",
+    "topic": "decision-maker absence not addressed",
+    "ts": "00:07",
     "quote": "Neil. I'm here at the moment. This is Lawanda. What can I do for you?",
-    "why": "The entire call was conducted with the wrong person. The rep never asked for Neil, never established Lawanda's relationship to the property or the title, and ultimately soft-DQ'd the lead based on Lawanda's self-reported estimate of Neil's credit. This is the single structural failure that determined the call's outcome. Every other gap in this call — skipped verify fields, passive callback close, schema-drift credit threshold — is secondary to the fact that the rep qualified a proxy and walked away. The manager should replay the first 10 seconds with the rep and establish a clear rule: when someone other than the named requestor answers, ask for the requestor before proceeding."
+    "why": "The rep never registers that Lawanda is a proxy for Neil and runs the credit qualifier against her secondhand guess instead of working to get Neil on the line or booking a specific callback window when he'd be available — this is the single structural issue driving the soft, unowned ending."
   },
   "key_moments": [
     {
-      "ts": "00:04",
+      "ts": "00:07",
       "quote": "Neil. I'm here at the moment. This is Lawanda. What can I do for you?",
-      "classification": "other",
-      "stewart_read": "The rep is immediately told the requestor (Neil) is not on the line and that a proxy (Lawanda) has answered. The rep never asks to speak with Neil, never establishes Lawanda's relationship to Neil or to the property, and never determines whether Lawanda is on the title. The entire qualification sequence — including the eventual credit DQ — is conducted with the wrong person. Strategic read: the rep may have judged that Lawanda could relay information and that pressing for Neil would create friction. Reactive read: the rep defaulted to whoever answered and never course-corrected. The reactive read holds — there is no evidence of a deliberate strategy to qualify through Lawanda and then route to Neil."
-    },
-    {
-      "ts": "01:08",
-      "quote": "Okay. So not too bad.",
-      "classification": "other",
-      "stewart_read": "The rep captures roof age (approximately 15 years) and acknowledges it with a neutral affirmation. This is a micro-momentum moment: the roof clears the threshold, which is a positive qualification signal. The rep had an opportunity to briefly mark this as a green light — building forward value before the credit gate — but moved directly to the credit qualifier instead. The acknowledgment is not wrong; it is simply flat where it could have been a small energy builder."
+      "classification": "conditional_booking",
+      "stewart_read": "Lawanda is functionally the same structural situation as the schema's spouse/adult-child decision-maker protocol: she is not the person whose credit and title status determine qualification, and she cannot commit Neil to anything. The rep never names this or works to get Neil on the line, and instead runs the full qualifier against her answers as if she were the account holder."
     },
     {
       "ts": "01:20",
       "quote": "The main requirements for solar are just that you own your home and have a credit score above 650. Is that the case for you?",
       "classification": "protocol_violation",
-      "stewart_read": "Two issues compound here. First, the rep states the credit threshold as 650, not 670 — a schema drift that has now appeared across multiple sessions (SESSION18_fcbf33c1 also cited 650). This is a floor-wide calibration issue, not an individual rep error. Second, the rep reaches the credit gate after completing only a partial verify: address, home type, and roof age were captured, but bill amount, utility company, interest in solar, and title/co-owners were skipped. Jumping to the credit qualifier before completing verify means the rep has no bill anchor, no emotional context, and no co-applicant information — all of which would have been relevant to handling the credit uncertainty that followed."
+      "stewart_read": "Rep runs the credit qualifier verbatim (adjacent lines 01:20-01:27) against Lawanda, who has already identified herself as calling on Neil's behalf, not as Neil. There's no attempt to redirect the question to Neil directly or flag that the answer being collected is secondhand."
     },
     {
-      "ts": "01:33",
-      "quote": "Do you have a way to check your credit score?",
-      "classification": "knowledge_gap",
-      "stewart_read": "The rep shows the instinct to probe rather than accept the first uncertain answer — this is a partial-credit execution. However, the probe is directed at Lawanda, who is not the requestor and cannot check Neil's credit. The rep had the right impulse (don't accept 'I don't think so' as a final answer) but applied it to the wrong person. A more productive probe would have been to ask for Neil directly at this point, or to ask whether Neil might have a different credit profile."
+      "ts": "01:39",
+      "quote": "Not right at the moment. I don't think it's 650, though. You don't think so? Okay.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a soft, self-reported, unverified credit doubt from a proxy caller — exactly the scenario Spencer's operator note in qualifiers.credit_qualifier flags: stated credit is unreliable and setters unilaterally DQ'ing on it may be killing real deals. The rep accepts the guess at face value and treats it as an effective DQ."
+    },
+    {
+      "ts": "01:20",
+      "quote": "If you wanna look into that or if Neil's credit score is 650 or above, we'd be able to help you out. Feel free to call this number back, though.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "The call ends with a passive, self-serve instruction to call back rather than the rep owning a next step. There's no offer to check back at a specific time, no attempt to get Neil directly, and no confirmation of contact preference."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 19,
+    "verified": 18,
+    "fuzzy": 0,
+    "wrong_ts": 1,
+    "not_found": 0
+  }
 }

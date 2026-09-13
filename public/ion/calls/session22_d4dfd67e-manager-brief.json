@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION22_d4dfd67e",
-  "trajectory_summary": "The call opened with a motivated, engaged prospect — a retired disabled veteran with a $400/month electric bill, explicit interest in Tesla Powerwall and battery backup, and 12 years of homeownership. The rep completed most of the verify section competently. The call collapsed entirely at the credit qualifier: the rep DQ'd a customer who said 'I don't know' rather than 'I'm below 670,' issued a dismissal ('wait until your credit is above 670'), and lost the lead permanently. This is a false DQ on a high-value prospect.",
+  "rep_name": null,
+  "trajectory_summary": "The call opens with a genuinely warm, self-qualifying customer who volunteers interest, tenure, roof age, and bill pain with no resistance. The rep runs the verify items reasonably but the call collapses at the credit qualifier: the customer answers 'No' to the 670 threshold, admits he doesn't know his exact score, and discloses being a fixed-income disabled veteran, after which the rep tells him to wait and disengage rather than exploring alternative paths or routing him through regardless of stated credit. The call ends with the customer asking to be removed from the contact list.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is 'unknown' but the observable outcome is a false DQ — the rep terminated a qualified-looking lead on an unverified credit assumption. This should be tagged as 'false_dq / lost_lead' not a natural disqualification. The customer's credit was never confirmed below threshold; 'I don't know' is not a DQ answer per the schema (qualifiers.credit_qualifier.spencer_operator_note).",
-  "primary_coaching_focus": {
-    "topic": "False DQ on unconfirmed credit — 'I don't know' is not a DQ answer",
-    "ts": "02:35",
+  "outcome_dispute": "v1 tag is unknown/unclear; the observed transcript supports a DQ outcome, but it's worth flagging that this DQ was rep-initiated on a customer's STATED uncertainty ('I have no idea' about his score) rather than a confirmed sub-670 pull, which per qualifiers.credit_qualifier's own drift-and-policy note is an open question for Kenny (stated vs. pulled credit).",
+  "observed_outcome": {
+    "outcome": "dq",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "02:34",
     "quote": "I would wait to look into solar until you know that your credit is above $6.70.",
-    "why": "The rep terminated a motivated, high-bill, product-aware prospect because the customer didn't know his credit score. The schema (qualifiers.credit_qualifier.spencer_operator_note) is explicit: stated credit is unreliable, and the closer's actual credit pull is the correct DQ mechanism. The rep's job at 'I don't know' is to route to the closer, not to dismiss. This is a recoverable lead that was permanently lost. The coaching move: give the rep a prepared third-branch response for credit uncertainty — something that keeps the appointment alive and defers the credit question to the closer's soft check."
+    "reasoning": "The rep explicitly disqualifies the customer on the credit gate and tells him to disengage until his score is confirmed above 670; the customer then asks to be removed from the contact list, closing the call with no appointment or next step."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "01:55",
+    "bill_quote": "400.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep acknowledges the $400 figure with surprise ('Oh my goodness') and a generic promise to help lower it, but never ties it back to the customer's stated 'save money' motivation or uses it to build urgency before the credit qualifier ended the call — the flip line should have landed at 01:57 before pivoting to qualifiers."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "01:29",
+    "reason_given": true,
+    "reason_ts": "01:34",
+    "reason_quote": "Save Money High Bills.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep acknowledged the reason ('Yeah. We can definitely help you get your bills cut down.') but never returned to it once the credit qualifier surfaced uncertainty — the stated motivation was never used to keep the customer engaged or to justify booking despite the credit ambiguity."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:05",
+      "quote": "This is calling with Ion. I got a request to look at a disclaimer for your line."
+    },
+    {
+      "section": "interest_question",
+      "status": "asked",
+      "ts": "01:29",
+      "quote": "what kind of got you looking into solar in the first place?"
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:43",
+      "quote": "I've got your address as 488 Davis Street in Smithville, Connecticut. Is that correct?"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "01:18",
+      "quote": "Is there anybody else on the title of the home with you? No."
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "01:08",
+      "quote": "do you happen to know how old your current roof is?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "01:43",
+      "quote": "Who is your current electric pension?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "01:46",
+      "quote": "what would you say that you're spending on average a month on your electric?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "02:02",
+      "quote": "you just need to have a credit score above 670."
+    },
+    {
+      "section": "military",
+      "status": "asked",
+      "ts": "00:33",
+      "quote": "I do believe that we have that veteran as well."
+    },
+    {
+      "section": "prior_design",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "credit-DQ on stated (unconfirmed) score",
+    "ts": "02:34",
+    "quote": "I would wait to look into solar until you know that your credit is above $6.70.",
+    "why": "This single line ends a warm, self-qualifying, $400/month-bill lead who explicitly said he didn't know his actual score — per the schema's own flagged policy question (qualifiers.credit_qualifier drift/operator note), this may be a real lost deal rather than correct procedure, and it directly triggered the customer's opt-out request."
   },
   "key_moments": [
     {
       "ts": "00:05",
-      "quote": "This is calling with Ion. I got a request to look at a disclaimer for your line. How are you interested? Have a veteran discount and you have Tesla",
-      "classification": "other",
-      "stewart_read": "Primary hypothesis: this is a Deepgram transcription artifact — the phonemes don't resolve into coherent English and the rep likely delivered something closer to the schema tesla intro template. Secondary hypothesis (pending audio review): the rep stumbled on the opening, skipping the legitimacy-first structure. Either way, the intro did not cleanly establish company name, state, and Tesla-certified framing in the sequence the schema requires."
-    },
-    {
-      "ts": "00:33",
-      "quote": "And then I do believe that we have that veteran as well.",
-      "classification": "knowledge_gap",
-      "stewart_read": "'I do believe' is a hedge on a benefit the rep raised unprompted. The rep introduced the veteran discount as a hook in the opening, then walked it back with uncertainty when Irvin confirmed interest. This is a credibility leak — the rep created an expectation they couldn't confirm."
+      "quote": "This is calling with Ion. I got a request to look at a disclaimer for your line.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The intro is garbled and doesn't clearly state the rep's name, cite a lead source, or give the customer a clean 'why I'm calling' anchor before pivoting straight into product assumptions about Tesla panels and veteran discount."
     },
     {
       "ts": "01:34",
       "quote": "Save Money High Bills.",
       "classification": "bill_anchor",
-      "stewart_read": "Irvin hands the rep a clean bill-pain anchor in four words. The rep's response — 'Save Money High Bills? Yeah. Okay. Yeah. We can definitely help you get your bills cut down.' — captures the anchor but drops it immediately. No emotional flip, no alignment-against-the-utility, no curiosity creation. The schema pattern is 'ask + acknowledge + flip'; the rep delivered 'ask + acknowledge + move on.'"
+      "stewart_read": "Customer states his reason for interest directly and cleanly — this is the emotional anchor the schema calls for."
     },
     {
-      "ts": "01:57",
+      "ts": "01:55",
       "quote": "400.",
       "classification": "bill_anchor",
-      "stewart_read": "The $400 figure is the sharpest leverage point in the call. The rep's 'Oh my goodness. 400. Okay. Yeah. We'll definitely help you get that cut down.' acknowledges the number but converts zero of its emotional weight. This is the second bill-anchor drop in 20 seconds. The schema flip for this moment: redirect the $400 as the actual ongoing expense — solar replaces the expense, it doesn't add to it. That reframe is especially powerful for a fixed-income customer who just disclosed financial constraint."
+      "stewart_read": "The rep captures a concrete, high bill figure ($400/month) — a strong anchor point — but the very next line pivots straight to the credit qualifier without using the number to build urgency or tie it back to the stated 'save money' motivation."
+    },
+    {
+      "ts": "02:02",
+      "quote": "for any other programs and state incentives that you can qualify for, you just need to have a credit score above 670.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "The customer had just handed the rep a strong bill-pain anchor ($400/month) and a stated 'save money' motive — instead of using that momentum, the rep moves immediately into a hard qualifier that risks losing the lead, without first building more commitment."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 32,
+    "verified": 32,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

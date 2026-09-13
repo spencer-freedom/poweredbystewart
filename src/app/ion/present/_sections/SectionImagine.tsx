@@ -80,7 +80,7 @@ const EFFECTS = [
 
 export function SectionImagine() {
   return (
-    <section className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-24 border-b border-white/10">
+    <section id="imagine" className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-24 border-b border-white/10">
       <div className="max-w-3xl w-full">
         <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-accent mb-4">
           Now imagine the opposite

@@ -1,38 +1,164 @@
 {
   "call_id": "20000555055",
-  "trajectory_summary": "The call opens with competent but mechanical verify execution, reaches its only genuine engagement moment around the bill, then loses coherence during a prolonged audio-confusion stretch. The call ends with Lorenzo stating a channel preference (in-person) that the rep does not address, leaving no appointment booked and no path forward established. Energy was never built — it was briefly present around the bill and then leaked through the audio gap and the unresolved channel objection.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "The v1 outcome tag is listed as 'unknown.' Based on the transcript, the correct classification is no appointment booked — Lorenzo's final line ('I would do an in person visit, not over the phone') is an unresolved channel objection, and the transcript ends without a booking, a callback time, or any confirmed next step. This should be tagged as stalled / no appointment.",
+  "rep_name": "Carter",
+  "trajectory_summary": "The call runs through the verify checklist competently but mechanically — bill captured, roof/utility/co-owner asked, tax qualifier delivered — with no emotional depth added to any answer. The transcript degrades into garbled, hard-to-parse customer speech from roughly 03:04 onward, and the call closes on an unresolved customer preference for an in-person visit rather than a locked phone appointment. This reads as a checklist-completed-but-not-closed call: procedural boxes ticked, no anchor built, no confirmed appointment time visible in the record.",
+  "shape": "stagnant",
+  "outcome_dispute": "The v1 outcome tag is unknown/unclear from metadata; based on the transcript, no day/time was ever stated, and the final customer line requests an in-person visit instead of the phone appointment the rep was building toward. This should be read as no_appointment or callback at best, not booked — there is no evidence of a locked appointment.",
+  "observed_outcome": {
+    "outcome": "no_appointment",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "04:24",
+    "quote": "Well, I would do an in person visit, not over the phone.",
+    "reasoning": "No day or time is stated anywhere in the transcript, and the call ends with the customer requesting a different appointment channel than what was being arranged, with no rep resolution captured in the record."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "00:42",
+    "bill_quote": "Over a $100 a month? About a 120 a month.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep captured the $120/month figure but only acknowledged it ('It's pretty expensive for you') before moving straight to the address verification question — the flip into alignment-against-the-utility never appears anywhere later in the transcript."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "00:18",
+    "reason_given": true,
+    "reason_ts": "00:23",
+    "reason_quote": "I was interested in getting my bills down.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep asked and the customer gave a clear reason (bills down), but the rep never returned to this stated motivation later in the call — no reinforcement when discussing the bill amount, the tax credit, or (in the visible transcript) the appointment."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:08",
+      "quote": "Hey, Lorenzo. This is Carter with ION."
+    },
+    {
+      "section": "interest_question",
+      "status": "asked",
+      "ts": "00:18",
+      "quote": "Why is you interested in solar?"
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:50",
+      "quote": "And you're at the 1508 South 2nd Avenue?"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "01:09",
+      "quote": "And then is there anyone else on the title with you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "01:29",
+      "quote": "And then how old is the roof on the home?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "01:40",
+      "quote": "And then who's the utility company that you're working with out there?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "00:27",
+      "quote": "How much are you paying a month usually?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "02:10",
+      "quote": "the main two requirements are that you pay income tax and have a credit score above six fifty"
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "02:02",
+      "quote": "will this be the first time seeing a solar design for your home?"
+    },
+    {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "02:32",
+      "quote": "the last thing I need from you before we can get you on the schedule is just your most current utility bill"
+    },
+    {
+      "section": "appointment_set",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Self-answering verify and qualifier questions",
-    "ts": "01:09",
-    "quote": "And then is there anyone else on the title with you?",
-    "why": "Carter answers his own required verify question (title co-owners, 01:15) and his own hard-gate qualifier (credit/income tax, 02:24) without confirmed customer responses. This is a pattern across two separate required fields in a single call. On the title question, an undetected co-owner creates a structural vulnerability for the closer. On the qualifier, a self-confirmed credit check has no validity. Manager should address the pattern — not just the individual moments — and drill the pause: ask, stop, wait."
+    "topic": "bill anchor captured but never flipped",
+    "ts": "00:46",
+    "quote": "Hundred and twenty hours? Okay. It's pretty expensive for you.",
+    "why": "The customer volunteered a clean, usable bill figure early in the call, and the rep's response filed it as a fact rather than turning it into the emotional reason to act — the single highest-leverage miss on this call per coaching_philosophy.bill_anchoring."
   },
   "key_moments": [
     {
+      "ts": "00:18",
+      "quote": "Why is you interested in solar?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Rep asks the required interest question but the customer's answer ('bills down') is immediately redirected into a bill-amount question rather than expanded or validated. The schema calls for 60+ seconds of depth here; this exchange is under 10 seconds."
+    },
+    {
+      "ts": "00:42",
+      "quote": "Over a $100 a month? About a 120 a month.",
+      "classification": "bill_anchor",
+      "stewart_read": "Customer gives a clear bill figure. This is the anchor moment the entire pitch should build from."
+    },
+    {
       "ts": "00:46",
       "quote": "Hundred and twenty hours? Okay. It's pretty expensive for you.",
-      "classification": "bill_anchor",
-      "stewart_read": "Rep captures the bill figure ($120/month) and acknowledges it with 'pretty expensive for you' — that's the capture step. But the flip never comes. The schema requires capture + emotional flip (alignment-against-utility). The rep moves immediately to address verification instead of using the bill pain as the emotional engine for the rest of the call. Reactive read holds: this is a missed flip, not a strategic deferral — there is no later moment in the transcript where the bill is revisited."
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Rep acknowledges the bill is expensive but files it and moves straight to the address/property-owner question. This is ask+acknowledge+move on, the schema's explicit failure pattern, not ask+acknowledge+flip."
     },
     {
       "ts": "01:09",
       "quote": "And then is there anyone else on the title with you?",
       "classification": "protocol_violation",
-      "stewart_read": "Rep asks the title co-owner question correctly, but at 01:15 the transcript shows 'No.' attributed to the rep — Carter answers his own question before Lorenzo responds. This is a data integrity failure on a required verify field. If Lorenzo actually has a co-owner on the title, this self-answer buries it. The verify section marks this item as critical for spouse coordination at button-up."
-    },
-    {
-      "ts": "02:15",
-      "quote": "the main two requirements are that you pay income tax and have a credit score above six fifty. Is that the case for you?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Two issues here. First, the schema states the credit threshold as 670; Carter states 650. This is the same drift observed in SESSION18_fcbf33c1 and flagged in the schema as unresolved. Second, at 02:24 the transcript shows 'Yes.' attributed to the rep — Carter self-answers the qualifier before Lorenzo confirms. A qualification that the rep answers for the customer has no validity. This is the second instance of Carter answering his own questions in this call."
-    },
-    {
-      "ts": "01:23",
-      "quote": "I don't know. For about forty years.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Lorenzo has lived in this home for approximately forty years. This is a strong tenure signal — a customer this rooted in a property is not going anywhere, which means the long-term value of a solar install is maximized and the 'I might move' objection is structurally absent. Carter captures the number and moves on without any acknowledgment of what it means. Note: the schema's verify.residence_length section does not explicitly label long tenure as an enthusiasm signal — this is a Stage 3-generated coaching insight, not a direct schema reference."
+      "stewart_read": "Rep asks the co-owner question correctly, but the transcript shows the answer logged as 'No' attributed to the rep speaker tag, not the customer, at 01:15 — a labeling ambiguity, but even taking it at face value the rep does not follow up or confirm before moving on."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": false
+  },
+  "quote_verification": {
+    "checked": 32,
+    "verified": 32,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

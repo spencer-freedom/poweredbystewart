@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION23",
-  "trajectory_summary": "A compressed recycled-lead callback that moves from guarded to cooperative in under two minutes. The design-framing opener was the right strategic call for this context, and the customer booked without resistance. The appointment is structurally thin: no bill captured, no computer anchor, no verbal handshake, and the co-decision-maker situation (mother was present at the prior appointment) is unresolved.",
+  "rep_name": "Meg",
+  "trajectory_summary": "This is a short, low-friction recycled-lead call: the customer didn't initially recognize the caller, but the rep re-oriented him fast and moved directly into scheduling. The call closes with a specific day and time, but the rep never re-establishes the bill, never confirms who else is on the title, and leaves the appointment channel ambiguous between an in-person walkthrough and a phone-confirmed visit.",
   "shape": "energy_built",
-  "outcome_dispute": "v1 tag is 'unknown' — this call ends with a booked appointment for Friday 05:30. Outcome should be tagged 'appointment_booked' with a 'conditional' flag: bill not captured, button-up incomplete, prior-contact decision-maker (mother) not addressed.",
+  "outcome_dispute": "The v1 tag is unknown, so there is nothing to dispute directly, but this should be read as a fragile/conditional booking rather than a clean booked outcome: the bill was never captured on this call (customer explicitly says he wasn't present for the prior appointment where it may have been collected), leaving a required qualification item resolved only by a future promise ('make sure you have it ready for the appointment') rather than by the rep herself.",
+  "observed_outcome": {
+    "outcome": "booked",
+    "appointment_channel": "unclear",
+    "datetime_captured": true,
+    "co_owner_confirmed": null,
+    "ts": "01:21",
+    "quote": "So I'll get you scheduled for 05:30 on Friday, which is the first.",
+    "reasoning": "A specific day (Friday, the 1st) and time (05:30) are agreed, meeting the bar for 'booked.' However, the appointment channel is ambiguous: 00:35 uses 'bring it by' language suggesting in-person, while 01:26-01:34 describes a call/text reminder flow that could imply either a phone appointment or just a pre-appointment reminder for an in-person visit — the rep never explicitly clarifies which during button-up, so this is recorded as unclear rather than asserted as either channel."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep asks about the bill only retrospectively ('did we end up getting a copy of your electric bill?') and the customer responds with uncertainty ('I wasn't there for that appointment'). No bill figure or usage number is captured on this call, so there is nothing to flip."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "This call is a re-engagement of a recycled lead with an existing design already on file, so the rep does not ask what interested the customer in solar at any point — the call skips straight from re-orientation into scheduling."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:13",
+      "quote": "From ION Solar. Are you returning a missed call?"
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "co_owner",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "roof",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "utility_company",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_amount",
+      "status": "skipped",
+      "ts": "01:37",
+      "quote": "Last time we spoke with you, did we end up getting a copy of your electric bill?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "skipped",
+      "ts": "00:26",
+      "quote": "We built a solar design for your home."
+    },
+    {
+      "section": "bill_collection",
+      "status": "skipped",
+      "ts": "02:00",
+      "quote": "make sure that when when we meet with you that you have your recent copy of your electric bill"
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "01:21",
+      "quote": "So I'll get you scheduled for 05:30 on Friday, which is the first."
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Button-up completion on cooperative customers",
-    "ts": "01:18",
-    "quote": "K. No.",
-    "why": "The customer confirmed he'd be home and awake — the lowest-friction window in the call — and Meg did not insert the computer anchor or verbal handshake. Both are schema-required and both predict show rate. This is a mechanical habit gap, not a judgment call. The rep had the moment and didn't use it."
+    "topic": "bill collection deferred instead of captured live",
+    "ts": "02:00",
+    "quote": "That's fine. Thank you.",
+    "why": "The rep learns the bill was likely never collected on a prior touch and, instead of attempting to collect it live on this call (text/email), defers the entire requirement to appointment day. This is the single highest-leverage miss — a required qualification anchor left unresolved when the customer was live, willing, and cooperative on the phone."
   },
   "key_moments": [
     {
-      "ts": "00:22",
+      "ts": "00:11",
+      "quote": "From where?",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The rep's opening ('Hi. Hi. This is This is Meg. Hi.') never states the company before the customer has to ask. On a recycled lead this matters more, not less, since the customer has no fresh memory of Ion to anchor to."
+    },
+    {
+      "ts": "00:26",
       "quote": "We built a solar design for your home. And on my end, it says we actually never had the chance to show it to you or get you the details.",
-      "classification": "other",
-      "stewart_read": "Strategic read holds. On a recycled callback, the design-framing opener is the correct move — it repositions the appointment as completing something already in progress rather than initiating a new sales pitch. This is the moment that converts the customer's 'From where?' challenge into a scheduling conversation. The rep is not over-explaining solar; she's using the existing design as a legitimacy anchor."
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "The rep discloses that a design already exists from a prior touch but never probes what happened on that prior contact (who was spoken to, why it didn't get shown, whether the customer's mother engaged with a competitor or other rep). This is a recycled lead with a documented history the rep is not exploring."
     },
     {
-      "ts": "01:45",
-      "quote": "I I I don't I wasn't there for that appointment. My mom must have been there. I'm not a 100% sure.",
-      "classification": "other",
-      "stewart_read": "This is a co-decision-maker disclosure, not a spouse-handling moment. The customer reveals that his mother was the prior contact — she may be on the title, may be the primary decision-maker, and is not confirmed for the Friday appointment. Meg acknowledges the uncertainty ('Gotcha') and moves to bill logistics without addressing whether the mother needs to be present. The schema is explicit: co-decision-makers must be included in the appointment. Secondary reference: protocols.spouse_decision applies by analogy."
+      "ts": "01:37",
+      "quote": "Last time we spoke with you, did we end up getting a copy of your electric bill?",
+      "classification": "bill_anchor",
+      "stewart_read": "This is the rep's only attempt to capture the bill, and it's framed as a records check rather than a live collection effort — she asks about the past instead of asking the customer directly for his current bill on this call."
     },
     {
-      "ts": "00:13",
-      "quote": "From ION Solar. Are you returning a missed call?",
-      "classification": "other",
-      "stewart_read": "On a self-initiated callback, the legitimacy-establishment burden is materially lower than on a cold outbound call. The customer called ION back — he already accepted the premise of the contact. Meg's response is functional but bare: no Tesla framing, no state mention, no design reference until 00:22. The schema defines intro variants for tesla and standard leads but has no recycled-lead intro variant. This is a schema gap, not a standard-intro violation. The callback context makes the abbreviated intro defensible; the absence of a defined recycled-lead intro template is the real flag."
-    },
-    {
-      "ts": "01:05",
-      "quote": "Oh, 05:30 is better. Because I work nights, so I'll probably be asleep most of the day.",
-      "classification": "conditional_booking",
-      "stewart_read": "The customer discloses a scheduling constraint (night-shift worker, asleep during the day) that makes the 05:30 slot non-negotiable and the appointment time-sensitive. This is a cooperation signal — he's explaining himself — but it also means any reschedule attempt will face real friction. Meg acknowledges it ('Makes sense. Okay. Gotcha.') but does not anchor the appointment with the button-up elements the schema requires: no computer anchor, no 'not driving' check, no verbal handshake."
+      "ts": "02:00",
+      "quote": "we should be good. Okay.",
+      "classification": "bill_anchor",
+      "stewart_read": "After learning the bill was likely never captured, the rep defers the entire requirement to the day of the appointment ('as long as you have it ready for the appointment') instead of collecting it live on this call via text or email, per bill_collection.branching. This is a bill-anchoring depth miss, not a features/curiosity issue — no product content is being oversold here, the gap is that a required qualification anchor is left to a future promise rather than captured now."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 21,
+    "verified": 21,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

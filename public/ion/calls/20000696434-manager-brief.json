@@ -1,38 +1,164 @@
 {
   "call_id": "20000696434",
-  "trajectory_summary": "Carter opens with one clean schema execution — the time-constraint reframe — that earns him the five minutes Shirley was about to deny him. From there the call is functional but thin: verify is partial, the credit-DQ moment is mishandled as a gate rather than a bridge, and the button-up is stripped to bare bones. The booking is real but fragile — the closer inherits an unresolved credit-score question, no bill data, no roof data, and a customer whose last stated concern was payment structure.",
+  "rep_name": "Carter",
+  "trajectory_summary": "The call opens with the rep successfully rescuing a time-constrained, distracted customer using a legitimate small-ask reframe, and the customer warms into an engaged, curious buyer who volunteers she wants to pay cash. But the call's structural integrity breaks when she answers 'no' to the credit qualifier and the rep books the appointment anyway without resolving or even acknowledging the disqualifying answer. The energy in the room built nicely on the customer's side; the rep's procedural handling did not keep pace with it.",
   "shape": "mixed",
-  "outcome_dispute": "The call ends with a booked Monday 11AM appointment, so a 'booked' outcome tag would be accurate. However, the booking is structurally incomplete — no button-up protocol elements were executed (one-hour block, computer/no-driving ask, 'is that fair' handshake, text follow-up promise). The sit is at elevated no-show risk.",
+  "outcome_dispute": "v1 tag is unknown/unclear, but observed_outcome should be recorded as 'booked' with a major caveat: the appointment was set past a customer's stated 'no' on the hard credit qualifier (qualifiers.credit_qualifier, hard_dq=true), which per current schema should have triggered disqualification or at minimum an explicit override conversation. This is a fragile, procedurally non-compliant booking, not a clean win.",
+  "observed_outcome": {
+    "outcome": "booked",
+    "appointment_channel": "in_person",
+    "datetime_captured": true,
+    "co_owner_confirmed": null,
+    "ts": "03:49",
+    "quote": "Okay. How about we plan on 11AM on Monday? So that sounds",
+    "reasoning": "A specific day (Monday) and time (11 AM) are agreed for an in-person visit ('Come by, and we'll go over everything with you'), meeting the booked threshold, though the booking is procedurally fragile given the unresolved credit qualifier answer."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep never asks about the customer's utility bill amount or usage at any point in the call -- the qualifier sequence jumps from utility company straight to the credit qualifier, and bill collection never happens."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never explicitly asks what interested the customer in solar. She does volunteer she was 'getting ready to just go on and buy the system' herself, which implies self-motivated interest, but this surfaces incidentally during the credit discussion rather than in response to a direct interest question, and the rep never reflects it back."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:04",
+      "quote": "Hey. This is Carter calling from ION."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:50",
+      "quote": "So it's 9688 Meeks Bay Avenue. Correct?"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "00:58",
+      "quote": "Anyone else on the title of the home with you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "01:10",
+      "quote": "Do you know how the roof is by chance?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "01:45",
+      "quote": "And then what utility company are you working with?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "02:16",
+      "quote": "the main requirement to get solar is having a credit score above 6 50."
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "03:53",
+      "quote": "How about we plan on 11AM on Monday?"
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Credit qualifier delivery — gate vs. bridge",
+    "topic": "Booking past a stated hard-DQ credit answer without resolution",
     "ts": "02:16",
-    "quote": "the main requirement to get solar is having a credit score above 6 50. Is that the case for you?",
-    "why": "Carter delivers the credit qualifier as a hard gate with no alternative path, then has nothing prepared when Shirley says no. The call recovers only because Shirley self-advocates. On a less engaged customer, this is where the call dies. The fix is structural: build the alternative path ('we also have purchase options') into the qualifier delivery so a 'no' answer opens a door rather than closing one. The threshold error (650 vs. 670) is a secondary correction the manager should address in the same conversation."
+    "quote": "the main requirement to get solar is having a credit score above 6 50. Is that the case for you? No.",
+    "why": "The customer answered the hard credit qualifier in the negative and the rep proceeded straight to booking an in-person visit without disqualifying, flagging, or explicitly overriding the gate. This is the exact scenario the schema's stated-vs-pulled-credit policy question anticipates, and right now the rep has no clear rule to follow -- this call is the concrete example to bring to that policy conversation with Kenny, and to give the rep a explicit standard going forward."
   },
   "key_moments": [
     {
-      "ts": "00:28",
-      "quote": "All I'm doing is trying to schedule something. So if you have a quick five minutes right now, I'll just run through it super quick, let you get back to your family, and then we can set something up for next week.",
-      "classification": "rapport_repair",
-      "stewart_read": "Carter executes the time-constraint protocol correctly: he names the time ask explicitly, frames the benefit to Shirley, and anchors the outcome. This is the call's one proactive schema-aligned move and it directly earns the five minutes Shirley was about to deny. Strategic read holds — this is not luck, it's the right move executed cleanly."
+      "ts": "00:21",
+      "quote": "and it is crazy in my house. Can we talk on Monday?",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "This isn't a full soft-exit since the rep does recover it immediately after, but the customer's opening move is a deferral attempt that the rep correctly intercepts rather than accepting."
     },
     {
-      "ts": "01:06",
-      "quote": "About two months now.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Two months in the home is the root cause of every subsequent knowledge gap — roof age unknown, utility company unknown, bill history nonexistent. Carter captures the residence length but does not register its downstream implication: this customer cannot produce a utility bill on this call, and the closer will arrive without usage data. The verify item is checked; the implication is missed."
+      "ts": "00:39",
+      "quote": "Oh, okay. If it's gonna be quick, because I'm not even dressed. I have to do",
+      "classification": "empathy_miss",
+      "stewart_read": "This is a mild disclosure (not dressed, guests imminent) rather than a true vulnerability trigger (health, loss, financial hardship) per the schema's trigger_categories. The rep does not acknowledge it verbally but does functionally respect it by compressing the call, so this is a low-severity, scan-and-dismiss case rather than a coaching priority."
     },
     {
-      "ts": "01:10",
-      "quote": "No. Do I know how old it is? No. But Yeah. It's not that old. It's in my package. I'd have to go and look it up.",
-      "classification": "other",
-      "stewart_read": "Roof age is a hard-DQ trigger if over 15 years with no replacement planned (dq_rules.roof_too_old_no_replacement). Carter accepts 'I'd have to look it up' and moves on without flagging the gap or noting it for the closer. The closer cannot complete qualification without this data — and if the roof turns out to be over 15 years, the cross-sell to roofing (cross_sell_signals.roof_replacement_planned) becomes the only revenue path."
+      "ts": "02:16",
+      "quote": "the main requirement to get solar is having a credit score above 6 50. Is that the case for you? No.",
+      "classification": "protocol_violation",
+      "stewart_read": "The customer gives a direct 'No' to the hard credit qualifier. Per the schema this is a hard_dq=true gate. The rep neither disqualifies nor explicitly overrides -- he simply keeps moving toward a booked appointment, leaving the gate unresolved."
     },
     {
-      "ts": "01:49",
-      "quote": "Oh, I don't know. I and, you know, everything's so new to me. Name something. And then, is it Las Vegas Power? I don't know. I'd have to go look that one up too.",
+      "ts": "02:24",
+      "quote": "No. I don't think so. That's why I was getting ready to just go on and buy the system because I don't charge a lot of anything. I pay for my house with cash. I pay for my new car with cash. So I don't like monthly bills.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Shirley's 'everything's so new to me' is not just a knowledge gap — it's a compounding new-homeowner signal. She has no bill history, no utility familiarity, and no roof data. Carter resolves the utility question by looking it up himself (a reasonable workaround) but does not register that bill collection is structurally impossible on this call. The enthusiasm signal buried here: a brand-new homeowner who filled out a solar form within two months of moving in is a high-intent lead — she's thinking about solar before she's even unpacked. Carter walks past this entirely."
+      "stewart_read": "This is a strong positive signal masquerading as a disqualifier. The customer is a cash-heavy buyer with low credit utilization who explicitly wants to purchase outright -- exactly the profile Spencer's operator note describes where stated credit is unreliable and a cash-purchase path may bypass the financing-credit gate entirely. The rep's 'wanna do a a cash deal?' response gestures at this but never develops it."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 31,
+    "verified": 30,
+    "fuzzy": 0,
+    "wrong_ts": 1,
+    "not_found": 0
+  }
 }

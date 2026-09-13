@@ -1,38 +1,164 @@
 {
   "call_id": "20000200569",
-  "trajectory_summary": "The call opens on a passive but willing customer, briefly touches genuine bill frustration, and then exits on a soft callback with no locked time, no bill captured, no co-decision-maker identified, and the commercial account complexity unresolved. Parker moved through the verify checklist at surface level and released Bernard the moment a scheduling obstacle appeared. The call's energy never built past the brief animated moment at 02:16 — it stagnated and then leaked at the close.",
+  "rep_name": "Parker",
+  "trajectory_summary": "This call never built real energy — Bernard is a hard-to-read, meandering talker, and the rep's job was mostly damage control just to extract verify data. The rep captured a strong bill anchor ($600/mo split across two meters) but never flipped it into urgency, and the call ends not with a booked appointment but a vague same-day-tomorrow callback with no time locked.",
   "shape": "stagnant",
-  "outcome_dispute": "The v1 outcome tag is unknown, but the call should be classified as a soft callback — not a booked appointment. Parker said 'I can call you tomorrow' at 05:14 with no specific time locked and no confirmation from Bernard. Per analysis_directives.soft_outcome_distinction, a callback without a locked time has materially higher no-show risk than a scheduled appointment. This is a fragile lead, not a sit.",
+  "outcome_dispute": "v1 tag is unknown, but the actual ending is a soft callback, not a booked appointment — no day or time was fixed, and the rep offered to 'call another day' with no specific slot named.",
+  "observed_outcome": {
+    "outcome": "callback",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "05:14",
+    "quote": "Okay. I can call you tomorrow.",
+    "reasoning": "No day-and-time appointment was set; the rep committed to calling back but without a specific time, which per the schema's soft_outcome_distinction is a callback, not a booked or tentative appointment."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "03:04",
+    "bill_quote": "It's almost $600.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep reacted with surprise ('Wow. That's a lot.') at 03:08 but never turned the $600 figure into a reason-to-act or emotional alignment-against-the-utility; the flip should have landed right after '$600? Wow. That's a lot.' — e.g., tying the number forward to the design/appointment."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": true,
+    "reason_ts": "00:34",
+    "reason_quote": "especially my, shop broke. It's all steel. You know? So",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never explicitly asked 'what interested you in solar,' but Bernard volunteered a reason unprompted (his steel shop structure/needs) early on; the rep acknowledged it in the moment ('Oh, your shop is all steel?') but never tied it back later when discussing the design, battery, or appointment framing."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:06",
+      "quote": "Hey. This is Parker. I'm with Ion. I was just reaching out because we had a request here that you were looking at solar for the home."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "01:21",
+      "quote": "I have here that you were the homeowner. Was that right?"
+    },
+    {
+      "section": "co_owner",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "03:35",
+      "quote": "It looks like an asphalt shingle roof. Is that right?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "00:44",
+      "quote": "what electric company you're working with?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "02:13",
+      "quote": "how much are you normally paying with p PG and E?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "00:53",
+      "quote": "You just need to be paying income tax and have a credit score above 650."
+    },
+    {
+      "section": "military",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "04:04",
+      "quote": "we take a look at your PG and E bill so we can make sure it's specific to your home."
+    },
+    {
+      "section": "appointment_set",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Callback locking — converting soft exits to scheduled appointments",
-    "ts": "05:09",
-    "quote": "Okay. I could call you another day.",
-    "why": "Parker released a willing customer with no locked time, no verbal handshake, and no button-up structure. Per the schema's setter_compensation_model, Parker is paid on sits — a soft callback that doesn't convert doesn't pay. This is the most direct paycheck-protection gap on this call, and it's a repeatable failure mode: any time a customer signals time pressure, Parker's default is to release rather than anchor. One question ('morning or afternoon tomorrow?') is the entire fix."
+    "topic": "unanchored soft exit / no locked callback time",
+    "ts": "05:14",
+    "quote": "Okay. I can call you tomorrow.",
+    "why": "The call ends without any specific day or time, which is the single biggest risk to this lead converting — an unlocked 'tomorrow' callback against a distracted, hard-to-follow customer is very likely to go cold. This is the most consequential and most fixable gap on this call."
   },
   "key_moments": [
     {
       "ts": "00:06",
-      "quote": "Hey. This is Parker. I'm with Ion. I was just reaching out because we had a request here that you were looking at solar for the home. How you doing?",
+      "quote": "Hey. This is Parker. I'm with Ion. I was just reaching out because we had a request here that you were looking at solar for the home.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "This is a standard lead-reference intro, not a Tesla-sourced call, so the correct bar is intros.standard's success_signals (clear_company_introduction, reference_to_form_submission, human_pause_for_response) — not Tesla-certified/state framing. Measured against that bar, the rep does reference a prior request/inquiry, which partially satisfies legitimacy, but there's no state or company-context anchor and no real pause before moving into verify."
+    },
+    {
+      "ts": "00:53",
+      "quote": "You just need to be paying income tax and have a credit score above 650.",
       "classification": "other",
-      "stewart_read": "Parker's intro contains none of the legitimacy anchors the schema rates as the primary scam-anxiety defense: no Tesla-certified framing, no form-fill reference, no state mention. 'A request here' is vague enough to read as a cold call. For a customer demographic that skews 45-70 and carries door-knocker anxiety, the first 30 seconds are the only window to answer 'is this a scam?' before the customer's guard goes up. Parker spent that window on nothing."
+      "stewart_read": "The rep states a 650 credit threshold, but the schema's documented threshold is 670. This is a second data point (alongside SESSION18_fcbf33c1) of a rep stating 650 instead of 670, suggesting this may be a live schema drift issue on the floor rather than a single rep's error."
     },
     {
-      "ts": "00:24",
-      "quote": "Is this something you're still looking at, sir?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Bernard answers 'Oh, sure. Yeah.' and Parker moves on. The schema marks interest_in_solar as the highest-weighted verify item — depth_grading: true, 'THE EMOTIONAL ANCHOR. Depth matters more than the answer. Top setters spend 60+ seconds here.' Parker got a one-word confirmation and checked the box. There is no emotional anchor on this call — no bill pain story, no neighbor influence, no environmental motive. The entire pitch that follows has no emotional foundation."
-    },
-    {
-      "ts": "02:16",
-      "quote": "Oh my god. I I'm paying I've got two two, gloves. One's, commercial, you know, because of that child. Anyway, it's two phase. So I have both.",
-      "classification": "bill_anchor",
-      "stewart_read": "This is the only moment of genuine emotional energy on the call. Bernard's 'Oh my god' opener signals real bill frustration — the exact emotional state the schema says should be flipped into alignment-against-the-utility. Parker's response is to estimate a combined total and move on ('Wow. That's a lot. Yeah. We'll definitely see what we can do to save you some money there.'). The bill is captured as data and dropped. No flip, no emotional alignment, no curiosity created. The schema's failure pattern — 'ask + acknowledge + move on' — is exactly what happened here."
-    },
-    {
-      "ts": "01:50",
-      "quote": "Yeah. We have battery options that can go with solar.",
+      "ts": "01:46",
+      "quote": "what was your question? Do we store electricity?",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Bernard asks unprompted about storing electricity for the shop — a direct battery storage inquiry. Parker confirms Ion has battery options and asks if Bernard wants to look at that too. Bernard says yes. Parker then moves on without capturing what the storage need is (shop-specific? whole-property? backup vs. offset?), without naming the Tesla Powerwall as the specific product Ion carries, and without flagging this as a cross-sell signal for the closer. The enthusiasm signal is real — a customer who asks about battery storage before the pitch has even started is more qualified, not less. Parker acknowledged it but didn't anchor on it."
+      "stewart_read": "Bernard's unprompted question about battery storage for his shop is a strong cross-sell/qualification signal (secondary structure + battery interest) that the rep correctly caught and answered directly, confirming battery options are available."
+    },
+    {
+      "ts": "03:04",
+      "quote": "It's almost $600.",
+      "classification": "bill_anchor",
+      "stewart_read": "The rep captured a strong bill figure but only reacted with mild surprise ('Wow. That's a lot.') rather than flipping it into emotional alignment-against-the-utility per objection_inversion. The bill was filed, not weaponized."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 28,
+    "verified": 28,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

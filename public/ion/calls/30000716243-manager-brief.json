@@ -1,38 +1,164 @@
 {
   "call_id": "30000716243",
-  "trajectory_summary": "The call opens warm, navigates a mid-call handoff cleanly, and lands a booked appointment — but the booking is structurally thin. Bill collection was impossible (new movers, no history), credit qualification was unresolved across three touches, and the button-up was missing several required elements. Parker kept the energy positive throughout, which is real skill, but the appointment was booked on goodwill rather than qualification depth.",
+  "rep_name": "Parker",
+  "trajectory_summary": "The call moves from a distracted-but-open pickup into a full verify-and-book sequence, but a mid-call handoff to the wife means the qualification and booking happen without the original title-holder present for confirmation. The rep completes most verify steps quickly and lands a specific day/time, but leaves the bill unanchored and the credit answer unresolved, producing a booked appointment built on thinner information than the schema calls for.",
   "shape": "mixed",
-  "outcome_dispute": "The call produced a booked appointment (next Saturday, 10AM, both Sam and Fannie on title confirmed). However, the appointment is conditionally fragile: credit status is unknown, bill history is unavailable, and the household is mid-move. The v1 outcome tag is not disputed as 'booked' but should be flagged as a fragile/conditional booking per analysis_directives.conditional_booking_detection.",
-  "primary_coaching_focus": {
-    "topic": "Button-up completeness on fragile bookings",
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata; based on the transcript this is a booked appointment (day + time agreed: Saturday at 10 AM) but it should be flagged as fragile — Sam, the title-holder the rep originally engaged, never returns to the call after 01:05, and the rep never re-confirms with him before booking.",
+  "observed_outcome": {
+    "outcome": "booked",
+    "appointment_channel": "in_person",
+    "datetime_captured": true,
+    "co_owner_confirmed": false,
     "ts": "05:06",
-    "quote": "Okay. Perfect. Let me get you down for Saturday next Saturday at at 10AM, and we'll just plan to drop by and answer any questions you guys have and show you, you know, what we can do to help you guys out.",
-    "why": "This household is mid-move, credit status is unresolved, and bill history is unavailable — the highest no-show risk profile on the floor. The three missing button-up elements (one-hour block, computer/no-driving anchor, 'is that fair?' handshake) are exactly what protect a fragile booking from ghosting. Parker got the appointment; the coaching is about protecting it."
+    "quote": "Okay. Perfect. Let me get you down for Saturday next Saturday at at 10AM,",
+    "reasoning": "A specific day (next Saturday) and time (10 AM) are locked, and the rep frames it as the specialist dropping by ('we'll just plan to drop by'), indicating an in-person appointment. Sam, the original title-holder, never returns to the call after 01:05 and is not confirmed as attending, so co_owner_confirmed is false."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "02:13",
+    "bill_quote": "No. We just got here.",
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep asked the bill question at 02:13 but the customer had no bill history to give since they just moved into the home — there was no number to flip."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never explicitly asked what interested the customer in solar; the call opened with the customer's own cost question rather than the rep probing for a motivation, and the rep never circled back to ask it directly."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:08",
+      "quote": "Hey. This is Parker. I'm with Ion."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "01:26",
+      "quote": "just to make sure I had the right address. Was it for the 1155 South In Harding Avenue?"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "01:41",
+      "quote": "I had here that it was Sam on the title of the home. Was it was it you and Sam?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "01:59",
+      "quote": "it looks like your roof is just an asphalt single roof. Is that right?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "02:08",
+      "quote": "are you guys working with ComEd for your electric bill?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "02:13",
+      "quote": "Do you know how much you're normally paying at the moment?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "05:06",
+      "quote": "Let me get you down for Saturday next Saturday at at 10AM"
+    },
+    {
+      "section": "button_up",
+      "status": "asked",
+      "ts": "05:11",
+      "quote": "we'll just plan to drop by and answer any questions you guys have"
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "co-owner handoff never resolved before booking",
+    "ts": "01:05",
+    "quote": "I gotta do some you could talk to my wife. Her name is Fannie Washington.",
+    "why": "Sam, the title-holder the rep was originally speaking with, hands the phone to Fannie and never returns; the rep completes the entire verify sequence and books Saturday's appointment without confirming Sam will be present. This is a significant risk among several on this call to the appointment actually being useful to the closer — if Sam isn't there Saturday, the closer is pitching only half the decision-making household."
   },
   "key_moments": [
     {
-      "ts": "00:37",
-      "quote": "Is this something that you have to pay upfront for, or how does this work?",
-      "classification": "other",
-      "stewart_read": "This is SAM (the homeowner) asking PARKER (the Ion setter) a cost question — not Parker scope-creeping. Parker's response ('we take care of everything up front for you... swap your current electric bill with a lower solar bill') is a legitimacy-building answer appropriate to the setter stage. No scope-creep flag applies here. Parker handled the question cleanly and used it to introduce the bill-swap framing before the handoff to Fannie."
+      "ts": "00:08",
+      "quote": "Hey. This is Parker. I'm with Ion.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The intro states the rep's name and company but skips any lead-source reference (form fill, Tesla referral, state framing) that would answer 'is this a scam?' before the customer has to ask. The opening is also garbled by a crossed-over greeting exchange, further diluting the legitimacy anchor."
+    },
+    {
+      "ts": "00:42",
+      "quote": "Oh, good question. So we we take care of everything up front for you. So there's nothing out of pocket for you.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "This is a brief, non-technical, non-numeric answer to a direct customer question and stays closer to appropriate legitimacy-building than a real scope violation — the rep doesn't quote prices, savings, or product specs."
+    },
+    {
+      "ts": "01:05",
+      "quote": "I gotta do some you could talk to my wife. Her name is Fannie Washington.",
+      "classification": "spouse_handling",
+      "stewart_read": "Sam hands off the call before any qualification is captured from him directly. This isn't the standard spouse-decision objection (customer withholding a decision pending spousal input) — it's a mid-call handoff where Sam disappears entirely and never returns, and the rep proceeds to complete verify and booking with only Fannie."
     },
     {
       "ts": "02:16",
       "quote": "No. We just got here.",
-      "classification": "bill_anchor",
-      "stewart_read": "Fannie's disclosure that they just moved in eliminates the bill-history path entirely. Parker's pivot to rapport ('Oh, you just moved in? That's so exciting') is warm but misses the flip opportunity: a new home means an unknown electric load, which is precisely why a specialist visit matters. The bill anchor is not just blocked — it's an opening to reframe the appointment as 'let's figure out what your new home will cost you before you're locked into a utility relationship.' Parker moved to rapport and then straight to scheduling without attempting this reframe."
-    },
-    {
-      "ts": "03:03",
-      "quote": "And then with solar, just to qualify for some of the programs, you need to have a credit score above 650. That sound like the case for you or Sam?",
       "classification": "other",
-      "stewart_read": "Parker states the credit threshold as 650. The schema schema specifies 670. This is a schema drift moment per analysis_directives.schema_drift_detection — not a knowledge gap, but a stated threshold that doesn't match Ion's documented qualifier. The coaching implication is different from a knowledge gap: the rep may be working from an outdated script, a floor-level variation, or a deliberate softening of the threshold. Manager needs to resolve which number is active before this becomes a compliance issue."
-    },
-    {
-      "ts": "03:47",
-      "quote": "Because I ain't think so. Because I know my dad got it. He didn't, he didn't have no credit score. They went on this out of his age.",
-      "classification": "empathy_miss",
-      "stewart_read": "Fannie references her elderly father qualifying for solar based on age rather than credit — a trust gift that contains both a vulnerability dimension (elderly parent, financial context) and a legitimate qualification question (are there age-based alternative paths?). Parker's response is 'Oh, I gotcha' followed by a repeat of the credit threshold. The empathy dimension is entirely missed: no acknowledgment of the father, no curiosity about the family context, no bridge to how the specialist can explore alternative qualification paths. Per schema, this is a trust gift that deserved a human moment before the procedural answer."
+      "stewart_read": "The bill-anchor question returns no usable data because the household just moved in and has no billing history yet. This closes off the standard bill-pain anchor for this call through no fault of the rep's questioning."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 28,
+    "verified": 28,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

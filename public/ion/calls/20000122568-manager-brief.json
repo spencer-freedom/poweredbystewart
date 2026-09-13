@@ -1,38 +1,164 @@
 {
   "call_id": "20000122568",
-  "trajectory_summary": "The call moves from neutral cooperation through a clean verify section and then stalls on bill logistics. The rep completes most qualification beats efficiently but misses the bill-anchor flip, books a conditional appointment at the customer's workplace without manager confirmation, and leaves the closer with an unresolved bill gap and an unusual venue. The outcome is a tentative appointment — not a locked sit.",
-  "shape": "stagnant",
-  "outcome_dispute": "The call ends with a conditional booking: the rep says 'I'll get you in the calendar for tomorrow at two' but immediately qualifies it with 'I will need to just double check with my manager that we can come to your work.' This is not a confirmed appointment — it is a tentative hold pending manager approval and a text confirmation. The v1 outcome tag (unknown) should be classified as 'conditional_booking / tentative' rather than 'booked,' and the closer should treat show-rate risk as elevated until the manager confirmation is sent and acknowledged.",
+  "rep_name": "Parker",
+  "trajectory_summary": "The call moves through verify smoothly with a cooperative-but-terse customer, hits real friction at the bill-collection and location stage, and ends without a locked appointment — the rep negotiated toward a work-address visit but left it contingent on manager approval and a future text confirmation. Energy is mixed: verify built momentum, but the ending leaks certainty rather than closing it down.",
+  "shape": "mixed",
+  "outcome_dispute": "This is better read as 'tentative' or 'callback' rather than a clean 'booked' appointment. The rep never confirms the work-visit is approved ('I will need to just double check with my manager') and the entire mechanism for confirming is a future text, meaning nothing is locked at call end.",
+  "observed_outcome": {
+    "outcome": "tentative",
+    "appointment_channel": "in_person",
+    "datetime_captured": true,
+    "co_owner_confirmed": null,
+    "ts": "05:09",
+    "quote": "I will need to just double check with my manager that we can come to your work, and I'll I'll reach out to you via text message to confirm that with you. Is that okay?",
+    "reasoning": "A specific day and time ('tomorrow at two') were stated, but the rep immediately qualifies this as pending manager approval for the work-visit location, to be confirmed later via text — this is agreement in principle without a fully locked appointment, matching 'tentative' rather than 'booked.'"
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "02:09",
+    "bill_quote": "About 400 a month.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep acknowledges the bill is high ('that is that's pretty expensive') but never converts this into an explicit reason to act or ties it back to the appointment's value when booking — the flip line should have landed around 05:04 when confirming the appointment, e.g., referencing the $400 bill as the reason the visit matters."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "01:04",
+    "reason_given": true,
+    "reason_ts": "01:10",
+    "reason_quote": "It's a new technology.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep asked and got a thin answer, validated it generically ('a lot of people have kinda been looking into it for the same reason'), and never followed up or referenced this stated interest again later in the call."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:17",
+      "quote": "This is Parker. I'm with Ion. I was just, reaching out because I got a request."
+    },
+    {
+      "section": "interest_question",
+      "status": "asked",
+      "ts": "01:04",
+      "quote": "what kinda got you interested in solar?"
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "01:25",
+      "quote": "I have here that you're the homeowner. Is that right?"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "01:30",
+      "quote": "Is there anyone else on the title of the home with you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "01:40",
+      "quote": "just asphalt single. Is that right?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "01:53",
+      "quote": "what utility company are you with right now?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "02:05",
+      "quote": "Do you know how much you're normally paying per month?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "02:24",
+      "quote": "have a credit score above 650. Does that sound like the case for you?"
+    },
+    {
+      "section": "military",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "02:38",
+      "quote": "is this the first solar design you have seen for the property?"
+    },
+    {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "03:01",
+      "quote": "we just get a look at the Excel utility bill so we can build up an accurate design for you."
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "05:04",
+      "quote": "I'll get you in the calendar for tomorrow at two."
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Button-up completeness and conditional-booking risk",
-    "ts": "05:04",
-    "quote": "I'll get you in the calendar for tomorrow at two. I will need to just double check with my manager that we can come to your work, and I'll I'll reach out to you via text message to confirm that with you.",
-    "why": "The rep produced a tentative hold, not a locked sit. Every button_up element is missing — one-hour block, appointment format clarification, no-driving/computer anchor, 'is that fair' handshake — and the rep introduced uncertainty at the moment of confirmation. On a stair-step comp model, a conditional appointment that no-shows pays nothing. This is the highest-leverage coaching gap on this call because it compounds every other gap: even if the verify and bill work had been stronger, a structurally incomplete button-up puts the sit at risk."
+    "topic": "bill collection left unresolved at call end",
+    "ts": "03:44",
+    "quote": "Is there any way you could send it before? It just helps us to build it up for you. No.",
+    "why": "The bill is the design's foundation and the call ends with no bill in hand and no firm plan beyond 'text you' — whether this lead type strictly requires the bill before booking is an assumption Stewart can't confirm from this transcript alone, but regardless of lead type, leaving bill collection as a vague future text with no specific ask (which utility page, what format, what deadline) risks the appointment happening without the design ready."
   },
   "key_moments": [
     {
       "ts": "00:17",
-      "quote": "Hey, Mohammed. This is Parker. I'm with Ion. I was just, reaching out because I got a request. You were looking at solar for the home. How are you doing today?",
+      "quote": "I was just, reaching out because I got a request. You were looking at solar for the home.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "This intro matches neither the tesla nor standard template — no form reference, no state/Tesla framing, no clear credibility anchor. It answers 'why are you calling' vaguely but never answers 'is this legitimate,' which is the intro's primary job per schema."
+    },
+    {
+      "ts": "00:44",
+      "quote": "3274",
       "classification": "other",
-      "stewart_read": "The rep references the inbound request — a functional paraphrase of the form-fill anchor the standard intro template requires. However, the opener omits two elements both intro templates share: a state mention and an explicit company-legitimacy anchor beyond the name 'Ion.' Without knowing the lead source, we cannot assert a Tesla framing failure. What we can say is that the opener does not establish why Ion specifically should be trusted, which matters for a demographic (45-70, scam-skeptical) that needs legitimacy in the first 30 seconds. The rep's phrasing ('I was just reaching out') also softens the call's authority unnecessarily."
+      "stewart_read": "The customer gives a Denver home address here, but later in the call gives a separate Aurora work address (04:42-04:57) for the visit. The rep never reconciles which address is the actual solar-install site versus the meeting location, which matters for the design build."
     },
     {
-      "ts": "01:10",
-      "quote": "It's a new technology.",
-      "classification": "knowledge_gap",
-      "stewart_read": "This is a shallow non-answer on the schema's highest-priority verify item. The rep's follow-up ('For sure. Okay. Gotcha.') accepts it and moves on. The schema flags this item as requiring 60+ seconds of depth — it is the emotional anchor for the entire pitch. Mohammed's answer reveals nothing about bill pain, environmental motive, neighbor influence, or any hook the rep can use later. The rep had the opening to probe ('What about it caught your attention — is it more the savings side or just curious how it works?') and didn't take it."
+      "ts": "02:24",
+      "quote": "there is a federal tax incentive when you go solar. You're just gonna be paying income tax and have a credit score above 650.",
+      "classification": "other",
+      "stewart_read": "The rep states a 650 credit threshold, which matches the schema's noted drift pattern (schema default is 670) rather than being a one-off error — this is a floor-wide numbers-consistency issue, not just this rep's mistake."
     },
     {
-      "ts": "02:14",
-      "quote": "Oh, wow. Yeah. That is that's pretty expensive. I definitely don't blame you for seeing if we can get, you know, get you a little better bill.",
-      "classification": "bill_anchor",
-      "stewart_read": "The rep captures the $400 bill and acknowledges it with sympathy — that's the 'ask + acknowledge' half of the required pattern. The flip never comes. The schema's bill_anchoring section is explicit: 'capture alone is not sufficient — the bill must be FLIPPED into emotional alignment-against-the-utility.' The rep's phrasing ('get you a little better bill') frames solar as a nice-to-have improvement rather than a replacement for a $400/month expense Mohammed is already paying. The emotional leverage of that number is left on the table."
-    },
-    {
-      "ts": "03:44",
-      "quote": "Is there any way you could send it before? It just helps us to build it up for you.",
-      "classification": "protocol_violation",
-      "stewart_read": "Mohammed has already said he's at work, the bill is paper, and he's not at home. The rep asks a second time for the bill anyway. The customer gives a flat 'No.' The schema's bill_collection.alternative_paths section covers this scenario directly: bill_collection.alternative_paths.landline_protocol prescribes deferring bill collection to the specialist site visit when the customer cannot send a photo, and the broader alternative_paths section flags that the pivot should happen within 2 minutes of friction — not after a second failed ask. If this is a paid lead, the rep needed to either pivot to verbal read-back or explicitly defer to the on-site visit. If it is an organic lead, the rep could have booked without the bill entirely. Either way, the second ask added friction and produced a harder refusal."
+      "ts": "02:09",
+      "quote": "About 400 a month.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The customer discloses a $400/month bill — a strong pain point — and the rep responds with acknowledgment ('that is that's pretty expensive') but never flips it into a forward-pulling reason to act or ties it to the appointment's value later in the call."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 37,
+    "verified": 37,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION22",
-  "trajectory_summary": "A short, cooperative call that reaches a booked appointment efficiently. Chris is a qualified, technically literate buyer with a specific need (battery storage, non-Powerwall preference), and Bucky moves him to a 2PM appointment without friction. The structural risk is not in the booking — it is in what Bucky left unverified: the orphaned flow is incomplete (system-working check never asked, panel size never captured), and the battery catalog claim is unverified against Ion's known Powerwall-only confirmation. The appointment is real but the closer walks in blind on product fit.",
+  "rep_name": "Bucky",
+  "trajectory_summary": "This is an orphaned-solar call where the customer arrives self-qualified and cooperative, and the rep successfully gets him to a booked phone appointment with minimal friction, including a smooth live bill capture. The call's weakness is informational rather than tonal: the rep skips almost all of the orphaned_flow qualification checklist (original installer name, panel size, system-working status) and never substantively engages the customer's repeated, specific battery-brand requirement, leaving the closer under-briefed on the one thing the customer clearly cares about.",
   "shape": "energy_built",
-  "outcome_dispute": "The call ends with a booked appointment and a bill successfully captured — the surface outcome is a clean sit. However, the appointment carries structural risk: Bucky's unverified battery catalog claim and the incomplete orphaned flow (system-working DQ check never asked) mean the closer may arrive at a lead that is either a product mismatch or a hard DQ. The outcome tag should be 'booked — verify product fit and system status before sit.'",
+  "outcome_dispute": null,
+  "observed_outcome": {
+    "outcome": "booked",
+    "appointment_channel": "phone",
+    "datetime_captured": true,
+    "co_owner_confirmed": null,
+    "ts": "05:52",
+    "quote": "That sounds good. Alright. I'll text you after this to remind you. We'll call you tomorrow at 2PM, and it'll be for the battery.",
+    "reasoning": "A specific day (tomorrow) and time (2PM) were agreed for a phone call, meeting the booked threshold; co-owner status was raised at 00:43 but never resolved, so it cannot be confirmed either way."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "02:21",
+    "bill_quote": "About a $100.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep captured the $100/month figure but simply said \"Okay\" and moved on to the roof question; the number was never used as leverage or reflected back, and given this is an orphaned/battery-add call rather than a new-solar bill-pain call, the flip's relevance is lower but was still available and unused."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": true,
+    "reason_ts": "00:57",
+    "reason_quote": "so I have a, I have a a grid tied solar inverter and was looking for options to add batteries.",
+    "reason_used": "yes",
+    "use_ts": "05:55",
+    "use_quote": "We'll call you tomorrow at 2PM, and it'll be for the battery.",
+    "reasoning": "The rep never explicitly asked the standard \"what interested you in solar\" question, but the customer volunteered his reason unprompted, and the rep did tie the appointment booking back to it by specifying \"it'll be for the battery,\" which counts as using the stated reason even without a formal ask."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:03",
+      "quote": "This is Bucky with Ion. I'm reaching out about the solar form you filled online."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:19",
+      "quote": "Are you at 234 Wood Mill Drive Or Way?"
+    },
+    {
+      "section": "co_owner",
+      "status": "skipped",
+      "ts": "00:43",
+      "quote": "Is there anybody else on the title but you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "02:24",
+      "quote": "And then, your roof is a shingle?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "02:09",
+      "quote": "So what utility company are you with?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "02:13",
+      "quote": "How much are you spending on a monthly average?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "02:40",
+      "quote": "Are you home right now? The last thing I need to do. You able to access the power bill real quick?"
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "05:38",
+      "quote": "Can you do tomorrow?"
+    },
+    {
+      "section": "button_up",
+      "status": "asked",
+      "ts": "05:52",
+      "quote": "I'll text you after this to remind you. We'll call you tomorrow at 2PM, and it'll be for the battery."
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Orphaned flow completion + battery catalog knowledge gap",
-    "ts": "03:58",
-    "quote": "Yeah. We have tons of batteries. We have, like, multiple.",
-    "why": "Two compounding gaps converge here: Bucky never completed the orphaned flow (system-working hard DQ check never asked), and he answered a product-fit question with an unverified catalog claim. The closer walks into a 2PM appointment without knowing whether the existing system is operational (a hard DQ condition) and with a customer who may expect EG4 or non-Powerwall options that Ion may not carry. Manager should verify Ion's current battery catalog with Kenny before the appointment, and walk Bucky through both the four-step orphaned flow and the setter scope escape hatch as a single coaching session — they are the same root failure: Bucky improvising in closer-tier territory instead of following procedure."
+    "topic": "orphaned_flow qualification depth and battery-requirement follow-through",
+    "ts": "01:51",
+    "quote": "I I I wanted to do something like a a EG four system... with, the 48 volt batteries so that I could, expand it later with, you know, non brand specific batteries.",
+    "why": "This customer states his core technical requirement three separate times (01:48, 01:51, 03:56) and the rep never confirms it, never asks who his original installer was, and skips panel size and system-working status entirely — the closer is walking in blind on the one thing this customer clearly cares about most."
   },
   "key_moments": [
     {
-      "ts": "01:46",
-      "quote": "they only do Tesla Powerwalls. And so We're probably gonna be testing. I was yeah. But I was I'm I'm you know, I I I wanted to do something like a a EG four system... with, the 48 volt batteries so that I could, expand it later with, you know, non brand specific batteries.",
-      "classification": "cross_sell_miss",
-      "stewart_read": "Chris is not a Tesla-sourced lead with a product expectation gap — he is an existing solar owner who has already evaluated Powerwall and rejected it in favor of a non-brand-specific battery architecture. This is a product-fit qualification moment, not a Tesla relationship reframe. Bucky does not acknowledge the non-Powerwall preference, does not flag it for the closer, and does not probe whether Ion's catalog can serve this need. The schema marks battery_storage_inquiry as a TBD cross-sell signal, meaning the correct routing path is unresolved — but the failure to capture and flag the customer's stated requirement is clear regardless."
-    },
-    {
-      "ts": "03:58",
-      "quote": "Yeah. We have tons of batteries. We have, like, multiple.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Per the 2026-05-15 Kenny confirmation, Ion's battery offering is Powerwall-only. If that is still current, Bucky's answer is an unverified claim from a rep who does not know the catalog — not a fabrication, but a confident assertion made without product knowledge. Even if Ion has since expanded its battery line, the correct setter move is the universal escape hatch: 'That's exactly the kind of question our specialist is built to answer — let me get you on the calendar.' Bucky instead answers a closer-tier product question with unverified specificity."
-    },
-    {
-      "ts": "01:18",
-      "quote": "And your panels, are you in contract with somebody, or are you independent?",
+      "ts": "00:43",
+      "quote": "So it's a single family home. Is there anybody else on the title but you? Oh, do you already have solar?",
       "classification": "other",
-      "stewart_read": "Bucky enters the orphaned flow but executes only the first step (ownership confirmed at 01:28: 'Yes. I own the panels'). The schema requires four steps: ownership, original company, panel size, and system working. Bucky never asks panel size (step 3) or — critically — whether the system is working (step 4). The system-working question is a hard DQ trigger per dq_rules. A non-working existing system is a hard disqualifier, and Bucky books the appointment without ever asking."
+      "stewart_read": "The co-owner question is asked and immediately abandoned when the customer's solar-ownership status surfaces; the call pivots into orphaned_flow territory without ever getting a co-owner answer, and it's never revisited later for the appointment."
     },
     {
-      "ts": "01:12",
-      "quote": "I'm looking for options to just add storage.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Chris is not a passive form-fill — he has a defined technical need, has already evaluated one battery option (Powerwall), rejected it on architectural grounds (non-brand-specific expandability), and is actively shopping alternatives. This is a high-intent buyer signal. Bucky captures the surface need ('looking for a battery') but does not probe the depth of Chris's motivation, his timeline, or what specifically drove him to reject the Powerwall path. The verify.interest_in_solar item calls for 60+ seconds of depth on motivation — Bucky moves to utility company within seconds."
+      "ts": "01:41",
+      "quote": "Right. So the, the the the company that I worked with previously, they only do Tesla Powerwalls.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses the name-level detail of a prior installer relationship and its limitation (Tesla-only); rep never asks which company this was or what else they were told, losing competitive intel orphaned_flow explicitly calls for."
+    },
+    {
+      "ts": "02:09",
+      "quote": "Yeah. So what utility company are you with?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer has just laid out a fairly technical, specific battery goal (48V hybrid, brand-agnostic expandability) and the rep pivots immediately to a rote verify-script question without reflecting any of it back, missing a chance to build rapport around the customer's stated interest."
+    },
+    {
+      "ts": "03:56",
+      "quote": "do y'all do, do y'all do the, like, the e g four batteries?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "The customer directly asks a brand/product-capability question. The rep's answer, \"We have tons of batteries. We have, like, multiple,\" is vague but avoids committing to a specific product claim, and the rep immediately bridges to the specialist — this is closer to the schema's universal escape hatch than a scope violation, since no false technical claim was made."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 32,
+    "verified": 32,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

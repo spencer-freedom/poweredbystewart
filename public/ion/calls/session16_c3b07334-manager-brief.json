@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION16_c3b07334",
-  "trajectory_summary": "The call opens with a solvable barrier (townhome eligibility), clears it quickly, then stalls because the rep never found the customer's actual motivation. The customer's real interest — curiosity about solar energy use, not bill savings — was volunteered at 03:27 and walked past. The call ends on a soft callback with no locked time, no spouse coordination, and no appointment. Energy was available to build but leaked steadily after the motivation miss.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is 'unknown' — the actual outcome is a soft callback with no appointment booked, no locked time, and no spouse included. This is a fragile non-outcome: the customer said he'd call back, but there is no scheduled sit, no bill collected, and no decision-maker alignment. Should be tagged 'callback_soft_no_appointment' rather than any booked variant.",
-  "primary_coaching_focus": {
-    "topic": "Spouse-protocol discipline + locked callback scheduling",
+  "rep_name": "Holland",
+  "trajectory_summary": "The call opens with the customer trying to withdraw the lead entirely, and the rep's boundary correction at 01:08 successfully reverses that and keeps the conversation alive through a full verify sequence. From there the call is mixed: qualification items get captured (roof ownership, spouse on title, utility, a bill figure, a self-reported credit score) but several are captured shallowly — the credit claim is unverified, the interest-reason answer is thin and not built on, and the bill number is never flipped into urgency. The call ends in a soft, unlocked callback with no day/time and no confirmed spouse presence.",
+  "shape": "mixed",
+  "outcome_dispute": "The v1 tag is unknown/unclear; based on the transcript this should be recorded as a callback, not a booked or tentative appointment — the customer explicitly says he will call back after discussing with his spouse, and the rep never proposes or locks a day/time.",
+  "observed_outcome": {
+    "outcome": "callback",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
     "ts": "06:21",
     "quote": "Let me discuss it with my spouse and, give me a call on this number. Okay?",
-    "why": "The spouse was on title (confirmed at 02:54) and named as the decision gate at 06:21 — the rep had both the protocol and the information to schedule a joint appointment. Instead, Holland accepted an open-ended callback with no locked time and no spouse coordination. Per schema.protocols.spouse_decision, this is the failure mode that produces no-shows and lost deals: the setter 'wins' the objection by accepting it rather than converting it into a scheduled sit. Manager should walk Holland through the spouse-inclusion reframe and establish a floor rule: soft callbacks without a locked time and both decision-makers confirmed are not outcomes."
+    "reasoning": "The customer states he will call back after discussing with his spouse, and the rep never proposes or locks a specific day or time — this is a callback with no anchor, not a booked or tentative appointment. The spouse was identified as co-owner earlier but is not confirmed for any future contact."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "04:03",
+    "bill_quote": "$2.50.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep captured a bill figure (transcribed as '$2.50', very likely a garbled '$250' per numeric_discipline — flagged as an assumed correction, not settled fact) and moved directly into the program pitch at 04:13 ('Well, we do have a pretty good program right now') without reflecting the number back to the customer or using it as emotional leverage against the utility; the flip never happened."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "03:03",
+    "reason_given": true,
+    "reason_ts": "03:36",
+    "reason_quote": "And, you know, I just, you know, wanted to see how best best one could be used. You know?",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep first supplied an assumed reason ('I'm assuming you're just wanting to save on your electric bills?') which the customer corrected, revealing the real motivation was efficiency/usage-optimization curiosity rather than bill savings; the rep never returned to or built on that corrected reason for the rest of the call."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:36",
+      "quote": "Hey. This is Holland with Ion. I got a request you were looking into solar for your home."
+    },
+    {
+      "section": "interest_question",
+      "status": "asked",
+      "ts": "03:03",
+      "quote": "I was wondering what kind of got you guys interested in solar?"
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "02:04",
+      "quote": "And then your roof, so it looks like a good southern facing roof."
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "02:48",
+      "quote": "Is there anybody else on the title of the home with you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "02:07",
+      "quote": "do you own the roof, or are you in, like, an HOA?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "03:48",
+      "quote": "who is your current electric company?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "03:55",
+      "quote": "how much are you spending on average a month with Dominion?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "01:16",
+      "quote": "How many other companies have you spoken to? Was it just that one?"
+    },
+    {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "04:57",
+      "quote": "do you get those Dominion bills in the mail or online?"
+    },
+    {
+      "section": "appointment_set",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "06:48",
+      "quote": "K. Yeah. That sounds good. I'll just send you a text as well."
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "Unanchored close / no locked callback time",
+    "ts": "06:48",
+    "quote": "K. Yeah. That sounds good. I'll just send you a text as well. And then if you can find that bill and send me a photo of it, that'd be great.",
+    "why": "The entire qualification effort in this call (boundary correction, roof ownership, spouse identification, bill capture, credit claim) is put at risk by an ending with zero locked time, no spouse-inclusion proposal for the next step, and no handshake — this is the single highest-leverage fix because it governs whether any of the upstream work converts into a real appointment."
   },
   "key_moments": [
     {
-      "ts": "00:17",
-      "quote": "No. I thought you're doing it tomorrow. Thanks. Please stay on the line. That's so sad.",
-      "classification": "other",
-      "stewart_read": "Pre-call audio bleed — the rep's side conversation is audible to the customer before the intro begins. 'That's so sad' is an emotionally loaded fragment that the customer hears before Holland says a word. This is a professionalism and first-impression gap: the customer's first experience of Ion is ambient personal conversation, not a controlled intro."
+      "ts": "01:08",
+      "quote": "Yeah. Well, we would actually we it looks like you are in our boundaries, so we'd be able to get you a system.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is actually a well-handled factual correction, not a true inversion opportunity — the customer's stated reason (told solar isn't available there) was misinformation, not a cost/time/interest objection, so a factual correction was the right tool rather than a flip. Classification here is to flag that Stewart considered and rejected the inversion frame."
     },
     {
-      "ts": "01:45",
-      "quote": "I do I do believe that we can work with townhomes.",
-      "classification": "other",
-      "stewart_read": "The hedge 'I do believe' is the wrong register for a legitimacy-building moment. The customer's entire barrier was 'someone told me solar doesn't work here' — the rep's job is to replace that secondhand doubt with confident authority. 'I do believe' mirrors the uncertainty rather than resolving it. The rep had already confirmed boundary eligibility ('it looks like you are in our boundaries' at 01:08) — this second statement should have been declarative."
+      "ts": "04:03",
+      "quote": "$2.50.",
+      "classification": "bill_anchor",
+      "stewart_read": "The customer's stated figure is almost certainly a mis-transcription or shorthand for $250/month (a bare $2.50 electric bill is not plausible), but this is an assumed correction, not a settled fact — the transcript itself only contains '$2.50.' Whatever the true figure, the rep captured a number and moved straight to the program pitch without acknowledging or reflecting the bill back to the customer."
+    },
+    {
+      "ts": "04:32",
+      "quote": "My credit score is the best that anyone can have.",
+      "classification": "knowledge_gap",
+      "stewart_read": "This is a stated-but-unverified and non-numeric credit claim — the customer never gives an actual number, just a vague superlative. The rep accepts it immediately with no follow-up probe for an actual score or range, directly touching the schema's open policy question about stated vs. pulled credit."
     },
     {
       "ts": "03:20",
       "quote": "And then I'm assuming you're just wanting to save on your electric bills?",
-      "classification": "empathy_miss",
-      "stewart_read": "The customer had already said 'I just wanted to see how best one could be used' at 03:42 — a curiosity-and-efficiency frame, not a bill-pain frame. The rep's assumption collapses that into the default bill-savings pitch, which the customer immediately corrects. This is the call's pivotal miss: the customer's actual motivation (energy curiosity, tight consumption habits) was available and the rep walked past it to reach for the familiar anchor."
-    },
-    {
-      "ts": "04:13",
-      "quote": "Well, we do have a pretty good program right now. It will start saving you immediately year one as long as you have a credit score above 670.",
-      "classification": "bill_anchor",
-      "stewart_read": "The program pitch is delivered without any emotional anchor. The customer has just told the rep he's not motivated by bill savings and that he uses electricity conservatively. The rep delivers the standard savings-forward pitch anyway — 'saving you immediately year one' — which is misaligned with the customer's stated frame. There is no flip, no curiosity creation, and no tie to what the customer actually said he wanted."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Rather than asking an open interest question and letting the customer answer, the rep supplies the assumed answer for the customer. The customer then corrects him (\"Not really because... we're very tight on how we use electricity consumption\"), revealing the assumption was wrong and the real motivation (efficiency/curiosity about optimal usage) went uncaptured with any depth."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 36,
+    "verified": 36,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

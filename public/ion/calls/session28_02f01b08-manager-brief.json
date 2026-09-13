@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION28_02f01b08",
-  "trajectory_summary": "This is a duplicate-contact call — Gary had already spoken with another ION rep (Ella) and booked an appointment before Bucky reached him. Bucky ran a competent but mechanical verify pass, discovered the prior booking at 02:11, and exited without capturing any handoff context or reinforcing the appointment. The call produced no new value and left the closer with nothing Bucky learned. Energy was flat throughout and leaked at the close when Bucky apologized and disengaged rather than using the 90 seconds of qualify data he had just collected.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is listed as 'unknown.' The actual outcome is a duplicate contact on an already-booked lead — not a new booking, not a DQ, not a callback. The appointment exists but Bucky contributed nothing to its quality. The closer will walk in without the TPO roof detail, the 25-year-old panel replacement intent, the $200 PNM bill, or the sole-decision-maker status that Bucky collected and then discarded.",
-  "primary_coaching_focus": {
-    "topic": "Duplicate-contact exit discipline — handoff context over clean escape",
+  "rep_name": "Bucky",
+  "trajectory_summary": "This call is a redundant touch on a lead that had already progressed past the setter stage — the customer already has solar, already sent his bill to another Ion rep ('Ella'), and already has an appointment scheduled. The rep ran the standard verify sequence (address, title, utility, bill, roof, credit) without checking CRM/contact history first, which cost several minutes gathering data that had already been captured elsewhere. The transcript itself is degraded with crosstalk and likely speaker-attribution errors, which limits how much can be read into exact rep phrasing.",
+  "shape": "stagnant",
+  "outcome_dispute": "The v1 tag is unknown/unclear from metadata, but the observed outcome here is neither a fresh booking nor a clean DQ — it is a discovery that the customer is already scheduled with Ion. This should be tagged as a duplicate-contact / already-scheduled outcome, not treated as a standard no_appointment or DQ, since the underlying lead is still active and appointed elsewhere in the pipeline.",
+  "observed_outcome": {
+    "outcome": "no_appointment",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": false,
     "ts": "02:15",
     "quote": "Oh, then you're all good. Sorry to bother you.",
-    "why": "Bucky collected six closer-relevant data points in under two minutes (TPO flat roof, 10 panels 25+ years old, PNM utility, ~$200/month bill, sole decision-maker, credit 670+, replacement intent) and then discarded all of it with an apology exit. The manager should use this call to establish what a duplicate-contact call is for: not to rebook, but to enrich the closer's context. The coaching move is to ask Bucky where Gary's TPO roof detail went after he hung up — and then build the habit of a 20-second confirmation-and-note close that makes the 90 seconds already spent worth something to the closer."
+    "reasoning": "No new appointment was set on this call — the customer revealed he already has an appointment scheduled through a prior Ion contact, and the rep closed the call without re-confirming that appointment's day/time or setting any new next step. This is a duplicate-contact discovery rather than a fresh booking, DQ, or no-contact scenario, so no_appointment is the closest fit among the available outcome tags."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "01:24",
+    "bill_quote": "Close to $200.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep captured the monthly bill figure but never tied it back to the customer's stated interest in replacing his 25-year-old panels; given the call ended almost immediately after (once the existing appointment was discovered), there was little runway left to flip it, but the flip point would have been right after capturing the bill at 01:24, tying it to the aging-panel interest already voiced at 00:52."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": true,
+    "reason_ts": "00:52",
+    "reason_quote": "if you've got some good ones, replacing some. I've got 10 that are twenty five years over twenty five years old.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never asked the formal 'what interested you in solar' question, but the customer volunteered a real reason (aging panels needing replacement) in response to an ad-hoc add-on/replace question. The rep registered this enough to ask follow-up ownership questions, but never reinforced or anchored on it later in the call — the call ended too abruptly (upon discovering an existing appointment) for the reason to be actively used."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:04",
+      "quote": "This is Bucky with ION. I'm reaching out about the solar form you filled out online."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:19",
+      "quote": "Alright. You at 1537 Cutron Avenue Southeast?"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "01:09",
+      "quote": "is there anybody else from the title but you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "01:31",
+      "quote": "what kind of roof do you have? Is it is it like a flat roof?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "01:15",
+      "quote": "What utility company are you with?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "01:19",
+      "quote": "Okay. How much are you spending on a monthly average?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "01:46",
+      "quote": "Do you have a credit score over 6 70?"
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "skipped",
+      "ts": "01:56",
+      "quote": "Are you able to access the power bill, like, online?"
+    },
+    {
+      "section": "appointment_set",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "check for existing contact/appointment earlier in the call",
+    "ts": "02:11",
+    "quote": "and then did you get scheduled?",
+    "why": "The rep ran the full verify sequence (title, utility, bill, roof, credit) before checking whether this customer was already scheduled with Ion — flipping this check to the top of the call, right after the existing-solar disclosure, would have saved time for both rep and customer and avoided a redundant bill-collection ask."
   },
   "key_moments": [
     {
-      "ts": "00:04",
-      "quote": "Hey, Gary. Sorry. Yeah. Sorry. This is Bucky with ION. I'm reaching out about the solar form you filled out online. How are you doing?",
-      "classification": "other",
-      "stewart_read": "Bucky opens with two apologies before he has said anything worth apologizing for. The 'Sorry. Yeah. Sorry.' stutter costs legitimacy in the first four seconds. The rest of the intro is structurally correct — company name, form reference, social opener — but the apology framing undercuts the calm, neighbor-like energy the schema targets."
+      "ts": "00:28",
+      "quote": "So it's a single family home. Is there anybody oh, do you already have solar?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The moment the customer reveals existing solar, this call should have fully shifted into the orphaned_flow track (own vs. lease, which company, panel size, system working). The rep does partially follow this (asks about ownership, age of panels) but the transition is mechanical rather than curious."
     },
     {
-      "ts": "00:43",
-      "quote": "Yes. I do. Okay. And price was fast.",
+      "ts": "00:52",
+      "quote": "if you've got some good ones, replacing some. I've got 10 that are twenty five years over twenty five years old.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "DIARIZATION CAVEAT: Deepgram assigns this line to speaker_1 (Bucky), but the content — confirming solar ownership and editorializing about panel speed — is semantically inconsistent with Bucky's role and consistent with Gary responding to 'do you already have solar?' at 00:40. If this is Gary's line, 'price was fast' is an unprompted cost-sensitivity signal that opens a direct path to the replacement conversation. Bucky's follow-up at 00:46 ('Are you looking to add on or replace or anything?') is a reasonable pivot regardless of attribution. The enthusiasm signal classification is flagged as diarization-dependent — the manager should verify the audio before using this moment in a 1-on-1."
+      "stewart_read": "Aging panels (20-25 years old) needing replacement is a genuine re-engagement signal — this is a customer actively looking to upgrade, not a dead lead. The rep registers this (asks about ownership/company) but never anchors on it as a selling point for the appointment."
     },
     {
-      "ts": "00:55",
-      "quote": "I've got 10 that are twenty year over twenty five years old.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Gary volunteers that he has 10 panels that are 25+ years old and is considering replacing them. This is a high-value closer signal — a customer with owned legacy equipment, replacement intent, and a cost-sensitivity lean is a warm lead for a full system upgrade conversation. Bucky captures the data point but does nothing to anchor it emotionally or signal its significance to Gary. The moment passes as a checkbox."
+      "ts": "01:19",
+      "quote": "Okay. How much are you spending on a monthly average?",
+      "classification": "bill_anchor",
+      "stewart_read": "Rep captures the bill figure as part of the standard verify sequence, but treats it as a data point to log rather than a lever to flip into urgency, especially notable given the customer's stated interest in replacing aging panels."
     },
     {
-      "ts": "02:00",
-      "quote": "I just sent I sent a copy.",
-      "classification": "other",
-      "stewart_read": "Gary reveals he already sent his bill to another ION rep. Bucky's response — 'Oh, to who?' — is the right instinct (confirm the prior contact), but the follow-up at 02:11 ('did you get scheduled?') and the exit at 02:15 abandon everything Bucky just collected. The bill is on file, the appointment is booked, and Bucky has 90 seconds of qualify data that the closer will never see."
+      "ts": "02:02",
+      "quote": "Oh, to who?",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "This is an observed pattern not yet formalized in the schema taxonomy — a customer discloses a prior touchpoint with a specific named colleague ('Ella') and the rep asks only 'to who' without following up on what was discussed, what was sent, or what stage that contact reached before moving straight to 'did you get scheduled.'"
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 28,
+    "verified": 25,
+    "fuzzy": 3,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

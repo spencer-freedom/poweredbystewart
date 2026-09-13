@@ -122,6 +122,10 @@ def build_calls(spencer_os: Path) -> dict[str, Any]:
     copied_calls = 0
     copied_hero_sets = 0
 
+    # Start clean: a rebuilt corpus can have fewer calls than the last one
+    # (voicemails are gated now) and stale files would still be served.
+    if PUBLIC_CALLS.exists():
+        shutil.rmtree(PUBLIC_CALLS)
     PUBLIC_CALLS.mkdir(parents=True, exist_ok=True)
 
     for call_dir in sorted(calls_root.iterdir()):
@@ -161,6 +165,10 @@ def build_calls(spencer_os: Path) -> dict[str, Any]:
         if handoff_p.exists():
             handoff = read_json(handoff_p)
             write_json(PUBLIC_CALLS / f"{slug}-handoff.json", handoff)
+        quote_check_p = call_dir / "quote-check.json"
+        quote_check = read_json(quote_check_p) if quote_check_p.exists() else None
+        if quote_check is not None:
+            write_json(PUBLIC_CALLS / f"{slug}-quote-check.json", quote_check)
         if critic_audit_p.exists():
             critic = read_json(critic_audit_p)
             # Slim down — full audit objects are large; for the demo
@@ -174,11 +182,14 @@ def build_calls(spencer_os: Path) -> dict[str, Any]:
                 if isinstance(critic.get("weak_reasoning"), list)
                 else critic.get("weak_reasoning"),
                 "revision_summary": critic.get("revision_summary"),
+                # Quote existence is checked by code now (quote-check.json);
+                # the critic's own count field no longer exists.
                 "flags_count": (
-                    critic.get("verification", {}).get("quotes_failed")
-                    if isinstance(critic.get("verification"), dict)
-                    else None
+                    (quote_check.get("wrong_ts", 0) + quote_check.get("not_found", 0))
+                    if quote_check else None
                 ),
+                "missed_moments": len(critic.get("missed_moments") or [])
+                if isinstance(critic.get("missed_moments"), list) else None,
             }
             write_json(PUBLIC_CALLS / f"{slug}-critic-audit.json", slim)
 
@@ -232,6 +243,14 @@ def build_calls(spencer_os: Path) -> dict[str, Any]:
                 "is_gray_matter": bool(hero and hero["gray_matter"]),
                 "gray_matter_section": hero["gray_matter"] if hero else None,
                 "has_handoff": handoff_p.exists(),
+                # measured (pipeline v3.1)
+                "observed_outcome": (manager_brief or {}).get("observed_outcome") or None,
+                "bill_flip": ((manager_brief or {}).get("bill_anchor_audit") or {}).get("flip_executed"),
+                "reason_used": ((manager_brief or {}).get("interest_reason_audit") or {}).get("reason_used"),
+                "reason_asked": ((manager_brief or {}).get("interest_reason_audit") or {}).get("asked"),
+                "script_coverage": {c["section"]: c["status"] for c in ((manager_brief or {}).get("script_coverage") or []) if isinstance(c, dict) and c.get("section")},
+                "quote_verification": (manager_brief or {}).get("quote_verification"),
+                "pipeline_version": ((manager_brief or {}).get("pipeline") or {}).get("version"),
             }
         )
         copied_calls += 1
@@ -577,6 +596,13 @@ def main() -> int:
 
     PUBLIC_ION.mkdir(parents=True, exist_ok=True)
 
+    for name, src in (
+        ("corpus-stats.json", spencer_os / "scripts" / "stewart_demo_pipeline" / "outputs" / "_batch" / "corpus_stats.json"),
+        ("brain-v2-payload.json", spencer_os / "data" / "ion_solar" / "_brain_payload" / "brain-v2-payload.json"),
+    ):
+        if src.exists():
+            shutil.copyfile(src, PUBLIC_ION / name)
+            print(f"copied {name}")
     if not args.skip_calls:
         build_calls(spencer_os)
     if not args.skip_schema:

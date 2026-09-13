@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION24",
-  "trajectory_summary": "This is a structurally thin call that reaches a booking outcome without building any of the emotional scaffolding the schema requires. Bucky clears the mechanical qualifiers — address, homeowner status, roof type, credit — but skips the emotional anchor entirely (interest_in_solar never asked), has no bill to work with, and books on a customer who has articulated a purely conditional interest. The appointment exists on the calendar; the customer's investment in showing up does not.",
-  "shape": "stagnant",
-  "outcome_dispute": "The call ends with a booked appointment, but the booking is structurally fragile. Deepak has no bill yet (just moved in this month), the interest_in_solar verify item was never asked, no emotional anchor was set, and Deepak's closing statement frames the appointment as a cost-evaluation exercise rather than a committed sit. The v1 tag of 'booked' is technically accurate but masks a high no-show risk. This appointment should be flagged as conditional.",
+  "rep_name": "Bucky",
+  "trajectory_summary": "The call is dominated by several minutes of confused cross-talk where a third party appears to read out unrelated utility bill figures while the rep is trying to run basic verify questions, and the rep never resolves what that cross-talk actually was. Despite the chaos, the rep held the verify sequence together, caught a mapping inconsistency, and closed on a specific day and time. The outcome is a real booked appointment but built on a verify pass that is only partially trustworthy given how noisy the middle of the call was.",
+  "shape": "mixed",
+  "outcome_dispute": null,
+  "observed_outcome": {
+    "outcome": "booked",
+    "appointment_channel": "phone",
+    "datetime_captured": true,
+    "co_owner_confirmed": false,
+    "ts": "04:21",
+    "quote": "Okay. 04:30. How's that sound?",
+    "reasoning": "The rep and customer land on a specific day (Monday) and time (4:30, after the customer specified after 4:00), which meets the booked bar; however the co-owner son identified on the title was never confirmed for the appointment."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "03:12",
+    "bill_quote": "Still we are waiting for our one bill. We have not received anything yet.",
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "No usable monthly bill figure was captured — the customer explicitly states he has not yet received a bill at the new home, and the earlier cross-talk numbers ($147.6, $38.70, $1,400.88) are never confirmed as belonging to this account or being an electric bill at all."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never explicitly asks what interested the customer in solar; the closest content is the customer's own unprompted comment about wanting to compare Ion's charge against his utility bill, but this was volunteered near the end during scheduling, not solicited via an interest question."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:06",
+      "quote": "It's Bucky with Ion. I'm reaching out about the solar form you filled out online."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:22",
+      "quote": "are you at 1545 Young Street?"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "02:53",
+      "quote": "Is there anybody on the title but you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "03:29",
+      "quote": "Is your roof a shingle?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "03:00",
+      "quote": "And what utility company are you with?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "03:06",
+      "quote": "How much do you spend on a monthly average?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "04:21",
+      "quote": "Okay. 04:30. How's that sound?"
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "interest_in_solar emotional anchor — skipped entirely",
-    "ts": "03:00",
-    "quote": "And what utility company are you with?",
-    "why": "The interest_in_solar question is the schema's designated emotional anchor and the only verify item that is depth-graded. Bucky skipped it entirely, moving from title confirmation directly to utility company. Every downstream weakness on this call — the generic text, the conditional booking, the closer walking in blind — traces back to this single omission. This is the one coaching beat that, if fixed, changes the shape of every call Bucky runs."
+    "topic": "unresolved cross-talk contaminating the verify record",
+    "ts": "00:57",
+    "quote": "Your total is, $1.47.6 minus credit, $38.70.",
+    "why": "Several minutes of the call are consumed by numbers and confirmations that don't map cleanly to Ion's verify questions, and the rep never stops to clarify whose bill or account this is — the closer will inherit a qualification record with unexplained noise in it."
   },
   "key_moments": [
     {
-      "ts": "00:32",
-      "quote": "Can can you hold for a moment? Can you I got it. Just give me one moment.",
-      "classification": "other",
-      "stewart_read": "Deepak is pulled into a side transaction for ~90 seconds at the top of the call. Bucky holds the line silently. Strategic hypothesis: holding is a deliberate choice to preserve the lead rather than lose it by hanging up. Reactive hypothesis: Bucky defaults to waiting because he has no protocol for this situation. The evidence is ambiguous — there is no verbal move from Bucky during the hold, and no offer-to-call-back is made. Coaching point stands regardless of intent: a brief verbal anchor ('Take your time — I'll be right here, and if it's easier I can call you back in five minutes') would have managed the dead air and given Deepak a graceful exit option that he could decline, strengthening his commitment to the call."
-    },
-    {
-      "ts": "02:02",
-      "quote": "So it's still empty lot, but I know the home is built. It's a single family. Right?",
-      "classification": "other",
-      "stewart_read": "Bucky spends approximately two minutes (02:02–02:37) working through an address mapping problem — the satellite tool shows an empty lot for Deepak's address. On a call with an effective runtime of roughly 4.5 minutes of actual conversation, this is a disproportionate time burn. The address was ultimately confirmed verbally by Deepak; the mapping issue did not block qualification. Bucky could have confirmed the address verbally and moved on, deferring the mapping lookup to the closer or a back-office step."
-    },
-    {
-      "ts": "02:56",
-      "quote": "It's me and my son.",
-      "classification": "spouse_handling",
-      "stewart_read": "Deepak discloses that his son is on the title. Per schema protocols.adult_child_decision_maker, the correct response is to include the son in the appointment. Bucky acknowledges with 'Okay.' and moves directly to utility company. The son is never mentioned again — the appointment is booked without confirming whether the son will be present."
-    },
-    {
-      "ts": "03:00",
-      "quote": "And what utility company are you with?",
+      "ts": "00:57",
+      "quote": "Your total is, $1.47.6 minus credit, $38.70.",
       "classification": "knowledge_gap",
-      "stewart_read": "The interest_in_solar verify item — labeled in the schema as 'THE EMOTIONAL ANCHOR' and depth-graded — is never asked on this call. Bucky moves from title/co-owners directly to utility company, skipping the one question that would have surfaced Deepak's motivation, bill pain, or emotional investment in solar. Without this anchor, the entire pitch has no emotional foundation, and the appointment is booked on procedural momentum alone."
+      "stewart_read": "This appears to be a third party in the house reading out a completely different bill (possibly a receipt or a different utility) rather than the customer's electric bill. The rep never clarifies whose numbers these are or what bill they came from."
+    },
+    {
+      "ts": "03:12",
+      "quote": "Still we are waiting for our one bill. We have not received anything yet.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The customer flags that he has no bill yet because he just moved in, which is a legitimate reason no bill anchor exists on this call — but the rep does not use this as a hook (e.g., framing the appointment as the moment to project his likely usage) and simply moves to the next verify item."
+    },
+    {
+      "ts": "03:17",
+      "quote": "Oh, how long have you lived in the home since 2019?",
+      "classification": "other",
+      "stewart_read": "The rep's own question is garbled/contradictory (asking 'since 2019' as if confirming a fact not yet established), and the customer's actual answer directly contradicts the earlier stated 2019 move-in, revealing the verify record is internally inconsistent."
+    },
+    {
+      "ts": "03:38",
+      "quote": "Yeah. It's more than that, really. It's, maybe about it's about one, you know, 40 or so.",
+      "classification": "other",
+      "stewart_read": "Customer's credit answer is unclear/garbled ('about one 40 or so') and does not cleanly confirm a score above 670, yet the rep accepts it without seeking a clear number."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": false
+  },
+  "quote_verification": {
+    "checked": 26,
+    "verified": 26,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

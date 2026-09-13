@@ -1,5 +1,6 @@
 import { AtomHero } from "./_components/AtomHero.client";
 import { HashHighlight } from "./_components/HashHighlight.client";
+import { ProgressRail, type Beat } from "./_components/ProgressRail.client";
 import { AboutSpencer } from "./_components/AboutSpencer.client";
 import { CupOfWater } from "./_components/CupOfWater.client";
 import { SectionDiveDeeper } from "./_sections/SectionDiveDeeper";
@@ -7,53 +8,70 @@ import { SectionWhatIsStewart } from "./_sections/SectionWhatIsStewart";
 import { SectionMeaning } from "./_sections/SectionMeaning";
 import { SectionTheMiss } from "./_sections/SectionTheMiss";
 import { SectionImagine } from "./_sections/SectionImagine";
-import { SectionCoaching } from "./_sections/SectionCoaching";
-import { SectionLeakAtlas } from "./_sections/SectionLeakAtlas";
-import { SectionEconomics } from "./_sections/SectionEconomics";
-import { SectionMorningView } from "./_sections/SectionMorningView";
-import { SectionSowClose } from "./_sections/SectionSowClose";
-import { SectionHowItWorks } from "./_sections/SectionHowItWorks";
-import { SectionBrain } from "./_sections/SectionBrain";
+import { SectionAllCalls } from "./_sections/SectionAllCalls";
+import { SectionScriptFloor } from "./_sections/SectionScriptFloor";
+import { SectionOneRead } from "./_sections/SectionOneRead";
+import { SectionMorning } from "./_sections/SectionMorning";
+import { SectionMath } from "./_sections/SectionMath";
+import { SectionWithWhatIHad } from "./_sections/SectionWithWhatIHad";
+import { SectionAsk } from "./_sections/SectionAsk";
+import { SectionGoDeeper } from "./_sections/SectionGoDeeper";
 
 export const dynamic = "force-dynamic";
 
 // /ion/present — the single-page scroll Stewart pitch (Kenny + VP).
+// Built to be sent as a URL and walked alone: every beat is one full
+// screen, the steppers show their own Next, the rail on the right says
+// where you are, and a Bridge line at the top of each back-half beat
+// says what Spencer would say between them.
 //
-// Narrative rebuild (cup hook → pain → Stewart):
-//   hero → about → cup of water (sell/telling/takeaways) → dive deeper
-//   (reasons to buy) → WHAT is Stewart (pain: call review + coaching)
-//   → [remaining sections below are the OLD pitch, pending rework]
-//
-// Parked at the very bottom for reference (not the transition we want yet):
-//   SectionHowItWorks (Sales Machine + intent-vs-keyword), SectionBrain.
-//   These carry the "how Stewart works" material for a later step.
+// One spine, start to finish:
+//   the cup (they have to want it; know why) → speak to the reason they
+//   gave you → what Stewart does → meaning, not keywords → the miss
+//   (your calls, measured) → imagine the opposite → Stewart read all of them
+//   → your script across the floor → one read, all the way through → what a manager opens → the math
+//   → what I had vs. what the connection unlocks → the ask → go deeper.
+
+const BEATS: Beat[] = [
+  { id: "hero", label: "Ion" },
+  { id: "about", label: "Spencer" },
+  { id: "cup", label: "The cup" },
+  { id: "reasons", label: "The reasons" },
+  { id: "stewart", label: "Stewart" },
+  { id: "meaning", label: "Meaning" },
+  { id: "proof", label: "Your calls" },
+  { id: "imagine", label: "Imagine" },
+  { id: "all-calls", label: "All calls" },
+  { id: "floor", label: "Your script" },
+  { id: "one-read", label: "One read" },
+  { id: "morning", label: "The morning" },
+  { id: "math", label: "The math" },
+  { id: "inputs", label: "What I had" },
+  { id: "ask", label: "The ask" },
+  { id: "deeper", label: "Go deeper" },
+];
 
 export default function IonPresentPage() {
   return (
     <>
       <HashHighlight />
+      <ProgressRail beats={BEATS} />
       <AtomHero />
-      {/* Scroll down to "About Spencer" (dismissable), then the cup of water */}
       <AboutSpencer />
       <CupOfWater />
       <SectionDiveDeeper />
-      {/* Clean break from the cup → Stewart (what it does + the pain) */}
       <SectionWhatIsStewart />
-      {/* Why not just another call tool: keyword vs meaning (Google vs ChatGPT) */}
       <SectionMeaning />
-      {/* Proof: real Ion calls where both script anchors were dropped → 0/332 */}
       <SectionTheMiss />
-      {/* The upside flip: set rate → sit rate → close */}
       <SectionImagine />
-      {/* --- old pitch below, pending rework --- */}
-      <SectionCoaching />
-      <SectionLeakAtlas />
-      <SectionEconomics />
-      <SectionMorningView />
-      <SectionSowClose />
-      {/* --- parked for reference: "how it works" material, revisit later --- */}
-      <SectionHowItWorks />
-      <SectionBrain />
+      <SectionAllCalls />
+      <SectionScriptFloor />
+      <SectionOneRead />
+      <SectionMorning />
+      <SectionMath />
+      <SectionWithWhatIHad />
+      <SectionAsk />
+      <SectionGoDeeper />
     </>
   );
 }

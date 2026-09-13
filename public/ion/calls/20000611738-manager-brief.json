@@ -1,38 +1,164 @@
 {
   "call_id": "20000611738",
-  "trajectory_summary": "The call moves from process-skeptical to booked in under six minutes — a clean transactional arc. Carter completes verify, collects the bill live, and lands a next-day appointment. The structural problem is that the booking is fragile: Michael Dewar is on the title and is not on the appointment, and Janet's $4.34 average monthly bill is almost certainly a data anomaly that will surface at the closer stage. The call books but does not build.",
+  "rep_name": "Carter",
+  "trajectory_summary": "The call moves from a mildly skeptical, previously-burned customer through a fast, mechanical verify sequence to a booked next-day appointment. The rep succeeds procedurally — address, co-owner, roof, utility, bill amount, credit qualifier, bill collection, and scheduling all get covered — but does so without reinforcing the customer's stated motivations or resolving her spouse-availability and deadline concerns, leaving the booking structurally fragile.",
   "shape": "mixed",
-  "outcome_dispute": "v1 outcome tag is unknown. The call ends with a booked appointment for the following day at 12PM — that is a real booking, not tentative. However, the appointment is structurally fragile on two independent grounds: (1) Michael Dewar is a co-title-holder who is excluded, per protocols.spouse_decision; and (2) Janet's stated bill of $4.34/month is almost certainly erroneous or misunderstood, meaning the closer will need to re-qualify the economic case from scratch. The booking should be tagged as 'booked-fragile' rather than a clean sit.",
+  "outcome_dispute": "v1 outcome tag is unknown; observed transcript shows a booked appointment with day and time locked (tomorrow at 12PM), so this should be tagged booked, not tentative or no_appointment.",
+  "observed_outcome": {
+    "outcome": "booked",
+    "appointment_channel": "in_person",
+    "datetime_captured": true,
+    "co_owner_confirmed": false,
+    "ts": "05:40",
+    "quote": "K. I plan on 12PM. I'll block you out for an hour, but it shouldn't take that long. And then we'll just go over all the specific details with you.",
+    "reasoning": "Rep locks a specific day (tomorrow) and time (12PM) and confirms it verbally with the customer, meeting the booked threshold; it is an in-person visit per the rep's earlier statement 'It would be a in person visit.' The identified co-owner Michael Dewar is not confirmed to attend."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "02:45",
+    "bill_quote": "$4.34.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "Rep captures the bill figure but immediately moves to the next verify item ('And then have you seen a solar design for your home?') without acknowledging or flipping it into emotional leverage; the flip should have gone right after 02:45."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "00:19",
+    "reason_given": true,
+    "reason_ts": "00:24",
+    "reason_quote": "We've been interested for a while.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "Rep asked the interest question and got a vague answer, but never probed deeper or referenced this interest again later in the call (e.g., at booking or button-up), so the reason was never turned into leverage."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:06",
+      "quote": "Hey. This is Carter calling from ION."
+    },
+    {
+      "section": "interest_question",
+      "status": "asked",
+      "ts": "00:19",
+      "quote": "Awesome. What has you interested in solar?"
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "01:38",
+      "quote": "The address I have is 10011 Tarington Way. Is that correct?"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "01:51",
+      "quote": "Is there anyone else on the title with you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "02:19",
+      "quote": "And then how old is the roof on the place?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "02:35",
+      "quote": "who's the utility company that you're working with?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "02:41",
+      "quote": "how much on average are you paying a month?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "02:58",
+      "quote": "the main requirements are that you pay income tax and have a credit score above six fifty. Is that the case for you?"
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "02:48",
+      "quote": "have you seen a solar design for your home?"
+    },
+    {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "03:17",
+      "quote": "the last thing I need from you before we schedule an appointment is just your most current utility bill"
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "05:09",
+      "quote": "We could do twelve, 02:30, or five tomorrow. Which would be better?"
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "verify.interest_in_solar depth — emotional anchor missing",
-    "ts": "00:19",
-    "quote": "What has you interested in solar?",
-    "why": "Carter checks the box in under five seconds on the schema's highest-depth verify item and receives nothing usable. The rest of the call is a data-collection exercise with no emotional foundation. Without an anchor, the appointment has no pull — Janet is showing up because Carter asked her to, not because she's curious about her own numbers. This is the root cause of the call's transactional flatness and the most transferable coaching gap across Carter's book."
+    "topic": "Co-owner exclusion from appointment",
+    "ts": "05:13",
+    "quote": "I'll be here. He won't be until it's, like, an issue.",
+    "why": "Michael Dewar is confirmed on the title but the appointment is booked with Janet alone after a brief, unresolved exchange about his availability — this is the single biggest risk to the sit actually converting, since the decision-maker won't be present."
   },
   "key_moments": [
     {
-      "ts": "00:50",
-      "quote": "Okay. Gotcha. In the Yeah. I mean, it okay.",
-      "classification": "empathy_miss",
-      "stewart_read": "Janet has just disclosed a pattern of broken promises — 'get instant code' that never arrives, followed by a bait-and-switch to a home visit. This is a trust-eroding process complaint, not a random objection. Carter's response is a verbal stumble that neither acknowledges the frustration nor differentiates Ion from the prior experience. The schema notes that customers who complain about contact frequency or process should be resolved via action, not defense. Carter does neither — he absorbs the complaint and pivots to the appointment ask. The protocols.excessive_contact_complaint gap (TBD in schema) is directly relevant here."
+      "ts": "00:32",
+      "quote": "I think I've talked to you guys before. I don't know. Every time I fill something out where it says get instant code and you fill out information and get no instant code. And then then I talk to people and they're like, well, we have to do a home visit.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a repeated bad-experience pattern with the company (form-fill, no follow-through, unclear process). Rep does not probe what she was told before or by whom — free competitive/CRM intelligence left uncollected."
     },
     {
       "ts": "01:06",
       "quote": "Well, are you gonna be able to install this thing before the texting runs out or not?",
-      "classification": "other",
-      "stewart_read": "Janet's tax-credit deadline question is skeptical-transactional — she's probing whether this engagement is worth her time, not expressing enthusiasm. Carter answers affirmatively ('Yeah. We should be able to') and correctly routes the timeline detail to the appointment. The response is adequate but misses a flip opportunity: the urgency Janet is expressing could have been turned into a booking reason ('That's exactly why we should get you on the calendar now — the timeline is tight and the design takes a few days to build'). The emotional register here is 'prove it to me,' not 'I'm excited.'"
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a time-pressure objection/concern (likely tax-credit deadline) that the rep answers with a soft, hedged 'We should be able to' instead of anchoring firmly or using it as leverage to book urgently."
     },
     {
-      "ts": "00:19",
-      "quote": "What has you interested in solar?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Carter asks the schema's highest-depth verify item and receives 'We've been interested for a while' at 00:24. He responds with 'Cool.' and moves to the next question. The entire interest-in-solar exchange takes under five seconds. The schema is explicit: 'Top setters spend 60+ seconds here. Bottom setters check the box and move on.' Carter checks the box. There is no bill pain surfaced, no emotional anchor established, no curiosity created. The rest of the call proceeds without any emotional foundation — it's a data-collection exercise."
+      "ts": "03:01",
+      "quote": "the main requirements are that you pay income tax and have a credit score above six fifty. Is that the case for you?",
+      "classification": "other",
+      "stewart_read": "Rep states a 650 credit threshold, which matches the schema's noted drift observation (schema states 670) rather than a call-specific error — worth flagging for reconciliation with Kenny."
     },
     {
       "ts": "02:45",
       "quote": "$4.34.",
-      "classification": "bill_anchor",
-      "stewart_read": "Janet states her average monthly bill as $4.34. Carter responds 'K.' and moves to the next verify item. This is a double failure: first, $4.34 is almost certainly a data error (possibly a daily rate, a partial bill period, or a misread) and Carter does not probe it; second, even if the number were accurate, the schema's 'ask + acknowledge + flip' pattern requires an emotional flip against the utility — Carter does 'ask + acknowledge + move on.' The bill anchor is the foundation of the entire pitch. Carter has neither validated the number nor used it."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer gives a bill figure (likely $434, transcribed oddly) and the rep immediately moves to the next verify question without acknowledging it or using it as an anchor point."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": false
+  },
+  "quote_verification": {
+    "checked": 36,
+    "verified": 36,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

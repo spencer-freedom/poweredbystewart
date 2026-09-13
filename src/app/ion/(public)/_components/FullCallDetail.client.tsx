@@ -23,6 +23,7 @@ const DEFAULT_CLIP_DURATION_SEC = 20;
 
 type ManagerBrief = {
   call_id: string;
+  rep_name?: string | null;
   trajectory_summary: string;
   shape: string;
   outcome_dispute: string | null;
@@ -31,7 +32,12 @@ type ManagerBrief = {
     ts: string;
     quote: string;
     why: string;
-  };
+  } | null;
+  // measured (pipeline v3.1)
+  observed_outcome?: { outcome: string; appointment_channel?: string | null; datetime_captured?: boolean; co_owner_confirmed?: boolean | null; ts?: string | null; quote?: string | null; reasoning?: string } | null;
+  bill_anchor_audit?: { bill_captured: boolean; bill_ts: string; bill_quote?: string | null; flip_executed: string; flip_ts?: string; reasoning: string } | null;
+  interest_reason_audit?: { asked: boolean; ask_ts: string; reason_given: boolean; reason_quote?: string | null; reason_used: string; reasoning: string } | null;
+  script_coverage?: { section: string; status: string; ts?: string; quote?: string }[] | null;
 };
 
 type CherryPick = {
@@ -62,6 +68,16 @@ type CriticAudit = {
   flags_count?: number;
 };
 
+// Deterministic quote verification (scripts/stewart_demo_pipeline/verify_quotes.py):
+// every quoted line fuzzy-matched against the transcript near its timestamp.
+type QuoteCheck = {
+  checked: number;
+  verified: number;
+  fuzzy: number;
+  wrong_ts: number;
+  not_found: number;
+};
+
 export type FullCallDetailSummary = {
   rep_id?: string | null;
   outcome?: string | null;
@@ -81,6 +97,7 @@ type LoadState =
       picks: CherryPick[];
       handoff: Handoff | null;
       critic: CriticAudit | null;
+      quotes: QuoteCheck | null;
     };
 
 function slugify(callId: string): string {
@@ -114,8 +131,9 @@ export function FullCallDetail({
       fetchJsonOrNull<CherryPick[]>(`/ion/calls/${slug}-cherrypicks.json`),
       fetchJsonOrNull<Handoff>(`/ion/calls/${slug}-handoff.json`),
       fetchJsonOrNull<CriticAudit>(`/ion/calls/${slug}-critic-audit.json`),
+      fetchJsonOrNull<QuoteCheck>(`/ion/calls/${slug}-quote-check.json`),
     ])
-      .then(([brief, picks, handoff, critic]) => {
+      .then(([brief, picks, handoff, critic, quotes]) => {
         if (cancelled) return;
         setState({
           kind: "loaded",
@@ -123,6 +141,7 @@ export function FullCallDetail({
           picks: picks || [],
           handoff: handoff || null,
           critic: critic || null,
+          quotes: quotes || null,
         });
       })
       .catch((e) => {
@@ -153,6 +172,8 @@ export function FullCallDetail({
           <ManagerBriefBlock brief={state.brief} />
           <CherryPicksBlock callId={callId} picks={state.picks} />
           <HandoffBlock handoff={state.handoff} />
+          <MeasuredBlock brief={state.brief} />
+          <QuoteCheckLine quotes={state.quotes} />
           <CriticAuditBlock critic={state.critic} />
         </>
       ) : null}
@@ -246,22 +267,24 @@ function ManagerBriefBlock({ brief }: { brief: ManagerBrief | null }) {
           </p>
         </div>
       ) : null}
-      <div>
-        <p className="text-xs uppercase tracking-wider text-stewart-muted mb-1">
-          Primary coaching focus
-        </p>
-        <p className="text-sm text-stewart-text">
-          <span className="font-semibold">
-            {brief.primary_coaching_focus.topic}
-          </span>{" "}
-          <span className="font-mono text-stewart-accent">
-            @ {brief.primary_coaching_focus.ts}
-          </span>
-        </p>
-        <p className="text-sm text-stewart-muted leading-relaxed mt-1">
-          {brief.primary_coaching_focus.why}
-        </p>
-      </div>
+      {brief.primary_coaching_focus ? (
+        <div>
+          <p className="text-xs uppercase tracking-wider text-stewart-muted mb-1">
+            Primary coaching focus
+          </p>
+          <p className="text-sm text-stewart-text">
+            <span className="font-semibold">
+              {brief.primary_coaching_focus.topic}
+            </span>{" "}
+            <span className="font-mono text-stewart-accent">
+              @ {brief.primary_coaching_focus.ts}
+            </span>
+          </p>
+          <p className="text-sm text-stewart-muted leading-relaxed mt-1">
+            {brief.primary_coaching_focus.why}
+          </p>
+        </div>
+      ) : null}
     </section>
   );
 }
@@ -400,6 +423,21 @@ function HandoffBlock({ handoff }: { handoff: Handoff | null }) {
   );
 }
 
+function QuoteCheckLine({ quotes }: { quotes: QuoteCheck | null }) {
+  if (!quotes || !quotes.checked) return null;
+  const good = quotes.verified + quotes.fuzzy;
+  const clean = quotes.wrong_ts === 0 && quotes.not_found === 0;
+  return (
+    <p className={"text-xs " + (clean ? "text-stewart-success" : "text-stewart-warning")}>
+      <span className="uppercase tracking-wider text-stewart-muted">Quotes vs. transcript</span>{" "}
+      <span className="font-mono">{good}/{quotes.checked}</span> matched
+      {quotes.wrong_ts ? ` · ${quotes.wrong_ts} at the wrong timestamp` : ""}
+      {quotes.not_found ? ` · ${quotes.not_found} not found` : ""}
+      {clean ? " · every line grounded" : ""}
+    </p>
+  );
+}
+
 function CriticAuditBlock({ critic }: { critic: CriticAudit | null }) {
   const [open, setOpen] = useState(false);
   const flagCount =
@@ -463,6 +501,72 @@ function CriticAuditBlock({ critic }: { critic: CriticAudit | null }) {
               that gated the brief from shipping.
             </p>
           )}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+
+// Measured fields from pipeline v3.1 — the structured outcome, the two
+// anchors, and script coverage. Absent on calls still on the old contract.
+const COVERAGE_ORDER = [
+  "intro_legitimacy", "interest_question", "address_homeowner", "co_owner", "roof", "utility_company",
+  "bill_amount", "tax_credit_qualifier", "military", "prior_design", "bill_collection", "appointment_set", "button_up",
+];
+function MeasuredBlock({ brief }: { brief: ManagerBrief | null }) {
+  if (!brief) return null;
+  const o = brief.observed_outcome;
+  const b = brief.bill_anchor_audit;
+  const r = brief.interest_reason_audit;
+  const cov = brief.script_coverage;
+  if (!o && !b && !r && !cov) return null;
+  const covMap = new Map((cov ?? []).map((c) => [c.section, c]));
+  return (
+    <section className="rounded border border-stewart-border bg-stewart-bg/40 p-3 text-xs space-y-3">
+      <p className="text-stewart-muted uppercase tracking-wider">Measured on this call</p>
+      {o ? (
+        <p>
+          <span className="text-stewart-muted">Outcome:</span>{" "}
+          <span className="font-mono text-stewart-text">{o.outcome}</span>
+          {o.appointment_channel ? <span className="text-stewart-muted"> · {o.appointment_channel}</span> : null}
+          {o.ts ? <span className="text-stewart-muted"> @ {o.ts}</span> : null}
+          {o.co_owner_confirmed === false ? <span className="text-stewart-warning"> · co-owner not confirmed</span> : null}
+        </p>
+      ) : null}
+      {b ? (
+        <p>
+          <span className="text-stewart-muted">Bill:</span>{" "}
+          <span className={b.bill_captured && b.flip_executed !== "yes" ? "text-stewart-warning" : "text-stewart-text"}>
+            {!b.bill_captured ? "never captured" : b.flip_executed === "yes" ? `captured @ ${b.bill_ts}, used @ ${b.flip_ts}` : `captured @ ${b.bill_ts}, never used`}
+          </span>
+        </p>
+      ) : null}
+      {r ? (
+        <p>
+          <span className="text-stewart-muted">Reason:</span>{" "}
+          <span className={!r.asked || (r.reason_given && r.reason_used !== "yes") ? "text-stewart-warning" : "text-stewart-text"}>
+            {!r.asked ? "never asked" : !r.reason_given ? `asked @ ${r.ask_ts}, none given` : r.reason_used === "yes" ? "given and used" : "given, never used"}
+          </span>
+          {r.reason_quote ? <span className="text-stewart-muted"> — “{r.reason_quote}”</span> : null}
+        </p>
+      ) : null}
+      {cov && cov.length ? (
+        <div>
+          <p className="text-stewart-muted mb-1">Script:</p>
+          <div className="flex flex-wrap gap-1">
+            {COVERAGE_ORDER.map((k) => {
+              const c = covMap.get(k);
+              const st = c?.status ?? "not_reached";
+              const cls =
+                st === "asked" ? "border-stewart-success/50 text-stewart-success" : st === "skipped" ? "border-stewart-warning/60 text-stewart-warning" : "border-stewart-border text-stewart-muted/60";
+              return (
+                <span key={k} title={c?.ts ? `${st} @ ${c.ts}` : st} className={"rounded border px-1.5 py-0.5 font-mono " + cls}>
+                  {k.replace(/_/g, " ")}
+                </span>
+              );
+            })}
+          </div>
         </div>
       ) : null}
     </section>

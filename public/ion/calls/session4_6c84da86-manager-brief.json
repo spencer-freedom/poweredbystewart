@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION4_6c84da86",
-  "trajectory_summary": "The call opened cooperatively but was structurally misrouted from the first minute. Craig disclosed existing solar and a renovation-driven removal need at 00:55 — a clear orphaned_flow trigger — but Bucky stayed on the new-solar script. The bill-swap pitch at 02:28 briefly re-engaged Craig ('I'm curious to hear more' at 02:53), giving the call a genuine second chance. That window closed at 03:09 when Bucky asked for the power bill without addressing the removal constraint. The call ended when Bucky could not confirm whether Ion offers standalone removal, leaving Craig's actual question unanswered.",
+  "rep_name": "Bucky",
+  "trajectory_summary": "The call opens cooperatively but leaks energy steadily from the moment the customer discloses a non-standard need (panel removal/reinstall for a home renovation, not a new install). The rep never recognizes this as outside the standard script and continues running new-install qualifiers, prompting the customer to correct him four separate times before politely ending the call. This is a non-standard scenario the setter script has no branch for, and the rep had no escalation path (e.g., a hold-and-check with a supervisor) to fall back on.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 outcome tag is unknown, but the correct characterization is a non-prospect routing failure, not a standard lost-sale. Craig was never a new-solar prospect — he needed a service routing answer (standalone panel removal). The correct outcome was either (a) a handoff to Ion's service or operations team if Ion offers standalone removal — which the schema does not confirm — or (b) a graceful, honest acknowledgment that Ion may not offer this as a standalone service. The coaching implication differs depending on which is true: if Ion does offer standalone removal, Bucky needed a routing path he didn't have; if Ion does not, the correct move was an honest DQ with a referral. The manager should clarify Ion's actual removal service offering before coaching Bucky on the routing alternative.",
+  "outcome_dispute": "v1 outcome is unknown; observed outcome is a clean no_appointment / soft DQ — the customer's need (removal/reinstall only, no new purchase) does not map to Ion's standard qualifier flow, and the call ends with the customer disengaging rather than any next step being set.",
+  "observed_outcome": {
+    "outcome": "no_appointment",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "04:56",
+    "quote": "I'm actually good. I'm I'm this isn't what I'm looking for. I appreciate your help.",
+    "reasoning": "The call ends with the customer politely declining to continue, no appointment day or time was ever discussed, and no next step was owned by the rep."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "01:42",
+    "bill_quote": "I'm not quite sure. Probably about $2.50.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep captures a rough bill figure ('$2.50', likely shorthand for $250) and simply acknowledges it ('$2.50.') before moving to the next verify question about roof type — the number is never turned into leverage, and in this call it's moot anyway since the customer already owns his system outright and isn't buying a new one."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never asks what interested the customer in solar — likely because the call quickly reveals the customer already has solar and is only seeking removal/reinstall service, making the standard interest question less applicable, but it was still never asked."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:05",
+      "quote": "This is Bucky with ION. I'm reaching out about the solar form you filled online."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:23",
+      "quote": "Are you at 2007 Freeland Avenue?"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "01:02",
+      "quote": "Is there any way on the title but you and your wife?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "01:49",
+      "quote": "do you know what type of roof you got?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "01:30",
+      "quote": "What utility company are you with?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "01:35",
+      "quote": "do you know what you're spending on a monthly average?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "02:01",
+      "quote": "do you have a credit score over $6.70?"
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Orphaned-flow branch recognition and service-request routing",
-    "ts": "00:55",
-    "quote": "No. We're not looking to expand. We're doing a home renovation, so we need them removed and and then reinstalled until the home reno is finished.",
-    "why": "Bucky missed the orphaned_flow branch at the first clear signal and stayed on the new-solar script for the entire call. The result was a customer whose actual question — does Ion offer standalone removal? — was never answered. Before coaching the routing move, the manager needs to confirm whether Ion offers standalone panel removal: if yes, Bucky needs a service-team routing path; if no, Bucky needs language for an honest DQ with a referral. Either way, the coaching starts with branch recognition: when a customer discloses existing solar and a non-new-solar need, the new-solar script stops and the routing conversation starts."
+    "topic": "non-standard scenario recognition (removal/reinstall)",
+    "ts": "02:04",
+    "quote": "Are you looking at details for new panels? I'm I'm not looking to buy any more panels. I just need the removal and reinstallation.",
+    "why": "The customer states his actual need clearly and repeats it four separate times across the call, yet the rep never breaks from the standard new-install verify script to either answer directly or escalate. This single unresolved gap is what costs the call — the manager should walk through each of the five touches with the rep and identify the moment a hold-and-check or honest 'let me find out' should have replaced continued script execution."
   },
   "key_moments": [
     {
-      "ts": "00:55",
-      "quote": "No. We're not looking to expand. We're doing a home renovation, so we need them removed and and then reinstalled until the home reno is finished.",
+      "ts": "00:44",
+      "quote": "We so we were with Fluent Solar, but another business.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer names the prior installer (Fluent Solar) unprompted. This is exactly the kind of orphaned-system disclosure the schema's orphaned_flow branch is built for ('What company did you go with originally?'), but the rep doesn't probe further — no question about system size, ownership structure, or why they're moving off Fluent Solar before pivoting to the wife/co-owner question."
+    },
+    {
+      "ts": "01:02",
+      "quote": "Is there any way on the title but you and your wife? Or sorry. Just you?",
       "classification": "other",
-      "stewart_read": "This is the orphaned_flow trigger. Craig has existing solar and a non-new-solar need. The correct branch is the orphaned_flow protocol — probe ownership, system status, and then route to the appropriate service path. Bucky instead continues the standard verify flow, asking about title/co-owners as if Craig were a new-solar prospect. Reactive read holds: Bucky did not recognize the branch point."
+      "stewart_read": "Minor self-corrected verbal stumble — rep starts to ask about a spouse, catches himself, and clarifies. Not a substantive failure; the correction happens in the same breath."
+    },
+    {
+      "ts": "01:15",
+      "quote": "Is she she looking into solar too?",
+      "classification": "knowledge_gap",
+      "stewart_read": "The customer had just said thirty seconds earlier that Mary Anne 'owns the home' and that the household already has solar installed. Asking whether she's 'looking into solar too' shows the rep isn't tracking facts the customer just gave him — a concrete instance of information not being retained mid-call, distinct from the earlier title-question stumble."
     },
     {
       "ts": "02:04",
-      "quote": "I'm not looking to buy any more panels. I just need the removal and reinstallation.",
-      "classification": "other",
-      "stewart_read": "Craig's second explicit statement of his removal-only need, this time as a direct correction to Bucky's credit-score question. Bucky's response ('I'm just getting information together so we can do a design for your home') does not address the removal constraint and pivots to the bill-swap pitch. This is the second missed orphaned_flow branch — the correct move here was to directly address whether Ion can service a removal request, not to redirect to a new-solar design."
-    },
-    {
-      "ts": "02:53",
-      "quote": "Okay. Yeah. We we can continue then. I'm I'm curious to hear more.",
-      "classification": "rapport_repair",
-      "stewart_read": "This is the most important moment in the call and the one Stage 3 must not miss. Craig re-engages directly after the bill-swap pitch — the call has a genuine second chance. The correct move here is to acknowledge Craig's removal need explicitly ('I hear you on the removal — let me make sure we can handle that, and separately, here's what the specialist can show you on the bill side') and then route to the specialist for both threads. Instead, Bucky immediately asks for the power bill, treating Craig's re-engagement as permission to continue the new-solar path without addressing the removal constraint. The window closes at 03:09."
-    },
-    {
-      "ts": "03:43",
-      "quote": "do you guys just have the service to remove the panels?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Craig asks a direct, answerable service question. Bucky's response — 'I know we can remove it. We just...' followed by a pivot back to the design path — is a framing error on the universal_escape_hatch. The escape hatch ('that's exactly the kind of question our specialist is built to answer') would have been the correct move here: acknowledge the question, confirm it can be answered, and route to the specialist. Instead, Bucky offers an unconfirmed 'I know we can remove it' and immediately walks it back into the design path, which Craig correctly reads as a non-answer."
+      "quote": "Are you looking at details for new panels? I'm I'm not looking to buy any more panels. I just need the removal and reinstallation.",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "This is the first explicit signal that the customer's need doesn't fit the standard new-install script. Removal/reinstall for a home renovation is a scenario the schema flags as requiring recognition and routing (e.g., supervisor consult or a different track), not continued new-install qualification."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 33,
+    "verified": 32,
+    "fuzzy": 1,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

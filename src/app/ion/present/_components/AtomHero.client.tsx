@@ -346,7 +346,7 @@ export function AtomHero() {
   // overlay. "About Spencer" lives in its own section below (scroll to
   // it); see AboutSpencer.client.tsx.
   return (
-    <section className="relative h-[100svh] min-h-[600px] w-full overflow-hidden bg-black">
+    <section id="hero" className="relative h-[100svh] min-h-[600px] w-full overflow-hidden bg-black">
       <div className="absolute inset-0 z-0">
         <AtomCanvas />
       </div>

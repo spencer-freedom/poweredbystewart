@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION2_3c9962b0",
-  "trajectory_summary": "The call opened with an unusually warm, self-initiated lead — Jim had just filled out the form, owns three properties, and has demonstrated prior intent by engaging with another company. Bucky ran a competent verify pass but treated every emotional signal as a data-collection interruption rather than a leverage point. The call ended without an appointment when the line dropped during bill-collection follow-up, leaving a high-value three-property lead in an unresolved state.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "The v1 outcome tag is 'unknown.' Based on the transcript, the correct classification is 'no appointment set — call dropped during bill collection.' This is not a clean DQ and not a booking. It is an interrupted lead with strong qualification signals and no close attempt. The lead should be flagged for immediate callback, not treated as a completed interaction.",
+  "rep_name": "Bucky",
+  "trajectory_summary": "The call opens on a suspicion note, gets pulled off track by an incoming call that creates over a minute of dead air, and recovers into real engagement once the rep reaches the bill-swap pitch and the customer asks a direct cost question. The call then cuts off abruptly with the rep left talking to silence, so any momentum built in the back half is left unresolved.",
+  "shape": "mixed",
+  "outcome_dispute": "No appointment day/time was ever stated in the transcript — the call ends with the rep saying \"I'll call you right back\" after unanswered pings, so this is a callback/dropped-call scenario, not a booked or tentative appointment. If v1 tagged this as booked or tentative, that should be corrected.",
+  "observed_outcome": {
+    "outcome": "callback",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "08:55",
+    "quote": "I'll call you right back.",
+    "reasoning": "No day or time was ever agreed upon; the call ends with the rep unable to reach the customer after repeated attempts and stating intent to call back, which is a callback outcome, not a booked or tentative appointment."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The customer deferred the bill amount question to his wife (\"My wife knows all that stuff. She takes care of the bills.\" at 05:04) and no dollar figure or usage number was ever captured on this call; the rep moved to requesting the kilowatt-usage graph via text instead."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never explicitly asked what interested the customer in solar; the closest thing to a reason is the customer's own unprompted mention of a prior solar inquiry and no-show company, but this was volunteered context about frustration, not an answer to an interest question, and the rep never asked or used it as a motivator."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:05",
+      "quote": "Hey. It's Bucky with Ion. I'm reaching out about the solar form you filled out online."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "01:49",
+      "quote": "So this one, it's a is this an apartment, single family home?"
+    },
+    {
+      "section": "co_owner",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "05:12",
+      "quote": "and your roof, is it a shingle?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "04:46",
+      "quote": "What what utility company are you with?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "04:58",
+      "quote": "do you know how much you spend on a monthly average?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "05:17",
+      "quote": "do you have a credit score over 6 70?"
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "01:44",
+      "quote": "I can help you get a estimate going."
+    },
+    {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "05:54",
+      "quote": "the last thing we need is just your yearly kilowatt usage history... If I text you"
+    },
+    {
+      "section": "appointment_set",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Empathy-to-differentiation bridge on prior-company frustration",
-    "ts": "04:05",
-    "quote": "She said we never received an appointment from the other outfit after we sent all our electric — we never got the appointment after we sent all the paperwork that they were asking for.",
-    "why": "Jim raised the prior-company ghost twice — before and after the hold — and Bucky bypassed it both times. This is the moment where the call's outcome was most likely determined: Jim handed Bucky a direct reason to trust Ion over the prior company, and Bucky responded with a meter-location question. The coaching is not about script — it is about getting Bucky to hear what Jim is actually saying and respond to the emotional content before moving to the next checklist item. This pattern will repeat on every call where a customer has been burned before."
+    "topic": "Probing competitor/prior-contact disclosures",
+    "ts": "01:12",
+    "quote": "Anyway, you know, we had spoke to somebody a long time ago about it.",
+    "why": "The customer raises an unresolved prior solar contact three times (01:12, 01:28, 04:05) and the rep never asks a single clarifying question about which company or what happened — a free, low-cost probe that would have both reassured the customer and surfaced competitive intel for the closer."
   },
   "key_moments": [
     {
+      "ts": "00:22",
+      "quote": "Good. But I just got what's up? When your number comes up, it comes up as a a spam.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The intro at 00:05 referenced the online form but gave no state/context anchor, and when the spam suspicion surfaced the rep never returned to a clean company-identity restatement."
+    },
+    {
+      "ts": "00:40",
+      "quote": "Mount Airy? We have teams out there, but I'm in Utah. We have teams all over The US.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "This is the rep's actual attempt to resolve the spam/identity confusion, but it is improvised geography talk rather than the schema's honest_specificity pattern (referencing the form submission directly)."
+    },
+    {
       "ts": "01:28",
       "quote": "they never did wind up never showing up.",
-      "classification": "empathy_miss",
-      "stewart_read": "Jim is disclosing a prior trust violation — a company collected his information and disappeared. This is the call's first high-leverage empathy moment. Bucky's response ('Okay. I can help you get a estimate going') treats it as a transition cue rather than a trust signal. The strategic read would be that Bucky is deferring the differentiation conversation to after qualification — but there is no evidence of a later pickup. The reactive read holds: Bucky missed the moment."
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a prior company failed to follow through on an appointment across three properties — real competitive/service context the closer would want — and the rep does not ask which company or what was submitted."
     },
     {
       "ts": "04:05",
-      "quote": "She said we never received an appointment from the other outfit after we sent all our electric — we never got the appointment after we sent all the paperwork that they were asking for.",
-      "classification": "empathy_miss",
-      "stewart_read": "Jim returned from the hold with his wife's confirmation of the prior-company ghost — this is the second and stronger version of the same trust violation. The wife's involvement also signals she is a co-decision-maker. Bucky's response ('do you have a meter, like, behind your specific apartment or townhouse?') bypasses both the emotional content and the spouse-inclusion signal. This is the highest-leverage missed moment in the call."
-    },
-    {
-      "ts": "05:04",
-      "quote": "My wife knows all that stuff. She takes care of the bills.",
-      "classification": "spouse_handling",
-      "stewart_read": "Jim explicitly identifies his wife as the person who manages the bills — the same bills Bucky needs for qualification. This is a dual signal: the wife holds the information Bucky needs AND is an active participant in household financial decisions. Per protocols.spouse_decision, the correct move is to ask about including her in the appointment. Bucky moved to roof type instead. This is a protocol gap, not a judgment call."
-    },
-    {
-      "ts": "01:12",
-      "quote": "I actually have three houses in a row.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Jim volunteers three owned properties without being asked. This is a materially higher-value lead than a single-property inquiry — three separate solar installs, three separate bills, three separate utility accounts. Bucky captured the addresses efficiently but did not anchor on the scale of the opportunity. No curiosity was created around what three properties could mean for Jim's total monthly outlay."
+      "quote": "So I asked that was my wife called. And then I asked her. She said we never received an appointment from the other outfit after we sent all our electric",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "The same unresolved-competitor complaint resurfaces after the call interruption, and the rep again moves straight into a new verify question (meter location) rather than acknowledging it."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 34,
+    "verified": 32,
+    "fuzzy": 0,
+    "wrong_ts": 2,
+    "not_found": 0
+  }
 }

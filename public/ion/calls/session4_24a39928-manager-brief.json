@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION4_24a39928",
-  "trajectory_summary": "The call opens with a customer who has genuine, years-long interest in solar and a clear bill-pain motive, then collapses in under two minutes when a self-reported credit barrier triggers an immediate DQ exit. The energy never builds — Meg's speed-frame intro, incomplete cost reframe, and passive close leave Theodore exactly where he started: believing solar isn't for him. The call ends with no appointment, no locked callback, and no follow-up mechanism.",
+  "rep_name": "Meg",
+  "trajectory_summary": "This is a short, procedurally clean DQ call: the rep verified address and home type quickly, asked the interest question, and when the customer self-disclosed a sub-670 credit score, followed the hard DQ rule without over-selling or arguing. The call closes with a passive 'call us back' offer rather than a rep-owned follow-up, and the vulnerability disclosure around long-standing affordability got only a procedural, not empathetic, response.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 outcome tag is unknown, but the observable outcome is a DQ exit with no appointment booked. The DQ itself may be procedurally correct — Theodore confirmed all bureaus are below 670 — but the schema (qualifiers.credit_qualifier, spencer_operator_note) flags a live policy question: should the setter DQ on stated credit, or should the closer's actual pull be the only DQ gate? Theodore's all-bureaus confirmation ('Everything is lower') weakens but does not eliminate the premature-DQ concern, since stated credit remains unreliable self-reporting. If Ion's policy is 'let the closer's pull decide,' this call is a lost sit, not a correct DQ. That policy question is unresolved in the schema and must be resolved by Kenny before Stewart can definitively classify this outcome.",
+  "outcome_dispute": "v1 tag is 'unknown' — this call is a legitimate DQ per qualifiers.credit_qualifier (customer stated all credit scores below 670), not a booked or callback outcome. The rep's line 'you can give me a call' does not constitute a rep-owned callback; it puts the burden entirely on the customer with no date or mechanism.",
+  "observed_outcome": {
+    "outcome": "dq",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "01:45",
+    "quote": "Everything is lower.",
+    "reasoning": "Customer confirms all credit scores are below the 670 threshold, triggering the hard DQ per qualifiers.credit_qualifier and dq_rules.credit_below_670_no_alternative; no appointment was set."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The call was disqualified on the credit-score gate before reaching bill collection; no bill amount or usage figure was ever requested or given."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "00:41",
+    "reason_given": true,
+    "reason_ts": "00:57",
+    "reason_quote": "Well, I've been looking into it for years, but I can't never afford it.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep asked the interest question and got a clear affordability-driven answer, but instead of reinforcing or reframing that reason, she moved directly into characterizing loan structures and then into the credit qualifier, never returning to speak to the customer's long-standing interest."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:07",
+      "quote": "Hi, Theodore. This is Meg. I'm with Ion."
+    },
+    {
+      "section": "interest_question",
+      "status": "asked",
+      "ts": "00:41",
+      "quote": "what's got you looking at solar options for your home?"
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:27",
+      "quote": "I've got it here. 1731 Idlewood Avenue, Richmond, Virginia. Is that right?"
+    },
+    {
+      "section": "co_owner",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "roof",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "utility_company",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_amount",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "01:35",
+      "quote": "So we we do require that a credit score is 670 or above."
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "DQ exit discipline — locking a future touchpoint",
+    "topic": "rep-owned follow-up on DQ",
     "ts": "01:48",
-    "quote": "Alright. Well, what we'll wanna do, Theodore, is is work on that credit score, get that up to 670. Once you're at that marker, you can give me a call.",
-    "why": "Meg exits with no locked callback, no follow-up text, and no re-engagement mechanism. On a customer who has wanted solar for years and self-reported a credit barrier, a passive 'give me a call' is a lead abandoned, not a lead deferred. The schema's soft_outcome_distinction analysis directive makes this the highest-priority coaching gap: even a DQ exit should produce a locked future touchpoint. This is also the moment where the unresolved stated-vs-pulled credit policy question (qualifiers.credit_qualifier) matters most — if Ion's policy is 'let the closer's pull decide,' this exit cost a sit."
+    "quote": "Once you're at that marker, you can give me a call. And from there, we can get started on some options for you.",
+    "why": "The call is a legitimate hard DQ, but the rep hands 100% of the re-engagement burden to the customer with no date, no callback mechanism, and no note-taking commitment — this is the single most consequential structural gap since it likely means this lead never resurfaces even if credit improves."
   },
   "key_moments": [
     {
-      "ts": "01:07",
+      "ts": "00:41",
+      "quote": "Awesome. Well, Theodore, what's got you looking at solar options for your home? Last thing, while I send you that email, just Wait a minute. One one moment, please. Okay.",
+      "classification": "protocol_violation",
+      "stewart_read": "The rep asks the key interest question but immediately talks over herself with an unrelated aside about sending an email and pauses mid-thought, undermining the emotional-anchor moment the schema flags as critical (depth_grading: true)."
+    },
+    {
+      "ts": "00:57",
       "quote": "Well, I've been looking into it for years, but I can't never afford it.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "ATTRIBUTION NOTE: Deepgram assigns this line to speaker_1 (Meg), but the content — a personal history of wanting solar and being blocked by cost — is almost certainly Theodore's, given that Meg had just asked what got him looking at solar. The inference is likely correct but must be treated as uncertain due to the transcription artifact. Assuming Theodore: this is the richest signal in the call. Years of latent interest plus an explicit cost-pain statement is exactly the emotional anchor the schema calls for in verify.interest_in_solar. Meg begins a partial reframe ('I know in the past, it had, like, big upfront cost and big loans associated') — the right instinct — but the reframe is incomplete and gets overtaken by the credit disclosure before it lands."
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a textbook affordability objection ('I can't afford it') that maps directly to the schema's flip trigger. The rep's response pivots to the cost/loan structure rather than reframing the bill/expense as the real unaffordable item."
     },
     {
       "ts": "01:07",
-      "quote": "Yeah. It's been expensive. I know in in the past, it had, like, big upfront cost and big loans associated. Right? Is that what you're talking about?",
-      "classification": "other",
-      "stewart_read": "Meg starts the right move here — distinguishing past cost structure from current program options. This is a partial objection inversion: she is setting up a 'that was then, this is now' reframe. The instinct is correct. The problem is sequencing: she asks a confirming question ('Is that what you're talking about?') and then the credit disclosure arrives before she can complete the pivot to the program pitch. The reframe is abandoned mid-execution."
+      "quote": "I know in in the past, it had, like, big upfront cost and big loans associated. Right? Is that what you're talking about?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep begins characterizing financing structure and cost mechanics unprompted, which is closer-tier content rather than qualification. It's brief and doesn't escalate into a technical debate, but it's an early step onto that path."
     },
     {
-      "ts": "01:34",
-      "quote": "K. So we we do require that a credit score is 670 or above. Do you know if your other if your other ones are around that mark, or are they both lower?",
-      "classification": "other",
-      "stewart_read": "Meg correctly states the 670 threshold (no schema drift here — contrast SESSION18_fcbf33c1 where the rep said 650). She also makes a partial recovery attempt by asking about other bureaus, which is the right move per the schema's spencer_operator_note (three bureaus often differ; stated credit is unreliable). However, the schema flags an unresolved policy question: should the setter DQ on stated credit at all, or should the closer's actual pull be the only DQ gate? Theodore's all-bureaus confirmation ('Everything is lower') weakens but does not eliminate the premature-DQ concern — stated credit remains self-reported and potentially inaccurate."
-    },
-    {
-      "ts": "01:48",
-      "quote": "Alright. Well, what we'll wanna do, Theodore, is is work on that credit score, get that up to 670. Once you're at that marker, you can give me a call. And from there, we can get started on some options for you. Okay?",
-      "classification": "other",
-      "stewart_read": "The exit is passive on every dimension. No locked callback date. No follow-up text promised. No mechanism for Ion to re-engage Theodore when his credit improves. 'Give me a call' places all re-engagement burden on the customer — a customer who has already demonstrated he won't self-initiate (he filled out a form years ago and never followed through). Per analysis_directives.soft_outcome_distinction, this is the weakest possible close: a callback with no locked time."
+      "ts": "01:20",
+      "quote": "my FICO score is very low.",
+      "classification": "empathy_miss",
+      "stewart_read": "Customer discloses a sensitive financial vulnerability unprompted. The rep's next line is purely transactional ('Okay. What's it at?') with no acknowledgment of the disclosure as anything other than a data point."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": false
+  },
+  "quote_verification": {
+    "checked": 22,
+    "verified": 22,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION24_7073ada5",
-  "trajectory_summary": "The call opens on a blank slate, builds to genuine peak engagement when Guadalupe volunteers four months of escalating bill data and a utility dismissal — then collapses when the rep applies a policy exit before running the diagnostic sequence that determines whether the policy applies. The call ends with no appointment, no qualification data captured, and the customer self-directing to call back 'when I have my husband answer' — a soft callback with no locked time and no structure.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is 'unknown' — the actual outcome is a soft unstructured callback with no appointment booked and no qualification completed. The customer's parting line ('I'll call you back when I have my husband answer') is not a booked callback; it is a polite exit. No-show probability is high. The call should be tagged as 'disengaged — no appointment, soft callback only.'",
+  "rep_name": "Kyk",
+  "trajectory_summary": "This call surfaces an orphaned-lead scenario (existing solar, unknown installer, possible unresolved financing) that the rep detects reasonably quickly but handles with only partial rigor — asking who installed it but not resolving the financing/ownership ambiguity the customer raised. The call ends without disqualifying cleanly or booking, settling into a soft 'call us back' close.",
+  "shape": "mixed",
+  "outcome_dispute": "V1 tag is unknown/unclear; observed outcome should be logged as no_appointment given no date/time was set. However, the customer's own disclosure at 02:38 that her husband still owed money on the existing solar panel introduces real ambiguity about whether this is a clean re-sale opportunity or a lien/loan situation Ion cannot service — the rep's caution in not overselling is partially justified, even though the follow-through on probing that detail was thin.",
+  "observed_outcome": {
+    "outcome": "no_appointment",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "04:53",
+    "quote": "Okay. I'm a call I'm a save the number, and I'll call you back when I have my husband answer.",
+    "reasoning": "No date or time was set; the call ends with the customer taking responsibility for a future callback once her husband is available, and the rep offers no scheduled follow-up of their own."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "01:41",
+    "bill_quote": "I got the bill the electricity bill of men for $700.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The customer volunteers three bill figures ($700, $580/$520, $480) entirely unprompted, but the rep never reflects the number back as leverage — the conversation immediately pivots to who installed the existing system rather than using the bill pain to build urgency toward a resolution or callback commitment."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "01:11",
+    "reason_given": true,
+    "reason_ts": "01:21",
+    "reason_quote": "I I have a solar panel right now. We bought the house last year, and it was already there. But the thing is, I think it's not working because... I got the bill the electricity bill of men for $700.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep asked the interest question and got a rich, specific answer (suspected non-functional existing system plus high bills), but pivoted immediately to installer-identification questions without ever tying the appointment/next-step conversation back to 'let's figure out why your system isn't saving you money.'"
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:04",
+      "quote": "This is, Kyk with Ion. I received your request."
+    },
+    {
+      "section": "interest_question",
+      "status": "asked",
+      "ts": "01:11",
+      "quote": "What got you interested in looking at solar?"
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:23",
+      "quote": "I did 2451 Avista Place In Waldorf."
+    },
+    {
+      "section": "co_owner",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "roof",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "utility_company",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "01:41",
+      "quote": "customer volunteered $700 bill unprompted"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "04:45",
+      "quote": "Definitely give us a callback if it is our system"
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Orphaned-flow sequence discipline — run the diagnostic before applying the policy",
-    "ts": "02:55",
-    "quote": "Gotcha. Okay. Yeah. I would definitely just check with him. The issue is is we won't be able to do anything on equipment that might not be our own.",
-    "why": "The rep applied a real Ion policy at the wrong step, twice, to a customer who was actively asking for help. The orphaned_flow sequence (own vs. lease, company name, system size, working status) takes under two minutes and determines whether the policy applies. Skipping it means the rep may be DQ'ing Ion's own customers. This is the single highest-leverage coaching gap in the call — it explains both the lost appointment and the unstructured exit."
+    "topic": "Probing ownership/financing detail on orphaned systems",
+    "ts": "02:38",
+    "quote": "my man did the did that, but he said he still had to pay some money for the solar panel when he bought the house.",
+    "why": "This detail determines whether the existing system is even eligible for Ion to engage with (owned vs. financed vs. leased), and the rep let it pass without a clarifying question — a 10-second follow-up would sharpen the disposition and give a future rep or closer real information instead of a vague 'ask your husband.'"
   },
   "key_moments": [
     {
-      "ts": "01:41",
-      "quote": "I got the bill the electricity bill of men for $700.",
-      "classification": "bill_anchor",
-      "stewart_read": "Guadalupe volunteers her $700 bill unprompted. This is the bill anchor arriving as a gift — the rep did not have to extract it. The schema requires capture AND emotional flip (alignment-against-utility). The rep acknowledged with 'I don't blame you' but did not flip the figure into a value bridge. Capture happened; the flip did not."
+      "ts": "00:04",
+      "quote": "Yes. Hey, Guadalupe. This is, Kyk with Ion. I received your request. You're looking at solar for the home.",
+      "classification": "other",
+      "stewart_read": "For a standard form-fill lead, the rep references the customer's request and states the company name, which covers the core intros.standard requirements (company introduction + form reference). This is adequate, not a gap."
     },
     {
-      "ts": "01:59",
-      "quote": "Yeah. And another another month, it was $580. Another month was $5.20. Another 5 was $4.80.",
+      "ts": "01:21",
+      "quote": "I I have a solar panel right now. We bought the house last year, and it was already there. But the thing is, I think it's not working because... I got the bill the electricity bill of men for $700.",
       "classification": "bill_anchor",
-      "stewart_read": "Guadalupe delivers three additional months of bill data in rapid succession — $580, $520, $480 — building a multi-month pattern of high bills despite having solar. This is the flip opportunity: four months of data, all elevated, all with solar supposedly running. The rep's response ('I don't blame you') is empathetic but drops the data entirely. The figures are never named back, never totaled, never used as leverage."
+      "stewart_read": "Customer hands the rep a specific, dramatic bill figure ($700) completely unprompted, along with two more figures. This is exactly the anchor coaching_philosophy.bill_anchoring calls for capturing and flipping, but the call's actual context (existing but possibly non-functional solar) makes this closer to an orphaned-system troubleshooting anchor than a standard new-sale bill flip."
     },
     {
-      "ts": "02:08",
-      "quote": "So it's ridiculous. That's too much money for electricity. And I called medical. They said, you know, that's what it is.",
-      "classification": "bill_anchor",
-      "stewart_read": "Guadalupe has already tried to get help from her utility and was dismissed. This is a direct alignment-against-utility bridge point — the utility told her to accept the bill. The rep's response ('Yeah.') acknowledges but does not use this moment. The utility dismissal is the emotional proof that the existing system isn't working and that the utility won't fix it. It is the strongest setup for a value bridge in the call."
+      "ts": "01:56",
+      "quote": "No. I don't blame you. I don't blame you.",
+      "classification": "empathy_miss",
+      "stewart_read": "This is a light, appropriate empathy touch, but it's the only acknowledgment the rep gives across three separate bill figures and a visible venting moment; the response doesn't grow with the escalating frustration the customer shows through 02:08."
     },
     {
-      "ts": "02:55",
-      "quote": "Gotcha. Okay. Yeah. I would definitely just check with him. The issue is is we won't be able to do anything on equipment that might not be our own.",
-      "classification": "protocol_violation",
-      "stewart_read": "The rep applies Ion's third-party-equipment policy before running the orphaned_flow diagnostic sequence. The policy is real — Ion cannot service equipment it did not install. But the sequence exists to determine whether the policy applies: own vs. lease, company name, system size, working status. None of these questions were asked. The rep is not wrong about the policy; the rep is wrong about the sequence. This is premature policy application, not policy ignorance."
+      "ts": "02:38",
+      "quote": "my man did the did that, but he said he still had to pay some money for the solar panel when he bought the house.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "This is a significant disclosure — it suggests the existing system may carry a loan, lien, or PPA balance rather than being fully owned, which directly affects whether Ion could even take over or resell this account. The rep does not follow up to clarify what kind of payment obligation this is."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 30,
+    "verified": 29,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 1
+  }
 }

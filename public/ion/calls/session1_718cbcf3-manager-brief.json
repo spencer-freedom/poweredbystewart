@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION1_718cbcf3",
-  "trajectory_summary": "This is a recycled-lead callback where the customer arrived with a specific, narrow ask (battery only, not solar) and a scheduling agenda. Carter successfully navigated genuine scheduling friction and landed a Saturday 11AM appointment — that's a real outcome. However, the call is structurally fragile: no orphaned-flow qualification was run on the existing solar system, no button-up protocol elements were delivered, and the product mismatch from the prior touch ('Delta solar panel') was left unaddressed. The closer will walk into an appointment with an existing-solar customer whose specific need (battery) has not been qualified against Ion's actual offering (Tesla Powerwall), and whose commitment to the appointment rests on a text confirmation alone with no verbal handshake.",
+  "rep_name": "Carter",
+  "trajectory_summary": "This is a short, purely logistical call: an existing solar owner calling back about a battery-only need, and the rep spending almost the entire call negotiating a workable time slot around her job schedule. There is no qualification, no bill discussion, and no interest-reason exploration because the customer's need was already narrowly defined before the rep picked up.",
   "shape": "stagnant",
-  "outcome_dispute": "The call produced a booked appointment, so 'unknown' as a v1 tag understates the outcome. However, the appointment is conditionally fragile — no button-up protocol, no orphaned-flow qualification, and an unresolved product-name artifact from the prior touch. The booking is real but the sit probability is lower than a fully buttoned-up call would produce.",
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata, but the observed outcome is a booked appointment for a specific day and time (Saturday the 25th at 11 AM) — this should be tagged 'booked' with the caveat that no standard verify/qualify content was run, since the customer was routed straight to scheduling for a narrow battery-only ask.",
+  "observed_outcome": {
+    "outcome": "booked",
+    "appointment_channel": "unclear",
+    "datetime_captured": true,
+    "co_owner_confirmed": null,
+    "ts": "03:39",
+    "quote": "K. Sounds good. K. We'll do 11AM next Saturday. That's gonna be the twenty fifth.",
+    "reasoning": "A specific day (Saturday the 25th) and time (11 AM) were explicitly agreed upon, meeting the criteria for a booked outcome. Channel (phone vs. in-person) was never specified in the call."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "No bill amount or usage figure was ever discussed — the call was purely about rescheduling for a battery-only need, and the rep never asked about a utility bill."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": true,
+    "reason_ts": "00:28",
+    "reason_quote": "All I needed was, like, batteries.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The customer volunteered her reason for interest (battery backup for her existing solar system) without being asked, but the rep never probed further into WHY she wants the battery (outage history, cost, etc.) or referenced it again before booking."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "skipped",
+      "ts": "00:03",
+      "quote": "Hi. This is Carter."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "co_owner",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "roof",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "utility_company",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_amount",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "skipped",
+      "ts": "00:28",
+      "quote": "All I needed was, like, batteries."
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "03:39",
+      "quote": "We'll do 11AM next Saturday. That's gonna be the twenty fifth."
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
+      "ts": "03:43",
+      "quote": "I'll shoot you a text so you have it in writing. Okay?"
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Orphaned-flow qualification on battery-only / existing-solar customers",
-    "ts": "00:40",
-    "quote": "Just a battery? Okay.",
-    "why": "Carter accepted the battery-only framing and booked the appointment without running a single orphaned-flow question. The closer will arrive at a Saturday appointment with an existing-solar customer whose system has not been qualified (own vs. lease, installer, size, working status) and whose specific need (battery) has not been matched against Ion's actual offering (Tesla Powerwall only). This is the highest-leverage gap on this call — it's not a persuasion failure, it's a qualification failure that puts the closer in a blind spot and risks a wasted sit."
+    "topic": "orphaned-flow qualifying skipped on existing-solar-owner call",
+    "ts": "00:28",
+    "quote": "All I needed was, like, batteries.",
+    "why": "The customer disclosed she already owns a solar system and only wants a battery — this is squarely the orphaned_flow scenario, and none of its three qualifying questions (ownership type, original installer, system working) were asked before scheduling. If her existing system is leased/PPA or broken, this appointment is a wasted closer slot."
   },
   "key_moments": [
     {
       "ts": "00:28",
       "quote": "No. The thing is the person said that, you guys have a Delta solar panel for me to take a look at. But I was saying I already have solar panel. All I needed was, like, batteries.",
-      "classification": "other",
-      "stewart_read": "The customer is flagging two things simultaneously: (1) a product-name artifact from the prior touch ('Delta solar panel') that doesn't match Ion's catalog, and (2) their actual need — battery only, existing solar system already in place. This is the orphaned-flow trigger. Carter's response ('Just a battery? Okay') acknowledges the need but skips the entire qualification sequence: own vs. lease, original installer, system size, working status. On a recycled lead, the prior touch may have captured some of this — but Carter doesn't reference any prior data, and the closer will have no qualification context. Strategic read: Carter may be deferring qualification to the closer given this is a rebook. Reactive read: Carter simply didn't recognize the orphaned-flow trigger. The reactive read is more supported — there's no evidence of deliberate deferral, and the 'Just a battery? Okay' response reads as acceptance, not strategy."
-    },
-    {
-      "ts": "00:28",
-      "quote": "you guys have a Delta solar panel for me to take a look at",
-      "classification": "tesla_expectation_gap",
-      "stewart_read": "'Delta solar panel' is an unresolved product-name artifact from the prior touch. It doesn't match Ion's catalog (Ion sells its own panels, not a 'Delta' brand). Carter does not clarify what this refers to, does not correct the customer's framing, and does not establish what Ion actually offers. The customer may arrive at the closer appointment expecting a product Ion doesn't carry. This is a narrower version of the tesla_expectation_gap pattern — not Tesla roof tiles, but a named product from a prior rep's framing that needs to be resolved before the closer call."
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "This is an orphaned-flow scenario (existing solar owner) combined with a battery-only ask — outside the standard new-install script. The rep does not run any of the orphaned_flow qualifying questions (owns vs. leases the existing system, which company installed it, is it working)."
     },
     {
       "ts": "00:54",
-      "quote": "Yeah. We can reschedule that for you. I think let me look at yeah. It says it's just for a battery. That's just a generic text that goes out.",
-      "classification": "micro_trade",
-      "stewart_read": "Carter's transparency about the generic text ('That's just a generic text that goes out') is a small trust-building move — it explains the product mismatch the customer flagged without being defensive. This is a micro-trade: Carter substitutes a process explanation for a personal commitment, which reduces the customer's mild corrective friction. The move works — the customer doesn't push back further on the mismatch. However, it's a floor-level trust move, not a ceiling-level one. Carter could have followed it with a direct acknowledgment of the customer's actual need to deepen the trust signal."
+      "quote": "let me look at yeah. It says it's just for a battery. That's just a generic text that goes out.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The customer just handed the rep a clean anchor (battery-only need on an existing solar system) and the rep filed it as an administrative note rather than asking why she wants a battery now (power outages? new usage? distrust of grid?)."
     },
     {
-      "ts": "01:13",
-      "quote": "Okay. What about gonna be in July next week. I'll be back on Tuesday.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "The customer is actively problem-solving the scheduling — they're not looking for an exit, they're looking for a time that works. 'I'll be back on Tuesday' is a buying signal: this customer wants the appointment. Carter correctly reads this and pivots to Tuesday, then Wednesday when Tuesday proves difficult. The signal is handled adequately. What Carter misses is the opportunity to anchor the customer's motivation at this moment — the customer is clearly invested enough to work around a tight schedule, which is the emotional hook for the closer. Carter never asks why the battery matters to them, which would have given the closer a value anchor."
+      "ts": "01:01",
+      "quote": "Would you be able to talk about that battery tomorrow?",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "This begins a five-round scheduling negotiation with no structural anchor (no stated call length, no 'is that fair' handshake) until the very end. The rep is proposing times without framing what the appointment actually covers."
+    },
+    {
+      "ts": "03:43",
+      "quote": "I'll shoot you a text so you have it in writing. Okay?",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "The rep does promise a text follow-up, which is good procedure, but the button-up otherwise skips the one-hour block statement, the no-driving/computer instruction, and any recap of what the appointment will cover."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": false
+  },
+  "quote_verification": {
+    "checked": 23,
+    "verified": 23,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

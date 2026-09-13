@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION14_32e28871",
-  "trajectory_summary": "The call opened with a cooperative, inbound-posture customer and a clean verify section, then stalled in a prolonged bill-navigation sequence that consumed the back half of the call without producing a booking. The rep never reached button-up. The call ended on a technical dropout with no appointment set, no kWh data confirmed, and no next-step locked. The cooperative energy Greg brought to the call was never converted.",
-  "shape": "mixed",
-  "outcome_dispute": "The v1 outcome tag is 'unknown' — this call should be tagged 'no_appointment_set / call_dropped_mid_bill_collection.' The customer was qualified (homeowner, credit above 670, wife on title, 7-year roof, PGE utility confirmed) and cooperative throughout. The failure is not a DQ or a lost objection — it is a process failure: the rep did not invoke the bill-collection pivot protocol, the call dropped before booking, and no callback was locked. This is a recoverable lead, not a lost one, but it requires an immediate callback with a clear plan to either capture kWh verbally or defer to the specialist.",
+  "rep_name": "Carter",
+  "trajectory_summary": "The call opens cooperatively and the rep moves cleanly through the early verify items, but the entire back half is consumed by a bill-lookup struggle that produces three inconsistent dollar figures and one kWh number, none of which the rep reconciles. The call ends abruptly during this struggle with no appointment set and no clear next step.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "The v1 tag is unknown/unclear from metadata; based on the transcript this should be scored no_contact or no_appointment, not booked or tentative — the call ends mid-bill-lookup with the line 'It disappeared' and no appointment, day, time, or callback commitment was ever stated by the rep.",
+  "observed_outcome": {
+    "outcome": "no_contact",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "08:46",
+    "quote": "Maybe he'll call back.",
+    "reasoning": "The transcript ends with the customer's wife speculating about a future callback rather than the rep confirming a next step; no day, time, or appointment was ever stated. It is possible the connection dropped from either side, but the transcript does not confirm the cause — this is a hypothesis, not a fact — and regardless, the call ends without any next step owned by the rep."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "04:42",
+    "bill_quote": "About $527 a month.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep captured an initial figure ($527) but never used it or any of the subsequent conflicting figures ($170, kWh 1,200) as emotional leverage against the utility; the flip should have gone right after 04:42 with a line acknowledging the size of the bill before moving to kWh, per coaching_philosophy.bill_anchoring's ask+acknowledge+flip pattern."
+  },
+  "interest_reason_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep never asks Greg or his wife what specifically interested them in solar; the call moves directly from address/homeowner verification into roof age, title, credit, and utility questions without this step."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "skipped",
+      "ts": "00:01",
+      "quote": "Hi. This is Carter."
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:17",
+      "quote": "Is this for the 1512 Northeast Park Lane?"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "02:26",
+      "quote": "is there anyone else on the title of the home with you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "02:11",
+      "quote": "And how old is the roof?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "02:44",
+      "quote": "what utility company are you with?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "04:42",
+      "quote": "trying to get the kilowatt usage for the home to build that solar estimate"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "skipped",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "03:22",
+      "quote": "Would you be able to pull up one of those bills for me?"
+    },
+    {
+      "section": "appointment_set",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Bill-collection pivot protocol — active direction vs. passive waiting",
+    "topic": "Tech-friction pivot timing on bill collection",
     "ts": "05:04",
     "quote": "I could probably find it. Let me let me get into my email.",
-    "why": "The rep spent the entire back half of this call waiting passively while the wife navigated her email and utility portal without guidance. The schema's pivot protocol is explicit: when a customer cannot navigate within 1-2 attempts, the rep directs them to the kWh graph specifically or pivots to verbal readback. The rep never invoked either path. On a paid lead, this is the gating failure — no kWh data, no booking. The manager should walk the rep through the pivot triggers and the exact language for directing a customer to the usage graph, then role-play the scenario with a budget-billing customer."
+    "why": "From this point to the apparent call dropout at 08:30, the rep lets the customer struggle through an unfamiliar portal for over three minutes without offering the verbal read-back alternative the schema specifically budgets at 2 minutes; this is the single biggest time-and-outcome risk on the call."
   },
   "key_moments": [
     {
-      "ts": "01:54",
-      "quote": "K. Everything looks good over here. Great. So I just have a few questions for you, and then we can get started on a design for your home.",
-      "classification": "rapport_repair",
-      "stewart_read": "After a 60-second unplanned hold, the rep re-enters with a confident, forward-moving frame: 'everything looks good' resolves the uncertainty the hold created, and 'get started on a design for your home' re-anchors the customer's reason for calling. This is a small but effective recovery move that kept Greg cooperative through the verify section."
-    },
-    {
-      "ts": "02:32",
-      "quote": "My wife and I.",
-      "classification": "spouse_handling",
-      "stewart_read": "Greg discloses his wife is on the title at 02:32. The rep captures this fact and moves on — no attempt to establish whether the wife needs to be present for the appointment, no scheduling question that includes her. The wife later joins the call organically (04:09) because Greg hands her the phone for bill navigation, not because the rep structured her inclusion. The appointment was never set, so the protocol violation didn't cost a booking on this call — but the pattern is present."
-    },
-    {
-      "ts": "05:34",
-      "quote": "Oh, okay. So pretty expensive.",
-      "classification": "bill_anchor",
-      "stewart_read": "The wife confirms $170/month at 05:32. The rep's response — 'Oh, okay. So pretty expensive' — is a capture-and-drop. The schema's bill_anchoring pattern requires capture + flip: the bill must be turned into emotional alignment-against-the-utility, not just acknowledged as a data point. The flip was available here: the $170/month figure is the exact leverage point for 'what you're paying the utility every month is the problem solar solves.' The rep named the pain and walked away from it."
-    },
-    {
-      "ts": "05:37",
-      "quote": "I'm on this info pen thing. So I paid the same thing every month. You can read them online.",
+      "ts": "00:29",
+      "quote": "Row house.\n[00:31] speaker_1: Row house.\n[00:33] speaker_1: Row townhouse.",
       "classification": "knowledge_gap",
-      "stewart_read": "The wife discloses she is on a budget billing plan ('info pen thing' — likely 'average payment plan'). This is a distinct bill-navigation failure mode: budget billing customers pay a smoothed monthly amount that does not reflect actual kWh consumption month-to-month. The rep does not recognize this as a navigation signal — no pivot to the utility portal's usage graph, no verbal readback offer, no acknowledgment that the smoothed payment figure is not the same as kWh data. The rep continues waiting passively while the wife searches her email."
+      "stewart_read": "The rep does not immediately recognize 'row house' as a townhouse variant and has to have it repeated three times before clarifying, which is a minor terminology gap rather than a disqualifying error."
+    },
+    {
+      "ts": "00:52",
+      "quote": "I need to check into something. I'll I'll put you on hold for a sec. They just have some rules with townhouses.",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "The rep places the customer on hold for about a minute to check on townhouse-specific rules before continuing, which is the non-standard-scenario routing pattern rather than a simple knowledge gap."
+    },
+    {
+      "ts": "04:42",
+      "quote": "About $527 a month.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The wife gives a clear, high dollar figure early, but the rep files it silently with 'Okay. Cool.' and immediately pivots to asking for kWh usage instead of reflecting the number back as a pain point to anchor on."
+    },
+    {
+      "ts": "05:04",
+      "quote": "I could probably find it. Let me let me get into my email.",
+      "classification": "other",
+      "stewart_read": "This is the moment the tech-friction path opens: the customer is about to navigate email and a utility portal live on the phone, which the schema flags as a scenario requiring a 2-minute pivot budget to verbal read-back if friction appears."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 31,
+    "verified": 28,
+    "fuzzy": 2,
+    "wrong_ts": 0,
+    "not_found": 1
+  }
 }

@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION20_bc6b4e82",
-  "trajectory_summary": "The call was disqualified at 02:44 on a hard DQ (renter, not homeowner), but the structural failure happened much earlier. Meg never established legitimacy, skipped the verify section entirely, and spent the middle of the call pitching a financially distressed, skeptical non-homeowner. The trajectory moved in one direction: cold → suspicious → disengaged → irritated, with no energy built at any point.",
+  "rep_name": "Meg",
+  "trajectory_summary": "This call never had a real foothold: the customer questioned legitimacy almost immediately, stated disinterest and lack of money within the first 70 seconds, and the eventual renter disclosure at 02:35 was a hard, unavoidable DQ. The rep's handling was thin throughout — repeated vague legitimacy claims, a features-first response to a money objection, and a fast, unresisted exit once the DQ surfaced — but the DQ itself means no version of better handling was going to produce a booked appointment.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 outcome tag is listed as unknown. The correct classification is hard_DQ — Justin is a renter, which is a non-homeowner disqualifier per dq_rules.not_homeowner. There is no appointment, no tentative booking, and no recoverable lead. The call should be tagged DQ_not_homeowner, not left as unknown.",
+  "outcome_dispute": "The call is correctly a DQ (not_homeowner, dq_rules), so v1's likely tag of a failed/no-appointment call is directionally right; the dispute is only that the underlying legitimacy and objection-handling gaps happened well before the DQ surfaced and would have been coaching-relevant even on a qualified lead.",
+  "observed_outcome": {
+    "outcome": "dq",
+    "appointment_channel": null,
+    "datetime_captured": false,
+    "co_owner_confirmed": null,
+    "ts": "02:35",
+    "quote": "But I don't have I I'm I'm I'm renting. Who who told you that I have a house?",
+    "reasoning": "The customer discloses they are a renter, which is a hard disqualifier per dq_rules.not_homeowner; the rep confirms and closes the call with a removal offer rather than any appointment."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The customer asked about monthly cost ('How much every month have to pay?' at 01:53) but no actual bill amount or usage figure was ever captured from the customer before the call DQ'd on renter status."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "00:58",
+    "reason_given": true,
+    "reason_ts": "01:09",
+    "reason_quote": "No. I don't have money.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep asked 'Any specific reason why?' at 01:06 after the customer said they weren't interested, and the customer gave a financial reason at 01:09, but the rep responded with a no-upfront-cost feature claim rather than reinforcing or flipping that stated reason into leverage."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:07",
+      "quote": "Yeah. This is Meg. I'm with ION reaching out here about the solar form you filled out online."
+    },
+    {
+      "section": "interest_question",
+      "status": "asked",
+      "ts": "00:58",
+      "quote": "Well, have you ever looked at solar? Do you know much about the program itself?"
+    },
+    {
+      "section": "address_homeowner",
+      "status": "skipped",
+      "ts": "02:35",
+      "quote": "But I don't have I I'm I'm I'm renting."
+    },
+    {
+      "section": "co_owner",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "roof",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "01:25",
+      "quote": "I'm assuming you're with ComEd. Right?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "skipped",
+      "ts": "01:53",
+      "quote": "there isn't necessarily a rough idea or ballpark"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "appointment_set",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Verify-first discipline — homeownership confirmation",
-    "ts": "00:58",
-    "quote": "Well, have you ever looked at solar? Do you know much about the program itself?",
-    "why": "Meg skips the verify section entirely after the form denial and pivots to interest-probing. The renter DQ that ends the call at 02:44 is a direct consequence. On this call, the verify skip cost roughly 105 seconds of pitch time on an ineligible lead and left Justin more agitated than when the call started. The manager should drill verify.address_homeowner_confirmed as the mandatory first move after any legitimacy challenge — not interest-probing, not pitch. One question ('And you own the home there?') would have ended this call cleanly at 01:00."
+    "topic": "Homeowner verification never proactively run",
+    "ts": "02:35",
+    "quote": "But I don't have I I'm I'm I'm renting. Who who told you that I have a house?",
+    "why": "The rep never asked a direct homeowner-confirmation question at any point in the call; the disqualifying fact only surfaced because the customer volunteered it under pressure at 02:35, roughly two and a half minutes into a call that should have gated on this within the first 30-45 seconds per verify.address_homeowner_confirmed."
   },
   "key_moments": [
     {
-      "ts": "00:52",
-      "quote": "Is there someone else in the home who maybe would've filled it out?",
-      "classification": "other",
-      "stewart_read": "When Justin denies the form, Meg probes for another household member. The alternative hypothesis — that this is a strategic indirect legitimacy attempt, trying to find a path back to a valid lead premise — is worth considering. But the evidence cuts against it: Meg doesn't follow the probe with any reframe of the call's purpose, and when Justin says no, she simply moves on. The more supported read is reactive: Meg is trying to preserve the lead premise because she has no legitimacy-recovery move ready. A strategic probe would have been followed by a pivot ('Either way, since I have you — can I take 30 seconds to tell you why I'm calling?'). That pivot never comes."
+      "ts": "00:38",
+      "quote": "Looks like you filled out some information on the 20.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The rep's legitimacy answer is vague ('the 20' with no month, no source website named) instead of the honest_specificity pattern the schema calls for. On a call that opens with immediate suspicion, this is the moment that should have anchored trust and doesn't."
     },
     {
-      "ts": "00:58",
-      "quote": "Well, have you ever looked at solar? Do you know much about the program itself?",
-      "classification": "protocol_violation",
-      "stewart_read": "This is the root-cause moment of the call. Meg skips the verify section entirely and pivots to interest-probing. The first required verify item — confirm address, home type, ownership — would have surfaced Justin's renter status in under 60 seconds. Instead, Meg spends the next 105 seconds pitching an ineligible lead. The skip is not strategic; there is no later verify attempt. It is a clean protocol omission."
+      "ts": "00:45",
+      "quote": "I've you just gave me, like, basic info, like address, contact info.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "This is the second touch of the same unresolved legitimacy dispute — the rep repeats the unverified claim in different words rather than offering new, specific evidence, so the customer's suspicion is never actually addressed."
     },
     {
       "ts": "01:09",
       "quote": "No. I don't have money.",
-      "classification": "empathy_miss",
-      "stewart_read": "Justin discloses financial hardship directly and plainly. Meg's response — 'that's one of the nice things about our program here is there's nothing upfront or out of pocket to go solar' — contains zero empathy acknowledgment before the pitch pivot. The line 'Nah. I feel you there.' at 01:11 is Justin's own voice, not Meg's; Meg offers no equivalent. This is a hard empathy miss: a vulnerability disclosure met with an immediate product feature. Even on a call that was already heading toward DQ, the absence of a human acknowledgment before the pivot is a trust-destroying move."
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a textbook trigger for the 'I can't afford it' flip ('what you can't afford is your current bill'), but the rep instead leads with the no-upfront-cost feature claim, which the customer immediately rejects again at 01:21."
     },
     {
-      "ts": "01:21",
-      "quote": "I cannot pay even. I cannot pay even. Just for free.",
-      "classification": "empathy_miss",
-      "stewart_read": "Justin repeats his financial distress with more urgency — 'I cannot pay even. I cannot pay even.' This is a second vulnerability disclosure, escalating the first. Meg's response is to clarify that it's not free and explain the bill-replacement model. The explanation is technically accurate but again contains no empathy beat. At this point Justin has disclosed financial hardship twice in 12 seconds and received two consecutive pitch pivots. The pattern compounds the trust deficit."
+      "ts": "01:53",
+      "quote": "How much every month have to pay?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The customer is directly asking for a number — a real curiosity signal — and the rep's answer ('there isn't necessarily a rough idea or ballpark') closes the door on curiosity rather than using the ambiguity to create it (e.g., tying the eventual design reveal to their specific bill)."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 31,
+    "verified": 31,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }

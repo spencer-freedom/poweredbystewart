@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AudioClip } from "../../(public)/_components/AudioClip.client";
 import { AltTake } from "../../(public)/_components/AltTake.client";
+import { loadCorpusStats } from "../_lib/corpus";
 
 // The proof beat — "show, don't tell." Ion's script asks two anchor
 // questions (the bill + "what has you interested in solar"). These are
@@ -129,7 +130,10 @@ const CALLS: Call[] = [
   },
 ];
 
-export function SectionTheMiss() {
+export async function SectionTheMiss() {
+  const stats = await loadCorpusStats();
+  const b = stats?.bill;
+  const r = stats?.interest_reason;
   return (
     <section
       id="proof"
@@ -181,16 +185,29 @@ export function SectionTheMiss() {
           </span>
         </p>
 
-        <div className="mt-14 text-center">
-          <p className="text-5xl sm:text-6xl font-bold text-stewart-warning">
-            0 of 332
-          </p>
-          <p className="mt-4 text-lg text-stewart-text leading-relaxed max-w-xl mx-auto">
-            Not one call used the bill to build value. It&apos;s the single
-            largest upside on your floor — and it&apos;s a question your script
-            already asks.
-          </p>
+        {/* Measured across the published corpus — SectionScriptFloor has the full breakdown. */}
+        <div className="mt-14 grid sm:grid-cols-2 gap-6 text-center">
+          <div>
+            <p className="text-5xl sm:text-6xl font-bold text-stewart-warning">
+              {b ? `${b.flipped} of ${b.captured}` : "5 of 189"}
+            </p>
+            <p className="mt-3 text-base text-stewart-text leading-relaxed max-w-xs mx-auto">
+              calls where the rep got the bill and used it as the reason to act.
+            </p>
+          </div>
+          <div>
+            <p className="text-5xl sm:text-6xl font-bold text-stewart-warning">
+              {r ? `${r.used} of ${r.reason_given}` : "9 of 179"}
+            </p>
+            <p className="mt-3 text-base text-stewart-text leading-relaxed max-w-xs mx-auto">
+              customers who said why they wanted solar, and heard it again.
+            </p>
+          </div>
         </div>
+        <p className="mt-8 text-center text-lg text-stewart-text leading-relaxed max-w-xl mx-auto">
+          Both anchors, counted across every call you gave us &mdash; not picked. It&apos;s the
+          single largest upside on your floor, and your script already asks for both.
+        </p>
       </div>
     </section>
   );

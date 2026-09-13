@@ -1,12 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Reusable click-to-advance "slide" text box (PowerPoint-style). The
-// caller places it beside whatever visual stays put (e.g. a cup). Clicking
-// the text advances; a separate "back" control steps backward in case of a
-// mis-click. Step dots + a "continue" hint show progress. Each swap fades
-// (see the cupFade keyframe in globals.css).
+// caller places it beside whatever visual stays put (e.g. a cup).
+//
+// Self-presenting: the page gets sent as a URL with nobody narrating, so
+// the affordance has to be visible. A "Next" button sits under the text
+// (clicking the text still advances), arrow keys / space / enter step
+// while the stepper is on screen, and the last slide swaps the Next
+// button for a "scroll to continue" cue so the viewer knows the beat is
+// over. Each swap fades (see the cupFade keyframe in globals.css).
 
 export type Slide = {
   kicker?: string;
@@ -30,6 +34,11 @@ export function SlideStepper({
   centered?: boolean;
 }) {
   const [step, setStep] = useState(0);
+  const root = useRef<HTMLDivElement>(null);
+  // Mirror of `step` for the native keydown listener (it must decide
+  // synchronously whether to swallow the key).
+  const stepRef = useRef(0);
+  stepRef.current = step;
   const isFirst = step === 0;
   const isLast = step === slides.length - 1;
   const advance = () => setStep((s) => Math.min(s + 1, slides.length - 1));
@@ -40,13 +49,55 @@ export function SlideStepper({
     onStepChange?.(step);
   }, [step, onStepChange]);
 
+  // Keyboard stepping, only while this stepper is mostly in view so two
+  // steppers on one page never both react. Space/Enter are left alone
+  // when a button has focus (its own click already advances) and space
+  // falls through to the browser's page-scroll on the last slide, so a
+  // viewer who keeps tapping space naturally rolls into the next beat.
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    let visible = false;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+      },
+      { threshold: 0.5 }
+    );
+    io.observe(el);
+
+    const onKey = (e: KeyboardEvent) => {
+      if (!visible) return;
+      const active = document.activeElement;
+      const typing =
+        active instanceof HTMLElement &&
+        /^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(active.tagName);
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        advance();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        back();
+      } else if ((e.key === " " || e.key === "Enter") && !typing) {
+        if (stepRef.current >= slides.length - 1) return; // let space scroll the page
+        e.preventDefault();
+        advance();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      io.disconnect();
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [slides.length]);
+
   const alignText = centered ? "text-center" : "text-center lg:text-left";
   const alignRow = centered
     ? "justify-center"
     : "justify-center lg:justify-start";
 
   return (
-    <div className={centered ? "max-w-2xl" : "max-w-md"}>
+    <div ref={root} className={centered ? "max-w-2xl" : "max-w-md"}>
       <button
         type="button"
         onClick={advance}
@@ -75,7 +126,7 @@ export function SlideStepper({
         </div>
       </button>
 
-      <div className={`mt-10 flex items-center gap-4 ${alignRow}`}>
+      <div className={`mt-10 flex items-center gap-5 ${alignRow}`}>
         {/* Back — hidden (but space kept) on the first slide */}
         <button
           type="button"
@@ -103,6 +154,26 @@ export function SlideStepper({
             />
           ))}
         </div>
+
+        {isLast ? (
+          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-stewart-muted animate-pulse">
+            scroll to continue
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M12 5v14M5 12l7 7 7-7" />
+            </svg>
+          </span>
+        ) : (
+          <button
+            type="button"
+            onClick={advance}
+            className="inline-flex items-center gap-1.5 rounded-full border border-stewart-accent/50 bg-stewart-accent/10 px-4 py-1.5 text-sm font-semibold text-stewart-accent hover:bg-stewart-accent/20 transition-colors"
+          >
+            Next
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M5 12h14M13 5l7 7-7 7" />
+            </svg>
+          </button>
+        )}
       </div>
     </div>
   );

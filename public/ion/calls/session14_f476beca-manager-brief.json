@@ -1,38 +1,164 @@
 {
   "call_id": "SESSION14_f476beca",
-  "trajectory_summary": "The call opened with a genuinely warm, motivated customer and ended with a booked appointment — but the energy arc is net negative. John arrived engaged and curious, volunteered detailed solar thinking unprompted, and cooperated throughout. Becky's handling was procedurally adequate but reactive: she never drew out John's motivations, burned roughly 12 minutes on a bill-photo navigation that should have been pivoted within two minutes, and closed without a verbal handshake or a firm show-rate anchor. The appointment exists; its quality is fragile.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown. The call produced a booked appointment (Friday at 4PM) but the booking is conditionally fragile: John explicitly declined the no-driving commitment, the appointment time was proposed and re-proposed three times, and no 'is that fair' handshake was obtained. Outcome should be tagged 'booked — fragile' rather than a clean sit.",
+  "rep_name": "Becky",
+  "trajectory_summary": "This call is dominated by a single structural event: roughly nine minutes spent walking an elderly, low-tech customer through sending a bill photo, a friction point the rep never pivoted away from despite the schema's 2-minute budget for exactly this scenario. Outside of that stretch, the rep ran verify cleanly, held scope discipline when the customer went into unsolicited technical territory, and closed with a booked Friday phone appointment. The call's energy is mixed: it leaked heavily during the bill-collection ordeal but recovered at the end into a real booking.",
+  "shape": "mixed",
+  "outcome_dispute": "The appointment is real (day and time were confirmed multiple times, settling on Friday at 4PM), so v1 'unknown' should resolve to booked/tentative-leaning-booked; however, the confirmation lacked full button-up mechanics (no explicit hour-block statement, no 'is that fair?' handshake, no restated text-follow-up promise), making it a fragile rather than fully buttoned booking.",
+  "observed_outcome": {
+    "outcome": "booked",
+    "appointment_channel": "phone",
+    "datetime_captured": true,
+    "co_owner_confirmed": false,
+    "ts": "19:35",
+    "quote": "Friday at 4PM, they're gonna call you.",
+    "reasoning": "A specific day and time were confirmed for a phone consultation after several rounds of negotiation around the customer's travel schedule; the potential co-owner (wife) was never clarified or confirmed for the call, so co_owner_confirmed is false rather than null since ownership ambiguity was actually raised."
+  },
+  "bill_anchor_audit": {
+    "bill_captured": true,
+    "bill_ts": "01:52",
+    "bill_quote": "About a 150.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "The rep captured the $150 average bill but simply acknowledged it ('Okay. 150.') at 01:55 and moved straight to the roof question without ever tying the number back to bill pain or an alignment-against-utility frame later in the call, including at close."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "01:09",
+    "reason_given": true,
+    "reason_ts": "01:14",
+    "reason_quote": "And and, you know, ecological and also being independent.",
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep acknowledged the customer's stated reasons (savings, ecological motive, independence) with a brief 'Independent. Awesome.' at 01:20 but never referenced these motives again when booking or button-up, missing a chance to tie the appointment purpose back to what the customer said he cared about."
+  },
+  "script_coverage": [
+    {
+      "section": "intro_legitimacy",
+      "status": "asked",
+      "ts": "00:06",
+      "quote": "This is Becky with this is Becky with Ion. I'm reaching out about the solar form you filled out online."
+    },
+    {
+      "section": "interest_question",
+      "status": "asked",
+      "ts": "01:09",
+      "quote": "What interest did you in solar, saving some money?"
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:22",
+      "quote": "Alright. You still at 249 Albert Farm Road?"
+    },
+    {
+      "section": "co_owner",
+      "status": "asked",
+      "ts": "00:42",
+      "quote": "Is there anybody else on the title but you?"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "02:00",
+      "quote": "you know what type of roof you have?"
+    },
+    {
+      "section": "utility_company",
+      "status": "asked",
+      "ts": "01:24",
+      "quote": "What utility company are you with?"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "01:49",
+      "quote": "how much are you paying, like, on an average monthly?"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "03:44",
+      "quote": "Do you do you have a credit score over six seventy?"
+    },
+    {
+      "section": "military",
+      "status": "not_reached",
+      "ts": "",
+      "quote": ""
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "02:14",
+      "quote": "have you seen a solar design for for your home?"
+    },
+    {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "04:05",
+      "quote": "The last thing we need is just a picture of the graph on your power bill."
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "19:35",
+      "quote": "Friday at 4PM, they're gonna call you."
+    },
+    {
+      "section": "button_up",
+      "status": "partial",
+      "ts": "20:11",
+      "quote": "I'm a get you all filled out with your estimated design, and then we'll see you on Friday."
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Bill-collection pivot discipline — elderly/low-tech protocol",
-    "ts": "05:13",
-    "quote": "Well, if you gotta walk me through it a little bit since I'm so it's not a challenge.",
-    "why": "John signals immediately that phone navigation will be slow. Becky spends 11+ minutes on a photo path that the schema explicitly provides an alternative for. This is the call's single largest time-burn and the primary driver of energy leak. The fix is concrete: introduce the two-minute pivot rule and the verbal readback path. Once Becky has that tool, this failure mode disappears on future calls with low-tech customers — a demographic she will encounter repeatedly."
+    "topic": "Bill-collection tech-friction pivot timing",
+    "ts": "05:35",
+    "quote": "Can I do that now without losing you? Yeah. No. Yeah. You could do that right now.",
+    "why": "Nearly 9 of the call's ~20 minutes were consumed walking a low-tech customer through a photo-send process the schema explicitly says to abandon within 2 minutes in favor of a verbal kWh read-back; this is the single largest efficiency and call-shape issue on the tape."
   },
   "key_moments": [
     {
-      "ts": "01:09",
-      "quote": "What interest did you in solar, saving some money?",
-      "classification": "bill_anchor",
-      "stewart_read": "Becky leads the interest question with a yes/no prompt that hands John the answer. He confirms 'saving money' and adds ecology and independence — but only because he volunteered them, not because Becky drew them out. The schema flags this as the emotional anchor of the call and calls for 60+ seconds of depth. Becky spent roughly 10 seconds here and moved on. The closer has John's three stated motivations but no sense of which one is primary or what's driving the urgency — Becky never asked."
-    },
-    {
-      "ts": "01:04",
-      "quote": "I'll just put '72.",
+      "ts": "05:35",
+      "quote": "Can I do that now without losing you? Yeah. No. Yeah. You could do that right now.",
       "classification": "other",
-      "stewart_read": "John said his family has owned the home since 1972 but that he personally has owned it 'a couple years.' Becky records 1972 as the ownership date. This is a data-accuracy error: the verify item is asking about the customer's relationship to the home, not the family's. A customer who has personally owned a home for two years may have different bill-pattern familiarity and different decision-making dynamics than a 50-year owner. The closer will walk in with a misleading data point."
+      "stewart_read": "This is the entry point of the tech-friction spiral. The schema explicitly defines an elderly/low-tech pivot (verbal read-back of kWh numbers) to be used within 2 minutes of friction; the rep instead commits to a live photo-send walkthrough that ultimately consumes about 9 minutes."
     },
     {
-      "ts": "05:13",
-      "quote": "Well, if you gotta walk me through it a little bit since I'm so it's not a challenge.",
-      "classification": "knowledge_gap",
-      "stewart_read": "John signals immediately that he will need guidance navigating his phone. The schema's elderly_low_tech_protocol calls for a pivot to verbal readback within two minutes of friction. Instead, Becky spends the next 11+ minutes walking John through Samsung Galaxy navigation — share buttons, three-dot menus, screenshot instructions, gallery vs. camera — while John is outdoors, away from home, talking to passersby. The pivot never comes. The bill is eventually sent at 16:48, but the cost is roughly 11 minutes of call time and a customer whose attention has visibly drifted."
+      "ts": "16:11",
+      "quote": "Yeah. Don't hit the camera. Try to look for something else, like a photos or a, like, a gallery.",
+      "classification": "other",
+      "stewart_read": "Eleven minutes into the same friction point, the rep is still issuing granular UI navigation instructions instead of pivoting to a verbal read-back fallback, confirming this was a sustained miss rather than an isolated stumble."
     },
     {
-      "ts": "02:22",
-      "quote": "I've I've I've imagined what it would take. It's because of the trees around the house, it's best to have field of solar panels, a 100 feet away from the house on the south end off the south end by about, like, ninety, hundred feet, something like that.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "John has not just filled out a form — he has done independent research, thought through the tree-shading problem, identified a ground-mount solution, and picked a cardinal direction. This is a highly pre-qualified customer who has been mentally planning a solar install. Becky's response is 'Okay. I mean, your house, there's not a lot of trees covering your roof' — she redirects to the satellite map rather than anchoring on John's engagement. The enthusiasm signal is walked past entirely."
+      "ts": "04:39",
+      "quote": "I may have already done that. I've got it with some some solar outfit, but I'm not sure it was the ion.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a prior touch with 'some solar outfit' — competitive intelligence the closer would want — and the rep only checks internal records rather than asking which company or what was shown."
+    },
+    {
+      "ts": "17:49",
+      "quote": "the best way to do it is, you know, a solar field, as I said, just under a a 100 feet from the house.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Customer pushes unsolicited technical/design content (ground-mount solar field placement) a second time; rep correctly declines to engage and redirects to the specialist at 18:09 rather than debating the technical merits."
     }
-  ]
+  ],
+  "pipeline": {
+    "version": "v3.1",
+    "prompt_hash": "e8cdaf80b4dc",
+    "stage3_model": "claude-sonnet-5",
+    "stage4_model": "claude-sonnet-5",
+    "batch": true,
+    "run_at": "2026-09-12T23:31:17+00:00",
+    "revision_applied": true
+  },
+  "quote_verification": {
+    "checked": 39,
+    "verified": 39,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
+  }
 }
