@@ -14,8 +14,19 @@ export type CorpusStats = {
   shapes: Record<string, number>;
   critic_verdicts: Record<string, number>;
   quotes: { checked: number; verified: number; fuzzy: number; wrong_ts: number; not_found: number; grounded_rate: number; calls_fully_grounded: number };
-  script_coverage: Record<string, { asked: number; skipped: number; not_reached: number; asked_rate: number }>;
-  reps: Record<string, { calls: number; bill_captured: number; bill_flipped: number; reason_asked: number; reason_used: number; booked: number }>;
+  script_coverage: Record<string, { asked: number; skipped: number; not_reached: number; asked_rate: number; asked_rate_of_reached: number | null }>;
+  outcome_definition?: string;
+  set?: { n: number; rate: number | null };
+  adherence_vs_outcome?: {
+    min_n: number;
+    sections: Record<string, { ran_n: number; ran_set_rate: number | null; skipped_n: number; skipped_set_rate: number | null; lift_pts: number | null; small_sample: boolean }>;
+    anchors: Record<string, { set: number; n: number; set_rate: number | null }>;
+  };
+  reps: Record<string, {
+    calls: number; set?: number; set_rate?: number | null; bill_captured: number; bill_flipped: number;
+    reason_asked: number; reason_given?: number; reason_used: number; booked?: number;
+    coverage?: Record<string, { asked: number; skipped: number; not_reached: number; asked_rate_of_reached: number | null }>;
+  }>;
 };
 
 const ION = () => path.join(process.cwd(), "public", "ion");

@@ -16,6 +16,12 @@ export async function SectionScriptFloor() {
   });
   const b = s.bill;
   const r = s.interest_reason;
+  const ra = s.adherence_vs_outcome?.anchors.reason_asked;
+  const rn = s.adherence_vs_outcome?.anchors.reason_not_asked;
+  const askedLine =
+    ra && rn && ra.set_rate !== null && rn.set_rate !== null
+      ? `Calls where it was asked set at ${Math.round(ra.set_rate * 100)}%; calls where it wasn't, ${Math.round(rn.set_rate * 100)}%.`
+      : null;
 
   return (
     <section
@@ -43,7 +49,7 @@ export async function SectionScriptFloor() {
             kicker="The reason"
             big={`${r.used} of ${r.reason_given}`}
             line={`“What has you interested in solar?” was asked on ${r.asked} of ${s.calls} calls. ${r.reason_given} customers gave a reason. It was used ${r.used} times.`}
-            sub={`${r.not_asked} calls never asked. That's the first question on the script.`}
+            sub={`${r.not_asked} calls never asked — it's the first question on the script.${askedLine ? " " + askedLine : ""}`}
           />
         </div>
 
@@ -70,7 +76,8 @@ export async function SectionScriptFloor() {
           </ol>
           <p className="mt-4 text-xs text-stewart-muted">
             &ldquo;Ran it&rdquo; means any phrasing, not the script&apos;s words. Calls that ended or
-            disqualified before a section count as not reached, not skipped.
+            disqualified before a section count as not reached, not skipped. &ldquo;Set&rdquo; is
+            Stewart&apos;s read of the call &mdash; booked or tentative &mdash; until your sits and closes are joined.
           </p>
         </div>
 

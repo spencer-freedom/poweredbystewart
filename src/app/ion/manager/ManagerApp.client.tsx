@@ -105,6 +105,22 @@ export function ManagerApp({ index }: { index: TriageIndex }) {
     [ranked, coached, repFilter]
   );
 
+  // Floor run-rate per section (among calls that reached it) and each
+  // section's set-rate lift (ran vs skipped) — the inputs to "train here".
+  const floorStats = useMemo(() => {
+    const isSet = (r: TriageRow) => r.observed_outcome === "booked" || r.observed_outcome === "tentative";
+    const out: Record<string, { rate: number | null; lift: number }> = {};
+    for (const sec of TRAIN_SECTIONS) {
+      const ran = ranked.filter((r) => r.coverage?.[sec.key] === "asked");
+      const skipped = ranked.filter((r) => r.coverage?.[sec.key] === "skipped");
+      const reached = ran.length + skipped.length;
+      const rr = ran.length ? ran.filter(isSet).length / ran.length : null;
+      const sr = skipped.length ? skipped.filter(isSet).length / skipped.length : null;
+      out[sec.key] = { rate: reached ? ran.length / reached : null, lift: rr !== null && sr !== null && Math.min(ran.length, skipped.length) >= 20 ? Math.max(0, rr - sr) : 0 };
+    }
+    return out;
+  }, [ranked]);
+
   const reps = useMemo(() => {
     const by = new Map<string, TriageRow[]>();
     for (const r of ranked) {
@@ -113,6 +129,19 @@ export function ManagerApp({ index }: { index: TriageIndex }) {
     }
     return [...by.entries()]
       .map(([rep, rows]) => {
+        // Train here: biggest run-rate gap vs the floor, needs ≥3 reached calls,
+        // nudged toward sections that move the set rate.
+        const train = TRAIN_SECTIONS.map((sec) => {
+          const ran = rows.filter((r) => r.coverage?.[sec.key] === "asked").length;
+          const reached = ran + rows.filter((r) => r.coverage?.[sec.key] === "skipped").length;
+          const f = floorStats[sec.key];
+          if (reached < 3 || !f || f.rate === null) return null;
+          const gap = f.rate - ran / reached;
+          return { key: sec.key, label: sec.label, gap, score: gap * (1 + f.lift * 5), reached, ran };
+        })
+          .filter((x): x is NonNullable<typeof x> => x !== null && x.gap > 0.1)
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 2);
         const avg = rows.reduce((s, r) => s + r.score, 0) / rows.length;
         const comp = WEIGHT_KEYS.map((k) => ({
           k,
@@ -123,10 +152,10 @@ export function ManagerApp({ index }: { index: TriageIndex }) {
           acc[s] = (acc[s] || 0) + 1;
           return acc;
         }, {});
-        return { rep, rows, avg, gap: comp[0], shapes, coached: rows.filter((r) => coached.has(r.call_id)).length };
+        return { rep, rows, avg, gap: comp[0], shapes, train, coached: rows.filter((r) => coached.has(r.call_id)).length };
       })
       .sort((a, b) => b.rows.length - a.rows.length);
-  }, [ranked, coached]);
+  }, [ranked, coached, floorStats]);
 
   const max = maxScore(weights);
 
@@ -398,6 +427,21 @@ function Chip({ children, tone }: { children: React.ReactNode; tone?: "warn" | "
   return <span className={"text-[10px] uppercase tracking-wider font-mono rounded px-1.5 py-0.5 border " + cls}>{children}</span>;
 }
 
+const TRAIN_SECTIONS: { key: string; label: string }[] = [
+  { key: "intro_legitimacy", label: "Intro" },
+  { key: "interest_question", label: "Interest question" },
+  { key: "address_homeowner", label: "Address" },
+  { key: "co_owner", label: "Co-owner" },
+  { key: "roof", label: "Roof" },
+  { key: "utility_company", label: "Utility" },
+  { key: "bill_amount", label: "Bill" },
+  { key: "tax_credit_qualifier", label: "Qualifier" },
+  { key: "military", label: "Military" },
+  { key: "prior_design", label: "Prior design" },
+  { key: "bill_collection", label: "Bill collection" },
+  { key: "button_up", label: "Button-up" },
+];
+
 // ── Reps ─────────────────────────────────────────────────────────────────
 
 type RepRow = {
@@ -406,6 +450,7 @@ type RepRow = {
   avg: number;
   gap: { k: WeightKey; v: number };
   shapes: Record<string, number>;
+  train: { key: string; label: string; gap: number; score: number; reached: number; ran: number }[];
   coached: number;
 };
 
@@ -431,8 +476,10 @@ function Reps({
         <p className="text-xs uppercase tracking-wider text-stewart-muted">Your floor</p>
         <h1 className="text-xl sm:text-2xl font-bold mt-1">{reps.length} setters, every call read.</h1>
         <p className="text-sm text-stewart-muted mt-1">
-          Biggest gap = the score component that runs highest across that rep&apos;s calls. Click a rep to see
-          their calls; &ldquo;today&rdquo; filters the morning list to them.
+          Biggest gap = the score component that runs highest across that rep&apos;s calls. Train here = the script
+          sections this rep runs least often relative to the floor (points under, among calls that reached the section),
+          nudged toward the sections that move the set rate. Click a rep to see their calls; &ldquo;today&rdquo; filters the
+          morning list to them.
         </p>
       </div>
       <div className="rounded-lg border border-stewart-border overflow-hidden">
@@ -443,6 +490,7 @@ function Reps({
               <th className="text-right px-3 py-2">Calls</th>
               <th className="text-right px-3 py-2 hidden sm:table-cell">Avg score</th>
               <th className="text-left px-3 py-2">Biggest gap</th>
+              <th className="text-left px-3 py-2">Train here</th>
               <th className="text-left px-3 py-2 hidden md:table-cell">Shape mix</th>
               <th className="px-3 py-2" />
             </tr>
@@ -499,6 +547,19 @@ function RepLine({
           {x.avg.toFixed(1)} <span className="text-[10px]">/ {max.toFixed(0)}</span>
         </td>
         <td className="px-3 py-2 text-stewart-text">{labels[x.gap.k]}</td>
+        <td className="px-3 py-2">
+          {x.train.length ? (
+            <span className="flex flex-wrap gap-1">
+              {x.train.map((t) => (
+                <span key={t.key} title={`ran it on ${t.ran} of ${t.reached} calls that reached it — ${Math.round(t.gap * 100)} pts under the floor`} className="text-[10px] uppercase tracking-wider font-mono rounded px-1.5 py-0.5 border border-stewart-warning/50 text-stewart-warning">
+                  {t.label} −{Math.round(t.gap * 100)}
+                </span>
+              ))}
+            </span>
+          ) : (
+            <span className="text-xs text-stewart-muted">at or above floor</span>
+          )}
+        </td>
         <td className="px-3 py-2 hidden md:table-cell">
           <div className="flex h-2 w-40 rounded-full overflow-hidden bg-white/5" title={order.map((s) => `${SHAPE_LABEL[s]}: ${x.shapes[s] || 0}`).join(" · ")}>
             {order.map((s) => (
@@ -514,7 +575,7 @@ function RepLine({
       </tr>
       {expanded ? (
         <tr className="border-t border-stewart-border/60 bg-stewart-bg/60">
-          <td colSpan={6} className="px-3 py-3">
+          <td colSpan={7} className="px-3 py-3">
             <ul className="divide-y divide-stewart-border/60">
               {x.rows.map((r) => (
                 <li key={r.call_id} className="py-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">

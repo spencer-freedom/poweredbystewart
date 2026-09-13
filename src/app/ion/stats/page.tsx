@@ -80,6 +80,60 @@ export default async function IonStatsPage() {
           </details>
         </section>
 
+        {/* Adherence × outcome */}
+        {s.adherence_vs_outcome ? (
+          <section>
+            <h2 className="text-lg font-bold">Does running it change the outcome?</h2>
+            <p className="text-sm text-stewart-muted mt-1 mb-4">
+              &ldquo;Set&rdquo; = Stewart read the call as booked or tentative ({s.set?.n ?? "–"} of {s.calls}). Ran vs. skipped, among calls that
+              reached the section. Rows under {s.adherence_vs_outcome.min_n} calls on either side are greyed &mdash; too small to lean on.
+              Appointment and button-up are part of what &ldquo;set&rdquo; means, so they&apos;re listed but not evidence.
+            </p>
+            <div className="rounded-lg border border-stewart-border overflow-x-auto">
+              <table className="w-full text-sm min-w-[560px]">
+                <thead className="bg-stewart-card text-[10px] uppercase tracking-wider text-stewart-muted">
+                  <tr><th className="text-left px-3 py-2">Section</th><th className="text-right px-3 py-2">Ran it → set</th><th className="text-right px-3 py-2">Skipped → set</th><th className="text-right px-3 py-2">Lift</th></tr>
+                </thead>
+                <tbody>
+                  {SCRIPT_SECTIONS.map((sec) => {
+                    const a = s.adherence_vs_outcome!.sections[sec.key];
+                    if (!a) return null;
+                    const tautology = sec.key === "appointment_set" || sec.key === "button_up";
+                    const dim = a.small_sample || tautology;
+                    const lift = a.lift_pts;
+                    return (
+                      <tr key={sec.key} className={"border-t border-stewart-border/60 " + (dim ? "text-stewart-muted/60" : "")}>
+                        <td className="px-3 py-1.5">{sec.label}{tautology ? <span className="text-[10px] ml-2 uppercase tracking-wider">defines set</span> : a.small_sample ? <span className="text-[10px] ml-2 uppercase tracking-wider">small n</span> : null}</td>
+                        <td className="px-3 py-1.5 text-right font-mono">{a.ran_set_rate === null ? "–" : `${Math.round(a.ran_set_rate * 100)}%`} <span className="text-xs">n={a.ran_n}</span></td>
+                        <td className="px-3 py-1.5 text-right font-mono">{a.skipped_set_rate === null ? "–" : `${Math.round(a.skipped_set_rate * 100)}%`} <span className="text-xs">n={a.skipped_n}</span></td>
+                        <td className={"px-3 py-1.5 text-right font-mono font-semibold " + (dim ? "" : lift !== null && lift > 0 ? "text-stewart-success" : lift !== null && lift < 0 ? "text-stewart-warning" : "")}>{lift === null ? "–" : `${lift > 0 ? "+" : ""}${lift} pts`}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-4 grid sm:grid-cols-3 gap-3">
+              {([
+                ["Reason asked", "reason_asked", "reason_not_asked", "not asked"],
+                ["Reason used", "reason_used", "reason_not_used", "given, not used"],
+                ["Bill flipped", "bill_flipped", "bill_not_flipped", "captured, not flipped"],
+              ] as const).map(([label, yes, no, noLabel]) => {
+                const Y = s.adherence_vs_outcome!.anchors[yes]; const N = s.adherence_vs_outcome!.anchors[no];
+                const small = Math.min(Y.n, N.n) < s.adherence_vs_outcome!.min_n;
+                return (
+                  <div key={label} className={"rounded-lg border border-stewart-border bg-stewart-card p-4 " + (small ? "opacity-60" : "")}>
+                    <p className="text-[11px] uppercase tracking-wider text-stewart-muted">{label}{small ? " · small n" : ""}</p>
+                    <p className="mt-1 font-mono text-xl font-bold">{Y.set_rate === null ? "–" : `${Math.round(Y.set_rate * 100)}%`} <span className="text-xs font-normal text-stewart-muted">set · n={Y.n}</span></p>
+                    <p className="text-xs text-stewart-muted">vs {N.set_rate === null ? "–" : `${Math.round(N.set_rate * 100)}%`} when {noLabel} (n={N.n})</p>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="mt-3 text-xs text-stewart-muted italic">Negative lifts on verify sections mostly mean reps skip steps for customers who were already sold — a reason to join real sit and close data, not a reason to skip the qualifier.</p>
+          </section>
+        ) : null}
+
         {/* Outcomes + shapes */}
         <section className="grid md:grid-cols-2 gap-8">
           <div>
@@ -118,7 +172,7 @@ export default async function IonStatsPage() {
                 <tr>
                   <th className="text-left px-3 py-2">Rep</th>
                   <th className="text-right px-3 py-2">Calls</th>
-                  <th className="text-right px-3 py-2">Booked</th>
+                  <th className="text-right px-3 py-2">Set</th>
                   <th className="text-right px-3 py-2">Bill captured</th>
                   <th className="text-right px-3 py-2 text-stewart-warning">Bill used</th>
                   <th className="text-right px-3 py-2">Reason asked</th>
@@ -130,7 +184,7 @@ export default async function IonStatsPage() {
                   <tr key={r.name} className="border-t border-stewart-border/60 hover:bg-stewart-card/60">
                     <td className="px-3 py-1.5 font-semibold">{r.name}</td>
                     <td className="px-3 py-1.5 text-right font-mono text-stewart-muted">{r.calls}</td>
-                    <td className="px-3 py-1.5 text-right font-mono">{r.booked} <span className="text-stewart-muted text-xs">({pct(r.booked, r.calls)})</span></td>
+                    <td className="px-3 py-1.5 text-right font-mono">{r.set ?? r.booked ?? 0} <span className="text-stewart-muted text-xs">({pct(r.set ?? r.booked ?? 0, r.calls)})</span></td>
                     <td className="px-3 py-1.5 text-right font-mono">{r.bill_captured} <span className="text-stewart-muted text-xs">({pct(r.bill_captured, r.calls)})</span></td>
                     <td className="px-3 py-1.5 text-right font-mono">{r.bill_flipped}</td>
                     <td className="px-3 py-1.5 text-right font-mono">{r.reason_asked} <span className="text-stewart-muted text-xs">({pct(r.reason_asked, r.calls)})</span></td>
