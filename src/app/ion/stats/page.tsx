@@ -168,9 +168,9 @@ function Bars({ rows }: { rows: { label: string; value: number; denom: number; t
       {rows.map((r) => {
         const w = (100 * r.value) / max;
         return (
-          <li key={r.label} className="grid grid-cols-[minmax(0,11rem)_minmax(0,1fr)_5.5rem] items-center gap-3" title={r.title}>
-            <span className="text-sm text-stewart-text truncate">{r.label}</span>
-            <div className="h-2.5 rounded-r bg-white/5 overflow-hidden">
+          <li key={r.label} className="grid grid-cols-[minmax(0,1fr)_5.5rem] sm:grid-cols-[minmax(0,17rem)_minmax(0,1fr)_5.5rem] items-center gap-3" title={r.title}>
+            <span className="text-sm text-stewart-text leading-tight">{r.label}</span>
+            <div className="hidden sm:block h-2.5 rounded-r bg-white/5 overflow-hidden">
               <div className="h-full rounded-r bg-stewart-accent/75" style={{ width: `${w}%` }} />
             </div>
             <span className="font-mono text-xs text-right text-stewart-text">

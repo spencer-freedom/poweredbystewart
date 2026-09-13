@@ -58,8 +58,8 @@ export async function SectionScriptFloor() {
               const tone =
                 pct >= 75 ? "bg-stewart-success/70" : pct >= 45 ? "bg-stewart-accent/70" : "bg-stewart-warning/80";
               return (
-                <li key={row.key} className="grid grid-cols-[minmax(0,1fr)_3.25rem] sm:grid-cols-[16rem_minmax(0,1fr)_3.25rem] items-center gap-3">
-                  <span className="text-sm text-stewart-text truncate sm:col-span-1">{row.label}</span>
+                <li key={row.key} className="grid grid-cols-[minmax(0,1fr)_3.25rem] sm:grid-cols-[minmax(0,18rem)_minmax(0,1fr)_3.25rem] items-center gap-3">
+                  <span className="text-sm text-stewart-text leading-tight">{row.label}</span>
                   <div className="hidden sm:block h-2.5 rounded-full bg-white/5 overflow-hidden">
                     <div className={"h-full rounded-full " + tone} style={{ width: `${pct}%` }} />
                   </div>
