@@ -33,16 +33,21 @@ export function SectionMorning() {
 
           <div className="max-w-md space-y-5 text-lg text-stewart-muted leading-relaxed">
             <p>
-              Not a dashboard to study. A short list to act on. Four calls
-              &mdash; the four from this walkthrough &mdash; each with one line
-              on why it&apos;s worth opening.
+              Not a dashboard to study. Your team, one rep at a time &mdash;
+              and for each one, the single call worth your time today, ranked
+              from every call Stewart read. Nothing hand-picked.
             </p>
             <p>
               <span className="text-stewart-text font-medium">
                 Tap the moment, not the call.
               </span>{" "}
-              Twenty seconds of Meg at 01:29 instead of twenty-one minutes of
-              Meg. Then mark it coached.
+              Twenty seconds at the timestamp instead of twenty minutes of
+              tape. Then mark it coached, and the next one moves up.
+            </p>
+            <p>
+              Two taps deeper on any rep: their recent calls, and how they run
+              the script &mdash; the sections they skip, against the floor.
+              That&apos;s where a manager actually goes next.
             </p>
             <p>
               It looks boring on purpose. It&apos;s an extension of the CRM
