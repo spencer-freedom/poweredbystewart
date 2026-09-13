@@ -28,7 +28,7 @@ const UNLOCKS = [
   },
   {
     title: "Your playbook, filled in with Kenny.",
-    body: "The schema has 21 places marked TBD — what good looks like, in Ion's words. That's a room with Kenny and the managers, not a prompt.",
+    body: "The schema still has places marked TBD — what good looks like, in Ion's words. That's a room with Kenny and the managers, not a prompt.",
   },
   {
     title: "The morning list, tuned by your managers.",

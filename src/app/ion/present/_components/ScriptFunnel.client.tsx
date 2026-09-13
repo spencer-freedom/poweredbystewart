@@ -12,6 +12,10 @@ export type SectionCounts = { asked: number; skipped: number; not_reached: numbe
 export type FunnelInput = {
   calls: number;
   sections: Record<string, SectionCounts>;
+  // "Still on the line" per section: reached this section OR any later one.
+  // Monotonic, so a section reps skip doesn't look like calls ending. When
+  // absent, width falls back to asked + skipped.
+  on_line?: Record<string, number>;
 };
 
 export const FUNNEL_SECTIONS: { key: string; label: string; short: string }[] = [
@@ -45,10 +49,11 @@ export function ScriptFunnel({
   const data = who === "__floor" || !reps ? floor : reps[who] ?? floor;
   const repNames = reps ? Object.keys(reps).sort((a, b) => (reps[b].calls || 0) - (reps[a].calls || 0)) : [];
 
+  const onLine = (key: string, c: SectionCounts) => data.on_line?.[key] ?? c.asked + c.skipped;
   const rows = FUNNEL_SECTIONS.map((s, i) => {
     const c = data.sections[s.key] ?? { asked: 0, skipped: 0, not_reached: 0 };
-    const reached = c.asked + c.skipped;
-    const prev = i > 0 ? (() => { const p = data.sections[FUNNEL_SECTIONS[i - 1].key]; return p ? p.asked + p.skipped : reached; })() : data.calls;
+    const reached = onLine(s.key, c);
+    const prev = i > 0 ? (() => { const pk = FUNNEL_SECTIONS[i - 1].key; const p = data.sections[pk]; return p ? onLine(pk, p) : reached; })() : data.calls;
     return { ...s, ...c, reached, dropped: Math.max(0, prev - reached), ranRate: reached ? c.asked / reached : 0 };
   });
   const max = Math.max(data.calls, 1);
@@ -60,7 +65,7 @@ export function ScriptFunnel({
         <div>
           {title ? <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-muted">{title}</p> : null}
           <p className="text-sm text-stewart-muted mt-1">
-            Width = calls still on the line when the section came up. Filled = ran it. The step down between rows is where calls end.
+            Width = calls still on the line at that point (reached it, or anything after it). Filled = ran it. The step down between rows is where calls end; a narrow fill on a wide bar is a section reps skip.
           </p>
         </div>
         {reps ? (

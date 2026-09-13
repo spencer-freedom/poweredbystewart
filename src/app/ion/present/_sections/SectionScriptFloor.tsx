@@ -59,7 +59,11 @@ export async function SectionScriptFloor() {
         <div className="mt-12">
           <ScriptFunnel
             title="Your script, as a funnel"
-            floor={{ calls: s.calls, sections: Object.fromEntries(rows.map((r) => [r.key, { asked: r.asked, skipped: r.skipped, not_reached: r.not_reached }])) }}
+            floor={{
+              calls: s.calls,
+              sections: Object.fromEntries(rows.map((r) => [r.key, { asked: r.asked, skipped: r.skipped, not_reached: r.not_reached }])),
+              on_line: s.funnel ? Object.fromEntries(Object.entries(s.funnel.floor.sections).map(([k, v]) => [k, v.on_line])) : undefined,
+            }}
           />
           <p className="mt-4 text-xs text-stewart-muted">
             &ldquo;Ran it&rdquo; means any phrasing, not the script&apos;s words. A call that disqualified at the

@@ -17,6 +17,10 @@ export type CorpusStats = {
   script_coverage: Record<string, { asked: number; skipped: number; not_reached: number; asked_rate: number; asked_rate_of_reached: number | null }>;
   outcome_definition?: string;
   set?: { n: number; rate: number | null };
+  funnel?: {
+    floor: { calls: number; sections: Record<string, { on_line: number; ran: number; ran_rate_of_on_line: number | null }> };
+    reps: Record<string, { calls: number; sections: Record<string, { on_line: number; ran: number; ran_rate_of_on_line: number | null }> }>;
+  };
   adherence_vs_outcome?: {
     min_n: number;
     sections: Record<string, { ran_n: number; ran_set_rate: number | null; skipped_n: number; skipped_set_rate: number | null; lift_pts: number | null; small_sample: boolean }>;

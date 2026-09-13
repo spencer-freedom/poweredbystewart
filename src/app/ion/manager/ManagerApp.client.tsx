@@ -746,13 +746,16 @@ function Floor({ rows, onPick }: { rows: TriageRow[]; onPick: (rep: string) => v
     return cov;
   }, [rows]);
 
-  const shown = reps.filter((r) => r.calls >= minCalls);
+  const shown = reps.filter((r) => r.calls >= minCalls && r.rep !== "Unknown");
   const pct = (v: number | null) => (v === null ? "–" : `${Math.round(v * 100)}`);
 
   // Funnel inputs from the same rows: floor, and every rep with enough calls.
   const funnel = useMemo(() => {
+    const lastIdx = (r: TriageRow) =>
+      FUNNEL_SECTIONS.reduce((m, s, i) => (r.coverage?.[s.key] === "asked" || r.coverage?.[s.key] === "skipped" ? i : m), -1);
     const build = (rs: TriageRow[]): FunnelInput => ({
       calls: rs.length,
+      on_line: Object.fromEntries(FUNNEL_SECTIONS.map((s, i) => [s.key, rs.filter((r) => lastIdx(r) >= i).length])),
       sections: Object.fromEntries(
         FUNNEL_SECTIONS.map((s) => [
           s.key,

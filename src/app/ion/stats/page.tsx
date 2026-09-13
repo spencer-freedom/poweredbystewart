@@ -72,11 +72,19 @@ export default async function IonStatsPage() {
           <h2 className="text-lg font-bold">Where the calls go</h2>
           <p className="text-sm text-stewart-muted mt-1 mb-4">The script in order, wide at the intro and narrowing wherever calls end. Pick a rep to see their funnel against the floor&apos;s.</p>
           <ScriptFunnel
-            floor={{ calls: s.calls, sections: Object.fromEntries(Object.entries(s.script_coverage).map(([k, v]) => [k, { asked: v.asked, skipped: v.skipped, not_reached: v.not_reached }])) }}
+            floor={{
+              calls: s.calls,
+              sections: Object.fromEntries(Object.entries(s.script_coverage).map(([k, v]) => [k, { asked: v.asked, skipped: v.skipped, not_reached: v.not_reached }])),
+              on_line: s.funnel ? Object.fromEntries(Object.entries(s.funnel.floor.sections).map(([k, v]) => [k, v.on_line])) : undefined,
+            }}
             reps={Object.fromEntries(
               Object.entries(s.reps)
                 .filter(([name, r]) => name !== "Unknown" && r.coverage && r.calls >= 5)
-                .map(([name, r]) => [name, { calls: r.calls, sections: Object.fromEntries(Object.entries(r.coverage!).map(([k, v]) => [k, { asked: v.asked, skipped: v.skipped, not_reached: v.not_reached }])) } as FunnelInput])
+                .map(([name, r]) => [name, {
+                  calls: r.calls,
+                  sections: Object.fromEntries(Object.entries(r.coverage!).map(([k, v]) => [k, { asked: v.asked, skipped: v.skipped, not_reached: v.not_reached }])),
+                  on_line: s.funnel?.reps[name] ? Object.fromEntries(Object.entries(s.funnel.reps[name].sections).map(([k, v]) => [k, v.on_line])) : undefined,
+                } as FunnelInput])
             )}
           />
         </section>

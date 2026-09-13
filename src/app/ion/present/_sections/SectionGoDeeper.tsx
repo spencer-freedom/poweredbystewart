@@ -25,6 +25,16 @@ const DEEPER = [
     body: "The setting script your floor runs, verbatim, with the lines this walkthrough pulled from tagged back to the clips.",
   },
   {
+    href: "/ion/stats",
+    title: "The corpus, counted",
+    body: "Every number in this walkthrough, with the counts behind it — the funnel, adherence vs. outcome, and every rep.",
+  },
+  {
+    href: "/ion/manager",
+    title: "The manager's surface",
+    body: "Today's calls, the floor by rep, the script as a funnel, and the weights behind the ranking — the thing a manager would actually open.",
+  },
+  {
     href: "/ion/sow",
     title: "Scope of work",
     body: "Phases, pricing, terms, and what Spencer will and won't do.",
