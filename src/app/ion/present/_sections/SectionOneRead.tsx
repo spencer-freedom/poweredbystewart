@@ -207,6 +207,26 @@ export async function SectionOneRead() {
           </p>
         </div>
 
+        {/* The transcript can be wrong too — and this call proved it. Ties to
+            /ion/listen so anyone can hear the two moments themselves. */}
+        <div className="mt-6 rounded-xl border border-stewart-border bg-stewart-card p-5 sm:p-6">
+          <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-muted mb-2">
+            And sometimes the transcript is the one that&apos;s wrong
+          </p>
+          <p className="text-base text-stewart-text leading-relaxed">
+            An earlier read of this call coached {REP} for answering his own title and credit
+            questions &mdash; the transcript shows &ldquo;No.&rdquo; at 01:15 and &ldquo;Yes.&rdquo; at
+            02:24 on his track. We pulled the two clips. Lorenzo says both. The transcript had put
+            a one-word answer on the wrong speaker, and the read you just saw didn&apos;t take the
+            bait. A coaching tool that will admit the transcript can be wrong is the one you can
+            trust with your reps.
+          </p>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <AudioClip callId={CALL_ID} startSec={64} endSec={80} label="01:09 — the title question" />
+            <AudioClip callId={CALL_ID} startSec={130} endSec={150} label="02:15 — the credit question" />
+          </div>
+        </div>
+
         <p className="mt-8 text-sm text-stewart-muted">
           Every one of the {stats?.calls ?? 300} has this.{" "}
           <Link href="/ion/calls" className="text-stewart-accent hover:underline">
