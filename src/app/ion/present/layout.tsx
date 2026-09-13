@@ -32,7 +32,7 @@ export default function IonPresentLayout({
   return (
     <div className="min-h-screen bg-black text-stewart-text scroll-smooth">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur-md">
-        <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
           <Link href="/ion" className="flex items-baseline gap-2 shrink-0">
             <span className="text-sm sm:text-base font-bold text-stewart-accent">
               Powered by Stewart
@@ -42,7 +42,8 @@ export default function IonPresentLayout({
               Ion Solar
             </span>
           </Link>
-          <nav className="flex items-center gap-1 sm:gap-2">
+          {/* Phone: the tabs scroll sideways instead of clipping. */}
+          <nav className="flex items-center gap-1 sm:gap-2 overflow-x-auto whitespace-nowrap min-w-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {NAV_TABS.map((tab) => (
               <Link
                 key={tab.href}
