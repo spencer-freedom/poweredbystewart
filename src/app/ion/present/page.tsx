@@ -10,6 +10,7 @@ import { SectionTheMiss } from "./_sections/SectionTheMiss";
 import { SectionImagine } from "./_sections/SectionImagine";
 import { SectionAllCalls } from "./_sections/SectionAllCalls";
 import { SectionScriptFloor } from "./_sections/SectionScriptFloor";
+import { SectionBillAndObjections } from "./_sections/SectionBillAndObjections";
 import { SectionOneRead } from "./_sections/SectionOneRead";
 import { SectionMorning } from "./_sections/SectionMorning";
 import { SectionMath } from "./_sections/SectionMath";
@@ -43,6 +44,7 @@ const BEATS: Beat[] = [
   { id: "imagine", label: "Imagine" },
   { id: "all-calls", label: "All calls" },
   { id: "floor", label: "Your script" },
+  { id: "bill", label: "The bill" },
   { id: "one-read", label: "One read" },
   { id: "morning", label: "The morning" },
   { id: "math", label: "The math" },
@@ -66,6 +68,7 @@ export default function IonPresentPage() {
       <SectionImagine />
       <SectionAllCalls />
       <SectionScriptFloor />
+      <SectionBillAndObjections />
       <SectionOneRead />
       <SectionMorning />
       <SectionMath />
