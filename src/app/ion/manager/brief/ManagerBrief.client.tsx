@@ -101,7 +101,7 @@ export function ManagerBrief() {
       </ul>
 
       <p className="mt-6 text-[11px] text-stewart-muted italic leading-relaxed">
-        Four real calls from the 332. Each morning Stewart surfaces only the
+        Four real calls from the 300. Each morning Stewart surfaces only the
         ones worth a manager&apos;s time &mdash; the rest stay out of the way.
       </p>
     </div>

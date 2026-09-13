@@ -8,7 +8,7 @@ import { useState } from "react";
 // land. Math updates in real time.
 //
 // HARDCODED Stewart findings (real measurements from the 332-call run):
-const FINDING_TOTAL_CALLS = 332;
+const FINDING_TOTAL_CALLS = 300;
 const FINDING_OBJECTION_INVERSION_EXECUTED = 0;
 const FINDING_SOFTENER_INSTANCES = 314;
 const FINDING_SOFTENER_PER_7MIN = "~1 every 7 min of rep talk";

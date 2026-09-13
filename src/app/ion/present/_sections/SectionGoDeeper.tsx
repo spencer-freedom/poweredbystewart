@@ -7,7 +7,7 @@ const DEEPER = [
   {
     href: "/ion/brain",
     title: "The brain",
-    body: "All 332 calls in orbit around your playbook. Click any call to open Stewart's full read.",
+    body: "All 300 calls in orbit around your playbook. Click any call to open Stewart's full read.",
   },
   {
     href: "/ion/calls",

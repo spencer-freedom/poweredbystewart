@@ -61,7 +61,7 @@ export function Section4Brain() {
           className="lg:col-span-2 group block rounded-lg border border-stewart-accent/40 bg-stewart-accent/5 p-6 hover:bg-stewart-accent/10 transition-colors"
         >
           <p className="text-base sm:text-lg font-semibold text-stewart-text leading-snug">
-            See Stewart&apos;s brain on your 332 calls{" "}
+            See Stewart&apos;s brain on your 300 calls{" "}
             <span className="text-stewart-accent group-hover:translate-x-1 inline-block transition-transform">
               &rarr;
             </span>
@@ -75,7 +75,7 @@ export function Section4Brain() {
 
       <p className="mt-10 text-sm text-stewart-muted leading-relaxed max-w-3xl">
         Stewart has already processed{" "}
-        <span className="text-stewart-text font-semibold">332</span> of
+        <span className="text-stewart-text font-semibold">300</span> of
         your calls &mdash; production processing happens on whatever
         cadence you set in Phase 2+.
       </p>

@@ -120,7 +120,7 @@ export async function Section2CallWalkthrough() {
       <div className="mt-6 grid lg:grid-cols-12 gap-8 items-start">
         <p className="lg:col-span-8 text-lg text-stewart-muted leading-relaxed">
           From transcript to manager-ready coaching artifacts in one
-          Stewart pass. Seven calls Spencer hand-picked from the 332
+          Stewart pass. Seven calls Spencer hand-picked from the 300
           processed for the demo &mdash; pick any to walk through it
           end to end.
         </p>

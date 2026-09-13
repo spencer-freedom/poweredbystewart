@@ -96,7 +96,7 @@ const ITEMS: LegendItem[] = [
   },
   {
     label: "Nucleus",
-    description: "One of the 332 processed Ion calls. The nucleus of its own atom.",
+    description: "One of the 300 processed Ion calls. The nucleus of its own atom.",
     swatch: <CallSwatch />,
   },
   {

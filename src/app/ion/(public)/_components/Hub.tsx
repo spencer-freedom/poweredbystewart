@@ -18,19 +18,19 @@ const CARDS: Card[] = [
     href: "/ion/brain",
     title: "Stewart's brain",
     tagline: "Atomic structure of your sales floor",
-    body: "Crystal-core schema at the center. Each of your 332 processed calls orbits as a walnut nucleus. Cherry-pick moments orbit each call as ions colored by the schema domain they touched. Gray-matter exemplars stay near their schema section.",
+    body: "Crystal-core schema at the center. Each of your 300 processed calls orbits as a walnut nucleus. Cherry-pick moments orbit each call as ions colored by the schema domain they touched. Gray-matter exemplars stay near their schema section.",
   },
   {
     href: "/ion/calls",
     title: "Every call we processed",
-    tagline: "Browse all 332 — search, filter, drill down",
+    tagline: "Browse all 300 — search, filter, drill down",
     body: "Search by call_id / rep / objection / schema reference. Filter by outcome, rep, pattern, or tier (hero / gray-matter / standard). Click any call to open Stewart's full coaching folder: manager brief, cherry-picks, handoff brief, critic audit.",
   },
   {
     href: "/ion/schema",
     title: "Your floor's textbook",
     tagline: "The schema — browseable, with what's TBD vs RESOLVED",
-    body: "1,173 lines. 101 sections actively lit by Stewart's reads. 14 TBDs Spencer + Kenny work through together. 8 new categories pending Kenny's approval — including the bombshell.",
+    body: "1,173 lines. 108 sections actively lit by Stewart's reads. 14 TBDs Spencer + Kenny work through together. 8 new categories pending Kenny's approval — including the bombshell.",
   },
 ];
 

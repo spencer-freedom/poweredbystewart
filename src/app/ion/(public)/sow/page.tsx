@@ -322,18 +322,11 @@ function FooterCta() {
       <p className="text-xl sm:text-2xl font-semibold text-stewart-text leading-snug">
         Ready to start?
       </p>
-      {/*
-        Contact path TBD — Spencer to decide whether this hooks to a
-        Cal.com booking link, a form, an email, or a "reply to this
-        thread" CTA. Until then we render a styled placeholder so the
-        page has a clear close.
-      */}
+      {/* Contact path is deliberately "reply to the message this came in" —
+          same as the deck's close. Swap for a booking link if one ever exists. */}
       <p className="mt-3 text-stewart-muted leading-relaxed">
-        <span className="text-stewart-warning">
-          [TODO &middot; Spencer&apos;s contact / form / book a call]
-        </span>{" "}
-        &mdash; reach out and we&apos;ll get the first weekly synthesis
-        on the calendar.
+        Reply to the message this link came in &mdash; Spencer takes it from
+        there, and the first weekly synthesis goes on the calendar.
       </p>
     </section>
   );

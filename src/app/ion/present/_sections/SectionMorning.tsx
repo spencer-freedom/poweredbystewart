@@ -13,7 +13,7 @@ export function SectionMorning() {
     >
       <div className="max-w-5xl w-full">
         <Bridge>
-          Your managers don&apos;t read 332 of those. They open this.
+          Your managers don&apos;t read 300 of those. They open this.
         </Bridge>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
           What a manager opens in the morning.

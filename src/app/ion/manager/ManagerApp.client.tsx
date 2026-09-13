@@ -293,7 +293,7 @@ function Today({
       ) : null}
 
       <p className="mt-8 text-[11px] text-stewart-muted italic leading-relaxed">
-        Every card is a real call from the 332. The ranking is arithmetic over Stewart&apos;s reads — see
+        Every card is a real call from the 300. The ranking is arithmetic over Stewart&apos;s reads — see
         Weights — not a model deciding what you should care about.
       </p>
     </div>

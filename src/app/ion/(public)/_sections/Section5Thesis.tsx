@@ -36,7 +36,7 @@ export function Section5Thesis() {
         </p>
         <div className="space-y-6 max-w-3xl">
           <p className="text-2xl sm:text-3xl font-bold text-stewart-text leading-tight">
-            Stewart read 332 of your calls.
+            Stewart read 300 of your calls.
           </p>
           <p className="text-xl sm:text-2xl text-stewart-text leading-snug">
             The schema&apos;s highest-leverage coaching move &mdash; the{" "}
@@ -74,7 +74,7 @@ export function Section5Thesis() {
         </blockquote>
 
         <p className="mt-6 text-sm uppercase tracking-wider text-stewart-muted mb-3">
-          Stewart counted across all 332 calls
+          Stewart counted across all 300 calls
         </p>
         <ul className="space-y-2 text-sm sm:text-base text-stewart-text leading-relaxed">
           <li className="flex gap-3">

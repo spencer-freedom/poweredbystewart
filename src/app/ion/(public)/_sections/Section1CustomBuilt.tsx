@@ -11,7 +11,7 @@ const CONTRAST_ROWS = [
     generic:
       "Findings like “reps say ‘um’ too much” — anyone with ears could spot those",
     stewart:
-      "Findings like “the bill-as-villain inversion was executed zero times across 332 of your calls” — Stewart finds what nobody has time to count",
+      "Findings like “the bill was captured on 189 of your 300 calls and used as the reason to act on 5” — Stewart finds what nobody has time to count",
   },
   {
     generic:
@@ -87,7 +87,7 @@ export function Section1CustomBuilt() {
           number="101"
           label="schema sections actively lit across your corpus"
         />
-        <Stat number="332" label="of your calls processed" />
+        <Stat number="300" label="of your calls processed" />
       </div>
 
       <p className="mt-12 text-xl sm:text-2xl text-stewart-text font-medium leading-snug max-w-3xl">

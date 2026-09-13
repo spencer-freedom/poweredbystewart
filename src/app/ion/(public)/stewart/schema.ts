@@ -114,7 +114,7 @@ export const INVARIANTS: Invariant[] = [
       primary_kpi: "Set rate.",
       secondary_kpi: "Sit rate (the bill pain carries from setter call into appointment).",
       hypothesis:
-        "Reps who transform the bill from a qualifying datapoint into the call's central villain create urgency that survives objection handling and carries into the appointment. The floor currently runs 0 of 332 bill-flips — installing the L3 move across the 47 setters is the single largest-upside behavior change available. +10% relative set rate = +$4M/year.",
+        "Reps who transform the bill from a qualifying datapoint into the call's central villain create urgency that survives objection handling and carries into the appointment. The floor currently runs 5 bill-flips on 189 captured bills — installing the L3 move across the 47 setters is the single largest-upside behavior change available. +10% relative set rate = +$4M/year.",
     },
   },
   {
@@ -156,7 +156,7 @@ export const INVARIANTS: Invariant[] = [
       "How do we use resistance to create momentum instead of losing it?",
     job: "Use customer objections as bridges to appointment value instead of fighting them. The highest-leverage move on the floor lives here.",
     failure_state:
-      "Objections become dead-ends. Rep defends solar instead of redirecting. Customer disengages. Ion-corpus floor pattern: objection inversion executed 0 times across 332 calls — the entire L3 reframe layer is currently absent.",
+      "Objections become dead-ends. Rep defends solar instead of redirecting. Customer disengages. Ion-corpus floor pattern: the bill flipped on 5 of 189 calls where it was captured, measured across 300 — the entire L3 reframe layer is currently absent.",
     maturity: {
       l1: {
         label: "Mechanical execution",
@@ -178,7 +178,7 @@ export const INVARIANTS: Invariant[] = [
       secondary_kpi:
         "Per-objection-type conversion across the 10 canonical types (Price/Cost, Scheduling, Roof/Property, Bill Access, Credit, Not Ready, Info Preference, Existing Solar, Eligibility, Spouse).",
       hypothesis:
-        "Objection inversion is the highest-leverage absent move on the Ion floor (0 of 332 executions). Each canonical objection type that gets a working L3 inversion word track lifts that objection's conversion rate by single-digit-to-low-double-digit percentage points. Compounded across all 10 objection types, this is the largest revenue-recovery layer in the schema.",
+        "Objection inversion is the highest-leverage absent move on the Ion floor (5 of 189 captured bills, measured). Each canonical objection type that gets a working L3 inversion word track lifts that objection's conversion rate by single-digit-to-low-double-digit percentage points. Compounded across all 10 objection types, this is the largest revenue-recovery layer in the schema.",
     },
   },
   {
