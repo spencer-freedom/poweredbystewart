@@ -98,7 +98,7 @@ export default async function IonStatsPage() {
             <summary className="text-xs text-stewart-muted cursor-pointer hover:text-stewart-text">table</summary>
             <table className="mt-2 w-full text-xs">
               <thead className="text-[10px] uppercase tracking-wider text-stewart-muted"><tr><th className="text-left py-1">Section</th><th className="text-right">Ran it</th><th className="text-right">Skipped</th><th className="text-right">Not reached</th><th className="text-right">Of reached</th><th className="text-right">Of all {s.calls}</th></tr></thead>
-              <tbody>{coverage.map((c) => (<tr key={c.key} className="border-t border-stewart-border/60"><td className="py-1">{c.label}</td><td className="text-right font-mono">{c.asked}</td><td className="text-right font-mono">{c.skipped}</td><td className="text-right font-mono">{c.not_reached}</td><td className="text-right font-mono">{pct(c.asked, c.asked + c.skipped)}</td><td className="text-right font-mono text-stewart-muted">{pct(c.asked, s.calls)}</td></tr>))}</tbody>
+              <tbody>{coverage.map((c) => (<tr key={c.key} className="border-t border-stewart-border/60"><td className="py-1">{c.label}</td><td className="text-right font-mono"><Link href={`/ion/drill?section=${c.key}&status=asked`} className="hover:text-stewart-accent hover:underline">{c.asked}</Link></td><td className="text-right font-mono"><Link href={`/ion/drill?section=${c.key}&status=skipped`} className="hover:text-stewart-accent hover:underline">{c.skipped}</Link></td><td className="text-right font-mono">{c.not_reached}</td><td className="text-right font-mono">{pct(c.asked, c.asked + c.skipped)}</td><td className="text-right font-mono text-stewart-muted">{pct(c.asked, s.calls)}</td></tr>))}</tbody>
             </table>
           </details>
         </section>
@@ -108,9 +108,9 @@ export default async function IonStatsPage() {
           const A = s.adherence_vs_outcome!.anchors;
           const r = s.bill_document!.results;
           const asked = (r.received_on_call ?? 0) + (r.promised_later ?? 0) + (r.declined ?? 0);
-          const row = (label: string, n: number, set: { set: number; n: number; set_rate: number | null } | undefined, tone?: string) => (
+          const row = (label: string, n: number, set: { set: number; n: number; set_rate: number | null } | undefined, tone?: string, href?: string) => (
             <li key={label} className="grid grid-cols-[minmax(0,1fr)_4.5rem_5rem] items-center gap-3 text-sm">
-              <span className="text-stewart-text">{label}</span>
+              {href ? <Link href={href} className="text-stewart-text hover:text-stewart-accent hover:underline">{label} <span className="text-stewart-muted">→</span></Link> : <span className="text-stewart-text">{label}</span>}
               <span className="font-mono text-right text-stewart-muted">{n}</span>
               <span className={"font-mono text-right font-semibold " + (tone ?? "text-stewart-text")}>{set && set.set_rate !== null ? `${Math.round(set.set_rate * 100)}% set` : "–"}</span>
             </li>
@@ -124,10 +124,10 @@ export default async function IonStatsPage() {
               <div className="rounded-lg border border-stewart-border bg-stewart-card p-4 sm:p-5">
                 <ul className="space-y-2">
                   {row(`Asked for the bill (of ${s.bill_document!.measured_on})`, asked, A.bill_doc_asked, "text-stewart-text")}
-                  {row("↳ received on the call", r.received_on_call ?? 0, A.bill_doc_received_on_call, "text-stewart-success")}
-                  {row("↳ promised later", r.promised_later ?? 0, A.bill_doc_promised_later, "text-stewart-warning")}
-                  {row("↳ declined", r.declined ?? 0, A.bill_doc_declined)}
-                  {row("Never asked", r.not_asked ?? 0, A.bill_doc_not_asked, "text-stewart-danger")}
+                  {row("↳ received on the call", r.received_on_call ?? 0, A.bill_doc_received_on_call, "text-stewart-success", "/ion/drill?bill_doc=received_on_call")}
+                  {row("↳ promised later", r.promised_later ?? 0, A.bill_doc_promised_later, "text-stewart-warning", "/ion/drill?bill_doc=promised_later")}
+                  {row("↳ declined", r.declined ?? 0, A.bill_doc_declined, undefined, "/ion/drill?bill_doc=declined")}
+                  {row("Never asked", r.not_asked ?? 0, A.bill_doc_not_asked, "text-stewart-danger", "/ion/drill?bill_doc=not_asked")}
                 </ul>
                 <p className="mt-4 text-sm text-stewart-text leading-relaxed">
                   Asking gets the bill on the call{" "}
@@ -172,7 +172,7 @@ export default async function IonStatsPage() {
                       const small = v.n < 20;
                       return (
                         <li key={k} className={"grid grid-cols-[3.5rem_minmax(0,1fr)_5rem] items-center gap-3 text-sm " + (small ? "text-stewart-muted/70" : "")}>
-                          <span className="font-mono">{k}</span>
+                          <Link href={`/ion/drill?objections=${encodeURIComponent(k)}`} className="font-mono hover:text-stewart-accent hover:underline">{k} →</Link>
                           <div className="h-2 rounded bg-white/5 overflow-hidden"><div className="h-full bg-stewart-accent/75" style={{ width: `${Math.round((v.set_rate ?? 0) * 100)}%` }} /></div>
                           <span className="font-mono text-right">{v.set_rate !== null ? `${Math.round(v.set_rate * 100)}%` : "–"} <span className="text-xs text-stewart-muted">n={v.n}</span></span>
                         </li>
@@ -186,7 +186,7 @@ export default async function IonStatsPage() {
                   <ul className="space-y-1.5">
                     {typeOrder.slice(0, 8).map(([k, v]) => (
                       <li key={k} className="grid grid-cols-[minmax(0,1fr)_3.5rem] items-center gap-3 text-sm">
-                        <span className="text-stewart-text">{k.replace(/_/g, " ")}</span>
+                        <Link href={`/ion/drill?objection_type=${encodeURIComponent(k)}`} className="text-stewart-text hover:text-stewart-accent hover:underline">{k.replace(/_/g, " ")} →</Link>
                         <span className="font-mono text-right text-stewart-muted">{v}</span>
                       </li>
                     ))}
@@ -209,7 +209,11 @@ export default async function IonStatsPage() {
               <div className="grid sm:grid-cols-3 gap-3">
                 <Tile label="Rep talk share (median)" big={t.rep_talk_share_median !== null ? `${Math.round(t.rep_talk_share_median * 100)}%` : "–"} sub={`set ${Math.round((t.rep_talk_share_set_vs_not.set ?? 0) * 100)}% · not set ${Math.round((t.rep_talk_share_set_vs_not.not_set ?? 0) * 100)}% · ${t.measured_on} calls`} />
                 <Tile label="Softeners per 100 words (median)" big={t.softeners_per_100_words_median !== null ? `${t.softeners_per_100_words_median}` : "–"} sub={`“kinda”, “I guess”, “maybe”, “I think” on rep lines · longest monologue ${t.longest_monologue_median_words ?? "–"} words`} />
-                <Tile label="Credit threshold stated" big={creditTotal ? `${Math.round((100 * (t.credit_threshold_stated["670"] ?? 0)) / creditTotal)}% said 670` : "–"} sub={credit.map(([k, v]) => `${k}: ${v}`).join(" · ")} warn={creditTotal > 0 && (t.credit_threshold_stated["670"] ?? 0) / creditTotal < 0.9} />
+                <div className="rounded-lg border border-stewart-border bg-stewart-card p-4">
+                  <p className="text-[11px] uppercase tracking-wider text-stewart-muted">Credit threshold stated</p>
+                  <p className={"mt-1 font-mono text-2xl sm:text-3xl font-bold leading-tight " + (creditTotal > 0 && (t.credit_threshold_stated["670"] ?? 0) / creditTotal < 0.9 ? "text-stewart-warning" : "text-stewart-text")}>{creditTotal ? `${Math.round((100 * (t.credit_threshold_stated["670"] ?? 0)) / creditTotal)}% said 670` : "–"}</p>
+                  <p className="mt-1 text-xs text-stewart-muted leading-snug">{credit.map(([k, v], i) => (<span key={k}>{i ? " · " : ""}<Link href={`/ion/drill?credit=${k}`} className="hover:text-stewart-accent hover:underline">{k}: {v} →</Link></span>))}</p>
+                </div>
               </div>
             </section>
           );
@@ -250,15 +254,15 @@ export default async function IonStatsPage() {
             </div>
             <div className="mt-4 grid sm:grid-cols-3 gap-3">
               {([
-                ["Reason asked", "reason_asked", "reason_not_asked", "not asked"],
-                ["Reason used", "reason_used", "reason_not_used", "given, not used"],
-                ["Bill flipped", "bill_flipped", "bill_not_flipped", "captured, not flipped"],
-              ] as const).map(([label, yes, no, noLabel]) => {
+                ["Reason asked", "reason_asked", "reason_not_asked", "not asked", "/ion/drill?reason=asked"],
+                ["Reason used", "reason_used", "reason_not_used", "given, not used", "/ion/drill?reason=used"],
+                ["Bill flipped", "bill_flipped", "bill_not_flipped", "captured, not flipped", "/ion/drill?bill_flip=yes"],
+              ] as const).map(([label, yes, no, noLabel, href]) => {
                 const Y = s.adherence_vs_outcome!.anchors[yes]; const N = s.adherence_vs_outcome!.anchors[no];
                 const small = Math.min(Y.n, N.n) < s.adherence_vs_outcome!.min_n;
                 return (
                   <div key={label} className={"rounded-lg border border-stewart-border bg-stewart-card p-4 " + (small ? "opacity-60" : "")}>
-                    <p className="text-[11px] uppercase tracking-wider text-stewart-muted">{label}{small ? " · small n" : ""}</p>
+                    <Link href={href} className="text-[11px] uppercase tracking-wider text-stewart-muted hover:text-stewart-accent">{label}{small ? " · small n" : ""} →</Link>
                     <p className="mt-1 font-mono text-xl font-bold">{Y.set_rate === null ? "–" : `${Math.round(Y.set_rate * 100)}%`} <span className="text-xs font-normal text-stewart-muted">set · n={Y.n}</span></p>
                     <p className="text-xs text-stewart-muted">vs {N.set_rate === null ? "–" : `${Math.round(N.set_rate * 100)}%`} when {noLabel} (n={N.n})</p>
                   </div>
@@ -274,7 +278,7 @@ export default async function IonStatsPage() {
           <div>
             <h2 className="text-lg font-bold">How the calls ended</h2>
             <p className="text-sm text-stewart-muted mt-1 mb-4">Stewart&apos;s structured outcome per call — the column that joins to Salesforce.</p>
-            <Bars rows={outcomes.map((o) => ({ label: o.label, value: o.n, denom: s.calls, title: `${o.n} calls` }))} />
+            <Bars rows={outcomes.map((o) => ({ label: o.label, value: o.n, denom: s.calls, title: `${o.n} calls`, href: `/ion/drill?outcome=${o.k}` }))} />
           </div>
           <div>
             <h2 className="text-lg font-bold">Trajectory shape</h2>
@@ -350,14 +354,14 @@ function Tile({ label, big, sub, warn, good }: { label: string; big: string; sub
 }
 
 // Horizontal bars: one hue, thin marks, direct labels, a table behind them.
-function Bars({ rows }: { rows: { label: string; value: number; denom: number; title?: string }[] }) {
+function Bars({ rows }: { rows: { label: string; value: number; denom: number; title?: string; href?: string }[] }) {
   return (
     <ol className="space-y-2">
       {rows.map((r) => {
         const w = r.denom ? (100 * r.value) / r.denom : 0;
         return (
           <li key={r.label} className="grid grid-cols-[minmax(0,1fr)_5.5rem] sm:grid-cols-[minmax(0,17rem)_minmax(0,1fr)_5.5rem] items-center gap-3" title={r.title}>
-            <span className="text-sm text-stewart-text leading-tight">{r.label}</span>
+            {r.href ? <Link href={r.href} className="text-sm text-stewart-text leading-tight hover:text-stewart-accent hover:underline">{r.label} →</Link> : <span className="text-sm text-stewart-text leading-tight">{r.label}</span>}
             <div className="hidden sm:block h-2.5 rounded-r bg-white/5 overflow-hidden">
               <div className="h-full rounded-r bg-stewart-accent/75" style={{ width: `${w}%` }} />
             </div>
