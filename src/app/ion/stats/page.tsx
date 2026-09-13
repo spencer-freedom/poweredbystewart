@@ -69,13 +69,13 @@ export default async function IonStatsPage() {
         {/* Script coverage */}
         <section>
           <h2 className="text-lg font-bold">Did the rep run it?</h2>
-          <p className="text-sm text-stewart-muted mt-1 mb-4">Share of {s.calls} calls where each section of Ion&apos;s setting script happened, in any phrasing. Hover a bar for skipped vs. not reached.</p>
-          <Bars rows={coverage.map((c) => ({ label: c.label, value: c.asked, denom: s.calls, title: `asked ${c.asked} · skipped ${c.skipped} · not reached ${c.not_reached}` }))} />
+          <p className="text-sm text-stewart-muted mt-1 mb-4">Of the calls that got that far, the share where each section of Ion&apos;s setting script happened, in any phrasing. Calls that ended or disqualified before a section don&apos;t count against it. Hover a bar for the counts.</p>
+          <Bars rows={coverage.map((c) => ({ label: c.label, value: c.asked, denom: c.asked + c.skipped, title: `ran it ${c.asked} · skipped ${c.skipped} · not reached ${c.not_reached} (of ${s.calls})` }))} />
           <details className="mt-3">
             <summary className="text-xs text-stewart-muted cursor-pointer hover:text-stewart-text">table</summary>
             <table className="mt-2 w-full text-xs">
-              <thead className="text-[10px] uppercase tracking-wider text-stewart-muted"><tr><th className="text-left py-1">Section</th><th className="text-right">Asked</th><th className="text-right">Skipped</th><th className="text-right">Not reached</th><th className="text-right">Rate</th></tr></thead>
-              <tbody>{coverage.map((c) => (<tr key={c.key} className="border-t border-stewart-border/60"><td className="py-1">{c.label}</td><td className="text-right font-mono">{c.asked}</td><td className="text-right font-mono">{c.skipped}</td><td className="text-right font-mono">{c.not_reached}</td><td className="text-right font-mono">{pct(c.asked, s.calls)}</td></tr>))}</tbody>
+              <thead className="text-[10px] uppercase tracking-wider text-stewart-muted"><tr><th className="text-left py-1">Section</th><th className="text-right">Ran it</th><th className="text-right">Skipped</th><th className="text-right">Not reached</th><th className="text-right">Of reached</th><th className="text-right">Of all {s.calls}</th></tr></thead>
+              <tbody>{coverage.map((c) => (<tr key={c.key} className="border-t border-stewart-border/60"><td className="py-1">{c.label}</td><td className="text-right font-mono">{c.asked}</td><td className="text-right font-mono">{c.skipped}</td><td className="text-right font-mono">{c.not_reached}</td><td className="text-right font-mono">{pct(c.asked, c.asked + c.skipped)}</td><td className="text-right font-mono text-stewart-muted">{pct(c.asked, s.calls)}</td></tr>))}</tbody>
             </table>
           </details>
         </section>
@@ -216,11 +216,10 @@ function Tile({ label, big, sub, warn, good }: { label: string; big: string; sub
 
 // Horizontal bars: one hue, thin marks, direct labels, a table behind them.
 function Bars({ rows }: { rows: { label: string; value: number; denom: number; title?: string }[] }) {
-  const max = Math.max(...rows.map((r) => r.denom), 1);
   return (
     <ol className="space-y-2">
       {rows.map((r) => {
-        const w = (100 * r.value) / max;
+        const w = r.denom ? (100 * r.value) / r.denom : 0;
         return (
           <li key={r.label} className="grid grid-cols-[minmax(0,1fr)_5.5rem] sm:grid-cols-[minmax(0,17rem)_minmax(0,1fr)_5.5rem] items-center gap-3" title={r.title}>
             <span className="text-sm text-stewart-text leading-tight">{r.label}</span>

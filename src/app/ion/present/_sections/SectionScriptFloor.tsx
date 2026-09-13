@@ -12,7 +12,8 @@ export async function SectionScriptFloor() {
   if (!s) return null;
   const rows = SCRIPT_SECTIONS.map((sec) => {
     const c = s.script_coverage[sec.key] ?? { asked: 0, skipped: 0, not_reached: 0, asked_rate: 0 };
-    return { ...sec, ...c };
+    const reached = c.asked + c.skipped;
+    return { ...sec, ...c, reached, rate_of_reached: reached ? c.asked / reached : 0 };
   });
   const b = s.bill;
   const r = s.interest_reason;
@@ -56,15 +57,15 @@ export async function SectionScriptFloor() {
         {/* Coverage bars */}
         <div className="mt-12">
           <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-muted mb-4">
-            Did the rep run it? &mdash; share of {s.calls} calls
+            Did the rep run it? &mdash; of the calls that got that far
           </p>
           <ol className="space-y-2.5">
             {rows.map((row) => {
-              const pct = Math.round(row.asked_rate * 100);
+              const pct = Math.round(row.rate_of_reached * 100);
               const tone =
                 pct >= 75 ? "bg-stewart-success/70" : pct >= 45 ? "bg-stewart-accent/70" : "bg-stewart-warning/80";
               return (
-                <li key={row.key} className="grid grid-cols-[minmax(0,1fr)_3.25rem] sm:grid-cols-[minmax(0,18rem)_minmax(0,1fr)_3.25rem] items-center gap-3">
+                <li key={row.key} title={`ran it ${row.asked} · skipped ${row.skipped} · ${row.not_reached} calls ended before this`} className="grid grid-cols-[minmax(0,1fr)_3.25rem] sm:grid-cols-[minmax(0,18rem)_minmax(0,1fr)_3.25rem] items-center gap-3">
                   <span className="text-sm text-stewart-text leading-tight">{row.label}</span>
                   <div className="hidden sm:block h-2.5 rounded-full bg-white/5 overflow-hidden">
                     <div className={"h-full rounded-full " + tone} style={{ width: `${pct}%` }} />
@@ -75,8 +76,9 @@ export async function SectionScriptFloor() {
             })}
           </ol>
           <p className="mt-4 text-xs text-stewart-muted">
-            &ldquo;Ran it&rdquo; means any phrasing, not the script&apos;s words. Calls that ended or
-            disqualified before a section count as not reached, not skipped. &ldquo;Set&rdquo; is
+            &ldquo;Ran it&rdquo; means any phrasing, not the script&apos;s words. Each bar is out of the calls
+            that reached that section &mdash; a call that disqualified at the roof doesn&apos;t count against
+            button-up. Hover for the counts. &ldquo;Set&rdquo; is
             Stewart&apos;s read of the call &mdash; booked or tentative &mdash; until your sits and closes are joined.
           </p>
         </div>
