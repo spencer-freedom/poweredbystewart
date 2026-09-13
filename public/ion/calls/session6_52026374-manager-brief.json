@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION6_52026374",
   "rep_name": "Tyson",
-  "trajectory_summary": "This is a short, thin call that never gets past the opening verify beats before the rep hits a data-accuracy snag and ends the call with a vague callback promise. No bill, utility, roof age, co-owner, or tax-credit qualifiers were captured, and the interest-reason answer was never mined for depth. The call neither escalates into resistance nor builds toward a booked appointment — it stalls.",
+  "trajectory_summary": "This is a short, thin call that never gets past basic address/roof verification before the rep hits a data mismatch (stale satellite imagery showing trees and an older structure that don't match the customer's brand-new garage) and pivots to a callback. No bill, no interest depth, no appointment — the call ends with a promise to call back once imagery is updated.",
   "shape": "stagnant",
-  "outcome_dispute": "v1 tag is unknown/unclear; based on the transcript this should be scored as callback, not booked or tentative — the rep explicitly says he will call back once he has updated imagery, with no day/time specified.",
+  "outcome_dispute": "v1 tag is unknown/unclear; observed outcome is a callback, not a booked or tentative appointment — the rep explicitly defers to a future callback pending updated imagery rather than setting a day/time.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "01:56",
+    "ts": "01:49",
     "quote": "And then I can give you a callback once I have more updated imagery. Does that work for you? Fine. Yep.",
-    "reasoning": "The rep explicitly frames the next step as a future callback contingent on getting updated satellite imagery from the design team, with no specific day or time stated — this is a callback, not a booked or tentative appointment."
+    "reasoning": "The rep explicitly promises to call back once updated imagery is available, but no specific day or time is stated, making this a callback outcome rather than booked, tentative, or no_appointment."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,143 +20,232 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches the bill_amount verify item — it stalls at the roof/imagery discrepancy before any utility or bill discussion begins."
+    "reasoning": "The call never reaches the bill_amount portion of the verify script — it derails on the roof/imagery mismatch and ends with a callback promise before utility or bill questions are asked."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The rep never reaches bill or document collection in this short call; it ends on the imagery/callback issue before that section of the script."
   },
   "interest_reason_audit": {
     "asked": true,
-    "ask_ts": "00:44",
+    "ask_ts": "00:41",
     "reason_given": true,
     "reason_ts": "00:47",
     "reason_quote": "We've thought about it before. We just when this came up saying that they need needed people to test them. Maybe.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question per script, but the customer's garbled answer was never clarified or revisited — the rep moved straight into address/roof verification without anchoring or using the stated reason later in the call."
+    "reasoning": "The rep asked what got the customer interested and received a garbled but present answer; he never circled back to clarify or use this reason later in the call, moving straight into the first-time-design question instead."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "quote": "This is Tyson Ion. I received a request to look at solar for the home."
+      "end_ts": "00:32",
+      "quote": "Hey, Don. This is Tyson Ion. I received a request to look at solar for the home.",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, really?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "asked",
-      "ts": "00:44",
-      "quote": "And, what got you interested in looking at solar?"
+      "ts": "00:41",
+      "end_ts": "00:56",
+      "quote": "And, what got you interested in looking at solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "We've thought about it before. We just when this came up saying that they need needed people to test them.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:32",
-      "quote": "The first thing I wanted to clarify was the address."
+      "end_ts": "00:41",
+      "quote": "Looks like you put it down as 6043 Chiosalem Road in Johns Island?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:07",
-      "quote": "It does look like you have a couple of trees kind of in the front of the home."
+      "ts": "01:01",
+      "end_ts": "01:49",
+      "quote": "It does look like you have a couple of trees kind of in the front of the home. Are they still there?",
+      "customer_response": "resistant",
+      "customer_quote": "There's nothing in this is there's a new house in the house. And it would be going on the garage, not my house.",
+      "resistance_reason": "other",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "00:56",
-      "quote": "So is this kind of your first time fully getting a design, or or have you looked into it before?"
+      "end_ts": "01:01",
+      "quote": "So is this kind of your first time fully getting a design, or or have you looked into it before?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. It's first time. First time.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
-      "ts": "01:56",
-      "quote": "And then I can give you a callback once I have more updated imagery."
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "02:00",
-      "quote": "Appreciate your time for now, Doug. You have a good day."
+      "status": "asked",
+      "ts": "01:49",
+      "end_ts": "02:03",
+      "quote": "And then I can give you a callback once I have more updated imagery. Does that work for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Fine. Yep.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "unanchored soft exit / no button-up",
-    "ts": "01:56",
+    "topic": "unanchored callback / no locked next step",
+    "ts": "01:49",
     "quote": "And then I can give you a callback once I have more updated imagery. Does that work for you? Fine. Yep.",
-    "why": "The call ends with zero locked next step — no date, no time, no text-confirmation promise — after the rep never even completed basic verify items (bill, utility, roof age, co-owner, tax credit). This is the single biggest miss: the call generated no forward momentum and the customer has no concrete reason to expect Ion again."
+    "why": "The call ends without any day/time commitment, no bill discussion, and no button-up elements (no hour block, no computer/no-driving instruction, no recap) — this is the single biggest procedural gap and directly threatens whether this lead is ever recovered."
   },
   "key_moments": [
     {
       "ts": "00:04",
-      "quote": "Hey, Don. This is Tyson Ion. I received a request to look at solar for the home.",
+      "quote": "Hey, Don. This is Tyson Ion. I received a request to look at solar for the home. Oh, really?",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The intro names the company and references the form, which is the right instinct, but it skips any state/region or credibility anchor and moves immediately into questions before pausing to let the customer settle after being surprised by the speed of the callback."
+      "stewart_read": "The intro states the company name but gives no state, no certified-installer framing, and no context beyond 'a request' — thin legitimacy anchor for a cold-feeling lead who immediately questions whether he filled it out."
     },
     {
-      "ts": "00:44",
-      "quote": "And, what got you interested in looking at solar?",
+      "ts": "00:47",
+      "quote": "We've thought about it before. We just when this came up saying that they need needed people to test them. Maybe.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The interest question is asked correctly per script, but the customer's answer is vague and unclear (\"they need needed people to test them\") and the rep never asks a clarifying follow-up to understand what that means or to anchor an emotional reason."
+      "stewart_read": "This is a thin, ambiguous interest reason (something about being asked to 'test' solar) and the rep never probes to clarify or expand it — a missed anchor per the schema's instruction that depth matters more than the answer."
+    },
+    {
+      "ts": "01:01",
+      "quote": "No. It's first time. First time. K. Well, I'm taking a look look at the the house there. It does look like you have a couple of trees kind of in the front of the home. Are they still there?",
+      "classification": "knowledge_gap",
+      "stewart_read": "The rep is working off satellite imagery that appears stale — trees that no longer exist and a garage the customer says is brand new. This is a data/tooling gap, not a rep skill failure, but it derails the qualifying flow."
     },
     {
       "ts": "01:13",
-      "quote": "It does look like you have a couple of trees kind of in the front of the home. Are they still there?",
+      "quote": "There's nothing in this is there's a new house in the house. And it would be going on the garage, not my house.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Trees no longer being in front of the home (per the customer's later correction) is exactly the kind of improved-sun-exposure signal the schema flags as a positive qualifier, but because the rep treated this purely as a data-accuracy problem rather than a selling point, the signal was never anchored back to the customer as a reason solar now works better for his home."
-    },
-    {
-      "ts": "01:44",
-      "quote": "Yeah. The trees are not even there.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "This is the second touch on the same imagery-accuracy issue and the rep still doesn't use it to build forward momentum ('great, that'll actually help your design') — he simply logs it internally and prepares to end the call."
+      "stewart_read": "A brand-new garage under a year old with no tree coverage is a strong technical fit signal (clear roof, new structure) that the rep never anchors on or reflects back with any enthusiasm."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": false
   },
   "quote_verification": {
-    "checked": 25,
-    "verified": 25,
+    "checked": 31,
+    "verified": 31,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION24_14479f1a",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens as a routine, low-energy verify run-through, briefly gains real customer engagement when pricing comes up, then loses that energy because the rep cannot give a clear, confident answer about cost or financing mechanics. It ends in a credit-based DQ without the rep circling back to the cash-purchase option he himself raised earlier, closing on 'nothing we can do' rather than a genuine alternative.",
+  "trajectory_summary": "The call opens as a flat, compliant verify run with no rapport or curiosity-building, then stalls when the customer repeatedly asks for a monthly cost figure the rep cannot or does not clearly provide. The credit qualifier ultimately disqualifies the customer, and the rep closes the call immediately with no cross-sell, no cash-purchase exploration, and no bridge to a specialist.",
   "shape": "energy_leaked",
-  "outcome_dispute": null,
+  "outcome_dispute": "The call is correctly read as a hard DQ (sub-670 credit, no co-signer, no stated intent to use another financing source), consistent with qualifiers.credit_qualifier and dq_rules.credit_below_670_no_alternative. However, the rep never explored the cash-purchase option they themselves mentioned ('if you wanna pay for the panels yourself and own them, you could do that, I think') as a live alternative before ending the call — this was a live path left unexplored, not confirmed closed.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "05:38",
     "quote": "Well, then there's nothing we can do.",
-    "reasoning": "The customer's stated credit score of approximately 500 falls below the 670 threshold, and with no co-signer and no explicit re-engagement on the cash-purchase path, the rep ends the call declaring there is no viable option — a hard credit DQ per qualifiers.credit_qualifier."
+    "reasoning": "The customer's stated credit score ('About five, I think' — sub-670) with no co-signer or alternative financing source triggers the hard credit qualifier gate, and the rep explicitly closes the call as a dead end with no appointment set."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the $200+/month figure early but never used it later — even when the customer directly asked about monthly cost at 01:50 and 02:33, the rep said 'it'll be cheaper than what you're paying now' without naming the customer's actual $200 figure as the anchor."
+    "reasoning": "The rep captures the $200+/month bill figure and moves straight to the roof question ('And then what kind of roof you got?') without ever reflecting the number back as pain or aligning it against the utility — the flip should have gone right after 01:01 ('Okay.') before pivoting to the next verify item."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "02:55",
+    "ask_quote": "You can access the power bill?",
+    "result": "received_on_call",
+    "method": "read_aloud",
+    "result_ts": "04:58",
+    "result_quote": "Okay. Total usage",
+    "reasoning": "The rep asks if the customer can access the bill, and after a multi-minute gap the customer reads kWh usage figures aloud directly off the bill starting around 04:58-05:11, satisfying the bill document collection on-call via verbal readback."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,227 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what specifically interested the customer in solar; the call moved directly from intro into the standard verify checklist (address, title, utility, bill, roof, credit) without this question."
+    "reasoning": "The rep never asks any variant of 'what has you interested in solar' — the call moves directly from the greeting into address/title/utility/bill verify questions, skipping the interest-reason anchor entirely."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:24",
-      "quote": "This is Bucky with Ion. I'm reaching out about the solar form you filled out online."
+      "end_ts": "00:31",
+      "quote": "Hey. This is Bucky with Ion. I'm reaching out about the solar form you filled out online.",
+      "customer_response": "cooperative",
+      "customer_quote": "Uh-huh.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:36",
-      "quote": "Are you at 7332 Arcadia Street?"
+      "end_ts": "00:41",
+      "quote": "Are you at 7332 Arcadia Street?",
+      "customer_response": "cooperative",
+      "customer_quote": "Uh-huh.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:43",
-      "quote": "Is there anybody else on the title but you?"
+      "end_ts": "00:47",
+      "quote": "Is there anybody else on the title but you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. Just me.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:02",
-      "quote": "And then what kind of roof you got?"
+      "end_ts": "01:08",
+      "quote": "And then what kind of roof you got?",
+      "customer_response": "cooperative",
+      "customer_quote": "Shingle? It's fancy.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "00:51",
-      "quote": "What utility company are you with?"
+      "end_ts": "00:54",
+      "quote": "What utility company are you with?",
+      "customer_response": "cooperative",
+      "customer_quote": "Conrad.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "00:55",
-      "quote": "How much are you spending each month?"
+      "end_ts": "00:58",
+      "quote": "How much are you spending each month?",
+      "customer_response": "cooperative",
+      "customer_quote": "About 200 and something. 200.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
-      "section": "tax_credit_qualifier",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "section": "credit_qualifier",
+      "status": "asked",
+      "ts": "01:09",
+      "end_ts": "01:24",
+      "quote": "And then do you have a credit score over $6.70?",
+      "customer_response": "resistant",
+      "customer_quote": "About five, I think.",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "declined"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "02:55",
-      "quote": "You can access the power bill?"
+      "end_ts": "05:14",
+      "quote": "You can access the power bill?",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Total usage",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:09",
+      "quote": "About five, I think.",
+      "type": "credit_qualifier",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "Do you have a family member or friends that could help or no?",
+        "are you, are you gonna use somebody else or no?"
+      ],
+      "resolved": true,
+      "resolution_ts": "05:38",
+      "reasoning": "The rep tries two angles to work around the sub-670 credit score — a co-signer/family-member path and an 'other financing source' check — both come back negative, and the rep concludes the deal is dead without testing the cash-purchase alternative he himself raised at 02:26."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Failing to re-offer the cash-purchase alternative before closing",
-    "ts": "05:38",
-    "quote": "Well, then there's nothing we can do.",
-    "why": "The rep raised cash-purchase as a viable path at 02:26 but never circled back to it before ending the call on the credit DQ — this is the single most consequential miss because it may have closed a real, salvageable lead."
+    "topic": "Repeated cost question never resolved",
+    "ts": "01:50",
+    "quote": "So how much is it monthly?",
+    "why": "The customer asked for a monthly cost figure five separate times across the call and never received a clear answer or a clean redirect to the specialist — this is the defining friction of the call and directly precedes the DQ, so the customer never got to experience curiosity-building before the credit gate ended things."
   },
   "key_moments": [
     {
+      "ts": "00:24",
+      "quote": "Hey. This is Bucky with Ion. I'm reaching out about the solar form you filled out online. How are you doing? Uh-huh. I'm doing good.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The intro follows the standard template (name, company, form reference) so legitimacy is technically established, but it's delivered in a rushed, run-on way with no pause for the customer's actual answer before moving into questions — the transcript shows the rep's own line ('I'm doing good') immediately following the customer's inaudible response, suggesting the rep talked through/over the pause."
+    },
+    {
       "ts": "01:33",
       "quote": "It's just, seems to have a $6.70 or above to qualify, but, basically, we just switch you to a power like, we've become a new energy providers, and then you just pay a cheaper monthly power bill.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The customer asked a direct financing question and the rep's answer is disorganized and hard to follow — this reads as a clarity/delivery gap in explaining the bill-swap program, not a scripted feature-dump."
+      "classification": "setter_scope_creep",
+      "stewart_read": "The rep attempts to explain the bill-swap financing mechanism in improvised, garbled language rather than using the universal escape hatch to defer this financial-mechanism explanation to the specialist. This is closer-tier content (how the financing program structurally works) delivered without preparation."
     },
     {
       "ts": "01:50",
       "quote": "So how much is it monthly?",
-      "classification": "bill_anchor",
-      "stewart_read": "This is the customer's own version of asking to compare cost against the bill he already disclosed ($200+/month at 00:58) — a natural moment to flip the existing bill into the reason to keep going, which the rep does not do."
-    },
-    {
-      "ts": "02:26",
-      "quote": "But if you wanna pay for the panels yourself and own them, you could do that, I think.",
-      "classification": "softener_overuse",
-      "stewart_read": "The rep floats the cash-purchase alternative with hedging language ('you could do that, I think') that undercuts confidence in a real, available option at exactly the moment the customer needs certainty."
-    },
-    {
-      "ts": "02:52",
-      "quote": "Okay. Hold on.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer is actively going to retrieve his bill unprompted — a strong buy-in signal — but the rep gives no framing or anticipation-building line while waiting, missing a chance to build curiosity about what the specialist will show him."
+      "stewart_read": "This is the customer's first direct ask for a number. The rep's answer ('It'll be cheaper than what you're paying now') is vague rather than using this moment to build curiosity toward the specialist's design ('I can't give you an exact number, but that's exactly what the design session will show you — line by line against what Conrad is charging you now')."
+    },
+    {
+      "ts": "01:55",
+      "quote": "Like how much?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Second consecutive ask for the same number, again met with a vague deflection ('It's just specific to your home') that doesn't advance toward booking or build anticipation for the specialist call."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 35,
-    "verified": 35,
+    "checked": 49,
+    "verified": 48,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION16_4f518fa9",
   "rep_name": "Holland",
-  "trajectory_summary": "A short, low-friction call where the customer's real ask -- a replacement solar-compatible refrigerator, not a new solar install or a requalification of her existing system -- doesn't match anything Ion sells. The rep loses roughly 40 seconds to her own address/map lookup, then correctly identifies the mismatch and disqualifies cleanly. The DQ outcome itself is very likely correct; the coaching gap is process (orphaned_flow was never run), not outcome.",
-  "shape": "stagnant",
-  "outcome_dispute": "v1 outcome likely already reads as DQ/no_contact-adjacent; that read holds. The call is a legitimate disqualification -- customer wants a specific appliance (solar refrigerator) Ion does not sell, not a new solar design or system service. The miss is that the rep never ran orphaned_flow to confirm system ownership/status, but running it would likely not have changed the outcome given the customer's need is appliance-specific, not solar-service-specific.",
+  "trajectory_summary": "This is a short, low-friction call that ends in disqualification once the customer reveals she already has an existing solar system and was actually calling about a broken solar-powered refrigerator, not a new install. The rep handled the mismatch honestly but closed the call immediately without running any orphaned-system qualification questions, leaving a possible probing opportunity unexplored.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "The dq/no_appointment outcome itself is correctly called — the rep did not book and the customer's stated need falls outside Ion's offerings. However, this should be read as a process gap rather than a contested outcome: the rep skipped the orphaned_flow script entirely (existing system ownership, company, working status) before disqualifying, so the DQ was made on incomplete information about whether a new legitimate solar-and-battery quote could still apply to this address.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "03:48",
     "quote": "Okay. We actually don't have solar refrigerators here, so I I do apologize.",
-    "reasoning": "The customer's need (a solar-compatible refrigerator) does not match any Ion offering; the rep correctly identifies this and disqualifies the lead. No appointment or callback was set."
+    "reasoning": "The customer's actual need — a solar-powered refrigerator/replacement appliance — falls outside anything Ion sells (solar panels, Tesla Powerwall, roofing), so the rep correctly disqualified and closed the call rather than booking an appointment."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,143 +20,232 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call was disqualified before reaching bill collection -- the customer's stated need (a replacement appliance) made the bill-anchor step moot."
+    "reasoning": "The call never reached the bill_amount section of the script — it was cut short by the orphaned-system/refrigerator disclosure and subsequent disqualification before utility company or bill amount were ever raised."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ended in disqualification before the rep reached bill collection; no mention of obtaining a utility bill occurs anywhere in the transcript."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "02:48",
     "reason_given": true,
-    "reason_ts": "02:53",
-    "reason_quote": "Well, I do have a solar, that runs, the reason why I wanted was asking because I have a solar, and when the solar was brought to me, the solar on it says, Sacred Power.",
+    "reason_ts": "03:39",
+    "reason_quote": "So I was looking for a refrigerator for for a solar.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question directly and got a real answer, but the answer surfaced an existing-system disclosure that the rep didn't follow up on with orphaned_flow questions before moving straight to the refrigerator-specific DQ."
+    "reasoning": "The rep asked what got the customer interested in solar, and the customer explained at length that she has an existing 'Sacred Power' solar system and was actually looking for a replacement solar refrigerator. The rep acknowledged the mismatch and disqualified rather than using the disclosed reason to explore any adjacent need (e.g., system health, battery, re-quote)."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:11",
-      "quote": "This is Holland with Ion. I got a request you were looking into solar for your home."
+      "end_ts": "00:22",
+      "quote": "Awesome. This is Holland with Ion. I got a request you were looking into solar for your home. How are you doing today?",
+      "customer_response": "cooperative",
+      "customer_quote": "Good. And you?",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "02:48",
-      "quote": "And then I did wanna ask you what kind of got you interested in solar?"
+      "end_ts": "03:39",
+      "quote": "And then I did wanna ask you what kind of got you interested in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "So I was looking for a refrigerator for for a solar.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:40",
-      "quote": "I've got your address here, Cecilia, as 345 Burning Bridge Road"
+      "ts": "00:41",
+      "end_ts": "01:03",
+      "quote": "I've got your address here, Cecilia, as 345 Burning Bridge Road in Ojo Aniso, New Mexico. Is that correct?",
+      "customer_response": "resistant",
+      "customer_quote": "It's not Ojo Anicino.",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "02:35",
-      "quote": "Is there anybody else in the title of the home with you?"
+      "end_ts": "02:47",
+      "quote": "And then I have you, Cecilia, down as the property owner. Is there anybody else in the title of the home with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. No?",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:50",
-      "quote": "is your roof just a regular asphalt shingle roof?"
+      "end_ts": "02:26",
+      "quote": "Do you know how old your roof is currently?",
+      "customer_response": "cooperative",
+      "customer_quote": "Well, one one, the first one, the middle one is about, like, 30 since '98, '95, or '98.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "orphaned_flow not run on disclosed existing-system customer",
+    "topic": "orphaned_flow protocol not run",
     "ts": "02:53",
     "quote": "Well, I do have a solar, that runs, the reason why I wanted was asking because I have a solar, and when the solar was brought to me, the solar on it says, Sacred Power.",
-    "why": "Customer revealed an existing solar system from a named installer, but the rep never asked the standard orphaned_flow questions (ownership, system status, panel size) before disqualifying. This is a documentation/process gap for the record even though it likely doesn't change the outcome here -- worth building as a reflex for calls where it might."
+    "why": "The customer clearly disclosed an existing solar system from a named company, which is the exact trigger for Ion's orphaned_flow questions (ownership type, system working status, company). The rep skipped straight to disqualifying on the refrigerator mismatch without ever probing the underlying system, closing the call on incomplete information."
   },
   "key_moments": [
     {
-      "ts": "00:41",
-      "quote": "as 345 Burning Bridge Road in Ojo Aniso, New Mexico. Is that correct?",
-      "classification": "other",
-      "stewart_read": "The rep's address record is wrong (customer corrects both the city and the community name), and the rep then spends roughly 40 seconds (00:41-01:44) trying to relocate the address on a map while the customer waits silently. This is rep-side time-burn on a basic verify step, not customer resistance."
+      "ts": "00:24",
+      "quote": "I just have a look. So I work with our design team. I help get those solar estimates created for the home.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The rep never establishes company identity with state/referral framing (no 'certified installer' or lead-source context), skipping the legitimacy anchor the schema calls for in the first 30 seconds."
+    },
+    {
+      "ts": "02:02",
+      "quote": "Well, one one, the first one, the middle one is about, like, 30 since '98, '95, or '98.",
+      "classification": "knowledge_gap",
+      "stewart_read": "The customer's answer is garbled and self-contradictory — she references two different roofs ('the middle one', 'the other site') and cites three different years ('98, '95, or '98, then 2009 for the other roof). The rep does not clarify which roof applies to the actual install site or reconcile the conflicting dates before moving on."
     },
     {
       "ts": "02:53",
       "quote": "Well, I do have a solar, that runs, the reason why I wanted was asking because I have a solar, and when the solar was brought to me, the solar on it says, Sacred Power.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses an existing solar system from a named company (Sacred Power) as part of explaining her ask. The rep never runs any orphaned_flow questions (own vs. lease, system working, panel size) before reaching the DQ decision seconds later."
+      "stewart_read": "The customer discloses an existing solar system from a company called 'Sacred Power' — this is a direct trigger for Ion's orphaned_flow protocol (ownership status, system working condition, company name), but the rep never runs any of those questions."
     },
     {
       "ts": "03:48",
       "quote": "Okay. We actually don't have solar refrigerators here, so I I do apologize.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The customer's ask, stated plainly at 03:39 ('I was looking for a refrigerator for for a solar'), is for a specific appliance Ion does not sell. The rep identifies this correctly and quickly. This is not a missed solar-service opportunity -- it is an accurate, fast disqualification on a genuine product mismatch."
-    },
-    {
-      "ts": "03:59",
-      "quote": "I'll give you off our list, though, but you have a good rest of your day.",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "The call ends with a list-removal offer and a pleasantry but no structured close -- no recap of why she was disqualified, no note of what she should do if her needs change. The schema has no defined DQ-close protocol, so this is a gap in coverage rather than a violation of an existing rule."
+      "classification": "cross_sell_miss",
+      "stewart_read": "Once it's clear the customer already owns a solar system that may be old (system installed via 'Sacred Power', unclear age) and is having equipment issues, the rep could have asked whether the broader system still functions or whether she'd want a re-quote, rather than immediately disqualifying on the refrigerator-specific mismatch."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 23,
-    "verified": 23,
+    "checked": 28,
+    "verified": 28,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

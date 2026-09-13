@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION8_e3ceb903",
   "rep_name": "Kyk",
-  "trajectory_summary": "The customer arrived already highly engaged and informed — high bills, existing undersized system, explicit battery and expansion interest — so the call's energy was strong from the start rather than something the rep had to build. The rep ran a competent, orderly verify pass and to their credit proactively checked utility eligibility before burning the customer's time on bill collection, but the call ends in an unresolved callback after a likely hard DQ (WASCO not accepting solar applications), leaving a strong lead in limbo.",
+  "trajectory_summary": "The call opens with an unusually well-qualified, articulate customer who volunteers detailed technical data (panel count, inverter, kWh usage, existing solar) with minimal prompting, and the rep captures it competently. The call's shape shifts from steady data-gathering to a clean, honest DQ when the rep discovers WASCO Electric Co-op isn't accepting solar applications — rather than pushing through a dead lead, the rep pauses and commits to a callback. This is a defensible, low-drama ending, but the rep leaves real value on the table: the battery-backup ask and system-undersizing detail are strong signals that never get anchored, and the required orphaned-system 'is it working' question is skipped despite the customer's own comment about a broken panel.",
   "shape": "mixed",
-  "outcome_dispute": "v1 outcome is unclear from metadata; observed outcome is best read as 'callback' rather than a booked or dq outcome, since the rep explicitly frames it as pending verification with sales/design team rather than a confirmed disqualification or a locked appointment. Given the strength of this lead (existing system, clear expansion/battery need, high consistent bills), the manager should flag this for priority follow-up rather than treating it as a routine DQ.",
+  "outcome_dispute": "V1 tag is unknown/unclear; observed outcome here is best read as callback (rep explicitly commits to messaging the design team and calling back), not a booked or DQ'd outcome in the clean sense — the DQ is provisional pending design-team confirmation, so it should not be recorded as a hard, final DQ.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
@@ -11,152 +11,254 @@
     "co_owner_confirmed": null,
     "ts": "05:03",
     "quote": "So I'll I'll I'll message them right now, and then I'll give you a callback with an update later. Does that work for you?",
-    "reasoning": "The rep does not book an appointment or issue a hard disqualification; instead they commit to checking with their design team and calling the customer back, but no specific day or time is given, making this a weak/unanchored callback rather than a booked or tentative appointment."
+    "reasoning": "The call ends with the rep committing to check with the design team about the WASCO utility restriction and call the customer back, but no specific day or time is given — a callback, not a booked or DQ outcome, since the DQ is provisional pending internal confirmation."
   },
   "bill_anchor_audit": {
-    "bill_captured": false,
-    "bill_ts": "02:52",
-    "bill_quote": "My summer bills are about $2.20.",
+    "bill_captured": true,
+    "bill_ts": "00:44",
+    "bill_quote": "all the way up into the 5 hundreds.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer gave both a winter figure ($500s) and a summer figure ($220) plus a delivery charge ($51), but the call ends before the actual bill document is collected and before the rep ever verbally reframes these numbers as the reason to act — the rep moves straight into bill-collection logistics and then into the WASCO DQ discussion without flipping the pain into urgency."
+    "reasoning": "The rep captures both the winter ($500s) and summer ($220) bill figures plus usage range, but never turns the number into an explicit reason-to-act line ('that's exactly the bill we can help bring down') before the call pivots into the WASCO disqualification; the flip should have landed around 02:57 right after the summer bill and delivery charge were given."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:16",
+    "ask_quote": "I just wanna take a look at the most recent electrical electric bill.",
+    "result": "promised_later",
+    "method": "other",
+    "result_ts": "04:28",
+    "result_quote": "I actually did just look it up before I I have you waste your time pulling up that bill.",
+    "reasoning": "Rep asked how the customer typically receives the bill and offered read-aloud or text options, but before the customer could act on it, the rep discovered the WASCO utility block and withdrew the request to avoid wasting her time, so the bill was never actually collected."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:32",
     "reason_given": true,
-    "reason_ts": "00:40",
-    "reason_quote": "the I mean, my winter power bills are, all the way up into the 5 hundreds.",
+    "reason_ts": "00:44",
+    "reason_quote": "all the way up into the 5 hundreds.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question early and got a strong, specific answer (winter bills in the $500s plus an undersized existing system), but never referenced this pain point again later in the call — no reflection back when discussing the WASCO issue or when framing the callback."
+    "reasoning": "The rep asked the interest question early and got a clear bill-pain answer, but never explicitly reinforced or tied the appointment/callback back to that winter bill pain later in the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "quote": "This is, Kyk with ION. I have received a request."
+      "end_ts": "00:12",
+      "quote": "Yeah. This is, Kyk with ION. I have received a request. You're looking at solar for the home.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm doing okay.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:32",
-      "quote": "And what was your main interest in looking at solar?"
+      "end_ts": "00:44",
+      "quote": "And what was your main interest in looking at solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "my winter power bills are, all the way up into the 5 hundreds.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:13",
-      "quote": "the address at 3500 Japanese Hollow Road"
+      "ts": "00:17",
+      "end_ts": "02:31",
+      "quote": "the address at 3500 Japanese Hollow Road in the Dallas?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "02:17",
-      "quote": "Is there anybody else in the title with you, or is it just you?"
+      "end_ts": "02:19",
+      "quote": "Is there anybody else in the title with you, or is it just you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. It's just me.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "02:08",
-      "quote": "is that is the roof an asphalt shingle roof?"
+      "end_ts": "02:14",
+      "quote": "is that is the roof an asphalt shingle roof?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. That's a metal roof over a garage.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:17",
-      "quote": "is PGE the utility company, or is it something different?"
+      "end_ts": "02:46",
+      "quote": "is PGE the utility company, or is it something different?",
+      "customer_response": "resistant",
+      "customer_quote": "No. It's Waspo Electric Co op.",
+      "resistance_reason": "other",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:46",
-      "quote": "do you know how much you're kinda paying on average usually?"
+      "end_ts": "03:14",
+      "quote": "do you know how much you're kinda paying on average usually?",
+      "customer_response": "cooperative",
+      "customer_quote": "My summer bills are about $2.20.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "01:45",
+      "end_ts": "01:56",
+      "quote": "Do you know who you got installed with originally with",
+      "customer_response": "cooperative",
+      "customer_quote": "I've this property was previously owned by a guy that owns an electric company.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:16",
-      "quote": "I just wanna take a look at the most recent electrical electric bill."
+      "end_ts": "04:33",
+      "quote": "Would it be easier for you to just, read those numbers off to me or send a copy of it through text?",
+      "customer_response": "cooperative",
+      "customer_quote": "I have easy access to those. That's not a big deal.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "ts": "05:03",
+      "end_ts": "05:20",
+      "quote": "So I'll I'll I'll message them right now, and then I'll give you a callback with an update later.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Thanks.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "04:33",
+      "quote": "Apparently, we're not able to work with WASCO,",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I'll have to just check with my design team to see if anything has changed"
+      ],
+      "resolved": true,
+      "resolution_ts": "05:20",
+      "reasoning": "This is a utility-policy hard gate rather than a customer objection, but the rep still worked one angle — checking whether the restriction might have changed — before settling on a callback rather than an immediate hard DQ."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored callback on a high-value lead",
-    "ts": "05:03",
-    "quote": "So I'll I'll I'll message them right now, and then I'll give you a callback with an update later. Does that work for you?",
-    "why": "This is a strong, motivated lead (existing undersized system, explicit expansion + battery request, high consistent bills) ending on a vague, timeless callback promise instead of a specific commitment. Given this lead's quality, an unanchored soft exit risks losing a customer who is clearly ready to move if Ion can serve WASCO."
+    "topic": "Reflecting customer-volunteered value signals back before logging them",
+    "ts": "01:19",
+    "quote": "I'd like battery backup.",
+    "why": "Twice in quick succession (battery backup, system undersizing) the customer handed the rep high-value anchors for free, and both were filed away rather than reflected back — the single highest-leverage, most repeatable coaching beat on this call."
   },
   "key_moments": [
     {
       "ts": "01:01",
       "quote": "It's 20, but one's broken. So let's call it nineteen, two hundred and sixty five kilowatt panels.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "This is a strong lead-quality signal — an existing system that is broken/undersized and a customer who has already done the math herself. This is not a standard schema section (the schema's enthusiasm examples focus on trees/EV/pool-type signals), but it functions the same way: it materially raises this lead's value and warrants an anchor-back from the rep."
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "The orphaned_flow protocol requires asking 'Is your system working?' with broken/not_working as a hard_dq_answer trigger for orphaned handling. The customer discloses a broken panel directly, but the rep never asks the required working-status question or logs whether this affects design/DQ status."
     },
     {
-      "ts": "01:34",
+      "ts": "01:19",
+      "quote": "I'd like battery backup.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "This is a direct, unprompted ask for Tesla Powerwall — Ion's only battery product — volunteered by the customer without any pitch. The rep logs it ('K. Battery backup. Let me get that down.') but never reflects it back as a value anchor for the appointment or callback."
+    },
+    {
+      "ts": "01:30",
       "quote": "I'm looking to add on to that system. That system is not properly sized for this house.",
-      "classification": "cross_sell_miss",
-      "stewart_read": "This is a distinct, high-value signal separate from the battery-backup mention: the customer is explicitly requesting a system expansion due to undersizing, which is core Ion business but sits in the schema's acknowledged TBD gap (battery_storage_inquiry / system-expansion cross-sell isn't yet codified). The rep captures the fact procedurally but never reflects it back as a value point."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The customer states her own system is undersized — a strong, self-diagnosed pain point that practically writes the curiosity hook for the rep ('that's exactly why a proper resize matters, let's get the numbers to our specialist'). The rep instead moves straight into a factual follow-up about installer identity without reflecting the sizing problem back."
     },
     {
       "ts": "02:17",
-      "quote": "Oh, what I'm surprised you didn't get this information. I've provided all of this information.",
+      "quote": "I've provided all of this information.",
       "classification": "rapport_repair",
-      "stewart_read": "Customer directly names a process friction (repeated data requests) — this maps to the schema's C6 list of TBD/emerging protocols (excessive_contact_complaint is listed as a placeholder, not a populated protocol), so this should be read as an emerging pattern worth flagging to Kenny rather than a documented procedure the rep violated."
-    },
-    {
-      "ts": "04:44",
-      "quote": "No. They're not accepting that metering. I know that. Yeah.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The customer already knew about the WASCO net-metering freeze before the rep found it. Had the rep checked or asked about utility program status earlier in the utility_company verify step (02:17), this could have surfaced sooner and avoided walking the customer through the full bill-collection discussion before hitting the wall."
+      "stewart_read": "Customer flags redundant data collection, suggesting this may be a recycled or repeat-touch lead where bill/utility info could already be on file. Rep's response addresses the immediate friction (data-pull glitch) but doesn't ask when or with whom the customer previously spoke."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 31,
-    "verified": 31,
+    "checked": 47,
+    "verified": 47,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

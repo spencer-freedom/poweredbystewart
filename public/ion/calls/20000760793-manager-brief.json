@@ -1,17 +1,17 @@
 {
   "call_id": "20000760793",
   "rep_name": "Carter",
-  "trajectory_summary": "This is a short, cooperative, low-friction call: the customer was pre-warmed, volunteered information freely, and the rep moved through verify items in order without major pushback. The call ends with a specific day and time set, but two structural loose ends â€” unclear appointment logistics (drone shot / bill required before locking the schedule) and end-of-call confusion about who visits the home â€” leave the booking more fragile than the smooth middle of the call suggests.",
+  "trajectory_summary": "This is a cooperative, low-friction inbound lead call where the customer was pre-sold on interest and the rep ran the verify sequence competently, but the call ends with a conditional/tentative appointment gated on two items (drone shot or photos, and the utility bill) that were not resolved on the call. The rep never flipped the captured bill number into emotional leverage and gave a slightly-off credit threshold, but the customer's cooperative energy never dipped.",
   "shape": "mixed",
-  "outcome_dispute": "The appointment has a specific day (tomorrow) and time (9:30 AM) stated aloud, which meets the bar for 'booked' on datetime_captured. However the rep explicitly conditions the schedule slot on receiving the roof photo and utility bill first ('I would need the picture of the roof and then the utility bill before I can put you in the schedule'), so this is better read as tentative/conditional rather than a clean booked outcome.",
+  "outcome_dispute": "The appointment time (9:30am tomorrow) was verbally agreed, but the rep explicitly conditions the booking on receiving the roof documentation and the utility bill first: 'I would need the picture of the roof and then the utility bill before I can put you in the schedule.' Neither was received on the call. This is a tentative appointment, not a firm booked one, since the rep's own stated gate was not cleared during the call.",
   "observed_outcome": {
     "outcome": "tentative",
-    "appointment_channel": "phone",
+    "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "05:54",
     "quote": "Okay. We could do 09:30 in the morning.",
-    "reasoning": "A specific day and time were agreed verbally, but the rep explicitly conditioned locking the schedule on receiving the roof photo and bill first, making this a tentative/conditional booking rather than a firm one."
+    "reasoning": "A specific day and time were verbally agreed, but the rep explicitly conditioned the actual scheduling on receiving the roof documentation and utility bill first ('before I can put you in the schedule'), neither of which was delivered during the call — making this tentative rather than firmly booked."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the bill figure but responded with reassurance ('Not, like, the highest bill, but I think we can definitely still save you some money') rather than reflecting the number back as leverage against the utility; the flip should have gone right at 03:43 where he instead softened the number."
+    "reasoning": "Rep captured the bill and even got a second data point ($100 last month plus five mini-splits) but responded with a generic reassurance ('we can definitely still save you some money') rather than turning the number into urgency or alignment-against-the-utility; the flip should have landed at 03:43 where the rep instead softened the pitch."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "04:15",
+    "ask_quote": "And then your most current Rappahannock bill just so we can know exactly how many panels you would need for your home.",
+    "result": "promised_later",
+    "method": "text",
+    "result_ts": "04:43",
+    "result_quote": "So I'm just gonna shoot you a text.",
+    "reasoning": "Rep asks for the current utility bill and states he'll send a text (with his email) to facilitate sending it, but the customer does not produce or send the bill during the call itself — it's deferred to before the appointment."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,134 +41,213 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Customer gave a fairly unusual reason (passive solar design curiosity plus a direct cost question) but the rep never referenced this back later in the call, either when discussing fit or when setting the appointment expectations."
+    "reasoning": "The customer's stated interest (curiosity about cost for a passive-solar-designed home) was never referenced again by the rep — no tieback in the close or scheduling language connecting the appointment to answering his specific cost question."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "quote": "Hey. This is Carter calling from Ion. How are you?"
+      "end_ts": "00:24",
+      "quote": "Hey. This is Carter calling from Ion. How are you?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm doing well this morning, Carter.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:38",
-      "quote": "Is there anything in particular that sparked your interest in solar?"
+      "end_ts": "00:55",
+      "quote": "Yeah. Is there anything in particular that sparked your interest in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "I have a passive solar house with a clear story window that brings light into my living room, dining room, and I was just wondering what the cost would be to put on solar panels.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:30",
-      "quote": "And you're at 16106 Little Fork Church Road?"
+      "end_ts": "00:36",
+      "quote": "And you're at 16106 Little Fork Church Road?",
+      "customer_response": "cooperative",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "02:52",
-      "quote": "Is there anyone else on the title of the home with you?"
+      "end_ts": "02:57",
+      "quote": "Is there anyone else on the title of the home with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. That's I'm the only owner.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "02:16",
-      "quote": "customer volunteered rubber roof detail unprompted; rep did not directly ask roof type/age"
+      "end_ts": "02:22",
+      "quote": "Okay. And then is there trees around the home at all?",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. And the roof is a rubber roof with which is pitched in the middle.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:59",
-      "quote": "And then what electric company are you working with?"
+      "end_ts": "03:09",
+      "quote": "And then what electric company are you working with?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. For RAC.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "03:13",
-      "quote": "And then what's your average utility bill?"
+      "end_ts": "03:38",
+      "quote": "Perfect. And then what's your average utility bill?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'd say about a $120 a month.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "03:51",
+      "end_ts": "04:00",
+      "quote": "And then in Virginia, the main requirement to get solar right now is having a credit score above 6 50. Is that the case for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "04:39",
-      "quote": "So I'm just gonna shoot you a text. And then also with that text, I'll send you my email."
+      "ts": "04:15",
+      "end_ts": "04:49",
+      "quote": "And then your most current Rappahannock bill just so we can know exactly how many panels you would need for your home.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. It was a $100.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "05:54",
-      "quote": "Okay. We could do 09:30 in the morning."
+      "ts": "05:25",
+      "end_ts": "05:58",
+      "quote": "How about tomorrow morning? Would that work?",
+      "customer_response": "cooperative",
+      "customer_quote": "If it's before 11:00, yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
       "ts": "06:00",
-      "quote": "Cool. Yeah. So just make sure you send me those sometime today."
+      "end_ts": "06:33",
+      "quote": "Cool. Yeah. So just make sure you send me those sometime today. The sooner, the better.",
+      "customer_response": "deflected",
+      "customer_quote": "I'll see and you'll be visiting the house tomorrow?",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "partial"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "conditional appointment gating without lead-type context",
+    "topic": "Conditional booking closed without a clear collection plan or backup",
     "ts": "05:23",
     "quote": "I mean, I would need the the picture of the roof and then the utility bill before I can put you in the schedule.",
-    "why": "The appointment as booked is contingent on two customer deliverables not yet in hand, which materially affects whether this sit will hold — the manager should confirm this customer's lead type and coach the rep on whether this gate was necessary or an avoidable fragility."
+    "why": "The appointment hinges on two documents (drone shot/photos, utility bill) that were not captured on the call and no specific same-day collection commitment (deadline, method, confirmation step) was locked beyond 'sometime today, the sooner the better' — this is exactly the fragile-booking pattern that doesn't pay out on the sit-based comp model if the customer doesn't follow through."
   },
   "key_moments": [
     {
-      "ts": "00:52",
-      "quote": "and I was just wondering what the cost would be to put on solar panels.",
-      "classification": "conditional_booking",
-      "stewart_read": "Customer asks a pricing question directly out of the gate. The rep never explicitly answers or redirects this with the schema's price-deferral language; he simply moves on to house lookup. This isn't a rep failure per se — deferring detailed pricing to the closer is correct setter-scope procedure — but the question was never acknowledged or bridged, leaving it open for the closer to walk into cold."
+      "ts": "03:51",
+      "quote": "And then in Virginia, the main requirement to get solar right now is having a credit score above 6 50. Is that the case for you?",
+      "classification": "other",
+      "stewart_read": "Rep states 650 as the credit threshold, but the schema's documented figure is 670. This is the same drift already flagged in SESSION18_fcbf33c1 (Meg), making this a second corroborating instance of the same number being misstated on the floor."
     },
     {
-      "ts": "03:18",
-      "quote": "I'd say about a $120 a month.",
+      "ts": "03:13",
+      "quote": "Perfect. And then what's your average utility bill?",
       "classification": "bill_anchor",
-      "stewart_read": "Rep captures the bill figure but the very next thing he does is soften it ('Not, like, the highest bill') rather than flip it into alignment-against-the-utility. This is capture-and-move-on, the schema's named failure pattern, not capture-and-flip."
+      "stewart_read": "Rep captures the bill amount cleanly and on-script, but the flip into emotional leverage never follows."
+    },
+    {
+      "ts": "03:43",
+      "quote": "Yeah. Still should be a a great fit. Not, like, the highest bill, but I think we can definitely still save you some money.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Rep had the $120/$100 bill numbers in hand and instead of using them to build curiosity about specific savings, gave a generic reassurance ('we can definitely still save you some money') that undersells the moment and slightly downplays the lead ('not the highest bill')."
     },
     {
       "ts": "03:38",
       "quote": "I have five mini splits in the house.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Customer volunteers a detail indicating a high electric load (five mini-split heat pump units) immediately after giving his bill figure. This is exactly the kind of unsolicited usage signal that should raise the value of the lead in the rep's eyes, but the rep's response treats it as a neutral acknowledgment rather than a hook."
-    },
-    {
-      "ts": "03:51",
-      "quote": "in Virginia, the main requirement to get solar right now is having a credit score above 6 50. Is that the case for you?",
-      "classification": "other",
-      "stewart_read": "Rep states 650 as the credit threshold. The schema's documented threshold is 670, and this is a second corroborating instance of the same drift already flagged in SESSION18_fcbf33c1 (Meg), where the rep also said 650. This is a schema_drift_detection finding, not a coaching failure on this individual rep — it suggests 650 may be common floor language, or the schema's 670 is stale."
+      "stewart_read": "Customer volunteers a high-electric-load detail (five mini-split heat pumps) unprompted, which is a system-sizing signal that could offset the modest $100-120 bill read and support a bigger system recommendation."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 30,
-    "verified": 29,
+    "checked": 48,
+    "verified": 48,
     "fuzzy": 0,
     "wrong_ts": 0,
-    "not_found": 1
+    "not_found": 0
   }
 }

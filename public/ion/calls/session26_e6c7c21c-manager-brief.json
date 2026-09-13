@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION26_e6c7c21c",
   "rep_name": "Tyke",
-  "trajectory_summary": "This is a disqualified orphaned-system call that the rep handled correctly at the DQ moment but then let run long as an unstructured technical Q&A. The customer was never a bookable lead — he owns a working SolarEdge system from a defunct installer and was calling out of curiosity about Ion's shingle-roofing product, not to buy anything.",
+  "trajectory_summary": "This is an orphaned/existing-system call that DQ's within the first minute per Ion's hard rule on servicing another company's equipment, and the remaining five-plus minutes are the customer lecturing the rep on panel efficiency, HOA politics, and renewable-energy economics while the rep answers passively. There was no real appointment to book; the rep's job effectively ended at the DQ, and everything after is scope creep driven by the customer rather than the rep chasing a sale.",
   "shape": "stagnant",
-  "outcome_dispute": "v1 tag is unknown; observed outcome should be 'dq', not any booking-adjacent tag. The customer discloses an existing, working solar system with a competitor's install at 00:49, which is a hard DQ per orphaned_flow / dq_rules.ppa_existing_system-adjacent logic, and the rep himself confirms 'we're not able to work on another company's equipment' at 01:00.",
+  "outcome_dispute": "v1 tag is unknown/unlabeled going in; observed outcome should be recorded as dq — the customer discloses an existing system with a company that 'doesn't operate in the state anymore' and the rep issues the standard can't-service-other-company's-equipment disqualifier at 01:00. There is no appointment, tentative or booked, anywhere in the call.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "01:00",
     "quote": "Unfortunately, my company, we're not we're not able to work on another company's, equipment or anything like that.",
-    "reasoning": "Customer owns a working solar system installed by a now-defunct competitor; per orphaned_flow logic this is a hard disqualification, and the rep confirms Ion cannot service it. No appointment, callback, or booking of any kind resulted."
+    "reasoning": "Customer already owns a solar system installed by a company that no longer operates in the state; per dq_rules this is a hard disqualifier for a new Ion install, and the rep states this plainly. No appointment of any kind is set at any point in the call."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,143 +20,255 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer is an existing solar owner, not a prospect for a new install, so there was never a utility-bill qualification step to run — the call was DQ'd on ownership grounds before bill collection would apply."
+    "reasoning": "This call never reaches bill collection — the customer already has solar and is disqualified within the first minute, so there is no utility bill to capture or flip; the customer does reference his own system's output ('just under 10 kilowatt hours' rated, 'several gigawatts... a year') but this is existing-system production data, not a monthly bill amount to anchor a new sale on."
   },
-  "interest_reason_audit": {
+  "bill_document_audit": {
     "asked": false,
     "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call never progresses to a bill-collection stage since the customer is disqualified immediately as an existing solar owner with an unsupported installer; there was no design being built, so no bill was needed."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "00:18",
     "reason_given": true,
-    "reason_ts": "00:27",
-    "reason_quote": "My curiosity was not so much running solar. I already have that.",
-    "reason_used": "no_reason_given",
+    "reason_ts": "00:33",
+    "reason_quote": "My curiosity was the system itself.",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' since the intro line already presumed interest; the customer volunteered his reason unprompted (technical curiosity about an existing system), but since he isn't a prospect there was no appointment to tie the reason to."
+    "reasoning": "Rep's opening line functions as the interest question ('I've received a request you're looking at solar for the home'), and the customer immediately clarifies his real interest is technical curiosity about panel operation, not a purchase. The rep never circles back to that stated curiosity as a reason to continue engaging or route him anywhere — he answers ad hoc technical questions instead of framing the conversation around what the customer actually said he wanted."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "This is, Tyke with Ion. I received your request. You're looking at solar for the home."
+      "end_ts": "00:24",
+      "quote": "This is, Tyke with Ion. I received your request. You're looking at solar for the home.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm alright.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "00:18",
+      "end_ts": "00:41",
+      "quote": "You're looking at solar for the home. How are you doing today?",
+      "customer_response": "deflected",
+      "customer_quote": "My curiosity was not so much running solar. I already have that.",
+      "resistance_reason": "already_have_quote",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "co_owner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "roof",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "00:42",
-      "quote": "Okay. Who did you, get installed with?"
+      "end_ts": "00:59",
+      "quote": "Okay. Who did you, get installed with?",
+      "customer_response": "cooperative",
+      "customer_quote": "it was installed by a company, that doesn't operate in the state anymore, but, it was a Glide. It was put in the Glide, but it's a solar edge system.",
+      "resistance_reason": "already_have_quote",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "06:40",
+      "quote": "",
+      "customer_response": "cooperative",
+      "customer_quote": "Well, thanks for the call. Of course. Have a great day. Bye bye.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "00:27",
+      "quote": "My curiosity was not so much running solar. I already have that.",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. Who did you, get installed with?"
+      ],
+      "resolved": true,
+      "resolution_ts": "01:00",
+      "reasoning": "Customer discloses existing system; rep runs the orphaned-flow qualifier once, learns the installer is unsupported, and immediately delivers the DQ — one clean attempt that resolves into disqualification rather than a sale."
+    },
+    {
+      "ts": "03:19",
+      "quote": "I live in an HOA, and they they don't like it being having it stuffed down their throat by the state of Ohio and the federal government that they will approve panels whether they like it or not",
+      "type": "other",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": true,
+      "resolution_ts": "03:38",
+      "reasoning": "This is not a live sales objection but an unsolicited aside within the customer's broader monologue on renewable-energy economics after he was already disqualified; the rep does not respond to it directly, and the customer moves on himself without needing rep intervention."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Fabricating specifics under casual questioning",
-    "ts": "01:25",
-    "quote": "Yeah. We we unfortunately, those are, like, kind of backed up right now. They're, about two years out to to order them or at least to be installed.",
-    "why": "This is the clearest instance on the call of the rep inventing a concrete, checkable fact (a two-year backlog on an unreleased product) with no grounding — a real liability if repeated on a recorded, bookable call, and it directly violates numeric_discipline."
+    "topic": "clean DQ delivery for orphaned-system calls",
+    "ts": "01:00",
+    "quote": "Unfortunately, my company, we're not we're not able to work on another company's, equipment or anything like that. You'd have to, like, probably reach out to, like, another solar contractor or something like that",
+    "why": "The disqualification decision itself was correct and fast, but the delivery was filler-heavy and hesitant. On a floor where setters hit this scenario repeatedly, a crisp scripted line for 'existing system, unsupported installer' would land with more authority and end these calls faster."
   },
   "key_moments": [
     {
+      "ts": "00:12",
+      "quote": "I'm sorry. I can't hear you.",
+      "classification": "other",
+      "stewart_read": "Minor audio/connection friction at the very start required the rep to repeat the intro. Not a rep error, but it ate the first 15+ seconds and slightly softened the opening's legitimacy framing since it had to be restated."
+    },
+    {
+      "ts": "00:42",
+      "quote": "Okay. Who did you, get installed with?",
+      "classification": "other",
+      "stewart_read": "Rep correctly and immediately runs the orphaned-flow qualifier the moment the customer discloses existing solar, asking who installed it before anything else."
+    },
+    {
       "ts": "01:00",
-      "quote": "Unfortunately, my company, we're not we're not able to work on another company's, equipment or anything like that.",
-      "classification": "non_standard_scenario_hold",
-      "stewart_read": "The rep correctly identifies the DQ but skips the actual orphaned_flow qualifying questions — own vs. lease, and whether the system is currently working — before delivering the DQ. The DQ conclusion happens to be right, but it's reached by instinct rather than by running the procedure, so it isn't fully clean."
+      "quote": "Unfortortunately, my company, we're not we're not able to work on another company's, equipment or anything like that. You'd have to, like, probably reach out to, like, another solar contractor",
+      "classification": "protocol_violation",
+      "stewart_read": "The DQ call itself is correct per policy, but the delivery is hedgy and filler-heavy ('probably', 'like... like...') rather than a clean, confident disqualification-and-redirect. This is a delivery issue riding on top of a correct decision, not a wrong decision."
     },
     {
-      "ts": "01:25",
-      "quote": "Yeah. We we unfortunately, those are, like, kind of backed up right now. They're, about two years out to to order them or at least to be installed.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The rep invents a specific, unverified timeline ('about two years out') for Ion's shingle-roofing product on the spot. There is no basis in the schema or transcript for this figure — it reads as improvised filler to a curious customer rather than a grounded fact, which is a fabrication risk under numeric_discipline."
-    },
-    {
-      "ts": "01:42",
-      "quote": "What what, just out of curiosity, what deficiency are you getting out of your panels?",
+      "ts": "01:47",
+      "quote": "We use four four thirties.",
       "classification": "setter_scope_creep",
-      "stewart_read": "This is exactly the kind of technical spec question the schema flags as closer-tier content, and the rep engages with it directly (giving a panel model number) instead of using the universal escape hatch."
-    },
-    {
-      "ts": "01:58",
-      "quote": "I'm not entirely too sure on the efficiency rating.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Rep admits the gap transparently rather than fabricating a number, which per knowledge_gap_handling is the better of the three response modes (dodge/admit/fabricate) — this is a small positive relative to the invented 'two years out' line eight lines earlier."
+      "stewart_read": "Customer asks a technical efficiency question post-DQ; rep answers with a panel model number instead of redirecting. Since the customer was already disqualified, this isn't costing a sale, but it establishes a pattern of engaging on closer-tier technical content without a redirect reflex."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 26,
-    "verified": 25,
+    "checked": 28,
+    "verified": 27,
     "fuzzy": 1,
     "wrong_ts": 0,
     "not_found": 0

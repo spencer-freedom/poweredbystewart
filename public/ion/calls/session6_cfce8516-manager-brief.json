@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION6_cfce8516",
   "rep_name": "Meg",
-  "trajectory_summary": "The call opens neutral and builds real engagement once the rep asks about the customer's interest — Zachary volunteers a genuine two-year regret narrative and a concrete bill figure. From there the call flattens into a long, patient but repetitive bill-collection slog that never pivots channels, and it closes on a tentative, contingent appointment rather than a locked booking. The rep held the send-proposal-before-meeting hard rule cleanly but left the customer's own compelling data points (regret framing, near-doubled usage) largely unflipped into urgency.",
+  "trajectory_summary": "This call starts flat and stays procedurally on-track: the rep runs through address, shading, ownership, interest, bill amount, utility, and credit qualifier in under three minutes, then spends the back half wrestling a bill-photo capture that eventually succeeds. The energy is mostly stagnant rather than built — the customer's one real engagement spike (regret about not going solar two years ago, and later noticing his own usage spike) is acknowledged but not leveraged into a stronger booking push, and the appointment that results is explicitly tentative pending the customer's work schedule.",
   "shape": "mixed",
-  "outcome_dispute": "The call ends with 'let's tentatively plan for that, and I'll let you know if that doesn't work' plus an explicit rep-side fallback plan ('if I don't hear back from you, we'll call Monday morning just to make sure that time still works'). This is a conditional/tentative booking, not a firm booked appointment — the customer never confirms without a contingency, and the rep's own language treats Monday 3:30 as unconfirmed pending the customer's work schedule.",
+  "outcome_dispute": "The appointment is not firmly booked — the customer says 'I'll have to look at my work schedule' (07:46) and the rep herself frames it as tentative: 'we'll tentatively schedule you for Monday at 03:30' (10:14). This should be tagged tentative/callback, not a clean booked outcome, since no firm handshake ('is that fair?') or reconfirmed lock occurred.",
   "observed_outcome": {
     "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "08:17",
-    "quote": "Yeah. Let's tentatively plan for that, and I'll let you know if that doesn't work.",
-    "reasoning": "A specific day and time (Monday 3:30) is stated, but the customer's own word 'tentatively' plus the explicit condition ('I'll let you know if that doesn't work') and the rep's built-in fallback plan for Monday morning confirm this is not a locked booking."
+    "ts": "08:12",
+    "quote": "Let's tentatively plan for Monday, you said, at 03:30?",
+    "reasoning": "A specific day and time (Monday 03:30) is named, but the customer conditions it on checking his work schedule and both parties use 'tentatively,' with the rep planning a Monday-morning reconfirm call rather than a locked commitment."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,144 +20,246 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep acknowledges the number ('Wow. Okay... Got you there. Yeah. We can definitely get that lower for you.') and later engages with the customer's near-doubled usage by probing cause ('Did anything change, like new appliances?'), but never converts either figure into an explicit emotional flip against the utility — the closest line stays a generic assurance ('We can definitely get that lower for you') rather than the alignment-against-utility reframe the schema calls for."
+    "reasoning": "The rep acknowledges the rising bill with 'Wow. Okay.' and 'We can definitely get that lower for you' (02:33) but never turns the number into an explicit reason-to-act framing tied to the appointment; the flip should have landed here or when usage doubling was raised again at 09:52."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:41",
+    "ask_quote": "Do you get that bill online or through the mail?",
+    "result": "received_on_call",
+    "method": "photo",
+    "result_ts": "08:38",
+    "result_quote": "I did get that photo. It's only showing me, like, five months. Are you able to to send me a couple more screenshots?",
+    "reasoning": "Rep collected bill data via text-photo during the call itself, though it took multiple rounds (initial photo, then a request for additional screenshots to cover a full year) before the data was sufficient."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "01:15",
     "reason_given": true,
-    "reason_ts": "01:15",
-    "reason_quote": "What's got you looking at the solar options? ... The rising rising electricity cost. I talked to somebody, like, maybe two years ago, and I just kinda regret not doing it then, now.",
+    "reason_ts": "01:19",
+    "reason_quote": "The rising rising electricity cost. I talked to somebody, like, maybe two years ago, and I just kinda regret not doing it then, now.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer gives a rich, specific reason (rising costs plus regret over a two-year-old missed opportunity), but the rep's subsequent lines address only the factual tax-credit question embedded in it and never circle back to the regret/urgency framing at button-up or elsewhere in the call."
+    "reasoning": "Customer names rising costs and prior regret as his motivator, but the rep moves straight into tax-credit talk and never explicitly reconnects the appointment to that stated regret or the rising-cost motivator later in the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "quote": "Hey. This is Meg. I'm with ION reaching out about the solar form you filled out online."
+      "end_ts": "00:14",
+      "quote": "Hey. This is Meg. I'm with ION reaching out about the solar form you filled out online.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm good.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:15",
-      "quote": "What's got you looking at the solar options?"
+      "end_ts": "01:40",
+      "quote": "What's got you looking at the solar options?",
+      "customer_response": "cooperative",
+      "customer_quote": "The rising rising electricity cost. I talked to somebody, like, maybe two years ago, and I just kinda regret not doing it then, now.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:09",
-      "quote": "I'm assuming you're property owner, single family home. Right?"
+      "end_ts": "01:14",
+      "quote": "I'm assuming you're property owner, single family home. Right?",
+      "customer_response": "cooperative",
+      "customer_quote": "Correct.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "00:39",
-      "quote": "I am seeing a tree in the front yard that's probably gonna put some shade on the roof."
+      "end_ts": "01:06",
+      "quote": "I am seeing a tree in the front yard that's probably gonna put some shade on the roof. Is that still there?",
+      "customer_response": "cooperative",
+      "customer_quote": "It is my tree, so yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:37",
-      "quote": "Are you paying is it Dayton Power and Light or what company?"
+      "end_ts": "02:47",
+      "quote": "Are you paying is it Dayton Power and Light or what company?",
+      "customer_response": "cooperative",
+      "customer_quote": "I think Dayton Power and Light got bought by AES, and AES just got bought by BlackRock.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:06",
-      "quote": "how much would you say you're paying on average for power?"
+      "end_ts": "02:24",
+      "quote": "How much would you say you're paying on average for power?",
+      "customer_response": "cooperative",
+      "customer_quote": "Our electric bill's somewhere between last year, it was, like, $2.90. Now it's, like, $3.53 90.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "01:42",
-      "quote": "the big federal tax credits, those did end up going away."
+      "ts": "02:58",
+      "end_ts": "03:07",
+      "quote": "The last thing that actually qualifies you for the program is as long as the credit score is above 650, we're good to go. Is that the case for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Mine is. I don't want it run until I'm ready.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "asked",
-      "ts": "03:32",
-      "quote": "We might have done this last time we spoke to you a couple years ago."
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "we might have done this last time we spoke to you a couple years ago",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "05:05",
-      "quote": "I'm gonna send you a text message. If you actually wanna take a a picture of the bar graph and text that to me, that works best."
+      "ts": "03:41",
+      "end_ts": "08:45",
+      "quote": "Do you get that bill online or through the mail?",
+      "customer_response": "cooperative",
+      "customer_quote": "I think I get it online. I'd have to check. I have the app. I can pull it up on you.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "07:36",
-      "quote": "I do have time. Monday, I've got a 03:30, and then my next time would be a 06:30."
+      "end_ts": "08:22",
+      "quote": "I do have time. Monday, I've got a 03:30, and then my next time would be a 06:30.",
+      "customer_response": "resistant",
+      "customer_quote": "I'll have to look at my work schedule.",
+      "resistance_reason": "timing",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "10:14",
+      "end_ts": "10:30",
+      "quote": "We'll tentatively schedule you for Monday at 03:30.",
+      "customer_response": "cooperative",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "07:46",
+      "quote": "I'll have to look at my work schedule.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "And what we'll do as well is, if I don't hear back from you, we'll call Monday morning just to make sure that time still works."
+      ],
+      "resolved": true,
+      "resolution_ts": "08:12",
+      "reasoning": "Customer conditions the appointment on checking his schedule; rep does not push for a firmer lock but sets up a reconfirm call and the customer tentatively agrees to the time regardless."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "button-up mechanics on a fragile booking",
+    "topic": "Button-up handshake discipline",
     "ts": "10:14",
     "quote": "We'll tentatively schedule you for Monday at 03:30. And, again, you've got my info, so if things change, just let me know.",
-    "why": "The appointment is explicitly conditional in the customer's own words, and the rep's close skips the hour-block statement, the no-driving/computer instruction, and the 'is that fair?' handshake — the exact elements the schema flags as predictive of show rate. On an already-hedging customer, these are the highest-leverage lines to firm things up, and the rep left all of them out."
+    "why": "The appointment never gets a firm lock — no hour-block, no computer/no-driving instruction, no 'is that fair?' — leaving a real booking dependent entirely on a Monday-morning reconfirm call. This is the single highest-leverage fix since it directly affects show rate on an otherwise well-run call."
   },
   "key_moments": [
     {
-      "ts": "01:15",
+      "ts": "01:19",
       "quote": "I talked to somebody, like, maybe two years ago, and I just kinda regret not doing it then, now.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer hands the rep a strong emotional anchor — regret over a missed opportunity — but the rep's reply pivots straight to tax-credit mechanics rather than reflecting the regret back as urgency ('let's make sure you don't have that same regret again')."
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a prior solar conversation from roughly two years ago but the rep never asks which company, what was shown, or why it didn't move forward. This is competitive intel the closer would want walking in."
     },
     {
-      "ts": "01:53",
-      "quote": "we've actually redone the whole solar program here at ION to where you don't have to pay anything upfront, nothing out of pocket.",
-      "classification": "other",
-      "stewart_read": "This mirrors the schema's own qualifier template language ('saves you money immediately... nothing upfront') and directly answers the customer's tax-credit question — standard setter-level program framing, not closer-tier technical or pricing detail. Not a scope-creep instance under this schema's actual signal list (panel specs, inverter debates, quoted savings ranges)."
+      "ts": "01:42",
+      "quote": "Yeah. So the the big federal tax credits, those did end up going away.",
+      "classification": "knowledge_gap",
+      "stewart_read": "The schema's required disclosure language is specific: the credit can't be guaranteed on purchased systems, may still apply if installed before year-end, and purchase options exist without it. The rep's line is looser and omits the purchase-options-without-credit clarification entirely."
     },
     {
-      "ts": "03:01",
-      "quote": "the last thing that actually qualifies you for the program is as long as the credit score is above 650, we're good to go.",
-      "classification": "other",
-      "stewart_read": "The rep states 650 as the threshold, but the schema's documented active threshold is 670. This is the same drift already noted in SESSION18_fcbf33c1, suggesting a floor-wide inconsistency rather than a one-off error."
+      "ts": "01:03",
+      "quote": "It is my tree, so yes.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer gives an easy, unprompted yes to removing his own tree for more sun exposure — a cooperative signal the rep could reflect back later ('since you're open to the tree coming down, we can maximize your roof's exposure') but instead moves straight to the next verify item."
     },
     {
-      "ts": "07:51",
-      "quote": "Well, I mean, will you be able to send me some program information in the meantime?",
-      "classification": "conditional_booking",
-      "stewart_read": "Customer's request for material before the appointment is a soft hedge on commitment. The rep's response two lines later held the harder line (no design without a scheduled appointment) before offering a softer concession of 'basics' — a disciplined split between the hard rule and a reasonable accommodation."
+      "ts": "02:12",
+      "quote": "Our electric bill's somewhere between last year, it was, like, $2.90. Now it's, like, $3.53 90. So, like, edging up on 400.",
+      "classification": "bill_anchor",
+      "stewart_read": "Customer volunteers a concrete, rising bill figure — a strong anchor point. Rep acknowledges with 'Wow. Okay.' and briefly reinforces ('We can definitely get that lower for you') but does not flip it into an emotional alignment-against-the-utility close later in the call."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 37,
-    "verified": 37,
-    "fuzzy": 0,
+    "checked": 47,
+    "verified": 46,
+    "fuzzy": 1,
     "wrong_ts": 0,
     "not_found": 0
   }

@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION18_f0ab72d0",
   "rep_name": "Natalia",
-  "trajectory_summary": "This call opens cold and never builds — the rep short-circuits her own qualification process by disqualifying the lead off a visual satellite impression within two minutes, then compounds it by placing the customer on hold to consult a supervisor rather than continuing the conversation. The customer pushes back three separate times with specific, reasonable counter-evidence about her actual sun exposure, and the rep never pivots to the obvious resolution — routing to a specialist for an on-site look — instead closing the call with a well-wish.",
+  "trajectory_summary": "The call opens with a legitimate qualification step — satellite imagery shows heavy tree cover — but the rep delivers the DQ verdict abruptly, within seconds of pulling up the house, before the customer has any chance to describe her actual sun exposure. The customer pushes back three separate times with specific, credible detail about her property, and each time the rep restates the same satellite-based tree argument rather than offering any path to a physical reassessment. The DQ itself is likely substantively correct given the imagery, but the execution left the customer feeling unheard and the call ended with no resolution path or referral offered.",
   "shape": "energy_leaked",
-  "outcome_dispute": "V1 outcome context is unclear, but this should be recorded as a DQ initiated entirely by the rep's satellite-imagery read, not a customer-driven disqualification. The customer never said solar wouldn't work for her — she actively argued the opposite three times. This is a premature/rep-driven DQ, not a clean hard-gate failure like roof age or non-ownership.",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "01:51",
-    "quote": "I really wouldn't recommend solar panels for your home",
-    "reasoning": "The call ends with no appointment and no next step; the rep disqualified the lead based on tree/shading concerns from satellite imagery, though the customer contested this disqualification with specific counter-evidence multiple times without resolution."
+    "ts": "04:02",
+    "quote": "with the trees just from on the south facing end, that do cover up that south roof, it really probably wouldn't be the best option for you. Okay?",
+    "reasoning": "After a supervisor consult, the rep delivers a firm DQ based on south-facing tree shading and closes the call without offering an appointment — this matches the hard DQ pattern, though the schema has no explicit shading-based DQ rule documented (a gap to flag), and the execution left the customer unconvinced."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep never reached the bill/utility portion of the verify script — the call was diverted into the roof/tree DQ discussion within the first two minutes and never returned to bill or utility questions."
+    "reasoning": "The call never reached the bill_amount Verify item — the rep moved from address verification directly into a roof/shading DQ discussion, so no bill figure was ever captured or discussed."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ended in a shading-based DQ before the rep reached the bill_collection stage of the script; the utility bill was never raised."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,132 +41,225 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what interested the customer in solar. The customer's original form ('looking for some changes to my house') was acknowledged at 00:58 but never explored further before the rep moved to address/roof verification and then the DQ."
+    "reasoning": "The rep never asked what interested the customer in solar. The closest the customer came to volunteering a reason was at 00:49 ('I filled out a form, looking for some changes to my house') but the rep did not probe further or ask the dedicated interest question before moving to the DQ."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:10",
-      "quote": "I'm Natalia with ION."
+      "end_ts": "00:21",
+      "quote": "I'm Natalia with ION. I got that form that was filled out that you were looking to some solar options.",
+      "customer_response": "deflected",
+      "customer_quote": "I don't quite understand what your more information is about.",
+      "resistance_reason": "trust",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:22",
-      "quote": "I got your address listed As 1075 Southwest Walkingwood Depot Bay. Is that correct?"
+      "end_ts": "01:34",
+      "quote": "I got your address listed As 1075 Southwest Walkingwood Depot Bay. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Mhmm.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:40",
-      "quote": "there are a lot of trees surrounding the area. Right?"
+      "end_ts": "06:20",
+      "quote": "Just looking at it off the rip, there are a lot of trees surrounding the area. Right?",
+      "customer_response": "resistant",
+      "customer_quote": "Well, I have, sun all morning on the front of my house and all afternoon on the back.",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "declined"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "02:04",
+      "quote": "Well, I have, sun all morning on the front of my house and all afternoon on the back.",
+      "type": "roof_or_home",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "Mhmm. And, definitely, part of the house could get some sun, but just with how many trees there are and the amount that is needed, right, the amount of sun exposure needed, I'm not too sure here.",
+        "with the trees just from on the south facing end, that do cover up that south roof, it really probably wouldn't be the best option for you."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The customer disputes the shading DQ twice more (at 04:27 and 06:07) with the same underlying complaint — she never accepts or softens on the point, she simply runs out of road when the rep closes the call at 06:20."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "premature DQ from satellite imagery, skipping verify section",
-    "ts": "01:51",
-    "quote": "I really wouldn't recommend solar panels for your home",
-    "why": "The rep disqualifies the lead within two minutes based solely on a visual satellite impression, before asking a single verify-section question (interest, bill, roof type/age) and without testing her read against the customer's own account of her sun exposure. This is the single highest-leverage fix — the rep needs a rule that satellite imagery informs but does not decide a DQ, and that customer-reported sun exposure gets tested (or routed to a specialist) before a DQ is delivered."
+    "topic": "Verify section skipped entirely before DQ delivered",
+    "ts": "01:04",
+    "quote": "I'm here to build you out a solar design, see if you're qualified for our programs, to get you saving money on your electric bill every month. Okay?",
+    "why": "The rep never asks the interest question, bill amount, or utility company before jumping to a DQ based purely on satellite imagery. A required, hard-required Verify item (interest_in_solar) was never touched — this is a complete omission of a required beat, not just a quality issue on a beat that was attempted. Even on a call that ends in DQ, running the interest question first could surface facts (recent tree removal, planned roof work) that change the qualification call, and gives the customer a sense of being heard before bad news lands."
   },
   "key_moments": [
     {
       "ts": "00:36",
       "quote": "You talk so fast. I can't understand you.",
-      "classification": "other",
-      "stewart_read": "This is a first-30-seconds legitimacy/rapport signal — the customer can't process the intro because the rep's pace doesn't match her tempo. The schema flags energy match (calm, neighbor-like pace, 140-170 wpm target) as a conversion factor for this demographic, and this call opens with the customer explicitly failing to keep up."
+      "classification": "empathy_miss",
+      "stewart_read": "Customer explicitly signals a pace mismatch in the first 30 seconds. The rep does slow down briefly ('Here. I'll speak a little slower.') but reverts to a fast, run-on delivery style for the rest of the call, visible in the transcript's frequent trailing/restart phrasing."
     },
     {
-      "ts": "01:51",
-      "quote": "I really wouldn't recommend solar panels for your home",
-      "classification": "protocol_violation",
-      "stewart_read": "The rep disqualifies the home before completing any verify-section items — no interest question, no bill capture, no roof type/age discussion. This is a premature DQ built on a two-second satellite glance, skipping the hard-required qualification beat entirely."
+      "ts": "01:42",
+      "quote": "there are a lot of trees surrounding the area. Right?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The rep jumps directly from address verification to a DQ signal within 90 seconds, skipping the interest and bill-pain Verify items entirely. There was no rapport or curiosity-building before the negative news landed."
+    },
+    {
+      "ts": "02:04",
+      "quote": "Well, I have, sun all morning on the front of my house and all afternoon on the back.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "The customer offers a specific, credible counter-fact (front/back sun exposure) that directly challenges a satellite-only read. The rep's response ('Mhmm... but just with how many trees there are') does not probe which side of the house faces south or ask any clarifying question that could actually change the qualification call."
     },
     {
       "ts": "02:46",
       "quote": "I'm gonna ask someone else their opinion, and we shall see. Wait. Just give me a second.",
       "classification": "non_standard_scenario_hold",
-      "stewart_read": "The rep puts the customer on hold for nearly a minute to consult a supervisor over what should be a routine qualification judgment call, not an unusual scenario like off-grid or manufactured housing. This also interrupts the hard-required verify_section beat mid-stream, leaving qualification incomplete when the rep returns with a supervisor-relayed answer instead of her own read."
-    },
-    {
-      "ts": "04:09-04:44",
-      "quote": "Well, I I understand that you see nothing but trees when you look at pictures that are taken from the sky. But, I guess what I have to have is somebody who's willing to actually look at what's on I get, know what that is.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer, in a halting and visibly frustrated turn, directly names the fix: someone needs to actually look at her property rather than rely on satellite imagery. This is effectively the customer handing the rep the exact next step (site visit / specialist referral) and the rep does not pick it up."
+      "stewart_read": "The rep places the customer on hold for roughly a minute to consult a supervisor on a shading-based qualification question. This could be a legitimate escalation for a genuinely borderline case, though the hold is unexplained to the customer beforehand and she is left without any indication of what's being checked or why."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 25,
-    "verified": 23,
+    "checked": 30,
+    "verified": 28,
     "fuzzy": 0,
     "wrong_ts": 2,
     "not_found": 0

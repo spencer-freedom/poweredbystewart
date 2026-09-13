@@ -21,6 +21,20 @@ export type CorpusStats = {
     floor: { calls: number; sections: Record<string, { on_line: number; ran: number; ran_rate_of_on_line: number | null }> };
     reps: Record<string, { calls: number; sections: Record<string, { on_line: number; ran: number; ran_rate_of_on_line: number | null }> }>;
   };
+  bill_document?: { measured_on: number; results: Record<string, number> };
+  talk?: {
+    measured_on: number; speaker_balance_suspect: number; rep_talk_share_median: number | null;
+    rep_talk_share_set_vs_not: { set: number | null; not_set: number | null };
+    longest_monologue_median_words: number | null; softeners_per_100_words_median: number | null;
+    credit_threshold_stated: Record<string, number>;
+  };
+  time_to_bill_vs_set?: Record<string, { set: number; n: number; set_rate: number | null }>;
+  objections?: {
+    calls_with_objections: number; by_type: Record<string, number>; attempts_histogram: Record<string, number>;
+    resolved_rate_by_attempts: Record<string, { resolved: number; n: number; rate: number | null }>;
+    set_rate_by_max_attempts: Record<string, { set: number; n: number; set_rate: number | null }>;
+  };
+  script_events?: Record<string, { customer_response: Record<string, number>; resistance_reasons: Record<string, number>; results: Record<string, number>; rep_followup: Record<string, number>; set_rate_by_result: Record<string, { set: number; n: number; set_rate: number | null }> }>;
   adherence_vs_outcome?: {
     min_n: number;
     sections: Record<string, { ran_n: number; ran_set_rate: number | null; skipped_n: number; skipped_set_rate: number | null; lift_pts: number | null; small_sample: boolean }>;

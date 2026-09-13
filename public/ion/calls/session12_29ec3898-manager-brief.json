@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION12_29ec3898",
   "rep_name": "Tyke",
-  "trajectory_summary": "The call opens with rapport-building and a genuine, specific reason for interest (rising electric bills), but stalls almost entirely on a technical mapping mismatch that consumes the back half of the call. The rep never returns to the verify script (co-owner, roof, utility, bill, tax credit) or books any appointment element — the call ends on an open-ended callback promise with no scheduled time.",
+  "trajectory_summary": "The call opens cooperatively with a clean intro and quick interest capture, but the entire remaining runtime is consumed by the rep trying to visually locate the customer's home on an outdated mapping tool. The rep never returns to qualification (bill, utility, roof age, co-owner, tax credit) and ends the call by promising a callback, leaving no appointment, no bill capture, and no verify-section progress.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is unknown/unclear from metadata, but the observed transcript shows no appointment was booked or even tentatively scheduled — the rep ends the call promising an unscheduled callback after consulting a design team, which is a callback outcome, not booked or tentative.",
+  "outcome_dispute": "V1 tag is unknown/unclear from metadata; based on the transcript, this call should be classified as a callback with no locked time — the rep says 'give you a callback here a little bit later' with no specific day or time, so it is a soft, unanchored callback rather than a booked or tentative appointment.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "01:49",
-    "quote": "So let me just talk to them, and then I can give you a callback here a little bit later.",
-    "reasoning": "The call ends with the rep promising to call back after consulting the design team about the address mismatch, but no specific day or time is given, so this is a callback outcome without a locked datetime, not a booked or tentative appointment."
+    "ts": "02:48",
+    "quote": "I might not have updated imagery. Let me check with my design team. This should have, like, a more updated image, and then I can just use what you described to figure it out. So let me just talk to them, and then I can give you a callback here a little bit later.",
+    "reasoning": "The rep ends the call promising to call back after consulting the design team, but no specific day or time is stated, making this a soft, unanchored callback rather than a booked or tentative appointment."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,145 +20,234 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer referenced 'the prices of the electric bill' as their motivation, but no specific bill amount or usage figure was ever captured before the call was derailed by the address-mapping issue."
+    "reasoning": "The customer mentions 'the prices of the electric bill recently' as a motivator but no dollar amount or usage figure is ever captured before the call ends on the address/tooling issue."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call never reaches bill collection; it ends during address verification, before the rep gets to utility company, bill amount, or bill-document collection steps."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:28",
     "reason_given": true,
-    "reason_ts": "00:35",
-    "reason_quote": "Honestly, the mainly just the prices of the electric bill recently",
+    "reason_ts": "00:41",
+    "reason_quote": "the mainly just the prices of the electric bill recently\nas well as\nit's just easy to provide for myself and not have to worry about things like that.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question and got a clear, usable answer (rising electric bills, self-sufficiency), but never referenced it again — the call pivoted immediately into address verification and stayed stuck there until the callback close."
+    "reasoning": "The rep asked the interest question and the customer gave a clear bill-pain reason, but the rep never referenced it again — the call pivots immediately into address verification and never returns."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "quote": "This is Tyke with ION. I received your request."
+      "end_ts": "00:14",
+      "quote": "This is Tyke with ION. I received your request. You're looking at solar for the home.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm doing great. Thank you for asking.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:28",
-      "quote": "And what got you interested in looking at solar?"
+      "end_ts": "00:52",
+      "quote": "And what got you interested in looking at solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "the mainly just the prices of the electric bill recently",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "01:05",
-      "quote": "Are you in a single family home or a manufactured home?"
+      "ts": "00:21",
+      "end_ts": "02:48",
+      "quote": "Have you at 3708 Livingston Stone Circle in Little River?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes, sir.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "co_owner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "roof",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
-      "ts": "01:49",
-      "quote": "I can give you a callback here a little bit later."
+      "ts": "02:48",
+      "end_ts": "02:52",
+      "quote": "I can give you a callback here a little bit later.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes, sir. Thank you.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "declined"
     },
     {
       "section": "button_up",
       "status": "skipped",
-      "ts": "01:49",
-      "quote": "So let me just talk to them, and then I can give you a callback here a little bit later."
+      "ts": "02:48",
+      "end_ts": "02:52",
+      "quote": "K. No problem. You have a good day. Bye bye.",
+      "customer_response": "cooperative",
+      "customer_quote": "Bye bye.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "unanchored callback / lost momentum on address mismatch",
-    "ts": "01:49",
-    "quote": "So let me just talk to them, and then I can give you a callback here a little bit later.",
-    "why": "The call had real momentum (early bill-pain disclosure, cooperative customer) that was entirely lost to an unresolved mapping problem. The rep should have a fallback protocol to proceed on the verbal address rather than repeatedly guessing exterior features, and should never end a call with a vague 'later' instead of a locked callback time."
+    "topic": "Tooling friction ended the call instead of being parked",
+    "ts": "02:48",
+    "quote": "I might not have updated imagery. Let me check with my design team. This should have, like, a more updated image, and then I can just use what you described to figure it out. So let me just talk to them, and then I can give you a callback here a little bit later.",
+    "why": "The rep let a satellite-imagery problem consume the entire call and then used it as the reason to hang up with only a vague callback promise — no bill amount, no utility company, no appointment day/time were captured. The fix is procedural: park unresolvable tooling issues and keep running the verify script in parallel."
   },
   "key_moments": [
     {
-      "ts": "00:35",
-      "quote": "the mainly just the prices of the electric bill recently",
+      "ts": "00:14",
+      "quote": "I'll keep it short for you. My job here at Ion is just to put together this design to see if it's a good fit for the home. Just have a couple of quick questions for you.",
+      "classification": "other",
+      "stewart_read": "Efficient framing of the call's purpose right after intro, setting expectations for a short qualifying conversation. This is a clean, functional opening that sets up the rest of the script well."
+    },
+    {
+      "ts": "00:41",
+      "quote": "the mainly just the prices of the electric bill recently\nas well as\nit's just easy to provide for myself and not have to worry about things like that.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer volunteers a bill-pain reason unprompted, which is the exact emotional anchor the schema wants captured and flipped later. The rep never returns to this reason or ties the eventual callback to it."
+      "stewart_read": "Customer names bill pain unprompted as the primary motivator. This is exactly the anchor coaching_philosophy.bill_anchoring calls for, but the rep never returns to it — the call derails into the address-lookup problem and the bill amount is never asked."
     },
     {
       "ts": "01:05",
-      "quote": "Are you in a single family home or a manufactured home?",
+      "quote": "Let me get a better view of it. It's not automatically pinning the home. Are you in a single family home or a manufactured home?",
       "classification": "other",
-      "stewart_read": "This is a legitimate verify-script question, but it arrives right as the mapping tool fails, and the rep never gets a clean confirmation before pivoting into guessing game about door/siding color."
+      "stewart_read": "Rep tries to keep the address-verification flowing by asking a structured qualifying question (home type) even while the mapping tool struggles — a reasonable attempt to make dead time productive."
     },
     {
-      "ts": "01:52",
-      "quote": "Does it got, like, a red door?",
+      "ts": "01:41",
+      "quote": "I'm not sure if you can zoom in or whatever, but it should be kind of like a blue with a metal on roof.",
       "classification": "other",
-      "stewart_read": "Rep attempts to visually confirm the property by guessing exterior features instead of using a faster resolution path (cross streets, nearest landmark, or simply proceeding with the verbal address already confirmed at 00:28). This is the first of three similar guesses that don't converge."
-    },
-    {
-      "ts": "02:34",
-      "quote": "And is it, got, like, blue siding or",
-      "classification": "other",
-      "stewart_read": "Third visual-matching attempt in the same unresolved thread; customer has to correct the rep again ('The blue siding is not mine'). This is the clearest single-call marker that the improvised approach was not working."
+      "stewart_read": "By this point the customer is doing most of the navigational work for the rep, describing colors and landmarks unprompted — a sign the visual-matching approach has become the customer's problem to solve, not the rep's."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 25,
-    "verified": 19,
+    "checked": 26,
+    "verified": 26,
     "fuzzy": 0,
-    "wrong_ts": 6,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

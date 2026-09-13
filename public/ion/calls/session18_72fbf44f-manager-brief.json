@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION18_72fbf44f",
   "rep_name": "Tyke",
-  "trajectory_summary": "The call opens with the customer already anxious from two conflicting neighbor experiences and builds real trust when the rep investigates and specifically explains the shading issue on the neighbor's property. That momentum is not converted into a bill anchor or roofing cross-sell, and the call ends abruptly on a utility-eligibility concern with only a vague callback promise. The energy arc is genuinely mixed: real rapport built, then an unresolved, soft ending.",
+  "trajectory_summary": "The call opens with an unusually rich, voluntary disclosure from the customer — solar interest, a friend's good outcome, a neighbor's bad outcome, a genuine affordability fear, and enthusiasm signals (roof replacement need, pool pump experimentation, backup-power interest) — and the rep handles the objection portion well with home-specific data. But the call is cut short by a utility qualifier failure (Edisto Electric) that ends in a vague 'I'll give you a callback' with no locked next step, leaving a highly engaged customer's momentum unresolved.",
   "shape": "mixed",
-  "outcome_dispute": "V1 tag is unknown/unclear from metadata, but the observed transcript ends with no appointment set, no date/time, and only a conditional 'I'll give you a callback' — this should be scored as callback, not booked or tentative, and the call should be flagged for reconciliation since it never reached bill_collection, tax_credit_qualifier, or button_up sections.",
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata; observed outcome here is best read as a soft disqualification pending design-team review, not a booked or tentative appointment. The call ends with 'let me see if there's anything we could do... I'll give you a callback' — no appointment, day, or time was ever offered.",
   "observed_outcome": {
-    "outcome": "callback",
+    "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "04:48",
-    "quote": "But, yeah, I'll I'll talk to my design team. If we're able to help you, I'll give you a callback.",
-    "reasoning": "No day or time was ever agreed; the call ends with the rep saying he needs to check with the design team on a possible utility net-metering disqualification and will call back only if the deal is viable, which is a conditional callback, not a booked or tentative appointment."
+    "quote": "It looks like we're not gonna be able to work with them, and let me see if there's anything we could do. But, yeah, I'll I'll talk to my design team. If we're able to help you, I'll give you a callback.",
+    "reasoning": "The utility (Edisto Electric Cooperative) appears to fail Ion's net-metering criteria, and the call ends without any appointment, day, or time — the rep frames it as a soft disqualification pending internal design-team review with an open-ended callback promise, not a booked or tentative appointment."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,143 +20,245 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the average monthly bill figure and acknowledged it ('About $2.50. Perfect.') but immediately moved into the qualification/net-metering check rather than tying the number back to the customer's own earlier statement that 'our electric bill's kinda high' — the flip should have landed right after 04:20."
+    "reasoning": "Transcript literally shows '$2.50,' almost certainly a transcription artifact for roughly $250/month given the customer's earlier comment that 'our electric bill's kinda high' — flagging this as an inference, not asserting the figure as fact. Regardless of exact number, the rep replies 'About $2.50. Perfect.' and moves straight into the qualifier question without tying the amount back to the customer's own stated bill-pain, so no flip occurred."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ends on a likely utility disqualification before the rep ever reaches the bill-collection step (text/email/photo of the actual utility bill) — the call was cut short at the qualifier stage."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:31",
     "reason_given": true,
     "reason_ts": "00:47",
-    "reason_quote": "Alright. There we go. A friend of mine got solar through Sunrun.",
+    "reason_quote": "A friend of mine got solar through Sunrun.",
     "reason_used": "yes",
-    "use_ts": "02:28",
-    "use_quote": "No. And that yeah. Those are all good concerns to have. I mean, exactly that's that's exactly what my job is, just to kinda get you a preliminary design, complete for you to take a look at to see if even is gonna make sense for your specific home and needs.",
-    "reasoning": "The rep asked the interest question, the customer gave an extended answer rooted in a friend's Sunrun experience and neighbor anecdotes, and the rep directly engaged with that reasoning by investigating the neighbor's property and explaining the shading discrepancy — a genuine use of the stated reason, even though it wasn't tied forward into a bill-pain flip."
+    "use_ts": "02:41",
+    "use_quote": "I was taking a look at the, the across the street neighbors there, and it does look like they have shade pretty close to the house with, some of the trees.",
+    "reasoning": "The customer's stated interest was layered — a friend's good experience, a neighbor's bad experience, and general curiosity about clean energy/self-sufficiency — and the rep directly engaged with the neighbor's-bad-outcome thread by pulling home-specific data to differentiate the customer's situation, which is a genuine use of the stated reason rather than a filed-and-dropped acknowledgment."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "Hey, James. This is Tyke with Ion. I received a request you're looking at solar for the home."
+      "end_ts": "00:11",
+      "quote": "Hey, James. This is Tyke with Ion. I received a request you're looking at solar for the home.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Good. How are you?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:31",
-      "quote": "And what got you interested in looking at solar?"
+      "end_ts": "02:27",
+      "quote": "And what got you interested in looking at solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "A friend of mine got solar through Sunrun.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:22",
-      "quote": "I get 2069 Highway 61 in Ridgeville."
+      "ts": "00:20",
+      "end_ts": "00:29",
+      "quote": "I get 2069 Highway 61 in Ridgeville.",
+      "customer_response": "cooperative",
+      "customer_quote": "Ridgeville? Yeah. Me? Yep. Perfect.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "03:49",
-      "quote": "is there anybody else with the title with you, or is it just you?"
+      "end_ts": "03:55",
+      "quote": "And then it looks like I have you down as the property owner. Is there anybody else with the title with you, or is it just you?",
+      "customer_response": "cooperative",
+      "customer_quote": "It's just me.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "03:12",
-      "quote": "what kind of roof do you currently have right now? Is that like a metal roof or asphalt shingle?"
+      "end_ts": "03:42",
+      "quote": "I do wanna just clarify what what kind of roof do you currently have right now? Is that like a metal roof or asphalt shingle?",
+      "customer_response": "cooperative",
+      "customer_quote": "It's a metal roof, and it's about, I wanna say, 15 years old.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "03:58",
-      "quote": "is Dominion the current utility company for you, or is it something different?"
+      "ts": "03:57",
+      "end_ts": "04:14",
+      "quote": "is Dominion the current utility company for you, or is it something different?",
+      "customer_response": "cooperative",
+      "customer_quote": "Edisto Electric Cooperative. Yep.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "04:14",
-      "quote": "do you know how much you're kinda paying on average per month with them?"
+      "end_ts": "04:20",
+      "quote": "do you know how much you're kinda paying on average per month with them?",
+      "customer_response": "cooperative",
+      "customer_quote": "$2.50.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "skipped",
+      "ts": "04:48",
+      "end_ts": "04:56",
+      "quote": "I'll I'll talk to my design team. If we're able to help you, I'll give you a callback.",
+      "customer_response": "no_answer",
+      "customer_quote": "Alright.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "declined"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:19",
+      "quote": "I'm a little nervous though because one friend says, man, it knocks, like, a $100 a month off, and they got a roof repair or a new roof. Yeah. And I've got a neighbor across the street who did the same thing, and he's like, they put all this stuff on my roof, and now I pay my electric bill plus a $100 a month.",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I was taking a look at the, the across the street neighbors there, and it does look like they have shade pretty close to the house with, some of the trees. So that might be the issue that they're running into is, their system is just not big enough to where it was producing enough energy to cover their full electric bill"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep gave a single, specific, home-tied explanation for why the neighbor had a bad outcome and asserted the customer's home would perform better, but the customer never verbally confirms feeling reassured — the call moves directly into the roof-type question without an explicit acknowledgment from the customer, so this is better read as apparently resolved (customer did not re-raise the concern) rather than confirmed resolved."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "roofing cross-sell missed on self-disclosed roof maintenance",
-    "ts": "03:20",
+    "topic": "cross-sell miss on roofing need",
+    "ts": "03:12",
     "quote": "I actually just got off the roof yesterday. I just cleaned it. It's all been pressure washed, and I was gonna start the process of doing the screws myself because paying somebody is kinda ridiculous now.",
-    "why": "This is the single clearest, most actionable miss on the call — the customer directly told the rep he's managing roof upkeep himself to avoid cost, which is exactly the cross_sell_signals.roof_replacement_planned trigger, and it went completely unaddressed while the call later stalled on a utility eligibility question."
+    "why": "Customer stated a roof need twice (01:13 and 03:12-03:42) on a call that ultimately soft-disqualifies on solar — the roofing lead was a live, capturable alternative outcome and the rep never said the word 'roofing' or offered to route it, unlike the positive exemplar in SESSION18_fcbf33c1."
   },
   "key_moments": [
     {
-      "ts": "01:19",
-      "quote": "I'm a little nervous though because one friend says, man, it knocks, like, a $100 a month off, and they got a roof repair or a new roof.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "The customer is describing exactly the situation objection_inversion is built for: a cost/skepticism objection tied to his own high electric bill and roof need. The rep validates the concern generically instead of flipping it toward 'what's expensive is your current bill plus an aging roof you're already paying to maintain yourself.'"
+      "ts": "00:51",
+      "quote": "A friend of mine got solar through Sunrun. K. I don't know if that's the or is that y'all?",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "The customer surfaces a competitor (Sunrun) by name and directly asks if Ion is affiliated. The rep's reply is garbled ('No. We're we're ION solar, but I know it's under. Alright.') and never clarifies the relationship or probes what the friend's Sunrun experience actually involved (system size, savings, install timeline) — competitive intel left on the table."
     },
     {
-      "ts": "04:19",
-      "quote": "$2.50.",
-      "classification": "bill_anchor",
-      "stewart_read": "The rep captured the bill figure and acknowledged it, but immediately moved into the utility net-metering concern rather than reflecting the number back as leverage against the customer's own stated bill pain from 01:13 ('our electric bill's kinda high')."
-    },
-    {
-      "ts": "03:20",
-      "quote": "I actually just got off the roof yesterday. I just cleaned it. It's all been pressure washed, and I was gonna start the process of doing the screws myself because paying somebody is kinda ridiculous now.",
+      "ts": "01:08",
+      "quote": "his electric bill went down, and he also kinda got a a roof restoration or repair out of it, or new roof.",
       "classification": "cross_sell_miss",
-      "stewart_read": "This is a stronger and more actionable roofing signal than the friend's-roof anecdote at 01:03 — the customer is personally maintaining a 15-year-old metal roof and considering DIY repair to avoid paying someone, which is a direct opening for Ion's in-house roofing bridge. The rep responds only with light rapport ('Yeah. It's a little bit of pain.') and moves straight to the title-ownership verify question."
+      "stewart_read": "Customer references a friend getting a roof out of the solar deal, which foreshadows his own roof situation raised minutes later (03:12-03:37) — an early signal the rep could have flagged mentally but is understandably folded into the later roof discussion."
     },
     {
-      "ts": "02:14",
-      "quote": "And it'd be something cool. Like, we live out in the country a little bit. So Yeah. If power outages happen, it'd be nice to be maybe a little self sufficient.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer is expressing unprompted interest in backup power / self-sufficiency during outages — a direct opening to mention the Tesla Powerwall battery offering. The rep does not acknowledge this at all before moving to the roof question."
+      "ts": "03:12",
+      "quote": "It's a metal roof, and it's about, I wanna say, 15 years old... I actually just got off the roof yesterday. I just cleaned it. It's all been pressure washed, and I was gonna start the process of doing the screws myself because paying somebody is kinda ridiculous now.",
+      "classification": "cross_sell_miss",
+      "stewart_read": "Customer describes a 15-year-old roof needing maintenance (screws, silicone) and explicitly frames paying a contractor as 'ridiculous' — combined with his earlier mention (01:08, 01:13) that 'my wife and I are looking at having to spend money on a roof right now,' this is a live roofing need. The rep's response, 'Yeah. It's a little bit of pain... I don't blame you. Okay. Thanks for clarifying,' treats it purely as a qualifier data point (roof type/age) and never bridges to Ion's in-house roofing offering."
+    },
+    {
+      "ts": "02:00",
+      "quote": "I really you know, it's hard to get ahead in life already. I don't need somebody making money on me and then me having to pay another $100 a month because that won't happen. I'll just default because I can't I can't make I can't afford that.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a textbook cost/affordability objection stated preemptively and at length. The rep's response at 02:28 is empathetic and pivots to home-specific differentiation, which is a legitimate strategy, but never inverts the framing (e.g., speaking to what the *current* bill is already costing him) — the flip described in the schema was available and unused."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 31,
-    "verified": 29,
+    "checked": 42,
+    "verified": 40,
     "fuzzy": 0,
     "wrong_ts": 2,
     "not_found": 0

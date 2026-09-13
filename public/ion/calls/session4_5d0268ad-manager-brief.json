@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION4_5d0268ad",
   "rep_name": "Brandon",
-  "trajectory_summary": "The call moves from an already-warm, self-directed customer to a booked (tentative) site-visit appointment on his own terms and timeline. The rep adapts reasonably to a non-standard scenario (new homeowner, no bill, renovation in progress, off-grid-adjacent heating question) but does so reactively and leaves several structural gaps: no co-owner/spouse identification despite repeated 'we' language, no interest-reason reinforcement, and a button-up that borrows phone-appointment language for what is actually an in-person visit.",
+  "trajectory_summary": "This call opens with an unusually warm, self-motivated customer who volunteers property and interest details without prompting. The rep captures the referral and basic qualification but never gets a usable bill or usage figure because the customer is a new homeowner without a bill history, and instead of forcing the issue, pivots cleanly to booking a site-visit-style specialist appointment nearly three weeks out. The call ends with a real date and time locked, though the long lead time and lack of a bill or reconfirmation mechanic leave it somewhat fragile.",
   "shape": "mixed",
-  "outcome_dispute": "This is best read as tentative, not booked — the rep himself frames it as tentative (\"We will set a tentative appointment for Wednesday, the twenty second at 01:00\") and adds a pre-confirmation caveat, so the date/time exist but the appointment is explicitly soft.",
+  "outcome_dispute": "V1 tag is unknown; observed outcome is a tentative/booked appointment with a specific day and time (Wednesday, April 22 at 1:00) but the rep explicitly frames it as tentative pending a reconfirmation call, which should be read as 'tentative' rather than a firm 'booked' in Ion's outcome taxonomy.",
   "observed_outcome": {
     "outcome": "tentative",
     "appointment_channel": "in_person",
@@ -11,153 +11,267 @@
     "co_owner_confirmed": null,
     "ts": "10:47",
     "quote": "Great. We will set a tentative appointment for Wednesday, the twenty second at 01:00.",
-    "reasoning": "Rep explicitly labels it tentative and states a reconfirmation call will happen the day before; a specific date and time were captured for an in-person specialist site visit, not a phone closer call. No co-owner was ever identified or confirmed despite repeated 'we' language from the customer, so co_owner_confirmed is null (a co-owner was implied but never explicitly surfaced as a named person)."
+    "reasoning": "The rep explicitly labels this a tentative appointment and states the office will call the day before to reconfirm, matching the tentative rather than firm-booked outcome definition; the visit appears to be an in-person site visit given the customer's repeated request to have someone come look at the property and structures."
   },
   "bill_anchor_audit": {
-    "bill_captured": false,
-    "bill_ts": "",
-    "bill_quote": null,
-    "flip_executed": "no_bill_captured",
+    "bill_captured": true,
+    "bill_ts": "05:10",
+    "bill_quote": "maybe we could get something from the prior owner, but but I know their electrical bill was around, you know, give or take, you know, around 400 a month or something like that.",
+    "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Customer explicitly states he has no bill yet ('We don't have an exact energy bill or anything like that,' 04:47) and only offers a rough prior-owner estimate ('around 400 a month,' 05:18) which the rep never asks him to confirm or use numerically. No bill was captured in a usable form, and there was no flip to execute against it."
+    "reasoning": "The $400/month figure is a secondhand estimate from the prior owner, not the customer's own bill, and the rep never reflects it back as leverage ('that $400 a month is what solar would eliminate') — it is acknowledged and the conversation moves on to utility company identification instead."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "04:41",
+    "ask_quote": "All we do is just take a look at your energy bill so that way we'll get you an accurate evaluation.",
+    "result": "declined",
+    "method": "none",
+    "result_ts": "08:58",
+    "result_quote": "You know, so but I think the best thing is, you know, this is not something we can do. Here's our utility bill.",
+    "reasoning": "The rep raises needing the energy bill at 04:41, but the customer explains across 04:47-09:10 that no bill exists yet (new homeowner, mid-renovation) and proposes a site visit instead, which the rep accepts — the bill was never produced or promised for later, so this resolves as declined/not-possible rather than promised_later."
   },
   "interest_reason_audit": {
-    "asked": true,
-    "ask_ts": "00:54",
+    "asked": false,
+    "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "07:15",
-    "reason_quote": "we wanna go solar to be more renewable than we were. We also wanna lower our carbon footprint. There's there's a number of reasons. Right? We wanna save some money, of course, but we also, you know, wanna be more renewable in the way we're living.",
+    "reason_ts": "07:03",
+    "reason_quote": "we wanna go solar to be more renewable than we were. We also wanna lower our carbon footprint.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep's initial question ('have you ever looked into the solar programs in the area?') opened the door, and the customer volunteered a detailed, layered reason (renewables/carbon footprint plus cost-avoidance vs. heating system replacement). The rep's response ('Okay. Great. Then that's what we will go over with you.') is generic and never ties this reason back into the appointment framing or booking language."
+    "reasoning": "The rep never explicitly asks 'what interested you in solar,' but the customer volunteers a clear reason unprompted (renewables/carbon footprint plus an inefficient heating system) during the bill-collection exchange; the rep acknowledges the surrounding conversation but never reflects this specific motivator back at booking or in the appointment framing."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:02",
-      "quote": "This is Brandon here with Ion. We got this for me sold out online on our website for solar energy."
+      "end_ts": "00:20",
+      "quote": "This is Brandon here with Ion. We got this for me sold out online on our website for solar energy.",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, good. Good. Let us click. Okay.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:54",
-      "quote": "have you ever looked into the solar programs in the area?"
+      "end_ts": "02:03",
+      "quote": "have you ever looked into the solar programs in the area?",
+      "customer_response": "cooperative",
+      "customer_quote": "Well, I'm investigating. Yeah. You know, I wanted to see what kind of, you know, rebates there are.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:30",
-      "quote": "The address we have is 5384 Old Stage Road in Boulder, Colorado?"
+      "end_ts": "00:53",
+      "quote": "The address we have is 5384 Old Stage Road in Boulder, Colorado?",
+      "customer_response": "cooperative",
+      "customer_quote": "It's it's zoned as a single family home.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "01:41",
+      "end_ts": "02:03",
+      "quote": "",
+      "customer_response": "cooperative",
+      "customer_quote": "it's it's also all perfectly south facing.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "06:09",
-      "quote": "Right. Okay. So who do you have for the utility company?"
+      "end_ts": "06:22",
+      "quote": "So who do you have for the utility company?",
+      "customer_response": "cooperative",
+      "customer_quote": "Excel. I think everybody in Colorado has Excel.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "06:22",
-      "quote": "And you said you just moved in, so you have not received an electric bill yet?"
+      "end_ts": "06:28",
+      "quote": "And you said you just moved in, so you have not received an electric bill yet?",
+      "customer_response": "resistant",
+      "customer_quote": "No. No. No. We don't have any.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "military",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "04:41",
+      "end_ts": "08:58",
+      "quote": "All we do is just take a look at your energy bill so that way we'll get you an accurate evaluation.",
+      "customer_response": "resistant",
+      "customer_quote": "this is not something we can do. Here's our utility bill.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "declined"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "10:47",
-      "quote": "We will set a tentative appointment for Wednesday, the twenty second at 01:00."
+      "ts": "09:24",
+      "end_ts": "10:47",
+      "quote": "Great. We will set a tentative appointment for Wednesday, the twenty second at 01:00.",
+      "customer_response": "cooperative",
+      "customer_quote": "I think the week of, I think something like April 2223 would be best.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
       "ts": "10:52",
-      "quote": "we'll reach out the day before just to confirm with you if that time still works."
+      "end_ts": "11:06",
+      "quote": "When we get closer to the day, we'll we will reach out the day before just to confirm with you if that time still works.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Okay. Thank you.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "04:47",
+      "quote": "We don't have an exact energy bill or anything like that.",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. Okay. Well, thank you for letting me know. I mean, what I can do is, I can have a specialist get you an evaluation,"
+      ],
+      "resolved": true,
+      "resolution_ts": "09:24",
+      "reasoning": "This is not a sales objection but a genuine situational barrier — new homeowner with no bill history and active renovation. The rep made one attempt to redirect (specialist site visit) and the customer readily accepted, resolving into a booked site visit."
+    },
+    {
+      "ts": "10:01",
+      "quote": "Yeah. No. I think when I think when we're I think tomorrow might be a little rushed.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "April 22. That's a a Wednesday? Yeah. Yeah. We're pretty wide open that day."
+      ],
+      "resolved": true,
+      "resolution_ts": "10:47",
+      "reasoning": "Customer declines the next-day offer and proposes a date roughly three weeks out; rep accommodates without pushback, and a specific date/time is agreed."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Missing co-owner / spouse identification despite repeated 'we' language",
-    "ts": "00:36",
-    "quote": "I thought the home real fast, looks like single family home. Is that correct?",
-    "why": "The customer says 'we' at least three separate times (property plans, financing understanding, motivations) strongly signaling a co-decision-maker in the household, but the rep never asks who else is involved or gets them onto the site-visit appointment. This is the single most consequential gap on the call — it risks a fragile close if the closer/specialist shows up to a two-person decision with only one person prepped."
+    "topic": "button-up handshake discipline",
+    "ts": "10:47",
+    "quote": "Great. We will set a tentative appointment for Wednesday, the twenty second at 01:00.",
+    "why": "The appointment is locked on date/time but the rep skips the verbal fairness handshake and the no-driving/computer logistics reminder, leaving a three-week-out appointment without the button-up mechanics schema ties to show-rate. This is the clearest, most fixable procedural gap on an otherwise strong call."
   },
   "key_moments": [
     {
       "ts": "01:41",
-      "quote": "we have a a nice you know, the property has two structures, and on the second structure, we have a roof a perfect roof to put a solar energy system on because it's it's a pretty large space,",
+      "quote": "we have a a nice you know, the property has two structures, and on the second structure, we have a roof a perfect roof to put a solar energy system on because it's it's a pretty large space",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Customer volunteers a large, ideally-oriented second structure with south-facing roof — a strong technical enthusiasm signal (bigger install surface, favorable orientation) the rep never reflects back or anchors on."
+      "stewart_read": "Customer unprompted describes an ideal roof condition (large, south-facing) — a strong qualification and enthusiasm signal the rep could have anchored on to build curiosity about system sizing."
     },
     {
-      "ts": "07:15",
-      "quote": "we wanna go solar to be more renewable than we were. We also wanna lower our carbon footprint. There's there's a number of reasons.",
+      "ts": "02:23",
+      "quote": "Yeah. Yeah. Yeah. I think so. Steve, was it? Can you Steve. Yeah. Yeah. Steve? Okay.",
+      "classification": "other",
+      "stewart_read": "Rep successfully captured a referral name and spelling (Steve Bogacz) for Ion's referral program, a small but concrete process win that adds business value beyond the appointment itself."
+    },
+    {
+      "ts": "07:03",
+      "quote": "you know, we wanna go solar to be more renewable than we were. We also wanna lower our carbon footprint.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer gives a rich, specific interest reason (environmental motive plus cost-avoidance-vs-heating-system-replacement logic) but the rep's response ('Okay. Great. Then that's what we will go over with you.') is generic and doesn't tie this reason into the appointment framing or the eventual text/booking recap."
+      "stewart_read": "Customer clearly states their interest reason (environmental/renewable motive plus inefficient heating system), but the rep does not reflect this back or tie it to the appointment when booking later in the call."
     },
     {
-      "ts": "06:09",
-      "quote": "it doesn't really matter if it's less efficient because we have the solar system to provide the energy.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "The customer essentially self-flips his own inefficient-heating-system objection into a reason FOR solar. The rep could have reinforced this alignment explicitly (turning his own logic into the emotional anchor) but instead moves straight to a routine utility-company question."
-    },
-    {
-      "ts": "09:44",
-      "quote": "It'll take anywhere between thirty to forty five minutes. But like you said, you want to have them take a look at a few things. So we can block you off for an hour so that you don't feel rushed.",
+      "ts": "08:58",
+      "quote": "You know, so but I think the best thing is, you know, this is not something we can do. Here's our utility bill.",
       "classification": "conditional_booking",
-      "stewart_read": "This is an in-person site visit, not the standard phone closer call the button_up script assumes — the rep correctly applies the appointment-type-agnostic hour-block framing but the visit's mechanics (who shows up, what to have ready, walking the two structures) are never spelled out."
+      "stewart_read": "Customer explicitly states a utility bill cannot be produced (new homeowner, no bill history, active renovation) and proposes a site-visit-first structure instead. This is a genuine customer-side barrier, not rep evasion."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 32,
-    "verified": 28,
-    "fuzzy": 2,
+    "checked": 44,
+    "verified": 42,
+    "fuzzy": 0,
     "wrong_ts": 2,
     "not_found": 0
   }

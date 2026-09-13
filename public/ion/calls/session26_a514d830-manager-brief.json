@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION26_a514d830",
   "rep_name": "Holland",
-  "trajectory_summary": "This is a short, procedurally clean call that ends in a hard disqualification on credit score. The rep ran the verify sequence in order, surfaced real bill pain, but the call terminates before that pain point could be leveraged because the credit qualifier fails immediately after. The shape is mixed — genuine engagement built briefly around the bill, then flattened by an unavoidable DQ.",
-  "shape": "mixed",
-  "outcome_dispute": "v1 tag is unknown/unlabeled but the observed outcome is a clean dq (credit qualifier failure), not a booked or callback appointment in the traditional sense — the 'I'll give you a callback' line from the customer is customer-initiated, not a rep-owned next step, so this should not be coded as a scheduled callback.",
+  "trajectory_summary": "The call opens cleanly and cooperatively, builds real bill pain by 01:47-02:09, then hits a hard credit qualifier that the rep verifies twice before disqualifying the lead. The rep closes professionally with a callback path, but the call never gets a chance to flip the bill pain into leverage because the DQ gate ends the conversation first.",
+  "shape": "stagnant",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "02:56",
-    "quote": "Okay. Well, yeah. Unfortunately, you wouldn't qualify.",
-    "reasoning": "The call ends in a hard disqualification per the credit_qualifier rule (below 670 threshold); no appointment was booked, tentative, or scheduled as a callback owned by the rep — the customer's offer to call back is customer-initiated, not a rep-scheduled next step."
+    "quote": "Unfortunately, you wouldn't qualify.",
+    "reasoning": "Customer's credit score does not meet the 670 threshold and she confirms this with escalating certainty; the rep correctly disqualifies the lead per qualifiers.credit_qualifier and offers to remove her from the call list, closing the call without an appointment."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured a concrete bill floor and partially validated it against Dominion's rate complaints ('Dominion's been getting a lot of complaints about their rates rising, so I do not blame you at all' at 02:21), but never completed the flip into an explicit reason-to-act framing before the credit DQ ended the pitch."
+    "reasoning": "The rep captured the bill and acknowledged it ('that makes a lot more sense... I do not blame you at all') but moved directly into the credit qualifier at 02:38 rather than flipping the bill into alignment-against-the-utility first. This sequencing — qualifier immediately after bill capture — is consistent with the script's required_beats order (program_pitch/qualifier follows verify), so it isn't a clear missed-flip failure; the DQ that followed simply ended the call before a flip had room to land."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call was disqualified on the credit qualifier immediately after the bill amount was verbally captured, before the rep reached the bill-collection/document stage of the script."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,132 +41,224 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked directly and the customer gave a clear bill-pain reason, but the rep moved straight to quantifying the bill number rather than reinforcing or tying the appointment's value proposition explicitly back to 'saving money' before the DQ occurred."
+    "reasoning": "The rep acknowledged the bill pain by moving into the average-bill question but the call ended in DQ before the rep could tie the appointment or program back to the customer's stated reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "So this is Holland with Ion. I got a request you were looking into solar for your home."
+      "end_ts": "00:16",
+      "quote": "So this is Holland with Ion. I got a request you were looking into solar for your home.",
+      "customer_response": "cooperative",
+      "customer_quote": "This is she.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:35",
-      "quote": "what my biggest question is for you is what got you looking into solar in the first place?"
+      "end_ts": "01:53",
+      "quote": "what got you looking into solar in the first place?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm just trying to save money. My bill is high.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:25",
-      "quote": "I've got your address here as 1708 Holiday Street in Portsmouth, Virginia. Is that correct?"
+      "end_ts": "00:33",
+      "quote": "I've got your address here as 1708 Holiday Street in Portsmouth, Virginia. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:24",
-      "quote": "Is there anybody else on the title of the home with you?"
+      "end_ts": "01:30",
+      "quote": "is there anybody else on the title of the home with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No, ma'am.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "00:55",
-      "quote": "is that just a regular asphalt shingle roof?"
+      "end_ts": "01:19",
+      "quote": "is that just a regular asphalt shingle roof?",
+      "customer_response": "resistant",
+      "customer_quote": "I don't know what that means, honey.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:16",
-      "quote": "And is that with Dominion?"
+      "end_ts": "02:20",
+      "quote": "is that with Dominion?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:56",
-      "quote": "what would you say an average bill looks like for you then?"
+      "end_ts": "02:14",
+      "quote": "what would you say an average bill looks like for you then?",
+      "customer_response": "cooperative",
+      "customer_quote": "it's always over $1.50.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:30",
-      "quote": "it guarantees you savings within the first year you have solar as long as you have a credit score above 6 70."
+      "ts": "02:34",
+      "end_ts": "02:55",
+      "quote": "as long as you have a credit score above 6 70. So is that the case for you?",
+      "customer_response": "resistant",
+      "customer_quote": "It's nowhere near that. I can guarantee you that.",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "02:44",
+      "quote": "No. That's not the case for me.",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Do you know what your credit is currently sitting at?"
+      ],
+      "resolved": true,
+      "resolution_ts": "02:56",
+      "reasoning": "Not a persuasion objection but a hard qualifier gate; the rep's single follow-up confirms the DQ is genuine rather than a soft guess, and the customer's own escalating certainty ('nowhere near', 'I can guarantee you that') closes the matter definitively."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "credit qualifier DQ policy vs stated-credit reliability",
-    "ts": "02:44",
-    "quote": "No. That's not the case for me.",
-    "why": "The entire deal died on a self-reported credit estimate the customer admitted was imprecise ('I can guarantee you that'), and the schema itself flags this exact scenario as an open policy question — this call is a clean example to bring to Kenny to resolve whether stated-credit DQs are costing Ion real deals."
+    "topic": "unprompted technical/legitimacy claims before qualification",
+    "ts": "00:45",
+    "quote": "it looks like a really good home for solar, especially because you have a really good southern exposure, which is exactly what we look for",
+    "why": "The rep asserts a specific site assessment (southern exposure, roof suitability) with no stated basis before roof-type is even confirmed. This is a small but repeatable habit worth flagging — it's premature closer-tier content that could create false expectations if a similar claim doesn't hold up later with a different customer whose roof is genuinely unsuitable."
   },
   "key_moments": [
     {
       "ts": "00:45",
-      "quote": "And looking at the roof here, it looks like a really good home for solar, especially because you have a really good southern exposure, which is exactly what we look for.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Rep asserts a specific technical claim (southern exposure) about the roof with no visible verification method described on the call — likely from a satellite/tool lookup, but stated with unearned certainty to a customer who hasn't been told the source."
+      "quote": "it looks like a really good home for solar, especially because you have a really good southern exposure, which is exactly what we look for",
+      "classification": "setter_scope_creep",
+      "stewart_read": "This is a specific technical assessment (southern exposure, roof suitability) volunteered unprompted before the roof-type question is even asked, with no stated tool or basis given to the customer. It's a legitimacy-building flourish, but it edges into closer-tier technical claims the setter isn't positioned to make credibly."
     },
     {
-      "ts": "01:19",
-      "quote": "Okay. No problem. It looks like it's still in decent shape.",
+      "ts": "01:01",
+      "quote": "I don't know what that means, honey.",
       "classification": "knowledge_gap",
-      "stewart_read": "Rep offers a roof-condition assessment ('still in decent shape') immediately after the customer says she doesn't know the roof's age, without a clear evidentiary basis stated on the call."
+      "stewart_read": "Customer doesn't understand 'asphalt shingle' terminology. Rep's response is garbled ('I'm like, yes. Yes.') and doesn't clearly simplify the question before moving on."
     },
     {
-      "ts": "01:43",
-      "quote": "I'm just trying to save money. My bill is high.",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer gives a clean, emotionally direct reason for interest tied to bill pain — this is the exact anchor the schema calls for capturing early."
+      "ts": "01:47",
+      "quote": "Like, it's been times my bill has been, like, $400,",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer volunteers a high dollar figure unprompted, which is strong bill pain signal — a $400 peak bill is a vivid anchor point even before the average is captured."
     },
     {
       "ts": "02:04",
       "quote": "It's been jumping around, but it's it's always over $1.50.",
       "classification": "bill_anchor",
-      "stewart_read": "Customer confirms a concrete bill floor ($150+), giving the rep a usable number, but the rep moves straight to utility company confirmation rather than reflecting the number back or aligning it against Dominion's rate complaints in a pointed way before the DQ hit."
+      "stewart_read": "Bill amount is captured clearly by the rep's direct follow-up question. This satisfies the 'ask' half of bill anchoring within the first four minutes as the schema recommends."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 30,
-    "verified": 30,
+    "checked": 38,
+    "verified": 38,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

@@ -1,17 +1,17 @@
 {
   "call_id": "20000054949",
   "rep_name": "Joel",
-  "trajectory_summary": "The call opens cold with the customer firing rapid factual/skeptical questions, and the rep answers each competently while working qualification in around them — a live, back-and-forth call rather than a scripted monologue. The ending, however, degrades into a confusing scheduling exchange with contradictory day references (Friday, Tuesday the 28th, and finally 'next Wednesday'), leaving real doubt about what date was actually locked.",
+  "trajectory_summary": "The call opens with a skeptical, question-driven customer and closes with a booked appointment, so on its face this is a win — but the path there is scope creep (weather/seasonal mechanics, battery banking, roof timing) answered in real time rather than deferred, and a knowledge gap on repair costs handled honestly but not converted into urgency. The bill was captured cleanly via screenshot, a good micro-trade, but never flipped into an emotional lever against the utility.",
   "shape": "mixed",
-  "outcome_dispute": "The rep states 'Tuesday, the twenty eighth at 7PM' at 10:16 and the customer's response at 10:11-10:23 is not a clean confirmation — it's fragmented ('That's not true. We can do a seven or 8PM in the evening. Okay. Yeah. Okay.') — and then the rep closes the call with 'we'll see you next Wednesday' at 11:18, which matches neither Friday the 31st nor Tuesday the 28th mentioned earlier. This is not a clean booked outcome; it should be read as tentative/fragile at best given the contradictory day references, and the scheduling crosstalk around 09:47 ('Close it door. Looks like we have... next Friday the thirty first') likely seeded the confusion that the rep never fully resolved.",
+  "outcome_dispute": "The diarization in this transcript is unreliable in the 08:20-09:10 and 10:03-11:08 windows: lines like 'Can you text it to me so I can add it to my calendar?' (10:03) and 'I'll be saving every month because of it?' (10:58) are tagged rep but read as customer questions responding to the rep's proposals, and conversely several 'customer' tagged lines in 08:20-09:10 (discussing weekday/weekend availability) read as continuous customer speech misattributed mid-thought. This does not change the booked outcome, but it means word-level attribution in the back third of the call should not be used to coach either party without an audio re-check.",
   "observed_outcome": {
-    "outcome": "tentative",
+    "outcome": "booked",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "11:18",
-    "quote": "So let's see. So Tuesday, the twenty eighth at 7PM works good for you? ... But, yeah, other than that, Ava, thank you for your time today, and we'll see you next Wednesday.",
-    "reasoning": "A specific day and time (Tuesday the 28th at 7PM) was stated, and the customer's reply at 10:11-10:23 ('That's not true. We can do a seven or 8PM in the evening. Okay. Yeah. Okay.') is ambiguous rather than a clean confirmation. The rep then closes with a contradicting day ('next Wednesday') at 11:18. Given the earlier Friday-the-31st offer at 09:47 that was never explicitly closed out, this scheduling segment is internally inconsistent, so the appointment should be read as tentative/fragile rather than cleanly booked — the actual date the customer believes she has may not match what's in the rep's calendar."
+    "ts": "10:16",
+    "quote": "So let's see. So Tuesday, the twenty eighth at 7PM works good for you?",
+    "reasoning": "A specific day and time (Tuesday the 28th, 7PM) is proposed and confirmed, with the rep also promising a confirmation text. No co-owner was identified (customer stated no one else is on the title), so co_owner_confirmed is not applicable."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep acknowledges the bill amount as generically high ('Those are up there for sure') but never connects it back to her stated PGE pain point or reframes it as the reason to act now — the flip should have landed here, immediately after capture, tying the number to the fixed-rate/no-rate-increase pitch made earlier."
+    "reasoning": "The rep captures a specific average bill figure and again a specific last-bill figure ($390 at 06:22) but only responds with acknowledgment ('Those are up there for sure' / 'a little higher than average') rather than using either number as the customer's reason to book or act. The earlier generic line at 04:39 about eliminating the PGE bill predates the actual number and is not a customer-specific flip; no true flip follows once the real figures are on the table. Given this transcript's numeric noise ('$3.50' and '$3.90' almost certainly mean $350/$390), these figures should be treated as directionally reliable but not verbatim-precise."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "06:02",
+    "ask_quote": "So do you usually get those bills online or through the mail?",
+    "result": "received_on_call",
+    "method": "text",
+    "result_ts": "07:34",
+    "result_quote": "Okay. Awesome. Yeah. If you wanna just take a screenshot of that. I can send you a text right now if you wanna send that over.",
+    "reasoning": "Rep asked how she receives bills, then had her pull it up online, sent a text link, and confirmed receipt of the screenshot at 08:20 ('I got that photo. So that is exactly what we're looking for'), completing bill collection live on the call."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,133 +41,238 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Rep asked the interest question and got a specific, personal answer, but responded with generic regional commentary ('that's why most people in Oregon are looking into solar') rather than later reinforcing it at bill collection or button-up as her specific reason for the appointment."
+    "reasoning": "The rep asked what got her interested and she named high PGE bills, but the rep's response at 01:41-01:47 is a generalization about Oregon customers broadly ('That's why most people in Oregon are looking into solar') rather than reinforcing her specific pain, and this reason is never revisited later in the call — not at the bill-capture moment, not at booking, not in the close."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "Hey. This is Joel with Ion. I just got a request that you were looking into solar for your home."
+      "end_ts": "00:11",
+      "quote": "Hey. This is Joel with Ion. I just got a request that you were looking into solar for your home.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. How much does it cost?",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:28",
-      "quote": "I'm just curious what got you interested in solar?"
+      "end_ts": "01:36",
+      "quote": "I'm just curious what got you interested in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "My I have really high PGE bills.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:15",
-      "quote": "So first, do you mind if I grab the address of the home?"
+      "end_ts": "01:24",
+      "quote": "So first, do you mind if I grab the address of the home?",
+      "customer_response": "cooperative",
+      "customer_quote": "2105 Southeast 1 10th Avenue, Portland, Oregon 97216.",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "02:52",
-      "quote": "Is there anyone else on the title of the home with you at all?"
+      "ts": "02:50",
+      "end_ts": "02:57",
+      "quote": "You're is there anyone else on the title of the home with you at all?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "02:59",
-      "quote": "Just looking at your roof here in Google Maps, it looks perfect for solar."
+      "end_ts": "03:15",
+      "quote": "And then, yeah, just looking at your roof here in Google Maps, it looks perfect for solar.",
+      "customer_response": "cooperative",
+      "customer_quote": "It's brand new.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "05:17",
-      "quote": "PG is your electric company."
+      "end_ts": "05:24",
+      "quote": "But yeah. So PG is your electric company. How much would you say an average monthly bill has been for you so far?",
+      "customer_response": "cooperative",
+      "customer_quote": "Like, $3.50.",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "05:17",
-      "quote": "How much would you say an average monthly bill has been for you so far?"
+      "end_ts": "05:27",
+      "quote": "How much would you say an average monthly bill has been for you so far?",
+      "customer_response": "cooperative",
+      "customer_quote": "Like, $3.50.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:35",
-      "quote": "You just need to have a form of taxable income and a credit score of six fifty or higher."
+      "ts": "02:19",
+      "end_ts": "02:42",
+      "quote": "To qualify, you just need to have a form of taxable income and a credit score of six fifty or higher. Would that be the case for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "completed"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "05:34",
-      "quote": "Have you seen a solar design for your home before? Is this kinda your first time looking into it?"
+      "end_ts": "05:40",
+      "quote": "Have you seen a solar design for your home before? Is this kinda your first time looking into it?",
+      "customer_response": "cooperative",
+      "customer_quote": "First time.",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "06:02",
-      "quote": "So do you usually get those bills online or through the mail?"
+      "end_ts": "08:20",
+      "quote": "So do you usually get those bills online or through the mail?",
+      "customer_response": "cooperative",
+      "customer_quote": "I could check my email from my last PGE bill.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "10:16",
-      "quote": "So Tuesday, the twenty eighth at 7PM works good for you?"
+      "ts": "09:47",
+      "end_ts": "10:22",
+      "quote": "So Tuesday, the twenty eighth at 7PM works good for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "That's not true. We can do a seven or 8PM in the evening. Okay. Yeah.",
+      "resistance_reason": "timing",
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": "No clean recap/hour-block/no-driving/'is that fair' handshake was delivered before the call ended with a contradicting date."
+      "status": "asked",
+      "ts": "10:25",
+      "end_ts": "11:24",
+      "quote": "So I'll go ahead and get that on our calendar here.",
+      "customer_response": "cooperative",
+      "customer_quote": "Have a good one. Okay. Bye bye.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     }
   ],
-  "primary_coaching_focus": {
-    "topic": "Scheduling lock discipline / button-up handshake",
-    "ts": "11:18",
-    "quote": "But, yeah, other than that, Ava, thank you for your time today, and we'll see you next Wednesday.",
-    "why": "The rep names three different days across the scheduling segment (Friday the 31st at 09:47, Tuesday the 28th at 10:16, and Wednesday at 11:18) without ever cleanly reconciling them or getting an unambiguous 'yes' from the customer. This directly threatens the appointment holding at all — on a comp model paid on sits, an appointment the customer shows up to on the wrong day (or not at all due to confusion) doesn't pay. Replay 09:47 through 11:18 with the rep and drill a single clean lock-and-confirm habit."
-  },
-  "key_moments": [
+  "objections": [
     {
-      "ts": "00:14",
-      "quote": "Yeah. With the progress and incentives, you're actually not paying anything upfront for the solar.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "This is a cost/financial-mechanism answer delivered in the first 15 seconds, before any qualification has happened — exactly the closer-tier content the schema flags. Reactive read: rep is scrambling to answer an aggressive opener. Strategic read: rep is using the no-upfront-cost line as a fast legitimacy/hook move to keep her on the phone before she hangs up. Adjudication: the strategic read is better supported — the customer's very next question ('does it mess up the roof') shows she stayed engaged and kept volunteering more questions rather than disengaging, meaning the quick answer served its purpose of keeping the call alive rather than being a costly scope violation."
-    },
-    {
-      "ts": "02:18",
-      "quote": "producer How much does it cost? Consumer.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "Customer asks cost a second time and rep pivots into explaining net-metering producer/consumer mechanics rather than redirecting to the qualifier flow he then actually runs. This is borderline scope creep on a technical concept (net metering) that belongs to the closer's design walkthrough."
+      "ts": "00:11",
+      "quote": "Yeah. How much does it cost?",
+      "type": "cost",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "Yeah. With the progress and incentives, you're actually not paying anything upfront for the solar.",
+        "Yeah. Actually, the next couple of questions I have here for you is to make sure you do qualify for the government program."
+      ],
+      "resolved": true,
+      "resolution_ts": "02:33",
+      "reasoning": "Customer repeats cost-shaped questions three times (00:11, 01:54, 02:16); rep redirects each time toward no-upfront-cost framing and then the qualifier questions rather than giving a firm number, and she moves on to other topics without pressing further, suggesting she accepted the deflection rather than got a resolved answer."
     },
     {
       "ts": "04:44",
       "quote": "And what's the cost of repair? Like, if something needs to be repaired out, is that cost?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Rep hits a genuine knowledge boundary and handles it well: 'I'm not too sure about that part, just because I'm in scheduling... I would note that that's kind of something you're curious about.' This is the correct admit-and-defer pattern, not a fabrication."
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I'm not too sure about that part, just because I'm in scheduling."
+      ],
+      "resolved": true,
+      "resolution_ts": "05:05",
+      "reasoning": "Rep admits the knowledge gap and defers to the specialist in one clean attempt; customer accepts this and moves on without pressing further."
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "bill capture without flip",
+    "ts": "05:24",
+    "quote": "Like, $3.50.",
+    "why": "This is the clearest and most consequential gap: a specific bill number was captured but never turned into the customer's reason to act, despite the schema calling this THE anchor for the entire pitch."
+  },
+  "key_moments": [
+    {
+      "ts": "03:46",
+      "quote": "But What about in the different seasons, like, when it get cold in the fall and the winter? Do you cover it up, or how does that work?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep answers with a full explanation of panel physics, cloud/snow absorption, and seasonal energy banking (battery mechanism) rather than redirecting to the specialist. This is accurate-but-premature closer-tier content."
     },
     {
-      "ts": "03:17",
-      "quote": "So I What about when it's time they get a new roof? How does it work then?",
-      "classification": "cross_sell_miss",
-      "stewart_read": "Rep responds that Ion has a sister roofing company but immediately downgrades the opportunity by noting her roof is brand new ('It's brand new... you probably don't won't have to worry about it for a while') rather than capturing this as a future cross-sell touchpoint or noting it for the closer. This is a real but distant signal, correctly deprioritized in the moment but not logged anywhere for later follow-up."
+      "ts": "04:48",
+      "quote": "And what's the cost of repair? Like, if something needs to be repaired out, is that cost?",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep admits he doesn't know and defers to the specialist — the correct move per schema (admit and recover with transparency) rather than fabricating an answer."
+    },
+    {
+      "ts": "05:24",
+      "quote": "Like, $3.50.",
+      "classification": "bill_anchor",
+      "stewart_read": "Customer gives an average monthly bill figure (transcribed as $3.50, likely $350 given context and known transcription noise in this call). Rep acknowledges it's high but does not flip it into a reason to act."
+    },
+    {
+      "ts": "04:39",
+      "quote": "That's kinda how we're we're able to eliminate that PGE bill for you",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This line, spoken before the bill amount is even captured, is a generic company-benefit statement ('we eliminate PGE bills') rather than a customer-specific flip. It is not a true bill anchor flip because there is no number yet to flip — it's a precursor claim, not the emotional-alignment-against-utility move the schema calls for once her actual $350/$390 figures are on the table."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 43,
-    "verified": 42,
-    "fuzzy": 0,
+    "checked": 56,
+    "verified": 54,
+    "fuzzy": 1,
     "wrong_ts": 1,
     "not_found": 0
   }

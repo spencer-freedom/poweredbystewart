@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION26_7fdc3074",
   "rep_name": "Meg",
-  "trajectory_summary": "The call opens neutrally and briefly warms when the customer volunteers detailed bill history and explicit willingness to keep listening, but the rep never asks why he's interested in solar, never captures or uses the bill figures he offers, and unilaterally disqualifies him over shading in under two minutes. The call ends with the rep closing the file rather than routing to a closer or logging the lead for reassessment.",
+  "trajectory_summary": "The call opens cooperatively through standard verification, then the customer delivers a detailed, informed cost objection (specific bill figures, payback-period math, prior solar experience) that the rep has no strong answer for. Within seconds of validating that objection, the rep pivots to the tree-shade issue and disqualifies the customer outright, ending the call in under three minutes with no design offer, no bill document ask, and no attempt to work the objection further.",
   "shape": "energy_leaked",
-  "outcome_dispute": "This should be tagged dq, not a soft no-appointment — the rep explicitly disqualifies the lead ('I can just remove you from my list') on her own read of sun exposure, which is a closer/design-tier judgment the setter is not positioned to make from a phone call alone.",
+  "outcome_dispute": "Stage 3 is not disputing that this call ended as a DQ — it is disputing whether the DQ was procedurally sound. The shade/tree issue was real, but the rep never quantified actual shade impact (percentage of roof affected, time of day, panel placement options) before declaring solar unworkable, and the DQ was invoked immediately after the customer raised a cost objection the rep could not counter. The sequencing suggests the shade rationale may have been used opportunistically as an exit rather than a rigorously verified disqualifier.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "02:15",
+    "ts": "02:14",
     "quote": "yeah, like you said, you're not open to removing the trees at all, so solar won't work for you. I can just remove you from my list.",
-    "reasoning": "The rep explicitly disqualifies the lead and offers to remove him from her list; no appointment, tentative time, or callback was set — the call ends on the rep's own DQ determination."
+    "reasoning": "The rep explicitly disqualifies the lead and ends the call with no appointment, next step, or bill collection — a clear DQ outcome, though its procedural soundness is contested in the trajectory verdict."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer volunteered specific bill figures unprompted, but the rep never acknowledged the number or used it in any direction (flip or otherwise) — the conversation immediately moved to the shading/DQ track instead."
+    "reasoning": "The rep captured a precise bill figure but instead of flipping it into a reason to still look at options, validated it as proof the home isn't a good fit ('Your bill isn't extremely high') at 02:02, which is the opposite of the intended anchor strategy."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ended in a DQ before the rep reached bill-collection; the customer's bill figures were given verbally as part of his objection, not solicited as a document."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,133 +41,237 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested Kevin in solar; the call moved from address/homeowner verification straight into the shading concern and then to bill discussion the customer volunteered, without a direct interest question ever being asked."
+    "reasoning": "The rep never asked what interested the customer in solar; the call moved directly from address/home-type verification into the shade concern before this section could be reached."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "quote": "Hi, Kevin. My name is Meg. I'm with Ion. I'm reaching out here about the solar form that you filled out online."
+      "end_ts": "00:15",
+      "quote": "Hi, Kevin. My name is Meg. I'm with Ion. I'm reaching out here about the solar form that you filled out online.",
+      "customer_response": "cooperative",
+      "customer_quote": "This is he.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:28",
-      "quote": "We can actually start here with the address."
+      "end_ts": "00:47",
+      "quote": "We can actually start here with the address. I've got 2825 Mill Hill Road in Waldorf, Maryland. Is that right?",
+      "customer_response": "cooperative",
+      "customer_quote": "That's correct.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "01:14",
-      "quote": "Are you I mean, my average"
+      "ts": "00:49",
+      "end_ts": "01:32",
+      "quote": "Are you I mean, my average",
+      "customer_response": "resistant",
+      "customer_quote": "the highest bill I've ever had was a $109. And my average bill, I'd say, over a course of twelve months is around 76 to $81.",
+      "resistance_reason": "cost",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:32",
+      "quote": "I don't see how you guys can even touch that. Breakeven over twenty one years. It used to be a thirty six year payback, so I don't know. I've dealt with solar, like, quite a bit. So I don't I don't I mean, regardless of their incentives or not, it's just I don't think it can be done. But, I mean, I'm more willing to listen.",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. I mean, I I totally see where you're coming from. You're right. Your bill isn't extremely high."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep validated the objection rather than inverting or countering it, and the call moved to a shade-based DQ before the objection was actually worked; the customer's closing line 'I'm more willing to listen' was never revisited."
+    },
+    {
+      "ts": "02:21",
+      "quote": "How would you move a 250 year old tree?",
+      "type": "roof_or_home",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I mean, a lot of people will just get them removed. Just call it out of the ground."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep offered one generic suggestion; customer rejected it outright and the rep dropped the topic and ended the call rather than exploring alternative panel placement or partial-shade options."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unilateral DQ on unverified shading assessment",
-    "ts": "02:15",
-    "quote": "so solar won't work for you. I can just remove you from my list.",
-    "why": "The rep made a design-tier technical call (insufficient sun exposure) with no imagery or tool reference and closed the lead within two minutes of raising it, on a customer who explicitly said he was 'more willing to listen.' This is the costliest single moment on the call — a real lead with detailed bill data and stated openness was let go on a guess."
+    "topic": "DQ timing immediately follows an unresolved cost objection",
+    "ts": "02:14",
+    "quote": "yeah, like you said, you're not open to removing the trees at all, so solar won't work for you. I can just remove you from my list.",
+    "why": "The rep validated the customer's low-bill objection at 02:02 and disqualified on shade twelve seconds later, with no quantification of the shade impact and no attempt to re-engage the customer's own 'I'm more willing to listen' opening at 01:53. Review whether this was a genuine technical DQ or an exit from a hard conversation the rep didn't have an answer for."
   },
   "key_moments": [
     {
       "ts": "00:49",
-      "quote": "one thing I'm a little concerned about is you've got some trees that are putting some shade on the home.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Rep opens with a disqualifying frame instead of curiosity or qualification. This primes the whole call toward exit rather than toward building interest in seeing a design."
+      "quote": "Now, Kevin, one thing I'm a little concerned about is you've got some trees that are putting some shade on the home.",
+      "classification": "other",
+      "stewart_read": "This is the root of the whole disputed trajectory: the rep raises the shade concern unprompted and early, before any cost pushback has occurred, which supports the reading that it started as a genuine qualifying question rather than a manufactured exit. Its later use as an instant hard DQ right after the cost objection is what turns this from legitimate qualification into a questionable pattern."
+    },
+    {
+      "ts": "01:14",
+      "quote": "My my I'm not cutting my trees down. My average bill, quite frankly",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Customer states his actual bill is low and defends the tree in the same breath — this maps to the schema's objection_inversion trigger (cost objection) but the rep never inverts it; instead the rep later validates the low bill as if that settles the matter."
     },
     {
       "ts": "01:20",
       "quote": "the highest bill I've ever had was a $109. And my average bill, I'd say, over a course of twelve months is around 76 to $81.",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer volunteers detailed bill figures unprompted — a rare gift of real usage data. Rep never acknowledges or reflects the number back, flipped or otherwise."
-    },
-    {
-      "ts": "01:44",
-      "quote": "I've dealt with solar, like, quite a bit. So I don't I don't I mean, regardless of their incentives or not, it's just I don't think it can be done. But, I mean, I'm more willing to listen.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses significant prior solar experience/quotes ('breakeven over twenty one years... used to be a thirty six year payback') and explicit openness to continue. Rep never asks who he talked to, what was quoted, or what changed his numbers — competitive intel left on the table."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer hands the rep a precise bill figure and even quotes a specific payback-period claim ('breakeven over twenty one years... used to be a thirty six year payback'), both usable anchors. The rep never reflects the number back or challenges the stale payback figure with anything current."
     },
     {
       "ts": "02:02",
-      "quote": "I think where where the situation is, where I'm at, right, is your home doesn't get enough sun exposure for a system to even work effectively.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "Rep makes a technical design determination (sun exposure sufficiency) that belongs to the design/closer team using satellite and shading tools, not a setter's phone judgment."
+      "quote": "Yeah. I mean, I I totally see where you're coming from. You're right. Your bill isn't extremely high.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Rather than reframing the low bill as still worth reviewing (e.g., against future rate increases or usage growth), the rep fully concedes the objection, which removes any basis for continuing the conversation and sets up the DQ that follows two lines later."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 25,
-    "verified": 25,
-    "fuzzy": 0,
+    "checked": 33,
+    "verified": 32,
+    "fuzzy": 1,
     "wrong_ts": 0,
     "not_found": 0
   }

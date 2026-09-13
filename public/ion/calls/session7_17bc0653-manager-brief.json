@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION7_17bc0653",
   "rep_name": "Natalia",
-  "trajectory_summary": "This call never had bill-anchor or appointment-setting mechanics applied because the customer's house isn't built yet, but the rep also never used her own stated tool -- routing to a specialist -- to capture a future-dated touchpoint. The call is honest and low-friction but ends with the rep actively steering the customer away from Ion and toward independent research. Energy leaks out steadily from an already-cold open to a self-directed goodbye.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "V1 tag is unknown/unstated; the correct read is no_appointment, not dq. The customer was never run through a hard-gate DQ criterion (not_homeowner, existing system, credit, roof age) -- 'house not yet built' is not a listed category in dq_rules. The rep effectively self-selected out of the lead by recommending the customer search elsewhere, which is a missed-opportunity outcome, not a procedural disqualification.",
+  "trajectory_summary": "This is a pre-construction inquiry that never fit Ion's model: the caller has no built house, no utility bill, and no address to qualify — he only wanted to know if Virginia subsidizes installation costs. The rep correctly recognized this early, stayed honest about the limits of her scheduling-department scope, and ultimately told the customer outright this wasn't the right resource, closing the call cleanly with no appointment set. The v1 tag should be treated as DQ, not a missed booking opportunity.",
+  "shape": "stagnant",
+  "outcome_dispute": "This call should be tagged dq, not no_appointment or callback. The customer's home does not exist yet ('the house is not built,' 00:26), which fails the basic address/homeowner verify step and the bill/design prerequisite entirely — there is no qualifiable lead here. The rep's own words at 04:28 confirm this is structurally outside Ion's service model, making DQ the accurate outcome rather than a rep failure to book.",
   "observed_outcome": {
-    "outcome": "no_appointment",
+    "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "04:28",
-    "quote": "I don't think this is the best way to find that information.",
-    "reasoning": "No appointment was set, no callback time was offered, and the rep actively recommended the customer pursue independent research instead of an Ion next step. 'House not yet built' does not match any listed dq_rules category, so this is best read as a missed opportunity ending in no_appointment rather than a formal disqualification."
+    "ts": "00:26",
+    "quote": "the house is not built.",
+    "reasoning": "The customer's home does not yet exist, which is a structural disqualifier under Ion's design-from-actual-usage model; the rep confirms this is unworkable and the call ends with the customer redirected elsewhere, with no appointment, callback, or next step captured."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The house does not exist yet, so there is no utility bill to capture; the call never reaches bill collection because the lead is structurally pre-construction."
+    "reasoning": "The customer's house is not yet built, so there is no utility bill or usage history to capture at all — the entire premise of bill anchoring doesn't apply to this call."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "Since the house doesn't exist yet, there is no utility bill to request; the rep correctly never raises bill collection because it would be structurally impossible for this customer to produce one."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,238 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar; the customer volunteered his reason (a Virginia installation-cost incentive question) unprompted, and the rep neither confirmed she could answer it nor routed it to someone who could -- she pivoted to Ion's financing program instead of the actual state-incentive question asked."
+    "reasoning": "The rep never formally asks the standard 'what interested you in solar' question, but the customer volunteers his actual motivation unprompted (checking on a Virginia installation subsidy); the rep acknowledges it by explaining Ion's own no-upfront-cost program but does not directly address whether Virginia itself offers anything, leaving the customer's specific question technically unanswered."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "quote": "Oh, hi. I'm Natalia. I'm with Ion. I got your form that you filled out looking to some solar options."
+      "end_ts": "00:15",
+      "quote": "Oh, hi. I'm Natalia. I'm with Ion. I got your form that you filled out looking to some solar options.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm doing okay.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "00:15",
+      "end_ts": "02:51",
+      "quote": "So how are you doing?",
+      "customer_response": "cooperative",
+      "customer_quote": "the reason I clicked on all this was to find out whether or not Virginia would pay for some of the installation cost.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "00:26",
+      "end_ts": "00:29",
+      "quote": "",
+      "customer_response": "cooperative",
+      "customer_quote": "the house is not built.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "co_owner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "roof",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "03:12",
-      "quote": "you need a credit score about 650 for that program that we offer"
+      "end_ts": "03:19",
+      "quote": "for that to qualify, you need a credit score about 650 for that program that we offer.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. That's that's no problem.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "00:29",
+      "quote": "So, you you may not be interested in giving me information.",
+      "type": "roof_or_home",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I'll be honest. Yeah. I'm just in our scheduling department. I check to see if people's houses are already, you know, qualified"
+      ],
+      "resolved": true,
+      "resolution_ts": "01:33",
+      "reasoning": "The core barrier — no built house means no design/pricing possible — is explained once clearly by the rep and the customer accepts the logic, moving on to ask about the state incentive instead."
+    },
+    {
+      "ts": "03:39",
+      "quote": "Do you know what kind of panels you guys supply?",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I'll be completely honest. I'm not too sure since I'm just in the scheduling department."
+      ],
+      "resolved": true,
+      "resolution_ts": "04:00",
+      "reasoning": "Rep admits the knowledge gap once and the customer accepts it without pushing further, moving on to mention a local supplier he's considering instead."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Talking the lead out of the funnel instead of keeping a door open",
-    "ts": "04:28",
-    "quote": "I don't think this is the best way to find that information.",
-    "why": "This is the single highest-cost line in the call: the rep, unprompted, tells the customer Ion isn't the right resource and to search independently, closing a lead that was never actually disqualified by any hard gate."
+    "topic": "Close DQ calls with an explicit future-callback invitation",
+    "ts": "04:50",
+    "quote": "So Right. Right. Okay. Well, thank you. I will Yeah. No problem. Continue my search. Okay?",
+    "why": "This lead is a genuine disqualification (house not built), but the rep let the call end with no explicit door left open — a simple 'once your house is built and you have usage numbers, give us a call back' would preserve this as a future lead rather than a dead end, and costs nothing given the rep already correctly identified the DQ."
   },
   "key_moments": [
     {
       "ts": "00:58",
       "quote": "Yeah. I'll be honest. Yeah. I'm just in our scheduling department. I check to see if people's houses are already, you know, qualified, and then I set you up with a specialist who would be able to go over more information.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "Rep correctly names her scope (scheduling, qualification check, specialist handoff) but never executes the handoff -- she describes the escape hatch without walking through it. Strategic read (she is diagnosing non-buildability before offering the specialist) is weaker than the reactive read because she never returns to offer the specialist call even after the customer restates his need three more times."
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep admits and recovers with transparency rather than fabricating an answer — this is the correct handling per the schema's three-way knowledge-gap grading (dodge/admit-and-recover/fabricate)."
     },
     {
-      "ts": "02:46",
-      "quote": "and the reason I clicked on all this was to find out whether or not Virginia would pay for some of the installation cost.",
-      "classification": "knowledge_gap",
-      "stewart_read": "This is the customer's real, specific, answerable question -- a state incentive/rebate question. The rep admits uncertainty (\"I am not sure specifically about the local laws\") which is honest, but she does not offer to find out or route the question, so the knowledge gap is disclosed but not recovered."
+      "ts": "01:43",
+      "quote": "I know you can kinda base it off square footage, and you could probably just Google that online, the average how much system based off square footage.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep volunteers a workaround (Google an estimate) that isn't hers to offer and edges toward giving pricing guidance outside her role, even though her intent is to be helpful given the caller can't be served."
+    },
+    {
+      "ts": "02:54",
+      "quote": "I am not sure specifically about the local laws. I don't, specialist goes over that. I know with our company, we do have a program that has no upfront cost or installation fees.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "This was the customer's actual reason for calling — whether Virginia subsidizes installation — and it's the single clearest anchor point on the entire call, but the rep pivots straight to Ion's no-upfront-cost program without first asking what interests him about solar generally or building any curiosity about Ion's own value beyond incentives."
     },
     {
       "ts": "03:12",
       "quote": "let's see. And for that to qualify, you need a credit score about 650 for that program that we offer.",
       "classification": "other",
-      "stewart_read": "Schema states the credit threshold is 670; this rep states 650, matching a prior observed instance of the same drift in the corpus (SESSION18_fcbf33c1). This is a second data point suggesting either policy variance or a training gap that Kenny should reconcile."
-    },
-    {
-      "ts": "03:52",
-      "quote": "I'll be completely honest. I'm not too sure since I'm just in the scheduling department. I Uh-huh. I I know I've heard it. Yeah. I just I couldn't tell you off the top of my head.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Rep admits and recovers with transparency rather than fabricating panel specs -- a correct instinct per the schema's dodge/admit/fabricate framework -- but stops short of offering to find out or connect the customer to someone who knows."
+      "stewart_read": "Rep states a 650 credit threshold where the schema's documented figure is 670 — this is the same drift previously observed in another call (SESSION18_fcbf33c1), suggesting either an inconsistent internal script or a recurring rep error worth reconciling with Kenny."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 24,
-    "verified": 24,
+    "checked": 32,
+    "verified": 31,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

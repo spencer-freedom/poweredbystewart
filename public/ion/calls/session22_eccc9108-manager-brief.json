@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION22_eccc9108",
   "rep_name": "John",
-  "trajectory_summary": "This is a short, largely one-sided call where a customer who denies making the original inquiry states upfront that he cannot afford solar and has poor credit, and repeats this three times with increasing frustration before the rep asks the direct qualifying question. The rep's 'Gotcha, gotcha' acknowledgments never engage the customer's stated objections, and the call ends in a clean, correct disqualification once credit is confirmed below threshold. There was no viable path to a booked appointment here — the outcome is a legitimate hard DQ, not a lost opportunity — but the rep's handling of the lead-up (three unaddressed statements, an unresolved 'it's not free' legitimacy challenge, and a request to be left alone) reflects reactive listening rather than a controlled qualification flow.",
+  "trajectory_summary": "This call opens hostile and stays hostile — the customer disputes the premise of the call, raises trust and credit objections in the same breath, and the rep never resets the frame or slows down to address the confusion directly. The rep runs the credit qualifier to its natural DQ conclusion, but the customer had already stated the disqualifying fact three separate times before the rep formally asked. The call ends in a DQ with a vague, unanchored callback offer.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unclear; the observed outcome should be recorded as dq (hard disqualifier: customer confirms credit below the qualifying threshold at 01:44), not a missed-opportunity or no-appointment call. The DQ itself was procedurally correct per qualifiers.credit_qualifier.",
+  "outcome_dispute": "v1 tag is unknown; observed outcome is a hard DQ on credit (customer confirms he does not meet the threshold), not a genuine callback or appointment — the 'reach back out in a couple months' line is left unanchored with no date, making it a soft, non-committal close rather than a real callback.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "01:44",
     "quote": "This one, I don't have it. No.",
-    "reasoning": "Customer confirms he does not meet the stated credit threshold, triggering the hard disqualifier under qualifiers.credit_qualifier; the call ends immediately after with no appointment set."
+    "reasoning": "Customer confirms he does not meet the stated credit threshold, which is a hard_dq per qualifiers.credit_qualifier; no appointment, date, or time was set, and the call ends with the customer saying goodbye."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reached bill collection — it was cut short by the customer's credit disqualification before the rep got past the credit qualifier question."
+    "reasoning": "The call never reaches a bill-amount question; it is derailed by the customer's upfront trust and credit objections and DQ's on credit before verify/bill sections are reached."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call never progresses past the intro/credit-qualifier stage, so bill document collection was never raised."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,132 +41,235 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what interested the customer in solar; the customer instead used the early part of the call to deny the premise of the inquiry and state financial disqualifiers, so no interest reason was ever established."
+    "reasoning": "The rep never asks what interested the customer in solar; the customer instead volunteers unprompted that he never made a request and can't afford it, which functions as a rejection of the premise rather than a stated interest reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:10",
-      "quote": "This is John with ION."
+      "end_ts": "00:20",
+      "quote": "This is John with ION. I'm reaching out really quick because we got a request you were looking into solar for your home here in Beaverton.",
+      "customer_response": "resistant",
+      "customer_quote": "I'm not I never I never make a request.",
+      "resistance_reason": "trust",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "co_owner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "roof",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "01:38",
+      "end_ts": "01:45",
+      "quote": "Gotcha. Is your credit at 650?",
+      "customer_response": "resistant",
+      "customer_quote": "This one, I don't have it. No.",
+      "resistance_reason": "cost",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     }
   ],
-  "primary_coaching_focus": {
-    "topic": "acknowledging stated objections before repeating script",
-    "ts": "00:38",
-    "quote": "My credit, I don't have no good credit to get financed solar. You gotta leave me alone.",
-    "why": "The customer states his disqualifying credit situation and a request to disengage three times before the rep asks the direct qualifying question at 01:38 — the rep's repeated 'Gotcha, gotcha' response pattern shows he is not actually processing what the customer is saying, just holding space until he can ask his next scripted line."
-  },
-  "key_moments": [
+  "objections": [
     {
-      "ts": "00:12",
-      "quote": "I'm reaching out really quick because we got a request you were looking into solar for your home here in Beaverton.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The customer immediately disputes making any request. The rep never grounds the lead source with specificity (form name, date, referral channel) which is exactly the protocol move that reduces suspicion per protocols.how_did_you_get_my_number — instead the vague 'we got a request' framing invites exactly the pushback that follows."
-    },
-    {
-      "ts": "00:54",
-      "quote": "is your credit above the credit? Free. You're calling somebody. It's not free.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is a legitimacy/scam-anxiety challenge layered on top of a cost objection — the customer is questioning whether 'free' framing is a scam tactic. The rep's response at 01:02 explains installation-fee mechanics but never directly addresses the trust/scam undertone in 'it's not free... you're calling somebody.'"
+      "ts": "00:20",
+      "quote": "Yeah. I'm not I never I never make a request. I said I need to buy a house. It's time to figure out what I'm doing. I don't have money to put solar in my house.",
+      "type": "trust_or_scam",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep never directly addresses the 'I never made a request' trust challenge; the call moves forward as if it wasn't raised."
     },
     {
       "ts": "00:38",
       "quote": "My credit, I don't have no good credit to get financed solar. You gotta leave me alone.",
-      "classification": "empathy_miss",
-      "stewart_read": "The customer explicitly states a disqualifying financial fact and asks to be left alone in the same breath. The rep's next line is 'Gotcha. Gotcha. So,' which neither acknowledges the request nor moves to close the call respectfully."
+      "type": "cost",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "Yeah. I mean, the only free part, Mustafa, is we take care of the installation fee and no down payment, no upfront cost.",
+        "Gotcha. Is your credit at 650?"
+      ],
+      "resolved": true,
+      "resolution_ts": "01:44",
+      "reasoning": "Rep tried a no-upfront-cost reframe and then ran the direct credit qualifier; the customer confirmed he does not meet the threshold, resolving the objection into a hard DQ rather than overcoming it."
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "Slowing down on hostile opens instead of running the linear script",
+    "ts": "00:38",
+    "quote": "My credit, I don't have no good credit to get financed solar. You gotta leave me alone.",
+    "why": "The customer gave the disqualifying credit answer here, three exchanges before the rep formally asked the qualifier question at 01:38 — the rep spent the intervening minute pitching financing mechanics instead of listening to what had already been said, which extended a hostile call without changing the outcome."
+  },
+  "key_moments": [
+    {
+      "ts": "00:20",
+      "quote": "Yeah. I'm not I never I never make a request. I said I need to buy a house. It's time to figure out what I'm doing. I don't have money to put solar in my house.",
+      "classification": "trust_or_scam",
+      "stewart_read": "Customer denies making the request, which is a legitimacy/trust challenge functionally similar to 'how did you get my number' — the rep never restates the lead source specifically (e.g., 'you filled out a form online')."
     },
     {
-      "ts": "01:44",
-      "quote": "This one, I don't have it. No.",
-      "classification": "policy_ambiguity",
-      "stewart_read": "This is the customer's own disqualifying answer, and ending the call here is correct procedure under the schema's current hard_dq=true rule for stated credit. However, per qualifiers.credit_qualifier's spencer_operator_note, self-reported credit is unreliable (bureau scores often run 30-50 points higher than what customers believe), so a policy question remains open: is DQ-on-stated-credit costing Ion real deals on this floor."
+      "ts": "00:38",
+      "quote": "My credit, I don't have no good credit to get financed solar. You gotta leave me alone.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is exactly the objection_inversion trigger pattern — a stated financial hardship that could be reframed as the reason solar helps (eliminating the electric bill) rather than a disqualifier. The rep instead moves toward the hard credit qualifier."
+    },
+    {
+      "ts": "00:52",
+      "quote": "Gotcha. Gotcha. So,",
+      "classification": "empathy_miss",
+      "stewart_read": "Customer has just disclosed financial stress twice and asked to be left alone; the rep's response is a filler acknowledgment with no empathetic content before continuing the pitch."
+    },
+    {
+      "ts": "01:02",
+      "quote": "Yeah. I mean, the only free part, Mustafa, is we take care of the installation fee and no down payment, no upfront cost.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep explains financing mechanics (installation fee waiver, no down payment, bill elimination) in detail — this is closer-tier financial content being delivered by the setter to a customer who has already said he can't afford it."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 26,
-    "verified": 26,
+    "checked": 30,
+    "verified": 30,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

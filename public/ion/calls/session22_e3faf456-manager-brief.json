@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION22_e3faf456",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens smoothly and the customer is cooperative throughout verify, even surfacing a clear backup-power motivation that the rep picks up on. However, the rep never anchors an appointment day/time, moves into bill collection without booking first, and the call is interrupted mid-bill-retrieval by another call, leaving no locked next step. The transcript ends with the customer stepping away, so there is no evidence of a booked or even tentative appointment.",
-  "shape": "mixed",
-  "outcome_dispute": "v1 tag is unknown/unclear from metadata, but based on the transcript the call should NOT be logged as booked or tentative — it ends mid-bill-collection with the customer taking another call and no appointment time ever offered or discussed by the rep.",
+  "trajectory_summary": "The call moves through the verify sequence smoothly with a cooperative customer who volunteers a real, specific motivator (grid backup) early, but the rep never anchors on it, never flips the captured bill figure into leverage, and the call is cut off before the bill document is retrieved or an appointment is set. The transcript ends mid-task with no booking, no button-up, and no resolution.",
+  "shape": "stagnant",
+  "outcome_dispute": "The v1 tag is unknown/unclear from metadata, but based on the transcript the call ends with no appointment booked, no date/time discussed, and the customer stepping away to take another call — this should be tagged no_appointment (or callback if Ion's system shows a scheduled follow-up outside this transcript), not booked or tentative.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": false,
-    "ts": "07:00",
-    "quote": "I got a call I gotta take real quick. Hold on.",
-    "reasoning": "The transcript ends with the customer stepping away to take another call during bill retrieval; no day or time was ever proposed by the rep, and no button-up sequence occurred."
+    "ts": "06:58",
+    "quote": "Hang on. I got another call.",
+    "reasoning": "The transcript ends with the customer stepping away to take another call while trying to log into her online utility account — no appointment day/time was ever discussed, and the call record shows no button-up or booking."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep captures a bill figure (with the customer noting it varies and April is a low month) but immediately pivots to the program/qualifier pitch without probing peak-month costs or using the number as leverage against the utility."
+    "reasoning": "The rep captured the bill figure but immediately pivoted to the credit-score qualifier and savings-guarantee pitch without turning the dollar amount into personal stakes or emotional leverage against the utility — the flip should have landed right after 02:31 or when introducing the program at 02:41."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:11",
+    "ask_quote": "Alright. Well, yeah, the only thing we'll need from you, so it's just a copy of your AES bill.",
+    "result": "promised_later",
+    "method": "online_login",
+    "result_ts": "05:11",
+    "result_quote": "Okay. I gotta look for my computer because I gotta log in.",
+    "reasoning": "The rep asked for the bill and set up a text-to-number handoff (04:54), and the customer began the online login process, but the call is interrupted by another incoming call before the bill is actually sent or confirmed received."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,134 +41,213 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Customer gives a specific grid-reliability/backup-power reason and confirms interest in batteries at 02:03, but the rep never returns to this theme later in the call — no reinforcement when discussing the program or bridging to next steps."
+    "reasoning": "The rep's immediate follow-up at 01:56 about backup batteries picks up the thread in the moment, but this is a same-breath continuation of the same exchange, not a later reinforcement — the motivator is never referenced again once the call moves into the bill and program-qualifier sections, so at the level of 'was this reason used to reinforce or tie to the ask later,' the answer is no."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "this is Holland with Ion. I got a request to remove the solar for your home."
+      "end_ts": "00:14",
+      "quote": "Hey. So this is Holland with Ion. I got a request to remove the solar for your home. How are you today?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm okay. How are you?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "interest_question",
-      "ts": "01:33",
       "status": "asked",
-      "quote": "what kind of got you interested in solar?"
+      "ts": "01:33",
+      "end_ts": "02:03",
+      "quote": "And I guess my my biggest question for you is what kind of got you interested in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Because if the if the grid goes down, you still have, electricity, right, because of the solar?",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:29",
-      "quote": "I've got your address as 408 Lawrence Avenue in Miamisburg, Ohio. Is that correct?"
+      "end_ts": "00:35",
+      "quote": "first off, I've got your address as 408 Lawrence Avenue in Miamisburg, Ohio. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:22",
-      "quote": "Is there anybody else on the title of the home in two?"
+      "end_ts": "01:29",
+      "quote": "I brought you down, Stephanie, as the property owner. Is there anybody else on the title of the home in two?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:04",
-      "quote": "just regular asphalt shingle roof. Do you know how old it is?"
+      "ts": "01:01",
+      "end_ts": "01:19",
+      "quote": "As far as the roof goes, it looks like, just regular asphalt shingle roof. Do you know how old it is?",
+      "customer_response": "resistant",
+      "customer_quote": "I don't know.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:09",
-      "quote": "who is your electric company?"
+      "end_ts": "02:16",
+      "quote": "And then who is your electric company?",
+      "customer_response": "cooperative",
+      "customer_quote": "I believe it's AES.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:24",
-      "quote": "you're paying about 200 a month on that electric bill. Is that still accurate?"
+      "end_ts": "02:37",
+      "quote": "And then I have down here that you're paying about 200 a month on that electric bill. Is that still accurate?",
+      "customer_response": "cooperative",
+      "customer_quote": "It depends. Like, last I think April is 133, but April is not a bad month.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:51",
-      "quote": "As long as you have a credit score above 6 70, then you'll qualify."
+      "ts": "02:41",
+      "end_ts": "02:58",
+      "quote": "As long as you have a credit score above 6 70, then you'll qualify. Is that the case for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "02:59",
-      "quote": "have you ever really looked into solar before... or is this your first time?"
+      "end_ts": "03:07",
+      "quote": "have you ever really looked into solar before, mister Stephanie, or is this your first time?",
+      "customer_response": "cooperative",
+      "customer_quote": "First time.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:11",
-      "quote": "the only thing we'll need from you, so it's just a copy of your AES bill."
+      "end_ts": "06:58",
+      "quote": "Alright. Well, yeah, the only thing we'll need from you, so it's just a copy of your AES bill.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. I gotta look for my computer because I gotta log in.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "no appointment time ever proposed before interruption",
-    "ts": "07:00",
-    "quote": "I got a call I gotta take real quick. Hold on.",
-    "why": "By the seven-minute mark the rep has run verify and started bill collection but has not once mentioned a day, time, or the closer appointment — when the customer gets pulled away, there is no committed next step to fall back on. Rep should propose a tentative appointment time earlier in the call, independent of whether the bill gets sent immediately."
+    "topic": "letting a strong stated motivator go unused",
+    "ts": "01:46",
+    "quote": "Yeah. Because if the if the grid goes down, you still have, electricity, right, because of the solar?",
+    "why": "The customer handed the rep a specific, personal reason for interest (grid backup/resilience) and confirmed interest in batteries seconds later, but neither surfaces again — not at the bill discussion, not heading into the bill-document ask. This is the clearest missed anchor point on the call and the cheapest fix: reflect it back once more before the call ends."
   },
   "key_moments": [
     {
       "ts": "00:05",
-      "quote": "Hey. So this is Holland with Ion. I got a request to remove the solar for your home. How are you today?",
+      "quote": "I got a request to remove the solar for your home.",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The intro references a prior request but doesn't clarify company legitimacy (no state, no referral source, no form-fill context) beyond the company name and a garbled phrase about removing solar, which doesn't match the rest of the call's content (this is a new-install qualification call, not a removal)."
+      "stewart_read": "This phrasing doesn't match either the Tesla or standard intro template and is confusing — 'remove the solar' reads like an orphaned-flow or removal-request opener, not a new-design qualifying call, yet the rest of the call proceeds as a standard new-design verify sequence. This is likely a script/lead-type mismatch worth flagging rather than a deliberate move."
     },
     {
       "ts": "01:46",
       "quote": "Yeah. Because if the if the grid goes down, you still have, electricity, right, because of the solar?",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Customer volunteers a specific, well-formed reason for solar interest tied to grid reliability/backup power, which is a stronger qualification signal than a generic 'save the world' answer."
-    },
-    {
-      "ts": "01:56",
-      "quote": "Are you interested in, like like, backup batteries and whatnot, it sounds like, case of emergency fees?",
-      "classification": "cross_sell_miss",
-      "stewart_read": "Rep correctly identifies the battery/backup interest signal and asks a follow-up, but the customer's confirming 'Yeah' is not developed further — no mention of Tesla Powerwall, no framing of this as something the closer will cover, no reinforcement."
+      "stewart_read": "The customer independently names grid-resilience/backup power as her reason for interest — a strong, specific anchor point. The rep's immediate follow-up about batteries (01:56) picks up on the theme in the moment, but neither the interest reason nor the battery interest is referenced again later in the call."
     },
     {
       "ts": "02:24",
       "quote": "And then I have down here that you're paying about 200 a month on that electric bill. Is that still accurate?",
       "classification": "bill_anchor",
-      "stewart_read": "Rep does capture a bill figure, but it comes from a pre-existing record (recycled lead pattern) rather than a fresh ask, and the customer's answer complicates the number."
+      "stewart_read": "Rep captures a bill figure (customer corrects it to $133 for April) but the number is filed and the call moves straight to the savings-guarantee pitch without ever turning the dollar figure into personal stakes for the customer. Capture without flip is exactly the failure_pattern the schema names."
+    },
+    {
+      "ts": "02:52",
+      "quote": "we have a a pretty decent program, and what it does is it guarantees you savings within the first year you have solar.",
+      "classification": "other",
+      "stewart_read": "This is an unqualified, blanket savings guarantee with no numbers or conditions attached to the customer's actual bill data — a numeric-discipline flag under the schema, since any savings claim should be grounded in real figures, not a flat guarantee."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 31,
-    "verified": 31,
+    "checked": 42,
+    "verified": 41,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

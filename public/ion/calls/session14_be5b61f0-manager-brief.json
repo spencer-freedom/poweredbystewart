@@ -1,26 +1,36 @@
 {
   "call_id": "SESSION14_be5b61f0",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens on friction (address mismatch, a spontaneous vulnerability disclosure) and then spends nearly two-thirds of its runtime stuck in a tech-friction loop trying to get bill data from an elderly, low-tech customer. The rep eventually recovers with a verbal read-back and lands a scheduled appointment despite the customer's limited phone literacy and real-world scheduling constraints (a funeral, a daughter's shift work). The shape is mixed: real energy was lost to a slow pivot, but the rep's persistence through both the tech friction and the multi-round scheduling negotiation ultimately produced a concrete booked time.",
+  "trajectory_summary": "The call opens with an address mismatch and a spontaneous disclosure of the customer's wife's passing, both handled adequately but without emotional depth. The middle third burns roughly 8-9 minutes on a bill-collection tech struggle before the rep correctly pivots to verbal read-back, recovering a customer who was close to disengaging. The close is efficient and protocol-correct: the rep identifies the daughter as co-title-holder and builds the appointment around her schedule, landing a booked time with a specific day and hour.",
   "shape": "mixed",
-  "outcome_dispute": "The appointment does have a specific day and time (Monday at 7) and a channel (in-person specialist visit), so 'booked' is defensible, but it is fragile: the daughter (the co-owner/decision-maker) was never directly spoken to or confirmed, only relayed through James, and James himself asks the rep to call him to confirm attendance — 'if anything change, you call me' — which signals real uncertainty about whether the appointment holds.",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "in_person",
     "datetime_captured": true,
-    "co_owner_confirmed": false,
-    "ts": "25:21",
+    "co_owner_confirmed": true,
+    "ts": "25:17",
     "quote": "Well, I would get you guys down for Monday at seven.",
-    "reasoning": "A specific day (Monday) and time (7pm) are agreed for an in-person specialist visit, meeting the 'booked' bar, but the daughter — the co-owner/decision-maker — was never directly spoken to on the call and James himself flags the plan as tentative ('if anything change, you call me'), making co_owner_confirmed false."
+    "reasoning": "A specific day (Monday) and time (7 PM) were locked, and the rep confirmed the daughter (co-title-holder since the wife's passing) would be present, satisfying co-owner inclusion per protocols.spouse_decision logic extended to the daughter."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "03:06",
-    "bill_quote": "I just paid it today, and that was 200 and something dollars.",
+    "bill_ts": "03:12",
+    "bill_quote": "200 and something dollars.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep acknowledges the $200+ figure with only 'Yeah. Okay. Good to know.' and moves straight into requesting the detailed kWh bill; the number is never used later as emotional leverage against the utility or tied to the value of the appointment."
+    "reasoning": "The rep captured the bill amount and simply acknowledged it ('Yeah. Okay. Good to know.') before moving straight to the kilowatt-usage ask; the number was never turned into an emotional lever against the utility. The flip should have gone right after the bill amount was given, e.g. reflecting the pain of that $200+ bill before pivoting to the usage-data ask."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:28",
+    "ask_quote": "So the only thing I need from you, James, is just a copy of your kilowatt usage on your bill.",
+    "result": "received_on_call",
+    "method": "read_aloud",
+    "result_ts": "19:38",
+    "result_quote": "23.",
+    "reasoning": "After failed attempts at photo/text and email, the rep pivoted to having the customer read the kWh numbers aloud directly off the paper bill, successfully capturing usage data live on the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,240 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar' — the call moves from intro directly into address/roof/title verify items, and the customer never volunteers a motivation (bill pain, environment, etc.) unprompted."
+    "reasoning": "The rep never explicitly asked 'what interested you in solar' or an equivalent; the call moved directly from intro into address/roof/title verification without surfacing the customer's underlying motivation."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:08",
-      "quote": "Hey, James. This is Holland with Ion. I got a request you were looking into solar for your home."
+      "end_ts": "00:28",
+      "quote": "Hey, James. This is Holland with Ion. I got a request you were looking into solar for your home.",
+      "customer_response": "cooperative",
+      "customer_quote": "Fantastic thus far.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:37",
-      "quote": "I've got your address here, James, as 907 North Leamington Avenue in Chicago. Is that correct?"
+      "end_ts": "01:11",
+      "quote": "So first off, I've got your address here, James, as 907 North Leamington Avenue in Chicago. Is that correct?",
+      "customer_response": "resistant",
+      "customer_quote": "Because I don't know where you got that from.",
+      "resistance_reason": "trust",
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "02:02",
-      "quote": "Is there anybody else on the title of the home with you?"
+      "end_ts": "02:20",
+      "quote": "And then I have you down, James, as the property owner. Is there anybody else on the title of the home with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "But since my wife passed, I put my daughter on my insurance.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:22",
-      "quote": "Do you know how old your current roof is?"
+      "end_ts": "01:57",
+      "quote": "Do you know how old your current roof is?",
+      "customer_response": "cooperative",
+      "customer_quote": "I just had a roof put on maybe ten years ago or something like that.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:56",
-      "quote": "I'm assuming you're just with ComEd for your electricity."
+      "end_ts": "03:02",
+      "quote": "I'm assuming you're just with ComEd for your electricity.",
+      "customer_response": "no_answer",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "03:02",
-      "quote": "Do you know how much you're spending on average a month with ComEd?"
+      "end_ts": "03:16",
+      "quote": "Do you know how much you're spending on average a month with ComEd?",
+      "customer_response": "cooperative",
+      "customer_quote": "200 and something dollars.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:21",
-      "quote": "Just as long as you have a credit score above 670, then you'll qualify."
+      "end_ts": "02:48",
+      "quote": "as long as you have a credit score above 670, then you'll qualify. Is that the case for you?",
+      "customer_response": "resistant",
+      "customer_quote": "I have no idea what my score is or nothing.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:28",
-      "quote": "The only thing I need from you, James, is just a copy of your kilowatt usage on your bill."
+      "end_ts": "22:41",
+      "quote": "So since you have the bill in front of you, I'm just gonna have you read off the numbers to me instead.",
+      "customer_response": "resistant",
+      "customer_quote": "23.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "25:21",
-      "quote": "Well, I would get you guys down for Monday at seven."
+      "ts": "23:33",
+      "end_ts": "25:21",
+      "quote": "So we can do Saturday then at 5PM. Does that work?",
+      "customer_response": "resistant",
+      "customer_quote": "For this Saturday, no. Not at all Saturday.",
+      "resistance_reason": "timing",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "25:33",
+      "end_ts": "26:38",
+      "quote": "just make sure she's at your house at seven then when the specialist stops by.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Give me a call, and, I'll let you know if he's here or something at that, at that time or whatever.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "03:51",
+      "quote": "Yeah. But hold on. Hold on. What are we talking about? Signing up for, solar stuff?",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "No. Well, you're not signing up for it. We're just showing you an estimate."
+      ],
+      "resolved": true,
+      "resolution_ts": "04:09",
+      "reasoning": "Customer's confusion about the call's purpose was resolved with a single clarifying statement, after which he cooperated with the bill request."
+    },
+    {
+      "ts": "23:39",
+      "quote": "What's the oh, no. No. Not tomorrow. I'll be at a funeral tomorrow.",
+      "type": "timing_or_callback",
+      "rep_attempts": 3,
+      "attempt_quotes": [
+        "So we can do Monday, the twenty seventh.",
+        "Well, sorry. We can either do Saturday anytime, or we can do Monday at 06:30.",
+        "So we can do Saturday then at 5PM. Does that work?"
+      ],
+      "resolved": true,
+      "resolution_ts": "25:17",
+      "reasoning": "The rep cycled through multiple day/time combinations across a funeral conflict and the daughter's work schedule before landing on a mutually workable Monday 7PM slot."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Slow pivot on tech-friction / alternative bill-collection path",
-    "ts": "06:26",
-    "quote": "So I'm just gonna send you a text. And then could you take a picture of that bill that you're looking at and send that over to me?",
-    "why": "The rep burned roughly 9 minutes cycling through text-photo and email before landing on verbal readback, well past the schema's 2-minute pivot guidance; this is the single largest time-and-energy leak on the call and a repeatable, coachable behavior for future low-tech customers."
+    "topic": "Slow pivot to verbal bill read-back on low-tech customer",
+    "ts": "10:01",
+    "quote": "Now as far as sending it to you, I don't know how to do that.",
+    "why": "The rep let roughly 8-9 minutes elapse between the first clear signal of tech friction and the pivot to verbal read-back at 15:04, well past the schema's 2-minute budget (bill_collection.alternative_paths.elderly_low_tech_protocol). This nearly cost the appointment when the customer suggested ending the attempt at 14:48."
   },
   "key_moments": [
     {
-      "ts": "00:45",
-      "quote": "No.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The rep's intro at 00:08 references a 'request' for solar but the address the rep has on file is immediately wrong, undercutting the legitimacy the intro was meant to establish. There's no clear lead-source framing (no form reference, no Tesla framing) to anchor why this call is happening, which likely contributed to the customer's later confusion about 'what are we talking about.'"
+      "ts": "02:10",
+      "quote": "My my me and my wife was. But since my wife passed, I put my daughter on my insurance.",
+      "classification": "empathy_miss",
+      "stewart_read": "The customer discloses his wife's death unprompted while answering a routine title-ownership question. The rep's next line is a flat pivot to the credit-score qualifier with no acknowledgment of the loss."
     },
     {
-      "ts": "02:14",
-      "quote": "But since my wife passed, I put my daughter on my insurance.",
+      "ts": "02:21",
+      "quote": "Alright. Perfect. That is good to know. And then right now, we have a pretty good program going on.",
       "classification": "empathy_miss",
-      "stewart_read": "The customer discloses his wife's death directly in response to the co-owner verify question. The rep's next line is purely procedural ('Alright. Perfect. That is good to know.') with no acknowledgment of the loss before pivoting straight into the credit-score pitch."
+      "stewart_read": "This is the rep's actual response to the wife's-passing disclosure — an upbeat 'Alright. Perfect.' immediately followed by a pivot into the credit-qualifier pitch, compounding the missed acknowledgment."
     },
     {
       "ts": "02:39",
       "quote": "I have no idea what my score is or nothing.",
       "classification": "knowledge_gap",
-      "stewart_read": "When the customer can't state a credit score, the rep improvises a substitute question ('Okay. Do you, like, pay your bills on time and everything?') rather than following any defined schema path. This is exactly the ambiguity the schema's policy_question_for_kenny flags: it's unclear whether the setter should be making a stated-credit judgment call at all, and here the rep effectively waves the customer through on an unverified proxy answer."
+      "stewart_read": "Customer can't confirm the 670 credit threshold. Rep pivots to an informal proxy question ('Do you, like, pay your bills on time') rather than either hard-gating or explicitly deferring the decision to the closer's credit pull."
     },
     {
-      "ts": "03:51",
-      "quote": "Yeah. But hold on. Hold on. What are we talking about? Signing up for, solar stuff?",
-      "classification": "rapport_repair",
-      "stewart_read": "The customer's confusion mid-verify about the call's purpose is handled cleanly and immediately: the rep clarifies no signup is happening and reminds him he inquired."
+      "ts": "14:48",
+      "quote": "Well, maybe you call later on when one of my grandchildren here, they can, assist you or whatever because I don't know nothing about this.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "This is the near-exit point after roughly 8-9 minutes of failed texting. The schema's time budget for pivoting to verbal read-back is 2 minutes from first friction (first friction visible around 10:01 when customer says 'I don't know how to do that'); the rep didn't pivot to read-back until 15:04, well past budget."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 42,
-    "verified": 42,
+    "checked": 53,
+    "verified": 47,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 6,
     "not_found": 0
   }
 }

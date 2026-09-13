@@ -1,7 +1,7 @@
 {
   "call_id": "SESSION24_0f7cfab6",
   "rep_name": "Holland",
-  "trajectory_summary": "The call moves from a guarded, transactional customer to a booked appointment, but the booking happens because the customer drove the process ('keep it moving, schedule everything') rather than because the rep built trust or answered the substantive questions raised. Multiple pricing and program-mechanics questions were left hanging, and the rep's own knowledge gaps (Mecklenburg vs Dominion, no clear answer on panel payoff timeline) added friction rather than reducing it.",
+  "trajectory_summary": "The call opens combative — a customer setting hard conditions before engaging — and never fully resolves into comfort; instead the customer takes control of pacing, repeatedly steering the rep toward scheduling to shortcut a pitch he doesn't trust. The rep gets the appointment booked and the bill photo request out, but did so by yielding to the customer's terms rather than running the qualification structure, leaving unanswered cost questions and an unaddressed co-owner exclusion sitting under a fragile booking.",
   "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
@@ -10,8 +10,8 @@
     "datetime_captured": true,
     "co_owner_confirmed": false,
     "ts": "05:19",
-    "quote": "Yeah. So on Wednesday, I have you down for 02:30. Is that fine? Yep. Yes.",
-    "reasoning": "A specific day and time (Wednesday 2:30) is agreed, so this is more than tentative on its face, but the appointment is fragile: the required bill photo has not yet been sent as of call end, the wife (co-owner) explicitly will not attend, and the button-up handshake never happens cleanly — so I'm marking tentative given the unresolved bill dependency and unclear final confirmation."
+    "quote": "So on Wednesday, I have you down for 02:30. Is that fine? Yep. Yes.",
+    "reasoning": "A specific day and time (Wednesday 02:30) was agreed, but the identified co-owner (wife) was explicitly confirmed as NOT attending, and the bill document was only promised for later rather than captured live — the booking exists but rests on an unresolved dependency (the bill) and an excluded decision-maker, making it fragile rather than a clean 'booked' outcome."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep asks for the bill and the customer agrees to send a photo via text, but no actual bill amount or kWh figure is stated on the call itself — the customer only agrees to send it afterward, so there is nothing captured live to flip."
+    "reasoning": "No dollar bill amount or usage figure was ever stated by the customer on this call — the rep asked for the utility bill document itself (kilowatt usage graph) rather than a spoken dollar figure, and the customer never volunteered one."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "05:25",
+    "ask_quote": "do you have a copy of your Mecklenburg bill with your kilowatt usage on it?",
+    "result": "promised_later",
+    "method": "photo",
+    "result_ts": "06:44",
+    "result_quote": "That's all you needed that? That's fine. I can do that.",
+    "reasoning": "The rep asked for the bill, discovered the customer has a paper copy in hand but can't read all 12 months instantly, and pivoted to a text-photo request; the customer agreed to send it after the call rather than during it."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,250 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks an explicit 'what interested you in solar' question; the customer leads with his own conditional framing ('I don't want a bill') but the rep never explicitly surfaces or reinforces this as his stated reason for interest."
+    "reasoning": "The rep never explicitly asked 'what interested you in solar' — the call moved from intro directly into the customer's own gatekeeping questions about the bill-swap program, and the rep never circled back to ask the customer's underlying motivation."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "quote": "Hey. This is Holland with Ion. I got a request you were looking into solar for your home."
+      "end_ts": "00:14",
+      "quote": "Hey. This is Holland with Ion. I got a request you were looking into solar for your home.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm fine. But I wanted to",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "co_owner",
-      "status": "asked",
-      "ts": "04:17",
-      "quote": "Okay. Your wife goes to work on Wednesdays, you said?"
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "02:17",
+      "end_ts": "02:42",
+      "quote": "if there is is there a leak protection for the roof with this program?",
+      "customer_response": "resistant",
+      "customer_quote": "I don't have leaks right now. So I don't wanna add something and then it start happening.",
+      "resistance_reason": "trust",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "05:36",
-      "quote": "do you have a copy of your Mecklenburg bill with your kilowatt usage on it?"
+      "ts": "05:30",
+      "end_ts": "05:41",
+      "quote": "do you have a copy of your Mecklenburg bill with your kilowatt usage on it?",
+      "customer_response": "resistant",
+      "customer_quote": "Mecklenburg. I don't have Mecklenburg. I don't know what that is. Are you with Dominion?",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "06:19",
-      "quote": "So if I just send you a text, could you just send me a photo of that?"
+      "ts": "05:41",
+      "end_ts": "06:44",
+      "quote": "do you get those bills in the mail or online?",
+      "customer_response": "cooperative",
+      "customer_quote": "That's all you needed that? That's fine. I can do that.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "05:19",
-      "quote": "Yeah. So on Wednesday, I have you down for 02:30. Is that fine?"
+      "ts": "02:57",
+      "end_ts": "05:24",
+      "quote": "So on Wednesday, I have you down for 02:30. Is that fine?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yep. Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "06:48",
+      "end_ts": "07:08",
+      "quote": "I'll send you that text right now, and then I will also text you your appointment details just so you can add it to your calendar as well.",
+      "customer_response": "cooperative",
+      "customer_quote": "That's fine.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "00:31",
+      "quote": "So you're saying reduce? Because you're saying and then you're saying affordable and cheaper. What that?",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. That just that's I'm saying take away the bill completely."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer never gets a clean resolution to the eliminate-vs-reduce contradiction; he simply moves on to the next question rather than accepting a clarified answer."
+    },
+    {
+      "ts": "02:17",
+      "quote": "is there is there a leak protection for the roof with this program?",
+      "type": "roof_or_home",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "We have tons of warranties and everything. And so, yeah, if you did happen to get a leak or anything, then we'd cover that."
+      ],
+      "resolved": true,
+      "resolution_ts": "02:42",
+      "reasoning": "Customer clarifies he doesn't currently have leaks and doesn't want to introduce the risk, then moves on to scheduling without further pushback."
+    },
+    {
+      "ts": "05:00",
+      "quote": "The bill is not higher than what we already and then just not forever. And is it transferable or because if we move, we we yeah. Stuff like that.",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. Those are really good questions."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep validates the questions but does not answer them or commit to the closer addressing them specifically; customer moves forward with scheduling regardless, leaving the concerns open for the handoff."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Answering the customer's stated buying condition before booking",
-    "ts": "04:51",
-    "quote": "As long as the bill there's nothing upfront that we have to pay as far as the installation, that would be more open to doing.",
-    "why": "The customer handed the rep the exact condition for staying engaged (no upfront cost, bill not higher, not permanent) and the rep never confirmed it, instead sliding past to lock the appointment time — this is the biggest unresolved risk for the appointment holding."
+    "topic": "unresolved pricing questions with no scope-creep escape hatch",
+    "ts": "01:51",
+    "quote": "So on the average, do you happen to know how long it's the average cost of the panels?",
+    "why": "Three separate times the customer asked about cost/duration/mechanics and the rep either gave a partial answer or trailed off without deploying the schema's redirect line — this is the single most repeatable, coachable fix and it's the reason the customer kept pushing to 'just schedule and be done with it.'"
   },
   "key_moments": [
     {
+      "ts": "00:31",
+      "quote": "our goal is to actually completely eliminate that bill and replace it with something more affordable and cheaper",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The rep's very first pitch line contains an internal contradiction — 'eliminate' the bill but 'replace' it with something 'cheaper' — that the customer catches within seconds. This is the moment that sets the guarded tone for the entire call, not just the customer's own predisposition."
+    },
+    {
       "ts": "01:08",
-      "quote": "I know we have a couple different options. To be honest, I'm not exactly sure what options they are, just because I'm I'm just like a scheduler. I'm not a scheduler by any means.",
+      "quote": "I know we have a couple different options. To be honest, I'm not exactly sure what options they are, just because I'm I'm just like a scheduler.",
       "classification": "knowledge_gap",
-      "stewart_read": "The rep is reaching for the scope-limitation escape hatch but executes it so haltingly (self-contradicting mid-sentence) that it reads as evasive rather than confident redirection."
+      "stewart_read": "Rep admits the gap honestly rather than fabricating, which is the correct instinct, but doesn't pair it with the schema's escape hatch language to redirect confidently to the specialist."
     },
     {
       "ts": "01:51",
       "quote": "So on the average, do you happen to know how long it's the average cost of the panels?",
       "classification": "knowledge_gap",
-      "stewart_read": "Second time the customer asks for cost/timeline specifics; rep's response ('I don't I') is an incomplete non-answer rather than a redirect."
+      "stewart_read": "Third instance of the customer probing cost/mechanics; rep's response trails into silence ('I don't I—') before the customer moves on unprompted. No scope-creep escape hatch was deployed here either."
     },
     {
-      "ts": "02:17",
-      "quote": "is there anything gonna be done if there is is there a leak protection for the roof with this program?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer raises a concrete, checkable concern (roof leak warranty) that is a natural curiosity/trust anchor for the appointment, but rep's answer ('tons of warranties and everything') is vague and generic rather than tied forward to what the closer will show him."
-    },
-    {
-      "ts": "04:51",
-      "quote": "As long as the bill there's nothing upfront that we have to pay as far as the installation, that would be more open to doing.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is the customer stating his core condition for moving forward — essentially a soft objection wrapped in a conditional. The rep does not acknowledge or confirm it at all before moving to lock the time."
+      "ts": "04:17",
+      "quote": "it'll just be me. My wife goes to work on Wednesdays.",
+      "classification": "spouse_handling",
+      "stewart_read": "Customer discloses the co-owner will not be on the appointment. Rep's response is a flat factual acknowledgment with no attempt to find a time that works for both or explain why her presence matters for a joint decision."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 31,
-    "verified": 30,
-    "fuzzy": 1,
-    "wrong_ts": 0,
+    "checked": 47,
+    "verified": 42,
+    "fuzzy": 3,
+    "wrong_ts": 2,
     "not_found": 0
   }
 }

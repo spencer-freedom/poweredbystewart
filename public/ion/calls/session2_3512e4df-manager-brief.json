@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION2_3512e4df",
   "rep_name": "Holland",
-  "trajectory_summary": "This is a short, procedurally competent verify pass on an orphaned-solar lead — the rep moves briskly through address, tenure, existing-system, credit, and utility confirmation. But the call ends without a locked callback time or a captured bill, and a clear enthusiasm/pain signal (suboptimal panel placement due to the tree) was left unexplored.",
-  "shape": "mixed",
-  "outcome_dispute": "v1 tag is unknown/unclear from metadata; observed outcome is a callback, not a booked or tentative appointment — no day or time was set, only 'pick it up in a couple hours.'",
+  "trajectory_summary": "This is an orphaned-lead call (existing solar owner wanting to add panels/battery) that the rep correctly identified and adapted to mid-call, but the call ends without a bill, without a locked callback time, and without key orphaned-flow qualifiers (system working status, panel wattage) ever being asked. The call closes on the customer's terms — driving, unavailable, defer everything — with the rep accepting each deferral passively rather than anchoring a concrete next step.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "The v1 tag is unknown/unclear, but the observed outcome is a soft callback with no time attached — this is weaker than a standard 'callback' outcome typically implies and should not be read as a booked or tentative appointment.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
@@ -11,16 +11,26 @@
     "co_owner_confirmed": null,
     "ts": "04:40",
     "quote": "Okay. Yeah. No problem. We can pick it up in a couple hours then. You have a wonderful rest of your day.",
-    "reasoning": "No day or time was locked for either a specialist appointment or a callback — the customer said 'a couple hours' and the rep accepted that vague window without proposing a specific time, so this is a callback outcome, not booked or tentative."
+    "reasoning": "The call ends with an agreement to resume the conversation later but no specific day/time is locked — a soft callback, not a booked or tentative appointment."
   },
   "bill_anchor_audit": {
-    "bill_captured": false,
-    "bill_ts": "",
-    "bill_quote": null,
-    "flip_executed": "no_bill_captured",
+    "bill_captured": true,
+    "bill_ts": "03:11",
+    "bill_quote": "That sounds a little high.",
+    "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep proposed a pre-filled $200/month figure but the customer disputed it as too high and could not confirm a real number while driving, so no reliable bill figure was actually captured on this call — it was deferred to an emailed kWh usage document instead."
+    "reasoning": "The rep surfaced a pre-loaded $200/month figure and the customer softened it without giving a firm confirmed number; the rep never turned even the soft estimate into emotional leverage, instead pivoting directly to logistics (kilowatt usage document) at 03:26."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:26",
+    "ask_quote": "So the only thing I'll need from you, Ken, is just a copy of your kilowatt usage.",
+    "result": "promised_later",
+    "method": "email",
+    "result_ts": "03:54",
+    "result_quote": "Yeah. Just send me an email, and I'll send it to you.",
+    "reasoning": "Customer agrees to send the usage/bill info after the call via email once the rep sends him the request; nothing is transmitted during the call itself."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,226 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' (the customer already has solar, so this was reframed as an orphaned-flow add-on question instead), but the customer's stated want (more panels + battery) was never reinforced or tied back into the close of the call."
+    "reasoning": "The rep never explicitly asked 'what interested you in solar' since the standard interest_question doesn't apply cleanly to an orphaned lead, but the customer volunteered his motivation (adding panels/battery) in response to a re-inquiry probe; this stated interest was never reinforced or tied back into the appointment framing later in the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:03",
-      "quote": "This is Holland with Ion. I got a request you're looking into solar for your home."
+      "end_ts": "00:11",
+      "quote": "This is Holland with Ion. I got a request you're looking into solar for your home. How are you doing today?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm fine.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "asked",
-      "ts": "00:59",
-      "quote": "Were you just, like, re inquiring like, were you wanting to add panels or a battery or anything?"
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:24",
-      "quote": "I've got your address here as 912 Twinbrook Parkway in Rockville, Maryland. Is that correct?"
+      "end_ts": "00:35",
+      "quote": "So first off, I've got your address here as, 912 Twinbrook Parkway in Rockville, Maryland. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Correct.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:42",
-      "quote": "Are you with Pepco... Oh, yeah. Your electric company?"
+      "end_ts": "02:56",
+      "quote": "Are you with Pepco Oh, yeah. Your electric company?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:59",
-      "quote": "I have down here that you're paying about 200 a month on that electric bill. Is that accurate?"
+      "end_ts": "03:24",
+      "quote": "I have down here that you're paying about 200 a month on that electric bill. Is that accurate?",
+      "customer_response": "resistant",
+      "customer_quote": "That sounds a little high.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:22",
-      "quote": "You'll just need to have a credit score above 670. Is that the case for you?"
+      "end_ts": "02:38",
+      "quote": "To qualify for any incentives going on right now, you'll just need to have a credit score above 670. Is that the case for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Last time I checked, it was 849.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "asked",
-      "ts": "01:42",
-      "quote": "Who are your panels with currently? What company did you buy them from?"
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:26",
-      "quote": "The only thing I'll need from you, Ken, is just a copy of your kilowatt usage."
+      "end_ts": "03:54",
+      "quote": "The only thing I'll need from you, Ken, is just a copy of your kilowatt usage. So whenever you have a sec, do you do you get those bills in the mail or online?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Just send me an email, and I'll send it to you.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
-      "ts": "04:19",
-      "quote": "It would be best to pick up this conversation once I get home in a couple hours."
+      "status": "asked",
+      "ts": "04:04",
+      "end_ts": "04:40",
+      "quote": "The last thing that we need to do is find a good time that my specialist could come out and actually show you that estimate.",
+      "customer_response": "resistant",
+      "customer_quote": "So it would be best to, pick up this conversation once I once I get home in a couple hours.",
+      "resistance_reason": "timing",
+      "rep_followup": "moved_on",
+      "result": "deferred"
     },
     {
       "section": "button_up",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "04:19",
+      "quote": "So it would be best to, pick up this conversation once I once I get home in a couple hours.",
+      "type": "timing_or_callback",
+      "rep_attempts": 0,
+      "attempt_quotes": [
+        "Okay. Yeah. No problem. We can pick it up in a couple hours then."
+      ],
+      "resolved": true,
+      "resolution_ts": "04:40",
+      "reasoning": "Rep accepted the deferral immediately without attempting to lock a specific time or alternative — zero angles attempted before conceding to the vague timeframe."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored callback exit",
-    "ts": "04:19",
-    "quote": "Well, I I, again, I'm driving, and I'm not anywhere near my I can't see my, calendar. So it would be best to, pick up this conversation once I once I get home in a couple hours.",
-    "why": "This call had every qualifier pass cleanly (credit, ownership, utility) but ends with zero locked next step — no callback time, no handshake. That's the single highest-leverage fix: a specific rep-proposed window turns a vague callback into a scheduled, trackable touch."
+    "topic": "Locking a specific callback time instead of accepting a vague window",
+    "ts": "04:40",
+    "quote": "Okay. Yeah. No problem. We can pick it up in a couple hours then.",
+    "why": "This call ends with zero rep-owned next step — no date, no time, no confirmed contact window. Given the customer was cooperative throughout, a specific callback time (\"I'll call you at 5pm\") was achievable and would have converted this from a soft, easily-forgotten callback into a scheduled touch."
   },
   "key_moments": [
     {
-      "ts": "01:25",
-      "quote": "No. That's why the panels are located on less than optimal, location.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer volunteers that his existing system underperforms because of shading — a live pain point on his CURRENT solar investment. This is a strong reason to add panels/battery and directly explains his inbound interest, but the rep never asks a follow-up (how much is it underperforming, has he noticed a bill gap) that would have deepened the qualification."
+      "ts": "00:54",
+      "quote": "And I see here, do you already have solar on your home?",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "This customer already owns solar and wants to add panels/battery — the schema's orphaned_flow trigger applies. The rep recognized it and adapted (\"were you wanting to add panels or a battery\") but never ran the full orphaned_flow checklist."
     },
     {
-      "ts": "01:42",
-      "quote": "Alright. Let me see if I could get a better look here.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer has an existing system with Astrum and wants to add panels/battery — this is the orphaned_flow scenario. The rep captures ownership status and installer name but never asks if the system is currently working or whether Ken has had any issues beyond shading, both of which the orphaned_flow protocol calls for and which would surface useful context for the closer."
-    },
-    {
-      "ts": "02:35",
-      "quote": "Last time I checked, it was 849.",
+      "ts": "01:48",
+      "quote": "K. And then who are your panels with currently? What company did you buy them from?",
       "classification": "other",
-      "stewart_read": "Customer clears the credit qualifier decisively and the rep acknowledges it cleanly and moves on — correct, no issue here, included as a clean qualifier pass."
+      "stewart_read": "Rep asks the original-company question from orphaned_flow correctly, and also captures ownership status (\"do you own your system, or do you still make payments?\" at 02:02). This is partial orphaned_flow coverage — two of four items captured."
     },
     {
-      "ts": "02:59",
-      "quote": "Great. And then I have down here that you're paying about 200 a month on that electric bill. Is that accurate?",
-      "classification": "bill_anchor",
-      "stewart_read": "Rep surfaces a pre-existing bill figure from records rather than asking fresh, and when the customer disputes it (\"That sounds a little high\") the rep just agrees (\"A little high, I would say\") without probing for a corrected number or flipping it into motivation."
+      "ts": "02:02",
+      "quote": "And then do you own your system, or do you still make payments?",
+      "classification": "cross_sell_miss",
+      "stewart_read": "The rep never asked whether the existing system is working (a hard_dq trigger per orphaned_flow: \"We cannot service the existing system right now\") or captured panel wattage. Both are required orphaned_flow items and neither was raised."
+    },
+    {
+      "ts": "01:17",
+      "quote": "And then on Google Maps, it shows you have a pretty large tree in your backyard. Is that tree removed?",
+      "classification": "other",
+      "stewart_read": "Customer's reply reveals the existing panel placement is suboptimal due to shading — a flat technical fact stated by the customer, not an enthusiasm signal. There is no schema-documented cross-sell or coaching pathway tied to tree removal for this call type."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 33,
-    "verified": 33,
+    "checked": 44,
+    "verified": 43,
     "fuzzy": 0,
     "wrong_ts": 0,
-    "not_found": 0
+    "not_found": 1
   }
 }

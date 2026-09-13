@@ -1,17 +1,17 @@
 {
   "call_id": "30000559843",
   "rep_name": "Carter",
-  "trajectory_summary": "The call moves from a low-urgency, planning-stage customer to a tentative next-day appointment, driven mainly by the rep's clean handling of the roof/solar bundle question and persistent (if ultimately unsuccessful) attempts to lock down the bill. The appointment is fragile — no bill was actually sent by the end of the call and the rep explicitly conditions the slot on it arriving.",
-  "shape": "mixed",
-  "outcome_dispute": "This should be read as tentative, not booked. The rep states 'Once you get me that, though, I'll put you in for 09:30 tomorrow' (04:11) — the appointment is explicitly conditional on the bill being sent, which never happens on the call. A time was discussed but not irrevocably locked.",
+  "trajectory_summary": "This is a warm re-engagement call with an already-interested lead who volunteers a real sequencing objection (roof before solar) and a scheduling-channel mismatch (assumed in-person, got a phone-style booking). The rep recovers both moments reasonably well by reframing the roof timing as a bundling opportunity and locking a next-day time, but never explicitly reconciles the customer's stated 'springtime' timeline with the 'tomorrow 9:30' booking, leaving a soft contradiction sitting under the appointment.",
+  "shape": "energy_built",
+  "outcome_dispute": "The appointment is booked with a specific day and time (tomorrow, 9:30) but is fully conditional on the customer sending the utility bill that night from a parking lot while driving — this is closer to a fragile/tentative booking than a clean 'booked' outcome, since the rep even says 'I'll put you in for 09:30 tomorrow' only 'once you get me that.'",
   "observed_outcome": {
     "outcome": "tentative",
-    "appointment_channel": "in_person",
+    "appointment_channel": "unclear",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "04:11",
     "quote": "Once you get me that, though, I'll put you in for 09:30 tomorrow, spot you out for an hour, and they'll give you a roof estimate as well as a solar estimate.",
-    "reasoning": "A specific day (tomorrow) and time (09:30) were discussed, but the rep explicitly conditions actually booking the slot on receiving the utility bill first, which was not sent during the call — this is agreement in principle without a locked booking."
+    "reasoning": "A specific day and time (tomorrow, 9:30) is stated, but the rep's own language makes the booking explicitly conditional on receiving the bill first ('once you get me that'), and the appointment channel (phone vs in-person) is never clarified after the customer's 'in person?' question at 01:01 — this is a tentative/conditional hold, not a firmly locked booking."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,143 +20,257 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "No specific bill amount or usage figure was ever stated on this call — the customer only discusses the logistics of sending the bill (already promised to Meg, to be sent via login/download), never a dollar figure or kWh number."
+    "reasoning": "No dollar amount or kWh usage figure is ever spoken by the customer on this call; the conversation only ever refers to needing the utility bill document, never an amount, so there is nothing available to flip."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "00:31",
+    "ask_quote": "Oh, okay. You just haven't gotten that over to us yet?",
+    "result": "promised_later",
+    "method": "online_login",
+    "result_ts": "03:47",
+    "result_quote": "For sure. I'm working on so I'll I'll get it sent over tonight. Is that okay?",
+    "reasoning": "Rep first references the outstanding bill ask from the prior call at 00:31, then explicitly re-asks the collection method at 03:30 ('Do you get those through the mail or online?'). Customer commits to sending it that night via online login/download rather than sending it during the call."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "01:23",
-    "reason_quote": "well, I'm I got a HELOC coming through. I'm planning on using that to I I need to redo my roof.",
+    "reason_ts": "01:17",
+    "reason_quote": "The only thing so like I told Meg, so my biggest thing is I'm trying to figure out, well, I'm I got a HELOC coming through. I'm planning on using that to I I need to redo my roof.",
     "reason_used": "yes",
     "use_ts": "02:05",
     "use_quote": "What we could do for you, though, is obviously a solar estimate as well as a roof estimate. So we could do both at the same time.",
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' (this is a recycled lead where that groundwork was presumably done with Meg), but the customer volunteered his real motivator/blocker unprompted, and the rep used it immediately to pitch the bundled roof+solar estimate."
+    "reasoning": "The rep never asks 'what interested you in solar' directly in this call (likely already covered by Meg in the prior touch), but the customer volunteers his roof-first reasoning unprompted, and the rep does use it moments later to pitch the bundled roof+solar estimate."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:03",
-      "quote": "This is Carter calling from ION. How are you?"
+      "end_ts": "00:22",
+      "quote": "Hey, Ken. This is Carter calling from ION. How are you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Good, Carter. How are you?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "02:58",
-      "quote": "just to make sure I got your address correct, you're at 392 Brook Neal Drive?"
+      "end_ts": "03:04",
+      "quote": "And just to make sure I got your address correct, you're at 392 Brook Neal Drive?",
+      "customer_response": "cooperative",
+      "customer_quote": "That's correct.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:23",
-      "quote": "I I need to redo my roof."
+      "ts": "02:05",
+      "end_ts": "02:49",
+      "quote": "Yeah. So we don't do ground mounts. What we could do for you, though, is obviously a solar estimate as well as a roof estimate.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Yeah.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "asked",
-      "ts": "00:22",
-      "quote": "And where did we leave off with you?"
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:30",
-      "quote": "in order to get you on a schedule, we would need that utility bill. Do you get those through the mail or online?"
+      "end_ts": "03:51",
+      "quote": "Do you get those through the mail or online?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'll get it sent over tonight. Is that okay?",
+      "resistance_reason": "timing",
+      "rep_followup": "persisted",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "03:17",
-      "quote": "we got a 12PM, I can see, a 02:30, or if you want earlier, just it's 09:30."
+      "end_ts": "03:26",
+      "quote": "A 12PM, I can see, a 02:30, or if you want earlier, just it's 09:30.",
+      "customer_response": "cooperative",
+      "customer_quote": "Twelve? Yeah. Actually, 09:30 is perfect.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "04:11",
+      "end_ts": "04:28",
+      "quote": "I'll put you in for 09:30 tomorrow, spot you out for an hour, and they'll give you a roof estimate as well as a solar estimate.",
+      "customer_response": "cooperative",
+      "customer_quote": "Sounds good. Talk to you later.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     }
   ],
-  "primary_coaching_focus": {
-    "topic": "conditional booking left without button-up mechanics",
-    "ts": "04:11",
-    "quote": "Once you get me that, though, I'll put you in for 09:30 tomorrow, spot you out for an hour, and they'll give you a roof estimate as well as a solar estimate.",
-    "why": "The appointment hinges entirely on a bill that was never sent during the call, and the rep never ran the full button-up sequence (recap, no-driving/computer instruction, 'is that fair?' handshake, text-confirmation promise) to give the customer something concrete to hold onto — this is the highest-risk gap on a call that otherwise built real momentum."
-  },
-  "key_moments": [
+  "objections": [
     {
-      "ts": "00:19",
-      "quote": "Was it Meg, maybe?",
-      "classification": "rapport_repair",
-      "stewart_read": "On a recycled lead, the rep proactively supplies the prior rep's name when the customer can't recall it, smoothing an awkward moment and signaling continuity/legitimacy of the follow-up."
+      "ts": "01:17",
+      "quote": "I need to get the roof done first and then talk about implementing the solar panels.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "What we could do for you, though, is obviously a solar estimate as well as a roof estimate. So we could do both at the same time."
+      ],
+      "resolved": true,
+      "resolution_ts": "02:49",
+      "reasoning": "Customer's roof-first sequencing concern is resolved when the rep reframes it as a same-visit bundled estimate rather than a blocker, and the customer accepts with 'Okay. Yeah.'"
     },
     {
       "ts": "01:59",
-      "quote": "I don't even know if ION has those, but that's another option I wanted to look at.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Customer asks directly about ground-mount panels. Rep responds immediately and honestly at 02:05 ('we don't do ground mounts') without fumbling, then redirects to what Ion does offer — a clean example of admit-and-recover knowledge-gap handling."
+      "quote": "Also have options for possibly putting panels on the ground. I don't even know if ION has those, but that's another option I wanted to look at.",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. So we don't do ground mounts."
+      ],
+      "resolved": true,
+      "resolution_ts": "02:05",
+      "reasoning": "Rep answers honestly and the customer moves on without pushback, immediately engaging with the roof/solar bundle discussion instead."
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "Pushing bill collection while customer is driving",
+    "ts": "04:03",
+    "quote": "Yeah. I'll I'll I'll do it in the parking lot. I'll pull it down. Okay. Cool.",
+    "why": "The customer explicitly said he was driving to a business errand, and the rep's response encourages him to pull over and do the bill download 'in the parking lot' rather than simply accepting the 'tonight' timeline the customer already offered — a small but real safety/trust issue that also risks a rushed, incomplete bill capture."
+  },
+  "key_moments": [
+    {
+      "ts": "01:01",
+      "quote": "Like, a in person?",
+      "classification": "conditional_booking",
+      "stewart_read": "Rep asked about appointment availability without specifying channel, and the customer's immediate assumption was in-person. This is a real expectation gap the rep never fully corrects — the transcript never clarifies whether the appointment is phone or in-person."
+    },
+    {
+      "ts": "01:59",
+      "quote": "Also have options for possibly putting panels on the ground. I don't even know if ION has those, but that's another option I wanted to look at.",
+      "classification": "other",
+      "stewart_read": "Customer raises a legitimate product question outside Ion's catalog. Rep answers directly and honestly at 02:05 ('we don't do ground mounts') without deflecting, fabricating, or over-explaining — a clean knowledge-gap handling."
+    },
+    {
+      "ts": "02:05",
+      "quote": "Yeah. So we don't do ground mounts. What we could do for you, though, is obviously a solar estimate as well as a roof estimate. So we could do both at the same time.",
+      "classification": "cross_sell_miss",
+      "stewart_read": "The rep does bridge to roofing here, which is the correct move per the roof_replacement_planned signal, but the framing stays generic ('a lot of people are able to bundle') rather than anchoring to this specific customer's HELOC-funded roof plan already on the table. The bridge happened; the personalization of it was thin."
     },
     {
       "ts": "02:28",
       "quote": "Say that again. So when you say roll solar and roof, do you mean, like, roof shingles or panels on the roof?",
-      "classification": "other",
-      "stewart_read": "The rep answers the customer's direct clarifying question accurately (02:41) but treats it as a definitional Q&A rather than tying the bundle back to the customer's stated HELOC/roof-timing constraint as the reason to act now."
-    },
-    {
-      "ts": "00:34",
-      "quote": "Oh, okay. You just haven't gotten that over to us yet?",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a prior unresolved commitment (bill promised to Meg, not yet sent) and cites being busy. Rep confirms the gap but doesn't probe further into why or what would make it easier this time."
+      "classification": "knowledge_gap",
+      "stewart_read": "Customer's confusion signals the rep's prior line wasn't clear. Rep clarifies simply at 02:37-02:44 without over-explaining product mechanics, keeping the answer at the appointment-scheduling level."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 30,
-    "verified": 29,
+    "checked": 41,
+    "verified": 40,
     "fuzzy": 1,
     "wrong_ts": 0,
     "not_found": 0

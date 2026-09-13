@@ -1,17 +1,17 @@
 {
   "call_id": "20000424749",
   "rep_name": "Parker",
-  "trajectory_summary": "The call opens cooperatively and the rep builds some early rapport and flexibility around the tree/roof complication, but the call ends abruptly once a low credit score surfaces, with the rep closing to a vague future callback rather than exploring alternatives or fully engaging the vulnerability the customer disclosed. Energy is mixed: it builds through the verify section but leaks out entirely at the qualifier stage.",
+  "trajectory_summary": "The call opens with a cooperative, warming customer who shares real engagement signals (tree permission just granted, roof replacement plans, a dog) but the rep leans into roof/tree design talk before finishing verify, then the credit qualifier surfaces a genuine hard disqualifier — a self-reported 450 score, roughly 200 points under Ion's ~650-670 threshold. The rep handles the DQ cleanly with a callback-in-a-couple-months close, which is the correct procedural move given how far outside plausible bureau variance the stated number is.",
   "shape": "mixed",
-  "outcome_dispute": "v1 tag is unspecified (\"unknown\"); observed outcome should be recorded as callback since the rep explicitly commits to calling back in a couple of months rather than booking or setting a definite next step, but no date or time was fixed, making it a soft, unanchored callback rather than a true booked or tentative appointment.",
+  "outcome_dispute": "v1 tag is unknown; observed outcome is a soft callback, not a booked or tentative appointment. The credit-DQ itself is not disputable here — a self-reported 450 is far below the 650-670 threshold, well outside the 30-50 point stated-vs-bureau variance described in qualifiers.credit_qualifier.spencer_operator_note, so the rep's decision to file this as a future callback rather than book now is defensible, not a coaching gap.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "04:44",
-    "quote": "I could make a note here to maybe call you back in a couple of months and see, if it's gotten a little bit higher for you.",
-    "reasoning": "The rep commits to a future callback due to the stated low credit score but does not lock a specific date or time, making this a soft, unanchored callback rather than a booked or tentative appointment."
+    "ts": "05:00",
+    "quote": "Okay. Yeah. I'll I'll make a note. We can call you back in a couple months then.",
+    "reasoning": "The call ends with a credit-based disqualification and a vague future callback rather than a booked or tentative appointment; no specific date or time was set."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,145 +20,247 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches bill collection — the customer describes general air conditioning cost pain at 00:47 but no specific bill amount or usage figure is ever requested or given before the call ends on the credit disqualification."
+    "reasoning": "The rep never asked for or received a specific dollar bill amount; the closest is the customer's general comment about running a lot of air conditioning being expensive, but no figure was captured before the call moved to credit qualification and disqualification."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call was disqualified on the credit qualifier before reaching bill collection; the rep never raised getting the utility bill itself."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:40",
     "reason_given": true,
-    "reason_ts": "00:47",
-    "reason_quote": "I want to could the cost of electricity? Like, I'm running a lot of air conditioning right now, and it's expensive.",
+    "reason_ts": "00:51",
+    "reason_quote": "Like, I'm running a lot of air conditioning right now, and it's expensive.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question early and got a clear bill-pain-driven reason (AC costs), but never referenced it again — not when discussing the tree/roof timing, not when offering a design, and not when closing out with the callback plan."
+    "reasoning": "Rep asked what got the customer interested and the customer gave a clear bill-pain reason (AC costs), but the rep only acknowledged it generically ('Okay. For sure. Yeah. We can definitely see what we can do to save you some money.') and never returned to it later, especially not as leverage before or during the credit disqualification conversation."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "quote": "This is Parker. I'm with Ion."
+      "end_ts": "00:17",
+      "quote": "Hey, Davis. This is Parker. I'm with Ion. I was just reaching out because I had a request here.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:40",
-      "quote": "what kinda got you interested in solar?"
+      "end_ts": "00:55",
+      "quote": "what kinda got you interested in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "Like, I'm running a lot of air conditioning right now, and it's expensive.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "02:58",
-      "quote": "I had you as a homeowner. Is that right?"
+      "ts": "02:55",
+      "end_ts": "03:06",
+      "quote": "I had you as a homeowner. Is that right?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:00",
-      "quote": "I just pulled up your roof here and, you know, you have a pretty good roof"
+      "end_ts": "02:19",
+      "quote": "I just pulled up your roof here and, you know, you have a pretty good roof, and I do see a few trees around you.",
+      "customer_response": "cooperative",
+      "customer_quote": "Because I wanted to replace the roof before they get the solar panels.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "03:26",
-      "quote": "what a or what energy company are you working with at the moment?"
+      "end_ts": "03:31",
+      "quote": "what a or what energy company are you working with at the moment?",
+      "customer_response": "cooperative",
+      "customer_quote": "ComEd.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "03:38",
-      "quote": "you seem to be paying income tax and have a credit score above 650"
+      "end_ts": "04:53",
+      "quote": "You seem to be paying income tax and have a credit score above 650. That sound like the case for you?",
+      "customer_response": "resistant",
+      "customer_quote": "450, I think it is.",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "02:24",
-      "quote": "have you seen a solar design yet?"
+      "end_ts": "02:33",
+      "quote": "Well, have you seen a solar design yet?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
-      "ts": "04:44",
-      "quote": "call you back in a couple of months"
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "03:52",
+      "quote": "I'm not sure what my, credit score is.",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Do you know if it's near around 650, or would you be able to check it?"
+      ],
+      "resolved": true,
+      "resolution_ts": "04:13",
+      "reasoning": "Customer follows up with the loan officer's stated 450 score, resolving the uncertainty and confirming the hard disqualifier; rep did not need further attempts since the answer itself closed the qualifier question."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "acknowledging financial vulnerability disclosures",
-    "ts": "04:24",
-    "quote": "I applied for, debt relief National Debt Relief program. I'm I'm on I'm on that.",
-    "why": "The customer handed the rep a clear, unambiguous hardship disclosure directly tied to why he can't currently qualify, and the rep moved straight into disqualification math without any acknowledgment — a clean, replayable moment to build the habit of pausing on trust-gift moments before moving to procedure."
+    "topic": "cross-sell bridge on roof replacement",
+    "ts": "02:19",
+    "quote": "Because I wanted to replace the roof before they get the solar panels.",
+    "why": "This is a clean, explicit cross-sell trigger per cross_sell_signals.roof_replacement_planned that the rep let pass with just 'I gotcha' — an easy, repeatable coaching fix that captures value independent of how the credit situation ultimately resolved."
   },
   "key_moments": [
     {
-      "ts": "01:15",
-      "quote": "I'm gonna have a I just got permission to cut cut down some of the trees, but I just got the permission, like, five minutes ago.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer reveals he just received permission to remove trees blocking solar exposure minutes before the call — a strong, time-sensitive positive signal for solar viability. The rep reacts with mild surprise but does not anchor on it as a reason to move quickly or reinforce the appointment's timing."
-    },
-    {
-      "ts": "02:16",
-      "quote": "Well, I got it cut down anyway because they're damaging the roof. Because I wanted to replace the roof before they get the solar panels.",
-      "classification": "cross_sell_miss",
-      "stewart_read": "Customer states outright he plans to replace his roof before solar installation — a textbook trigger for Ion's in-house roofing bridge. The rep only replies 'I gotcha' and moves straight into verify questions."
+      "ts": "01:07",
+      "quote": "can do some something on the back. Would you consider trimming that front tree?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep is already discussing roof positioning and tree-trimming trade-offs before finishing the verify section — this is closer-tier design conversation happening at setter stage."
     },
     {
       "ts": "01:41",
       "quote": "For sure. It's kinda kinda hard to do because I've had a stroke three years ago, and I can't I can't do stuff real quick.",
       "classification": "empathy_miss",
-      "stewart_read": "Customer discloses a serious health event (stroke) explaining his limited physical capacity. Note: the following line ('Oh, I'm sorry to hear that') is attributed to 'customer' in the raw transcript, which is almost certainly a diarization error given its content and position — it likely belongs to the rep. Given that ambiguity, Stewart cannot confidently assert the rep failed to acknowledge this specific disclosure."
+      "stewart_read": "Customer discloses a significant health limitation (stroke, reduced mobility) unprompted. The diarization labels the next line 'Oh, I'm sorry to hear that' as customer, but content-wise this reads as the rep's sympathetic response mis-attributed by the automatic speaker split — the words that follow ('And I'm not fucking wealthy...') read as the customer continuing."
     },
     {
-      "ts": "04:24",
-      "quote": "I applied for, debt relief National Debt Relief program. I'm I'm on I'm on that.",
+      "ts": "01:49",
+      "quote": "I'm not I'm not fucking wealthy like some people think they are.",
       "classification": "empathy_miss",
-      "stewart_read": "This is an unambiguous financial vulnerability disclosure — the customer is enrolled in a debt relief program, directly explaining his low credit score. The rep's next line moves straight into qualification math ('until it's just around $6.40, $6.50...') with no acknowledgment of the hardship behind the number."
+      "stewart_read": "Customer pushes back on an implied wealth assumption right after disclosing a health limitation — a financial-anxiety signal stacked on a health vulnerability. The rep's next audible line simply moves to logistics ('Okay. Well, I mean, what I could do for you...') without acknowledging either disclosure."
+    },
+    {
+      "ts": "02:19",
+      "quote": "Because I wanted to replace the roof before they get the solar panels.",
+      "classification": "cross_sell_miss",
+      "stewart_read": "Customer explicitly states a plan to replace the roof before solar installation — a textbook roofing cross-sell trigger since Ion does in-house roofing. Rep responds only with 'I gotcha' and moves straight to 'have you seen a solar design yet,' never bridging to the roofing team."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 30,
-    "verified": 28,
-    "fuzzy": 2,
-    "wrong_ts": 0,
+    "checked": 37,
+    "verified": 36,
+    "fuzzy": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

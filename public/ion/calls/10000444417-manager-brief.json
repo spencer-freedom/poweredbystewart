@@ -1,7 +1,7 @@
 {
   "call_id": "10000444417",
   "rep_name": "Joel",
-  "trajectory_summary": "The call opens cold and drifts through a mechanical verify sequence with no real rapport built, then breaks down entirely when the credit/tax qualifier triggers a privacy objection the rep cannot resolve. The rep repeats the same scripted reassurance three times without adapting, and the customer terminates the call having given no bill, no real interest reason, and no appointment.",
+  "trajectory_summary": "The call opens cold and stays shallow — the rep never secures a real reason for interest and moves quickly through roof/title questions before hitting a qualifier question that triggers escalating suspicion. The rep's only counter to the trust objection is a single reassurance repeated near-verbatim, and the customer terminates the call having given no usable qualification data beyond address and roof age.",
   "shape": "energy_leaked",
   "outcome_dispute": null,
   "observed_outcome": {
@@ -9,9 +9,9 @@
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "04:09",
-    "quote": "Thanks for calling.",
-    "reasoning": "The customer explicitly refuses to continue and ends the call before any appointment, bill collection, or button-up occurred; there is no next step owned by the rep."
+    "ts": "04:04",
+    "quote": "No. I don't wanna do this. I I don't wanna do this. I don't wanna just be giving out information.",
+    "reasoning": "The customer explicitly terminates the interaction before any bill collection, appointment discussion, or next step is reached; the call ends on the customer's refusal with the rep's response cut off."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reached bill collection — it broke down at the credit/tax qualifier stage when the customer refused to continue, so no bill amount or usage figure was ever discussed."
+    "reasoning": "The call never reached the bill amount question — it broke down at the credit/tax qualifier step before the utility bill or usage figure was raised."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ended during the credit/tax qualifier objection before the rep reached bill collection in the script sequence."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,133 +41,227 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question and got a vague answer, restated it back once ('So you're pretty much just curious about it?') but never developed it into a hook used later in the pitch or at any recovery point during the objection."
+    "reasoning": "The rep asked what interested the customer in solar and got a vague, non-committal answer; the rep acknowledged it ('So you're pretty much just curious about it?') but never returned to it or used it to anchor later parts of the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
-      "status": "skipped",
+      "status": "asked",
       "ts": "00:06",
-      "quote": "Hi, Patricia. This is Joel with Ion. How's it going?"
+      "end_ts": "00:23",
+      "quote": "Hi, Patricia. This is Joel with Ion. How's it going?",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:48",
-      "quote": "what had you interested in solar?"
+      "end_ts": "01:19",
+      "quote": "I'm just curious what had you interested in solar?",
+      "customer_response": "deflected",
+      "customer_quote": "I don't know. I would I you know, I would just wanted to look into it.",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:40",
-      "quote": "I have your address here as the one eighty eight Badger Lane"
+      "end_ts": "00:47",
+      "quote": "I have your address here as the one eighty eight Badger Lane in Bailey, Colorado. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "02:00",
-      "quote": "Is there anyone else on the title of the home with you at all?"
+      "end_ts": "02:07",
+      "quote": "I have you here, Patricia, as the homeowner. Is there anyone else on the title of the home with you at all?",
+      "customer_response": "no_answer",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:42",
-      "quote": "it looks like it's asphalt shingles. Do you know about how old it is"
+      "end_ts": "01:59",
+      "quote": "It looks like it's asphalt shingles. Do you know about how old it is by chance?",
+      "customer_response": "cooperative",
+      "customer_quote": "Five, six years old.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:16",
-      "quote": "you just need to have a form of taxable income and a credit score of six fifty or higher"
+      "ts": "02:08",
+      "end_ts": "04:09",
+      "quote": "to qualify for those, you just need to have a form of taxable income and a credit score of six fifty or higher. Would that be the case for you?",
+      "customer_response": "resistant",
+      "customer_quote": "I just don't like giving out personal information to a person that calls me on the phone.",
+      "resistance_reason": "privacy",
+      "rep_followup": "persisted",
+      "result": "declined"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "02:41",
+      "quote": "And why do you need this information?",
+      "type": "trust_or_scam",
+      "rep_attempts": 3,
+      "attempt_quotes": [
+        "Just to see if you qualify for the incentives.",
+        "It's just a yes or no. We're we're not checking into anything right now.",
+        "You just have to have any form you just need to be paying income taxes pretty much, and then your credit score just needs to be above 650."
+      ],
+      "resolved": false,
+      "resolution_ts": "04:09",
+      "reasoning": "The rep repeated a near-identical reassurance across three attempts without adapting to the escalating privacy concern, and the customer ended the call still unresolved and frustrated."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Single-angle repetition on trust objection",
+    "topic": "single-angle response to a trust objection",
     "ts": "03:16",
     "quote": "I just don't like giving out personal information to a person that calls me on the phone.",
-    "why": "The customer raised the same privacy/legitimacy concern three times (02:41, 03:16, 03:38) and the rep answered with the same generic line each time instead of escalating with specifics — this is the exact opposite of multi_angle_resilience and is the direct cause of the call's collapse."
+    "why": "The rep had three separate chances (02:41, 03:16, 03:38) to try a different approach to the customer's privacy concern and used the same reassurance each time; this is the clearest, most replayable evidence of the multi_angle_resilience gap on this call."
   },
   "key_moments": [
-    {
-      "ts": "00:26",
-      "quote": "Yeah. Well, I'll be quick with you.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The rep skips any real legitimacy framing (no mention of how the lead was generated, no state reference, no form/Tesla anchor) and instead leads with a promise of brevity, which undercuts trust-building before qualification even starts."
-    },
     {
       "ts": "00:56",
       "quote": "I don't know. I would I you know, I would just wanted to look into it.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer's interest reason is thin and unresolved ('just wanted to look into it'), and the rep accepts it at face value without probing for a real motivator (bill pain, environmental concern, etc.) that could later anchor the pitch."
+      "stewart_read": "The customer hands the rep a thin, non-committal reason for interest with an unrelated political aside. The rep should have gently probed (e.g., what prompted the look-into-it, bill pain, a neighbor, an ad) but instead accepted the vague answer at 01:15 and moved on."
     },
     {
-      "ts": "01:15",
-      "quote": "Okay. Gotcha. So you're pretty much just curious about it?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Rep restates the customer's vague answer back to her rather than expanding it, confirming the interest reason was logged but never developed into something usable later in the call."
+      "ts": "02:16",
+      "quote": "to qualify for those, you just need to have a form of taxable income and a credit score of six fifty or higher.",
+      "classification": "other",
+      "stewart_read": "The schema's documented credit threshold is 670, but the rep states 650 — the same drift already flagged once in the schema (SESSION18_fcbf33c1, Meg). This is now a second data point suggesting either the rep is consistently wrong or policy actually differs from the schema."
     },
     {
       "ts": "02:32",
       "quote": "just to qualify for the new furnace.",
       "classification": "knowledge_gap",
-      "stewart_read": "The rep substitutes 'furnace' for 'solar' mid-qualifier — likely a copy-paste script artifact from another vertical/campaign rather than a deliberate choice, and it happens right before the sensitive credit/income ask."
+      "stewart_read": "The rep says 'new furnace' when discussing solar tax credit qualification — almost certainly a script slip-up or leftover phrasing from a different offer/vertical, immediately followed by rep re-reading the qualifier without correcting the error."
+    },
+    {
+      "ts": "02:41",
+      "quote": "And why do you need this information?",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a trust/privacy pushback tied to the credit and income question. The rep's response ('Just to see if you qualify for the incentives') validates the ask on the company's terms rather than reframing why this information benefits the CUSTOMER (e.g., tying it back to whatever bill pain or motivation she might have, however thin)."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 29,
-    "verified": 29,
-    "fuzzy": 0,
+    "checked": 42,
+    "verified": 40,
+    "fuzzy": 2,
     "wrong_ts": 0,
     "not_found": 0
   }

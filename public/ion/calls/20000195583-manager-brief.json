@@ -1,17 +1,17 @@
 {
   "call_id": "20000195583",
   "rep_name": "Joel",
-  "trajectory_summary": "The call opens neutral and procedural, but stalls when the customer — who says he understands how solar tax incentives work — pushes back on the credit qualifier framing and gets a muddled, defensive answer instead of clarity. The bill/usage-history requirement is fully declined by the customer, and the rep closes the design gap with only square footage, a much thinner data basis than the schema's usage-history anchor. The call ends with a vague callback promise rather than a locked appointment.",
+  "trajectory_summary": "This call opens neutral, dips into friction when the rep muddles the credit-score qualifier with the tax credit and a knowledgeable customer calls it out three times, and ends with no bill amount, no bill document, and a vague 'I'll call you back once the design is done' close with no date, time, or handshake. The rep pushed through structural verify items but never resolved the customer's direct challenge or converted the call into a concrete booked appointment.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The call is best read as a callback, not a booked or tentative appointment — no date or time was ever offered or agreed to; the rep only promises to call back once a design exists.",
+  "outcome_dispute": "This should not be read as a booked or tentative appointment — the rep promises a future callback once a design is built, with no day/time given and no commitment mechanism, which is a callback outcome at best and reflects an unanchored close.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "06:38",
-    "quote": "Yeah. And so once that the design is finished here, I'll give you another call here. We can find a good time for our specialist to give you a call and just kinda review that with you.",
-    "reasoning": "No specific day or time is ever stated; the rep only commits to calling back once the design is complete, which is a callback, not a booked or tentative appointment. A co-owner (wife) was identified at 02:42 but no appointment exists yet for her to be confirmed on."
+    "ts": "06:42",
+    "quote": "I'll give you another call here. We can find a good time for our specialist to give you a good time for our specialist to give you a call and just kinda review that with you.",
+    "reasoning": "No day or time was set on this call; the rep promises to call back once the design is complete, which is a callback outcome, not a booked or tentative appointment."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,145 +20,248 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer never provides a bill amount or usage figure ('I'm not sure' at 04:47, then 'That's not gonna happen' at 05:44 regarding usage history), so there is no bill figure for the rep to flip into emotional leverage."
+    "reasoning": "Customer said he wasn't sure of his average bill amount ('I'm not sure... it's just auto paid, so don't worry about it') and no dollar figure or usage history was ever obtained, so there was nothing to flip."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "05:08",
+    "ask_quote": "So do you usually get those OG and E bills online or through the mail?",
+    "result": "declined",
+    "method": "none",
+    "result_ts": "05:41",
+    "result_quote": "That's not gonna happen.",
+    "reasoning": "Rep asked how the customer receives bills and pursued a twelve-month usage history, but the customer explained the property was recently under construction and flatly said the history 'is not gonna happen,' so no bill or usage data was collected on the call or promised for later."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:43",
     "reason_given": true,
-    "reason_ts": "00:52",
-    "reason_quote": "The power shuts off out there periodically.",
+    "reason_ts": "00:50",
+    "reason_quote": "power shuts off out there periodically.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep correctly identifies the reason as a backup-power interest at 00:52 ('so you're kinda looking into the backup options?') but never returns to it later in the call — not when discussing the design, not in the callback promise — so the stated motivator is acknowledged but not reinforced or tied to next steps."
+    "reasoning": "Rep acknowledged the reason briefly ('so you're kinda looking into the backup options?') but never revisited the reliability/outage motive later in the call, including at the point where usage data collection failed and the design conversation could have anchored back to it."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "quote": "Hey, Mike. This is Joel with Ion."
+      "end_ts": "00:12",
+      "quote": "Hey, Mike. This is Joel with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm doing alright.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:43",
-      "quote": "But I'm just curious. What kinda got you interested in solar?"
+      "end_ts": "00:56",
+      "quote": "But I'm just curious. What kinda got you interested in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "power shuts off out there periodically.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:24",
-      "quote": "So first, I have your address here as the 3012 Skeeter Blue Road, Sulphur, Oklahoma. Is that correct?"
+      "end_ts": "01:34",
+      "quote": "I have your address here as the 3012 Skeeter Blue Road, Sulphur, Oklahoma. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "I have two lots up there. I have the one that has the cabin on it, which is the one in question.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "02:39",
-      "quote": "I have you as a homeowner. Is there anyone else on the title with you?"
+      "ts": "02:28",
+      "end_ts": "02:43",
+      "quote": "Is there anyone else on the title with you at all?",
+      "customer_response": "cooperative",
+      "customer_quote": "My wife.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "04:04",
-      "quote": "As far as the roof, is it just a asphalt shingle roof, or what kind of roof does it have?"
+      "ts": "04:02",
+      "end_ts": "04:16",
+      "quote": "as far as the roof, is it just a asphalt shingle roof, or what kind of roof does it have?",
+      "customer_response": "cooperative",
+      "customer_quote": "The metal.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "04:38",
-      "quote": "So what utility company are you going through for the electricity there?"
+      "ts": "04:26",
+      "end_ts": "04:42",
+      "quote": "what utility company are you going through for the electricity there?",
+      "customer_response": "cooperative",
+      "customer_quote": "OJME.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "04:42",
-      "quote": "How much would you say kind of an average monthly bill with them is costing you?"
+      "end_ts": "04:54",
+      "quote": "how much would you say kind of an average monthly bill with them is costing you?",
+      "customer_response": "resistant",
+      "customer_quote": "I'm not sure. It's just it's auto paid, so don't worry about it.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:51",
-      "quote": "To qualify, you guys would just need to have a form of taxable income and a credit score of six fifty or higher."
+      "ts": "02:46",
+      "end_ts": "03:56",
+      "quote": "you guys would just need to have a form of taxable income and a credit score of six fifty or higher. Is that the case for you guys?",
+      "customer_response": "resistant",
+      "customer_quote": "I'm not aware of you needing to have a certain credit score to qualify for the tax incentives. So be straight with me because I do understand what the system and how it works.",
+      "resistance_reason": "trust",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
-      "status": "skipped",
-      "ts": "05:41",
-      "quote": "That's not gonna happen."
+      "status": "asked",
+      "ts": "05:08",
+      "end_ts": "05:53",
+      "quote": "So do you usually get those OG and E bills online or through the mail?",
+      "customer_response": "resistant",
+      "customer_quote": "That's not gonna happen.",
+      "resistance_reason": "other",
+      "rep_followup": "alternative_offered",
+      "result": "declined"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
-      "ts": "06:42",
-      "quote": "I'll give you another call here."
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "06:50",
-      "quote": "K. Sounds good. But, yeah, Mike, thanks for your time today."
+      "status": "asked",
+      "ts": "06:38",
+      "end_ts": "07:01",
+      "quote": "I'll give you another call here. We can find a good time for our specialist to give you a call and just kinda review that with you.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "03:00",
+      "quote": "Is that for me to qualify with you guys or to qualify with the tax and incentives? Just for the because I am familiar with that. I'm not aware of you needing to have a certain credit score to qualify for the tax incentives. So be straight with me because I do understand what the system and how it works.",
+      "type": "trust_or_scam",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "Yeah. No. That's qualify me. Okay? No. It's just the requirements.",
+        "Yeah. So they just tell us to make sure you qualify for the incentives in the program here."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The customer restates the same confusion three times ('By you. I understand.' / 'Not for the incentives for you guys.') and the rep never gives a clean, direct clarification before cutting him off and moving to the next topic — the objection is not actually resolved, just abandoned."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "credit qualifier clarity under a knowledgeable customer",
-    "ts": "03:22",
-    "quote": "Yeah. No. That's qualify me. Okay?",
-    "why": "A customer who explicitly states he understands the tax-credit system directly challenges the rep's blended framing three separate times, and the rep never gives a clean, confident answer — this is the single biggest credibility leak in the call and it's a repeatable, scriptable fix."
+    "topic": "Credit qualifier / tax credit conflation under customer challenge",
+    "ts": "03:00",
+    "quote": "Is that for me to qualify with you guys or to qualify with the tax and incentives? Just for the because I am familiar with that.",
+    "why": "A knowledgeable customer directly and repeatedly called out an inaccurate framing of the credit qualifier, and the rep never resolved it cleanly — this is the single moment that most damaged trust and is a repeatable, coachable error (separate Ion's internal requirement from the federal credit clearly, every time)."
   },
   "key_moments": [
     {
-      "ts": "00:52",
-      "quote": "The power shuts off out there periodically.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Reactive read: the rep's immediate reframe ('so you're kinda looking into the backup options?') is a fast, accurate acknowledgment of the stated reason and the correct next step given the schema's interest_in_solar item. Strategic read: the rep could have gone further and used outage/reliability pain as the emotional anchor for the whole call (per bill_anchoring's flip logic, applied to reliability instead of cost), but instead treats it as a single verify checkbox and never returns to it. The evidence favors the reactive read — the rep never revisits backup/outage pain later in the call, including when discussing panel sizing or the callback, so there's no sign of a deferred strategic move."
-    },
-    {
-      "ts": "01:13",
-      "quote": "I have two lots up there. I have the one that has the cabin on it, which is the one in question, and then I have a fifth wheel that's sitting right beside it in a 40 foot camp, carport. Yeah. Okay. Gotcha. Yeah. I actually live in Texas.",
+      "ts": "02:52",
+      "quote": "you guys would just need to have a form of taxable income and a credit score of six fifty or higher. Is that the case for you guys?",
       "classification": "knowledge_gap",
-      "stewart_read": "The customer reveals the solar property is a secondary cabin on a separate lot, and that his primary residence is in Texas — a meaningful qualification wrinkle (occupancy pattern, utility usage pattern, possibly non-primary-residence financing implications) that the rep does not probe at all."
-    },
-    {
-      "ts": "02:51",
-      "quote": "To qualify, you guys would just need to have a form of taxable income and a credit score of six fifty or higher. Is that the case for you guys?",
-      "classification": "other",
-      "stewart_read": "This is a schema_drift_detection flag: the rep states the credit threshold as 650, but the schema's documented Ion threshold is 670. This is the same drift previously observed in SESSION18_fcbf33c1, meaning it is not an isolated rep error but a recurring floor-wide inconsistency in stated qualifier numbers."
+      "stewart_read": "The rep bundles Ion's internal 650 credit threshold with the federal tax incentive requirement, which is factually incorrect framing and immediately draws a knowledgeable customer's suspicion."
     },
     {
       "ts": "03:03",
-      "quote": "Is that for me to qualify with you guys or to qualify with the tax and incentives? Just for the because I am familiar with that. Yeah. I'm not aware of you needing to have a certain credit score to qualify for the tax incentives.",
+      "quote": "So be straight with me because I do understand what the system and how it works.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "The customer is directly pointing out that the rep blended two separate things — Ion's internal financing qualifier and the federal tax credit — and is asking for a straight answer. Strategic read: the rep could treat this as an opening to build credibility by cleanly separating the two ('that's a great distinction — the credit score is our financing partner's requirement, separate from the tax credit itself') which would have converted skepticism into trust. Reactive read: the rep instead doubles down with a confusing answer ('Yeah. No. That's qualify me. Okay?') that does not resolve the distinction, and the customer has to restate his point twice more before the rep moves on unresolved."
+      "stewart_read": "This is effectively a trust/scam-adjacent challenge dressed as a factual correction. The rep had an opening to validate the customer's knowledge and pivot cleanly to Ion's specific offer, but instead got defensive and rushed past it."
+    },
+    {
+      "ts": "03:56",
+      "quote": "But anyway No. It's pretty important as well. Let's move on. Okay. K. Anyway yeah. So",
+      "classification": "protocol_violation",
+      "stewart_read": "Rather than admitting uncertainty or clarifying transparently, the rep talks over the customer's third attempt at clarification and steamrolls into the next script section."
+    },
+    {
+      "ts": "03:00",
+      "quote": "Is that for me to qualify with you guys or to qualify with the tax and incentives? Just for the because I am familiar with that.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer signals prior familiarity with how solar tax incentives and qualification work, which could indicate previous quotes or research, but the rep never probes what he already knows or has seen."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 36,
-    "verified": 36,
-    "fuzzy": 0,
+    "checked": 55,
+    "verified": 51,
+    "fuzzy": 3,
     "wrong_ts": 0,
-    "not_found": 0
+    "not_found": 1
   }
 }

@@ -1,26 +1,36 @@
 {
   "call_id": "SESSION18_cf7f1073",
   "rep_name": null,
-  "trajectory_summary": "The call opens with mild fatigue-signaling from the customer, moves through a friendly but meandering middle section (address confusion, real-estate tangent, son/boyfriend joke), and reaches the verify items in a scattered, non-linear order. It ends with a bill-collection promise and a vague 'we'll keep in touch' close — no appointment day/time was ever offered or locked.",
+  "trajectory_summary": "The call opens cold with visible call fatigue, recovers through an extended and genuinely warm rapport stretch, but that warmth is never converted into a booked appointment — the call ends on a personal joke and a vague promise to text, with no day/time offered. Energy was built with the customer but not channeled into the setter's actual job.",
   "shape": "mixed",
-  "outcome_dispute": "The v1 tag is unknown, but based on the transcript this should be scored callback, not booked or tentative appointment. No day or time was proposed at any point; the rep only promised to text for the bill photo. There is no appointment to hand off — this is a bill-collection follow-up promise, not a scheduled closer call.",
+  "outcome_dispute": "The call should be tagged no_appointment (or callback at best) rather than any booked/tentative outcome — no date or time is ever proposed by the rep; the closing exchange is purely about how the bill photo will be sent, and the call ends with 'we will keep in touch,' not a scheduled slot.",
   "observed_outcome": {
-    "outcome": "callback",
+    "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "10:08",
     "quote": "K. Well, thank you so much. I really appreciate it, and we will keep in touch.",
-    "reasoning": "No day or time was ever proposed. The rep's only forward commitment is to text the customer for a bill photo once he's home, with the customer's reply left open-ended ('we can figure it out'). This is a callback/follow-up state, not a booked or tentative appointment, since no closer call was scheduled at all."
+    "reasoning": "No day or time is ever proposed in the call; the only forward action established is a text-and-photo exchange for the bill, with no scheduled appointment attached to it."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "07:00",
-    "bill_quote": "$300 or so, not not too much.",
+    "bill_ts": "06:58",
+    "bill_quote": "I would say it's probably about $300 or so, not not too much.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the $300/month figure but responded with 'We can still cut that down for you a little bit,' which accepts the customer's low-urgency framing rather than flipping the number into a reason to act now. The flip should have landed right here, before moving to the credit qualifier."
+    "reasoning": "Rep's only response to the $300/month figure is 'We can still cut that down for you a little bit,' a generic acknowledgment rather than a flip that reframes the bill as a reason to act now; the flip should have landed at 07:04 immediately after capture."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "07:48",
+    "ask_quote": "Awesome. Well, yeah, everything looks good on my end. So the only thing that I would need from you is just a copy of your kilowatt usage.",
+    "result": "promised_later",
+    "method": "photo",
+    "result_ts": "08:26",
+    "result_quote": "I can just send you a text from my personal phone, and then just whenever you get home and and have access to one of those, if you could just send me a photo of it, then that'd be great.",
+    "reasoning": "Customer is not home and cannot produce the bill on the call; rep arranges a text-later photo path, which is a promised-later result, not a decline or live capture."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,128 +41,226 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer gave a weak, non-committal reason (accidental link click) and the rep's follow-up probe ('are you just kinda curious to see what it could do for you then?') got only a shallow confirmation. The rep never returned to this thread later to build motivation or tie it to the appointment."
+    "reasoning": "The customer gives a low-motivation, accidental-click reason with no emotional anchor; the rep acknowledges it as 'kinda annoying' and moves directly to the utility company question without probing further or referencing this reason again later in the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:13",
-      "quote": "I actually just got a request that you were looking into solar for your home."
+      "end_ts": "00:28",
+      "quote": "I actually just got a request that you were looking into solar for your home.",
+      "customer_response": "resistant",
+      "customer_quote": "You're not the first person I've talked to all day.",
+      "resistance_reason": "other",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "05:53",
-      "quote": "I just wanna know what kind of are you looking into solar?"
+      "end_ts": "06:09",
+      "quote": "I just wanna know what kind of are you looking into solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "I think I just I think I clicked on a link or something about it, and then out of nowhere, I started getting calls.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:46",
-      "quote": "I've got your address here, Mike, as, 733 Ohio Dash 380."
+      "ts": "00:43",
+      "end_ts": "02:23",
+      "quote": "I've got your address here, Mike, as, 733 Ohio Dash 380.",
+      "customer_response": "cooperative",
+      "customer_quote": "It's 1874 Amies Ridge Court.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "05:40",
-      "quote": "Is there anybody else on the title of the home with you?"
+      "end_ts": "05:52",
+      "quote": "Is there anybody else on the title of the home with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. It would just be me.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "05:09",
-      "quote": "I'm assuming it's just a regular asphalt shingle roof?"
+      "end_ts": "05:38",
+      "quote": "I'm assuming it's just a regular asphalt shingle roof? And do you know how old that roof is currently?",
+      "customer_response": "cooperative",
+      "customer_quote": "I would say about five or six maybe.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "06:29",
-      "quote": "And then your electric company, is it AEP or Duke?"
+      "end_ts": "06:38",
+      "quote": "And then your electric company, is it AEP or Duke?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. No. It's AEP.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "06:38",
-      "quote": "How much would you say you're spending on average a month on that electric bill?"
+      "ts": "06:47",
+      "end_ts": "07:00",
+      "quote": "How much would you say you're spending on average a month on that electric bill?",
+      "customer_response": "cooperative",
+      "customer_quote": "I would say it's probably about $300 or so",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "07:11",
-      "quote": "As long as you have a credit score above 670, then you'll qualify."
+      "ts": "07:08",
+      "end_ts": "07:29",
+      "quote": "Just as long as you have a credit score above 670, then you'll qualify. So is that the case for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "My credit credit score is definitely above 670... I think it's actually, like, 700 exactly on the dot",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
+    },
+    {
+      "section": "military",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "07:39",
-      "quote": "Have you ever, like, really looked into solar before, Mike, or is this your first time?"
+      "end_ts": "07:45",
+      "quote": "Have you ever, like, really looked into solar before, Mike, or is this your first time?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. It it would be my first time.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "07:56",
-      "quote": "The only thing that I would need from you is just a copy of your kilowatt usage."
+      "ts": "07:48",
+      "end_ts": "09:11",
+      "quote": "The only thing that I would need from you is just a copy of your kilowatt usage.",
+      "customer_response": "resistant",
+      "customer_quote": "At the moment, no. I'm actually not home right now.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "00:24",
+      "quote": "You're not the first person I've talked to all day.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Well, I can keep the call super short for you."
+      ],
+      "resolved": true,
+      "resolution_ts": "00:28",
+      "reasoning": "Customer's mild call-fatigue comment is addressed once with a time anchor and the customer proceeds cooperatively through the rest of the call, so it counts as resolved with a single attempt."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "No button-up executed — call ends with zero locked next step",
+    "topic": "unanchored close / no appointment locked",
     "ts": "10:08",
     "quote": "K. Well, thank you so much. I really appreciate it, and we will keep in touch.",
-    "why": "Despite completing most of the verify section, the rep never offers a specific day/time, never states the one-hour block, never asks 'is that fair,' and never confirms how/when the bill photo and callback will actually happen. This is a structural, not cosmetic, gap — the entire lead now depends on an unscheduled future text exchange with no owner and no deadline."
+    "why": "Despite roughly 10 minutes of largely warm rapport and clean qualification data (address, roof, utility, bill, credit), the call ends without any day/time offered or button-up handshake — the single biggest reason this call produces no bookable outcome despite a receptive customer."
   },
   "key_moments": [
     {
-      "ts": "00:21",
-      "quote": "You're not the first person I've talked to all day.",
-      "classification": "rapport_repair",
-      "stewart_read": "Customer signals fatigue from repeated solar outreach without outright hostility. The rep's response at 00:28 ('I can keep the call super short for you') is an appropriate, low-friction acknowledgment rather than a defensive or argumentative reaction."
+      "ts": "00:43",
+      "quote": "I've got your address here, Mike, as, 733 Ohio Dash 380.",
+      "classification": "knowledge_gap",
+      "stewart_read": "The rep spends nearly two minutes (00:43-02:23) failing to confirm a basic address, cycling through wrong guesses (Ohio Dash 380, State Route 380, Moore's Body Shop) before the customer volunteers his actual address unprompted. This is a data-quality/CRM issue surfacing as call friction, not a rep skill failure per se, but it burns time and signals disorganization early."
+    },
+    {
+      "ts": "02:51",
+      "quote": "I actually found the home this time. I have no idea what it was pending before, but you have the pool the pool and the basketball court?",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "A pool and basketball court visible on the property could indicate higher electric usage (pool pump, outdoor lighting) — this is the analyst's inference, not an Ion-documented qualification factor, but it was a naturally available anchor point the rep could have tied to usage/bill discussion later. The rep used it only for rapport, not as a bill-usage lead-in."
     },
     {
       "ts": "03:43",
       "quote": "No. That's awesome. I actually so I just barely finished real estate school. I've been wanting to get into that kind of stuff.",
       "classification": "setter_scope_creep",
-      "stewart_read": "The rep volunteers unrelated personal career information and then asks the customer for career advice, extending a tangent that runs roughly a full minute with zero qualification content. This is not the closer-tier content the schema usually flags, but it is the same underlying discipline failure — letting the customer's agenda fully displace the call's purpose."
+      "stewart_read": "This isn't closer-tier solar content, but it is the rep inserting her own unrelated personal/career narrative into a qualification call, extending an off-topic tangent for roughly 90 seconds (03:43-05:00) about real estate licensing and Utah housing markets. Reactive drift, not a deliberate rapport strategy tied to the sale."
     },
     {
       "ts": "05:59",
       "quote": "I don't know. I think I just I think I clicked on a link or something about it, and then out of nowhere, I started getting calls.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer gives essentially no organic interest reason — he doesn't know why he's interested, just that he clicked something. The rep's follow-up ('are you just kinda curious to see what it could do for you then?') is a reasonable soft probe, but the answer ('Yeah. A little bit, I guess.') is weak and the rep doesn't attempt to build curiosity around the bill or savings before moving to the utility company question."
-    },
-    {
-      "ts": "07:00",
-      "quote": "$300 or so, not not too much.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "Customer states a $300/month bill but frames it as 'not too much' — a soft version of the cost-minimization objection. The rep's response, 'K. Yeah. Yeah. No problem. We can still cut that down for you a little bit,' accepts the customer's framing rather than flipping it into leverage against the utility."
+      "stewart_read": "The customer gives a weak, low-motivation reason for interest (accidental link click, unwanted follow-up calls) — essentially zero emotional anchor. The rep's response acknowledges the annoyance but does not probe further for a real motivator (bill pain, environmental interest, etc.) before moving to the utility company question."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 35,
-    "verified": 35,
-    "fuzzy": 0,
-    "wrong_ts": 0,
+    "checked": 45,
+    "verified": 43,
+    "fuzzy": 1,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION14_fe077550",
   "rep_name": "Bucky",
-  "trajectory_summary": "This is a short, mechanical verify call that opens with a voicemail pickup and identity mix-up, which the rep resolves correctly before running the standard qualification sequence. The call ends in a legitimate hard DQ on credit score (450 vs. the required 670), and the rep closes it out cleanly and respectfully.",
+  "trajectory_summary": "A short, mechanical verify-and-DQ call: the rep moves through address, homeowner, utility, bill, and roof questions in under two minutes, hits the credit qualifier, and disqualifies the customer on a single stated number without probing alternatives beyond one co-signer question. The call neither builds nor loses much energy — it starts guarded, briefly opens, and closes on a flat, accepted DQ.",
   "shape": "stagnant",
-  "outcome_dispute": null,
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata, but the observed outcome is a clean hard DQ on stated credit score (450 vs 670 threshold) — this should be tagged dq, not left ambiguous.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "03:42",
+    "ts": "03:46",
     "quote": "So the only requirement is you do have a credit score over 670. So there's nothing we could do right now. I'm sorry to bother you.",
-    "reasoning": "Customer's stated credit score of 450 fails the hard 670 threshold with no co-signer available, and the rep correctly ends the call as a hard disqualification per qualifiers.credit_qualifier and dq_rules.credit_below_670_no_alternative."
+    "reasoning": "The customer's stated credit score of 450 falls under the schema's hard credit_qualifier threshold of 670, and the rep explicitly ends the call on this basis with no appointment set."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep acknowledges the $600 bill positively ('Okay. Oh, we can definitely help with that.') but does not flip it into an emotional alignment-against-the-utility line before the call moves into the credit qualifier and ends in DQ."
+    "reasoning": "Rep acknowledges the $600 bill with 'Oh, we can definitely help with that' but never ties it back into a reason to act or an emotional alignment-against-the-utility; the call moves straight into the roof and credit questions and then DQs before any flip could land."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ended on the credit DQ before the rep reached bill-collection; no request for the physical utility bill was made."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,132 +41,224 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks what interested the customer in solar; the call moves directly from address/homeowner verification into utility company and bill questions, skipping the interest_question beat entirely."
+    "reasoning": "The rep never asked what interested the customer in solar; the call moved directly from homeowner/title verification into utility, bill, roof, and credit questions before DQ'ing."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "01:51",
-      "quote": "This is Bucky with Ion. I'm just reaching out about the solar for me for the online."
+      "end_ts": "01:57",
+      "quote": "Oh, okay. This is Bucky with Ion. I'm just reaching out about the solar for me for the online.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm good. How are you?",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "02:11",
-      "quote": "Are you at 3004 Appleton Avenue?"
+      "ts": "02:09",
+      "end_ts": "02:26",
+      "quote": "Are you at 3004 Appleton Avenue?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. Yes. Question. Is it is it stomach free?",
+      "resistance_reason": "trust",
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "02:41",
-      "quote": "Is there anybody else on the title but you?"
+      "end_ts": "02:46",
+      "quote": "Is there anybody else on the title but you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "03:16",
-      "quote": "What kind of roof do you have? A shingle?"
+      "end_ts": "03:19",
+      "quote": "What, what kind of roof do you have? A shingle?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:51",
-      "quote": "What utility company are you with?"
+      "end_ts": "03:03",
+      "quote": "What utility company are you with?",
+      "customer_response": "cooperative",
+      "customer_quote": "Dominion Energy.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "03:05",
-      "quote": "Do you know how much you're spending on a monthly average?"
+      "end_ts": "03:12",
+      "quote": "And then do you know how much you're spending on a monthly average?",
+      "customer_response": "cooperative",
+      "customer_quote": "600.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
-      "section": "tax_credit_qualifier",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "section": "credit_score_qualifier",
+      "status": "asked",
+      "ts": "03:22",
+      "end_ts": "03:49",
+      "quote": "Do you have a credit score over 670?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm at, like, a 450.",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "03:26",
+      "quote": "I'm at, like, a 450.",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Do you do you have anybody that would be willing to help or no?"
+      ],
+      "resolved": false,
+      "resolution_ts": "03:46",
+      "reasoning": "The credit shortfall is a hard qualifier gate rather than a persuadable objection; the rep tried one workaround (co-signer) before conceding and closing the call, falling short of the schema's 3+ angle target for multi-angle resilience."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "consistent intro framing regardless of who answers",
-    "ts": "00:13",
-    "quote": "Yeah. This is Bucky with Ion. I'm reaching out about the solar form. It says Briton Duncan.",
-    "why": "The rep's opening to the initial pickup lacks the fuller legitimacy anchor (state/context) used later, and while he self-corrects by re-confirming identity at 01:46, building the habit of a complete, consistent intro on every pickup reduces reliance on a recovery step."
+    "topic": "stated-credit hard DQ without alternative exploration",
+    "ts": "03:42",
+    "quote": "Okay. So the only requirement is you do have a credit score over 670. So there's nothing we could do right now. I'm sorry to bother you.",
+    "why": "The rep disqualified the lead entirely off a self-reported 450 score with only one workaround attempt (co-signer) and no mention of routing to the closer for an actual credit pull. Given the schema's own flagged ambiguity on stated-vs-pulled credit policy, this is the single highest-leverage moment on the call — either it's correct procedure or it's a needlessly lost lead, and the manager should clarify which before the rep repeats this pattern."
   },
   "key_moments": [
     {
       "ts": "00:13",
-      "quote": "Yeah. This is Bucky with Ion. I'm reaching out about the solar form. It says Briton Duncan.",
+      "quote": "No. Can I ask who's calling?",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The initial intro to the person who picked up gives company name and lead name but no state/context anchor, and is delivered to someone who isn't yet confirmed as the lead. However, the rep recovers well moments later by re-confirming identity at 01:46 before running verify, so this is a minor, self-corrected gap rather than a call-ending legitimacy failure."
+      "stewart_read": "The initial screener questions who's calling before the rep gives a full company/reason explanation, suggesting the intro landed weakly on first contact. The rep's line at 00:13 ('This is Bucky with Ion. I'm reaching out about the solar form...') is a reasonable recovery, but the need for it shows the opener didn't preempt the suspicion."
     },
     {
       "ts": "02:26",
       "quote": "Yes. Yes. Question. Is it is it stomach free?",
-      "classification": "empathy_miss",
-      "stewart_read": "Customer's question (likely 'is it cost free') signals a live cost-anxiety concern early in the call, and the rep's answer is brief and immediately returns to the checklist without exploring why she's asking or what she's worried about."
+      "classification": "other",
+      "stewart_read": "Customer is asking (garbled transcription, likely 'is it cost free') whether the specialist call itself carries a cost — a scam/legitimacy check even after she's already engaged with several verify questions. This is a lingering trust signal the rep should note."
+    },
+    {
+      "ts": "02:31",
+      "quote": "Even though it's when the when we have you talk to a specialist and he provides all the information we have, that's free too.",
+      "classification": "rapport_repair",
+      "stewart_read": "Rep directly answers the cost-free question and reassures the customer the specialist call is also free, addressing the anxiety in the moment."
     },
     {
       "ts": "03:05",
-      "quote": "And then do you know how much you're spending on a monthly average? 600.",
+      "quote": "And then do you know how much you're spending on a monthly average?",
       "classification": "bill_anchor",
-      "stewart_read": "A $600/month bill is a strong pain anchor, and the rep acknowledges it positively but the call reaches the credit DQ almost immediately after, so there was no further opportunity within the call to flip this into emotional alignment-against-the-utility."
-    },
-    {
-      "ts": "03:22",
-      "quote": "Do you have a credit score over 670?",
-      "classification": "other",
-      "stewart_read": "Rep runs the standard hard credit qualifier verbatim at the correct threshold (670), which matches schema and is procedurally correct."
+      "stewart_read": "Rep asks for the bill amount directly and gets a clean answer of 600, but the acknowledgment at 03:12 ('Okay. Oh, we can definitely help with that.') is a soft flip attempt, not a full emotional alignment-against-utility flip — it's closer to a capture-and-acknowledge than a true reframe."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 24,
-    "verified": 24,
+    "checked": 34,
+    "verified": 34,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

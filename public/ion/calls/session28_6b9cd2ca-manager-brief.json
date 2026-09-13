@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION28_6b9cd2ca",
   "rep_name": "Parker",
-  "trajectory_summary": "This call is a low-energy, mechanical verify run against a customer who is either confused, disengaged, or not equipped to answer basic household questions. The rep pushes through the checklist and lands a nominal appointment, but the booking rests entirely on an absent son who was never directly confirmed, and several qualifying answers (credit score, utility company) were effectively guessed or answered on his behalf.",
-  "shape": "stagnant",
-  "outcome_dispute": "Booked appointment for Monday at 10AM is real per script, but co-owner (son) attendance was never confirmed directly -- Barbara answers 'probably' to time preference and gives credit score answer as 'Yeah' without clarity on who she's answering for. This is a fragile tentative-leaning booking, not a clean 'booked.'",
+  "trajectory_summary": "This is a fast, low-friction call that ends in a booked time slot, but nearly every verification answer is soft, uncertain, or deferred to a third party (the son), and the rep books anyway without resolving the shading issue, the son's involvement, or the bill collection. The call has the shape of a smooth booking but the underlying qualification is thin.",
+  "shape": "mixed",
+  "outcome_dispute": "V1 tag is unknown; the observed outcome is best read as 'tentative' rather than a clean 'booked' — a day and time were set (Monday at 10AM) but the credit qualifier answer was ambiguous ('Yeah' to a compound question), the bill was never collected, the shading tree issue was left as 'I would consider it,' and the actual bill-payer/account holder (the son) was never confirmed for the appointment despite being referenced three times.",
   "observed_outcome": {
     "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": false,
-    "ts": "04:11",
-    "quote": "Well, I don't know without checking with my son, but I can probably next Monday.",
-    "reasoning": "A day and time (Monday at 10AM) were stated, but the customer explicitly said she needed to check with her son first, and the son — the actual financial/title co-owner — was never directly contacted or confirmed for the appointment, making this a tentative booking rather than a firm one."
+    "ts": "04:19",
+    "quote": "Monday? Okay. And then would you prefer mornings or afternoons",
+    "reasoning": "A specific day and time (Monday 10AM) are set, but the son — the identified co-owner and the person with all the relevant financial/utility information — is never directly confirmed as attending; Barbara only says 'I don't know without checking with my son.'"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep asked about bill format (mail vs online) at 03:20 but Barbara said she didn't know because they haven't lived there long, and the rep never obtained an actual bill amount or usage figure from her or arranged direct follow-up with the son who handles it."
+    "reasoning": "The rep never gets an actual dollar amount or usage figure — Barbara states her son handles the electric bill and doesn't know the details, and the rep does not follow up to get a number from her or arrange to get one from the son."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:20",
+    "ask_quote": "Do you normally get the bill in the mail, or do you get that online?",
+    "result": "declined",
+    "method": "none",
+    "result_ts": "03:26",
+    "result_quote": "I don't know. We haven't lived here that long.",
+    "reasoning": "The rep raised bill collection directly but Barbara could not answer since her son manages it, and the rep did not pivot to arranging bill collection through the son or scheduling it before the appointment."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,132 +41,211 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Rep asked the interest question early per script, and Barbara gave a vague, minimal-effort answer ('it makes sense'). The rep acknowledged it briefly ('Yeah. For sure.') but never probed deeper or tied the appointment back to any specific motivation later in the call."
+    "reasoning": "Barbara's answer is vague and generic and falls short of the schema's depth_grading expectation for verify.interest_in_solar; the rep accepts it with 'Yeah. For sure.' and never probes further or ties it back later when setting the appointment."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:15",
-      "quote": "Hey, Barbara. This is Parker. I'm with Ion."
+      "end_ts": "00:22",
+      "quote": "Hey, Barbara. This is Parker. I'm with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm fine.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:47",
-      "quote": "what kinda got you, you know, looking at solar for the home?"
+      "end_ts": "00:59",
+      "quote": "what kinda got you, you know, looking at solar for the home?",
+      "customer_response": "cooperative",
+      "customer_quote": "Well, it makes sense.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:29",
-      "quote": "was it the 4309 Northeast 114th Street"
+      "end_ts": "00:45",
+      "quote": "was it the 4309 Northeast 114th Street",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:48",
-      "quote": "Was there anyone else with you on the title of the home?"
+      "end_ts": "01:57",
+      "quote": "Was there anyone else with you on the title of the home?",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, my son.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "02:13",
-      "quote": "is the roof just a single roof there, an asphalt shingle roof?"
+      "end_ts": "02:19",
+      "quote": "is the roof just a single roof there, an asphalt shingle roof?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:21",
-      "quote": "what electric company were you currently working with, Barbara?"
+      "end_ts": "02:29",
+      "quote": "what electric company were you currently working with, Barbara?",
+      "customer_response": "deflected",
+      "customer_quote": "I don't know. My son handles that.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "bill_amount",
       "status": "skipped",
-      "ts": "03:20",
-      "quote": "Do you normally get the bill in the mail, or do you get that online?"
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "02:33",
+      "end_ts": "02:56",
+      "quote": "you can have a credit score above 670. Is that sound like the case for you or your son?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
-      "status": "skipped",
-      "ts": "03:26",
-      "quote": "I don't know. We haven't lived here that long."
+      "status": "asked",
+      "ts": "03:20",
+      "end_ts": "03:26",
+      "quote": "Do you normally get the bill in the mail, or do you get that online?",
+      "customer_response": "deflected",
+      "customer_quote": "I don't know. We haven't lived here that long.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "04:44",
-      "quote": "I'll get you down for a 10AM then."
+      "ts": "04:01",
+      "end_ts": "04:47",
+      "quote": "I know we have some availability as early as tomorrow or Monday or Tuesday.",
+      "customer_response": "cooperative",
+      "customer_quote": "I can probably next Monday.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "05:14",
-      "quote": "we'll I'll send you a message right after this"
+      "status": "asked",
+      "ts": "04:52",
+      "end_ts": "05:30",
+      "quote": "our specialist will just drop by and plan to talk to your you and your son on Monday at ten",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "Unconfirmed co-decision-maker booking",
-    "ts": "04:11",
-    "quote": "Well, I don't know without checking with my son, but I can probably next Monday.",
-    "why": "The son is the actual financial contact and title co-owner, was never directly reached or confirmed for the appointment, and the customer explicitly flagged uncertainty about his availability — this is the single biggest risk to the appointment holding."
+    "topic": "co-decider inclusion for the son",
+    "ts": "03:03",
+    "quote": "I know you said your son does all the electric bill.",
+    "why": "The son is referenced three times as the person who holds the title, the utility info, and possibly the credit qualifier, yet the rep never gets a direct line to him or firmly confirms his attendance beyond Barbara's uncertain 'I don't know without checking with my son.' This appointment is booked around the person who actually has the information needed to move the deal forward."
   },
   "key_moments": [
     {
-      "ts": "01:54",
-      "quote": "Oh, my son.",
-      "classification": "spouse_handling",
-      "stewart_read": "Barbara reveals her son is on the title. Per schema, this should trigger immediate co-decision-maker inclusion in the appointment discussion, not just an acknowledgment and continuation of verify questions to Barbara alone."
+      "ts": "01:07",
+      "quote": "I do see that big tree kinda in front. Is that still there by chance?",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "This is actually a feasibility-risk flag, not an enthusiasm signal in the positive sense, but the rep does raise it proactively via satellite imagery, which is a good verification instinct. The follow-through is where it breaks down — see the next moment."
     },
     {
-      "ts": "02:27",
-      "quote": "I don't know. My son handles that.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Barbara cannot answer the utility company question because her son manages finances. The rep says 'no worries' and moves on rather than flagging this as a second signal that Barbara may not be positioned to answer qualifying questions on her son's behalf."
+      "ts": "01:24",
+      "quote": "I would consider it.",
+      "classification": "conditional_booking",
+      "stewart_read": "The rep asked a binary willingness question and got a hedge, then proceeded to book the appointment on the assumption of cooperation ('as long as you're willing to consider it'). This is a real unresolved barrier to system feasibility, not just a procedural gap."
+    },
+    {
+      "ts": "02:06",
+      "quote": "What'd you say?",
+      "classification": "empathy_miss",
+      "stewart_read": "Barbara needs a simple yes/no question repeated, which combined with her later inability to recall her move-in date, suggests possible hearing or comprehension difficulty. The rep repeats the question flatly and moves on without checking in on her."
     },
     {
       "ts": "02:43",
       "quote": "Is that sound like the case for you or your son?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Rep tries to route the credit question to whichever household member it applies to, but still receives the answer from Barbara ('Yeah') without clarifying whose credit score that answer describes."
-    },
-    {
-      "ts": "01:07",
-      "quote": "I do see that big tree kinda in front. Is that still there by chance?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Rep identifies a real shading obstacle and asks if Barbara would trim it, which is functional, but he immediately explains the shading impact analytically ('it's covering a lot of this of the roof with shade') rather than using it to build curiosity about what her specific system could look like once trimmed."
+      "classification": "knowledge_gap_handling",
+      "stewart_read": "The rep asks a compound qualifying question (Barbara OR her son) and accepts a bare 'Yeah' at 02:56 without clarifying whose credit actually qualifies. Since Barbara has already said her son handles finances, this is the one hard qualifier in the call and it's left genuinely ambiguous."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 30,
-    "verified": 30,
+    "checked": 47,
+    "verified": 47,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

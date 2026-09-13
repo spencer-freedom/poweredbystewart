@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION22_63ae3d08",
-  "rep_name": "Jeff",
-  "trajectory_summary": "This is a short, low-friction call: an inbound-inquiry customer who is already warm, a rep who moves through verify items in order, and a callback booked with day and time locked. The call's main gaps are omissions rather than active mishandling — the bill was captured but never flipped, the wife identified on title was never looped into the callback, and the Tesla black-panel comment was acknowledged but not used as a hook. Energy did not leak, but the rep left available value on the table rather than compounding it.",
-  "shape": "mixed",
-  "outcome_dispute": "The call books a specialist callback for tomorrow 11AM (a locked day+time), which functions as 'tentative' rather than a fully booked closer appointment — the specialist call itself is the actual sales appointment, and this call only secures the pre-step (usage data + callback slot). Categorizing as 'callback' is more accurate than 'booked' since the substantive appointment has not yet occurred.",
+  "rep_name": "Nica",
+  "trajectory_summary": "This is a short, low-friction call between an already-inbound, motivated customer and a rep who runs the verify script cleanly and efficiently — address, homeowner, co-owner, interest, utility, bill, prior design, and bill-collection method are all covered in under five minutes. The call never truly leaks energy, but it also never builds beyond the customer's starting warmth: two volunteered bill-pain signals go unflipped, and a live pricing question from the customer is glossed over rather than redirected with the scope-discipline escape hatch.",
+  "shape": "stagnant",
+  "outcome_dispute": "The v1 tag is unclear from metadata ('unknown'); based on the transcript this is best read as a callback (specialist callback locked for tomorrow 11 AM) rather than a fully booked closer appointment — the design/appointment itself is contingent on Jeff first sending his usage data.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": "phone",
     "datetime_captured": true,
-    "co_owner_confirmed": false,
-    "ts": "05:05",
-    "quote": "We can go ahead and give you a call tomorrow at 11AM. Is that time for you? Sounds good.",
-    "reasoning": "A specific day and time were locked for a specialist callback, but this is a pre-step callback to review usage/design rather than the full closer appointment, and the wife (confirmed co-owner) was not included in the invitation."
+    "co_owner_confirmed": null,
+    "ts": "05:00",
+    "quote": "We can go ahead and give you a call tomorrow at 11AM. Is that time for you?",
+    "reasoning": "A specific day and time (tomorrow, 11 AM) were locked for a specialist callback to review the design once usage data is received — this is a callback rather than a fully booked closer appointment because it's explicitly contingent on Jeff sending his kWh usage first, and the wife (confirmed co-owner) was never addressed for this specific call."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,145 +20,234 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep acknowledged the bill amount with sympathy ('Oh, jeez. Yeah. That's a lot to be paying for electricity.') but immediately moved to the next verify item (prior design question) rather than turning the $300 into a stated reason to move forward with the appointment."
+    "reasoning": "The rep captured the $300/month figure and responded with empathy ('That's a lot to be paying for electricity') but never turned it into an explicit reason to act or a hook for the appointment. The flip should have landed here or at 04:14 when Jeff reinforced the pain with the winter-usage comment."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "02:31",
+    "ask_quote": "the last bit of information we need to take a look at in order to get this solar design built out, it's just the past twelve months of your kilowatt usage. So do you know if you get those online or in the mail?",
+    "result": "promised_later",
+    "method": "text",
+    "result_ts": "03:07",
+    "result_quote": "I'm gonna send it to you right now. I'm pulling it up right now.",
+    "reasoning": "Rep asked clearly and offered a text/email path; Jeff began pulling up the usage data live on the call and said he'd send it via text, but the transcript ends without confirmation the data was actually received, so this is best read as promised/in-progress rather than fully received."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:52",
     "reason_given": true,
-    "reason_ts": "01:32",
-    "reason_quote": "I was like, you know what? I could kill a couple birds with, you know, a few stones. What would it cost to put in black solar paneling?",
+    "reason_ts": "01:24",
+    "reason_quote": "we're painting our house black.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question and got a distinctive, specific answer (aesthetic match with a black house repaint), validated it warmly in the moment, but never referenced it again when booking the callback or setting expectations for the follow-up text."
+    "reasoning": "Rep asked what sparked interest and Jeff gave a vivid, specific reason (matching black panels to his black-painted house), which the rep validated warmly ('that's pretty cool') but never referenced again when setting the callback or describing what the design/specialist call would cover."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "quote": "Yeah. Hi there. This is, Jeff. Are you with Ion Solar?"
+      "end_ts": "00:20",
+      "quote": "Yeah. Hi there. This is, Jeff. Are you with Ion Solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "You guys reached out to me earlier today. I, I put an inquiry in for a quote.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:52",
-      "quote": "what kinda sparked your initial interest in solar?"
+      "end_ts": "01:52",
+      "quote": "what kinda sparked your initial interest in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "And they had black panels.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:29",
-      "quote": "Is your address the 3721 Ivy Road?"
+      "end_ts": "00:43",
+      "quote": "I just wanna reconfirm. Is your address the 3721 Ivy Road?",
+      "customer_response": "cooperative",
+      "customer_quote": "It is. In Charlottesville?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:44",
-      "quote": "Is there anyone else on the title with you?"
+      "end_ts": "00:51",
+      "quote": "Is there anyone else on the title with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. My wife.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:03",
-      "quote": "do you know what utility company you guys are with?"
+      "end_ts": "02:07",
+      "quote": "do you know what utility company you guys are with?",
+      "customer_response": "cooperative",
+      "customer_quote": "Dominion.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:08",
-      "quote": "how much would you say you guys are paying to Dominion on average per month for electricity?"
+      "end_ts": "02:20",
+      "quote": "how much would you say you guys are paying to Dominion on average per month for electricity?",
+      "customer_response": "cooperative",
+      "customer_quote": "Too much. About 300.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "02:23",
-      "quote": "would this be your first time seeing a solar design for the the property?"
+      "end_ts": "02:27",
+      "quote": "would this be your first time seeing a solar design for the the property?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "02:31",
-      "quote": "the last bit of information we need to take a look at ... it's just the past twelve months of your kilowatt usage."
+      "end_ts": "03:39",
+      "quote": "it's just the past twelve months of your kilowatt usage. So do you know if you get those online or in the mail?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm gonna send it to you right now. I'm pulling it up right now.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "05:00",
-      "quote": "We can go ahead and give you a call tomorrow at 11AM. Is that time for you?"
+      "ts": "04:34",
+      "end_ts": "05:06",
+      "quote": "We can go ahead and give you a call tomorrow at 11AM. Is that time for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Sounds good.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "spouse/co-owner not carried into the callback invitation",
-    "ts": "00:49",
-    "quote": "Yes. My wife. The wife. Okay. Perfect.",
-    "why": "Wife is confirmed on title early in the call but is never mentioned again when the tomorrow-11AM callback is booked with Jeff alone — per protocols.spouse_decision this is the kind of appointment fragility that can cost the sit if she isn't present for the design review."
+    "topic": "bill-pain anchor captured but never flipped",
+    "ts": "02:13",
+    "quote": "Too much. About 300.",
+    "why": "Jeff gave the rep two separate, unprompted bill-pain signals ($300/month and 'goes insane during the winter') and both were acknowledged empathetically but never converted into a reason to value the appointment — this is the single clearest, repeatable skill gap on an otherwise smooth call."
   },
   "key_moments": [
     {
-      "ts": "00:49",
-      "quote": "Yes. My wife. The wife. Okay. Perfect.",
-      "classification": "spouse_handling",
-      "stewart_read": "The wife is confirmed as co-owner on title, which per protocol means she should be included in the eventual specialist appointment. The rep acknowledges her existence but never revisits this when scheduling the callback for 'tomorrow at 11AM' with Jeff alone."
+      "ts": "01:41",
+      "quote": "What would it cost to put in black solar paneling?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Jeff asks a direct pricing question mid-verify. The rep does not answer with pricing (good — no scope creep occurred), but she also does not use the universal escape hatch language; she simply doesn't respond to the question at all and moves to validating his motivation and pulling up the address. The silence works here because Jeff doesn't press the point, but it's a coincidence of a cooperative customer, not a repeatable move."
     },
     {
       "ts": "01:12",
       "quote": "you guys represent you guys represent the Tesla ones as well?",
       "classification": "tesla_expectation_gap",
-      "stewart_read": "Jeff is asking about Tesla-branded product (black panels), which touches the narrow, documented expectation gap where a small subset of Tesla-adjacent customers expect Tesla-branded panels or roof tiles rather than Ion's own product line."
+      "stewart_read": "Jeff's Tesla question reads as enthusiastic curiosity about product options, not a pushback or bait-and-switch complaint. Per schema, the setter does not need to over-explain the Tesla relationship unless the customer pushes — and Jeff never pushes. The rep's brief 'Yes. So we're a Tesla installer.' is an adequate, schema-compliant answer for this level of inquiry."
     },
     {
-      "ts": "01:29",
-      "quote": "and we're painting the house black. I was like, you know what? I could kill a couple birds with, you know, a few stones. What would it cost to put in black solar paneling?",
+      "ts": "01:24",
+      "quote": "we're painting our house black.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Jeff volunteers a strong, specific aesthetic motivator (matching black panels to a black house repaint) — a vivid, personal reason for interest that could anchor the eventual text follow-up and closer conversation."
+      "stewart_read": "Jeff is mid-renovation (painting the house black) and explicitly wants matching black panels — a strong buying-motivation and aesthetic-alignment signal that also implies a home he's investing in and staying in."
     },
     {
       "ts": "02:13",
       "quote": "Too much. About 300.",
       "classification": "bill_anchor",
-      "stewart_read": "Customer states $300/month and volunteers 'too much' unprompted — an emotionally loaded bill figure. Rep acknowledges ('Oh, jeez. Yeah. That's a lot to be paying for electricity.') but does not flip it into a forward-pulling reason to act."
+      "stewart_read": "Bill captured cleanly, but the rep's response ('Oh, jeez. Yeah. That's a lot to be paying for electricity.') acknowledges the pain without converting it into forward-pulling language tied to the appointment or the design review."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 27,
-    "verified": 27,
+    "checked": 42,
+    "verified": 41,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

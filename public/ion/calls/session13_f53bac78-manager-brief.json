@@ -1,26 +1,36 @@
 {
   "call_id": "SESSION13_f53bac78",
   "rep_name": "Randy",
-  "trajectory_summary": "The call opens on a wrong-name stumble and spends its middle stretch fielding a customer who probes the rep's role and repeatedly tries to get the proposal sent directly to him rather than via appointment. The rep holds scope and holds the hard proposal rule, gets through the verify section, and ultimately locks a Saturday appointment — but a late scheduling-system delay draws a pointed, unresolved criticism from the customer that the rep never directly answers, closing the call on a sour note despite the booked time.",
+  "trajectory_summary": "The call opens with real friction — a confused, skeptical customer who interrogates the rep's purpose five different ways before settling — and the rep holds scope discipline well, deferring technical questions to the specialist. The verify section then runs smoothly with cooperative answers, but the close is rushed and fumbled: the customer says he has to go mid-bill-collection, and the rep's live scheduling-tool delay draws an open credibility jab ('you gotta do better than that, man') right before the appointment is set.",
   "shape": "mixed",
-  "outcome_dispute": null,
+  "outcome_dispute": "No prior v1 tag was supplied to dispute. Based on the transcript alone, this reads as a fragile tentative booking rather than a clean 'booked' outcome: a day and time (Saturday 09:30) were agreed, but the confirmation came immediately after visible customer irritation, the bill was never actually sent on the call, and the button-up (no-driving/computer expectation, one-hour block, 'is that fair' handshake) was skipped entirely.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "07:02",
-    "quote": "So, yeah, we have a set schedule. So 09:30 would be the, the morning time on Saturday. Alright. Does that work for you? Alright. / Yes.",
-    "reasoning": "A specific day (Saturday) and time (09:30) are agreed by the customer with an explicit 'Yes,' satisfying the booked threshold. No spouse or co-owner was identified (customer confirmed no one else is on the title), so co_owner_confirmed is null."
+    "ts": "06:52",
+    "quote": "It looks like we can do 09:30. So, yeah, we have a set schedule. So 09:30 would be the, the morning time on Saturday. Alright. Does that work for you? Alright.",
+    "reasoning": "A specific day and time (Saturday 09:30) were agreed verbally, but the close lacked the full button-up mechanics (hour block, no-driving/computer expectation, explicit handshake) and the bill was not yet in hand, making this a tentative rather than a fully secured booking."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "04:53",
-    "bill_quote": "Yeah. No. More than that. I I More than 300?",
+    "bill_quote": "Around 300? Yeah. No. More than that. More than 300? Yeah.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures a bill figure above $300 but responds only with 'Okay' and moves directly to the next verify question about whether this is the customer's first time looking at solar — the number is filed, not flipped into a reason to act."
+    "reasoning": "The rep captured that the customer pays more than $300/month but never returned to that figure to frame it as the reason to act — the next line pivots straight to 'is this your first time looking at solar,' and the number is never referenced again."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "05:15",
+    "ask_quote": "So, yeah, the way that we design these systems is based on how much energy the home uses. So we get everything we need off of your recent bill with Dominion.",
+    "result": "promised_later",
+    "method": "email",
+    "result_ts": "05:41",
+    "result_quote": "Souk8203@gmail.com.",
+    "reasoning": "The rep asked for the bill and the customer provided an email address for the rep to send information to, but the bill photo itself was not sent or read aloud during the call — collection is deferred to after the call ('once I get that bill from you, I'll just shoot you a confirmation email back')."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,133 +41,249 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks what interested the customer in solar; the call moves from program explanation directly into address/verify questions without a dedicated interest question, so there is no stated customer motivation to reinforce later."
+    "reasoning": "The rep never explicitly asked 'what interested you in solar' — the customer's own questions ('Tell me what your program is like,' 'What happened to the energy that I get') function as skepticism-driven interrogation rather than a stated motivation, and no interest reason was ever captured or used."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
-      "status": "asked",
-      "ts": "00:13",
-      "quote": "we just got a request here that you were looking at solar for the home... is that right?"
+      "status": "skipped",
+      "ts": "00:02",
+      "end_ts": "00:23",
+      "quote": "Hey. This is Randy.",
+      "customer_response": "resistant",
+      "customer_quote": "Hello. Did you try to call somebody who?",
+      "resistance_reason": "trust",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "02:53",
-      "quote": "I've got your address here at 8203 Blaritan Road in Springfield, Virginia. Is that right?"
+      "end_ts": "03:04",
+      "quote": "I've got your address here at 8203 Blaritan Road in Springfield, Virginia. Is that right?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "03:56",
-      "quote": "I have Lee Yoon as the property owner. Is there anyone else on the title?"
+      "end_ts": "04:04",
+      "quote": "And then I have you down I have Lee Yoon as the property owner. Is there anyone else on the title?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "03:44",
-      "quote": "is that a asphalt shingle roof on the home?"
+      "end_ts": "03:53",
+      "quote": "Is that a asphalt shingle roof on the home?",
+      "customer_response": "cooperative",
+      "customer_quote": "It's a new roof too.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "04:20",
-      "quote": "do you know who you're doing your electricity here with?"
+      "end_ts": "04:25",
+      "quote": "And then do you know who you're doing your electricity here with?",
+      "customer_response": "cooperative",
+      "customer_quote": "Millennium.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "04:44",
-      "quote": "how much are you guys currently paying for electricity right now?"
+      "ts": "04:29",
+      "end_ts": "04:59",
+      "quote": "And how much are you guys currently paying for electricity right now?",
+      "customer_response": "cooperative",
+      "customer_quote": "It's around 3 something.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "04:04",
+      "end_ts": "04:19",
+      "quote": "You just need to have a credit score above 670. Could that be the case for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "05:01",
-      "quote": "is this your first time looking at a solar for this property here?"
+      "end_ts": "05:05",
+      "quote": "And is this your first time looking at a solar for this property here?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "05:26",
-      "quote": "you can get that over to me, either text or email... just take a picture of that bill"
+      "ts": "05:15",
+      "end_ts": "05:56",
+      "quote": "You can get that over to me, either text or email.",
+      "customer_response": "cooperative",
+      "customer_quote": "Souk8203@gmail.com.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "06:56",
-      "quote": "it looks like we can do 09:30... does that work for you?"
+      "ts": "06:24",
+      "end_ts": "07:02",
+      "quote": "I just need a a time that works best for you guys so we can show you that design.",
+      "customer_response": "resistant",
+      "customer_quote": "Oh, man. You're gonna be a salesperson. You gotta do better than that, man.",
+      "resistance_reason": "timing",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "button_up",
       "status": "skipped",
-      "ts": "07:09",
-      "quote": "once I get that bill from you, I'll just shoot you a confirmation email back. Does that work?"
+      "ts": "07:04",
+      "end_ts": "07:14",
+      "quote": "Once I get that bill from you, I'll just shoot you a confirmation email back. Does that work?",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:02",
+      "quote": "What about, extra power? When does that come?",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I would, definitely bring that up to a specialist."
+      ],
+      "resolved": true,
+      "resolution_ts": "01:27",
+      "reasoning": "A technical net-metering-style question that the rep correctly deferred to the specialist once; the customer moved on to a different question afterward, treating it as settled for now."
+    },
+    {
+      "ts": "05:56",
+      "quote": "Alright. I gotta go. I'm right in the middle of work right now.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. Sorry. Give me that email one more time so I can send this out to you now."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep never verbally acknowledged the stated time pressure — he pushed straight into re-confirming the email address without addressing the constraint, so this is better read as an unaddressed protocol cue than a cleanly resolved objection; the call continues afterward but only because the customer complied, not because the concern was handled."
+    },
+    {
+      "ts": "06:24",
+      "quote": "You can come Saturday morning at 10:00.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "It looks like we can do 09:30. So, yeah, we have a set schedule. So 09:30 would be the, the morning time on Saturday."
+      ],
+      "resolved": true,
+      "resolution_ts": "06:52",
+      "reasoning": "Customer requested a specific time the rep couldn't honor; the rep offered the nearest available slot and the customer accepted, despite voicing irritation at the delay in getting there."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "bill capture without emotional flip",
-    "ts": "04:53",
-    "quote": "Okay.",
-    "why": "The rep gets the number he needs ('more than 300') but the single-word acknowledgment and immediate pivot to the next verify item wastes the strongest anchor in the call — coach the rep to connect the bill figure to the reason for the appointment before moving on."
+    "topic": "Booking mechanics readiness / button-up discipline",
+    "ts": "06:41",
+    "quote": "Oh, man. You're gonna be a salesperson. You gotta do better than that, man.",
+    "why": "The appointment was locked (Saturday 09:30) but under visible customer irritation caused by the rep fumbling the calendar live, and the close skipped the hour-block, no-driving/computer framing, and the 'is that fair' handshake entirely — this is the single most consequential structural gap because it makes the booking fragile right at the moment it should be solidifying."
   },
   "key_moments": [
     {
       "ts": "00:02",
       "quote": "Hey. This is Randy.",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The rep opens by calling the customer 'Glenn' — a wrong name — and the recovery at 00:13 ('is this Li Yoon... it is a home') is muddled rather than clean, meaning legitimacy is not cleanly established in the first 30 seconds as the schema requires."
+      "stewart_read": "The rep never states the company name, references a form/lead source, or gives the Tesla/Ion legitimacy framing in the opening exchange — he confirms the lead name and jumps straight to solar interest at 00:13 without ever saying 'this is Randy with Ion.'"
     },
     {
-      "ts": "01:20",
-      "quote": "I would, definitely bring that up to a specialist. So, yeah, my job here is to help you get that design put together, and then you can kinda go over that with a specialist.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The customer asks a genuine closer-tier technical question about excess energy/net metering. The rep does not fabricate an answer and instead deploys the universal escape hatch, deferring cleanly to the specialist. This is schema-compliant scope discipline, not a failure to answer."
+      "ts": "01:37",
+      "quote": "But what is your job? Just to get appointment?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "This is the third time the customer probes the purpose of the call. Instead of using this moment to build curiosity around his specific numbers ('once we see your usage we can show you exactly what you'd pay instead'), the rep gives a flat procedural answer that restates the mechanics rather than pulling him forward."
     },
     {
-      "ts": "02:30",
-      "quote": "You're gonna email me this?",
-      "classification": "protocol_violation",
-      "stewart_read": "This is the third touch of the customer trying to get the proposal sent directly rather than delivered on the appointment call. The rep holds the hard rule (no cave, no promise to email) but answers with a bare 'No' and a redirect, never giving the canonical justification ('our proposals require full explanation otherwise they're confusing'). Per the deviation grading, this lands as held_line_with_improvisation rather than a clean scripted hold."
+      "ts": "04:04",
+      "quote": "And then to qualify for that program I was telling you about, you just need to have a credit score above 670.",
+      "classification": "other",
+      "stewart_read": "The rep states the correct 670 threshold per schema, but the diarized answer at 04:13-04:19 ('Good morning. Yeah.' / 'Yes.') is almost certainly a mis-attributed or corrupted exchange — the response makes no sense as a credit answer, suggesting a diarization error rather than a real customer non-sequitur."
     },
     {
-      "ts": "03:27",
-      "quote": "We have them all cut. We only got five trees.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer volunteers that previously-tall trees blocking the roof have been removed — a direct sun-exposure improvement that increases system viability and production potential."
+      "ts": "04:53",
+      "quote": "Around 300? Yeah. No. More than that. More than 300? Yeah.",
+      "classification": "bill_anchor",
+      "stewart_read": "The rep captures a bill figure (north of $300/month) but immediately moves to 'is this your first time looking at a solar for this property' without acknowledging the number or using it as leverage — a capture-and-drop pattern."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 38,
-    "verified": 37,
-    "fuzzy": 1,
+    "checked": 54,
+    "verified": 52,
+    "fuzzy": 2,
     "wrong_ts": 0,
     "not_found": 0
   }

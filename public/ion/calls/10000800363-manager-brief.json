@@ -1,17 +1,17 @@
 {
   "call_id": "10000800363",
   "rep_name": "Carter",
-  "trajectory_summary": "The call opens with the customer volunteering he's reconsidering, and the middle stretch is spent litigating a new-roof/warranty objection where the rep gets pulled into specifics instead of redirecting early. The rep recovers with a genuinely good redirect-to-design move on the sun-exposure objection and closes with a tentative Saturday booking, but the customer's own words throughout signal he expects the visit to go nowhere.",
+  "trajectory_summary": "The call opens with immediate resistance dressed as a roof/sun objection cluster, which the rep initially tries to answer feature-by-feature before correctly pivoting to a report-based curiosity play. The back half is consumed by bill-collection logistics (email swap) and a long date-negotiation that eventually lands a Saturday phone appointment, but the close is soft — no explicit 'is that fair' handshake and the bill is only promised, not captured.",
   "shape": "mixed",
-  "outcome_dispute": "This should be read as tentative, not a clean booked appointment. A day and a time (Saturday, 12PM) were agreed, but the customer explicitly frames it as likely pointless twice ('I think it's gonna be very limited in what we can do'), the bill was not actually sent during the call, and there was no is-that-fair handshake or button-up recap — the booking is real but structurally fragile.",
+  "outcome_dispute": "v1 tag is unknown/unclear; based on the transcript this is best read as tentative rather than a fully solid booked appointment — a day and a start time (Saturday, 12PM) were agreed, but the rep himself flags it as fragile ('since that is further out, we'll call you or text you beforehand... to make sure it still works'), and the bill is not yet in hand.",
   "observed_outcome": {
     "outcome": "tentative",
-    "appointment_channel": "in_person",
+    "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "04:54",
+    "ts": "04:57",
     "quote": "We'll plan on 12PM on Saturday.",
-    "reasoning": "A specific day and time were agreed (Saturday at 12PM), which supports more than a bare callback, but the customer twice pre-frames the visit as likely pointless and the bill was never actually captured during the call — the booking is real but carries explicit customer-stated doubt that was never resolved, making 'tentative' more accurate than a clean 'booked.'"
+    "reasoning": "A specific day and time are agreed (Saturday, 12PM), but the rep himself frames it as provisional, promising a reconfirmation call/text beforehand ('since that is further out, we'll call you or text you beforehand... to make sure it still works'), and the bill has not yet been sent, so this is tentative rather than a fully solid booking."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer agrees to send his utility bill via email at 02:20 and 02:26 but never states an actual bill amount or usage figure on the call, and no bill was transmitted during the call itself — there is nothing numeric to flip."
+    "reasoning": "The customer never states a dollar amount or usage figure on this call; the entire bill-related conversation is about the physical document (photo/email of the bill), not the cost itself, so there is nothing to flip."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "00:18",
+    "ask_quote": "Looks like we just need a utility bill and a time to come by and show you a solar design. Is that right?",
+    "result": "promised_later",
+    "method": "email",
+    "result_ts": "03:28",
+    "result_quote": "yeah. Do an email because I can just attach it to the email.",
+    "reasoning": "The rep raises the bill need at intro and again explicitly requests it be texted or emailed at 02:59; the customer agrees to email it once home from driving, but it is not sent during the call, making this a promised_later result via email."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,265 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never directly asks Carl what interested him in solar; the closest line, 'whatever your main motive in wanting to go solar is' at 02:51, is a hedge embedded inside a reassurance sentence, not a genuine question posed to the customer, and Carl never states a motive in response."
+    "reasoning": "The rep never explicitly asks 'what interested you in solar' — the call opens by referencing a prior touch and jumps straight to logistics (bill + appointment), so the interest-reason anchor from the verify section is skipped entirely."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "Hey, Carl. This is Carter calling from ION."
+      "end_ts": "00:18",
+      "quote": "Hey, Carl. This is Carter calling from ION. How are you doing today?",
+      "customer_response": "cooperative",
+      "customer_quote": "Good.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "co_owner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "00:36",
-      "quote": "Well, I just had a new roof put on, I mean, just last year."
+      "end_ts": "01:56",
+      "quote": "Yeah. I mean, it it wouldn't damage it at all.",
+      "customer_response": "resistant",
+      "customer_quote": "Well, I just had a new roof put on, I mean, just last year.",
+      "resistance_reason": "trust",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
-      "status": "skipped",
-      "ts": "02:20",
-      "quote": "Let me send in my, my utility bill with the the graph on it."
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "02:59",
-      "quote": "I'm shooting a text. Would you be able to just text that over to me when you're able to?"
+      "end_ts": "03:39",
+      "quote": "I'm shooting a text. Would you be able to just text that over to me when you're able to?",
+      "customer_response": "cooperative",
+      "customer_quote": "yeah. Do an email because I can just attach it to the email.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "04:48",
-      "quote": "We could do twelve or 02:30. Which would be better for you?"
+      "ts": "03:52",
+      "end_ts": "04:57",
+      "quote": "We could do twelve or 02:30. Which would be better for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Twelve.",
+      "resistance_reason": "timing",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "05:08",
+      "end_ts": "05:30",
+      "quote": "We'll also since that is further out, we'll call you or text you beforehand",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. And I'll try to get that billed to you as soon as I can.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "00:36",
+      "quote": "Well, I just had a new roof put on, I mean, just last year.",
+      "type": "roof_or_home",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "Yeah. I mean, it it wouldn't damage it at all.",
+        "it's it's warrantied as well with us if there are any issues."
+      ],
+      "resolved": false,
+      "resolution_ts": "01:29",
+      "reasoning": "Customer moves on to the sun-exposure concern without fully accepting the warranty answer, which itself was somewhat unclear."
+    },
+    {
+      "ts": "01:34",
+      "quote": "I I don't get a lot of sun. The more more I thought about it, I have the limited amount of sun that gets on my roof.",
+      "type": "roof_or_home",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "We can we can run a report for your home and show you a quote... show you specific numbers rather than just guessing"
+      ],
+      "resolved": true,
+      "resolution_ts": "02:16",
+      "reasoning": "Rep's single redirect to a data-based report gets the customer to agree to move forward and send the bill."
+    },
+    {
+      "ts": "02:34",
+      "quote": "I I just don't wanna send you guys on a wild goose chase because, you know, I I think it's gonna be very limited in what we can do.",
+      "type": "not_interested",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "we meet with people all day every day, so it's no issues if it doesn't make sense for you."
+      ],
+      "resolved": true,
+      "resolution_ts": "02:59",
+      "reasoning": "Customer proceeds to agree to send the utility bill right after this reassurance, indicating the guilt-driven hesitation was defused enough to continue."
+    },
+    {
+      "ts": "03:57",
+      "quote": "No. I'm not. I'm gonna be in Washington tomorrow.",
+      "type": "timing_or_callback",
+      "rep_attempts": 3,
+      "attempt_quotes": [
+        "Are you gonna be around tomorrow?",
+        "How about Wednesday?",
+        "Yeah. Would would Saturday Saturday Yeah. Saturday"
+      ],
+      "resolved": true,
+      "resolution_ts": "04:52",
+      "reasoning": "After tomorrow and Wednesday were ruled out, the rep persisted through the calendar until landing on Saturday at 12PM, which the customer accepted."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "scope creep on roof warranty debate",
-    "ts": "01:09",
-    "quote": "How long is the warranty? Because my roof has a lifetime warranty.",
-    "why": "The rep gets pulled into a specifics-based comparison (25-year panel warranty vs lifetime roof warranty) instead of routing it to the closer, and never fully resolves whether Ion's position beats the customer's existing warranty — this is the moment most likely to have planted lingering doubt that survives to Saturday."
+    "topic": "Missing button-up handshake on a fragile booking",
+    "ts": "05:25",
+    "quote": "Alright, Jay. We'll look forward to seeing you on Saturday. Hope you have a good Thanksgiving.",
+    "why": "This appointment is already fragile — it's five days out, the customer has cycled through three unavailable days, the bill is only promised not captured, and the rep still skips the hour-block, no-driving/computer instruction, and 'is that fair?' handshake at close. On a booking this loosely held, the full button-up matters more, not less."
   },
   "key_moments": [
     {
-      "ts": "00:18",
-      "quote": "Looks like we just need a utility bill and a time to come by and show you a solar design. Is that right?",
-      "classification": "other",
-      "stewart_read": "This is framed as an in-person visit ('come by') on a prior-contact/recycled-style lead rather than a standard phone-appointment setter call, which explains why several button_up elements (phone appointment specified, no-driving/computer instruction) don't appear later — those elements are built for phone closer appointments and may not apply to an in-person format."
+      "ts": "00:36",
+      "quote": "Well, I just had a new roof put on, I mean, just last year.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a classic roof_or_home objection that could be inverted ('a new roof is actually the best time to add solar — it's already structurally sound') but the rep answers literally instead ('it wouldn't damage it at all'), missing a reframe opportunity."
     },
     {
       "ts": "01:09",
       "quote": "How long is the warranty? Because my roof has a lifetime warranty.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "Rep answers a direct product-comparison question with a specific figure (25 years) instead of using the universal escape hatch to route this to the closer, getting pulled deeper into a debate he's not equipped to fully resolve."
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep's answer ('between the two, you should be getting... twenty five years... but say there was an issue with installation or something like that, you'd be able to cover that') is muddled and doesn't clearly resolve whether the roof's lifetime warranty is voided by panel installation — a real, specific customer question left unanswered rather than dodged cleanly or admitted honestly."
     },
     {
-      "ts": "01:56",
-      "quote": "We can we can run a report for your home and show you a quote because we'd be able to tell exactly how much sunlight you are getting and if it would be worth it to do it",
-      "classification": "other",
-      "stewart_read": "This is a clean strategy match for the schema's redirect-to-design pattern: instead of debating sun exposure in the abstract, the rep offers the data-driven report as the path to a real answer. This is the call's best moment and should be reinforced, not flagged as a miss."
+      "ts": "02:34",
+      "quote": "I I just don't wanna send you guys on a wild goose chase because, you know, I I think it's gonna be very limited in what we can do.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a guilt-framed soft objection (customer protecting the rep's time, not a hard no) per the guilt_as_objection_detection directive. The rep's response acknowledges but doesn't explicitly reframe the appointment as customer-in-control ('you're not wasting anyone's time, this costs you nothing to find out')."
     },
     {
-      "ts": "02:51",
-      "quote": "We just wanna see if we can can help you cut down on costs or whatever your main motive in wanting to go solar is.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The Verify beat 'What interested you in solar?' is never genuinely asked anywhere in the call — this line is a hedge inside a reassurance sentence, not a direct question to Carl, so his actual motive for going solar is never captured."
+      "ts": "02:42",
+      "quote": "Yeah. I mean, we meet with people all day every day, so it's no issues if it doesn't make sense for you.",
+      "classification": "rapport_repair",
+      "stewart_read": "Rep de-escalates the guilt-driven objection with low pressure, keeping the customer engaged enough to agree to send the bill next."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 31,
-    "verified": 30,
+    "checked": 48,
+    "verified": 47,
     "fuzzy": 0,
-    "wrong_ts": 0,
-    "not_found": 1
+    "wrong_ts": 1,
+    "not_found": 0
   }
 }

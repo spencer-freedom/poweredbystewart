@@ -1,17 +1,17 @@
 {
   "call_id": "20000696434",
   "rep_name": "Carter",
-  "trajectory_summary": "The call opens with the rep successfully rescuing a time-constrained, distracted customer using a legitimate small-ask reframe, and the customer warms into an engaged, curious buyer who volunteers she wants to pay cash. But the call's structural integrity breaks when she answers 'no' to the credit qualifier and the rep books the appointment anyway without resolving or even acknowledging the disqualifying answer. The energy in the room built nicely on the customer's side; the rep's procedural handling did not keep pace with it.",
+  "trajectory_summary": "The call opens with the customer trying to defer to Monday, and the rep salvages it by compressing the ask into a fast verify run instead of accepting a vague callback — a strategically sound move. From there the call is efficient but shallow: verify items are rushed, the credit qualifier surfaces real confusion the rep never resolves, and the customer's direct financing questions (three payments vs. lump sum) go unanswered before a Monday in-person visit is booked.",
   "shape": "mixed",
-  "outcome_dispute": "v1 tag is unknown/unclear, but observed_outcome should be recorded as 'booked' with a major caveat: the appointment was set past a customer's stated 'no' on the hard credit qualifier (qualifiers.credit_qualifier, hard_dq=true), which per current schema should have triggered disqualification or at minimum an explicit override conversation. This is a fragile, procedurally non-compliant booking, not a clean win.",
+  "outcome_dispute": "v1 tag is unknown; based on the transcript this is a clear booked appointment — day (Monday) and time (11 AM) were both explicitly agreed — but it carries real fragility given the unresolved credit-score confusion and the switch to an in-person 'send someone by' visit rather than the standard phone-closer format.",
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "03:49",
-    "quote": "Okay. How about we plan on 11AM on Monday? So that sounds",
-    "reasoning": "A specific day (Monday) and time (11 AM) are agreed for an in-person visit ('Come by, and we'll go over everything with you'), meeting the booked threshold, though the booking is procedurally fragile given the unresolved credit qualifier answer."
+    "ts": "03:56",
+    "quote": "Okay. How about we plan on 11AM on Monday? So that sounds good.",
+    "reasoning": "A specific day (Monday) and time (11 AM) were agreed, and the visit is explicitly in-person ('Come by, and we'll go over everything with you') rather than a phone appointment, which is a channel shift from the standard closer call."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep never asks about the customer's utility bill amount or usage at any point in the call -- the qualifier sequence jumps from utility company straight to the credit qualifier, and bill collection never happens."
+    "reasoning": "The rep never asked for or received a bill amount or usage figure at any point in the call; the qualifying conversation moved straight from utility company to credit score without touching the bill."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "No mention of the utility bill document (mail, online, photo, text, email) appears anywhere in the transcript; the call moves from utility company name straight to the credit qualifier and then to booking."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,238 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks what interested the customer in solar. She does volunteer she was 'getting ready to just go on and buy the system' herself, which implies self-motivated interest, but this surfaces incidentally during the credit discussion rather than in response to a direct interest question, and the rep never reflects it back."
+    "reasoning": "The rep references the form submission at 00:09 but never asks what specifically interested her in solar; she never volunteers a motivating reason (bill pain, environment, etc.) beyond wanting to buy the system outright, which surfaces later during the credit tangent rather than in response to an interest question."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "quote": "Hey. This is Carter calling from ION."
+      "end_ts": "00:09",
+      "quote": "Hey. This is Carter calling from ION.",
+      "customer_response": "cooperative",
+      "customer_quote": "Good. Thanks. How are you?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:50",
-      "quote": "So it's 9688 Meeks Bay Avenue. Correct?"
+      "end_ts": "01:29",
+      "quote": "So it's 9688 Meeks Bay Avenue. Correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:58",
-      "quote": "Anyone else on the title of the home with you?"
+      "end_ts": "01:00",
+      "quote": "Anyone else on the title of the home with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:10",
-      "quote": "Do you know how the roof is by chance?"
+      "end_ts": "01:22",
+      "quote": "Do you know how the roof is by chance?",
+      "customer_response": "deflected",
+      "customer_quote": "No. Do I know how old it is? No. But it's not that old. It's in my package.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:45",
-      "quote": "And then what utility company are you working with?"
+      "end_ts": "02:13",
+      "quote": "And then what utility company are you working with?",
+      "customer_response": "cooperative",
+      "customer_quote": "NV. Like, the NV. Yeah. That's what it is. NV Energy.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:16",
-      "quote": "the main requirement to get solar is having a credit score above 6 50."
+      "end_ts": "02:47",
+      "quote": "the main requirement to get solar is having a credit score above 6 50. Is that the case for you?",
+      "customer_response": "resistant",
+      "customer_quote": "No. I think the credit score is around 611. Yeah. Because I don't, you know I mean, I have money in the bank, so I don't charge things.",
+      "resistance_reason": "trust",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "03:53",
-      "quote": "How about we plan on 11AM on Monday?"
+      "ts": "03:49",
+      "end_ts": "04:00",
+      "quote": "Would Monday morning or evening work better for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. Morning. Late morning, though. Ten or eleven.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "04:00",
+      "end_ts": "04:04",
+      "quote": "Come by, and we'll go over everything with you. Okay?",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright. Thanks. Thanks.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "00:21",
+      "quote": "and it is crazy in my house. Can we talk on Monday?",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "All I'm doing is trying to schedule something. So if you have a quick five minutes right now, I'll just run through it super quick"
+      ],
+      "resolved": true,
+      "resolution_ts": "00:39",
+      "reasoning": "Customer accepts the compressed call after the rep's single reframe, so the reschedule request is resolved without needing multiple angles."
+    },
+    {
+      "ts": "02:24",
+      "quote": "No. I don't think so. That's why I was getting ready to just go on and buy the system because I don't charge a lot of anything.",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Wanna do a a cash deal?"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "This is credit-qualifier confusion rather than a cost objection — she isn't objecting to price, she's anxious about a self-reported number and unclear on how it affects her ability to buy. The rep's single pivot to 'cash deal' doesn't clarify the credit question or reassure her, and it's left unresolved as the call moves to booking."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Booking past a stated hard-DQ credit answer without resolution",
-    "ts": "02:16",
-    "quote": "the main requirement to get solar is having a credit score above 6 50. Is that the case for you? No.",
-    "why": "The customer answered the hard credit qualifier in the negative and the rep proceeded straight to booking an in-person visit without disqualifying, flagging, or explicitly overriding the gate. This is the exact scenario the schema's stated-vs-pulled-credit policy question anticipates, and right now the rep has no clear rule to follow -- this call is the concrete example to bring to that policy conversation with Kenny, and to give the rep a explicit standard going forward."
+    "topic": "credit-qualifier confusion left unresolved",
+    "ts": "02:24",
+    "quote": "No. I don't think so. That's why I was getting ready to just go on and buy the system because I don't charge a lot of anything.",
+    "why": "The customer is anxious and confused about her own credit number right as she's revealing strong purchase intent (cash buyer, ready to buy outright). The rep never clarifies that the closer will verify actual credit rather than her self-report, leaving her booked into Monday still uncertain whether she even qualifies — a resolvable anxiety that should have been closed on the call."
   },
   "key_moments": [
     {
       "ts": "00:21",
       "quote": "and it is crazy in my house. Can we talk on Monday?",
       "classification": "unanchored_soft_exit",
-      "stewart_read": "This isn't a full soft-exit since the rep does recover it immediately after, but the customer's opening move is a deferral attempt that the rep correctly intercepts rather than accepting."
+      "stewart_read": "This is a reschedule request rather than the scripted 'how long will this take' time-constraint objection, so the schema fit is loose — it's better read as an unlisted reschedule-deflection pattern. The rep's response (compress to 5 minutes rather than accept a vague future callback) is the right instinct even without a scripted template for it."
     },
     {
-      "ts": "00:39",
-      "quote": "Oh, okay. If it's gonna be quick, because I'm not even dressed. I have to do",
-      "classification": "empathy_miss",
-      "stewart_read": "This is a mild disclosure (not dressed, guests imminent) rather than a true vulnerability trigger (health, loss, financial hardship) per the schema's trigger_categories. The rep does not acknowledge it verbally but does functionally respect it by compressing the call, so this is a low-severity, scan-and-dismiss case rather than a coaching priority."
+      "ts": "00:09",
+      "quote": "I'm seeing here you just put in a request to get some more information on solar for your home. Is that correct?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The rep never actually asks what interested her in solar — he references the form and moves straight into rescheduling logistics once she interrupts. The emotional anchor (verify.interest_in_solar) is skipped entirely and never recovered later in the call."
     },
     {
-      "ts": "02:16",
-      "quote": "the main requirement to get solar is having a credit score above 6 50. Is that the case for you? No.",
-      "classification": "protocol_violation",
-      "stewart_read": "The customer gives a direct 'No' to the hard credit qualifier. Per the schema this is a hard_dq=true gate. The rep neither disqualifies nor explicitly overrides -- he simply keeps moving toward a booked appointment, leaving the gate unresolved."
+      "ts": "01:22",
+      "quote": "Well, the garages are connected, so I don't know. Not the houses. Just the Oh, okay. Garage.",
+      "classification": "knowledge_gap",
+      "stewart_read": "The home-type answer is ambiguous (shared garage, unclear if it's a townhome) and the rep just says 'Cool' and moves on without clarifying what this means for roof/solar feasibility on a shared structure."
     },
     {
       "ts": "02:24",
-      "quote": "No. I don't think so. That's why I was getting ready to just go on and buy the system because I don't charge a lot of anything. I pay for my house with cash. I pay for my new car with cash. So I don't like monthly bills.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "This is a strong positive signal masquerading as a disqualifier. The customer is a cash-heavy buyer with low credit utilization who explicitly wants to purchase outright -- exactly the profile Spencer's operator note describes where stated credit is unreliable and a cash-purchase path may bypass the financing-credit gate entirely. The rep's 'wanna do a a cash deal?' response gestures at this but never develops it."
+      "quote": "No. I don't think so. That's why I was getting ready to just go on and buy the system because I don't charge a lot of anything.",
+      "classification": "knowledge_gap",
+      "stewart_read": "This is not a cost objection — she's confused about her own credit number and anxious that it may disqualify her, while stating she has cash and good card history. Per Spencer's operator note in qualifiers.credit_qualifier, stated credit often differs from pulled credit, and the rep never reassures her that the actual number will be verified by the closer rather than her self-report."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 31,
-    "verified": 30,
-    "fuzzy": 0,
-    "wrong_ts": 1,
+    "checked": 44,
+    "verified": 42,
+    "fuzzy": 2,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

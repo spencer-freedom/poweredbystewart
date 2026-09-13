@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION10_eb080f7c",
   "rep_name": "Jake",
-  "trajectory_summary": "The call opens cold and only degrades — every customer turn adds a new challenge (Tesla confusion, data sourcing, panel technology, pricing) and the rep responds to each individually without ever re-establishing control or bridging to the specialist consistently. There is no bill capture, no interest-reason exploration, and two clear cross-sell signals (roof replacement, tree removal) surface and go unrouted. The call ends with the customer delivering an unrebutted credibility critique and the rep closing with a passive sign-off.",
+  "trajectory_summary": "The call opens cold and only deteriorates: the customer raises a legitimate Tesla-vs-Ion product confusion early, the rep never resolves it, and from there the customer pulls the rep into a series of technical and ethical debates (inverters, American-made components, data sourcing, satellite imaging cost) that the rep engages point-by-point rather than redirecting to the closer. A clear roof-replacement cross-sell signal is raised twice and never bridged. The call ends with no appointment and a customer who explicitly concludes he's being sold to, not helped.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unclear, but the observed transcript shows no appointment was booked, tentative, or even a firm callback — the customer's 'maybe I'll contact you after I get a roof' is a self-initiated soft deferral, not a rep-owned next step. This should be scored no_appointment, not any positive outcome tag.",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "10:07",
-    "quote": "Well, maybe I'll contact you after I, get a roof.",
-    "reasoning": "No date, time, or rep-owned next step was established. The customer's vague, self-initiated deferral followed by the rep's passive sign-off ('Of course, Larry. Have a good one.') confirms the call ended without any booked, tentative, or callback commitment."
+    "ts": "11:54",
+    "quote": "Sometimes there's other reasons to very much. Of course, Larry. Have a good one.",
+    "reasoning": "The call ends with no day/time offered or agreed to; the rep's final lines are a garbled non-sequitur followed by a sign-off, with the customer's only forward-looking statement being a vague, self-initiated 'maybe I'll contact you after I get a roof' at 10:07-10:10 that the rep does not convert into any tracked next step."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches utility company or bill-amount verify items; the conversation stays stuck on legitimacy, Tesla confusion, and technical objections before the customer disengages."
+    "reasoning": "The call never reaches the bill/utility qualification section — it stays stuck in intro-legitimacy and technical objections throughout, so there is no bill amount to capture or flip."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call never progresses past legitimacy and technical objections to the verify/bill-collection stage, so the rep never raises getting the utility bill."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,274 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks what interested the customer in solar; the call is driven entirely by the customer's objections and questions rather than a structured verify flow."
+    "reasoning": "The rep never explicitly asks what interested the customer in solar; the call is consumed by legitimacy questions, the Tesla/shingle expectation gap, and technical objections before any interest-question exchange occurs."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:09",
-      "quote": "Hey, man. This is Jake with Ion."
+      "end_ts": "00:23",
+      "quote": "Hey, man. This is Jake with Ion. I was just giving you a call here because I saw that you requested some information on solar for your house.",
+      "customer_response": "resistant",
+      "customer_quote": "I'm doing alright. I'm not familiar with Ion.",
+      "resistance_reason": "trust",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:50",
-      "quote": "I have your address at 63 Larkspur Road in Rutgersville."
+      "end_ts": "01:02",
+      "quote": "I guess I could take a look right now. I have your address at 63 Larkspur Road in Rutgersville.",
+      "customer_response": "cooperative",
+      "customer_quote": "Is that right? Yeah.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "05:38",
-      "quote": "I'm I'm scheduled to get a new roof with a fifty year warranty."
+      "end_ts": "06:34",
+      "quote": "Yep.",
+      "customer_response": "resistant",
+      "customer_quote": "I'm I'm scheduled to get a new roof with a fifty year warranty.",
+      "resistance_reason": "timing",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "01:39",
+      "end_ts": "01:44",
+      "quote": "",
+      "customer_response": "cooperative",
+      "customer_quote": "So the only thing I remember signing up for or or filling out was for Tesla.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     }
   ],
-  "primary_coaching_focus": {
-    "topic": "Missed roofing cross-sell bridge (stated twice)",
-    "ts": "05:38",
-    "quote": "I don't know. I'm I'm scheduled to get a new roof with a fifty year warranty.",
-    "why": "The customer names a scheduled roof replacement twice (05:38 and 06:19) — an explicit, high-value cross-sell trigger the schema flags as high revenue impact — and the rep never once mentions Ion's in-house roofing team. This is the single most consequential, recoverable miss on the call."
-  },
-  "key_moments": [
+  "objections": [
     {
-      "ts": "01:40",
-      "quote": "Are you are you, like, a subcontractor of Tesla?",
-      "classification": "tesla_expectation_gap",
-      "stewart_read": "This is the textbook Tesla expectation-gap trigger the schema flags as rare-but-real. The rep's answer at 01:49 addresses installer status but never resolves what Ion actually sells versus what the customer believes he signed up for."
+      "ts": "01:39",
+      "quote": "So the only thing I remember signing up for or or filling out was for Tesla. Are you are you, like, a subcontractor of Tesla?",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yes. So we're one of Tesla's preferred installers."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep gives a partial factual answer but never completes the panel/roof-tile distinction (trails off at 02:04), and the confusion resurfaces twice more later in the call, so it's never truly resolved."
     },
     {
-      "ts": "02:39",
-      "quote": "I was I was under the understanding that Tesla was offering, like, free free solar roofs with, battery.",
-      "classification": "tesla_expectation_gap",
-      "stewart_read": "Second touch on the same unresolved gap; rep answers with speculation about wait lists rather than clarifying Ion's actual catalog."
-    },
-    {
-      "ts": "04:14",
-      "quote": "on both ends of the yard so that they can stay south. Is that something y'all do?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer is asking a specific technical question about ground-mount configuration — an opening to redirect to the specialist and build curiosity about a custom design — but the rep answers directly with 'we actually don't do the ground mount systems anymore,' closing the door rather than opening one."
+      "ts": "02:33",
+      "quote": "I was under the understanding that Tesla was offering, like, free free solar roofs with, battery.",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I haven't heard anything about that. I would really guys, the solar roofs right now are on, like like, over a two year wait list"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep casts doubt on the offer's existence rather than clarifying Ion's actual product versus Tesla's roof tile — customer's underlying confusion persists into later exchanges."
     },
     {
       "ts": "05:38",
-      "quote": "I don't know. I'm I'm scheduled to get a new roof with a fifty year warranty.",
-      "classification": "cross_sell_miss",
-      "stewart_read": "This is a direct, unambiguous roof-replacement trigger phrase. The schema's canonical response is to bridge to Ion's in-house roofing team immediately. The rep instead continues discussing roof lifespan generically."
+      "quote": "I'm I'm scheduled to get a new roof with a fifty year warranty.",
+      "type": "roof_or_home",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. And and I'm sure that a lot of times the warranties will hold up."
+      ],
+      "resolved": false,
+      "resolution_ts": "06:34",
+      "reasoning": "Rep acknowledges the roof timing issue but never bridges to Ion's roofing team; customer restates the same barrier again at 06:19-06:34 and the rep tells him to call back later, ending the thread without resolution or cross-sell capture."
+    },
+    {
+      "ts": "07:08",
+      "quote": "And now it just sounds like you're just a solar company trying to sell sell me solar.",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "From, the lead sources you filled out, yeah, they did send it to a a few companies there."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The customer's bait-and-switch conclusion and the follow-up data-mining accusation are treated as one continuous exchange; the rep's confirming answer doesn't include any reframe or value pivot, so the objection is left standing rather than resolved."
+    },
+    {
+      "ts": "08:20",
+      "quote": "It's not really better because it has, like, it has 50 times more or a 100 times more failure points.",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "No. So in a traditional solar system, kind of the way it goes with one inverter is if one panel start like, it doesn't work, your whole system is broken."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "This is a technical design objection the rep engages on substance rather than redirecting; the customer maintains his position ('I thought it was going away') through the end of the exchange."
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "Tesla expectation-gap reframe",
+    "ts": "01:45",
+    "quote": "Are you are you, like, a subcontractor of Tesla?",
+    "why": "This is the single most consequential unresolved thread in the call — it surfaces three separate times (01:45, 02:33, 07:03) and the rep never delivers the schema's clean reframe, letting a resolvable legitimacy question calcify into a full trust breakdown by minute 7."
+  },
+  "key_moments": [
+    {
+      "ts": "01:45",
+      "quote": "Are you are you, like, a subcontractor of Tesla?",
+      "classification": "tesla_expectation_gap",
+      "stewart_read": "Customer directly asks the exact question the schema anticipates. This was the moment to deliver the clean reframe: Tesla is a lead source, Ion sells its own panels plus Tesla Powerwall, not Tesla roof tiles."
+    },
+    {
+      "ts": "02:04",
+      "quote": "we install their batteries for them, but we use our own How much is the battery? A little bit. That's a great question.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "The rep is one clause away from correctly stating 'we use our own panels' — the exact language needed to resolve the Tesla confusion — but the sentence is interrupted/trails off and the rep never returns to complete it, instead pivoting to deflect the battery pricing question."
+    },
+    {
+      "ts": "03:05",
+      "quote": "But, we do have a I guess there's just false advertisement on Facebook, and that's how you got my number.",
+      "classification": "trust_or_scam",
+      "stewart_read": "Customer is now accusing the lead source of false advertising. The rep's response about 'lead sources' is honest but generic and doesn't rebuild trust or redirect the conversation toward value."
+    },
+    {
+      "ts": "07:23",
+      "quote": "So in other words, y'all y'all bought my information from some other company. Right?",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer directly names the data-mining concern. The rep confirms it plainly ('From the lead sources you filled out, yeah') without any reframe of value or attempt to redirect — this compounds the trust erosion started at 03:05 rather than resolving it."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 32,
-    "verified": 32,
-    "fuzzy": 0,
-    "wrong_ts": 0,
+    "checked": 46,
+    "verified": 44,
+    "fuzzy": 1,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

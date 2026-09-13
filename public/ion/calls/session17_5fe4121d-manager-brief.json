@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION17_5fe4121d",
   "rep_name": "Ethan",
-  "trajectory_summary": "The call opens with a standard legitimacy-and-verify attempt but is quickly pulled off-script by a customer whose plans (chicken-run mount, garden mount, ground pipe HVAC ideas) are unfinished and shifting, and who also discloses a hard DQ fact (self-install with no installer) that the rep never explicitly names or resolves. The call ends on a bad-connection excuse with no next step locked, drifting into tangents about motorcycle trips and insurance before disconnecting.",
+  "trajectory_summary": "The call opens with routine, cooperative verification but derails once the customer discloses a non-standard install scenario (ground-mount on an unfinished chicken run, possible self-install) that the script and the rep are not equipped to handle. The rep never escalates or gets a supervisor involved, never locks a concrete follow-up time, and the call dissolves into disconnected tangents and a bad connection before ending with no real next step.",
   "shape": "energy_leaked",
-  "outcome_dispute": "Given primary_outcome_tag is unknown/see-transcript, the observed record here is no_appointment: no day/time was ever proposed or agreed, and the DIY self-install disclosure at 06:13 is a likely dq_rules-adjacent fact (Ion's model assumes professional install) that was never confirmed or resolved before the call dissolved.",
+  "outcome_dispute": "No appointment was booked, tentative, or locked to a callback time; the rep's line 'would it be okay if we followed up with you in a couple weeks' was never converted into a specific date or time, and the call ends on connection failure and vague 'give me a holler some other time' — this is a no_appointment outcome, not a booked or tentative one.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "09:09",
-    "quote": "Sorry. It's cutting out pretty bad. So Yeah. I'm still bad. I'll try calling some other time then. But thanks for your time today. We'll we'll take in touch.",
-    "reasoning": "No specific day or time is ever agreed; the call ends with the rep saying he'll try calling back at some unspecified future point, which is a callback intention without a locked time, not a booked or tentative appointment."
+    "ts": "09:14",
+    "quote": "but, yeah, I'll try calling some other time, though. Okay. Give me a holler some other time. Okay. Bye bye.",
+    "reasoning": "No day or time was ever locked for a follow-up call or appointment; the call ends on a vague mutual 'some other time' with no rep-owned next step, consistent with a no_appointment outcome."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,145 +20,269 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer never gives a bill amount or usage figure in dollars/kWh terms; he describes wanting enough panels for '220 electricity' and mentions various appliance loads, but no bill number is ever captured or asked for directly."
+    "reasoning": "The customer never gives a bill amount or usage figure in dollars/kWh terms; he mentions wanting '220 electricity' capacity and describes multiple electric loads, but no actual bill number is captured or discussed on the call."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The rep never raises getting the utility bill itself at any point in the call — the conversation gets stuck on the non-standard mounting scenario before bill collection is ever reached."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "01:19",
     "reason_given": true,
-    "reason_ts": "02:00",
+    "reason_ts": "01:58",
     "reason_quote": "What I want to do is, buy the panels and, all the equipment enough for to do two twenty electricity.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question appropriately and got a self-sufficiency-oriented answer, but never returned to reinforce that motivation when steering the conversation toward a next step or when the customer later raised cost questions."
+    "reasoning": "The rep asks what sparked interest in solar and the customer explains he wants enough panels/equipment for 220V electricity capacity, but the rep never returns to this stated capacity need later to size, anchor, or reinforce the appointment around it — he moves on to roof assessment instead."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "This is Ethan from ION."
+      "end_ts": "00:16",
+      "quote": "Yeah. This is Ethan from ION.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. It is.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:19",
-      "quote": "what kind of sparked your interest in learning about the solar options there?"
+      "end_ts": "02:08",
+      "quote": "what, like, sparked your interest in learning about the solar options there for your home?",
+      "customer_response": "cooperative",
+      "customer_quote": "What I want to do is, buy the panels and, all the equipment enough for to do two twenty electricity.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:41",
-      "quote": "Can I just start by getting the address of the home you were looking to get the info made for?"
+      "end_ts": "01:06",
+      "quote": "Can I just start by getting the address of the home you were looking to get the info made for?",
+      "customer_response": "cooperative",
+      "customer_quote": "3760 Chelsea Road, West Point, Virginia.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "02:16",
-      "quote": "the roof looks really good... lots of space up there."
+      "end_ts": "02:53",
+      "quote": "Alright. And looking at the roof as well, the roof looks really good.",
+      "customer_response": "resistant",
+      "customer_quote": "I'm not gonna put it on my roof.",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
-      "ts": "04:10",
-      "quote": "would it be okay if we followed up with you in a few weeks"
+      "ts": "03:11",
+      "end_ts": "04:20",
+      "quote": "So would it be okay if we followed up with you in a couple weeks?",
+      "customer_response": "deflected",
+      "customer_quote": "I need to know how much it's gonna cost, then I'll know what direction to go.",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     }
   ],
-  "primary_coaching_focus": {
-    "topic": "Non-standard scenario surfaced but never resolved",
-    "ts": "06:13",
-    "quote": "But yeah. Yeah. I'm not I'm not gonna have anybody to install it. I'm only install it myself.",
-    "why": "A DIY self-install intent is a fundamental mismatch with Ion's install model and is the single highest-value fact in this call; it was never confirmed, escalated, or clearly explained before the conversation dissolved into unrelated tangents. This is the fact the manager should replay with the rep to build a clear routing habit for non-standard scenarios."
-  },
-  "key_moments": [
+  "objections": [
     {
-      "ts": "01:19",
-      "quote": "what kind of sparked your interest in learning about the solar options there?",
-      "classification": "other",
-      "stewart_read": "Rep runs the interest question early and correctly per script, but the answer that follows (buy panels/equipment for '220 electricity') is unusual phrasing the rep doesn't probe further before moving to roof assessment."
-    },
-    {
-      "ts": "02:16",
-      "quote": "Alright. And looking at the roof as well, the roof looks really good. I can see there's lots of space up there. Looks like it's in really good condition.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Rep runs a roof assessment via Google Maps before confirming the customer actually wants a roof-mounted system, wasting the assessment when the customer immediately says he does not want it on his roof."
+      "ts": "03:19",
+      "quote": "I need to know how much it's gonna cost, then I'll know what direction to go.",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Gotcha. Yeah. Well, the issue though is that we have to size the system for your home's energy usage."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep explains why a price can't be given yet but never redirects to collecting bill/usage data as the path to an actual number; the customer repeats the same need again later, indicating it wasn't resolved."
     },
     {
       "ts": "02:31",
       "quote": "I'm not gonna put it on my roof.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "This is a customer taking initiative to plan his own structure specifically for solar — an engaged, self-directed prospect, not a disinterested one, even though the plan is unconventional."
+      "type": "roof_or_home",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Oh, okay. Were you hoping to get, like, a ground mounted installation then specifically?"
+      ],
+      "resolved": true,
+      "resolution_ts": "02:53",
+      "reasoning": "The customer clarifies he plans a chicken-run ground mount; the rep accepts this and moves to timeline questions, so the immediate exchange resolves even though the underlying scenario remains unresolved for scheduling purposes."
+    },
+    {
+      "ts": "06:16",
+      "quote": "I'm not I'm not gonna have anybody to install it. I'm only install it myself.",
+      "type": "other",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep responds with uncertainty rather than a clear policy statement or disqualification attempt, and the call's bad connection cuts off any further discussion of this likely disqualifying detail."
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "Non-standard scenario escalation and unanchored close",
+    "ts": "02:31",
+    "quote": "I'm not gonna put it on my roof.",
+    "why": "This call falls entirely outside the standard roof-mount script from minute 2 onward, and the rep never escalates or locks a specific follow-up — the call drifts through six minutes of unmanaged conversation and ends with 'call back some other time' and no date. This is the single most consequential gap: a clear escalation point followed by a firm, dated callback would have salvaged real qualification value from this lead."
+  },
+  "key_moments": [
+    {
+      "ts": "02:31",
+      "quote": "I'm not gonna put it on my roof.",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "This is a genuinely non-standard scenario: ground-mount on an unfinished agricultural structure. The rep improvises alone rather than pausing to consult a supervisor or escalation path, which the schema's non_standard_scenario_hold category exists to catch even though this call shows the omission of a hold rather than an observed hold itself."
+    },
+    {
+      "ts": "03:19",
+      "quote": "I need to know how much it's gonna cost, then I'll know what direction to go.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "The customer is essentially asking for a price-before-design, the schema's classic rebuttals.price_estimate_before_design trigger. The rep never uses the canonical redirect-to-design strategy or ties it back to bill/usage data — he instead treats the ask as blocked by construction timing."
     },
     {
       "ts": "05:51",
-      "quote": "I also got, two twenty in my greenhouse running that so that my plants won't freeze.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer reveals significant additional electric load (greenhouse heating, chicken coop heaters, hinted future HVAC project) beyond a normal home — this is usage information directly relevant to system sizing that the rep never captures as a qualifying data point."
+      "quote": "I just need some prices so I know which way to go.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is the second time the customer states the identical blocking need for pricing information, and the rep again fails to use it as leverage to collect the bill or usage data — he instead reiterates the structural limitation ('the other one's not finished yet')."
+    },
+    {
+      "ts": "04:37",
+      "quote": "I even thought about, digging down in the ground and, putting down, pipe in the ground and and, and do my act condition like that.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The customer drifts into an extended, unmanaged tangent (geothermal HVAC, chicken heaters, greenhouse wiring) spanning nearly a full minute with no redirection from the rep. This isn't a cross-sell signal so much as unmanaged scope-drift — the rep lets the call wander rather than steering back to qualification or a bill/usage anchor."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 33,
-    "verified": 32,
-    "fuzzy": 0,
-    "wrong_ts": 0,
-    "not_found": 1
+    "checked": 37,
+    "verified": 34,
+    "fuzzy": 1,
+    "wrong_ts": 2,
+    "not_found": 0
   }
 }

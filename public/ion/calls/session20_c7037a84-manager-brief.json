@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION20_c7037a84",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens cold and never warms — the customer cooperates through a lengthy, frustrating bill-navigation struggle, then uses a disclosed family emergency to exit and asks to be removed from Ion's contact list. Energy leaked steadily from the moment the app struggle began, and the rep never recovered it with reassurance, a scope pivot, or a clean close.",
+  "trajectory_summary": "The call opens cold but cooperative, sustains through a lengthy and increasingly frustrating bill-lookup detour, and ends with the customer withdrawing — citing a family emergency and a request to be removed from the contact list. The rep never converted the qualification data he did get (bill in the $60-100+ range, composite roof, 670+ credit) into a booked or even clearly tentative appointment; the call ends in a polite, unresolved opt-out.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unclear; observed outcome should be no_appointment or dq-by-withdrawal, not any form of booked/tentative. The customer explicitly declines to proceed ('That is not something that I'm interested in doing right now') and asks for contact removal — no appointment or callback time was set.",
+  "outcome_dispute": "No appointment day/time was ever offered or captured; the call ends with the customer requesting removal from contact lists. This should not be read as any form of booked/tentative outcome — it is a no_appointment call that closed with an opt-out request, which is a materially worse outcome than a soft callback.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "10:21",
-    "quote": "That is not something that I'm interested in doing right now.",
-    "reasoning": "No day or time was ever proposed or agreed to; the call ends with the customer requesting removal from Ion's contact list, which is the opposite of a booked or tentative appointment."
+    "quote": "That is not something that I'm interested in doing right now... I think we need to put this on hold.",
+    "reasoning": "No day or time was ever proposed or agreed to; the call ends with the customer explicitly deprioritizing the inquiry and requesting removal from contact lists, which is a clean no_appointment outcome rather than any form of booking."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured a workable ballpark bill figure early but never used it as emotional leverage or a reason to act — instead of flipping to alignment-against-the-utility, the rep spent the next seven-plus minutes chasing a more precise kWh figure through a frustrating app struggle, which is exactly where the flip should have gone instead."
+    "reasoning": "The rep captured a rough bill figure but never turned it into an emotional or comparative reason to act (e.g., tying $100+/month to what solar could offset); the call moved straight into roof/credit qualifiers and then the prolonged bill-document chase without ever revisiting the dollar figure as leverage."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "02:45",
+    "ask_quote": "Would you be able to access a utility bill real quick?",
+    "result": "declined",
+    "method": "online_login",
+    "result_ts": "09:22",
+    "result_quote": "Well, the last three months, it will be a month and a half of service. So that makes no sense",
+    "reasoning": "The rep asked and the customer attempted live retrieval via her utility's online portal for roughly seven minutes, but the usable document was never successfully produced — she surfaced a data-validity problem (partial occupancy) that stalled the request, and the call moved to disengagement before a bill was actually sent or read aloud in full."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,238 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what interested the customer in solar (verify.interest_in_solar) — the call moved directly from intro into address/homeowner/utility/bill verify items without ever surfacing the customer's motivation, so there was no emotional anchor available to reinforce later."
+    "reasoning": "The rep never asked what interested the customer in solar (per verify.interest_in_solar); the call moved directly from intro into address/title/utility/bill verify items without ever surfacing her motivation, so there was no reason to reinforce later."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:10",
-      "quote": "This is Bucky with ION. I'm reaching out about the solar form you filled out online."
+      "end_ts": "00:24",
+      "quote": "This is Bucky with ION. I'm reaching out about the solar form you filled out online. How are you doing?",
+      "customer_response": "cooperative",
+      "customer_quote": "Good.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:27",
-      "quote": "Are you still at 1251 North Davis Street?"
+      "end_ts": "00:39",
+      "quote": "Are you still at 1251 North Davis Street? Okay. And then this is a single family home?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:40",
-      "quote": "Perfect. Anybody else on the title but you?"
+      "end_ts": "00:44",
+      "quote": "Perfect. Anybody else on the title but you?",
+      "customer_response": "no_answer",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "02:24",
-      "quote": "Do you know what kind of roof you have?"
+      "end_ts": "02:30",
+      "quote": "Do you know what kind of roof you have?",
+      "customer_response": "cooperative",
+      "customer_quote": "Composite.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "00:46",
-      "quote": "And then what utility company are you with?"
+      "end_ts": "00:52",
+      "quote": "And then what utility company are you with?",
+      "customer_response": "cooperative",
+      "customer_quote": "PGE.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "00:53",
-      "quote": "How much are you spending on a monthly average?"
+      "end_ts": "02:10",
+      "quote": "How much are you spending on a monthly average?",
+      "customer_response": "cooperative",
+      "customer_quote": "No idea. ... So average, maybe about a 100 or more.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "02:33",
+      "end_ts": "02:38",
+      "quote": "And then do you have a credit score over 670?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "02:45",
-      "quote": "Would you be able to access a utility bill real quick?"
+      "end_ts": "09:22",
+      "quote": "Would you be able to access a utility bill real quick?",
+      "customer_response": "resistant",
+      "customer_quote": "Their interface is less than ideal here.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "asked",
       "ts": "10:01",
-      "quote": "we can put you on the schedule if we get the last three months."
+      "end_ts": "10:17",
+      "quote": "We can put you on the schedule if we get the last three months.",
+      "customer_response": "resistant",
+      "customer_quote": "Put me on the schedule. What does that mean?",
+      "resistance_reason": "timing",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "10:21",
+      "quote": "That is not something that I'm interested in doing right now... I think we need to put this on hold. I have a a family emergency that came up, so this is kind of the lowest priority.",
+      "type": "timing_or_callback",
+      "rep_attempts": 0,
+      "attempt_quotes": [
+        "Okay."
+      ],
+      "resolved": true,
+      "resolution_ts": "10:38",
+      "reasoning": "The rep did not attempt to preserve the appointment or offer a specific future callback time; he accepted the deprioritization immediately with a bare acknowledgment, and the customer moved on to closing logistics (asking for company info) rather than the rep steering back to a booking."
+    },
+    {
+      "ts": "11:32",
+      "quote": "I please take me off of all inquiry list, like, updates because I think you guys have been calling me all the time, and it's not something I can do right now.",
+      "type": "other",
+      "rep_attempts": 0,
+      "attempt_quotes": [
+        "Okay. No problem at all. You have a great day."
+      ],
+      "resolved": true,
+      "resolution_ts": "11:47",
+      "reasoning": "The rep complied immediately without attempting a save or offering a lighter-touch alternative (e.g., a single follow-up at a specified later date); the customer accepted the compliance and ended the call cordially."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "vulnerability disclosure went unacknowledged",
-    "ts": "10:29",
-    "quote": "I have a a family emergency that came up, so this is kind of the lowest priority.",
-    "why": "The customer handed the rep a direct, real reason for disengaging and the rep's only response was 'Okay' before continuing logistics — this is the single biggest relationship-repair opportunity missed on the call and it's a named schema pattern (coaching_philosophy.empathy_on_vulnerability_disclosure)."
+    "topic": "Bill-collection pivot timing",
+    "ts": "04:37",
+    "quote": "Their interface is less than ideal here. Yeah. They try to make it easy, and it's just it's impossible.",
+    "why": "The schema budgets 2 minutes before pivoting to verbal read-back or specialist deferral; this call ran the live-navigation path for roughly 8 minutes past the point of audible frustration, and that drawn-out friction is the clearest driver of the customer's declining engagement before she exited."
   },
   "key_moments": [
     {
-      "ts": "01:57",
-      "quote": "Are you So sorry. Are you logged in to the app right now?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer had already given a workable ballpark ('60 to a 100... but summer months were even higher') from her own spreadsheet. Instead of using that number to anchor the conversation, the rep pushed her into the utility app, starting a seven-minute detour."
+      "ts": "00:40",
+      "quote": "Perfect. Anybody else on the title but you? No.",
+      "classification": "other",
+      "stewart_read": "The diarized 'No.' is attributed to the rep immediately after his own question, which is the classic mis-attribution pattern the diarizer produces on short replies — almost certainly the customer's answer, not the rep answering himself."
     },
     {
-      "ts": "05:39",
-      "quote": "I'm not seeing a yearly kilowatt hours.",
+      "ts": "04:37",
+      "quote": "Their interface is less than ideal here. Yeah. They try to make it easy, and it's just it's impossible.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "This is the point where bill_collection's own alternative-path guidance calls for a pivot to verbal read-back within about two minutes of friction. The rep is already past that window and continues coaching the customer through app navigation instead."
+      "stewart_read": "This is the moment the schema's 2-minute pivot budget was already blown — the customer is audibly frustrated navigating her utility's site — yet the rep continues directing her through the same online path rather than pivoting to verbal read-back or deferring collection to the specialist."
     },
     {
       "ts": "09:22",
       "quote": "Well, the last three months, it will be a month and a half of service. So that makes no sense",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "By this point the customer is pointing out the data itself is unreliable (she wasn't home for six months), yet the rep continues pursuing the same data-capture goal instead of stepping back and offering to defer bill collection to the specialist appointment."
+      "classification": "knowledge_gap",
+      "stewart_read": "The customer surfaces a logical inconsistency in the rep's request (she wasn't in the home for six months, so three months of billing data isn't real usage), and the rep asks a clarifying question rather than resolving it with a clean alternative ask."
     },
     {
-      "ts": "10:29",
-      "quote": "I have a a family emergency that came up, so this is kind of the lowest priority.",
-      "classification": "empathy_miss",
-      "stewart_read": "This is a direct vulnerability disclosure — a family emergency, one of the schema's named trigger categories. The rep's entire response is a flat 'Okay,' with no acknowledgment of the situation before continuing the call mechanics."
+      "ts": "10:07",
+      "quote": "Put me on the schedule. What does that mean?",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "The customer directly asks the rep to explain what 'the schedule' means, and the rep's answer at 10:10 never states a day, time, or hour-block — this ambiguity directly precedes her decision to deprioritize and exit the call."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 33,
-    "verified": 33,
-    "fuzzy": 0,
-    "wrong_ts": 0,
+    "checked": 50,
+    "verified": 47,
+    "fuzzy": 1,
+    "wrong_ts": 2,
     "not_found": 0
   }
 }

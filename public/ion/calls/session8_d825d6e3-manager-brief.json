@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION8_d825d6e3",
   "rep_name": "Bucky",
-  "trajectory_summary": "This is a short, procedurally clean verify-section walkthrough that ends in a legitimate credit disqualification, but the rep leaves real value on the table by not converting the customer's stated intent to re-engage into a tracked callback. The call has no energy problems — Nathaniel is cooperative throughout — but the ending is flat and unanchored.",
-  "shape": "mixed",
-  "outcome_dispute": "V1 tag is unclear; observed outcome is best read as dq (hard gate: qualifiers.credit_qualifier, stated credit below 670 with no stated alternative) rather than a soft no_appointment. However, because the customer explicitly signals intent to return once his credit recovers and even cites a prior Ion rep's guidance on the 670 threshold, this DQ has a natural callback opening that the rep did not capture — it is a dq call, but a coachable one.",
+  "trajectory_summary": "This is a short, mechanical verify-and-DQ call: the rep runs through address, title, utility, bill, and roof questions efficiently, then hits a hard credit-score gate the customer cannot currently clear. The rep accepts the stated credit answer at face value, asks one generic follow-up, and closes the call with no callback plan or next step. Energy never built because the rep didn't probe the return-lead history or the co-owner angle before disengaging.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "The customer discloses at 01:57 that they contacted Ion before ('I did reach out to you guys couple couple months back') and were told to come back once credit clears 670 — this is a recycled/returning lead, not a fresh one, and the rep never surfaces or logs this fact for follow-up. Given qualifiers.credit_qualifier's unresolved policy question (stated vs. pulled credit), a dq tag is defensible only if setter-level stated-credit DQ is confirmed as Ion's actual policy; if the closer's pull is meant to be the real gate, this call is a lost deal, not a clean DQ.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "01:39",
     "quote": "Not recently. No.",
-    "reasoning": "Customer's stated credit score is below the 670 threshold in qualifiers.credit_qualifier with no stated alternative path, and the call ends without an appointment or callback date — this is a hard DQ, not an ambiguous outcome."
+    "reasoning": "The customer's self-reported credit score falls below Ion's stated 670 threshold and the call ends without an appointment or callback plan; per qualifiers.credit_qualifier this is a hard_dq per current schema, though the underlying stated-vs-pulled-credit policy question (see spencer_operator_note) means this DQ should be reconciled with Kenny before treating it as unambiguously correct procedure."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the bill figure but only echoed it back numerically ('That's 2 to 300') and moved directly to the roof question at 01:26 without acknowledging the customer's own framing that the bill was 'getting up there pretty high' — the flip should have gone right at 01:17 where the rep repeats the number."
+    "reasoning": "The rep captured the bill figure and simply repeated it back numerically ('That's 2 to 300') without acknowledging the pain language the customer used moments earlier ('getting up there pretty high') or tying it forward to a reason to act; the call moved directly to roof type instead."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ended at the credit disqualification before the rep reached the bill-collection stage of the script; the physical utility bill was never raised."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,132 +41,224 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what interested the customer in solar; the call moved straight from intro into verify-checklist questions (address, title, utility, bill, roof, credit) before disqualifying on credit, so this schema item (verify.interest_in_solar) was skipped entirely."
+    "reasoning": "The rep never asked what interested the customer in solar; the call moved directly from the intro into address/title/utility/bill/roof verify questions and then hit the credit DQ before any interest question was raised."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "quote": "This is Bucky with ION reaching out about the solar form you filled online."
+      "end_ts": "00:12",
+      "quote": "Hey. This is Bucky with ION reaching out about the solar form you filled online. How you doing?",
+      "customer_response": "cooperative",
+      "customer_quote": "This is him.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:23",
-      "quote": "Is it are you at 31 Woodland Hills Road?"
+      "end_ts": "00:34",
+      "quote": "Is it are you at 31 Woodland Hills Road?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:35",
-      "quote": "Anybody else in the title but you?"
+      "end_ts": "00:39",
+      "quote": "Okay. Anybody else in the title but you?",
+      "customer_response": "cooperative",
+      "customer_quote": "My wife.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:26",
-      "quote": "Do you know what kind of roof you have? Is it a shingle?"
+      "end_ts": "01:29",
+      "quote": "Do you know what kind of roof you have? Is it a shingle?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. It's a shingle.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "00:43",
-      "quote": "What utility company are you with?"
+      "end_ts": "00:59",
+      "quote": "What utility company are you with?",
+      "customer_response": "cooperative",
+      "customer_quote": "Central Mexico Community",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:04",
-      "quote": "do you know how much you're spending on a monthly average?"
+      "end_ts": "01:18",
+      "quote": "do you know how much you're spending on a monthly average?",
+      "customer_response": "cooperative",
+      "customer_quote": "But on average, roughly 2 to 300.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:34",
-      "quote": "do you have a credit score over 670?"
+      "end_ts": "01:39",
+      "quote": "do you have a credit score over 670?",
+      "customer_response": "resistant",
+      "customer_quote": "Not recently. No.",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "declined"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "skipped",
+      "ts": "02:16",
+      "end_ts": "02:24",
+      "quote": "Okay. Well, then no problem. You can always reach out anytime, and you have a great day.",
+      "customer_response": "cooperative",
+      "customer_quote": "Awesome. Thank you.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:39",
+      "quote": "Not recently. No.",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. Do do you know anybody that does or that could help?"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "This is a hard qualifier gate rather than a persuadable objection, so a single follow-up attempt is a defensible floor — but it is not a strong attempt: it doesn't probe the co-owner (wife) credit angle that was already on the table, so it should not be read as exhausting the available options."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "converting a hard DQ into a tracked callback",
-    "ts": "02:16",
-    "quote": "Okay. Well, then no problem. You can always reach out anytime, and you have a great day.",
-    "why": "The customer explicitly stated he's waiting on his credit to recover and has already been told the 670 threshold by a prior Ion rep — this is a warm, self-identified future lead, not a dead one. The rep let the call end with no callback date or CRM flag, which is a lost re-engagement opportunity at essentially zero cost to fix."
+    "topic": "connect co-owner to credit qualifier",
+    "ts": "01:41",
+    "quote": "Okay. Do do you know anybody that does or that could help?",
+    "why": "The wife was already identified as a co-owner at 00:39; when the customer's own credit disqualified him, the rep had a live, schema-grounded option (spouse's credit) sitting right there and didn't use it. This is a concrete, replayable miss distinct from the general policy question about stated-vs-pulled credit."
   },
   "key_moments": [
     {
-      "ts": "00:39",
-      "quote": "My wife.",
-      "classification": "spouse_handling",
-      "stewart_read": "Rep correctly captures that the wife is on the title, but the call disqualifies before an appointment is ever discussed, so there's no chance to test whether the rep would have included her in scheduling."
+      "ts": "01:34",
+      "quote": "do you have a credit score over 670?",
+      "classification": "other",
+      "stewart_read": "Rep runs the credit qualifier exactly per script phrasing, and the customer immediately self-reports below threshold. Per qualifiers.credit_qualifier's spencer_operator_note, stated credit and pulled credit often diverge by 30-50 points across bureaus, so a customer self-reporting sub-670 may still qualify on the bureau Ion actually pulls."
     },
     {
-      "ts": "01:13",
-      "quote": "But on average, roughly 2 to 300.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer volunteers a bill figure and even flags it was 'getting up there pretty high' — an emotional cue about bill pain — but the rep only echoes the number back mechanically ('That's 2 to 300') and moves straight to the roof question without acknowledging the pain or building on it."
+      "ts": "01:47",
+      "quote": "Yeah. So our credit kinda got hit a little bit recently.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer volunteers that this is a repeat contact with Ion ('I did reach out to you guys couple couple months back') and that a prior rep gave them the 670 threshold. The rep never asks when they last spoke to Ion, who told them this, or logs the return-lead status for follow-up."
     },
     {
       "ts": "01:41",
       "quote": "Okay. Do do you know anybody that does or that could help?",
       "classification": "objection_inversion_miss",
-      "stewart_read": "Rather than reframe the credit gap back toward the customer's own situation (e.g., re-checking timeline, alternative purchase options per qualifiers.credit_qualifier notes on tax credit/purchase-without-credit paths), the rep immediately looks for a workaround via a third party, which forecloses the primary lead."
+      "stewart_read": "The customer already disclosed at 00:39 that his wife is also on the title. When credit disqualifies the customer individually, the rep's generic 'know anybody that could help' line misses the concrete, schema-relevant angle of asking whether the co-owner's credit could qualify the household instead."
     },
     {
-      "ts": "01:59",
-      "quote": "someone else reached out and said, yeah. Once you get your credit score above at 6 70 range, then then we can help you out.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses this is not a first touch — a prior Ion rep already qualified him against the 670 threshold months ago. The rep does not probe when that contact happened, or check whether this lead should have been flagged as recycled with prior data on file."
+      "ts": "02:16",
+      "quote": "Okay. Well, then no problem. You can always reach out anytime, and you have a great day.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "No callback date, no timeframe, no 'reach back out in X months once your credit clears' — the exit is entirely passive and puts 100% of the burden on the customer to re-initiate."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 29,
-    "verified": 29,
+    "checked": 34,
+    "verified": 34,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

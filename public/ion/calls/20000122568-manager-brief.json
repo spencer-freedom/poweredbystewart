@@ -1,9 +1,9 @@
 {
   "call_id": "20000122568",
   "rep_name": "Parker",
-  "trajectory_summary": "The call moves through verify smoothly with a cooperative-but-terse customer, hits real friction at the bill-collection and location stage, and ends without a locked appointment — the rep negotiated toward a work-address visit but left it contingent on manager approval and a future text confirmation. Energy is mixed: verify built momentum, but the ending leaks certainty rather than closing it down.",
+  "trajectory_summary": "The call opens cold and logistics-driven, with the rep running the verify script fairly cleanly and capturing a strong bill figure ($400/month), but the back half unravels into an improvised venue negotiation the rep never resolves. The call ends with a day and time stated but the location and bill-delivery method both left pending a manager check and a future text, making this a fragile, conditional booking rather than a clean appointment.",
   "shape": "mixed",
-  "outcome_dispute": "This is better read as 'tentative' or 'callback' rather than a clean 'booked' appointment. The rep never confirms the work-visit is approved ('I will need to just double check with my manager') and the entire mechanism for confirming is a future text, meaning nothing is locked at call end.",
+  "outcome_dispute": "The call plausibly gets tagged 'booked' because a day (tomorrow) and time (2pm) were stated, but the rep explicitly says the location still needs manager approval and a confirmation text — this is a tentative/conditional outcome, not a locked appointment.",
   "observed_outcome": {
     "outcome": "tentative",
     "appointment_channel": "in_person",
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "05:09",
     "quote": "I will need to just double check with my manager that we can come to your work, and I'll I'll reach out to you via text message to confirm that with you. Is that okay?",
-    "reasoning": "A specific day and time ('tomorrow at two') were stated, but the rep immediately qualifies this as pending manager approval for the work-visit location, to be confirmed later via text — this is agreement in principle without a fully locked appointment, matching 'tentative' rather than 'booked.'"
+    "reasoning": "A day and time were stated ('tomorrow at two') but the rep explicitly conditions the appointment on manager approval of the work-location venue and promises a follow-up text to confirm — this is a tentative, not a locked, booking."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep acknowledges the bill is high ('that is that's pretty expensive') but never converts this into an explicit reason to act or ties it back to the appointment's value when booking — the flip line should have landed around 05:04 when confirming the appointment, e.g., referencing the $400 bill as the reason the visit matters."
+    "reasoning": "The rep acknowledges the bill is expensive ('Oh, wow. Yeah. That is that's pretty expensive.') at 02:14 but never turns it into forward-pulling leverage — e.g., tying the $400 to the value of seeing his design or savings. The flip should have gone right after 02:18 ('I definitely don't blame you for seeing if we can get you a little better bill') by connecting that sentiment directly to booking urgency."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:01",
+    "ask_quote": "the last thing we need from you is we just get a look at the Excel utility bill so we can build up an accurate design for you. Do you get that by email or by paper?",
+    "result": "promised_later",
+    "method": "text",
+    "result_ts": "03:33",
+    "result_quote": "Would would I be able to what I could do is I could text you, and and then when you get home, if you wanted to send me that utility bill, like, a little bit of it? When you when you guys come in, I will show it to you.",
+    "reasoning": "The customer couldn't produce the bill on the call (at work), and after the rep's request to send it sooner was declined ('No.' at 03:49), the plan defaults to the customer texting it later — the method exists but no firm deadline was locked."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,132 +41,225 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked and got a thin answer, validated it generically ('a lot of people have kinda been looking into it for the same reason'), and never followed up or referenced this stated interest again later in the call."
+    "reasoning": "The rep acknowledged the answer generically ('For sure. Okay. Gotcha.') and pivoted to a generalized savings pitch rather than probing the 'new technology' interest further or tying it back into the appointment framing later in the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:17",
-      "quote": "This is Parker. I'm with Ion. I was just, reaching out because I got a request."
+      "end_ts": "00:26",
+      "quote": "Hey, Mohammed. This is Parker. I'm with Ion. I was just, reaching out because I got a request. You were looking at solar for the home.",
+      "customer_response": "cooperative",
+      "customer_quote": "You wanna come see me?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:04",
-      "quote": "what kinda got you interested in solar?"
+      "end_ts": "01:12",
+      "quote": "what kinda got you interested in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "It's a new technology.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "01:25",
-      "quote": "I have here that you're the homeowner. Is that right?"
+      "ts": "00:36",
+      "end_ts": "01:29",
+      "quote": "I I I have here that you're in Denver, Colorado. What was your street address so I can get a good look at your roof?",
+      "customer_response": "cooperative",
+      "customer_quote": "3274 South Eudora Street.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:30",
-      "quote": "Is there anyone else on the title of the home with you?"
+      "end_ts": "01:33",
+      "quote": "Is there anyone else on the title of the home with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:40",
-      "quote": "just asphalt single. Is that right?"
+      "end_ts": "01:53",
+      "quote": "just asphalt single. Is that right?",
+      "customer_response": "cooperative",
+      "customer_quote": "About six years old.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:53",
-      "quote": "what utility company are you with right now?"
+      "end_ts": "02:04",
+      "quote": "what utility company are you with right now?",
+      "customer_response": "cooperative",
+      "customer_quote": "Excel Energy.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:05",
-      "quote": "Do you know how much you're normally paying per month?"
+      "end_ts": "02:09",
+      "quote": "Do you know how much you're normally paying per month?",
+      "customer_response": "cooperative",
+      "customer_quote": "About 400 a month.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:24",
-      "quote": "have a credit score above 650. Does that sound like the case for you?"
+      "end_ts": "02:36",
+      "quote": "there is a federal tax incentive when you go solar. You're just gonna be paying income tax and have a credit score above 650.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "02:38",
-      "quote": "is this the first solar design you have seen for the property?"
+      "end_ts": "02:50",
+      "quote": "is this the first solar design you have seen for the property?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:01",
-      "quote": "we just get a look at the Excel utility bill so we can build up an accurate design for you."
+      "end_ts": "03:49",
+      "quote": "the last thing we need from you is we just get a look at the Excel utility bill so we can build up an accurate design for you. Do you get that by email or by paper?",
+      "customer_response": "resistant",
+      "customer_quote": "Is there any way you could send it before? It just helps us to build it up for you. No.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "05:04",
-      "quote": "I'll get you in the calendar for tomorrow at two."
+      "ts": "03:53",
+      "end_ts": "05:04",
+      "quote": "what what would be a good day for us to drop by?",
+      "customer_response": "resistant",
+      "customer_quote": "It does not work for me.",
+      "resistance_reason": "timing",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "05:04",
+      "end_ts": "05:18",
+      "quote": "I'll get you in the calendar for tomorrow at two. I will need to just double check with my manager that we can come to your work, and I'll I'll reach out to you via text message to confirm that with you. Is that okay?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Okay. No problem.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "03:16",
+      "quote": "I'm not at home. I'm at work. I'd like to meet me at work if if you guys wanna come see me, give you my work address.",
+      "type": "timing_or_callback",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "We probably wouldn't be able to come today because we still have to make that design up, and we'll need that bill the utility bill to start on that.",
+        "I mean, we we I think we'd prefer to come to the house just if that work for you, we could do it when you when do you do it at home. No."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep tried to redirect to a home visit but the customer held firm ('It does not work for me.' at 04:32); the rep ultimately accepted the work address but left it pending manager approval, so this is deferred rather than resolved — consistent with the trajectory_verdict's tentative-outcome finding."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "bill collection left unresolved at call end",
-    "ts": "03:44",
-    "quote": "Is there any way you could send it before? It just helps us to build it up for you. No.",
-    "why": "The bill is the design's foundation and the call ends with no bill in hand and no firm plan beyond 'text you' — whether this lead type strictly requires the bill before booking is an assumption Stewart can't confirm from this transcript alone, but regardless of lead type, leaving bill collection as a vague future text with no specific ask (which utility page, what format, what deadline) risks the appointment happening without the design ready."
+    "topic": "Locking the appointment mechanics before ending the call",
+    "ts": "05:09",
+    "quote": "I will need to just double check with my manager that we can come to your work, and I'll I'll reach out to you via text message to confirm that with you.",
+    "why": "The call ends with day/time stated but venue unconfirmed and pending a manager check plus a future text — this is the single biggest risk to the appointment holding, and it stems from the rep never anchoring to Ion's standard model (phone appointment with a closer) early when the venue question first came up at 00:26."
   },
   "key_moments": [
     {
-      "ts": "00:17",
-      "quote": "I was just, reaching out because I got a request. You were looking at solar for the home.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "This intro matches neither the tesla nor standard template — no form reference, no state/Tesla framing, no clear credibility anchor. It answers 'why are you calling' vaguely but never answers 'is this legitimate,' which is the intro's primary job per schema."
+      "ts": "02:14",
+      "quote": "Oh, wow. Yeah. That is that's pretty expensive.",
+      "classification": "bill_anchor",
+      "stewart_read": "Rep acknowledges the $400 bill emotionally but never flips it into a reason-to-act line (e.g., tying it forward to the appointment or the utility company as the real cost). Capture without flip."
     },
     {
-      "ts": "00:44",
-      "quote": "3274",
-      "classification": "other",
-      "stewart_read": "The customer gives a Denver home address here, but later in the call gives a separate Aurora work address (04:42-04:57) for the visit. The rep never reconciles which address is the actual solar-install site versus the meeting location, which matters for the design build."
+      "ts": "03:16",
+      "quote": "I'm not at home. I'm at work. I'd like to meet me at work if if you guys wanna come see me, give you my work address.",
+      "classification": "conditional_booking",
+      "stewart_read": "A real logistical constraint (customer's location) derails the standard bill-collection and appointment flow. The rep never firmly resolves whether the visit happens at home or work before offering a time."
     },
     {
-      "ts": "02:24",
-      "quote": "there is a federal tax incentive when you go solar. You're just gonna be paying income tax and have a credit score above 650.",
-      "classification": "other",
-      "stewart_read": "The rep states a 650 credit threshold, which matches the schema's noted drift pattern (schema default is 670) rather than being a one-off error — this is a floor-wide numbers-consistency issue, not just this rep's mistake."
+      "ts": "03:44",
+      "quote": "Is there any way you could send it before? It just helps us to build it up for you. No.",
+      "classification": "bill_anchor",
+      "stewart_read": "This is a rep line followed immediately by the customer's one-word decline — the rep made a third attempt to get the bill sooner and the customer shut it down flatly. The thread ends here without an agreed method or deadline."
     },
     {
-      "ts": "02:09",
-      "quote": "About 400 a month.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer discloses a $400/month bill — a strong pain point — and the rep responds with acknowledgment ('that is that's pretty expensive') but never flips it into a forward-pulling reason to act or ties it to the appointment's value later in the call."
+      "ts": "04:25",
+      "quote": "Gotcha. I mean, we we I think we'd prefer to come to the house just if that work for you, we could do it when you when do you do it at home. No.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "The rep tries once to steer back to a home visit but immediately folds when the customer says no, without exploring alternatives like a phone appointment (Ion's stated standard model) instead of an in-person visit at either location."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 37,
-    "verified": 37,
+    "checked": 56,
+    "verified": 56,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

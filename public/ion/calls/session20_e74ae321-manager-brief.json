@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION20_e74ae321",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call starts neutral, with the customer cooperative on basic verify items, but degrades steadily once she asks — three separate times — for an email or mailed follow-up instead of continued phone questioning. The rep never acknowledges or resolves that request, repeating his own agenda instead, and the call ends with the customer stating she isn't required to answer and the rep abruptly saying goodbye with no next step secured.",
+  "trajectory_summary": "The call opens cold, and every rep move from 00:40 onward adds friction instead of resolving it — culminating in the customer stating a clear channel preference twice, being ignored both times, and ending the call herself. There is no point where energy builds; it is a steady, well-documented escalation from mild annoyance to a flat refusal to continue.",
   "shape": "energy_leaked",
-  "outcome_dispute": "This should not be read as a soft, natural call-end; it is a rep-caused breakdown. The customer gave usable information (address, utility company) early and stated she already has two competitor quotes — a live, engageable lead — but the rep's failure to honor her stated channel preference is what drove her to shut the call down.",
+  "outcome_dispute": "v1 tag is unknown/unset, but the observed outcome is unambiguous: no appointment, no bill captured, no alternative contact method honored — the call ends on the customer's terms with 'You too' after the rep says goodbye.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "02:32",
+    "ts": "02:28",
     "quote": "I never said you were. I'm just saying if you want help with that, I'll goodbye.",
-    "reasoning": "The call ends with the rep saying goodbye and no appointment, follow-up commitment, or next step secured — the customer's request for written information was never confirmed as being sent."
+    "reasoning": "The call ends with the rep saying goodbye and the customer replying 'You too' — no appointment, no alternative contact method confirmed, and no next step owned by the rep."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches bill collection — it breaks down during the basic verify section (utility company was captured, but bill amount was never asked) once the customer's channel-preference request goes unresolved."
+    "reasoning": "The call never reaches the bill_amount section of the script — the rep is still on utility company verification (00:56) when the customer shuts down the phone-based questioning, so no bill figure was ever obtained."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The rep never reaches or raises bill collection at all; the call ends during utility-company verification, well before the bill_collection section of the script would normally occur."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,133 +41,238 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks what interested the customer in solar; the call breaks down during basic address/utility verification before reaching that section."
+    "reasoning": "The rep never asks what interested the customer in solar; the call stays confined to address/utility verification before the customer ends the productive part of the conversation."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:08",
-      "quote": "This is Bucky with Ion Solar. I'm reaching out about the solar form you filled out online."
+      "end_ts": "00:14",
+      "quote": "This is Bucky with Ion Solar. I'm reaching out about the solar form you filled out online. How are you doing?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm doing fine. How can I help you?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:40",
-      "quote": "Just, well, the one that I do confirm, you live at 2225 North"
+      "end_ts": "00:47",
+      "quote": "the one that I do confirm, you live at 2225",
+      "customer_response": "resistant",
+      "customer_quote": "I fill out your form. So you should have enough enough information on the form that says that I am the owner of the house",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "co_owner",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "00:48",
+      "end_ts": "00:48",
+      "quote": "Is there anybody else? And then the title is in your name.",
+      "customer_response": "no_answer",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "00:48",
-      "quote": "What utility company are you with?"
+      "end_ts": "01:03",
+      "quote": "What utility company are you with?",
+      "customer_response": "resistant",
+      "customer_quote": "Yeah. Didn't I put that on the phone?",
+      "resistance_reason": "other",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "02:12",
-      "quote": "I want to send you a quote because I already have quotes from two other companies."
+      "end_ts": "02:18",
+      "quote": "",
+      "customer_response": "cooperative",
+      "customer_quote": "I already have quotes from two other companies.",
+      "resistance_reason": "already_have_quote",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:10",
+      "quote": "here's what I want you to do. Don't bother me anymore on the phone. Send me an email or send a hard copy of how your company can help me with my, electric bill.",
+      "type": "proposal_by_email",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "electric bill. Yeah. I can help you right now.",
+        "Yeah. I can help you literally right now. I only have, like, three more questions, and then you're good."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The customer's request to be contacted via email/mail instead of phone is restated at 01:39-01:54 in nearly identical terms and never acknowledged by the rep at any point; the call ends with the request still unaddressed, so it is not resolved."
+    },
+    {
+      "ts": "02:12",
+      "quote": "I want to send you a quote because I already have quotes from two other companies.",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. That's fine. Yeah. I literally just have, like, three other questions, and then it's that's it."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The customer raises having competing quotes as part of her argument that the rep already has enough information; the rep does not engage with the competitive detail at all and simply repeats his question-count line, and the call ends shortly after without resolution."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Ignoring a stated channel preference",
+    "topic": "Never honored the customer's explicit channel request",
     "ts": "01:12",
     "quote": "Don't bother me anymore on the phone. Send me an email or send a hard copy",
-    "why": "The customer asked for an email or mailed follow-up three separate times and the rep never once acknowledged or fulfilled the request — this single unresolved thread is what turned a cooperative, qualifiable lead (two competitor quotes already in hand) into a dead call."
+    "why": "The customer stated a clear, specific, repeatable preference twice (01:12-01:22 and 01:39-01:54) and even confirmed Ion already has her mailing address (01:49) — removing any logistical barrier — yet the rep never once offered to send an email or hard copy, even as the closing line of the call. This is the single most consequential and most avoidable miss on the call."
   },
   "key_moments": [
     {
-      "ts": "01:03",
-      "quote": "Sometimes it just it's a little it doesn't stick. But I'm sorry. Stick.",
-      "classification": "softener_overuse",
-      "stewart_read": "Rep stumbles verbally and undercuts his own credibility right after the customer flags redundant questioning — a small moment but it compounds her irritation about the call feeling careless."
-    },
-    {
-      "ts": "01:12",
-      "quote": "Don't bother me anymore on the phone. Send me an email or send a hard copy",
-      "classification": "other",
-      "stewart_read": "This is the schema's own acknowledged gap: the excessive_contact_complaint / channel-preference protocol is listed as TBD in Ion's schema (context.what_good_looks_like TBD list explicitly names 'excessive_contact_complaint (SESSION20 — I've gotten 45 emails)'), and this call is that exact exemplar. There is no populated canonical response for this scenario yet — Stewart flags it as raw material for that schema page rather than forcing it into an existing protocol."
+      "ts": "01:16",
+      "quote": "Send me an email or send a hard copy of how your company can help me with my,",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "This is a customer-stated alternative channel request, structurally similar to a protocol the rep should follow rather than argue — she is not objecting to solar, she is specifying HOW she wants to continue. The rep never routes to this alternative at any point in the call."
     },
     {
       "ts": "01:27",
       "quote": "electric bill. Yeah. I can help you right now.",
-      "classification": "protocol_violation",
-      "stewart_read": "Rep talks over the customer's request and asserts he can help 'right now' instead of answering her direct ask about channel preference — a procedural miss (not honoring a stated customer preference) rather than a persuasion failure."
+      "classification": "empathy_miss",
+      "stewart_read": "Rather than acknowledging what the customer just asked for, the rep asserts his own preferred channel ('right now') over hers. This is the first of three moments where the same unaddressed request recurs."
     },
     {
       "ts": "01:49",
-      "quote": "List all of the ways that your company can help me lower my electricity bill or send me a hard copy in the mail. You have my address.",
-      "classification": "other",
-      "stewart_read": "Second occurrence of the same unresolved channel-preference request. Rep's response at 01:54 ('everything we do is specific to homes') is a deflection, not an answer to whether he will or won't send something in writing."
+      "quote": "or send me a hard copy in the mail. You have my address. That's my mailing address.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "The customer explicitly confirms Ion already has her mailing address on file, removing any logistical reason the rep might have had for not honoring the mail request. The rep does not engage with this at all — he pivots immediately to defending the need for phone questions ('everything we do is specific to homes')."
+    },
+    {
+      "ts": "02:05",
+      "quote": "Oh, so you haven't gotten enough information about me to to get to send you a quote?",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "The customer hands the rep a sharp, logical challenge — she filled out a form, so why does he need more from her before sending anything? This is a moment where a flip ('exactly — that's why these three questions get you a real number instead of a generic one') could reframe the ask as being in her interest. The rep instead just repeats 'three other questions' again."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 26,
-    "verified": 26,
-    "fuzzy": 0,
+    "checked": 37,
+    "verified": 36,
+    "fuzzy": 1,
     "wrong_ts": 0,
     "not_found": 0
   }

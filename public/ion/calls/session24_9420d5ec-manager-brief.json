@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION24_9420d5ec",
   "rep_name": "Bucky",
-  "trajectory_summary": "This call never gets off the ground: verify questions are asked but repeatedly misheard or misunderstood by the customer, the rep never establishes clear legitimacy or purpose beyond a rushed opener, and the call ends abruptly on a confusing, possibly-mistranscribed customer line about his wife. The transcript quality itself (garbled opener at 00:07, ambiguous line at 02:28) limits how confidently any of this can be read, but the observable pattern is one of mutual confusion rather than resistance or genuine disqualification.",
+  "trajectory_summary": "This call is short and structurally compromised from the start — the 00:04 to 00:16 window has speaker labels that are almost certainly swapped or merged, which undermines confidence in exactly how the intro landed. What is clear from reliably-attributed lines is that the customer never understood this was a solar call until 01:44, and the call ends abruptly after a vulnerability disclosure the rep did not engage with. This is an energy-leaked call: whatever legitimacy was established in the opening evaporated by the midpoint, and the ending closes the door with no clear next step.",
   "shape": "energy_leaked",
-  "outcome_dispute": "This should not be read as a clean 'callback' in the confident sense — the rep says 'I'll call you back some other time' but sets no day, time, or method, and the call ends on an unresolved, unclear customer statement. This is closer to no_appointment / unanchored exit than a scheduled callback.",
+  "outcome_dispute": "The call did not produce a booked or tentative appointment, nor a clean disqualification, nor a clear scheduled callback time — the rep says 'I'll call you back some other time' with no date or time attached. This should be tagged no_appointment (an unanchored soft exit), not a callback, since no specific time was committed.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "02:36",
     "quote": "I'll I'll call you back some other time. Okay?",
-    "reasoning": "No day, time, or specific next step was locked. The rep's closing line is a vague intention to retry, not a scheduled callback with a stated time, so this falls under no_appointment rather than a true callback outcome."
+    "reasoning": "No date or time was set, no appointment was booked or tentatively agreed, and the call ends with only a vague, unanchored promise to follow up — this is a no_appointment outcome, not a genuine scheduled callback."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep asked for the utility company at 01:11 but the call broke down into confusion before any bill amount or usage figure was ever obtained."
+    "reasoning": "The call never reached the point of capturing an actual bill amount or usage figure — the rep only reached the utility company question (01:11) before the call derailed into confusion and then ended."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ended during the verify section before the rep reached bill collection; no mention of the physical bill document occurs anywhere in the transcript."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,132 +41,234 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar; the call moved directly from address/homeowner/title questions into utility company confusion without reaching this beat."
+    "reasoning": "The rep never explicitly asked what interested the customer in solar; the call moved from address/title/utility questions directly into confusion and shutdown before this section was reached."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "quote": "This is Bucky with ION. Just reaching out about the solar form you filled online."
+      "end_ts": "00:16",
+      "quote": "This is Bucky with ION. Just reaching out about the solar form you filled online.",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:24",
-      "quote": "Are you at 1135 Wind Haven Trail?"
+      "end_ts": "00:39",
+      "quote": "Are you at 1135 Wind Haven Trail?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:43",
-      "quote": "Is there anybody else on the title but you?"
+      "end_ts": "01:06",
+      "quote": "Is there anybody else on the title but you?",
+      "customer_response": "cooperative",
+      "customer_quote": "My wife.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:11",
-      "quote": "What utility company are you with?"
+      "end_ts": "01:34",
+      "quote": "What utility company are you with?",
+      "customer_response": "deflected",
+      "customer_quote": "Well, we're not gonna sell anyway.",
+      "resistance_reason": "trust",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "skipped",
+      "ts": "02:36",
+      "end_ts": "02:40",
+      "quote": "I'll I'll call you back some other time. Okay?",
+      "customer_response": "no_answer",
+      "customer_quote": "Okay.",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "declined"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:36",
+      "quote": "Well, we're not gonna sell anyway.",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "No. No. No. This is a solar company for solar panels."
+      ],
+      "resolved": true,
+      "resolution_ts": "02:00",
+      "reasoning": "Once the rep clarified the call's purpose, the customer moved past the confusion and asked a pricing question, indicating the misunderstanding was resolved, though only after a single correction attempt."
+    },
+    {
+      "ts": "02:28",
+      "quote": "Well, it might be hard to get us to buy that. My wife, she's dead again. So",
+      "type": "other",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "This vulnerability disclosure functioning as an objection to moving forward was met with no acknowledgment or handling attempt before the rep moved to end the call."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored call ending",
-    "ts": "02:36",
-    "quote": "I'll I'll call you back some other time. Okay?",
-    "why": "Regardless of what precisely triggered the exit, the rep closes with no day, time, or committed next step of any kind — a fully unanchored ending. This is a coachable, low-ambiguity gap independent of the transcript-quality questions elsewhere on the call: even on a confusing or difficult call, the rep should attempt a specific callback anchor ('Is Thursday afternoon still good to try again?') rather than a vague, open-ended promise."
+    "topic": "legitimacy anchoring beyond the intro line",
+    "ts": "01:36",
+    "quote": "Well, we're not gonna sell anyway.",
+    "why": "The customer's confusion about the call's purpose more than a minute in shows the intro (whatever it was, given the diarization issue) did not land or wasn't reinforced during verify — this is the root cause of the call's breakdown and directly precedes the vulnerability disclosure that ended it."
   },
   "key_moments": [
     {
-      "ts": "00:07",
-      "quote": "What do you want? This is Bucky with ION. Just reaching out about the solar form you filled online.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "This line is garbled — likely a diarization/ASR error merging customer and rep speech — but even reading only the clean portion, the intro skips any legitimacy anchor beyond company name and 'solar form.' There is no state mention, no context for why ION is calling, and no pause to let the customer settle before diving into verify questions."
-    },
-    {
-      "ts": "00:43",
-      "quote": "Okay. Is there anybody else on the title but you?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The rep asks the co-owner question directly and gets 'My wife' at 01:06, but never follows up to confirm she should be included on any future appointment — the fact is captured but not carried forward."
+      "ts": "00:04",
+      "quote": "Hey. Is this Jimmy?",
+      "classification": "other",
+      "stewart_read": "DATA QUALITY FLAG: the 00:04-00:16 block has speaker labels that are almost certainly swapped or merged. Lines like 'I'm doing alright.' (00:13) and 'Good.' (00:15) are tagged 'rep' but read as customer responses to the rep's own 'How are you doing?' question — a rep cannot plausibly answer their own question twice in a row. This materially limits confidence in any claim about how the intro was delivered or received."
     },
     {
       "ts": "01:36",
       "quote": "Well, we're not gonna sell anyway.",
-      "classification": "knowledge_gap",
-      "stewart_read": "No protocol in the current schema maps cleanly to this exact moment. The customer appears to have misunderstood the call as being about selling his home rather than installing solar, which is a comprehension breakdown rather than a scam-suspicion or contact-frequency objection. This should not be force-fit into an existing protocol category."
+      "classification": "other",
+      "stewart_read": "The customer believes this call concerns selling his home, not installing solar. Reliably-attributed lines (01:19-01:21, the rep asking about the power company) never included a clear restated purpose like 'this is about solar for your home,' so the legitimacy anchor evidently did not land or was not reinforced mid-verify. This is a legitimacy/comprehension breakdown distinct from the 'how did you get my number' protocol, which addresses a different trigger (suspicion about contact info, not confusion about the company's purpose)."
     },
     {
       "ts": "01:44",
       "quote": "No. No. No. This is a solar company for solar panels.",
       "classification": "rapport_repair",
-      "stewart_read": "Faced with genuine confusion, the rep drops the script and clarifies plainly and immediately rather than plowing ahead with more verify questions. This is a reasonable real-time repair."
+      "stewart_read": "The rep does correct the misunderstanding promptly once it surfaces, which is the right recovery move — but it happens two-plus minutes into the call, well past where legitimacy should have been locked per the schema's first-30-seconds principle."
+    },
+    {
+      "ts": "02:00",
+      "quote": "We And how much are they?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The customer asks a direct pricing question unprompted — a signal of genuine interest the rep could have redirected into curiosity about a personalized design rather than a vague comparison to his 'monthly bill.'"
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 23,
-    "verified": 23,
+    "checked": 29,
+    "verified": 29,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

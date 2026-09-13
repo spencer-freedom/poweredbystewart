@@ -1,26 +1,36 @@
 {
   "call_id": "30000608282",
   "rep_name": "Parker",
-  "trajectory_summary": "The call moves from neutral information-gathering to a fragile, customer-controlled soft-close. The rep completes most of the verify script competently but never converts the bill or interest reason into leverage, and ends the call without a locked appointment, ceding all control of timing to the customer's caregiving schedule.",
+  "trajectory_summary": "The call opens with mild audio friction but settles into a cooperative, information-rich exchange where the rep clears a tree-shading objection with a flexible compromise and captures a strong bill figure. It ends without a locked appointment — the customer, juggling a wife with MS and a doctor's appointment, asks for a callback in 60-90 minutes rather than committing to a day/time, and the rep accepts this without re-anchoring a specific fallback time or day.",
   "shape": "mixed",
-  "outcome_dispute": "V1 tag is unknown/unclear; based on this transcript the correct outcome is 'callback' — the rep agreed to call back in 60-90 minutes rather than locking a day/time, and no appointment date was set.",
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata, but the observed outcome is clearly a callback, not a booked or tentative appointment — no day or time was set, only a vague 'hour, hour and a half' callback window.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": "phone",
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "04:59",
+    "ts": "05:00",
     "quote": "Could you give me a callback in about an hour, hour and a half? And I'll have that information for you because I have to check my wife's calendar schedule.",
-    "reasoning": "No specific day or time was locked for an appointment; the rep agreed to call the customer back within 60-90 minutes to get scheduling and bill info, which is a callback outcome, not a booked or tentative appointment."
+    "reasoning": "No specific day or time for the actual appointment was ever locked; the customer asked for a callback within a vague window to sort his wife's schedule first, and the rep agreed to call back rather than securing a booked or tentative slot."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "03:57",
-    "bill_quote": "Oh, yeah. $3.51.",
+    "bill_ts": "02:44",
+    "bill_quote": "Oh, about right now, in fact, I just got a bill. I just sent them around, what, $331.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured both the ongoing bill ($331 at 02:35-02:44) and a specific monthly figure ($351 misspoken as '$3.51' at 03:57), but each time responded with acknowledgment and utility commentary rather than tying the number to urgency or savings; the flip should have landed right after 02:44."
+    "reasoning": "Rep acknowledges the $331 figure with generic commentary about utility rates rising ('Definitely. You know, it's more expensive... I've heard a lot of them kinda raising their rates') but never turns it into a personalized reason for Warner specifically to move forward; the flip line should have landed right here, tying the number directly back to him."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:27",
+    "ask_quote": "is to look at your ComEd bill. It just helps to see, like, how many panels you would need based off your actual usage.",
+    "result": "promised_later",
+    "method": "other",
+    "result_ts": "05:00",
+    "result_quote": "Could you give me a callback in about an hour, hour and a half? And I'll have that information for you because I have to check my wife's calendar schedule.",
+    "reasoning": "Customer threw away the physical bill and couldn't access online login in the moment due to being on his way to a doctor's appointment; he proposes providing the information later via the rep's planned callback, so the bill document itself is deferred rather than captured or declined outright."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,132 +41,249 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer's stated reason is comparison-shopping, not a specific pain point, and the rep never revisits this competitive framing later in the call to differentiate Ion or create urgency to decide."
+    "reasoning": "Customer's stated reason is comparison-shopping between solar and a generic alternative rather than a specific pain point; the rep acknowledges and moves on ('No. We can definitely help you and, you know, see what it look like for you') but never returns to differentiate Ion against that generic option later in the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "quote": "This is Parker. I'm with Ion."
+      "end_ts": "00:31",
+      "quote": "Hey. This is Parker. I'm with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm doing fine.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:03",
-      "quote": "what kinda got you interested in solar?"
+      "end_ts": "01:15",
+      "quote": "what kinda got you interested in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm looking at that, and I'm looking at generic too. I haven't decided which one I wanna go with.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:49",
-      "quote": "was it the 16565 In Trumbull Ave?"
+      "end_ts": "02:07",
+      "quote": "was it the 16565 In Trumbull Ave?",
+      "customer_response": "cooperative",
+      "customer_quote": "My wife and the house is paid for.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "01:59",
-      "quote": "Was there anyone else with you?"
+      "ts": "02:02",
+      "end_ts": "02:07",
+      "quote": "you were the homeowner. Was there anyone else with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "My wife and the house is paid for.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "02:20",
-      "quote": "is the roof still just a asphalt shingle, it looks like?"
+      "end_ts": "02:28",
+      "quote": "is the roof still just a asphalt shingle, it looks like?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. Just replaced a year ago.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:30",
-      "quote": "what electric company were you working with at the moment?"
+      "end_ts": "02:35",
+      "quote": "what electric company were you working with at the moment?",
+      "customer_response": "cooperative",
+      "customer_quote": "Comet.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:35",
-      "quote": "How much do you normally pay with them?"
+      "end_ts": "02:56",
+      "quote": "How much do you normally pay with them?",
+      "customer_response": "cooperative",
+      "customer_quote": "I just sent them around, what, $331.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:56",
-      "quote": "you need to be paying, like income tax and have a credit score above 650."
+      "ts": "02:59",
+      "end_ts": "03:18",
+      "quote": "you need to be paying, like income tax and have a credit score above 650.",
+      "customer_response": "cooperative",
+      "customer_quote": "My credit score is 7, what I think, 780 or 770.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "skipped",
-      "ts": "01:23",
-      "quote": ""
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "03:31",
-      "quote": "Do you normally get that in the mail, or do you get online?"
+      "ts": "03:27",
+      "end_ts": "04:20",
+      "quote": "is to look at your ComEd bill. It just helps to see, like, how many panels you would need based off your actual usage.",
+      "customer_response": "resistant",
+      "customer_quote": "So I don't have that available at this time.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "asked",
       "ts": "04:46",
-      "quote": "I can be so the last thing is kind of just getting a good time for you."
+      "end_ts": "05:08",
+      "quote": "I know we do have some availabilities as early as, like, tomorrow or Friday. Is there a day you think would be better for you?",
+      "customer_response": "deflected",
+      "customer_quote": "Could you give me a callback in about an hour, hour and a half?",
+      "resistance_reason": "timing",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "05:37",
-      "quote": "I'll call you back in about an hour and a half and then kinda, you know, get a good time from you."
+      "status": "asked",
+      "ts": "05:08",
+      "end_ts": "05:51",
+      "quote": "I'll call you then. And if you do have a moment to get your like, log in and get some of your usage, that'd be perfect.",
+      "customer_response": "cooperative",
+      "customer_quote": "No. You're talking to me you're talking to me on my landline.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:23",
+      "quote": "I do want you to know I have trees, and I'm not cutting any of my trees down. Because the last guy that came out said I'd have to cut down two or two or three of my trees, and I told him forget it.",
+      "type": "roof_or_home",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Would you trim any of the branches back?"
+      ],
+      "resolved": true,
+      "resolution_ts": "01:48",
+      "reasoning": "Rep offers a single alternative (trimming instead of full removal) and the customer immediately agrees, resolving the objection in one attempt."
+    },
+    {
+      "ts": "03:38",
+      "quote": "Well, I normally get it in the mail, but I I threw that away this, this month once I saw how much, the usage. ... So I don't have that available at this time.",
+      "type": "other",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "Do you know how much it do you remember how much usage it was?",
+        "would you be able to log in to your ComEd account online or, like, an app and kinda get a look at that for me real quick?"
+      ],
+      "resolved": false,
+      "resolution_ts": "05:00",
+      "reasoning": "Rep tries two distinct paths to get usage data (verbal recall, then online login) but the customer's time constraint (doctor's appointment) blocks both, so the bill document is deferred rather than resolved on this call."
+    },
+    {
+      "ts": "04:59",
+      "quote": "Could you give me a callback in about an hour, hour and a half? And I'll have that information for you because I have to check my wife's calendar schedule.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I know we do have some availabilities as early as, like, tomorrow or Friday. Is there a day you think would be better for you?"
+      ],
+      "resolved": true,
+      "resolution_ts": "05:08",
+      "reasoning": "Rep offers concrete near-term days but the customer counters with a callback request tied to his wife's schedule; rep accepts the callback plan without pushing further, so the timing question is resolved procedurally (agreed callback) even though no specific appointment time was locked."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "bill capture without the flip",
+    "topic": "bill anchor captured but not flipped",
     "ts": "02:44",
-    "quote": "Okay. Wow. Yeah. Definitely. You know, it's more expensive.",
-    "why": "The rep got a clean, specific bill number ($331) early in the call and let it pass with generic sympathy instead of using it as leverage — the single biggest lost anchor on this call, compounded by never circling back to it before the callback."
+    "quote": "Oh, about right now, in fact, I just got a bill. I just sent them around, what, $331.",
+    "why": "Warner handed the rep a strong, specific, recent number completely unprompted, and the rep's response stayed generic industry commentary instead of turning $331 into Warner's personal reason to act — this is the single highest-leverage moment on the call and it was left on the table."
   },
   "key_moments": [
-    {
-      "ts": "01:41",
-      "quote": "I think we could, you know, get you to nine at least see what it look like.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "The rep quotes a specific panel count to a customer who hasn't even provided a bill yet, guessing at design output the design team should generate. This is premature closer-tier content used to save a tree objection."
-    },
     {
       "ts": "01:23",
       "quote": "I do want you to know I have trees, and I'm not cutting any of my trees down. Because the last guy that came out said I'd have to cut down two or two or three of my trees, and I told him forget it.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a prior competitor visit and a specific reason for rejecting it. The rep never asks which company or when this happened, losing competitive intel that would help the closer differentiate."
+      "stewart_read": "Customer discloses a specific prior competitor encounter and the exact reason it fell through (tree removal). Rep resolves the surface concern (offers to trim instead of cut) but never asks which company that was or what else was proposed."
+    },
+    {
+      "ts": "01:41",
+      "quote": "I think we could, you know, get you to nine at least see what it look like. Would you trim any of the branches back?",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a roof/shading objection handled procedurally well (flexible compromise), but it's a reactive concession rather than a flip — the rep never reframes the trees-vs-bill tradeoff (e.g., tying tree preservation cost against the ongoing utility cost). Still, the practical fix worked and the customer agreed immediately, so this is a minor miss, not a call-losing one."
     },
     {
       "ts": "02:44",
-      "quote": "Okay. Wow. Yeah. Definitely. You know, it's more expensive. I know they've I've heard a lot of them kinda raising their rates and getting more expensive. So definitely see what we can do to help you cut that back there.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "The customer just handed over a real bill figure ($331) and the rep responded with generic utility-rate commentary instead of flipping it into a reason to act now ('that $331 is what you're not interested in keeping paying')."
+      "quote": "Oh, about right now, in fact, I just got a bill. I just sent them around, what, $331.",
+      "classification": "bill_anchor",
+      "stewart_read": "Customer volunteers a strong, specific, recent bill figure unprompted. Rep acknowledges it generically ('Definitely. You know, it's more expensive... they've raised their rates') but never flips it into a direct emotional alignment-against-the-utility tied to Warner's own number."
     },
     {
-      "ts": "01:23",
-      "quote": "I do want you to know I have trees, and I'm not cutting any of my trees down.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Buried inside a defensive statement is useful signal: the customer is engaged enough with solar to have already had a design conversation with a competitor and is still shopping (see 01:08). This is a warmer lead than the guarded tone suggests."
+      "ts": "03:38",
+      "quote": "Well, I normally get it in the mail, but I I threw that away this, this month once I saw how much, the usage.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer just disclosed he was startled enough by his own usage increase to throw the bill away — a strong pain signal. Rep moves straight to logistics (does he remember the number) instead of reflecting the emotional content back ('sounds like that jump really caught your attention')."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 33,
-    "verified": 33,
+    "checked": 59,
+    "verified": 59,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

@@ -1,9 +1,9 @@
 {
   "call_id": "10000671231",
   "rep_name": "Joel",
-  "trajectory_summary": "The call opens with mild lead-source friction that the customer self-resolves, then climbs steadily through verify with an unusually strong credit disclosure and candid admission about avoiding solar research. The call doesn't end in objection or decline — it's cut short by a genuine external circumstance (customer driving, then a disability-related delay getting inside), with the rep securing a callback commitment.",
-  "shape": "mixed",
-  "outcome_dispute": "This should be tagged 'callback,' not a failed or dead call. The rep secured an explicit time-bound commitment ('You call me back in about fifteen minutes') and confirmed intent to have the bill ready, which is a real next step owned by the rep, even though bill_collection and appointment_set were never reached.",
+  "trajectory_summary": "The call moves cleanly through the verify sequence with a customer who opens skeptical but never turns resistant — credit, utility, and bill amount all land cooperatively. It ends not with a booked appointment but with a same-day callback request driven by the customer's location (in his car) and mobility (self-described as handicapped), which the rep accepts without locking a specific time.",
+  "shape": "energy_built",
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata, but the transcript clearly ends in a callback, not a booked appointment — no appointment day/time was ever discussed; the entire call was verify-only, ending at bill collection with a 'call me back in fifteen minutes' logistics ask.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "03:28",
     "quote": "Yeah. Sounds good. I could give you a callback.",
-    "reasoning": "The call ends with a rep-owned commitment to call back in roughly fifteen minutes, but no specific clock time was locked and no appointment with a closer was set — this is a callback, not a booked or tentative appointment."
+    "reasoning": "The call ends with the rep agreeing to call the customer back in about fifteen minutes to collect the bill — no appointment day/time was ever discussed, and the call never reached the appointment_set or button_up stages of the script."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,144 +20,258 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep acknowledged the bill pain ('Dang. Yeah. That's up there for sure.') but never turned it into a forward-pulling reason to act or tied it to the design/savings outcome mentioned earlier in the call; the call was interrupted shortly after, but the flip line should have landed immediately at 02:24."
+    "reasoning": "The rep acknowledges the bill size ('Dang. Yeah. That's up there for sure.') but never turns it into the customer's reason to act — the flip should have landed at 02:47 ('Yeah, just to see if we can help you save some money there on your bill') where he had a natural bridge back to the $200 figure and didn't take it."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "02:59",
+    "ask_quote": "So the easiest way to do that is by looking at the usage history from one of your ComEd bills. So do you usually get those online or through the mail?",
+    "result": "promised_later",
+    "method": "read_aloud",
+    "result_ts": "03:23",
+    "result_quote": "I'm in my car at the moment. I'm getting ready to go inside my house. You wanna call me back in about fifteen minutes?",
+    "reasoning": "Rep asked for the mailed paper bill to be pulled up; customer agreed in principle but was physically unable to access it on this call and proposed a callback, with the rep agreeing to call back and collect it then."
   },
   "interest_reason_audit": {
-    "asked": true,
-    "ask_ts": "02:26",
+    "asked": false,
+    "ask_ts": "",
     "reason_given": false,
-    "reason_ts": "02:32",
-    "reason_quote": "No. This is the this is the first time I usually stepped away from it. So Gotcha. Okay.",
-    "reason_used": "no",
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep's question was actually the prior_designs verify item ('have you seen any solar information before'), not a direct 'what interested you in solar' ask, and the customer's answer describes avoidance history rather than a stated motivating reason — no true interest reason was captured or used."
+    "reasoning": "The rep never asked what got the customer interested in solar (verify.interest_in_solar) — the call jumped from intro straight into address/homeowner verification and never circled back to motive, so there is no interest reason to use later."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:08",
-      "quote": "Hey, John. This is Joel with ION."
+      "end_ts": "00:33",
+      "quote": "Hey, John. This is Joel with ION. How's it going today?",
+      "customer_response": "resistant",
+      "customer_quote": "I don't remember requesting that, but that's okay.",
+      "resistance_reason": "trust",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:51",
-      "quote": "I have the address here as the two one zero two Home Avenue in Berwyn, Illinois. Is that correct?"
+      "end_ts": "01:23",
+      "quote": "I have the address here as the two one zero two Home Avenue in Berwyn, Illinois. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:15",
-      "quote": "Is there anyone else on the title of the home with you at all?"
+      "end_ts": "01:26",
+      "quote": "Is there anyone else on the title of the home with you at all?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. No. It's it's mine.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
-      "status": "skipped",
+      "status": "asked",
       "ts": "01:08",
-      "quote": "The roof looks awesome for solar. You got tons of space up there."
+      "end_ts": "01:14",
+      "quote": "The roof looks awesome for solar. You got tons of space up there.",
+      "customer_response": "no_answer",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:55",
-      "quote": "Are you going through ComEd for your power?"
+      "end_ts": "02:02",
+      "quote": "Are you going through ComEd for your power?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:03",
-      "quote": "And how much is an average ComEd bill costing you?"
+      "end_ts": "02:19",
+      "quote": "And how much is an average ComEd bill costing you?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'd say it's never less than $200 a month.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "01:37",
+      "end_ts": "01:51",
+      "quote": "To qualify, you just need to have a credit score of six fifty or higher. Is that gonna be the case there for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Actually, I'm more like 860.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "02:26",
-      "quote": "Have you seen any solar information for your home before, or is this kinda your first time looking into it?"
+      "ts": "02:24",
+      "end_ts": "02:39",
+      "quote": "Have you seen any solar information for your home before, or is this kinda your first time looking into it?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. This is the this is the first time.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "02:59",
-      "quote": "So the easiest way to do that is by looking at the usage history from one of your ComEd bills."
+      "end_ts": "03:36",
+      "quote": "Could I have you pull up one of those paper bills real quick? We can take a look at the usage information.",
+      "customer_response": "deflected",
+      "customer_quote": "You know what? I'm in my car at the moment.",
+      "resistance_reason": "timing",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "00:27",
+      "quote": "Yeah. I don't remember requesting that, but that's okay. You can tell me about it.",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. Well, I just work with my design team here to just kinda get your options put together for you"
+      ],
+      "resolved": true,
+      "resolution_ts": "00:35",
+      "reasoning": "Customer raises the mild trust flag once and grants permission to continue immediately; no further pushback follows, so the rep's single indirect response was sufficient in this instance even though it didn't directly name the lead source."
+    },
+    {
+      "ts": "03:18",
+      "quote": "You know what? I'm in my car at the moment.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. Sounds good. I could give you a callback."
+      ],
+      "resolved": true,
+      "resolution_ts": "03:36",
+      "reasoning": "This is a logistics constraint rather than a resistance-based objection; the rep accommodates immediately and the customer sets the callback window himself, so it resolves cleanly but without a locked specific time."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "interest depth left unexplored",
-    "ts": "02:32",
-    "quote": "No. This is the this is the first time I usually stepped away from it. So Gotcha. Okay.",
-    "why": "This customer handed the rep a real 'why now' signal — active avoidance until today — and it was never asked about again. On a callback-eligible lead with strong credit and a real bill number, understanding what prompted him to finally engage would sharpen the pitch on the very next call."
+    "topic": "bill anchor captured but not flipped",
+    "ts": "02:16",
+    "quote": "I'd say it's never less than $200 a month.",
+    "why": "Joel gets a strong, above-average bill figure but responds with passive sympathy ('That's up there for sure') instead of using it to build urgency or tie it to the savings conversation — the single highest-leverage moment on this call was left on the table."
   },
   "key_moments": [
     {
       "ts": "00:27",
       "quote": "Yeah. I don't remember requesting that, but that's okay. You can tell me about it.",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The customer flags a lead-source mismatch and the rep's intro never specified the form/source that generated the lead. The customer self-waives the concern, so it costs nothing here, but the rep never used the moment to add specificity (e.g., naming where the interest was captured)."
+      "stewart_read": "The rep never directly answers the implicit 'how did you get my info' question raised by the customer's line. He instead moves into explaining the design-team process (00:35) and later narrates the Google Maps pull (01:02), which functions as an indirect, transparency-based legitimacy builder rather than the schema's honest_specificity protocol (protocols.how_did_you_get_my_number) which calls for naming the lead source directly ('you filled out a form online'). Given the customer let it go without further pushback, the indirect approach worked well enough here, but it left a specific, closeable gap unaddressed."
     },
     {
-      "ts": "01:37",
-      "quote": "To qualify, you just need to have a credit score of six fifty or higher. Is that gonna be the case there for you?",
-      "classification": "other",
-      "stewart_read": "The rep states a 650 credit threshold, not the schema's documented 670. This is the same drift pattern flagged previously in SESSION18_fcbf33c1, now recurring in a second call — suggesting this may be a floor-wide script variant rather than an isolated rep error."
-    },
-    {
-      "ts": "02:09",
-      "quote": "I'd say it's never less than $200 a month.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer gives a real bill anchor with added color about summer spikes. The rep's response, 'Dang. Yeah. That's up there for sure,' acknowledges the pain but doesn't flip it into forward-pulling curiosity about savings potential."
-    },
-    {
-      "ts": "02:32",
-      "quote": "No. This is the this is the first time I usually stepped away from it. So Gotcha. Okay.",
+      "ts": "01:08",
+      "quote": "The roof looks awesome for solar. You got tons of space up there. It looks like you're getting, yeah, full sun all day.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Customer discloses he's actively avoided looking into solar before now but is engaging today anyway — a signal of genuine, self-initiated interest rather than passive lead-gen noise. The rep's 'Gotcha. Okay.' doesn't build on this at all."
+      "stewart_read": "Rep offers a positive, specific observation about the roof from Maps rather than a generic script line — a small but real personalization move that reinforces legitimacy (he's actually looking) and builds rapport simultaneously."
+    },
+    {
+      "ts": "01:50",
+      "quote": "Yeah. Actually, I'm more like 860.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer volunteers a specific score well above the 650 threshold unprompted — a sign of comfort and forthcoming engagement the rep could have leaned into ('with a score like that you'll have your pick of financing options') but instead moved straight to the next verify item."
+    },
+    {
+      "ts": "02:16",
+      "quote": "I'd say it's never less than $200 a month.",
+      "classification": "bill_anchor",
+      "stewart_read": "This is the anchor moment — a concrete, above-average bill figure. The rep acknowledges it ('Dang. Yeah. That's up there for sure.') but the acknowledgment is passive; he does not flip it into an emotional alignment-against-the-utility frame or tie it forward to the design/savings conversation."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 30,
-    "verified": 30,
-    "fuzzy": 0,
+    "checked": 43,
+    "verified": 42,
+    "fuzzy": 1,
     "wrong_ts": 0,
     "not_found": 0
   }

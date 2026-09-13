@@ -1,26 +1,36 @@
 {
   "call_id": "SESSION2_2e3fd12f",
   "rep_name": "Bucky",
-  "trajectory_summary": "This call opens cold, gets an early legitimacy challenge, and then surfaces a hard DQ (existing panels under an active Palmetto/GoodLeaf contract) by the two-minute mark. The rep correctly identifies the orphaned-flow contract question once the existing system is disclosed, but the call ends with the customer declining further contact rather than any appointment being set.",
+  "trajectory_summary": "The call opens cold, with the customer challenging the rep's legitimacy before any rapport is built, and never recovers into genuine engagement. Once bill-amount verification surfaces that the customer already has a 20-panel system with Palmetto/GoodLeaf under an active contract and is unhappy with the promised bill credits, the call structurally becomes an orphaned-system disqualification rather than a fresh-lead appointment set. The rep correctly identifies the contract-lock as a hard stop but does so reactively and does not probe the customer's specific grievance (missing quarterly payments) for competitive intel or explore a future-touch plan.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The transcript ends in a hard disqualification — customer has an existing, contracted solar system with another provider (Palmetto/GoodLeaf) and states 'I don't need anymore' — so 'dq' is the correct outcome tag, not a booked/tentative/callback outcome. No appointment of any kind was set.",
+  "outcome_dispute": "v1 tag is unknown/unconfirmed; observed outcome should be recorded as dq (existing system under active contract with another provider — Palmetto/GoodLeaf — is a hard disqualifier per dq_rules, and the customer explicitly declines further contact at the end).",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "01:57",
-    "quote": "Are you still in contract with them right now?",
-    "reasoning": "Customer confirms he already has 20 panels installed via Palmetto/GoodLeaf and is still under contract, which is a hard DQ per dq_rules.ppa_existing_system / orphaned_flow. The call ends with the customer declining further contact ('I don't need anymore. Thank you.') rather than any appointment being scheduled."
+    "ts": "02:04",
+    "quote": "But as long as you're in it, there's nothing we can do. Yeah. But when I I know that I'm gonna get out from that contract, but I I don't I don't I don't need anymore. Thank you.",
+    "reasoning": "Customer is confirmed to have an existing solar system under an active contract with Palmetto/GoodLeaf, which is a hard disqualifier per dq_rules (ppa_existing_system / sunrun_existing analog); the rep confirms Ion cannot act while he's locked in, and the customer declines further contact."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "01:30",
+    "bill_ts": "01:33",
     "bill_quote": "my bill is is come to $202,147 dollars with 20 panels that I got in the roof.",
-    "flip_executed": "no",
+    "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "A bill figure was captured, but the objection_inversion/bill_anchoring flip assumes an active sales path toward a new install; this customer is a hard DQ candidate (existing, contracted solar system), which sharply reduces the applicability of a flip move here. The rep's pivot to the contract-status question was the procedurally correct response to this disclosure rather than a missed sales opportunity, so this should be read as reduced-relevance rather than a straight coaching miss."
+    "reasoning": "The 'bill' figure captured here belongs to an existing 20-panel system installed by a competitor (Palmetto/GoodLeaf), not a fresh-solar qualification bill — the call structurally became an orphaned/DQ scenario at this point, so there is no fresh bill to flip into an Ion pitch. The transcribed number itself is also garbled ('$202,147') and likely a transcription artifact, not a clean figure the rep could act on."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call never reached bill-collection because it disqualified on existing-system/active-contract grounds before the rep could raise getting a copy of the actual utility bill."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,132 +41,224 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar before the call moved into verify questions and then hit the existing-solar DQ; the customer's disclosed grievance about his current system emerged unprompted rather than in response to an interest question."
+    "reasoning": "The rep never explicitly asked what interested the customer in solar; the customer's monologue about the failed quarterly-payment promise emerged unprompted during the bill-amount question, not in response to an interest question."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "This is Bucky with ION reaching out about the solar form you filled online."
+      "end_ts": "00:23",
+      "quote": "Hey. This is Bucky with ION reaching out about the solar form you filled online.",
+      "customer_response": "resistant",
+      "customer_quote": "What company are you from?",
+      "resistance_reason": "trust",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:36",
-      "quote": "Are you still at six are you at 6906 West Road?"
+      "end_ts": "00:44",
+      "quote": "Are you still at six are you at 6906 West Road?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:53",
-      "quote": "And then anybody else on the title but you?"
+      "end_ts": "01:00",
+      "quote": "Is there anybody else on the title but you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. Just me.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:04",
-      "quote": "what utility company are you with?"
+      "end_ts": "01:07",
+      "quote": "what utility company are you with?",
+      "customer_response": "cooperative",
+      "customer_quote": "Dominion.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:08",
-      "quote": "What how much you spend on a monthly average?"
+      "end_ts": "01:36",
+      "quote": "What how much you spend on a monthly average?",
+      "customer_response": "deflected",
+      "customer_quote": "my bill is is come to $202,147 dollars with 20 panels that I got in the roof.",
+      "resistance_reason": "already_have_quote",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "01:41",
-      "quote": "Oh, you already have panels. Who are you with?"
+      "ts": "01:36",
+      "end_ts": "01:48",
+      "quote": "Oh, you already have panels. Who are you with?",
+      "customer_response": "cooperative",
+      "customer_quote": "Palmetto on Good Leaf.",
+      "resistance_reason": "already_have_quote",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:57",
+      "quote": "Okay. What? You're selling you're selling panel?",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. We're ION. If you can get out of that contract, we can help you. But as long as you're in it, there's nothing we can do."
+      ],
+      "resolved": true,
+      "resolution_ts": "02:04",
+      "reasoning": "Customer confirms he's under an active contract with Palmetto; rep correctly states Ion cannot act while locked in — this is a procedural DQ, not an objection to overcome, and the customer accepts it and closes the call."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "orphaned-flow handling on existing-solar disclosure",
-    "ts": "01:57",
-    "quote": "Are you still in contract with them right now?",
-    "why": "This is the pivotal moment of the call — the rep correctly ran the contract-status gate rather than continuing to pitch, which is the right procedural behavior. The manager should reinforce this specific move as the standard, and pair it with the smaller gap (no captured future-follow-up date given the customer's stated intent to eventually exit his contract)."
+    "topic": "capturing competitive intel and future-touch timing on an orphaned lead",
+    "ts": "01:36",
+    "quote": "my bill is is come to $202,147 dollars with 20 panels that I got in the roof.",
+    "why": "This customer volunteered a competitor name, a specific grievance, and an implied future window ('when I get out from that contract') — none of it was captured. On a DQ call, this is the only value left to extract, and the rep let it go by moving straight to procedure."
   },
   "key_moments": [
     {
-      "ts": "00:05",
-      "quote": "Hey. This is Bucky with ION reaching out about the solar form you filled online.",
+      "ts": "00:18",
+      "quote": "What company are you from?",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The intro names the company and references the form, which is the minimum legitimacy anchor, but there's no state/region or credibility context before diving into verify questions — and the customer challenges the company identity within 13 seconds anyway."
+      "stewart_read": "The rep's opening ('reaching out about the solar form you filled online') did not land as legitimate enough for the customer to proceed without demanding the company name again — the intro needed a stronger anchor (state, form timing, or referral specificity)."
     },
     {
-      "ts": "01:14",
-      "quote": "I only live here with my wife.",
-      "classification": "cross_sell_miss",
-      "stewart_read": "Customer volunteers that a wife is in the home right after the co-owner question was already answered 'No, just me' — this directly contradicts or complicates the earlier title answer, and the rep never revisits it or asks whether the wife is on the title/decision."
+      "ts": "00:23",
+      "quote": "Yes, sir. Ion Solar. We're the best.",
+      "classification": "other",
+      "stewart_read": "This is a filler confidence line with no substance — it doesn't answer 'why are you calling' or 'how did you get my info,' which is what a skeptical customer actually wants resolved."
     },
     {
-      "ts": "01:20",
+      "ts": "01:27",
       "quote": "because they said they was gonna give me some, extra money every three months, they ain't giving me shit.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a specific broken promise from his current provider (recurring payment never materialized) — this is exactly the kind of competitive intelligence the closer would want, but the rep does not probe further into what was promised or by whom before moving to the bill number."
+      "classification": "empathy_miss",
+      "stewart_read": "Customer discloses a real grievance — being promised quarterly payments by his current solar company that never materialized. This is exactly the kind of trust-gift disclosure the schema flags; the rep does not acknowledge it at all before moving to the next question."
     },
     {
       "ts": "01:36",
-      "quote": "now my my bill is is come to $202,147 dollars with 20 panels that I got in the roof.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "Customer states a bill-pain grievance tied directly to his existing 20-panel system underperforming — a live articulation of dissatisfaction the rep could reflect back, but the rep instead asks 'who are you with' and moves straight into the ownership/contract check without acknowledging the frustration."
+      "quote": "my bill is is come to $202,147 dollars with 20 panels that I got in the roof.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer reveals a specific competitor (Palmetto/GoodLeaf), a specific complaint (unfulfilled quarterly payments), and panel count unprompted. The rep never probes for detail (system size, install date, what exactly was promised) that would be valuable competitive intel for whoever revisits this lead later."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 27,
-    "verified": 27,
+    "checked": 36,
+    "verified": 36,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

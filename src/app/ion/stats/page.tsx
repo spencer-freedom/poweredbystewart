@@ -103,6 +103,118 @@ export default async function IonStatsPage() {
           </details>
         </section>
 
+        {/* The bill, as a funnel of its own: ask → result → set */}
+        {s.bill_document && s.adherence_vs_outcome ? (() => {
+          const A = s.adherence_vs_outcome!.anchors;
+          const r = s.bill_document!.results;
+          const asked = (r.received_on_call ?? 0) + (r.promised_later ?? 0) + (r.declined ?? 0);
+          const row = (label: string, n: number, set: { set: number; n: number; set_rate: number | null } | undefined, tone?: string) => (
+            <li key={label} className="grid grid-cols-[minmax(0,1fr)_4.5rem_5rem] items-center gap-3 text-sm">
+              <span className="text-stewart-text">{label}</span>
+              <span className="font-mono text-right text-stewart-muted">{n}</span>
+              <span className={"font-mono text-right font-semibold " + (tone ?? "text-stewart-text")}>{set && set.set_rate !== null ? `${Math.round(set.set_rate * 100)}% set` : "–"}</span>
+            </li>
+          );
+          return (
+            <section>
+              <h2 className="text-lg font-bold">The bill itself</h2>
+              <p className="text-sm text-stewart-muted mt-1 mb-4">
+                Not the dollar amount — the utility bill Ion builds the design from. Did the rep ask for it, what happened, and how each path set.
+              </p>
+              <div className="rounded-lg border border-stewart-border bg-stewart-card p-4 sm:p-5">
+                <ul className="space-y-2">
+                  {row(`Asked for the bill (of ${s.bill_document!.measured_on})`, asked, A.bill_doc_asked, "text-stewart-text")}
+                  {row("↳ received on the call", r.received_on_call ?? 0, A.bill_doc_received_on_call, "text-stewart-success")}
+                  {row("↳ promised later", r.promised_later ?? 0, A.bill_doc_promised_later, "text-stewart-warning")}
+                  {row("↳ declined", r.declined ?? 0, A.bill_doc_declined)}
+                  {row("Never asked", r.not_asked ?? 0, A.bill_doc_not_asked, "text-stewart-danger")}
+                </ul>
+                <p className="mt-4 text-sm text-stewart-text leading-relaxed">
+                  Asking gets the bill on the call{" "}
+                  <span className="font-mono font-bold">{asked ? Math.round((100 * (r.received_on_call ?? 0)) / asked) : 0}%</span> of the time.
+                  A call where the bill arrived during the call set at{" "}
+                  <span className="font-mono font-bold text-stewart-success">{A.bill_doc_received_on_call?.set_rate !== null ? Math.round((A.bill_doc_received_on_call?.set_rate ?? 0) * 100) : "–"}%</span>;
+                  one where it was promised later, <span className="font-mono font-bold">{Math.round((A.bill_doc_promised_later?.set_rate ?? 0) * 100)}%</span>;
+                  one where the rep never asked, <span className="font-mono font-bold">{Math.round((A.bill_doc_not_asked?.set_rate ?? 0) * 100)}%</span>.
+                </p>
+                {s.time_to_bill_vs_set ? (
+                  <p className="mt-2 text-xs text-stewart-muted">
+                    Time to the bill amount vs. set: {(["under_2m", "2_to_4m", "over_4m", "never"] as const).map((k) => {
+                      const t = s.time_to_bill_vs_set![k];
+                      return `${k.replace("_", " ").replace("m", " min").replace("under", "under").replace("over", "over")} ${t?.set_rate !== null && t ? Math.round(t.set_rate * 100) : "–"}% (n=${t?.n ?? 0})`;
+                    }).join(" · ")}
+                  </p>
+                ) : null}
+              </div>
+            </section>
+          );
+        })() : null}
+
+        {/* Objections: how many angles, and does it matter */}
+        {s.objections ? (() => {
+          const o = s.objections!;
+          const order = ["0", "1", "2", "3+"];
+          const typeOrder = Object.entries(o.by_type).sort((a, b) => b[1] - a[1]);
+          const totalObj = typeOrder.reduce((n, [, v]) => n + v, 0);
+          return (
+            <section>
+              <h2 className="text-lg font-bold">Objections — how many angles</h2>
+              <p className="text-sm text-stewart-muted mt-1 mb-4">
+                Every customer objection, and how many distinct angles the rep tried before conceding or moving on. {o.calls_with_objections} calls had at least one; {totalObj} objections total.
+              </p>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="rounded-lg border border-stewart-border bg-stewart-card p-4">
+                  <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-2">Most angles tried on the call → set rate</p>
+                  <ul className="space-y-1.5">
+                    {order.map((k) => {
+                      const v = o.set_rate_by_max_attempts[k];
+                      if (!v) return null;
+                      const small = v.n < 20;
+                      return (
+                        <li key={k} className={"grid grid-cols-[3.5rem_minmax(0,1fr)_5rem] items-center gap-3 text-sm " + (small ? "text-stewart-muted/70" : "")}>
+                          <span className="font-mono">{k}</span>
+                          <div className="h-2 rounded bg-white/5 overflow-hidden"><div className="h-full bg-stewart-accent/75" style={{ width: `${Math.round((v.set_rate ?? 0) * 100)}%` }} /></div>
+                          <span className="font-mono text-right">{v.set_rate !== null ? `${Math.round(v.set_rate * 100)}%` : "–"} <span className="text-xs text-stewart-muted">n={v.n}</span></span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <p className="mt-2 text-[11px] text-stewart-muted">Objection resolved, by angles tried: {order.map((k) => { const v = o.resolved_rate_by_attempts[k]; return v ? `${k}: ${Math.round((v.rate ?? 0) * 100)}% (n=${v.n})` : null; }).filter(Boolean).join(" · ")}</p>
+                </div>
+                <div className="rounded-lg border border-stewart-border bg-stewart-card p-4">
+                  <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-2">What they object to</p>
+                  <ul className="space-y-1.5">
+                    {typeOrder.slice(0, 8).map(([k, v]) => (
+                      <li key={k} className="grid grid-cols-[minmax(0,1fr)_3.5rem] items-center gap-3 text-sm">
+                        <span className="text-stewart-text">{k.replace(/_/g, " ")}</span>
+                        <span className="font-mono text-right text-stewart-muted">{v}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </section>
+          );
+        })() : null}
+
+        {/* Deterministic: talk share, softeners, credit drift */}
+        {s.talk ? (() => {
+          const t = s.talk!;
+          const credit = Object.entries(t.credit_threshold_stated).sort((a, b) => b[1] - a[1]);
+          const creditTotal = credit.reduce((n, [, v]) => n + v, 0);
+          return (
+            <section>
+              <h2 className="text-lg font-bold">From the transcript alone</h2>
+              <p className="text-sm text-stewart-muted mt-1 mb-4">No model — counted from the words. {t.speaker_balance_suspect} calls where the transcript merged both voices are left out of the talk numbers.</p>
+              <div className="grid sm:grid-cols-3 gap-3">
+                <Tile label="Rep talk share (median)" big={t.rep_talk_share_median !== null ? `${Math.round(t.rep_talk_share_median * 100)}%` : "–"} sub={`set ${Math.round((t.rep_talk_share_set_vs_not.set ?? 0) * 100)}% · not set ${Math.round((t.rep_talk_share_set_vs_not.not_set ?? 0) * 100)}% · ${t.measured_on} calls`} />
+                <Tile label="Softeners per 100 words (median)" big={t.softeners_per_100_words_median !== null ? `${t.softeners_per_100_words_median}` : "–"} sub={`“kinda”, “I guess”, “maybe”, “I think” on rep lines · longest monologue ${t.longest_monologue_median_words ?? "–"} words`} />
+                <Tile label="Credit threshold stated" big={creditTotal ? `${Math.round((100 * (t.credit_threshold_stated["670"] ?? 0)) / creditTotal)}% said 670` : "–"} sub={credit.map(([k, v]) => `${k}: ${v}`).join(" · ")} warn={creditTotal > 0 && (t.credit_threshold_stated["670"] ?? 0) / creditTotal < 0.9} />
+              </div>
+            </section>
+          );
+        })() : null}
+
         {/* Adherence × outcome */}
         {s.adherence_vs_outcome ? (
           <section>

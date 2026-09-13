@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION16_7101e33e",
   "rep_name": "Bucky",
-  "trajectory_summary": "This is a short, procedurally smooth call: the customer arrived pre-warmed from a form-fill, cooperated through verify items with minimal resistance, and the rep adapted efficiently to a genuine edge case (new homeowner with no bill history) by substituting a live kWh reading and checking with a supervisor. The call never builds real emotional charge — there's no bill-pain moment, no objection cycling, and no cross-sell probing — it simply proceeds calmly to a booked appointment.",
-  "shape": "stagnant",
-  "outcome_dispute": "v1 tag is unknown/unclear; observed outcome is a booked appointment with a firm day and time (March 27th at noon) and a stated location constraint, so this should be tagged 'booked,' not left ambiguous.",
+  "trajectory_summary": "This is a short, efficient call carried mostly by an already-warm customer who pre-books himself and solves his own bill-data gap. The rep executes the mechanical verify steps competently and lands a booked appointment with a specific day and time, but leaves several small threads (interest depth, the rear-facing panel constraint, the mid-call hold's purpose) unaddressed rather than actively worked.",
+  "shape": "energy_built",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "in_person",
@@ -11,154 +11,243 @@
     "co_owner_confirmed": null,
     "ts": "07:32",
     "quote": "K. So I got you twenty seventh at noon.",
-    "reasoning": "A specific date (the 27th) and time (noon) are locked, and the appointment is for someone to come to the customer's house, making this an in-person booked outcome. No co-owner was identified since the customer confirmed he is the sole person on the title."
+    "reasoning": "A specific date (the 27th) and time (noon) are locked, and the appointment is an in-home visit ('come over and look') rather than a phone consult, per the customer's own framing at 00:46 and the rep's confirmation."
   },
   "bill_anchor_audit": {
-    "bill_captured": false,
-    "bill_ts": "02:54",
-    "bill_quote": "I can tell you what my kilowatt usage is right now.",
+    "bill_captured": true,
+    "bill_ts": "02:24",
+    "bill_quote": "I can tell you what my usage is as of today.",
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "No dollar-amount bill was ever captured — the customer is a brand-new homeowner with no bill history, and the rep accepted a live kWh usage snapshot as a substitute for the utility bill. This satisfies the technical design-data requirement but leaves the emotional bill-pain anchor completely unestablished; the rep never asked what the customer expects to pay or reflected the usage number as a cost hook."
+    "reasoning": "No dollar bill amount exists for this customer — he closed on the home under a month ago and has never received a utility bill. He substitutes a current kWh usage reading instead, which is a legitimate data source for design purposes but leaves nothing to flip into bill-pain-versus-utility framing; this is a genuine edge case where the standard bill-anchor coaching does not apply."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "02:45",
+    "ask_quote": "So the bill the bill is important. We we're gonna need that, because it helps us know the utility usage or kilowatt usage.",
+    "result": "received_on_call",
+    "method": "photo",
+    "result_ts": "03:37",
+    "result_quote": "I'll text you right now.",
+    "reasoning": "No physical bill exists, but the rep pivots to collecting a photo of the customer's current kWh usage via text, which the customer agrees to send on the call itself."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "02:00",
-    "reason_given": false,
+    "reason_given": true,
     "reason_ts": "02:05",
     "reason_quote": "Yes. And, like, Allstate. You know?",
-    "reason_used": "no_reason_given",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked directly ('What's your interest in solar? Just saving money?') and the customer's response is transcribed ambiguously ('Yes. And, like, Allstate. You know?') — the transcription does not yield a clear, usable reason beyond the rep's own suggested 'saving money' framing, which the customer simply affirmed rather than articulated himself. Treating this as a captured reason would overstate what's actually on the record."
+    "reasoning": "The rep asked a leading version of the question ('just saving money?') and the customer's answer ('Yes. And, like, Allstate.') is confirmed plus an unclear secondary reference; the rep never circles back to clarify or use this reason later in the call, moving straight to the utility company question instead."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:30",
-      "quote": "Hey, Cedric. This is Bucky with Ion. Just reaching out about the solar form you filled out online."
+      "end_ts": "00:37",
+      "quote": "Hey, Cedric. This is Bucky with Ion. Just reaching out about the solar form you filled out online. How are you doing today?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. I'm doing fine.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "02:00",
-      "quote": "What's your interest in solar? Just saving money?"
+      "end_ts": "02:08",
+      "quote": "What's your interest in solar? Just saving money?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. And, like, Allstate. You know?",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:04",
-      "quote": "You still have 5017 Cape May Loop?"
+      "end_ts": "01:22",
+      "quote": "You still have 5017 Cape May Loop?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. That's correct.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:30",
-      "quote": "Then anyone else on the title but you?"
+      "end_ts": "01:33",
+      "quote": "then anyone else on the title but you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Nope. Just me.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "04:14",
-      "quote": "Roof type. Do you know what type of roof you got?"
+      "end_ts": "04:34",
+      "quote": "Do you know what type of roof you got?",
+      "customer_response": "cooperative",
+      "customer_quote": "The house is built in 2001. I mean, 2021.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:11",
-      "quote": "What utility company are you with?"
+      "end_ts": "02:15",
+      "quote": "What utility company are you with?",
+      "customer_response": "cooperative",
+      "customer_quote": "Dominion.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:16",
-      "quote": "Is your, how much you paying averagely, like, a month?"
+      "end_ts": "02:24",
+      "quote": "how much you paying averagely, like, a month?",
+      "customer_response": "resistant",
+      "customer_quote": "I don't know. I just bought the house.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "04:41",
+      "end_ts": "04:43",
+      "quote": "credit score over $6.70?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:10",
-      "quote": "If you could just text me a picture. Here, I'll text you right now."
+      "end_ts": "03:49",
+      "quote": "If you could just text me a picture. Here, I'll text you right now.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'll text you right now.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "07:32",
-      "quote": "K. So I got you twenty seventh at noon."
+      "ts": "07:22",
+      "end_ts": "07:32",
+      "quote": "K. So I got you twenty seventh at noon.",
+      "customer_response": "cooperative",
+      "customer_quote": "Noon is fine on Friday that day, the twenty seventh, at noon. So 12:12 o'clock? We're good?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "07:53",
-      "quote": "Alright. You have a great day. Yep. Bye."
+      "status": "asked",
+      "ts": "07:35",
+      "end_ts": "07:53",
+      "quote": "I'm gonna get your design built, and then we will see you on the twenty seventh at noon.",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright. Thanks.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "Bill pain never established",
-    "ts": "02:54",
-    "quote": "I can tell you what my kilowatt usage is right now.",
-    "why": "The customer never gave a dollar bill amount and the rep never asked what the customer expects a typical bill to be or reflected the kWh number back as a hook — the whole call proceeds on usage data alone with zero emotional anchor to cost. This is the single biggest gap: the appointment gets booked but the closer inherits zero bill-pain leverage to open with."
+    "topic": "Open-ended verify question depth",
+    "ts": "02:00",
+    "quote": "What's your interest in solar? Just saving money?",
+    "why": "The rep answers his own qualification question instead of letting the customer articulate motivation, which caps the emotional/motivational data available to the closer and is a repeatable, easily-fixed habit."
   },
   "key_moments": [
     {
-      "ts": "00:40",
-      "quote": "I am still in California right now. I won't be back till next week.",
-      "classification": "conditional_booking",
-      "stewart_read": "Customer discloses he's out of state at the time of the call, which the rep never explicitly reconciles until scheduling — it resurfaces at 05:42 when the rep asks if he's out of town all week, but the intervening logistics (is he home for the appointment window) were not locked down until late in the call."
+      "ts": "02:00",
+      "quote": "What's your interest in solar? Just saving money?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "This is a leading, closed-form version of the interest question — the rep supplies the answer ('just saving money?') instead of leaving it open, which caps the depth of what the customer might reveal. This is a verify-depth problem (the schema flags depth_grading and expand_to_validate on this item) rather than a features-explanation issue."
     },
     {
-      "ts": "02:21",
-      "quote": "I don't know. I just bought the house.",
+      "ts": "02:45",
+      "quote": "So the bill the bill is important. We we're gonna need that, because it helps us know the utility usage or kilowatt usage.",
       "classification": "bill_anchor",
-      "stewart_read": "This is the moment the schema's bill-amount capture should happen, but the customer has no bill history, creating a genuine data gap rather than a stall."
+      "stewart_read": "This is an edge case, not a standard bill-anchor miss: the customer has never received a bill on this newly-purchased home, so there is no dollar figure to flip into emotional alignment-against-the-utility. The rep's move (explain why the bill/usage matters, then accept a current kWh reading as a substitute) is the correct procedural fallback given the constraint, not a missed flip opportunity in the normal sense."
     },
     {
       "ts": "02:54",
       "quote": "I can tell you what my kilowatt usage is right now.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The rep accepts a live kWh reading as sufficient qualification data but never converts it into a forward-pulling hook — no follow-up like 'that's a solid number to build a design around' or tying it to potential savings once he's home. The number is filed, not leveraged."
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer proactively offers a usage data source that solves the rep's collection problem — a sign of genuine engagement with the process, not passive compliance."
     },
     {
-      "ts": "03:39",
-      "quote": "55622253206?",
-      "classification": "other",
-      "stewart_read": "Rep reads back a phone number to confirm where to send the text, which is a minor logistics moment but shows the rep using his own line for bill collection rather than a company-anchored channel."
+      "ts": "05:11",
+      "quote": "Okay. Let me just go talk to him, and then I think we'll we'll be good to go. Okay?",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "Rep places the customer on hold to consult a supervisor. The rep's own prior line at 05:05 — 'let me tell him you just got it the house, like, last month, this last two months' — indicates the hold is specifically to verify new-homeowner timing/eligibility (house closed within the last month, no bill history), not a generic escalation. The purpose is inferable from context but the rep never explains this reasoning to the customer directly."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 33,
-    "verified": 33,
+    "checked": 49,
+    "verified": 48,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION10_e388b143",
   "rep_name": "Tyke",
-  "trajectory_summary": "A short, procedurally clean verify sequence that ends in an immediate hard-gate disqualification on stated credit. The rep ran the qualifier correctly per script but treated the customer's self-reported credit issue as final without exploring alternatives (co-signer, alternative financing, closer's actual credit pull) or bridging to any other Ion offering. The call has almost no energy built before it's cut off by the DQ.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unclear from metadata, but the observed transcript clearly ends in a same-call DQ on stated credit score below 670 for both potential co-owners — this should be tagged 'dq', not booked/tentative/callback.",
+  "trajectory_summary": "The call runs cleanly through intro and verify — address, tenure, roof type, co-owner, utility, and bill are all captured without friction — before ending abruptly at the credit qualifier. The customer discloses a credit issue for themselves and a no-credit-file co-owner, and the rep closes the call on that stated answer alone. This is a flagged policy question for Kenny (qualifiers.credit_qualifier's stated-vs-pulled tension), not a confirmed rep error, since the schema explicitly leaves open whether setters should DQ on stated credit or pass everyone to the closer's actual pull.",
+  "shape": "mixed",
+  "outcome_dispute": "v1 tag is unknown/unconfirmed, but the observed call ends in a DQ on stated credit with no bill-flip, no appointment, and no alternative financing path offered. Whether this DQ was the 'correct' move depends on an unresolved Ion policy question (qualifiers.credit_qualifier notes stated credit may not match a bureau pull) — Stewart flags this as a coaching/policy discussion point rather than asserting the rep lost a bookable deal.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "02:41",
-    "quote": "unfortunately, as of right now, it's not really gonna make sense for you guys, mainly because, you're not gonna see as much savings.",
-    "reasoning": "The rep explicitly tells the customer the program won't work for them due to credit, offering only a vague future follow-up rather than any appointment; this is a hard-gate disqualification per qualifiers.credit_qualifier, not a booked, tentative, or callback outcome."
+    "quote": "unfortunately, as of right now, it's not really gonna make sense for you guys, mainly because, you're not gonna see as much savings",
+    "reasoning": "The rep explicitly closes the call without booking, citing the credit qualifier as the reason it 'doesn't make sense' — this is a DQ outcome, not a booked or tentative appointment, and no callback date/time was fixed."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep captures the bill amount but immediately moves to the credit qualifier without acknowledging the number emotionally or flipping it into alignment-against-the-utility; the flip should have gone right after '02:11 About one point. Okay.' before pivoting to credit."
+    "reasoning": "The rep captured the $120/month figure and acknowledged it ('About one point. Okay.') but moved immediately to the credit qualifier without tying the bill to any emotional or savings-based reframe."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ended at the credit qualifier before the rep reached the bill-collection stage of the script; no request for the physical bill document was made."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,132 +41,222 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question and received a vague answer, acknowledged it generically ('No. That makes sense.') but never returned to it later in the call — the DQ ended the conversation before there was any occasion to reinforce it."
+    "reasoning": "The rep asked the interest question and got a vague reason (clean energy), but never returned to it later in the call — the call was cut short by the credit qualifier before any reinforcement could occur."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:11",
-      "quote": "This is Tyke with Ion. I have received a request for looking at solar for the home."
+      "end_ts": "00:18",
+      "quote": "This is Tyke with Ion. I have received a request for looking at solar for the home.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Hi. Is this John?",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:20",
-      "quote": "What got you interested in looking at solar?"
+      "end_ts": "00:32",
+      "quote": "What got you interested in looking at solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "Clean energy, I guess. I don't know.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:45",
-      "quote": "I have you at 1126 West Cuacharas Street in Colorado Springs?"
+      "end_ts": "01:00",
+      "quote": "The first thing I wanted to clarify with the address. I have you at 1126 West Cuacharas Street in Colorado Springs?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:35",
-      "quote": "Is there anybody else you can paddle with you, or is it just you?"
+      "end_ts": "01:44",
+      "quote": "Is there anybody else you can paddle with you, or is it just you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Michael Hayes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:22",
-      "quote": "Is that a, shingle or metal roof?"
+      "end_ts": "01:32",
+      "quote": "Is that a, shingle or metal roof?",
+      "customer_response": "cooperative",
+      "customer_quote": "It's a a asphalt shingle.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:49",
-      "quote": "who's the current utility company for you guys?"
+      "end_ts": "01:55",
+      "quote": "And, who's the current utility company for you guys?",
+      "customer_response": "cooperative",
+      "customer_quote": "Colorado Skin Utility.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:57",
-      "quote": "Would you do you know how much you're kind of paying on average per month with them?"
+      "end_ts": "02:11",
+      "quote": "Would you do you know how much you're kind of paying on average per month with them?",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, it's about 120 a month.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "02:15",
+      "end_ts": "02:41",
+      "quote": "all we ask of one of the homeowners is you guys just have a credit score of at least 670. Is that gonna be an issue for you at all?",
+      "customer_response": "resistant",
+      "customer_quote": "Yep. Well, it's a issue for me. I have Michael has no credit at all because he because he's never used credit in that.",
+      "resistance_reason": "cost",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "asked",
-      "ts": "00:32",
-      "quote": "Is this your first time looking into solar? Have you looked into it before?"
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "02:35",
+      "quote": "Yep. Well, it's a issue for me. I have Michael has no credit at all because he because he's never used credit in that.",
+      "type": "other",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "02:41",
+      "reasoning": "This is a hard qualifier gate disclosure (qualifiers.credit_qualifier), not a persuadable objection — the rep made zero attempts to explore alternative financing paths or clarify whether the co-owner's zero-credit-history status differs from a disqualifying low score before ending the call."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unilateral credit DQ without exploring alternatives",
+    "topic": "stated-credit DQ policy — flag for Kenny before coaching the rep",
     "ts": "02:41",
-    "quote": "Okay. Well, in that case, then what I can do for you is I can notate here to just follow-up with you in a couple months, see where that's kinda at. But, yeah, unfortunately, as of right now, it's not really gonna make sense for you guys",
-    "why": "The rep ends the call within seconds of a stated-credit answer, offering an unanchored 'couple months' follow-up instead of probing whether a no-credit-history co-owner could still pass a real credit pull, or mentioning any alternative purchase/financing path. This is the single moment that decides the call's outcome and is worth resolving with Kenny on stated-vs-pulled credit policy."
+    "quote": "But, yeah, unfortunately, as of right now, it's not really gonna make sense for you guys, mainly because, you're not gonna see as much savings.",
+    "why": "The rep ended the call on the customer's self-reported credit answer without exploring alternative financing paths noted in the schema (qualifiers.credit_qualifier.notes.tax_credit_disclosure) or distinguishing the co-owner's thin-file status from a low score. This is a real coaching moment, but per the schema's own unresolved policy_question_for_kenny, whether this was correct procedure or a lost deal depends on Ion policy Stewart cannot determine — surface as a question, not a verdict."
   },
   "key_moments": [
     {
       "ts": "00:11",
-      "quote": "This is Tyke with Ion. I have received a request for looking at solar for the home.",
+      "quote": "Yeah. Hey, John. This is Tyke with Ion. I have received a request for looking at solar for the home. How are you doing today?",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The intro names the company and references a request but omits state/region framing or Tesla-certified language that would more firmly establish legitimacy in the first 30 seconds. It's functional but thin."
-    },
-    {
-      "ts": "00:20",
-      "quote": "I'll keep it short for you. What got you interested in looking at solar?",
-      "classification": "other",
-      "stewart_read": "The rep asks the required interest question, but 'I'll keep it short for you' is a generic pacing filler said just before the question — it is not strong evidence of a deliberate strategy to compress the interest-question depth specifically."
+      "stewart_read": "This intro doesn't match either documented variant (intros.tesla or intros.standard) — no Tesla certification framing, no explicit reference to a form fill, just 'I have received a request.' It's a third, undocumented phrasing worth flagging for schema drift tracking rather than a hard omission, since it does establish company name and a lead-source reason."
     },
     {
       "ts": "00:29",
       "quote": "Clean energy, I guess. I don't know.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer gives a thin, uncertain answer to the interest question. Rep validates it generically and moves on without expanding to find a firmer emotional anchor (bill pain, usage, etc.)."
+      "stewart_read": "The customer's flat, uncertain answer to the interest question was a low-energy moment the rep could have probed deeper on (per verify.interest_in_solar's 'depth matters more than the answer' note), but the rep moved on immediately with a generic acknowledgment."
     },
     {
       "ts": "01:35",
-      "quote": "looks like I have you down as the property owner. Is there anybody else you can paddle with you, or is it just you?",
-      "classification": "spouse_handling",
-      "stewart_read": "Rep asks the co-owner question (garbled in transcription, likely 'anybody else on the title'), and the customer names Michael Hayes as a co-owner. This is the correct verify step being run."
+      "quote": "And then, looks like I have you down as the property owner. Is there anybody else you can paddle with you, or is it just you? They found ways to ensure the food is out of state",
+      "classification": "other",
+      "stewart_read": "This passage is garbled ASR output ('paddle with you', 'food is out of state') — a transcription-quality artifact, not clean dialogue. The co-owner question itself is inferable from context (customer answers 'Michael Hayes') but the surrounding text should not be treated as a literal rep statement."
+    },
+    {
+      "ts": "01:57",
+      "quote": "Would you do you know how much you're kind of paying on average per month with them?",
+      "classification": "bill_anchor",
+      "stewart_read": "Rep captures the bill figure ($120/month) cleanly, but per bill_anchoring.failure_pattern this is 'ask + acknowledge + move on' — the number is filed and the call proceeds straight to the credit qualifier with no emotional flip."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 29,
-    "verified": 29,
+    "checked": 36,
+    "verified": 36,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION16_33f6ab67",
-  "rep_name": null,
-  "trajectory_summary": "This call opens with genuine interest (neighbor-driven curiosity, a real $300 bill) but collapses under a hard credit disqualifier the moment the setter asks the qualifying question. The customer volunteers a raw, extensive financial hardship disclosure — back taxes, threatened home sale, borrowed money — that the setter acknowledges only with a brief 'I'm sorry about that' before the call ends in a DQ. Energy leaked steadily from the neighbor-interest opening to a resigned goodbye.",
+  "rep_name": "Bucky",
+  "trajectory_summary": "The call opens with genuine, self-volunteered interest (neighbor's solar) but is immediately buried under domestic chaos and diarization confusion, then pivots hard into an unprompted financial hardship disclosure that resolves the call as a clean hard DQ on credit. The rep's script discipline (address, title, utility, bill, roof, credit) holds together despite the noise, but there is no emotional acknowledgment of the hardship disclosure and no cross-sell or pipeline follow-up offered before ending the call.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unclear; this should be tagged dq — the credit qualifier (per qualifiers.credit_qualifier, threshold 670) is a hard disqualifier and the customer confirms sub-670 credit at 02:06, with the setter confirming the DQ explicitly at 03:52.",
+  "outcome_dispute": "This call should be tagged dq, not booked/tentative/callback — the customer explicitly states 'without a credit score over 670, there's nothing I can do?' and the call ends immediately after with no appointment discussion at any point in the transcript.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "03:52",
-    "quote": "There's, so without a credit score over 670, there's nothing I can do? Yeah. I already figured that, Dan.",
-    "reasoning": "The customer confirms sub-670 credit and the setter confirms this is a hard blocker per the credit qualifier script; the call ends with no appointment, no callback, and a polite goodbye — a clean hard-gate disqualification."
+    "quote": "so without a credit score over 670, there's nothing I can do?",
+    "reasoning": "The customer's credit is below the 670 threshold, confirmed by the hardship disclosure and the explicit statement that nothing can be done; the call ends immediately after with pleasantries and no appointment, date, or callback time set."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The setter acknowledged the bill positively ('Oh, yeah. We can definitely help with that.') but the call moved to roof type and then credit before any emotional flip against the utility could occur — the DQ overtook the call before a flip was possible."
+    "reasoning": "The rep acknowledges the $300 bill generically ('Oh, yeah. We can definitely help with that') at 01:42 but never flips it into an emotional alignment-against-the-utility reframe before moving to the roof question; the call is later mooted by the credit DQ, but the flip was available and skipped in the moment."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call never reaches bill-document collection — it is short-circuited by the credit qualifier disqualification before the rep gets to asking for the actual utility bill (mail/online, photo, text, email)."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,135 +41,224 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer volunteered the neighbor-influence reason unprompted at the very start of the call before the setter reached the verify section; the setter never explicitly asked the interest question and never returned to reinforce this reason later, though the call was cut short by the credit DQ."
+    "reasoning": "The customer volunteers the neighbor-driven interest unprompted before the rep formally asks any verify questions; the rep never explicitly asks 'what interested you in solar' and never references the neighbor motivation again later in the call, including at the bill-anchor moment where it could have reinforced urgency."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
-      "status": "skipped",
+      "status": "asked",
       "ts": "00:20",
+      "end_ts": "00:53",
       "quote": "This is Bucky with Ion. I'm reaching out about the solar for me.",
-      "reasoning_note": "garbled opening, no clean company/state/legitimacy framing distinguishable in transcript"
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Okay.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "interest_question",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "00:40",
+      "end_ts": "00:52",
+      "quote": "and it does it how how it helps with your utility bill and such and so forth.",
+      "customer_response": "cooperative",
+      "customer_quote": "I actually saw my neighbor's head some. That's what made me really wanna do this.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:09",
-      "quote": "So are you at 134 Ellington Road?"
+      "end_ts": "01:13",
+      "quote": "So are you at 134 Ellington Road?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:17",
-      "quote": "Is anybody else on the title but you?"
+      "end_ts": "01:21",
+      "quote": "Is anybody else on the title but you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:45",
-      "quote": "Do you know what kind of roof you have? Is it a shingle?"
+      "end_ts": "01:50",
+      "quote": "Do you know what kind of roof you have? Is it a shingle?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. One of them were, but not all of them.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:25",
-      "quote": "what utility company are you with?"
+      "end_ts": "01:36",
+      "quote": "what utility company are you with?",
+      "customer_response": "cooperative",
+      "customer_quote": "CenterPoint Energy.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:37",
-      "quote": "What, how much are you spending on a monthly average?"
+      "end_ts": "01:42",
+      "quote": "What, how much are you spending on a monthly average?",
+      "customer_response": "cooperative",
+      "customer_quote": "Like, $300 almost.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "02:03",
+      "end_ts": "03:57",
+      "quote": "Your credit score over 670?",
+      "customer_response": "resistant",
+      "customer_quote": "so without a credit score over 670, there's nothing I can do?",
+      "resistance_reason": "financial_hardship",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "02:06",
+      "quote": "No. That's what I was thinking. It was gonna be something to do with that, and a lot of stuff just happened.",
+      "type": "cost",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": true,
+      "resolution_ts": "03:52",
+      "reasoning": "This is not a persuadable objection but a hard qualifier failure (credit below 670) per qualifiers.credit_qualifier — the customer discloses a specific $15,000 tax-debt hardship that confirms their credit is disqualifying. The line at 02:48 asking about relatives/family is attributed to 'rep' in the transcript, but given the documented diarization confusion in this call's opening minute, it is treated here as a single unresolved attempt rather than confidently counted, since audio review would be needed to confirm the speaker. The objection resolves as a clean DQ at 03:52 rather than through persuasion."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "empathy during vulnerability disclosure on a DQ call",
-    "ts": "02:10",
-    "quote": "a lot of stuff just happened. I've lived here seventeen years, and out of nowhere, they've told me that I owe them with $15,000 in taxes.",
-    "why": "The customer hands over an unusually raw, extended financial hardship disclosure and the setter offers almost no verbal acknowledgment until the call is already ending. Per coaching_philosophy.empathy_on_vulnerability_disclosure this is a trust-gift moment independent of whether the deal closes, and the rep's near-silence through it is the most consequential, coachable gap on this call."
+    "topic": "hard DQ close discipline",
+    "ts": "03:52",
+    "quote": "so without a credit score over 670, there's nothing I can do?",
+    "why": "This call correctly identifies a hard credit DQ per qualifiers.credit_qualifier, but ends abruptly on a joke with no clean close — the rep should have a standard, respectful DQ wrap-up ready (thank the customer, note the door isn't necessarily closed forever) rather than trailing into 'I'm totally joking.'"
   },
   "key_moments": [
     {
+      "ts": "00:20",
+      "quote": "Who is this? Hey. This is Bucky with Ion. I'm reaching out about the solar for me. So the Hey. How you doing?",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The diarization is garbled here (both 'rep' and 'customer' lines blend), but even accounting for that, there's no clean company/state/reason framing — the intro reads as fragmented rather than a clear legitimacy anchor."
+    },
+    {
+      "ts": "00:40",
+      "quote": "I actually saw my neighbor's head some. That's what made me really wanna do this.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "A neighbor-driven interest signal is exactly the kind of organic motivator the schema flags as valuable — it means the lead is not cold, it's socially primed."
+    },
+    {
       "ts": "01:40",
       "quote": "Like, $300 almost.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "A $300/month bill is a strong pain anchor and the setter reacted well in the moment, but the call never got the chance to use it since the credit DQ arrived one exchange later."
+      "classification": "bill_anchor",
+      "stewart_read": "A $300/month bill is captured cleanly and acknowledged ('Oh, yeah. We can definitely help with that'), but the acknowledgment is generic — no flip into alignment-against-the-utility before moving to the next verify item."
     },
     {
-      "ts": "02:39",
-      "quote": "Okay. I know how much it is. And if that's a part of it, my credit is not good, and I won't be able to, like, get a loan for this at all.",
+      "ts": "02:06",
+      "quote": "No. That's what I was thinking. It was gonna be something to do with that, and a lot of stuff just happened.",
       "classification": "empathy_miss",
-      "stewart_read": "The customer is mid-disclosure of a severe financial hardship (a $15,000 surprise tax bill, threatened forced sale of his home of 17 years) and is essentially narrating his own disqualification in real time. The setter does not interject with any acknowledgment during this stretch."
-    },
-    {
-      "ts": "03:42",
-      "quote": "Yeah. I'm sorry about that. Yeah. I tried to investigate it a little bit, but it couldn't get real far. So whatever.",
-      "classification": "empathy_miss",
-      "stewart_read": "The only empathy offered across the entire ~90-second hardship disclosure is a four-word 'I'm sorry about that,' delivered right as the setter is also confirming the DQ. It reads as procedural closure, not genuine acknowledgment."
-    },
-    {
-      "ts": "03:52",
-      "quote": "There's, so without a credit score over 670, there's nothing I can do?",
-      "classification": "other",
-      "stewart_read": "The setter confirms the hard credit DQ per script, correctly following the 670 threshold rule. This is procedurally correct — no alternative financing path is offered because the schema currently treats this as a hard_dq with no confirmed fallback."
+      "stewart_read": "The customer's $15,000 tax/credit hardship disclosure runs almost continuously from 02:06 to 03:44 with very little room for the rep to interject; the transcript shows the customer's monologue is nearly unbroken. That context tempers the read — this is not a rep sitting silent by choice, but a customer who does not leave natural pause points."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 25,
-    "verified": 25,
+    "checked": 40,
+    "verified": 39,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

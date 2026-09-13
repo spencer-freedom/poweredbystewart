@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION28_88b4362f",
   "rep_name": null,
-  "trajectory_summary": "This is a short, non-standard scenario call — a detached, newly-built, unmetered garage rather than a home — that the rep handled by adapting the verify sequence on the fly and holding setter scope when pressed for pricing. The call moves steadily toward a booked appointment without friction, though some qualifying gaps (unmetered structure, vague square footage) are left for the specialist to sort out rather than resolved on the call.",
-  "shape": "energy_built",
-  "outcome_dispute": "v1 tag is unknown/unclear; observed transcript shows a clean booked appointment for the next day at 12:00 with a reconfirmation text promised — this should be tagged tentative rather than a hard 'booked,' since the rep frames it with a reconfirmation contingency ('shoot you a text a couple of hours prior just to reconfirm that still works').",
+  "trajectory_summary": "This is a non-standard scenario — a customer requesting solar for a detached, unmetered, newly-built garage rather than the home — and the rep adapts reasonably well: he re-routes his questions around the garage, holds setter scope when asked for a sizing estimate, and locks a next-day specialist visit. The call is efficient (under 5 minutes) but shows friction in mapping the standard home-qualification script (square footage, utility company, prior design) onto a scenario the script wasn't built for.",
+  "shape": "mixed",
+  "outcome_dispute": "This looks like it should carry the dq tag in some systems given the garage has no separate meter, but the rep never treated it as a disqualifier and booked a specialist visit anyway — the observed outcome is a booked in-person appointment, not a DQ.",
   "observed_outcome": {
-    "outcome": "tentative",
+    "outcome": "booked",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "04:44",
-    "quote": "12:00 sounds good. K. Sounds good then. We'll go ahead and shoot for, tomorrow then, at twelve.",
-    "reasoning": "A specific day (tomorrow) and time (12:00) are agreed, but the rep explicitly frames it as pending reconfirmation via text a few hours prior, which makes this a tentative rather than a fully locked booking; no co-owner/spouse was identified or discussed on this call."
+    "quote": "K. Sounds good then. We'll go ahead and shoot for, tomorrow then, at twelve.",
+    "reasoning": "A specific day (tomorrow) and time (12:00) are agreed for a specialist to visit in person and look at the garage, and the customer confirms acceptance at 04:33 ('That sounds good. That's a good time.')."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,144 +20,246 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "This call is for a detached garage's electrical needs, not the home's utility bill, and the rep never asks about or captures a bill amount — utility company (BGE) is mentioned but no dollar figure or usage number is ever given by the customer."
+    "reasoning": "This call never reaches a bill amount or usage figure — the customer's garage has no separate meter, and the rep never asks about the home's own electric bill, so there was nothing to anchor on."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The rep never raises collecting a utility bill or usage document at any point in this call; the whole call is spent qualifying the garage structure itself rather than gathering billing data."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "00:39",
-    "reason_quote": "I'm looking for something that just handle general, you know, electricity. Maybe put a power tool, lights, and that sort of thing, and have receptacles out there.",
+    "reason_ts": "00:40",
+    "reason_quote": "Maybe put a power tool, lights, and that sort of thing, and have receptacles out there.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar,' but Larry volunteers his motivation (basic power for tools/lights/receptacles in the new garage) unprompted; the rep acknowledges it operationally (asking follow-up qualifying questions) but never reflects this specific use-case back when booking or framing the appointment."
+    "reasoning": "The rep never explicitly asks 'what interested you in solar,' but the customer volunteers his intended use case for the garage unprompted early in the call; the rep never reflects this back or ties the appointment/specialist visit to it later, so the anchor goes unused."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
-      "status": "skipped",
+      "status": "asked",
       "ts": "00:09",
-      "quote": "Hey, Larry. We were just giving you a quick call about a solar design for the home."
+      "end_ts": "00:19",
+      "quote": "Hey, Larry. We were just giving you a quick call about a solar design for the home.",
+      "customer_response": "cooperative",
+      "customer_quote": "Well, actually, I don't want it for the home. I want it for a garage.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:04",
-      "quote": "Is the is the address the 300 Morris Branch?"
+      "end_ts": "01:10",
+      "quote": "Is the is the address the 300 Morris Branch?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. It is. Yes. It is.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:34",
-      "quote": "And then what utility company are you with, Larry?"
+      "end_ts": "02:45",
+      "quote": "And then what utility company are you with, Larry?",
+      "customer_response": "deflected",
+      "customer_quote": "I'm talking solar.",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "bill_amount",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "02:51",
-      "quote": "Is this your first time seeing this, design for the garage?"
+      "end_ts": "03:16",
+      "quote": "Is this your first time seeing this, design for the garage?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. I haven't spoke with anyone else yet, but I am gonna call for other references.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "04:44",
-      "quote": "We'll go ahead and shoot for, tomorrow then, at twelve."
+      "ts": "03:37",
+      "end_ts": "04:44",
+      "quote": "But what when would work best for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "That sounds good. That's a good time.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "asked",
       "ts": "04:52",
-      "quote": "We'll shoot you a text a couple of hours prior just to reconfirm that still works"
+      "end_ts": "05:02",
+      "quote": "We'll shoot you a text a couple of hours prior just to reconfirm that still works and so we're not popping by unannounced.",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright. See you tomorrow. K.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "03:52",
+      "quote": "So can you just can you give me a can you give me a consensus of what it would take to have that minimal amount of solar up there?",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "So I'm not too sure only because I'm in the scheduling, and design department."
+      ],
+      "resolved": true,
+      "resolution_ts": "04:22",
+      "reasoning": "Customer asks for a ballpark sizing estimate; rep declines and redirects to the on-site specialist visit, offering to flag the concern in notes, and the customer accepts without pushing further."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "price-ballpark redirect using the right rebuttal language",
-    "ts": "03:52",
-    "quote": "So can you just can you give me a consensus of what it would take to have that minimal amount of solar up there?",
-    "why": "The rep's instinct to defer is correct (matches setter_scope_discipline), but the actual delivery ('I'm not too sure only because I'm in the scheduling and design department') is weaker than the schema's own price_estimate_before_design rebuttal, which reframes the ask as a positive ('let's get you real numbers, not a ballpark') instead of a limitation of the rep's role. This is a language/confidence fix, not a scope fix."
+    "topic": "adapting verify questions to non-standard scenarios",
+    "ts": "02:00",
+    "quote": "Then do you know the square footage of that garage?",
+    "why": "The rep ran the home-solar verify checklist (square footage, utility company, prior design) largely unmodified onto a garage-only, unmetered build, producing mismatched exchanges (customer correcting the utility-company answer at 02:45) — the coaching need is recognizing when the standard sequence doesn't fit and adapting the questions to the actual scenario in real time."
   },
   "key_moments": [
     {
-      "ts": "00:09",
+      "ts": "00:19",
       "quote": "Well, actually, I don't want it for the home. I want it for a garage.",
       "classification": "non_standard_scenario_hold",
-      "stewart_read": "The call opens on a mismatch between the lead record (home) and what the customer actually wants (a detached, newly-built, unmetered garage). No schema section addresses garage-only or unmetered-structure requests — this is a genuine gap in Ion's script coverage, not a rep error. The rep adapts smoothly rather than trying to force the standard homeowner flow."
+      "stewart_read": "The customer's request falls entirely outside Ion's standard new-home-solar script — a solar-for-detached-garage build with no separate meter. The rep doesn't escalate or place a hold, but also doesn't have a clean qualification path for it; he improvises verify questions in real time."
     },
     {
-      "ts": "00:29",
-      "quote": "No. It doesn't.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The garage has no separate meter, which is a material fact for how solar would even be metered/net-metered for that structure. The rep acknowledges it ('No problem at all') and moves on without probing whether this is a hard blocker, likely because that determination sits with the specialist's site visit."
+      "ts": "00:53",
+      "quote": "Oh, no. No. We we can do that for you.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "The customer asks whether the garage needs to be prewired before solar goes in — a technical installation question. The rep answers directly rather than redirecting to the specialist. Note: the transcript is ambiguous here about exactly what 'that' refers to, so this read carries a confidence caveat rather than being a clean violation."
     },
     {
       "ts": "02:00",
       "quote": "Then do you know the square footage of that garage?",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The rep collects a raw number (26 by 26, roughly 400-500 sq ft) but doesn't reflect it back as a forward-pulling hook (e.g., tying the size to what the specialist could realistically cover). The data is filed, not used to build anticipation for tomorrow's visit."
+      "stewart_read": "The rep runs the standard verify sequence (square footage, then utility company at 02:34, then prior design at 02:51) built for home-solar qualification directly onto a garage-only, unmetered structure, producing a mismatched exchange — the customer has to correct the utility-company answer ('I'm talking solar') and struggles to estimate square footage on the spot. This is schema drift: the qualification questions weren't adapted to the non-standard product, not a customer-side knowledge gap."
     },
     {
-      "ts": "03:52",
-      "quote": "So can you just can you give me a consensus of what it would take to have that minimal amount of solar up there?",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is a price/ballpark ask, similar in shape to the script's price_estimate_before_design trigger. Larry is asking for a 'minimal amount' framing — a soft cost-consciousness signal — but the rep doesn't reflect back any bill-pain or savings angle since no bill was ever discussed (this is a garage load, not a home bill)."
+      "ts": "00:40",
+      "quote": "Maybe put a power tool, lights, and that sort of thing, and have receptacles out there.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "The customer volunteers his actual use case for the garage unprompted — general power, tools, lighting, receptacles. This is the natural curiosity/interest anchor for this call (equivalent to a bill-pain reason on a standard call), but the rep never reflects it back or ties the appointment to it later."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 25,
-    "verified": 22,
-    "fuzzy": 3,
+    "checked": 34,
+    "verified": 33,
+    "fuzzy": 1,
     "wrong_ts": 0,
     "not_found": 0
   }

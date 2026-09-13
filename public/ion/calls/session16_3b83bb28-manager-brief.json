@@ -1,163 +1,283 @@
 {
   "call_id": "SESSION16_3b83bb28",
   "rep_name": "Meg",
-  "trajectory_summary": "The call opens with the customer venting frustration but volunteering a genuine engineer's curiosity about solar technology, along with three distinct objections (financing structure, slate roof, stale research). The rep never tests any of them and offers to remove the customer from the call list within roughly ninety seconds of first contact. The call ends amicably but with zero qualification data gathered and no attempt to re-open the door the customer himself left ajar.",
+  "trajectory_summary": "The customer opens by explaining he clicked into the form by accident while researching solar technology as an engineer, then stacks three objections (financial math doesn't work, slate roof incompatibility, and a belief solar only makes sense in a forever home) in one breath. The rep asks a single clarifying question, gets confirmation the customer isn't a real prospect, and moves directly to removing him from the call list rather than testing any of the three objections individually.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is unknown, but this should not be read as a clean, worked disqualification. The customer never had his roof claim verified, his bill was never asked about, and his own stated interest in solar technology (00:22, 01:39) was never explored. This is an unworked opt-out, not a qualified DQ — the rep exited on the customer's self-assessment rather than testing any of qualifiers.credit_qualifier, verify.roof_type_age, or verify.average_bill before conceding.",
+  "outcome_dispute": "The v1 tag is unknown, but the observed outcome is a clean no_appointment / opt-out — the rep never attempted to book, and the customer's tone, while initially adversarial, ended cordially, so this should not be read as a hostile hang-up.",
   "observed_outcome": {
-    "outcome": "no_appointment",
+    "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "01:52",
-    "quote": "Totally. Well, here, I can just take you off my list here, Charles.",
-    "reasoning": "The call ends with the rep voluntarily removing the customer from the call list rather than any appointment being booked, tentative, or a scheduled callback; no verify-section items were completed and no next step was set."
+    "ts": "01:56",
+    "quote": "What's that? Yeah. I'll take I'll take you off our list, so you shouldn't get any more calls from my own.",
+    "reasoning": "The rep explicitly removes the customer from the calling list rather than booking or attempting a callback; combined with a stated hard-DQ roof type (slate) and no stated intent to move, this is a disqualification/opt-out outcome, not a soft no-appointment or callback."
   },
   "bill_anchor_audit": {
-    "bill_captured": true,
-    "bill_ts": "01:15",
-    "bill_quote": "Mhmm. And so you're gonna pay a 150, $200 a month, which is, you know, what I pay in electricity now, which it it so it doesn't test the common sense test.",
-    "flip_executed": "no",
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer volunteered his current electricity spend as part of an objection, but the rep never acknowledged or flipped the number; the very next rep line (01:52) is an offer to remove him from the call list, meaning the flip never happened anywhere in the call."
+    "reasoning": "The customer references a rough monthly figure ('$150, $200 a month') as part of his own objection, but this was self-volunteered as a comparison point, not captured by the rep as a qualifying bill amount, and the rep never asked for or confirmed an actual bill number."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ended in disqualification/opt-out before the rep reached bill collection; the utility bill was never raised."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
     "reason_ts": "00:22",
-    "reason_quote": "All I wanted to do I'm an engineer, so I love reading about, you know, alternate sources of energy and stuff like that.",
+    "reason_quote": "All I wanted to do I'm an engineer, so I love reading about,",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked the interest question, but the customer volunteered a clear reason (engineering curiosity about alternate energy) unprompted at 00:22; the rep did not reference or build on this reason at any later point in the call, instead treating the customer's follow-on complaints as grounds to disengage."
+    "reasoning": "The rep never explicitly asked what interested him in solar; the customer volunteered a reason (engineering curiosity about alternate energy) unprompted, and the rep did not reference or build on it before ending the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "quote": "Hi. This is Meg. I'm with ION reaching out about the solar form you filled out online."
+      "end_ts": "00:12",
+      "quote": "Hi. This is Meg. I'm with ION reaching out about the solar form you filled out online.",
+      "customer_response": "resistant",
+      "customer_quote": "I think you guys did pretty did a pretty good job of tricking me into, clicking one too many times.",
+      "resistance_reason": "trust",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "co_owner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "roof",
       "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "ts": "01:26",
+      "end_ts": "01:37",
+      "quote": "",
+      "customer_response": "deflected",
+      "customer_quote": "a slate roof.",
+      "resistance_reason": "already_have_quote",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
-      "status": "skipped",
-      "ts": "01:15",
-      "quote": ""
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     }
   ],
-  "primary_coaching_focus": {
-    "topic": "single-angle concession on a multi-part objection",
-    "ts": "01:52",
-    "quote": "Totally. Well, here, I can just take you off my list here, Charles.",
-    "why": "The customer handed the rep three separate openings (a bill number, a repeated request for current tech info, and a self-declared engineering curiosity) inside 90 seconds, and the rep tested none of them before offering to end contact. This is the clearest, most consequential gap on the call — the manager should replay the 00:22 to 01:52 stretch and walk through where each opening could have been picked up."
-  },
-  "key_moments": [
+  "objections": [
+    {
+      "ts": "00:58",
+      "quote": "the truth of the matter is,",
+      "type": "cost",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer states across 00:58-01:22 that the loan payment matches his current electric bill, making solar not worth it; the rep never responds to this specific point before moving to list removal."
+    },
+    {
+      "ts": "01:26",
+      "quote": "a slate roof.",
+      "type": "roof_or_home",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": true,
+      "resolution_ts": "01:52",
+      "reasoning": "Customer states a slate roof prevents solar installation; the rep does not verify or question this, and it becomes part of the basis for ending the call, functionally 'resolving' the objection by conceding it."
+    },
     {
       "ts": "00:15",
       "quote": "Pretty good. But I think you guys did pretty did a pretty good job of tricking me into, clicking one too many times.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The customer is questioning the legitimacy of how his info was captured, essentially a soft version of the how-did-you-get-my-number concern. The rep never explicitly re-anchors the legitimacy of the form/lead source with honest specificity; he moves straight into disqualifying the interest instead of addressing the trust question."
-    },
+      "type": "trust_or_scam",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer feels misled by the lead-generation form itself; the rep never addresses this complaint directly, moving straight to disqualification instead of acknowledging the UX/trust concern."
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "confirming the exit instead of probing the stated interest",
+    "ts": "00:42",
+    "quote": "I was just gonna say, so it sounds like you're not really looking at solar options for the home. Right?",
+    "why": "The customer volunteered a genuine hook (engineer, curious about alternate energy tech) in the same breath as his complaints, but the rep's first move formalizes disqualification instead of testing that hook or verifying the stacked objections (roof type, forever-home framing) before ending the call."
+  },
+  "key_moments": [
     {
       "ts": "00:22",
-      "quote": "All I wanted to do I'm an engineer, so I love reading about, you know, alternate sources of energy and stuff like that.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "This is a genuine, self-disclosed interest in solar technology from a technically literate customer — exactly the kind of curiosity that could be redirected toward 'let's get you real numbers for your home' rather than treated as noise ahead of a complaint."
-    },
-    {
-      "ts": "01:15",
-      "quote": "Mhmm. And so you're gonna pay a 150, $200 a month, which is, you know, what I pay in electricity now, which it it so it doesn't test the common sense test.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is a textbook objection_inversion trigger: the customer states his current bill (150-200/month) as the reason solar doesn't make sense, when that same bill is the standard justification for switching. The rep never flips this — no acknowledgment of the number, no reframing that the same money is already being spent to the utility."
-    },
-    {
-      "ts": "01:37",
-      "quote": "And so, again, it was five years, so I thought I was clicking on getting the latest on technology about solar panels, that I could read about.",
+      "quote": "All I wanted to do I'm an engineer, so I love reading about,",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer restates, a second time, that his research is five years stale and that he wanted current information — practically inviting the rep to offer an updated look. The rep does not pick this up before moving to remove him from the list fifteen seconds later."
+      "stewart_read": "Customer explicitly frames himself as technically curious about alternate energy sources — this is an opening for a curiosity-based re-engagement ('what have you read about that interests you?') rather than a disqualification question. The rep does not pick up on this thread at all."
+    },
+    {
+      "ts": "00:42",
+      "quote": "I was just gonna say, so it sounds like you're not really looking at solar options for the home. Right?",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "Rather than asking for a small commitment or addressing any one objection, the rep's first move is a confirming question that hands the customer the exit. This isn't the scripted 'not interested' protocol (which asks for 30 seconds) — it's the rep pre-emptively conceding."
+    },
+    {
+      "ts": "00:58",
+      "quote": "the truth of the matter is,",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "The customer hands the rep a self-supplied bill-equivalent number ($150-200/month) as the reason solar doesn't make sense, and explicitly frames it as a wash against his current bill. This is the exact shape of an objection_inversion trigger, but the customer has already pre-empted the standard flip by naming the comparison himself — he's not saying 'I can't afford it,' he's saying 'the math is identical,' which is a harder rebuttal to invert than a simple cost objection. The rep does not attempt any response to this math at all."
+    },
+    {
+      "ts": "01:32",
+      "quote": "a slate roof.",
+      "classification": "knowledge_gap",
+      "stewart_read": "Customer states a slate roof as a reason panels can't be installed. The rep never confirms, questions, or acknowledges this claim — it simply becomes part of the reason the rep removes him from the list without any verification."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 22,
-    "verified": 20,
-    "fuzzy": 2,
+    "checked": 23,
+    "verified": 23,
+    "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0
   }

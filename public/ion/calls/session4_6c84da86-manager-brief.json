@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION4_6c84da86",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens cooperatively but leaks energy steadily from the moment the customer discloses a non-standard need (panel removal/reinstall for a home renovation, not a new install). The rep never recognizes this as outside the standard script and continues running new-install qualifiers, prompting the customer to correct him four separate times before politely ending the call. This is a non-standard scenario the setter script has no branch for, and the rep had no escalation path (e.g., a hold-and-check with a supervisor) to fall back on.",
+  "trajectory_summary": "Craig called with a narrow, already-decided need — remove and later reinstall his existing solar system during a renovation, no new sale desired — and stated this clearly five times. The rep, running the standard qualify-then-bill-swap-then-design script, never recognized this as a non-standard scenario requiring a different path, and the mismatch drove the customer from cooperative to confrontational to disengaged. The call ends with no appointment and no clear answer given to the customer's repeated, specific question.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 outcome is unknown; observed outcome is a clean no_appointment / soft DQ — the customer's need (removal/reinstall only, no new purchase) does not map to Ion's standard qualifier flow, and the call ends with the customer disengaging rather than any next step being set.",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "04:56",
-    "quote": "I'm actually good. I'm I'm this isn't what I'm looking for. I appreciate your help.",
-    "reasoning": "The call ends with the customer politely declining to continue, no appointment day or time was ever discussed, and no next step was owned by the rep."
+    "quote": "Man, I'm I'm sorry. I'm actually good. I'm I'm this isn't what I'm looking for. I appreciate your help.",
+    "reasoning": "The call ends with the customer declining to continue and no appointment, day, or time was ever discussed or offered."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,144 +20,249 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures a rough bill figure ('$2.50', likely shorthand for $250) and simply acknowledges it ('$2.50.') before moving to the next verify question about roof type — the number is never turned into leverage, and in this call it's moot anyway since the customer already owns his system outright and isn't buying a new one."
+    "reasoning": "The rep captured the bill figure (Craig means roughly $250) but never used it — this call's actual friction point isn't cost, it's Craig's stated non-interest in a new system, so the bill figure had limited natural leverage available; even so, the rep filed it silently at 01:47 ('$2.50.') without any acknowledgment or attempted use, which is the flip point where it should have gone if the rep intended to build a design case."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "02:58",
+    "ask_quote": "I just, do you are you able to access a power bill right now?",
+    "result": "declined",
+    "method": "none",
+    "result_ts": "03:07",
+    "result_quote": "Yeah. Sorry. I I really I I just need to reinstall and installation. I don't wanna go down the route of changing energy or anything like that right now.",
+    "reasoning": "The rep asked for the bill but Craig declined to engage with it, redirecting back to his actual request (removal/reinstall), so no bill document was produced or promised."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": false,
-    "reason_ts": "",
-    "reason_quote": null,
-    "reason_used": "no_reason_given",
+    "reason_given": true,
+    "reason_ts": "00:55",
+    "reason_quote": "No. We're not looking to expand. We're doing a home renovation, so we need them removed and and then reinstalled until the home reno is finished.",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks what interested the customer in solar — likely because the call quickly reveals the customer already has solar and is only seeking removal/reinstall service, making the standard interest question less applicable, but it was still never asked."
+    "reasoning": "The rep never asked the standard 'what interested you in solar' question, but Craig volunteered his actual reason for calling (renovation-driven removal/reinstall) unprompted; the rep never anchored the rest of the call to this stated reason, instead running the standard new-install qualifiers over it."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "This is Bucky with ION. I'm reaching out about the solar form you filled online."
+      "end_ts": "00:14",
+      "quote": "Hey, Craig. This is Bucky with ION. I'm reaching out about the solar form you filled online.",
+      "customer_response": "cooperative",
+      "customer_quote": "Good. Thanks for asking.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:23",
-      "quote": "Are you at 2007 Freeland Avenue?"
+      "end_ts": "00:30",
+      "quote": "Are you at 2007 Freeland Avenue?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:02",
-      "quote": "Is there any way on the title but you and your wife?"
+      "end_ts": "01:13",
+      "quote": "Is there any way on the title but you and your wife? Or sorry. Just you?",
+      "customer_response": "cooperative",
+      "customer_quote": "It actually, Mary Anne Pimodora, my partner, owns the home.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:49",
-      "quote": "do you know what type of roof you got?"
+      "end_ts": "01:56",
+      "quote": "Then do you know what type of roof you got?",
+      "customer_response": "cooperative",
+      "customer_quote": "I just know that it's a slanted front to back, but we're having all that changed.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:30",
-      "quote": "What utility company are you with?"
+      "end_ts": "01:33",
+      "quote": "What utility company are you with?",
+      "customer_response": "cooperative",
+      "customer_quote": "Duke.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:35",
-      "quote": "do you know what you're spending on a monthly average?"
+      "end_ts": "01:45",
+      "quote": "And then do you know what you're spending on a monthly average?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm not quite sure. Probably about $2.50.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:01",
-      "quote": "do you have a credit score over $6.70?"
+      "end_ts": "02:12",
+      "quote": "do you have a credit score over $6.70?",
+      "customer_response": "deflected",
+      "customer_quote": "Are you looking at details for new panels? I'm I'm not looking to buy any more panels. I just need the removal and reinstallation.",
+      "resistance_reason": "already_have_quote",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "02:58",
+      "end_ts": "03:17",
+      "quote": "I just, do you are you able to access a power bill right now?",
+      "customer_response": "resistant",
+      "customer_quote": "I I really I I just need to reinstall and installation. I don't wanna go down the route of changing energy or anything like that right now.",
+      "resistance_reason": "already_have_quote",
+      "rep_followup": "persisted",
+      "result": "declined"
     },
     {
       "section": "appointment_set",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "02:04",
+      "quote": "Yeah. Sorry. Are you looking at details for new panels? I'm I'm not looking to buy any more panels. I just need the removal and reinstallation.",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 4,
+      "attempt_quotes": [
+        "I'm just getting, like, information together so we can do, like, a design to for your home.",
+        "We we just need to know, like, your your kilowatt usage history to see, like, what we can do for you",
+        "No you don't have to pay for the panels at all.",
+        "we we would just kinda build you the design we're doing now, and then we could you could talk to a specialist"
+      ],
+      "resolved": false,
+      "resolution_ts": "04:56",
+      "reasoning": "Craig raised the same core mismatch — he wants removal/reinstall only, not a new solar sale — four separate times, and the rep tried four different angles to keep him engaged in the standard design process, but none directly answered his question about a standalone removal service, and Craig ultimately disengaged."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "non-standard scenario recognition (removal/reinstall)",
-    "ts": "02:04",
-    "quote": "Are you looking at details for new panels? I'm I'm not looking to buy any more panels. I just need the removal and reinstallation.",
-    "why": "The customer states his actual need clearly and repeats it four separate times across the call, yet the rep never breaks from the standard new-install verify script to either answer directly or escalate. This single unresolved gap is what costs the call — the manager should walk through each of the five touches with the rep and identify the moment a hold-and-check or honest 'let me find out' should have replaced continued script execution."
+    "topic": "Recognizing and routing non-standard requests (removal-only, no new sale)",
+    "ts": "03:45",
+    "quote": "I mean, do do you guys I so I don't want I don't wanna have to go down on that route. I mean, do you guys just have the service to remove the panels?",
+    "why": "Craig asked this exact direct question and never got a direct answer across three follow-up exchanges; the rep kept defaulting to the standard design/bill-swap script instead of pausing to confirm what Ion actually offers for a removal-only request, which drove the customer to disengage."
   },
   "key_moments": [
     {
-      "ts": "00:44",
-      "quote": "We so we were with Fluent Solar, but another business.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer names the prior installer (Fluent Solar) unprompted. This is exactly the kind of orphaned-system disclosure the schema's orphaned_flow branch is built for ('What company did you go with originally?'), but the rep doesn't probe further — no question about system size, ownership structure, or why they're moving off Fluent Solar before pivoting to the wife/co-owner question."
-    },
-    {
-      "ts": "01:02",
+      "ts": "01:08",
       "quote": "Is there any way on the title but you and your wife? Or sorry. Just you?",
-      "classification": "other",
-      "stewart_read": "Minor self-corrected verbal stumble — rep starts to ask about a spouse, catches himself, and clarifies. Not a substantive failure; the correction happens in the same breath."
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Craig discloses he had a prior company (Fluent Solar) for the existing system. The rep never probes what happened with that company, why it ended, or whether it's relevant to the removal request — competitive/relationship context a closer or specialist would want."
     },
     {
       "ts": "01:15",
       "quote": "Is she she looking into solar too?",
-      "classification": "knowledge_gap",
-      "stewart_read": "The customer had just said thirty seconds earlier that Mary Anne 'owns the home' and that the household already has solar installed. Asking whether she's 'looking into solar too' shows the rep isn't tracking facts the customer just gave him — a concrete instance of information not being retained mid-call, distinct from the earlier title-question stumble."
+      "classification": "protocol_violation",
+      "stewart_read": "Mary Anne, the actual title-holder/homeowner, is not on the call. Instead of treating this as a co-owner-inclusion moment (schema requires the title co-owner be part of the appointment), the rep asks a generic interest question and drops it entirely once Craig says they already have panels. This is more consequential than a standard spouse-objection miss because Mary Anne owns the home outright and Craig is not even the titleholder."
     },
     {
-      "ts": "02:04",
-      "quote": "Are you looking at details for new panels? I'm I'm not looking to buy any more panels. I just need the removal and reinstallation.",
+      "ts": "00:52",
+      "quote": "Were you looking for, like, an add on?",
       "classification": "non_standard_scenario_hold",
-      "stewart_read": "This is the first explicit signal that the customer's need doesn't fit the standard new-install script. Removal/reinstall for a home renovation is a scenario the schema flags as requiring recognition and routing (e.g., supervisor consult or a different track), not continued new-install qualification."
+      "stewart_read": "Craig's answer ('we need them removed and reinstalled until the home reno is finished') is a scenario orphaned_flow doesn't fully cover — it's not a lease/PPA DQ, not an 'add-on' interest, and not a broken-system case. It's a temporary removal-for-renovation request. The rep's one qualifying question here doesn't map onto any of orphaned_flow's four listed checks (own/lease, prior company, panel size, system working), and the rep never asks the one relevant orphaned_flow item that WOULD apply — whether the current system is working — before pivoting into the standard new-design pitch."
+    },
+    {
+      "ts": "02:28",
+      "quote": "Yeah. Well so we have a program. It's called the the bill swap.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Immediately after Craig explicitly says he isn't looking to buy panels, the rep launches into the full bill-swap pitch anyway — premature program-selling into a customer who has already signaled it doesn't apply to him."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 33,
-    "verified": 32,
-    "fuzzy": 1,
+    "checked": 49,
+    "verified": 46,
+    "fuzzy": 3,
     "wrong_ts": 0,
     "not_found": 0
   }

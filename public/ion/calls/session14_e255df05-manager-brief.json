@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION14_e255df05",
   "rep_name": "Tyk",
-  "trajectory_summary": "This is a short, mechanically smooth verify pass that ends abruptly on an unresolved utility-eligibility question. The call never reaches bill collection or appointment-setting because the rep flags a possible net-metering/service-area block and defers to a design-team callback rather than resolving it live. The transcript itself has quality issues (a ~57-second unexplained silent gap and a garbled line at 03:03) that limit how confidently the back half can be read.",
-  "shape": "stagnant",
-  "outcome_dispute": "v1 tag is unknown/unclear from metadata; observed transcript supports a callback outcome, not a booked or tentative appointment — the rep explicitly defers resolution to 'my design team' and promises 'a callback here shortly' rather than locking any appointment day/time.",
+  "trajectory_summary": "The call runs efficiently through the verify section with a cooperative customer, but stalls when the utility company check reveals a possible service-area disqualification. The rep handles the uncertainty correctly by deferring to the design team rather than guessing, but the call ends with no locked next step beyond a vague promise to call back.",
+  "shape": "mixed",
+  "outcome_dispute": "v1 tag is unknown; observed outcome is best read as callback, not booked or dq — the rep did not confirm a hard DQ, only flagged a possible net-metering issue and promised to check with the design team, so 'dq' would overstate certainty and 'no_appointment' would understate the rep's stated next step.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "03:16",
     "quote": "So let me ask them, and then I can give you a callback here shortly. Does that work for you?",
-    "reasoning": "The call ends with the rep promising to check with the design team on a utility-eligibility issue and call the customer back, with no specific day/time given and no appointment booked."
+    "reasoning": "The rep explicitly commits to a future callback pending internal design-team review of a possible utility disqualification; no appointment day/time was set, and the call ended on this pending status rather than a booked or DQ'd outcome. No co-owner was identified since the customer confirmed she is the sole title holder, so this field is not applicable rather than an incomplete step."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,145 +20,234 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call ends during the utility-company verify step, before bill amount was ever requested — there is no bill figure anywhere in the transcript."
+    "reasoning": "The call never reached the bill-amount verify item — it stalled at the utility-company check when a possible service-area disqualifier surfaced, so no bill figure was ever captured."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ended during the utility-company qualification step, before the rep reached bill collection; getting the physical bill or usage document was never raised."
   },
   "interest_reason_audit": {
     "asked": true,
-    "ask_ts": "00:30",
+    "ask_ts": "00:13",
     "reason_given": true,
-    "reason_ts": "00:38",
-    "reason_quote": "No. I've been interested for, since before I even bought my house.",
+    "reason_ts": "00:41",
+    "reason_quote": "for, since before I even bought my house.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked and the customer gave a longstanding-interest reason, but the rep's follow-up at 00:53 ('I kinda just wanted to look into clean energy') pivots to the rep's own framing rather than reinforcing the customer's stated long-term interest; the call then moves to roof and title questions without returning to it. Note the immediately adjacent 00:41-00:44 segment is transcription-ambiguous and is not relied on here."
+    "reasoning": "The rep asked what got her interested in solar and she gave a long-standing personal-interest reason, but the rep did not reference or reinforce this reason later in the call — the conversation moved to roof type and then stalled on utility qualification before any reason-based close could happen."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "Hey, Georgia. This is Tyk with Ion. I received a request you're looking at solar for the home."
+      "end_ts": "00:12",
+      "quote": "Hey, Georgia. This is Tyk with Ion. I received a request you're looking at solar for the home.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm doing good.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
-      "ts": "00:30",
-      "quote": "And, what got you interested in looking at solar?"
+      "ts": "00:13",
+      "end_ts": "01:04",
+      "quote": "what got you interested in looking at solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "I've been interested for, since before I even bought my house.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:13",
-      "quote": "the address. Looks like I have you at 10 Southeast East Williams Avenue in Depot Bay?"
+      "end_ts": "00:30",
+      "quote": "The first one I wanted to clarify was just the address. Looks like I have you at 10 Southeast East Williams Avenue in Depot Bay?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. That's right.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:17",
-      "quote": "Is there anybody else for the title with you, or is it just you?"
+      "end_ts": "01:23",
+      "quote": "Is there anybody else for the title with you, or is it just you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Just me.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:05",
-      "quote": "Is that an asphalt shingle roof?"
+      "ts": "01:04",
+      "end_ts": "01:15",
+      "quote": "Is that an asphalt shingle roof? It looks like it is.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:29",
-      "quote": "Who is the current utility company for you?"
+      "end_ts": "02:55",
+      "quote": "Who is the current utility company for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. It's Central Lincoln, PUD. Sugar.",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "00:58",
-      "quote": "Have you ever looked at it, previously before in terms of, like, getting a design"
+      "ts": "00:53",
+      "end_ts": "01:04",
+      "quote": "Have you ever looked at it, previously before in terms of, like, getting a design, or is this your kind of your first time doing so?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm just starting.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "skipped",
+      "ts": "03:16",
+      "end_ts": "03:33",
+      "quote": "So let me ask them, and then I can give you a callback here shortly. Does that work for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright. Yeah. That works. Thank you.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "unanchored callback exit",
+    "topic": "unanchored callback / no concrete next-step time",
     "ts": "03:16",
     "quote": "So let me ask them, and then I can give you a callback here shortly. Does that work for you?",
-    "why": "The call ends without a locked time or day for the follow-up, which the schema treats as a distinct risk from a genuine conditional hold — a simple habit of stating a specific callback window would materially improve follow-through odds on this lead."
+    "why": "The call ends on a pending disqualification with only a vague 'shortly' promise instead of a specific day/time for the callback, leaving the lead with no committed next touch — this is the single most consequential gap since it determines whether this lead gets recovered at all."
   },
   "key_moments": [
     {
-      "ts": "00:41",
-      "quote": "since I was a little kid.",
+      "ts": "00:44",
+      "quote": "Since I was a I thought I would maybe take this route since I was since I was a little kid.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer appears to give a long-standing personal interest in solar, but the transcript segment from 00:38-00:44 is speaker-ambiguous and garbled — the line 'I thought I would maybe take this route since I was since I was a little kid' is embedded inside a block also containing rep dialogue ('Okay. Awesome. Is this kind of your first time in the house?'). Given this transcription ambiguity, this should be read as a low-confidence signal, not a clean missed-anchor moment."
+      "stewart_read": "Customer gives a strong, lifelong-interest reason for going solar, but the rep's next line pivots to a generic verify question rather than reflecting the reason back. Confidence on this read is lowered by likely diarization overlap around this exchange (the 00:44-00:53 lines are hard to cleanly attribute), so this should be treated as a lower-confidence observation rather than a firm miss."
+    },
+    {
+      "ts": "01:29",
+      "quote": "Who is the current utility company for you?",
+      "classification": "other",
+      "stewart_read": "The rep asks the required utility-company verify question here, but the actual answer doesn't come until nearly 90 seconds later after an unexplained pause, splitting what should be a quick exchange into two disconnected moments."
     },
     {
       "ts": "01:37",
       "quote": "What? Hold on.",
+      "classification": "rapport_repair",
+      "stewart_read": "Customer pauses abruptly mid-question and disappears for close to a minute; the rep simply waits and checks in once ('You okay?') rather than filling the dead air or losing patience."
+    },
+    {
+      "ts": "02:55",
+      "quote": "Okay. It's Central Lincoln, PUD. Sugar.",
       "classification": "other",
-      "stewart_read": "An unexplained near-minute silent gap follows this line before the customer returns apologetically. Nothing in the transcript indicates the rep caused or mishandled this — it reads as an off-call interruption on the customer's end."
-    },
-    {
-      "ts": "03:12",
-      "quote": "It does look like we're not able to work with the utility company.",
-      "classification": "non_standard_scenario_hold",
-      "stewart_read": "Rep hits a utility-eligibility question outside the standard flow and defers to the design team rather than resolving or explaining further on the call — a scenario-recognition hold rather than a knowledge gap about solar itself."
-    },
-    {
-      "ts": "03:16",
-      "quote": "So let me ask them, and then I can give you a callback here shortly. Does that work for you?",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "The callback promise has no stated day or time — it is a vague 'shortly' rather than a locked callback window, which the schema treats as materially different from a time-anchored callback for no-show/follow-through purposes."
+      "stewart_read": "This is the point where the utility company name is actually confirmed, nearly 90 seconds after the rep first asked. The delayed answer is what triggers the rep's subsequent qualification check."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 24,
-    "verified": 24,
+    "checked": 32,
+    "verified": 31,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

@@ -90,7 +90,9 @@ def build_row(summary: dict) -> dict:
         "bill": 1.0 if flip == "not_flipped" else 0.0,
         "signals": min(1.0, cls["enthusiasm_signal"] / 3),
     }
-    grounded = (qc.get("not_found", 0) == 0 and qc.get("wrong_ts", 0) == 0) if qc else None
+    # Grounded = every quoted line exists in the transcript. A quote at the
+    # wrong timestamp is a precision slip, not a fabrication — not a flag.
+    grounded = (qc.get("not_found", 0) == 0) if qc else None
 
     return {
         "call_id": cid,

@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION16",
   "rep_name": "Bucky",
-  "trajectory_summary": "This is a short, mechanical verify-and-book call: the rep moves through qualification items in order, hits a genuine detour on utility-company identification, and closes with a booked Monday 5pm phone appointment. Energy neither builds meaningfully nor leaks badly — the customer stays cooperative throughout, but the rep never engages beyond box-checking, leaving real value (the prior-contact thread, the bill figure, a proper button-up) on the table.",
-  "shape": "stagnant",
-  "outcome_dispute": "The v1 tag is unknown/unclear; the observed transcript supports a clear 'booked' outcome — a specific day (Monday) and time (5:00) are agreed and confirmed by the customer at 06:54.",
+  "trajectory_summary": "The call moves through verify items smoothly with a cooperative customer, stalls for roughly 90 seconds on utility-name guessing, recovers when the customer volunteers to pull up his bill online, and closes with a booked phone appointment. The ending is abrupt — the rep cuts off a promising competitive-intel question to leave for an unrelated obligation, leaving a stronger close on the table.",
+  "shape": "mixed",
+  "outcome_dispute": "v1 tag is unknown; observed transcript shows a clear booked outcome (Monday 5pm phone appointment) with day and time both locked, so this should be tagged booked, not tentative or no_appointment.",
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "phone",
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "06:54",
     "quote": "05:00 is fine.",
-    "reasoning": "A specific day (Monday) and time (5:00) are explicitly agreed by the customer, and the rep confirms it back at 06:56 ('So we'll call you Monday at five'), satisfying the booked-outcome criteria. No co-owner was identified since the customer confirmed no one else is on the title."
+    "reasoning": "The customer confirms a specific day (Monday) and time (5pm) for a phone appointment with a specialist, satisfying both day-and-time requirements for a booked outcome. No co-owner was identified since the customer stated he is the sole title holder."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures the bill figure and immediately moves to the next verify question without reflecting it back or using it to build urgency; the flip should have happened right at 02:26 where the rep only said 'K. $3.50.'"
+    "reasoning": "The rep captures a bill figure but the phrasing is ambiguous as transcribed (likely meaning $350/month, though this is an inference and not confirmed on the call) and the rep neither clarifies nor uses it as leverage — the flip should have landed at 02:38 ('K. $3.50.') where the rep instead simply repeats the number and moves to the next verify item."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:08",
+    "ask_quote": "Okay. If I text you, at any point, could you access one and then take a picture of that graph and then send it to me? And then I can get you scheduled.",
+    "result": "promised_later",
+    "method": "photo",
+    "result_ts": "05:21",
+    "result_quote": "I went one.",
+    "reasoning": "The rep asks for a photo of the kWh usage graph via text, and the customer engages with pulling up the utility website live on the call, but the transcript does not confirm the photo was actually sent and received before scheduling proceeded."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,213 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks what interested the customer in solar; the call moves directly from intro into address/title/utility/bill verify items without ever surfacing the customer's motivation."
+    "reasoning": "The rep never asks what interested the customer in solar; the call moves directly from intro into address/title verification without touching the emotional-anchor question from verify.interest_in_solar."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "quote": "This is Bucky with ION reaching out about the solar for me you filled online."
+      "end_ts": "00:12",
+      "quote": "Yeah. Hey. This is Bucky with ION reaching out about the solar for me you filled online. How you doing?",
+      "customer_response": "cooperative",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:19",
-      "quote": "Are you at 423 Bill Avenue?"
+      "end_ts": "00:23",
+      "quote": "Alright. Are you at 423 Bill Avenue?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes, sir.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:27",
-      "quote": "Is there anybody else on the title but you?"
+      "end_ts": "00:32",
+      "quote": "So it's a single family home. Is there anybody else on the title but you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No, sir.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "02:43",
-      "quote": "is your roof just shingle?"
+      "end_ts": "02:46",
+      "quote": "is your roof just shingle?",
+      "customer_response": "cooperative",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "00:37",
-      "quote": "What utility company are you with?"
+      "end_ts": "02:26",
+      "quote": "What utility company are you with?",
+      "customer_response": "cooperative",
+      "customer_quote": "K. Shenandoah Valley Electric Cooperative.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:26",
-      "quote": "How much you paying on a monthly average?"
+      "end_ts": "02:33",
+      "quote": "Okay. How much you paying on a monthly average?",
+      "customer_response": "cooperative",
+      "customer_quote": "Well, I'd say varies. I'd say $3.50.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:48",
-      "quote": "do you have a credit score over $6.70?"
+      "end_ts": "02:51",
+      "quote": "K. And then do you have a credit score over $6.70?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yep.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "07:42",
-      "quote": "Did you ever see, like, a design or anything or no?"
+      "end_ts": "07:42",
+      "quote": "Did you ever see, like, a design or anything or no?",
+      "customer_response": "deflected",
+      "customer_quote": "I think you guys were out here before. I'm not sure.",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:08",
-      "quote": "If I text you, at any point, could you access one and then take a picture of that graph and then send it to me?"
+      "end_ts": "03:37",
+      "quote": "Okay. If I text you, at any point, could you access one and then take a picture of that graph and then send it to me?",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright. If you hold on a second, I might be able to bring up the website.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "06:32",
-      "quote": "Can you do Monday?"
+      "end_ts": "06:56",
+      "quote": "Can you do Monday?",
+      "customer_response": "cooperative",
+      "customer_quote": "05:00 is fine.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
       "ts": "06:56",
-      "quote": "All they ask is you're not driving and you can access your email."
+      "end_ts": "07:46",
+      "quote": "So we'll call you Monday at five. I'll text you after this to remind you, and then they'll, yeah, they'll call you at five. All they ask is you're not driving and you can access your email.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. And who's calling me?",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "bill capture without flip",
-    "ts": "02:26",
-    "quote": "K. $3.50.",
-    "why": "The rep gets the bill number cleanly but treats it as a checklist item rather than the emotional anchor for the whole call — no reflection, no urgency framing, nothing for the closer to build on."
+    "topic": "Utility lookup efficiency",
+    "ts": "01:08",
+    "quote": "What give me a couple names.",
+    "why": "Nearly 90 seconds is spent guessing utility company names with no reference tool, the single largest inefficiency on this call and an easy fix with a regional utility list."
   },
   "key_moments": [
     {
-      "ts": "02:26",
-      "quote": "K. $3.50.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The rep captures the bill figure but responds with a bare acknowledgment and moves straight to the roof question — no reflection, no emotional flip, no curiosity hook about what that bill could become."
+      "ts": "01:08",
+      "quote": "What give me a couple names.",
+      "classification": "knowledge_gap",
+      "stewart_read": "The rep lacks a reference list or lookup method for utility companies in the customer's region and resorts to guessing six different names over roughly 90 seconds before the customer self-resolves it."
     },
     {
-      "ts": "00:45",
-      "quote": "The Appalachian Power, I guess, or whatever it's called.",
-      "classification": "other",
-      "stewart_read": "Customer's own uncertainty about their utility provider triggers a two-minute guessing detour where the rep runs through a list of names (Dominion, SCVA, NRECA) instead of pausing to let the customer look at the bill directly, which is what eventually resolves it."
+      "ts": "02:33",
+      "quote": "Well, I'd say varies. I'd say $3.50.",
+      "classification": "bill_anchor",
+      "stewart_read": "The customer gives a bill figure, though the phrasing ('$3.50') is ambiguous and likely means $350/month rather than three dollars fifty cents; the rep repeats it back flatly and moves on without flipping it into emotional leverage or clarifying the amount."
+    },
+    {
+      "ts": "03:37",
+      "quote": "Alright. If you hold on a second, I might be able to bring up the website.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "The customer proactively offers to retrieve his own bill data online without being pushed, a cooperative signal the rep could lean into for the rest of the bill-collection process."
     },
     {
       "ts": "07:18",
       "quote": "I think you guys were out here before. I'm not sure.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a possible prior Ion contact and even mentions satellite/Google Earth imagery being used, which is real competitive/operational intel, but the rep's one follow-up question is cut off by the rep needing to leave."
-    },
-    {
-      "ts": "07:42",
-      "quote": "Did you ever see, like, a design or anything or no? I I have to go and serve.",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "The rep ends the call abruptly mid-question, citing needing to leave, without a clean recap or handshake confirmation of the appointment details."
+      "stewart_read": "This disclosure maps directly to the schema's recycled_lead category — if Ion already has this customer's data or bill on file from a prior visit, the roughly 90 seconds spent re-identifying the utility company and the full bill-collection request may have been redundant. The rep asks one follow-up but does not pursue which company or what was shown before ending the call."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 33,
-    "verified": 33,
+    "checked": 45,
+    "verified": 44,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

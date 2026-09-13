@@ -1,17 +1,17 @@
 {
   "call_id": "20000611738",
   "rep_name": "Carter",
-  "trajectory_summary": "The call moves from a mildly skeptical, previously-burned customer through a fast, mechanical verify sequence to a booked next-day appointment. The rep succeeds procedurally — address, co-owner, roof, utility, bill amount, credit qualifier, bill collection, and scheduling all get covered — but does so without reinforcing the customer's stated motivations or resolving her spouse-availability and deadline concerns, leaving the booking structurally fragile.",
-  "shape": "mixed",
-  "outcome_dispute": "v1 outcome tag is unknown; observed transcript shows a booked appointment with day and time locked (tomorrow at 12PM), so this should be tagged booked, not tentative or no_appointment.",
+  "trajectory_summary": "The call moves efficiently through verify and bill collection with minimal friction, landing a booked appointment in under six minutes. The main structural weakness is the co-owner: Michael Dewar is identified early as being on the title, but when the customer says he's essentially never available, the rep drops the thread instead of finding an alternate way to include him.",
+  "shape": "energy_built",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": false,
     "ts": "05:40",
-    "quote": "K. I plan on 12PM. I'll block you out for an hour, but it shouldn't take that long. And then we'll just go over all the specific details with you.",
-    "reasoning": "Rep locks a specific day (tomorrow) and time (12PM) and confirms it verbally with the customer, meeting the booked threshold; it is an in-person visit per the rep's earlier statement 'It would be a in person visit.' The identified co-owner Michael Dewar is not confirmed to attend."
+    "quote": "I plan on 12PM. I'll block you out for an hour, but it shouldn't take that long.",
+    "reasoning": "A specific day (tomorrow) and time (12PM) are locked, and the rep confirms the in-person visit format established earlier at 01:00. Michael Dewar, the co-owner, is explicitly not expected to attend per the customer's 05:21 statement, so co_owner_confirmed is false."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep captures the bill figure but immediately moves to the next verify item ('And then have you seen a solar design for your home?') without acknowledging or flipping it into emotional leverage; the flip should have gone right after 02:45."
+    "reasoning": "The rep captures the figure and immediately moves to the next verify item ('K. And then have you seen a solar design for your home?') with no acknowledgment or emotional flip. The flip should have gone right there at 02:48, before pivoting to the next question. Note the transcribed figure itself is anomalously low for a monthly bill and may be a transcription artifact — this doesn't change the flip-miss finding."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:17",
+    "ask_quote": "the last thing I need from you before we schedule an appointment is just your most current utility bill that just shows us exactly how much energy you're using for the home. Do you get those through the mail or online?",
+    "result": "received_on_call",
+    "method": "text",
+    "result_ts": "04:42",
+    "result_quote": "Perfect. Just got that.",
+    "reasoning": "Rep asked for the bill, offered to text a link since the customer said she gets bills online, and confirmed receipt live on the call before moving to scheduling."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,132 +41,236 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Rep asked the interest question and got a vague answer, but never probed deeper or referenced this interest again later in the call (e.g., at booking or button-up), so the reason was never turned into leverage."
+    "reasoning": "The customer's answer is vague and gives no specific motivator (bill pain, environment, neighbor), and the rep does not probe deeper or reference it again later in the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "quote": "Hey. This is Carter calling from ION."
+      "end_ts": "00:18",
+      "quote": "Hey. This is Carter calling from ION. How are you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:19",
-      "quote": "Awesome. What has you interested in solar?"
+      "end_ts": "00:24",
+      "quote": "Awesome. What has you interested in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "We've been interested for a while.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:38",
-      "quote": "The address I have is 10011 Tarington Way. Is that correct?"
+      "end_ts": "01:50",
+      "quote": "The address I have is 10011 Tarington Way. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Mhmm.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:51",
-      "quote": "Is there anyone else on the title with you?"
+      "end_ts": "01:59",
+      "quote": "Is there anyone else on the title with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Michael Dewar.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "02:19",
-      "quote": "And then how old is the roof on the place?"
+      "end_ts": "02:29",
+      "quote": "And then how old is the roof on the place?",
+      "customer_response": "cooperative",
+      "customer_quote": "Built in 2014.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:35",
-      "quote": "who's the utility company that you're working with?"
+      "end_ts": "02:38",
+      "quote": "who's the utility company that you're working with?",
+      "customer_response": "cooperative",
+      "customer_quote": "Rappahannock.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:41",
-      "quote": "how much on average are you paying a month?"
+      "end_ts": "02:45",
+      "quote": "And then how much on average are you paying a month?",
+      "customer_response": "cooperative",
+      "customer_quote": "$4.34.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:58",
-      "quote": "the main requirements are that you pay income tax and have a credit score above six fifty. Is that the case for you?"
+      "end_ts": "03:07",
+      "quote": "the main requirements are that you pay income tax and have a credit score above six fifty. Is that the case for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "02:48",
-      "quote": "have you seen a solar design for your home?"
+      "end_ts": "02:55",
+      "quote": "have you seen a solar design for your home? Were you saying you have or not yet?",
+      "customer_response": "cooperative",
+      "customer_quote": "Not from you.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:17",
-      "quote": "the last thing I need from you before we schedule an appointment is just your most current utility bill"
+      "end_ts": "04:42",
+      "quote": "the last thing I need from you before we schedule an appointment is just your most current utility bill",
+      "customer_response": "cooperative",
+      "customer_quote": "Just a mail.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "05:09",
-      "quote": "We could do twelve, 02:30, or five tomorrow. Which would be better?"
+      "ts": "04:57",
+      "end_ts": "05:38",
+      "quote": "we could do twelve, 02:30, or five tomorrow. Which would be better?",
+      "customer_response": "cooperative",
+      "customer_quote": "Twelve five.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "05:40",
+      "end_ts": "05:49",
+      "quote": "I plan on 12PM. I'll block you out for an hour, but it shouldn't take that long.",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright. Thank you.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:06",
+      "quote": "Well, are you gonna be able to install this thing before the texting runs out or not?",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. We should be able to. And then, I mean, that's what we'd go over in the appointment, just kind of the timeline of everything. But we're still having plenty of customers that are doing solar, and we'll be able to get done before the end of the year."
+      ],
+      "resolved": true,
+      "resolution_ts": "01:31",
+      "reasoning": "Customer moves on to the verify questions without further pushback after the rep's reassurance, but the confirmatory evidence is thin — she doesn't explicitly affirm satisfaction, she simply stops raising it, so this should be read as a soft, not fully confirmed, resolution."
+    },
+    {
+      "ts": "05:13",
+      "quote": "I'll be here. He won't be until it's, like, an issue.",
+      "type": "spouse_or_co_decider",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "When would he be around?"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "After the customer's second, more explicit statement at 05:21 that Michael is essentially never predictable, the rep concedes immediately ('Okay. Yeah. No worries then') without offering any alternate scheduling angle, so the co-owner exclusion is never actually resolved — only dropped."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Co-owner exclusion from appointment",
-    "ts": "05:13",
-    "quote": "I'll be here. He won't be until it's, like, an issue.",
-    "why": "Michael Dewar is confirmed on the title but the appointment is booked with Janet alone after a brief, unresolved exchange about his availability — this is the single biggest risk to the sit actually converting, since the decision-maker won't be present."
+    "topic": "co-owner exclusion from appointment",
+    "ts": "05:21",
+    "quote": "Never. I gotta be honest. He just he was on a business training for hours a day. I can never put in when he's here or not.",
+    "why": "Michael Dewar is a confirmed title-holder (01:59) and the rep lets him be fully excluded from the appointment after one soft question, rather than trying an alternate time or a brief-phone-join option — this is the single most consequential structural gap on this call and directly weakens the appointment per protocols.spouse_decision."
   },
   "key_moments": [
     {
-      "ts": "00:32",
-      "quote": "I think I've talked to you guys before. I don't know. Every time I fill something out where it says get instant code and you fill out information and get no instant code. And then then I talk to people and they're like, well, we have to do a home visit.",
+      "ts": "00:53",
+      "quote": "Yeah. It doesn't look like you've talked to us. For some reason, there's a duplicate lead, but we haven't contacted the duplicate for you yet. So, yeah, I can definitely help you out.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a repeated bad-experience pattern with the company (form-fill, no follow-through, unclear process). Rep does not probe what she was told before or by whom — free competitive/CRM intelligence left uncollected."
+      "stewart_read": "The customer describes a recurring bad experience with lead forms ('get instant code and you fill out information and get no instant code... they're like, well, we have to do a home visit') that sounds like a pattern with prior touches or other companies, but the rep only resolves the duplicate-lead technicality and never asks what company or context she encountered before."
     },
     {
       "ts": "01:06",
       "quote": "Well, are you gonna be able to install this thing before the texting runs out or not?",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is a time-pressure objection/concern (likely tax-credit deadline) that the rep answers with a soft, hedged 'We should be able to' instead of anchoring firmly or using it as leverage to book urgently."
+      "classification": "setter_scope_creep",
+      "stewart_read": "This is a timeline/tax-credit-adjacent question that edges into closer-tier territory (install timeline commitments). The rep answers with a soft commitment ('Yeah. We should be able to... we'll be able to get done before the end of the year') rather than using the escape hatch to redirect to the specialist."
     },
     {
-      "ts": "03:01",
-      "quote": "the main requirements are that you pay income tax and have a credit score above six fifty. Is that the case for you?",
-      "classification": "other",
-      "stewart_read": "Rep states a 650 credit threshold, which matches the schema's noted drift observation (schema states 670) rather than a call-specific error — worth flagging for reconciliation with Kenny."
+      "ts": "05:13",
+      "quote": "I'll be here. He won't be until it's, like, an issue.",
+      "classification": "spouse_handling",
+      "stewart_read": "Michael Dewar is a confirmed co-owner (01:59), but when scheduling comes up the customer signals he's essentially unavailable. This is the first soft signal that the appointment may proceed without the second title-holder present."
     },
     {
-      "ts": "02:45",
-      "quote": "$4.34.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer gives a bill figure (likely $434, transcribed oddly) and the rep immediately moves to the next verify question without acknowledging it or using it as an anchor point."
+      "ts": "05:21",
+      "quote": "Never. I gotta be honest. He just he was on a business training for hours a day. I can never put in when he's here or not.",
+      "classification": "spouse_handling",
+      "stewart_read": "This is the explicit, second touch on the co-owner exclusion — the customer directly states she can 'never' predict Michael's availability. The rep's response, 'Okay. Yeah. No worries then,' abandons the protocol entirely instead of offering an evening slot, a callback window, or asking if Michael could join briefly by phone."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 36,
-    "verified": 36,
+    "checked": 54,
+    "verified": 54,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

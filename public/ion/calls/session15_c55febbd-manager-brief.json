@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION15_c55febbd",
   "rep_name": "Corey",
-  "trajectory_summary": "This is a short, non-standard call where the customer's project (unbuilt workshop, undecided roof vs. ground mount) sits outside Ion's normal ready-to-design pipeline. The rep correctly recognized the scenario didn't fit the standard flow and disqualified for now, but closed with an improvised personal-number workaround and left two live customer questions (net metering, battery) answered with visible uncertainty just as the call was ending.",
+  "trajectory_summary": "This is a short, honest call: the rep correctly identifies that the lead isn't buildable today (no structure, no roof design, and Ion doesn't do ground mounts) and says so plainly instead of stringing the customer along. But the ending is where the call actually gets interesting — the customer keeps volunteering fresh, qualified interest (net metering under his co-op, battery banks) right as the rep is trying to sign off, and that energy is caught only passively. The call closes on a personal-phone-number handoff rather than any structured or confirmed follow-up.",
   "shape": "mixed",
-  "outcome_dispute": "V1 tag is unknown/unclear; based on the transcript this is best read as a soft dq — the rep explicitly states Ion can't help 'right now' — but it is not a clean hard dq per the schema's dq_rules (no roof, credit, ownership, or region gate applies) and not a scheduled callback either, since no specific time was set for the customer to follow up.",
+  "outcome_dispute": "A DQ read (no structure built, no roof to design against) is plausible and likely correct given Ion's stated constraints. But the ending shows real, self-generated re-engagement from the customer (net metering question, battery bank interest) that goes underused — worth flagging so this isn't filed as a dead lead without a documented, trackable next step.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "02:39",
-    "quote": "So we are unable to help you right now without anything built or, like, something to work off of with, like, a roof design or anything.",
-    "reasoning": "The rep explicitly states Ion cannot proceed without a finalized structure, and the call ends with no appointment, no locked callback time, and only an unverified personal-number text promise — this is a disqualification-for-now with no scheduled next step, closer to dq than callback since nothing is calendared."
+    "quote": "So we are unable to help you right now without anything built or, like, something to work off of with, like, a roof design or anything. And we don't do ground mounts here just because they are super expensive and ultimately defeat the purpose of savings.",
+    "reasoning": "No structure exists yet to design a solar system against, and the customer's ground-mount interest is explicitly something Ion doesn't do — the rep disqualifies the lead for the present, with only an informal personal-number path for future re-engagement, no appointment or callback time set."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reached bill collection — it was cut short at the verify/roof stage when the rep determined there was no built structure to design against, so no bill or usage figure was ever solicited."
+    "reasoning": "The call never reaches bill discussion — the rep disqualifies the lead at the structure/roof-design stage before verify's bill-amount question is ever raised."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "Bill collection was never reached; the call ends at the pre-qualification/no-structure-yet stage."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,133 +41,225 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep's 00:27 line ('I got a request. You're looking at solar for your home. Is that right?') is a lead-confirmation restatement, not an open-ended 'what interested you in solar' probe per verify.interest_in_solar — it happens to surface a rich answer, but the rep never revisits or reinforces the workshop/pasture-system motivation later in the call, instead pivoting straight to the structural disqualifier."
+    "reasoning": "The rep asks the interest question and gets a detailed answer (workshop build, revisiting solar economics, awareness of tech/incentive changes), but never reinforces or ties back to this reasoning later in the call — the conversation moves straight to address verification and then to disqualification without referencing the customer's stated motivation."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:12",
-      "quote": "This is, Corey with Ion. I got a request here that you're looking at solar for your home."
+      "end_ts": "00:27",
+      "quote": "Hi, Andy. This is, Corey with Ion. I got a request here that you're looking at solar for your home. How are you doing today?",
+      "customer_response": "cooperative",
+      "customer_quote": "Hi. Fine. Just one second. I just still got an air plug in.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:27",
-      "quote": "I got a request. You're looking at solar for your home. Is that right?"
+      "end_ts": "01:19",
+      "quote": "I got a request. You're looking at solar for your home. Is that right?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes and no. It's, I'd love to build a larger workshop this year...",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "01:36",
-      "quote": "Looks like I have you here at, 376 Seville Road in Rochelle, Virginia. Is that right?"
+      "ts": "01:31",
+      "end_ts": "01:49",
+      "quote": "I have you here at, 376 Seville Road in Rochelle, Virginia. Is that right?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:51",
-      "quote": "has the, like, metal barn been built? Is that what you're saying that was going to be built?"
+      "end_ts": "02:34",
+      "quote": "And then has the has the, like, metal barn been built? Is that what you're saying that was going to be built?",
+      "customer_response": "cooperative",
+      "customer_quote": "Not yet. No. Then I haven't I haven't exactly, finalized the dimensions on it yet either.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "asked",
-      "ts": "01:19",
-      "quote": "The government incentive did go away, the, tax credit. But, nonetheless, we do have our own program here in place to completely offset it."
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "00:55",
-      "quote": "I looked at it a few years ago, and the numbers really didn't make sense."
+      "end_ts": "01:07",
+      "quote": "",
+      "customer_response": "cooperative",
+      "customer_quote": "I I looked at it a few years ago, and the numbers really didn't make sense.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "ts": "02:39",
+      "end_ts": "03:06",
+      "quote": "So we are unable to help you right now without anything built or, like, something to work off of with, like, a roof design or anything.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Sounds good.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "declined"
     },
     {
       "section": "button_up",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "02:39",
+      "quote": "So we are unable to help you right now without anything built or, like, something to work off of with, like, a roof design or anything. And we don't do ground mounts here just because they are super expensive and ultimately defeat the purpose of savings.",
+      "type": "roof_or_home",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I'll shoot you a text message with my personal number. So then once you have, like, a roof design built out and something like that, you can then give me a call directly, and we can help you out in getting an estimate started."
+      ],
+      "resolved": true,
+      "resolution_ts": "03:04",
+      "reasoning": "This is a structural/hard-gate issue (no roof exists, ground mount not offered), not a persuadable objection — the rep offers one alternative path (call back once the structure exists) and the customer accepts it without pushback."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored soft exit / personal-number workaround",
-    "ts": "02:53",
-    "quote": "what I'll do here is I'll shoot you a text message with my personal number. So then once you have, like, a roof design built out and something like that, you can then give me a call directly",
-    "why": "This is the single mechanism the entire follow-up depends on, and it's unverified (no confirmation the text was sent), uses a personal number against schema-flagged privacy/scale concerns, and puts 100% of the re-engagement burden on the customer with no locked date or CRM trail — the deal is essentially unrecoverable if the customer doesn't call back."
+    "topic": "knowledge-gap recovery with a technically engaged customer",
+    "ts": "03:50",
+    "quote": "I'm fairly certain they're now doing the selling of the power, but I'm not too certain on that.",
+    "why": "This customer is detail-oriented (co-op name, net metering mechanics, panel wattage trends) and the rep's audible guessing undercuts credibility exactly when precision would build trust; a cleaner 'let me confirm that for your specific co-op' line protects credibility without inventing an answer."
   },
   "key_moments": [
     {
       "ts": "02:39",
-      "quote": "So we are unable to help you right now without anything built or, like, something to work off of with, like, a roof design or anything.",
+      "quote": "So we are unable to help you right now without anything built or, like, something to work off of with, like, a roof design or anything. And we don't do ground mounts here just because they are super expensive and ultimately defeat the purpose of savings.",
       "classification": "non_standard_scenario_hold",
-      "stewart_read": "The customer's scenario — an unbuilt structure with undecided dimensions — doesn't map to any existing hard_dq in the schema (not roof age, credit, ownership, or region). The rep handled it reasonably by declining to book, but this is a genuine schema gap: Ion has no documented policy for 'structure not yet built' scenarios, and the rep is making a judgment call without a script to lean on."
-    },
-    {
-      "ts": "02:44",
-      "quote": "And we don't do ground mounts here just because they are super expensive and ultimately defeat the purpose of savings.",
-      "classification": "knowledge_gap",
-      "stewart_read": "This is stated as flat company policy with no hedge, but nothing in the schema confirms Ion's ground-mount stance one way or the other. If this is inaccurate or outdated, the rep has just turned away a 'pasture based solar panel system' lead the customer explicitly raised at 00:44 without any verification."
+      "stewart_read": "This is a scenario outside Ion's standard workflow — no existing structure, a possible ground-mount ask, and a roof that doesn't exist yet. The rep handles it with a clear, honest answer rather than stringing the customer along, but this exact scenario (pre-construction lead, ground mount inquiry) isn't addressed anywhere in Ion's documented dq_rules or qualifiers — it's a genuine schema gap, not a rule the rep violated or followed."
     },
     {
       "ts": "02:53",
-      "quote": "what I'll do here is I'll shoot you a text message with my personal number. So then once you have, like, a roof design built out and something like that, you can then give me a call directly, and we can help you out in getting an estimate started.",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "This matches the schema's flagged anti-pattern of setters giving out personal numbers as a workaround, and it leaves the entire re-engagement burden on the customer with no locked date, no CRM follow-up, and no confirmation the text was even sent before the call ended."
+      "quote": "But, what I'll do here is I'll shoot you a text message with my personal number. So then once you have, like, a roof design built out and something like that, you can then give me a call directly, and we can help you out in getting an estimate started.",
+      "classification": "other",
+      "stewart_read": "This isn't a bill-collection moment, but it's an analogous extension of the same anti-pattern the schema flags for bill follow-up: the rep hands out a personal number as the re-engagement mechanism instead of a tracked, company-owned follow-up path. Same privacy/scale exposure, same lack of a system record if the rep leaves or loses the thread."
     },
     {
-      "ts": "03:19",
-      "quote": "I'm in the Rappahannock Electric Cooperative zone or they're my they're my co op, I guess. Anyway, times past, there was, essentially, no selling back solar power to the utility and was more like offsetting your, house load. Is that how it still is or something anything changed there?",
+      "ts": "01:19",
+      "quote": "Yeah. Most definitely. And, yeah, you are right. The government incentive did go away, the, tax credit. But, nonetheless, we do have our own program here in place to completely offset it.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "The rep runs the tax-credit rebuttal before confirming whether the customer even has a buildable project — premature program-pitch content delivered before verify/qualification is complete."
+    },
+    {
+      "ts": "03:50",
+      "quote": "I'm fairly certain they're now doing the selling of the power, but I'm not too certain on that.",
       "classification": "knowledge_gap",
-      "stewart_read": "Customer asks a specific, informed net-metering question directly tied to his utility co-op — a strong buying signal from an educated prospect — and the rep's answer is openly uncertain."
+      "stewart_read": "Customer asks a specific, well-informed question about his utility co-op's net-metering policy (Rappahannock Electric Cooperative). The rep's answer is an audible guess rather than an admission of not knowing paired with a recovery plan — 'fairly certain... but not too certain' undercuts credibility with a customer who is clearly detail-oriented."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 27,
-    "verified": 25,
-    "fuzzy": 1,
+    "checked": 32,
+    "verified": 31,
+    "fuzzy": 0,
     "wrong_ts": 1,
     "not_found": 0
   }

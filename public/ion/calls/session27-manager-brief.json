@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION27",
   "rep_name": "Nefer",
-  "trajectory_summary": "The call moves efficiently through verify items with a cooperative customer, but the rep never flips the bill pain, never probes the customer's stated interest in Tesla-style 'solar roofs,' and closes with a callback rather than a locked, specialist-owned appointment with full button-up mechanics. Energy neither builds nor collapses — it stays flat and procedural throughout.",
-  "shape": "stagnant",
-  "outcome_dispute": "The schema's call_shape allows short calls to compress beats when qualification is otherwise covered, but this call doesn't compress button_up — it omits it entirely (no hour-block, no no-driving/computer instruction, no 'is that fair' handshake, no text-follow-up promise). Because of that, and because the rep frames the next contact as 'I'll just have my specialist give you a callback' rather than confirming the appointment mechanics with the customer directly, this reads as a callback, not a fully booked appointment, even though a day and window were exchanged.",
+  "trajectory_summary": "This is a short, mechanical verify-and-book call. The rep moves through qualification items quickly and lands a callback time, but two major value-creation opportunities — a roof-replacement cross-sell and a $250/month bill — are acknowledged with filler phrases and then dropped. The call is efficient but leaves real revenue and leverage on the table.",
+  "shape": "mixed",
+  "outcome_dispute": "V1 tag is unknown/unclear from metadata. Observed outcome is best read as a callback (specialist to call back at a locked day/time), not a fully booked closer appointment with the customer live — the rep explicitly frames it as 'I'll just have my specialist give you a callback,' which is a different commitment structure than a booked design-review appointment.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "03:00",
-    "quote": "I'll just have my specialist give you a callback, to go over this information with you",
-    "reasoning": "A day (tomorrow) and afternoon window (2:30) were exchanged, but the rep frames this explicitly as a specialist callback rather than a fully buttoned-up appointment, and none of the standard booking mechanics (hour block, handshake, text promise) were executed."
+    "ts": "03:31",
+    "quote": "we can give you a call around this time, two, 02:30.",
+    "reasoning": "Rep explicitly frames this as a specialist callback rather than a customer-attended live design review, and locks tomorrow afternoon around 2:30 — a day and approximate time are captured, meeting the callback definition rather than a fully booked appointment with hour-block and handshake mechanics."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep acknowledges the bill figure with 'Oh, jeez. Okay. We can definitely help out there.' but never turns it into an explicit reason to act now or aligns it against the utility — the flip should have gone right at 02:05 immediately following the disclosure."
+    "reasoning": "The rep's only response to the $250/month figure was 'Oh, jeez. Okay. We can definitely help out there,' then immediately pivoted to explaining the kilowatt-usage/bill-collection process — the flip should have landed right there, tying the $250 figure to the cost of staying with the utility before moving on."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "02:23",
+    "ask_quote": "that should be found on any recent Dominion bill in the form of a bar graph. And so do you know if you get those online or in the mail?",
+    "result": "declined",
+    "method": "none",
+    "result_ts": "02:31",
+    "result_quote": "I just bought the house April 16. Okay. I don't know.",
+    "reasoning": "Rep raised the bill-collection ask correctly per script, but the customer just moved in and has no bill history to provide; rep accepted this gracefully ('No. You're all good.') without setting up an alternative path (e.g., a promise to collect once a bill arrives, or having the specialist gather it)."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,132 +41,224 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep acknowledges the roof reason warmly but never explicitly ties the appointment or design conversation back to it — no roofing team bridge or reference to the roof timing is made when setting the callback."
+    "reasoning": "The rep asked what sparked interest and got a clear, specific answer (needs a new roof, exploring solar roof options), but never returned to this reason later in the call — no cross-sell bridge, no reinforcement at booking, no mention in setting the appointment."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "Hey. This is Nefer."
+      "end_ts": "00:25",
+      "quote": "This is Nefer, Solar.",
+      "customer_response": "resistant",
+      "customer_quote": "I think I was calling Kenny. Is Kenny there?",
+      "resistance_reason": "trust",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:35",
-      "quote": "what what kind of sparked your initial interest in solar?"
+      "end_ts": "01:26",
+      "quote": "what what kind of sparked your initial interest in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm gonna need a new roof. So",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:28",
-      "quote": "Is your address the 16199 Covey Circle?"
+      "end_ts": "01:44",
+      "quote": "Is your address the 16199 Covey Circle?",
+      "customer_response": "cooperative",
+      "customer_quote": "Correct.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:47",
-      "quote": "Is there anyone else on the title with you?"
+      "end_ts": "01:52",
+      "quote": "Is there anyone else on the title with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Nope. Just I.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:52",
-      "quote": "what utility company are you with?"
+      "end_ts": "01:57",
+      "quote": "what utility company are you with?",
+      "customer_response": "cooperative",
+      "customer_quote": "Dominion.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:58",
-      "quote": "How much would you say you're paying to Dominion on average per month?"
+      "end_ts": "02:06",
+      "quote": "How much would you say you're paying to Dominion on average per month?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm gonna guess close to $2.50.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "02:14",
-      "quote": "we'll have to look at the last twelve months of your kilowatt usage"
+      "ts": "02:23",
+      "end_ts": "02:35",
+      "quote": "do you know if you get those online or in the mail?",
+      "customer_response": "resistant",
+      "customer_quote": "I just bought the house April 16. Okay. I don't know.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "03:24",
-      "quote": "Would you prefer morning or afternoon?"
+      "ts": "03:09",
+      "end_ts": "03:31",
+      "quote": "I have a specialist that can give you a call as early as tomorrow. What day would work better for you, Joshua?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Tomorrow is fine. That'd be great.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "03:32",
+      "end_ts": "03:36",
+      "quote": "K. Sweet. Well, I do appreciate your time, Joshua.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Perfect.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     }
   ],
-  "primary_coaching_focus": {
-    "topic": "button-up completeness on the close",
-    "ts": "03:00",
-    "quote": "I'll just have my specialist give you a callback, to go over this information with you",
-    "why": "The call ends with a day and rough time window but skips every other button-up element (hour-block, no-driving/computer instruction, fairness handshake, text-follow-up promise). This is the single biggest lever for show-rate on this call and it's fully missing, not just thin."
-  },
-  "key_moments": [
+  "objections": [
     {
       "ts": "00:15",
       "quote": "I think I was calling Kenny. Is Kenny there?",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The rep's intro was thin and fragmented ('Hey. This is Nefer.' / 'This is Nefer, Solar.') without stating the company name clearly or referencing a lead source, which likely contributed to the customer's confusion about who he was speaking to. This is a contributing factor alongside the possibility the customer was already expecting a specific callback from 'Kenny' independent of intro quality."
-    },
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Oh, yeah. So Kenny's out right now, but I work directly with Kenny. Were you looking into get a solar design built out?"
+      ],
+      "resolved": true,
+      "resolution_ts": "00:25",
+      "reasoning": "Customer's confusion about who he's speaking to is resolved in a single exchange when the rep explains the Kenny connection and redirects to the qualifying question; customer says 'Sure' and proceeds cooperatively."
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "bill anchor captured but never flipped",
+    "ts": "02:03",
+    "quote": "I'm gonna guess close to $2.50.",
+    "why": "A live $250/month bill is the single strongest piece of leverage in this call and the rep let it pass with a filler line before moving straight to bill-collection logistics — this is the highest-leverage, most fixable gap on the call."
+  },
+  "key_moments": [
     {
       "ts": "00:40",
       "quote": "I'm gonna need a new roof. So",
       "classification": "cross_sell_miss",
-      "stewart_read": "Customer opens with a roof-replacement need as his stated reason for interest. The rep acknowledges warmly ('We can can definitely help you out there') but never explicitly bridges to Ion's in-house roofing team or confirms roofing as a parallel track distinct from the solar design."
+      "stewart_read": "Customer states he needs a new roof as his reason for solar interest. The schema's template calls for an explicit bridge naming Ion's in-house roofing team and framing solar-plus-roof as a combined opportunity. The rep says only 'We can can definitely help you out there' — vague, no named service, no bridge."
     },
     {
       "ts": "01:05",
-      "quote": "I was at I was exploring the solar roofs, so I don't know what that looks like. It looks like they have their own shingles that are solar panels, and then they they have, like, a hub that they store energy in.",
+      "quote": "solar roofs, so I don't know what that looks like. It looks like they have their own shingles that are solar panels, and then they they have, like, a hub that they store energy in.",
       "classification": "tesla_expectation_gap",
-      "stewart_read": "Customer is describing Tesla's integrated solar roof tiles product, which Ion does not sell. The rep doesn't correct or clarify this expectation gap at all, letting the customer continue to believe this product may be what's being designed for him."
+      "stewart_read": "Customer is describing Tesla Solar Roof tiles with an integrated battery — a product Ion does not sell. The rep never corrects this expectation ('Exactly. You're you're kinda just doing your research. Okay.'), leaving the customer's mental model of what he'll be offered fundamentally wrong."
     },
     {
       "ts": "02:03",
       "quote": "I'm gonna guess close to $2.50.",
       "classification": "bill_anchor",
-      "stewart_read": "Customer discloses a bill estimate. The rep reacts with 'Oh, jeez. Okay. We can definitely help out there.' — an acknowledgment, but not a flip that ties this pain specifically to the customer's motivation to act now."
+      "stewart_read": "Bill figure is captured but the rep's response is a throwaway acknowledgment with zero flip toward alignment-against-the-utility. Per bill_anchoring, capture without flip is 'necessary but not sufficient' and this is exactly that failure pattern."
+    },
+    {
+      "ts": "01:47",
+      "quote": "Joshua. Is there anyone else on the title with you?",
+      "classification": "other",
+      "stewart_read": "Rep correctly runs the co-owner check per protocol. Customer answers 'Nope. Just I' (likely a diarization artifact for 'Just me' but attributed to rep — treating cautiously). Rep does not need to invoke spouse_decision protocol since none was disclosed."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 28,
-    "verified": 28,
+    "checked": 42,
+    "verified": 42,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

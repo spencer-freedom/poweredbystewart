@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION4_690e690d",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens cooperatively but the rep reaches a shading disqualification within roughly a minute of a Google Maps glance, without probing roof orientation, sun hours, or the customer's own read of the property. The customer offers two specific, unprompted counter-arguments that go uninvestigated, and the call ends on an unanchored 'I'll give you a callback' with no date or time. Energy leaked from a warm, cooperative start into a customer left contesting a conclusion nobody actually tested.",
+  "trajectory_summary": "The call opens cleanly and cooperatively, but the rep DQs the lead on a shading assumption pulled from a satellite map without probing further, and then does not update that read even after the customer twice offers specific corrective detail. The call ends with a vague, unanchored callback promise rather than a resolved outcome in either direction.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown; the observed outcome is best read as a soft/conditional callback, not a clean DQ. The rep never resolves the customer's shading counter-evidence and offers to 'reach out to my design team' and call back 'if they can' — this is a maybe, not a hard disqualification, and it is left completely unanchored (no date, no time, no confirmed next step).",
+  "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "callback",
+    "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "02:25",
-    "quote": "I can reach out to my design team and see if they would be able to do anything. And then if they can, I'll give you a callback, and we could totally get you scheduled.",
-    "reasoning": "The call does not end in a hard DQ delivered with finality nor a booked appointment — it ends with the rep promising to escalate to the design team and call back if the shading issue can be resolved. No date or time is given, making this a callback outcome rather than tentative or booked."
+    "ts": "01:24",
+    "quote": "I don't think that the panels will be able to get enough sun, for them to be super fully fully beneficial to you.",
+    "reasoning": "The rep disqualifies the lead on shading grounds mid-call and closes with a vague, undated callback contingent on internal design-team review rather than a confirmed appointment — no day/time was ever set, so the practical outcome is a soft DQ, not a booking."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reached bill collection — it was cut short by the shading DQ discussion before the rep asked about utility company or average bill."
+    "reasoning": "The call was cut short by the shading DQ before the rep ever reached the bill-amount question in the verify flow; no dollar figure or usage number was raised by either party."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ended at the shading/DQ stage, well before bill collection would normally occur in the script sequence."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,133 +41,223 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar; the call moved from address confirmation directly into the tree/shading assessment and the interest_question verify item was never reached."
+    "reasoning": "The rep never asked what interested the customer in solar; the call moved directly from address/tenure confirmation into the tree/shading assessment and DQ discussion."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "quote": "This is Holland with Ion. I got a request that you were looking into solar for your home."
+      "end_ts": "00:14",
+      "quote": "Hey, John. This is Holland with Ion. I got a request that you were looking into solar for your home. How are you doing?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm doing good.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:37",
-      "quote": "I've got your address here as 1909 McFadden Street in Columbia, South Carolina. Is that correct?"
+      "end_ts": "00:58",
+      "quote": "I've got your address here as 1909 McFadden Street in Columbia, South Carolina. Is that correct?",
+      "customer_response": "deflected",
+      "customer_quote": "We've only been renting it for about a little over a year, but, we've owned the home for a long time.",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "co_owner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "01:09",
+      "end_ts": "02:20",
+      "quote": "So So I see that you have some trees around you. Are all of those trees still there?",
+      "customer_response": "resistant",
+      "customer_quote": "But the trees really only only give shade on the portion of the house and only a part of the day, if that makes a difference.",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "02:25",
+      "end_ts": "02:40",
+      "quote": "I can reach out to my design team and see if they would be able to do anything. And then if they can, I'll give you a callback, and we could totally get you scheduled. Okay?",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:46",
+      "quote": "Once I only have that side gets a lot. ... only give shade on the portion of the house and only a part of the day, if that makes a difference.",
+      "type": "roof_or_home",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer pushes back on the shading DQ with specific corrective detail; the rep does not engage with a follow-up question and instead repeats the original conclusion at 02:20, so the customer's correction was never actually addressed."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Premature DQ from a map glance, no verify probing",
-    "ts": "01:24",
-    "quote": "So I think that with those trees still there, I don't think that the panels will be able to get enough sun, for them to be super fully fully beneficial to you.",
-    "why": "The rep disqualified a warm, cooperative lead off a satellite image in under 90 seconds without asking a single clarifying question about roof orientation, sun hours, or square footage — and then didn't engage with two specific counter-arguments the customer volunteered. This is the single biggest value-destroying moment on the call: a real lead may have been walked away from without being properly assessed."
+    "topic": "Re-engaging after a customer correction to a DQ",
+    "ts": "01:46",
+    "quote": "Once I once I have that side gets a lot. ... only give shade on the portion of the house and only a part of the day, if that makes a difference.",
+    "why": "The customer handed the rep specific, usable detail that could have changed the shading assessment, and the rep repeated the same conclusion two lines later without a single follow-up question — this is the single most consequential and correctable gap on the call."
   },
   "key_moments": [
     {
-      "ts": "00:51",
-      "quote": "We've only been renting it for about a little over a year, but, we've owned the home for a long time.",
-      "classification": "knowledge_gap",
-      "stewart_read": "This answer is genuinely ambiguous on the hard homeowner-verification gate: is the customer currently renting this specific home from someone else, or do they own it and are describing a landlord/tenant history elsewhere? The rep says 'Okay. Very nice.' and moves on without clarifying who is actually on title for THIS address."
-    },
-    {
-      "ts": "01:31",
-      "quote": "I don't think that the panels will be able to get enough sun, for them to be super fully fully beneficial to you.",
-      "classification": "protocol_violation",
-      "stewart_read": "The rep reaches a shading disqualification based solely on a Google Maps glance, without asking which side of the roof the trees shade, roof pitch, or square footage available on the unshaded side — verify items that would normally inform this call."
-    },
-    {
-      "ts": "01:57",
-      "quote": "But the trees really only only give shade on the portion of the house and only a part of the day, if that makes a difference.",
+      "ts": "01:24",
+      "quote": "So I think that with those trees still there, I don't think that the panels will be able to get enough sun, for them to be super fully fully beneficial to you.",
       "classification": "other",
-      "stewart_read": "The customer supplies a second, more granular counter-argument (partial shade, limited time of day) than their first, and the rep's next line ('It's a ton of space to put panels up there, unfortunately') does not engage with either specific detail raised."
+      "stewart_read": "Rep reaches a hard-DQ-style conclusion from a satellite image alone without asking which side of the roof the trees shade or for what portion of the day — a process gap in how shading DQs should be verified before being delivered to the customer."
     },
     {
       "ts": "01:36",
       "quote": "So, yeah, I really do apologize, but I can get you off our list if you don't get any more calls. Okay?",
+      "classification": "other",
+      "stewart_read": "Rep moves straight from a tentative shading impression ('I think... I don't think') to offering to remove the customer from the list entirely — a disproportionate action given the DQ hasn't actually been verified."
+    },
+    {
+      "ts": "01:46",
+      "quote": "Once I once I have that side gets a lot. ... only give shade on the portion of the house and only a part of the day, if that makes a difference.",
+      "classification": "knowledge_gap_handling",
+      "stewart_read": "The customer directly volunteers the exact information (which side gets sun, limited/partial shading) that would let the rep re-evaluate the DQ, and the rep does not ask a single follow-up question about it before repeating the same conclusion at 02:20."
+    },
+    {
+      "ts": "02:25",
+      "quote": "I can reach out to my design team and see if they would be able to do anything. And then if they can, I'll give you a callback, and we could totally get you scheduled. Okay?",
       "classification": "unanchored_soft_exit",
-      "stewart_read": "The rep offers to remove the customer from the call list within seconds of a single map-based observation, before any pushback or further verification — this is a premature exit path being floated on a call that was otherwise going cooperatively."
+      "stewart_read": "The call ends with a conditional, undated callback promise instead of either a resolved DQ or a locked next step — no timeframe, no specific commitment, and no confirmation the customer even wants to be recontacted given the earlier list-removal offer."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 23,
-    "verified": 23,
-    "fuzzy": 0,
+    "checked": 29,
+    "verified": 28,
+    "fuzzy": 1,
     "wrong_ts": 0,
     "not_found": 0
   }

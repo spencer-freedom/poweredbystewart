@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION22_b253ea5a",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens with a fumbled, self-interrupted intro and never recovers control: the rep works through verify items mechanically, misreads a satellite map live on the call, and has no answer prepared for a flat roof, which is a foreseeable qualification scenario. The customer, initially cooperative, ends up talking herself out of the appointment while the rep offers no resistance or bridge, and the call terminates with a self-inflicted DQ rather than a closer-routed decision.",
+  "trajectory_summary": "This is a short verify-only call that ends in an apparent hard stop: flat roof plus no ground-mount option. The rep never gets past qualification into bill anchoring or appointment setting, and the customer ends the call herself once the roof/ground-mount answer lands. The rep's handling was reactive throughout — correcting map confusion, giving thin reassurance on the bill question, and then confirming the disqualifying roof condition without exploring alternatives or looping in a specialist.",
   "shape": "energy_leaked",
-  "outcome_dispute": "V1 tag is unknown; observed outcome is a hard DQ driven by the flat-roof/no-ground-mount constraint, ending in no appointment. This should be tagged dq, not treated as a soft no-appointment outcome, since a stated hard constraint (rep confirms 'we don't do that' for ground mount) closed the door.",
+  "outcome_dispute": "v1 tag is unknown/unstated so there is nothing to formally dispute, but the observed outcome is a clean DQ (flat roof, no ground-mount) confirmed by the rep in real time rather than escalated to a specialist — worth flagging since Ion's dq_rules list does not document flat-roof/no-ground-mount as a formal hard gate, so it's unclear whether the rep's on-the-spot answer was accurate policy or a knowledge gap.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "02:29",
-    "quote": "Oh, we don't do that.",
-    "reasoning": "Customer has a flat roof and rejects rooftop mounting; rep confirms ground-mount is not something they do, and the customer concludes 'it won't work' and ends the call — a hard disqualification on roof type/mounting method with no appointment set."
+    "ts": "02:32",
+    "quote": "Oh, okay. Well, then it won't work. Well, thanks for getting back to me. You too. Bye bye.",
+    "reasoning": "The call ends with the rep confirming ground-mount isn't offered for the customer's flat roof and the customer closing the call, treating the lead as disqualified with no appointment set."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured a bill figure but only confirmed she still qualifies ('Yeah. You're still fine.') without attempting any reframe — though given the genuinely low bill, there was limited pain to flip in this case."
+    "reasoning": "The rep only replied with a generic reassurance ('That's good... Yeah. You're still fine.') and pivoted immediately to the roof question rather than using the $75 figure to build any urgency or curiosity about savings."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ended during the verify/roof section before the rep reached bill collection; no request for the actual utility bill document was made."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,132 +41,236 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what interested the customer in solar; the call moved straight from intro into address/homeowner and utility verify items, and the call ended before this question could surface."
+    "reasoning": "The rep never asked what interested the customer in solar; the call stayed in address/utility/bill/roof verification and ended before this section could be reached."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:11",
-      "quote": "This is, this is Bucky with Ion. I'm reaching out about the solar for me for the online."
+      "end_ts": "00:19",
+      "quote": "This is, this is Bucky with Ion. I'm reaching out about the solar for me for the online.",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "interest_question",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:29",
-      "quote": "you're still at 6 Villa Silo Azul?"
+      "end_ts": "01:08",
+      "quote": "you're still at 6 Villa Silo Azul?",
+      "customer_response": "resistant",
+      "customer_quote": "is that a single family or a home? No. No. No. No. This is wide open sagebrush.",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:39",
-      "quote": "Is there anybody else on the title but you?"
+      "end_ts": "01:42",
+      "quote": "Is there anybody else on the title but you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "02:17",
-      "quote": "do you know what kind of roof you have? Is it a shingle?"
+      "end_ts": "02:32",
+      "quote": "do you know what kind of roof you have? Is it a shingle?",
+      "customer_response": "resistant",
+      "customer_quote": "It's flat. Okay. I I wouldn't put it on the roof. I'm not putting anything on a flat roof.",
+      "resistance_reason": "other",
+      "rep_followup": "alternative_offered",
+      "result": "declined"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:44",
-      "quote": "Kit Carson?"
+      "end_ts": "01:48",
+      "quote": "What utility oh, wait. You already said that. Kit Carson?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:53",
-      "quote": "is it you're paying a 150 a month on that electricity?"
+      "end_ts": "02:07",
+      "quote": "is it you're paying a 150 a month on that electricity?",
+      "customer_response": "resistant",
+      "customer_quote": "No. No. No. No. No. My highest bill I'm have natural gas. My highest electric bill has been $75, and that's a bit of an anomaly.",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:21",
+      "quote": "Oh, well, then I don't qualify because that's under a 100.",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Oh, no. That doesn't mean you don't qualify."
+      ],
+      "resolved": true,
+      "resolution_ts": "01:28",
+      "reasoning": "Customer drops the concern herself ('Well, yeah. But this okay. Keep going then.') after a single bare reassurance from the rep, without a real explanation."
+    },
+    {
+      "ts": "02:21",
+      "quote": "It's flat. Okay. I I wouldn't put it on the roof. I'm not putting anything on a flat roof.",
+      "type": "roof_or_home",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Oh, okay. Where are we going? To go outside on the ground. Oh, we don't do that."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep confirms ground-mount isn't available, which ends the call with the customer treating this as a final no rather than a resolved concern."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "no prepared answer for non-standard roof scenario",
-    "ts": "02:29",
-    "quote": "Oh, we don't do that.",
-    "why": "This single improvised line ends the call and the lead. The rep had no fallback (bridge to specialist, roofing team, confirm-before-conceding) for a flat roof / ground-mount question, and the call terminated within seconds of it."
+    "topic": "Unverified real-time DQ decision on flat roof / ground-mount",
+    "ts": "02:28",
+    "quote": "Oh, okay. Where are we going? To go outside on the ground. Oh, we don't do that.",
+    "why": "The rep single-handedly closed out the lead on a capability question that isn't documented anywhere in Ion's DQ rules; this needs to be resolved with Kenny as either a real policy (in which case fine) or a routing gap (in which case this and every future flat-roof call is being closed prematurely)."
   },
   "key_moments": [
     {
-      "ts": "00:11",
-      "quote": "This is, this is Bucky with Ion. I'm reaching out about the solar for me for the online. How are you doing? Okay. Yeah.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The intro is garbled and doesn't clearly reference the online form or establish a clean legitimacy anchor before moving to verify questions."
-    },
-    {
-      "ts": "00:45",
-      "quote": "is that a single family or a home? No. No. No. No. This is wide open sagebrush. There's no issue with solar here.",
+      "ts": "00:42",
+      "quote": "On the map, it just shows a tree. Is your home,",
       "classification": "rapport_repair",
-      "stewart_read": "The rep's ambiguous 'I just see a tree on the map' comment triggered a defensive reaction; rep recovers by clarifying he wasn't implying disqualification, which is an adequate quick repair."
+      "stewart_read": "The rep's satellite-map observation reads as a routine verify check but lands as an implicit challenge to the customer's home, triggering a defensive reaction. This is address verification gone slightly off-script rather than an intro-legitimacy issue, since the call already used the standard online-form intro."
     },
     {
       "ts": "01:21",
       "quote": "Oh, well, then I don't qualify because that's under a 100.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "This is a low-bill self-disqualification — a moment where a bill-pain flip is unavailable, but the rep still had room to reframe the low bill as still qualifying and explain why, rather than a bare 'no you still qualify.'"
+      "stewart_read": "The customer hands the rep a bill anchor and simultaneously voices a self-disqualifying belief. This is exactly the kind of moment where a bill-based objection should be flipped into a reason to still move forward, but the rep gives a thin denial instead."
     },
     {
-      "ts": "01:53",
-      "quote": "is it you're paying a 150 a month on that electricity?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Rather than asking an open bill question per script ('do you know how much you're paying on average?'), the rep guesses a number, which is corrected immediately and produces no anchor-building value."
+      "ts": "02:04",
+      "quote": "My highest bill I'm have natural gas. My highest electric bill has been $75, and that's a bit of an anomaly.",
+      "classification": "bill_anchor",
+      "stewart_read": "The customer gives a specific, usable bill figure ($75) and even qualifies it as unusual, but the rep only replies with a flat reassurance and moves straight to the roof question — the number is filed, not flipped into urgency or curiosity."
+    },
+    {
+      "ts": "02:21",
+      "quote": "It's flat. Okay. I I wouldn't put it on the roof. I'm not putting anything on a flat roof.",
+      "classification": "knowledge_gap",
+      "stewart_read": "The customer's flat roof triggers a real capability question — Ion's schema does not document flat-roof/no-ground-mount as a formal DQ rule, so this is an area where the rep is operating without documented guidance rather than following an established hard gate."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 29,
-    "verified": 29,
+    "checked": 40,
+    "verified": 40,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

@@ -1,9 +1,9 @@
 {
   "call_id": "30000362733",
   "rep_name": "Parker",
-  "trajectory_summary": "The call opens cold with a cost-anxiety question, briefly warms during the roof/sun-exposure visual, then drifts into an unresolved qualification tangle around credit score and fixed income that the rep cannot close cleanly. It ends not with a booked appointment but with a vague callback promise, leaving the lead in limbo.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "This call should not be tagged as any form of booked/tentative appointment — the rep explicitly deferred the decision to a manager and promised a callback in five minutes, with no day/time offered for a closer appointment. The correct tag is 'callback,' and even that is fragile since no concrete callback time beyond '5 minutes' was locked and the rep never re-confirms the plan in writing or with a firm handshake.",
+  "trajectory_summary": "The call moves efficiently through verify items and holds a coherent structure, but never resolves the customer's real financial anxiety, which surfaced three times in increasingly explicit terms. It ends not with a booked appointment but a five-minute holding pattern pending a manager check on credit, leaving the customer's core question — can I actually do this — unanswered.",
+  "shape": "mixed",
+  "outcome_dispute": "V1 tag is unknown; the actual outcome is a callback, not a booked or tentative appointment. No day/time for a closer call was ever set — only a same-day five-minute callback pending internal credit-policy confirmation. This should not be scored as a booked or tentative sit.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "04:39",
     "quote": "Let me check with him, and I'll give you a callback in about five minutes. Would that work for you?",
-    "reasoning": "The call ends with the rep promising to check with a manager on the credit qualification and call back shortly — no appointment day/time was set, and no closer appointment was booked or tentatively agreed."
+    "reasoning": "The call ends with the rep promising to check credit policy with a manager and call back in five minutes — no closer appointment day/time was ever set, so this is a callback, not a booked or tentative appointment."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,143 +20,257 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep acknowledges the $80 figure ('80? Okay. Gotcha.') and offers a generic 'get that a little bit lower' line but never ties the number to a specific emotional or comparative reframe against the utility — it's captured and filed, not flipped."
+    "reasoning": "The rep acknowledged the number (\"80? Okay... Definitely see what we can do to get that a little bit lower\") but never turned it into a reason to act now or an emotional alignment-against-the-utility; the flip should have landed right after the $80 figure, tying it to her stated \"flat broke\" comment from earlier for maximum leverage."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The rep never raised getting the actual utility bill (photo, text, email, login) at any point in the call — the call ended on a credit-check hold before reaching bill collection."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "01:31",
     "reason_given": true,
-    "reason_ts": "01:40",
+    "reason_ts": "01:44",
     "reason_quote": "I was watching a YouTube video when a commercial came on for this.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep acknowledges the reason briefly ('just kinda seeing your options and seeing if it makes sense for you then') but never returns to it later in the call to reinforce motivation or personalize the appointment/callback."
+    "reasoning": "The rep acknowledged the answer generically (\"Just kinda seeing your options\") but never returned to it later in the call to reinforce or tie the appointment/next step back to it."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "Hey, Margaret. It's Parker. I'm with Ion."
+      "end_ts": "00:16",
+      "quote": "Hey, Margaret. It's Parker. I'm with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm okay. How are you?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:31",
-      "quote": "what kinda got you interested in solar?"
+      "end_ts": "01:44",
+      "quote": "what kinda got you interested in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "I was watching a YouTube video when a commercial came on for this.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:13",
-      "quote": "Was this still the 1915 And 23rd Street?"
+      "end_ts": "02:26",
+      "quote": "We had that you were the homeowner. Was that right?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "02:38",
-      "quote": "looks like your roof is an asphalt shingle. Is that right?"
+      "ts": "02:33",
+      "end_ts": "02:52",
+      "quote": "looks like your roof is an asphalt shingle. Is that right?",
+      "customer_response": "deflected",
+      "customer_quote": "I'm not sure. I, just bought the house, like, a year and three quarters ago.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:58",
-      "quote": "what, what electric company were you working with?"
+      "end_ts": "03:02",
+      "quote": "what, what electric company were you working with?",
+      "customer_response": "cooperative",
+      "customer_quote": "ComEd.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "03:04",
-      "quote": "how much are you normally paying right now with ComEd?"
+      "end_ts": "03:19",
+      "quote": "And how much are you normally paying right now with ComEd?",
+      "customer_response": "cooperative",
+      "customer_quote": "I don't know. I'd have to look at my bill, but I'm thinking, like, 80.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "03:30",
-      "quote": "you're just gonna be paying income tax and have a credit score above six fifty."
+      "end_ts": "03:59",
+      "quote": "you're just gonna be paying income tax and have a credit score above six fifty.",
+      "customer_response": "resistant",
+      "customer_quote": "Oh, I I I don't know. I didn't really know. Sorry.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "ts": "04:39",
+      "end_ts": "05:03",
+      "quote": "Let me check with him, and I'll give you a callback in about five minutes.",
+      "customer_response": "cooperative",
+      "customer_quote": "Sure. You got my number?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "00:18",
+      "quote": "Is there a charge for this?",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "No. So what we do how it works is we actually take care of everything up front."
+      ],
+      "resolved": true,
+      "resolution_ts": "00:37",
+      "reasoning": "Rep answered directly with the no-money-down model and the customer moved past it without further pushback."
+    },
+    {
+      "ts": "03:59",
+      "quote": "Oh, I I I don't know. I didn't really know. Sorry.",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I'll check with my manager to see what he thinks"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer's unknown credit score stalls the qualification; rep does not resolve it on the call, instead deferring to a manager check and a callback — left open at call end."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Credit qualifier sequencing and follow-through",
-    "ts": "03:44",
-    "quote": "That sound like the case for you?",
-    "why": "The rep declares the customer qualified on an unclear 'yeah,' then immediately reopens and re-litigates the same question ten seconds later, and finally has no resolution path when she admits she doesn't know her score — this sequencing confusion is what stalls the whole call into an unlocked callback instead of a booked appointment."
+    "topic": "Vulnerability disclosure handling / financial anxiety thread",
+    "ts": "03:51",
+    "quote": "Well, I live on Social Security.",
+    "why": "The customer surfaced the same underlying worry three separate times (cost, \"flat broke\", fixed income) and the rep never once paused to acknowledge it directly — the call ends with her anxiety about affordability completely unaddressed, which is the single biggest risk to this lead converting on a callback."
   },
   "key_moments": [
+    {
+      "ts": "00:18",
+      "quote": "Is there a charge for this?",
+      "classification": "other",
+      "stewart_read": "This is an early legitimacy/cost screen before any rapport is built — closer to a scam-check than a pricing objection. The rep answered it fine, but it's an unmapped moment worth noting as a first-30-seconds trust gate rather than a scripted rebuttal trigger."
+    },
     {
       "ts": "00:54",
       "quote": "Okay. Because I'm flat broke.",
       "classification": "empathy_miss",
-      "stewart_read": "This is a direct financial vulnerability disclosure. The rep's response leans on generic savings framing rather than acknowledging the hardship specifically."
+      "stewart_read": "This is a direct financial vulnerability disclosure. The rep's response — \"Gotcha. Yeah. We we definitely love to help you save some money\" — is a generic savings pivot, not an acknowledgment of the disclosure itself."
     },
     {
-      "ts": "02:44",
-      "quote": "I think But I know the rep is fairly new. I think the rep is only, four years old or something like that.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer gives a garbled, ambiguous answer about roof age (likely meant 'roof' not 'rep' — a transcription/speech artifact) and the rep responds with a flat acknowledgment, capturing no usable roof-age data despite this being a required verify item tied to a hard DQ threshold."
-    },
-    {
-      "ts": "03:44",
-      "quote": "That sound like the case for you?",
+      "ts": "03:34",
+      "quote": "you're just gonna be paying income tax and have a credit score above six fifty.",
       "classification": "other",
-      "stewart_read": "The rep runs the qualifier question but gets an unclear 'Yeah' response, then immediately declares the customer qualified before actually confirming a credit score — this is a procedural gap in how the qualifier was verified, not a violation of any spouse/time/hello protocol."
+      "stewart_read": "Schema documents 670 as the credit threshold, with a drift_observed note from a prior call (SESSION18_fcbf33c1) where a rep also said 650. This call reproduces that exact same drift verbatim — a second data point suggesting this may be a floor-wide misstatement rather than an isolated error."
     },
     {
-      "ts": "03:55",
-      "quote": "Okay. But do you you your credit score is about 650, though?",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "Immediately after telling the customer she's qualified, the rep reopens the credit question, contradicting the prior reassurance and creating confusion instead of confidence."
+      "ts": "03:51",
+      "quote": "Well, I live on Social Security.",
+      "classification": "empathy_miss",
+      "stewart_read": "Immediately after hearing the credit/tax-income qualifier, the customer discloses she's on a fixed income — a clear anxiety signal about whether she'll qualify. The rep's next line ignores it entirely and re-asks for her credit score."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 32,
-    "verified": 31,
+    "checked": 43,
+    "verified": 42,
     "fuzzy": 0,
     "wrong_ts": 1,
     "not_found": 0

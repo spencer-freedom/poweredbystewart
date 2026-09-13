@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION5",
   "rep_name": "Ella",
-  "trajectory_summary": "The call opens with the customer minimizing her own intent and drifts through real confusion and skepticism about the solar business model, but the rep persistently redirects back to the estimate rather than resolving the customer's stated misunderstandings. The call ends in a booked phone appointment, but several live objections (free state program confusion, pricing transparency) were deflected rather than closed, leaving structural fragility for the closer.",
+  "trajectory_summary": "The call opens with the customer disclaiming interest and closes with a booked phone appointment, but the middle stretch is dominated by the customer probing the billing mechanism and per-kWh pricing without ever getting a clear answer, and her belief in a free state program was never resolved. The rep held setter scope correctly under repeated pricing pressure and recovered a not_interested objection into a booking, but the appointment sits on top of unresolved skepticism about the billing swap and cost.",
   "shape": "mixed",
-  "outcome_dispute": null,
+  "outcome_dispute": "v1 tag is unknown/unclear; observed outcome is a booked phone appointment for a specific day and time (tomorrow, 10:30 AM), but the booking is fragile given the customer's unresolved catch-22 framing of the billing model and her explicit statement she 'wasn't really looking to do anything' at the start.",
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "phone",
@@ -11,154 +11,304 @@
     "co_owner_confirmed": null,
     "ts": "11:31",
     "quote": "I've got you on the schedule then that's gonna be for tomorrow, April 21 at 10:30AM just for that phone call appointment with my specialist.",
-    "reasoning": "A specific day and time were confirmed for a phone appointment, and the customer accepted it, meeting the booked criteria despite unresolved friction earlier in the call."
+    "reasoning": "A specific day and time were confirmed for a phone appointment with the specialist, and the customer accepted it without further resistance."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "02:02",
-    "bill_quote": "Maybe $1.50. $1.50? Like, I know one time it just it jumped to $2.50. So, you know, it's it's crazy right now. I don't know.",
+    "bill_ts": "01:59",
+    "bill_quote": "Maybe $1.50.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer gives a hesitant, somewhat ambiguous bill figure and spike narrative, but the rep responds with a generic acknowledgment ('I've just seen that happen lately') rather than reflecting the specific figure back as a reason to act — the flip line should have gone right there at 02:09."
+    "reasoning": "The customer stated a bill around $150-$250 (transcribed as '$1.50'/'$2.50' with a decimal misplacement) but the rep pivoted immediately to the credit qualifier at 02:22 and later to design mechanics at 09:04 without ever reframing the bill as the reason to move forward — a pure ask-and-move-on pattern."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "04:39",
+    "ask_quote": "So do you usually get your ComEd bills in the mail or online?",
+    "result": "received_on_call",
+    "method": "text",
+    "result_ts": "06:59",
+    "result_quote": "I just did.",
+    "reasoning": "Rep asked how the customer receives her bill, waited for her to retrieve it, then had her send a photo via text to the rep's personal number after the landline blocked direct texting, and confirmed receipt before booking the appointment."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": false,
-    "reason_ts": "",
-    "reason_quote": null,
-    "reason_used": "no_reason_given",
+    "reason_given": true,
+    "reason_ts": "00:16",
+    "reason_quote": "I just thought it would give an approximate estimate",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks what interested the customer in solar; the closest substitute is the customer's own unprompted statement that she just wanted a ballpark estimate, which functions as a low-commitment framing rather than a stated motivation the rep could anchor to."
+    "reasoning": "The customer volunteered her reason for engaging (wanting a ballpark estimate) unprompted at the very start; the rep never explicitly asked 'what interested you in solar' and never circled back to tie the appointment to her stated goal of getting a number, instead booking on general procedural completion."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
-      "ts": "00:08",
-      "quote": "Yeah. This is Ion Fuller. Am I speaking with Sanobio?"
+      "ts": "00:00",
+      "end_ts": "00:14",
+      "quote": "Yeah. This is Ion Fuller. Am I speaking with",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:59",
-      "quote": "I have it at 709 Sheridan Avenue in Dalton, Illinois. Is that correct?"
+      "end_ts": "01:10",
+      "quote": "I have it at 709 Sheridan Avenue in Dalton, Illinois. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "It is.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:31",
-      "quote": "I do have you down as the property owner of the home. Is anyone else on the title with you?"
+      "end_ts": "01:36",
+      "quote": "Is anyone else on the title with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:11",
-      "quote": "And then is that a shingle roof that's on your home?"
+      "end_ts": "01:28",
+      "quote": "And then is that a shingle roof that's on your home?",
+      "customer_response": "cooperative",
+      "customer_quote": "Probably, I would say at least maybe eighteen years.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:37",
-      "quote": "Looks like you're with Commonwealth Electric. Is that correct?"
+      "end_ts": "01:44",
+      "quote": "And then looks like you're with Commonwealth Electric. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "I mean, yes.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:45",
-      "quote": "How much would you say you're spending with them on average for your electricity every month?"
+      "end_ts": "02:09",
+      "quote": "And then how much would you say you're spending with them on average for your electricity every month?",
+      "customer_response": "cooperative",
+      "customer_quote": "Maybe $1.50.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    },
+    {
+      "section": "credit_qualifier",
       "status": "asked",
-      "ts": "02:09",
-      "quote": "We do have one requirement for solar, and that's just to have a credit score over 670."
+      "ts": "02:22",
+      "end_ts": "02:28",
+      "quote": "And then we do have one requirement for solar, and that's just to have a credit score over 670.",
+      "customer_response": "deflected",
+      "customer_quote": "I know. I do. You know, I actually thought this was probably through the state for some reason.",
+      "resistance_reason": "trust",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "04:39",
-      "quote": "Do you usually get your ComEd bills in the mail or online?"
+      "end_ts": "09:24",
+      "quote": "So do you usually get your ComEd bills in the mail or online?",
+      "customer_response": "cooperative",
+      "customer_quote": "I sent it to you already.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "11:23",
-      "quote": "About 10:30AM, or we also have 11:00AM."
+      "ts": "10:50",
+      "end_ts": "11:39",
+      "quote": "Are you typically available in the mornings, afternoons, or evenings for that phone call appointment?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm open for tomorrow. Yeah.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "11:39",
-      "quote": "I'll just wait for a second while you go and get that."
+      "status": "asked",
+      "ts": "11:31",
+      "end_ts": "11:56",
+      "quote": "I can also make sure to send you the details of this appointment through a text message just so you can put that on your schedule and have a better reminder.",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, that's fine.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     }
   ],
-  "primary_coaching_focus": {
-    "topic": "Resolving program-confusion objections directly instead of redirecting past them",
-    "ts": "02:24",
-    "quote": "I actually thought this was probably through the state for some reason. You know, they had that program going where you can get free solar for all.",
-    "why": "This misunderstanding is the root of the customer's explicit refusal two lines later ('I'm not gonna do it'), and the rep never circles back to directly clarify what Ion's program actually is versus what the customer believes — it's left for the closer to untangle."
-  },
-  "key_moments": [
+  "objections": [
     {
-      "ts": "02:24",
-      "quote": "I know. I do. You know, I actually thought this was probably through the state for some reason. You know, they had that program going where you can get free solar for all. Mhmm. Have you heard about it?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Customer directly asks about a specific free state program and the rep gives a vague, generic answer about 'various state incentives' rather than clearly distinguishing Ion's paid switch-out program from a free government program. This ambiguity likely seeds the refusal two lines later."
+      "ts": "00:16",
+      "quote": "I wasn't really looking to do anything.",
+      "type": "not_interested",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. So you're totally good. We can definitely still get you off that estimate and then just some overall more information about solar as well just to see if it makes sense for your home."
+      ],
+      "resolved": true,
+      "resolution_ts": "00:49",
+      "reasoning": "Customer accepted the reframe and proceeded cooperatively through verify questions immediately after, though this initial resolution is soft — she raises the same underlying hesitation again at 03:26, so 'resolved' here reflects only that she continued the call, not that the underlying reluctance was fully addressed."
     },
     {
       "ts": "03:26",
-      "quote": "Well, I'm not gonna do it. I won't do it. Because I heard, you know, I heard about they have some that's out here with the state of Illinois. We're doing some for free.",
+      "quote": "Well, I'm not gonna do it. I won't do it.",
+      "type": "not_interested",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "You know? Yeah. You're totally good. You know? We we can definitely still just get you out that estimate though just to see, you know, you could possibly be saving if you did decide to go solar."
+      ],
+      "resolved": true,
+      "resolution_ts": "04:02",
+      "reasoning": "Customer allows the estimate process to continue after this reassurance and provides her bill for the design, but this is a fragile resolution — the same underlying free-program comparison and billing distrust resurface later (07:10, 08:06), so the objection is procedurally passed rather than substantively closed; the eventual booking should be read as a fragile handoff, not a clean win."
+    },
+    {
+      "ts": "08:06",
+      "quote": "So that means once you guys see what the bill is, then you guys can charge what you want.",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "No. It would have to be lower than that electricity bill, though. It has to be lower than the electricity bill."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep answers procedurally but the customer's underlying catch-22 framing is never directly acknowledged or reframed with the price_estimate_before_design rebuttal; she moves on to a different question (per-kWh rate) rather than expressing satisfaction with the answer."
+    },
+    {
+      "ts": "10:23",
+      "quote": "What number would they be calling me from? Because I have a screening service on my phone number, and it usually blocks numbers.",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "It depends on the specialist that you get assigned to. But before the appointment, we can definitely send you over their number."
+      ],
+      "resolved": true,
+      "resolution_ts": "10:46",
+      "reasoning": "Customer accepts the answer and proceeds to scheduling without further pushback, though the answer given was vague rather than a firm commitment."
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "Bill captured but never flipped",
+    "ts": "02:22",
+    "quote": "And then we do have one requirement for solar, and that's just to have a credit score over 670.",
+    "why": "The customer gave two real numbers ($150 and a spike to $250) and the rep moved straight into qualifiers both times without ever turning the bill into the customer's reason to act — this is the single most repeatable, highest-leverage gap on this call and recurs at 09:04."
+  },
+  "key_moments": [
+    {
+      "ts": "03:26",
+      "quote": "Well, I'm not gonna do it. I won't do it.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "This is a direct refusal tied to a cost/value comparison (free vs. paid program) — a textbook trigger for an inversion move, but the rep responds by re-pitching the estimate rather than reframing the objection."
+      "stewart_read": "This is a not_interested / trust objection tied to a belief in a free state program. The rep's response ('you're totally good... just get you out that estimate') is a soft reassurance rather than an inversion move (e.g., flipping her own bill pain — she said $150-$250 — into the reason to still see the numbers). The strategic alternative was available and unused."
     },
     {
-      "ts": "02:02",
-      "quote": "Maybe $1.50. $1.50? Like, I know one time it just it jumped to $2.50. So, you know, it's it's crazy right now. I don't know.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer volunteers a bill figure and a spike narrative, but it is delivered hesitantly and somewhat unclearly — it's not fully certain in the transcript whether she means $150 jumping to $250 or is giving a rough, uncertain estimate. Either way, the rep's response ('I've just seen that happen lately') acknowledges the pain generically without reflecting the specific jump back to her as leverage."
+      "ts": "01:52",
+      "quote": "Too much.",
+      "classification": "bill_anchor",
+      "stewart_read": "Customer gives a vague answer first; the rep's follow-up range prompt ('It's like 200, 300?') then leads her to a specific figure. The bill was captured but via a suggestive range rather than an open question, which risks anchoring bias in the number."
     },
     {
-      "ts": "06:26",
-      "quote": "This is a landline. Let me just send you a text message to my number. One second.",
-      "classification": "protocol_violation",
-      "stewart_read": "The rep sends the bill-photo request from her personal number rather than a company system. The schema explicitly flags this exact behavior as the anti-pattern to catch — personal phone number exposure during bill collection — not a resourceful workaround."
+      "ts": "02:22",
+      "quote": "And then we do have one requirement for solar, and that's just to have a credit score over 670.",
+      "classification": "bill_anchor",
+      "stewart_read": "Immediately after capturing the bill figure, the rep pivots straight to the credit qualifier instead of flipping the bill pain into emotional alignment against the utility. This is the ask+acknowledge+move-on failure pattern named in the schema."
+    },
+    {
+      "ts": "08:06",
+      "quote": "So that means once you guys see what the bill is, then you guys can charge what you want.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a cost/trust objection about the billing mechanism (a 'catch-22'), closely matching the schema's price_estimate_before_design rebuttal pattern (customer wants a ballpark before committing). The rep's response ('It has to be lower than the electricity bill') answers procedurally but doesn't deploy the redirect-to-design framing ('that's exactly why we get you real numbers instead of a random ballpark')."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 35,
-    "verified": 34,
+    "checked": 57,
+    "verified": 56,
     "fuzzy": 0,
-    "wrong_ts": 0,
-    "not_found": 1
+    "wrong_ts": 1,
+    "not_found": 0
   }
 }

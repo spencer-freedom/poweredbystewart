@@ -1,164 +1,264 @@
 {
   "call_id": "20000555055",
   "rep_name": "Carter",
-  "trajectory_summary": "The call runs through the verify checklist competently but mechanically — bill captured, roof/utility/co-owner asked, tax qualifier delivered — with no emotional depth added to any answer. The transcript degrades into garbled, hard-to-parse customer speech from roughly 03:04 onward, and the call closes on an unresolved customer preference for an in-person visit rather than a locked phone appointment. This reads as a checklist-completed-but-not-closed call: procedural boxes ticked, no anchor built, no confirmed appointment time visible in the record.",
-  "shape": "stagnant",
-  "outcome_dispute": "The v1 outcome tag is unknown/unclear from metadata; based on the transcript, no day/time was ever stated, and the final customer line requests an in-person visit instead of the phone appointment the rep was building toward. This should be read as no_appointment or callback at best, not booked — there is no evidence of a locked appointment.",
+  "trajectory_summary": "The call runs the verify sequence in order — interest, bill amount, address, ownership, roof, utility, prior design, tax credit qualifier, and bill collection — with a cooperative, low-friction customer. The back half (from roughly 03:04) degrades into a fragmented, hard-to-parse transcript stretch that coincides with the bill-texting instruction, and the call as captured ends without a locked appointment day/time or a rep response to the customer's stated preference for an in-person visit.",
+  "shape": "mixed",
+  "outcome_dispute": "The transcript never shows a day/time being offered or a button-up close. It also ends on the customer stating a channel preference ('I would do an in person visit, not over the phone') that goes unaddressed in what's captured. This does not support a 'booked' tag — at best this is a callback/tentative outcome pending the bill text and resolution of the phone-vs-in-person preference, and it may be incomplete due to the transcript cutting off.",
   "observed_outcome": {
-    "outcome": "no_appointment",
-    "appointment_channel": null,
+    "outcome": "callback",
+    "appointment_channel": "unclear",
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "04:24",
     "quote": "Well, I would do an in person visit, not over the phone.",
-    "reasoning": "No day or time is stated anywhere in the transcript, and the call ends with the customer requesting a different appointment channel than what was being arranged, with no rep resolution captured in the record."
+    "reasoning": "No specific day/time is stated anywhere in the transcript, and the call's last captured line has the customer requesting an in-person visit instead of a phone appointment, which the rep's response (if any) is not captured. This does not meet the bar for 'booked' or even 'tentative' — it reads as an open loop pending the bill text and a channel decision, closer to a callback/unresolved state than a locked appointment."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "00:42",
+    "bill_ts": "00:43",
     "bill_quote": "Over a $100 a month? About a 120 a month.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the $120/month figure but only acknowledged it ('It's pretty expensive for you') before moving straight to the address verification question — the flip into alignment-against-the-utility never appears anywhere later in the transcript."
+    "reasoning": "The rep acknowledges the bill as 'pretty expensive' at 00:46 but never revisits the figure later — for example, at 02:10 when pitching the tax incentive — to turn it into a reason to act now. Capture happened; the flip did not."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "02:32",
+    "ask_quote": "is just your most current utility bill. Do you get those through the mail or online?",
+    "result": "promised_later",
+    "method": "text",
+    "result_ts": "02:52",
+    "result_quote": "I'll shoot you a text right now. Just let me know once you have that sent over. Okay?",
+    "reasoning": "The rep asks how the customer gets their bill and sets up a text-based photo submission, but the transcript does not show the bill actually being sent on the call — it's a promised/in-progress path, and the following minute of transcript is too degraded to confirm receipt."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:18",
     "reason_given": true,
-    "reason_ts": "00:23",
+    "reason_ts": "00:25",
     "reason_quote": "I was interested in getting my bills down.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked and the customer gave a clear reason (bills down), but the rep never returned to this stated motivation later in the call — no reinforcement when discussing the bill amount, the tax credit, or (in the visible transcript) the appointment."
+    "reasoning": "The customer gives a clean bill-pain reason immediately, and the rep pivots straight to asking the bill amount, but never explicitly reinforces 'getting your bills down' later in the call — for instance when pitching the tax incentive or discussing the design — to tie the appointment back to that stated motive."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:08",
-      "quote": "Hey, Lorenzo. This is Carter with ION."
+      "end_ts": "00:16",
+      "quote": "Hey, Lorenzo. This is Carter with ION.",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, fine.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:18",
-      "quote": "Why is you interested in solar?"
+      "end_ts": "00:27",
+      "quote": "Why is you interested in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "I was interested in getting my bills down.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:50",
-      "quote": "And you're at the 1508 South 2nd Avenue?"
+      "end_ts": "01:07",
+      "quote": "Okay. And you're at the 1508 South 2nd Avenue? And you're the property owner. Correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:09",
-      "quote": "And then is there anyone else on the title with you?"
+      "end_ts": "01:16",
+      "quote": "And then is there anyone else on the title with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:29",
-      "quote": "And then how old is the roof on the home?"
+      "end_ts": "01:40",
+      "quote": "And then how old is the roof on the home?",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, about let's say about ten years.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:40",
-      "quote": "And then who's the utility company that you're working with out there?"
+      "end_ts": "01:58",
+      "quote": "And then who's the utility company that you're working with out there?",
+      "customer_response": "cooperative",
+      "customer_quote": "Commonwealth.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "00:27",
-      "quote": "How much are you paying a month usually?"
+      "end_ts": "00:46",
+      "quote": "Get your bill down? How much are you paying a month usually?",
+      "customer_response": "cooperative",
+      "customer_quote": "About a 120 a month.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:10",
-      "quote": "the main two requirements are that you pay income tax and have a credit score above six fifty"
+      "end_ts": "02:24",
+      "quote": "the main two requirements are that you pay income tax and have a credit score above six fifty. Is that the case for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "02:02",
-      "quote": "will this be the first time seeing a solar design for your home?"
+      "end_ts": "02:08",
+      "quote": "will this be the first time seeing a solar design for your home?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "02:32",
-      "quote": "the last thing I need from you before we can get you on the schedule is just your most current utility bill"
+      "ts": "02:28",
+      "end_ts": "02:55",
+      "quote": "is just your most current utility bill. Do you get those through the mail or online?",
+      "customer_response": "cooperative",
+      "customer_quote": "I have to text it to you. Okay.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "Well, I would do an in person visit, not over the phone.",
+      "resistance_reason": "timing",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "04:24",
+      "quote": "Well, I would do an in person visit, not over the phone.",
+      "type": "other",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "This is a channel-preference statement (in-person vs. phone appointment), not one of the schema's defined objection categories (cost, spouse, timing/callback, trust, already-have-quote, not-interested, roof, proposal-by-email). No canonical rebuttal or protocol in the schema currently addresses an in-person-vs-phone request, so this is flagged as an undocumented protocol gap rather than forced into an existing type. The transcript ends before any rep response is captured, so zero rep attempts are recorded."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "bill anchor captured but never flipped",
+    "topic": "bill capture without a flip",
     "ts": "00:46",
     "quote": "Hundred and twenty hours? Okay. It's pretty expensive for you.",
-    "why": "The customer volunteered a clean, usable bill figure early in the call, and the rep's response filed it as a fact rather than turning it into the emotional reason to act — the single highest-leverage miss on this call per coaching_philosophy.bill_anchoring."
+    "why": "The rep gets the $120/month figure cleanly and acknowledges it's expensive but never returns to it to make it the customer's reason to act — the tax-credit pitch at 02:10 was the natural place to tie the bill pain to urgency, and the rep ran it as a flat qualifier question instead."
   },
   "key_moments": [
     {
-      "ts": "00:18",
-      "quote": "Why is you interested in solar?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Rep asks the required interest question but the customer's answer ('bills down') is immediately redirected into a bill-amount question rather than expanded or validated. The schema calls for 60+ seconds of depth here; this exchange is under 10 seconds."
+      "ts": "01:15",
+      "quote": "No.",
+      "classification": "other",
+      "stewart_read": "Transcript reliability caveat: this short one-word line is diarized to 'rep' immediately after the rep's co-owner question, which is the exact pattern the diarizer most often mis-attributes (per the verified example on call 20000555055 itself). This is very likely the customer answering 'No,' not the rep answering their own question. Do not coach this as the rep speaking for the customer."
     },
     {
-      "ts": "00:42",
-      "quote": "Over a $100 a month? About a 120 a month.",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer gives a clear bill figure. This is the anchor moment the entire pitch should build from."
+      "ts": "01:37",
+      "quote": "Seventeen.",
+      "classification": "other",
+      "stewart_read": "Transcript reliability caveat: the customer said the roof is about ten years old at 01:34-01:36, and 'Seventeen' is diarized to rep immediately after — almost certainly a mis-attributed or mis-transcribed number (either the customer correcting themselves, or an ASR error), not the rep independently asserting a different roof age."
     },
     {
       "ts": "00:46",
       "quote": "Hundred and twenty hours? Okay. It's pretty expensive for you.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "Rep acknowledges the bill is expensive but files it and moves straight to the address/property-owner question. This is ask+acknowledge+move on, the schema's explicit failure pattern, not ask+acknowledge+flip."
+      "classification": "bill_anchor",
+      "stewart_read": "Systematic transcript-quality caveat applies here too — 'hours' for 'dollars' is almost certainly an ASR mishearing of the rep saying 'a hundred and twenty dollars,' not a real rep error. Setting the mishearing aside, the underlying rep move — acknowledging the bill as 'pretty expensive' — is a bill capture with only a mild acknowledgment, not a flip into alignment-against-the-utility."
     },
     {
-      "ts": "01:09",
-      "quote": "And then is there anyone else on the title with you?",
-      "classification": "protocol_violation",
-      "stewart_read": "Rep asks the co-owner question correctly, but the transcript shows the answer logged as 'No' attributed to the rep speaker tag, not the customer, at 01:15 — a labeling ambiguity, but even taking it at face value the rep does not follow up or confirm before moving on."
+      "ts": "00:46",
+      "quote": "It's pretty expensive for you.",
+      "classification": "bill_anchor",
+      "stewart_read": "Rep captures the $120/month figure and offers a mild acknowledgment, but never returns to it later in the call to flip it into a reason to act (e.g., tying it to the tax credit pitch or the appointment). This is capture-and-move-on, the schema's named failure pattern."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 32,
-    "verified": 32,
+    "checked": 43,
+    "verified": 42,
     "fuzzy": 0,
     "wrong_ts": 0,
-    "not_found": 0
+    "not_found": 1
   }
 }

@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION20_6a33b8ee",
   "rep_name": "Owen",
-  "trajectory_summary": "The call opens with low resistance and drifts into extended personal banter that the rep leans into rather than steering, ultimately landing a booked appointment almost as a byproduct of goodwill rather than deliberate structure. The rep skips several script anchors (bill flip, interest-reason use, clean channel confirmation) and the appointment closes on friendliness, not on a tight handshake.",
-  "shape": "mixed",
-  "outcome_dispute": "The appointment has a day and time (Saturday the 21st at 8AM) but the channel is never disambiguated — the customer explicitly frames it as an in-person visit ('you guys can come and look at it') and the rep confirms with 'we got you for everything' rather than correcting to a phone consultation as the schema expects. This is booked on date/time but carries unresolved channel risk the v1 tag wouldn't capture.",
+  "trajectory_summary": "The call opens efficiently through the verify sequence and builds real rapport through an extended personal, joking exchange, ending with a booked date and time. The rep never explicitly confirms bill receipt in words, and the close lacks a firm 'is that fair' handshake, leaving two soft edges on an otherwise warm, forward-moving call.",
+  "shape": "energy_built",
+  "outcome_dispute": "V1 outcome is plausibly 'booked' given a specific day (next Saturday, the 21st) and time (8AM) are both stated and repeated by the rep at 11:07. The genuine open question is not whether an appointment exists but whether the bill was actually captured — the 07:02 'quick worker' line is suggestive the customer sent it during the rep's water break, but this is inferential, not a confirmed statement on the call, so bill_document_audit is recorded as promised_later with the caveat noted rather than received_on_call.",
   "observed_outcome": {
     "outcome": "booked",
-    "appointment_channel": "unclear",
+    "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "11:11",
+    "ts": "11:07",
     "quote": "But, yeah, we got you for next Saturday, the twenty first at 8AM.",
-    "reasoning": "A specific day and time are locked, satisfying 'booked,' but the channel is genuinely ambiguous: the customer frames it as an in-person visit at 10:45 ('you guys can come and look at it') and the rep affirms broadly ('we got you for everything') without ever stating it's a phone appointment, so this is recorded as unclear rather than assumed in_person."
+    "reasoning": "A specific day (Saturday the 21st) and time (8AM) are both stated and repeated by the rep; customer had earlier said 'So you guys can come and look at it and give me a quote' implying an in-person visit, though the appointment type is not explicitly disambiguated as phone vs in-person by the rep."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,145 +20,234 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep captured the figure and moved straight to the roof question ('Do you know what type of roof you have?') without acknowledging the number or tying it to the appointment's value; the flip should have landed right after 02:12."
+    "reasoning": "The rep captures the $80 average bill cleanly but moves immediately to the roof-type question without reflecting it back as leverage; the flip should have gone right after 02:12 ('80 dollars') before pivoting to roof type."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:47",
+    "ask_quote": "If you could take a picture of your power bill and send it to us, we will take a look at that, and then we'll see how much we can actually save you on the new solar bill.",
+    "result": "promised_later",
+    "method": "photo",
+    "result_ts": "05:00",
+    "result_quote": "Alright. Yeah. Text me, and I'll send you here in, like, two minutes. I'm about to pull up to the castle",
+    "reasoning": "Customer commits to sending a photo shortly and the rep steps away for roughly a minute (06:04-07:02); the 07:02 line 'My guy, you're a quick worker' is circumstantial evidence something was sent in that window, but the rep never verbally confirms receipt or references bill content on the call, so the safer read is promised_later with a plausible-but-unconfirmed receipt."
   },
   "interest_reason_audit": {
     "asked": true,
-    "ask_ts": "01:28",
+    "ask_ts": "01:30",
     "reason_given": true,
-    "reason_ts": "03:07",
-    "reason_quote": "For my home? Nah. Never. And I I don't even think any because it's a new build. I don't think anyone has it yet. So that's why I was like, if I do it if I do get it, I wanna be the first. No offense.",
+    "reason_ts": "01:36",
+    "reason_quote": "Not really. I mean, I just had a guy come knock on the door. Well, maybe not from your company, but and then,",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer's initial answer at 01:36 ('Not really... just had a guy come knock on the door') was thin, but the richer first-mover motivation surfaced later at 03:07 under the prior-design question; the rep never returns to either statement to anchor the appointment."
+    "reasoning": "Customer's answer is vague and the rep fills in 'save money' himself rather than the customer stating it; this filled-in reason is never revisited or tied to the appointment later in the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "quote": "Hey. This is Owen with Ion. I'm reaching out about the solar form that fills out online."
+      "end_ts": "00:20",
+      "quote": "Hey. This is Owen with Ion. I'm reaching out about the solar form that fills out online.",
+      "customer_response": "cooperative",
+      "customer_quote": "I already talked to somebody from your trucking, but go ahead.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:30",
-      "quote": "what interests you in solar?"
+      "end_ts": "01:43",
+      "quote": "what interests you in solar?",
+      "customer_response": "deflected",
+      "customer_quote": "Not really. I mean, I just had a guy come knock on the door.",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:35",
-      "quote": "Are you still at South Cabernet Avenue"
+      "end_ts": "01:00",
+      "quote": "Are you still at South Cabernet Avenue, Fort?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes, sir.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:53",
-      "quote": "is anybody else on the title, or is it just you?"
+      "end_ts": "00:58",
+      "quote": "is anybody else on the title, or is it just you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Just me.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "02:19",
-      "quote": "Do you know what type of roof you have?"
+      "end_ts": "02:36",
+      "quote": "Do you know what type of roof you have?",
+      "customer_response": "cooperative",
+      "customer_quote": "I do not.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "01:47",
-      "quote": "do you know who your utility company is?"
+      "ts": "01:51",
+      "end_ts": "01:57",
+      "quote": "Do you know how much or do you know who your utility company is?",
+      "customer_response": "cooperative",
+      "customer_quote": "United Power. United Power.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:59",
-      "quote": "how much you're paying, like, each month on average?"
+      "end_ts": "02:12",
+      "quote": "how much you're paying, like, each month on average?",
+      "customer_response": "cooperative",
+      "customer_quote": "80 doll hairs.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "02:38",
+      "end_ts": "02:57",
+      "quote": "is your credit score over 670?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. See. I have to double check. But, yeah, it should be last time I look.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "03:04",
-      "quote": "have you ever seen a solar design for your home?"
+      "end_ts": "03:16",
+      "quote": "have you ever seen a solar design for your home?",
+      "customer_response": "cooperative",
+      "customer_quote": "For my home? Nah. Never.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "03:38",
-      "quote": "take a picture of your power bill and send it to us"
+      "ts": "03:47",
+      "end_ts": "05:00",
+      "quote": "If you could take a picture of your power bill and send it to us, we will take a look at that",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright. Yeah. Text me, and I'll send you here in, like, two minutes. I'm about to pull up to the castle",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "10:41",
-      "quote": "8AM next Saturday."
+      "ts": "07:16",
+      "end_ts": "10:43",
+      "quote": "let's open up the schedule real quick. What day works best for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "8AM? Next Saturday works.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "11:07",
+      "end_ts": "11:33",
+      "quote": "we got you for next Saturday, the twenty first at 8AM.",
+      "customer_response": "cooperative",
+      "customer_quote": "Cool. Thank you, boss man.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "unresolved appointment channel + missing button-up mechanics",
-    "ts": "10:45",
-    "quote": "So you guys can come and look at it and give me a quote and all that? Oh, yeah. We got you for everything.",
-    "why": "The booking closes without correcting the customer's in-person expectation and without the hour-block/no-driving/handshake steps — this is the highest-risk gap because it directly threatens the appointment holding (show-rate) and creates a mismatch the closer will have to untangle cold."
+    "topic": "button-up handshake discipline",
+    "ts": "11:11",
+    "quote": "Alright. Well, I'm a work on getting your thing built and then, get your schedule all the way put through and then, yeah, we'll see you on the twenty first.",
+    "why": "The appointment is booked with a real day and time, but the rep never states the one-hour block, the no-driving/computer expectation, or asks 'is that fair?' — the mechanics schema flags as predictive of show rate. This is a clean, coachable, low-effort fix for a rep who otherwise built strong rapport."
   },
   "key_moments": [
     {
       "ts": "00:16",
       "quote": "I already talked to somebody from your trucking, but go ahead.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a prior Ion (or Ion-adjacent) contact and the rep never asks what was discussed or by whom, losing a free competitive/duplicate-lead intel opportunity."
+      "stewart_read": "Customer discloses a prior Ion touchpoint immediately, which is a recycled-lead signal — bill may already be on file, or this could be a repeat verify pass. Rep never asks who he spoke to or what was discussed."
     },
     {
-      "ts": "02:22",
-      "quote": "Asphalt shingle, single, it's a metal?",
-      "classification": "other",
-      "stewart_read": "Rep offers a list of roof types as a leading multiple-choice prompt rather than an open question, and the customer's uncertain answer ('I think it's, what you said, the second one') shows the data captured may not be reliable."
+      "ts": "01:36",
+      "quote": "Not really. I mean, I just had a guy come knock on the door. Well, maybe not from your company, but and then,",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer gives a vague, non-answer to the interest question and the rep immediately fills in 'save money' rather than probing further or reflecting the door-knocker mention back."
+    },
+    {
+      "ts": "02:02",
+      "quote": "The first month was 85. My next one is supposed to be 75, so I say $80.",
+      "classification": "bill_anchor",
+      "stewart_read": "Bill figure is captured cleanly, but the rep logs it and moves straight to the roof question without acknowledging or flipping the number into emotional leverage."
     },
     {
       "ts": "03:07",
       "quote": "For my home? Nah. Never. And I I don't even think any because it's a new build. I don't think anyone has it yet. So that's why I was like, if I do it if I do get it, I wanna be the first. No offense.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Customer volunteers a first-mover motivation on a brand-new build — a strong intrinsic interest signal distinct from bill pain — but the rep never reflects it back or anchors the appointment to it."
-    },
-    {
-      "ts": "02:02",
-      "quote": "The first month was 85. My next one is supposed to be 75, so I say $80.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer hands over an actual bill figure and a trend (85 down to 75), a natural hook, but the rep logs it and moves straight to the roof question with no acknowledgment or reflection."
+      "stewart_read": "Customer volunteers a strong buy-in signal — desire to be the first in a new development to get solar — which is a distinct enthusiasm marker the rep could have anchored on when setting or closing."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 34,
-    "verified": 33,
+    "checked": 53,
+    "verified": 50,
     "fuzzy": 1,
-    "wrong_ts": 0,
+    "wrong_ts": 2,
     "not_found": 0
   }
 }

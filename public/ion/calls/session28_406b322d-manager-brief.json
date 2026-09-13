@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION28_406b322d",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens with unusually high customer energy — a rare same-second callback reaction — but the rep skips the verify sequence entirely and jumps straight into the bill-swap pitch, leaving the customer's specific cost questions unanswered three times in a row. The call ends with the customer disengaging into a passive research request and a self-scheduled callback that the rep never locks down, converting an energetic opening into a no-next-step exit.",
+  "trajectory_summary": "The call opens with mild customer curiosity about the speed of the callback, but the rep never converts that into a real qualifying conversation — no bill amount, no interest-reason probe, no address/homeowner check. Instead the rep leads with an unconditional savings guarantee before having any customer-specific data, and when the customer presses for real numbers three separate times, the rep has nothing to offer but restated promises. The call ends with the customer requesting a website link and a vague 'I'll call you back' — an unanchored exit with no appointment, no callback time, and no next step owned by the rep.",
   "shape": "energy_leaked",
-  "outcome_dispute": "If v1 tagged this as any form of appointment set, that is incorrect — no appointment, date, or callback time was captured by the rep. The customer's 'I'll call you back' at 02:34 is a customer-owned exit, not a rep-secured next step, so this should be classified no_appointment.",
+  "outcome_dispute": "The v1 tag is unspecified but nothing here supports 'booked' or 'tentative' — the call ends on 'Okay. I'll call you back. Bye.' with no day/time and no rep-owned follow-up, which is a no_appointment outcome, not a soft callback the rep secured.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "02:34",
     "quote": "Okay. I'll call you back. Bye.",
-    "reasoning": "No day, time, or rep-owned next step was established. The customer ends the call by proposing to call back themselves, which the rep does not convert into a locked commitment."
+    "reasoning": "No day or time was ever proposed or agreed to. The call ends with the customer proposing an undefined future callback and the rep simply acknowledging it — no next step is owned by the rep."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep never asked for or received a specific bill amount or usage figure from the customer at any point in the call, despite the customer asking about rates and back-end costs three times. Without a captured number, there was nothing to flip into an emotional or comparative anchor."
+    "reasoning": "No bill amount or usage figure is ever stated by the customer or asked for by the rep. The rep instead relies on a generic 'always cheaper' guarantee that the customer explicitly rejects as unsubstantiated at 01:35, which is exactly the failure mode the schema warns against — leading with the promise instead of the number."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The rep never raises getting the actual utility bill document (mail, online, photo, text) at any point in this short call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,132 +41,225 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar; the call moved directly from the intro into the bill-swap pitch. The customer's stated context was about the speed of the callback, not a substantive interest reason, so there was nothing to work with here."
+    "reasoning": "The rep never asks what interested the customer in solar. The customer's only stated context is that a form was filled out and submitted, not a personal motivation like bill pain or environmental concern."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "quote": "Hey. This is Bucky with Ion."
+      "end_ts": "00:44",
+      "quote": "Hey. This is Bucky with Ion.",
+      "customer_response": "deflected",
+      "customer_quote": "What is it you're selling?",
+      "resistance_reason": "trust",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:11",
-      "quote": "So that's who you're with, Dominion?"
+      "end_ts": "02:17",
+      "quote": "So that's who you're with, Dominion?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. That's what the I filled out in a piece of paper.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:11",
+      "quote": "Well, what are the back end costs? If there's no front up upfront, what's the back end?",
+      "type": "cost",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "you'll be paying that lower monthly bill.",
+        "It'll always be cheaper than what you're paying now. It can never be higher."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The customer restates the same demand for real numbers twice more (01:22, 01:35) and is never given a figure; the objection is not resolved, only sidestepped, and the customer moves to a self-directed exit at 02:17."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Bill amount never captured — no anchor for the entire pitch",
+    "topic": "Bill capture never attempted despite customer handing the opening",
     "ts": "01:35",
-    "quote": "I'm I'm asking what those rates are that you would be paying.",
-    "why": "The customer asks the same cost question three separate times and the rep never once asks for their actual Dominion bill amount, so every 'always cheaper' claim has nothing real behind it. Capturing the bill in the first exchange would have resolved the entire back-and-forth and given the rep a concrete number to flip into urgency."
+    "quote": "But you don't know what I'm paying now.",
+    "why": "The customer explicitly names the exact gap in the rep's pitch — the rep doesn't know his bill — three separate times across the call, and the rep never once asks for the actual bill amount or utility usage. This single missed question is why the guarantee at 00:59 sounds hollow and why the call ends without any real qualifying data captured."
   },
   "key_moments": [
     {
-      "ts": "00:29",
-      "quote": "Okay. I'm I'm the fastest in the solar business.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer twice remarked on how fast the callback was ('That's incredible', 'That's so weird'), handing the rep a free legitimacy and rapport opening. The rep's joke response burns the moment instead of anchoring it to something specific — e.g., referencing the actual form submission or Piet's name again to build concrete trust."
-    },
-    {
-      "ts": "00:42",
-      "quote": "Yeah. What is it you're selling?",
+      "ts": "00:44",
+      "quote": "I'm not selling anything. I'm appointment setting.",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "Note: transcript speaker-labeling is ambiguous here — this line and the following 'I'm not selling anything. I'm appointment setting' are both tagged rep, suggesting a possible diarization error or a merged/misattributed turn. Read with caution. If the customer asked this, it signals the intro at 00:06-00:15 never clearly established what Ion does before the pitch began, consistent with no interest_question or program framing preceding it."
+      "stewart_read": "The rep never framed the purpose of the call in the opening (no reference to the form, no legitimacy anchor) — so the customer's very next question is 'what are you selling', a sign the intro didn't do its job. The rep's clarification here is defensive, coming after the customer already sensed a pitch rather than being told upfront."
     },
     {
-      "ts": "01:19",
-      "quote": "you'll be paying that lower monthly bill.",
+      "ts": "00:59",
+      "quote": "And if we can't save you money in the first year and remove that bill, we're not gonna offer anything at all.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "Customer asked directly for the back-end cost mechanism, and the rep had a clean opening to flip the framing (their current bill is the real expense, not the new one) per objection_inversion, but instead gave a circular non-answer that restates the pitch without new information."
+      "stewart_read": "This is a blanket guarantee delivered before any bill amount, usage figure, or utility company was captured. It reads as an unconditional promise the rep has no data to back, and it directly sets up the customer's three-part demand for actual rates later in the call."
     },
     {
       "ts": "01:35",
-      "quote": "I'm I'm asking what those rates are that you would be paying.",
+      "quote": "I'm I'm asking what those rates are that you would be paying. It'll always be cheaper than what you're paying now. It can never be higher. But you don't know what I'm paying now.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "This is the second touch of the same unanswered cost question. The rep never captured the customer's actual bill amount at any point in the call, so there is no real number to anchor a comparison — the 'always cheaper' claim has nothing concrete behind it."
+      "stewart_read": "The customer essentially hands the rep the exact gap he needs to close — 'you don't know what I'm paying now' — which is a direct invitation to ask for the bill amount. The rep does not pick this up; the transcript shows no subsequent question about the customer's actual bill."
+    },
+    {
+      "ts": "01:54",
+      "quote": "Yeah. But that's why the that's why the bill swap program is so cool because we're gonna keep it under because your power bill is gonna rise no matter what. Our bill will always stay under that no matter what.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "The customer raised a real inversion opportunity — rising utility costs from data centers — and the rep gestures at it ('your power bill is gonna rise no matter what') but never turns it into the customer's own reason to act; he stays on the generic 'we'll always be under' claim instead of anchoring to the customer's specific complaint about rate hikes."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 27,
-    "verified": 27,
+    "checked": 31,
+    "verified": 31,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

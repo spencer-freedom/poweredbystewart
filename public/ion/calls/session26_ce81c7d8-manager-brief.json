@@ -1,26 +1,36 @@
 {
   "call_id": "SESSION26_ce81c7d8",
   "rep_name": "Bucky",
-  "trajectory_summary": "This call opens flat, moves through a mechanical verify sequence with almost no rapport or curiosity-building, and ends without a locked appointment — just a promise to text for a bill photo. The one moment of real customer engagement (repeated cost questions) was met with generic program explanation rather than anchored to the customer's own bill, and the call closes on an unresolved, confused customer line that the rep didn't address.",
+  "trajectory_summary": "The call opens cold and confused, briefly perks up when the customer asks a real pricing question, then ends without a locked appointment, a confirmed bill-document plan, or a clean button-up — just a text promise and a passive goodbye. Energy never really builds; the rep runs the verify checklist competently but doesn't adapt to the customer's over-the-road-driver constraint or convert his pricing curiosity into a scheduled next step.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is unknown, but this should not be read as a booked or tentative appointment — no day or time was ever offered or agreed to. The rep only secured a promise to text for a bill photo, which is a callback/no_appointment outcome, not a scheduled sit.",
+  "outcome_dispute": "This should not be read as a booked or tentative appointment. No day or time was ever proposed or agreed — the call ends with 'I can get you scheduled' contingent on the customer sending a bill photo via text, with no scheduling attempt made on the call itself. This is a callback/pending-document outcome, not a set appointment.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "02:22",
-    "quote": "I'll send you a text. And if you wanna take a picture of that bill for me, and then you can get it to me, and I can get you scheduled to know what we can do for you.",
-    "reasoning": "No day or time was set; the rep's plan is to text the customer for a bill photo and schedule later, which is a callback-style outcome, not a booked or tentative appointment."
+    "quote": "Well, I'll send you a text. And if you wanna take a picture of that bill for me, and then you can get it to me, and I can get you scheduled to know what we can do for you.",
+    "reasoning": "No day or time was ever proposed or agreed on the call. The rep's plan is to text the customer, wait for a bill photo, and schedule afterward — a pending-document callback, not a booked or even tentative appointment."
   },
   "bill_anchor_audit": {
-    "bill_captured": true,
-    "bill_ts": "01:15",
-    "bill_quote": "Maybe two hundred hours.",
-    "flip_executed": "no",
+    "bill_captured": false,
+    "bill_ts": "01:13",
+    "bill_quote": "I don't know. Maybe two hundred hours.",
+    "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer gave a usage/bill estimate but the rep only responded with 'Okay. I'm wondering.' and moved to the roof question; the number was never used later to anchor the cost conversation when the customer asked directly how much things cost at 02:31."
+    "reasoning": "The customer's answer was never a confirmed dollar figure — \"two hundred hours\" doesn't correspond to a bill amount, and the rep never asked a clarifying follow-up to convert it into a usable number, so there is no real anchor to flip."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "01:59",
+    "ask_quote": "Oh, yeah. Are you able to access a power bill, like, online?",
+    "result": "promised_later",
+    "method": "text",
+    "result_ts": "02:22",
+    "result_quote": "Well, I'll send you a text. And if you wanna take a picture of that bill for me, and then you can get it to me, and I can get you scheduled to know what we can do for you.",
+    "reasoning": "The customer couldn't access the bill online or via a household member on the call, so the rep pivoted to sending a text for the customer to photograph and return the bill later — a promised_later result with no scheduling attached."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,133 +41,227 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what interested the customer in solar; the call jumps directly from intro into address/homeowner verification and bill/usage questions."
+    "reasoning": "The rep never asked what interested the customer in solar; the call moved directly from intro into address/homeowner verify items and never circled back to motivation."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "quote": "This is Bucky with Ion. I'm reaching out about the solar form you filled out online."
+      "end_ts": "00:23",
+      "quote": "Hey. This is Bucky with Ion. I'm reaching out about the solar form you filled out online. How you doing?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Yeah. Yeah. Good. I'm good.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:35",
-      "quote": "Are you at 5920 Taylors Road?"
+      "end_ts": "00:50",
+      "quote": "So let me actually look. Hold on. There we go. Are you at 5920 Taylors Road?",
+      "customer_response": "cooperative",
+      "customer_quote": "Road? Yes, sir.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:43",
-      "quote": "Is there anybody else from the title but you?"
+      "end_ts": "00:48",
+      "quote": "It's a single family home. Is there anybody else from the title but you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. Just me.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:19",
-      "quote": "Do you, is your roof a shingle?"
+      "end_ts": "01:29",
+      "quote": "Do you, is your roof a shingle?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "00:53",
-      "quote": "What what power company are you with?"
+      "end_ts": "01:00",
+      "quote": "What power company are you with?",
+      "customer_response": "cooperative",
+      "customer_quote": "AES.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:01",
-      "quote": "How much are you spending on a monthly average?"
+      "end_ts": "01:17",
+      "quote": "How much are you spending on a monthly average?",
+      "customer_response": "deflected",
+      "customer_quote": "I don't know. Maybe two hundred hours.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:30",
-      "quote": "And then do you have a credit score over 6 70?"
+      "end_ts": "01:39",
+      "quote": "And then do you have a credit score over 6 70?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Last I know, it was 7 something.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "02:22",
-      "quote": "I'll send you a text. And if you wanna take a picture of that bill for me..."
+      "ts": "01:59",
+      "end_ts": "02:31",
+      "quote": "Are you able to access a power bill, like, online?",
+      "customer_response": "resistant",
+      "customer_quote": "No. No. No?",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "02:31",
+      "quote": "Yeah. What is this, this the auction? What what is it that you I know you're talking about, you know, solar panels, but, how much is it? How much",
+      "type": "cost",
+      "rep_attempts": 3,
+      "attempt_quotes": [
+        "So we have a bill swap program. We look at your power bill, and then we remove it and replace it with a lower and cheaper solar bill.",
+        "No upfront cost? No. I say there's no upfront cost because you still have to pay that monthly bill that's cheaper than the one you're paying now.",
+        "I I could say specific I couldn't tell you until I see that bill because that's that's what lets us know everything."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The customer asked about price three separate times in different framings and the rep never gave a number or a confident scheduled path to get one — each response explained mechanics or deferred, and the customer's last line ('I have to send it... out of pocket, when we talk') suggests the concern was never fully put to rest."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored close / no button-up",
-    "ts": "02:22",
-    "quote": "Well, I'll send you a text. And if you wanna take a picture of that bill for me, and then you can get it to me, and I can get you scheduled to know what we can do for you.",
-    "why": "The call ends with zero date, time, or handshake — this is the single biggest gap since it means no appointment exists at all, just a hope that the customer texts back a bill photo on his own initiative."
+    "topic": "no locked next step / button_up entirely skipped",
+    "ts": "03:37",
+    "quote": "But I sent you a text. This is Bucky with ion. And then if you wanna get that back to me, the bill, and then we can get you scheduled for your estimate. Okay?",
+    "why": "The call ends with zero scheduling mechanics — no day, no time, no handshake — leaving the outcome entirely dependent on the customer proactively texting back a bill photo with no accountability loop. This is the single biggest reason this lead is likely to go cold."
   },
   "key_moments": [
     {
-      "ts": "00:07",
-      "quote": "Hey. This is Bucky with Ion. I'm reaching out about the solar form you filled out online. How you doing?",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The intro references the form but gives no state/context or credibility anchor beyond the company name, and the rep never re-establishes legitimacy later when the customer is visibly confused about what the call even is."
+      "ts": "01:01",
+      "quote": "How much are you spending on a monthly average?",
+      "classification": "bill_anchor",
+      "stewart_read": "The rep asks the required bill question, but the customer's answer is nonsensical (a time unit, not a dollar figure) and the rep never circles back to clarify it into a usable number."
     },
     {
       "ts": "01:13",
-      "quote": "I have my granddaughter who was staying with me before, so I don't know. Maybe two hundred hours.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer gives a usage/bill figure tied to a household change (granddaughter staying with him affecting usage) and the rep files it with a bare 'Okay' and pivots straight to the roof question, never reflecting the number back or using it as a hook."
+      "quote": "I don't know. Maybe two hundred hours.",
+      "classification": "bill_anchor",
+      "stewart_read": "This is the bill_anchor_audit's central fact: the customer never gave a confirmed dollar figure, and the rep proceeded as if a usable number had been captured. Per coaching_philosophy.bill_anchoring's 'ask + acknowledge + flip' pattern, there's nothing here to flip because the ask itself was never resolved into real data."
     },
     {
       "ts": "01:51",
       "quote": "Well, it's not present, but that's my job. I'm over the road truck driver.",
-      "classification": "conditional_booking",
-      "stewart_read": "This is a major logistical fact (customer is rarely home, drives for a living) that should shape how the appointment and bill collection are set up, but the rep never asks about his schedule or when he'd realistically be available for a 30-minute sit."
+      "classification": "knowledge_gap",
+      "stewart_read": "This customer profile (rarely home, no on-site bill access, granddaughter possibly the only other resident) is exactly the kind of non-standard access situation the schema's alternative_paths anticipates, but the rep runs the default 'text a photo' path without probing whether that's realistic given his schedule."
     },
     {
       "ts": "02:31",
       "quote": "Yeah. What is this, this the auction? What what is it that you I know you're talking about, you know, solar panels, but, how much is it? How much",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is the customer's real cost objection/confusion moment, and rather than flipping it back to his own bill pain, the rep gives a generic bill-swap explanation untethered from the ~$200 figure the customer gave minutes earlier."
+      "classification": "enthusiasm_signal",
+      "stewart_read": "This is the customer's most engaged moment on the call — an unsolicited question about price signals real interest, not resistance. The rep should treat this as a hook to build curiosity toward the appointment rather than just explaining the bill-swap mechanism."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 30,
-    "verified": 30,
-    "fuzzy": 0,
+    "checked": 44,
+    "verified": 43,
+    "fuzzy": 1,
     "wrong_ts": 0,
     "not_found": 0
   }

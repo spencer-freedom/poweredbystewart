@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION16_da8e5ba6",
   "rep_name": "Tyke",
-  "trajectory_summary": "The call opens with a confusing, jargon-heavy pitch that the customer explicitly flags as incomprehensible, then partially recovers through verify questions that surface strong bill pain (rising rates, grandson's household added load), only to be cut short by a stated sub-670 credit score that the rep treats as an immediate hard stop. The energy briefly built during the bill conversation but leaked out entirely at the DQ, with no attempt to explore alternative paths or probe the stated number.",
+  "trajectory_summary": "The call opens with a customer misconception (government-funded program) that the rep never directly corrects, runs a bill-swap pitch that has to be repeated because it didn't land, briefly builds some rapport through the verify section, then ends abruptly on a stated sub-670 credit score with a vague 'follow up in a couple months' close. There's no booked appointment and no real handoff value beyond a soft callback promise.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unclear from metadata, but the observed outcome is a credit-based DQ with a vague future follow-up promise, not a booked or tentative appointment — any v1 tag implying a set appointment would be incorrect.",
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata, but the observed transcript clearly ends in a credit-based DQ with only a vague future-follow-up promise — this should be coded as dq, not any form of booked/tentative appointment.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "03:54",
+    "ts": "03:53",
     "quote": "Unfortunately, then at the moment, it wouldn't really make sense.",
-    "reasoning": "The customer's self-reported credit score of approximately 650 falls below the stated 670 threshold, and the rep ends the qualification process on that basis with only a vague future follow-up, not a booked or tentative appointment."
+    "reasoning": "The call ends on a credit-score disqualification (self-reported ~650 vs. stated 670 threshold) with only a vague, undated follow-up promise — no appointment, date, or time is set."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep captured the bill figure and a good follow-up about rising rates ('biggest reason why most people look into it, get them to get a roof from those rising rates' at 03:34), which gestures toward a flip, but the call was cut short by the credit DQ before any full alignment-against-utility reframe could land as a forward-pulling hook."
+    "reasoning": "CAVEAT: the '$25,300' figure is almost certainly a transcription/diarization artifact — the customer immediately clarifies 'around $2.50' (likely $250) with the grandson's unit running '4 or 500,' so the real anchor is roughly $250-500/month, not a clean captured number. The rep's response at 03:30 ('biggest reason why most people look into it, get them to get a roof from those rising rates') gestures at a flip but is generic and garbled rather than a clear, deliberate use of her specific number as the reason to act — scoring this as a full 'yes' flip would overstate what happened."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call was cut short by the credit-based DQ before the rep reached bill-collection; no request for the physical utility bill (mail/online, photo, text, email) occurs anywhere in the transcript."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,132 +41,222 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked the standard 'what interested you in solar' question; the customer volunteered her own framing (a belief about a government-paid ZIP-code program) unprompted, and the rep never corrected or engaged with this specific framing, instead pivoting straight into the standard bill-swap pitch."
+    "reasoning": "The rep never explicitly asks 'what interested you in solar' — the customer volunteers her framing (a government-funded ZIP code program) unprompted, and the rep neither confirms nor corrects this premise before moving into the pitch, so the stated reason is never engaged with directly."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "Hey, Mary. This is Tyke with Ion. I received a request you're looking at struggle for the home."
+      "end_ts": "00:11",
+      "quote": "Hey, Mary. This is Tyke with Ion. I received a request you're looking at struggle for the home.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm doing fine.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:25",
-      "quote": "Is the address, 1198 Park Avenue Northeast in Salem?"
+      "end_ts": "00:29",
+      "quote": "Is the address, 1198 Park Avenue Northeast in Salem?",
+      "customer_response": "cooperative",
+      "customer_quote": "Correct.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "02:13",
-      "quote": "Is there anybody else in the title with you, or is it just you?"
+      "end_ts": "02:41",
+      "quote": "Heavy down as the property owner. Is there anybody else in the title with you, or is it just you?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. Just me.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:58",
-      "quote": "is that an asphalt shingle roof? It looks like it is."
+      "end_ts": "02:13",
+      "quote": "And then, is that an asphalt shingle roof? It looks like it is.",
+      "customer_response": "no_answer",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:42",
-      "quote": "is PGE the current utility company for the home, or is it somebody different?"
+      "end_ts": "02:51",
+      "quote": "Is PGE the current utility company for the home, or is it somebody different?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. That's my that's my electric vehicle, PGE.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "02:51",
-      "quote": "do you know how much you're kinda paying on average per month with them?"
+      "ts": "02:52",
+      "end_ts": "03:30",
+      "quote": "And do you know how much you're kinda paying on average per month with them?",
+      "customer_response": "cooperative",
+      "customer_quote": "At least $25,300.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
-      "section": "tax_credit_qualifier",
+      "section": "credit_qualifier",
       "status": "asked",
       "ts": "03:37",
-      "quote": "all we ask of the homeowner is you just have a credit score of at least 670."
+      "end_ts": "03:56",
+      "quote": "In order to qualify for all those programs I mentioned earlier, all we ask of the homeowner is you just have a credit score of at least 670.",
+      "customer_response": "resistant",
+      "customer_quote": "Yeah. It is. Mine's about 650, I believe.",
+      "resistance_reason": "other",
+      "rep_followup": "none",
+      "result": "declined"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "04:04",
-      "quote": "I'll get it notated down here to just follow-up with you in a couple months"
+      "status": "asked",
+      "ts": "04:02",
+      "end_ts": "04:23",
+      "quote": "I'll get it notated down here to just follow-up with you in a couple months",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Thank you for calling.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "03:49",
+      "quote": "Yeah. It is. Mine's about 650, I believe.",
+      "type": "cost",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "03:53",
+      "reasoning": "The rep accepts the self-reported credit figure at face value and immediately closes the qualification path with no attempt to probe further, offer alternative financing, or note that the closer's actual credit pull could differ."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "pitch clarity in the opening minute",
+    "topic": "pitch clarity before qualification",
     "ts": "00:35",
-    "quote": "The way the current program is set up is there is no out of pocket cost or any upfront fees. All we're doing is we call the bill swap to our swapping what you're currently paying with your electricity company to a less than silver rate.",
-    "why": "The customer explicitly says she understood nothing of this explanation at 00:59, forcing a full re-explanation and burning trust and time in the first minute of the call — this is the single clearest, most fixable failure on the call."
+    "quote": "We call the bill swap to our swapping what you're currently paying with your electricity company to a less than silver rate.",
+    "why": "The customer explicitly says she understood nothing, forcing a full redo and burning the first 90 seconds of the call before any real qualification began — this is the single largest efficiency and trust cost on the call."
   },
   "key_moments": [
-    {
-      "ts": "00:35",
-      "quote": "The way the current program is set up is there is no out of pocket cost or any upfront fees. All we're doing is we call the bill swap to our swapping what you're currently paying with your electricity company to a less than silver rate.",
-      "classification": "knowledge_gap",
-      "stewart_read": "This line is garbled ('less than silver rate') and front-loads program mechanics before any qualification has happened, and the customer immediately says she didn't understand any of it. This is a delivery/clarity failure, not a strategic choice."
-    },
     {
       "ts": "00:15",
       "quote": "if, I I wanted to find out if I was in the ZIP code that the government is paying for this.",
       "classification": "knowledge_gap",
-      "stewart_read": "Customer opens with a misconception (government paying for solar via ZIP code) that the rep never directly corrects or addresses — he pivots straight to the bill-swap pitch without clarifying what the program actually is or isn't."
+      "stewart_read": "The customer states a specific misconception — that a government program is paying for the system — and the rep never directly corrects this framing anywhere in the call. This is distinct from the interest-reason question; it's a factual misunderstanding about who pays that should be corrected before any pitch, or it resurfaces later as a trust problem."
     },
     {
-      "ts": "01:33",
-      "quote": "The one big one's not k. Towards the street, towards the side of that. You're looking at the house. I had that big monster taken out.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer volunteers that a large shading tree was removed roughly four months ago — a sun-exposure improvement signal that increases solar viability. Rep does capture the timing but doesn't use it to build excitement about improved production potential."
+      "ts": "00:35",
+      "quote": "We call the bill swap to our swapping what you're currently paying with your electricity company to a less than silver rate.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "This is a jargon-heavy, garbled explanation of the mechanism delivered before any qualification has happened, and the customer's immediate response confirms it failed. This is over-explaining program mechanics rather than creating curiosity about her specific numbers."
     },
     {
-      "ts": "03:00",
-      "quote": "At least $25,300.",
-      "classification": "bill_anchor",
-      "stewart_read": "Bill figure is garbled in the transcript but clearly in a high range given the follow-up conversation about $250-500/month; rep captured it and asked a decent follow-up ('has it kind of always been that high') but never got to flip it into an emotional alignment-against-utility because the call ended on the credit DQ."
+      "ts": "00:59",
+      "quote": "I didn't understand anything you've just said.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The customer flatly states the pitch didn't land — a clear signal the rep led with mechanism explanation instead of a simple curiosity hook tied to her bill."
+    },
+    {
+      "ts": "02:26",
+      "quote": "See, the people across the street had solar put in, but that's all I really paid attention to.",
+      "classification": "cross_sell_miss",
+      "stewart_read": "Customer volunteers a neighbor-influence signal (a known interest driver per the schema's customer_demographics) but the rep does not pick it up or use it as a curiosity or urgency hook."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 30,
-    "verified": 30,
+    "checked": 39,
+    "verified": 39,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

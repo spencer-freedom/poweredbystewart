@@ -1,17 +1,17 @@
 {
   "call_id": "20000711425",
   "rep_name": "Carter",
-  "trajectory_summary": "This call opens with an unusually technical, engaged customer who runs the rep through a multi-minute roof/panel-count analysis the rep isn't equipped to answer live. The rep survives the technical stretch by eventually deploying the correct scope-discipline exit (bill + design team), then successfully executes the verify sequence and books a next-day phone appointment. The shape is mixed: real credibility cost early, recovered structurally, ending in a clean booked outcome.",
+  "trajectory_summary": "The call opens with an unusually technical, self-directed customer who spends roughly seven minutes walking through his own roof-footprint and panel-count math while the rep mostly follows along and admits gaps rather than redirecting early. Once the rep pivots to the verify sequence and bill/utility/credit questions, the call moves efficiently and closes to a booked phone appointment with no resistance. The shape is mixed: real time and credibility were leaked in the technical middle section, but the rep recovered cleanly and landed the outcome.",
   "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "phone",
     "datetime_captured": true,
-    "co_owner_confirmed": null,
-    "ts": "10:06",
+    "co_owner_confirmed": true,
+    "ts": "10:10",
     "quote": "K. Yep. Put you in for 2PM.",
-    "reasoning": "Rep and customer agreed on tomorrow afternoon at 2PM for a phone call; a specific day and time were locked. No co-owner was identified (customer confirmed he is the sole owner on the deed with the bank), so co_owner_confirmed is null/not-applicable."
+    "reasoning": "A specific day (tomorrow) and time (2PM) were agreed for a phone appointment, and the rep confirmed he would send a text confirmation; co-owner check at 08:12 confirmed the customer is the sole owner, so there is no co-owner to include."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,143 +20,246 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep asked for the utility bill at 07:19 but the customer hasn't moved in yet and has no bill to give; the rep pivoted to square footage (08:00) as a substitute data point, so no actual bill amount or usage figure was ever captured on this call."
+    "reasoning": "No dollar bill amount or usage figure was ever captured — the customer hasn't moved into the home yet and has no billing history there, so the rep substituted square footage (1,330 sq ft) for design purposes instead."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "07:19",
+    "ask_quote": "I'd love to just get your utility bill so we know how many panels you would need, and then just send it over to my design team.",
+    "result": "declined",
+    "method": "none",
+    "result_ts": "07:26",
+    "result_quote": "Yeah. So it'll take me two months to get that to you.",
+    "reasoning": "Rep asked for the utility bill but the customer explained he hasn't moved in yet and won't have real usage data for roughly two months, so the rep pivoted to square footage instead of pursuing the bill further."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": false,
-    "reason_ts": "",
-    "reason_quote": null,
-    "reason_used": "no_reason_given",
+    "reason_given": true,
+    "reason_ts": "00:23",
+    "reason_quote": "Yeah. I think of, I think that that's the system I see this for me.",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' — the call opened directly into confirming the online form submission, and the customer's motivations (comparing Ion vs. Dominion's own program) emerged organically through his technical questions rather than being solicited by the rep."
+    "reasoning": "The rep never explicitly asked 'what interested you in solar,' but the customer's opening comparison to Dominion's own solar program effectively volunteers his reason (cost/performance comparison against the utility). The rep never circles back to explicitly reinforce this comparison angle when booking the appointment."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:09",
-      "quote": "This is Carter calling from ION. How are you doing?"
+      "end_ts": "00:23",
+      "quote": "This is Carter calling from ION. How are you doing?",
+      "customer_response": "cooperative",
+      "customer_quote": "Great. How are you?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
-      "status": "asked",
-      "ts": "08:12",
-      "quote": "is there anyone else on the title with you of the home?"
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "08:12",
-      "quote": "is there anyone else on the title with you of the home?"
+      "end_ts": "08:16",
+      "quote": "is there anyone else on the title with you of the home?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. Just me.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "03:43",
-      "quote": "on a rubber membrane roof, they want a four foot setback"
+      "ts": "03:38",
+      "end_ts": "04:06",
+      "quote": "Alright. So here's where my issue is, and we'll just cut to it.",
+      "customer_response": "cooperative",
+      "customer_quote": "on a rubber membrane roof, they want a four foot setback from all the edges of the roof.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "09:09",
-      "quote": "is the utility company Virginia Electric and Power?"
+      "end_ts": "09:19",
+      "quote": "is the utility company Virginia Electric and Power?",
+      "customer_response": "cooperative",
+      "customer_quote": "Dominion Power.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "skipped",
-      "ts": "07:19",
-      "quote": "I'd love to just get your utility bill"
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "08:49",
+      "end_ts": "09:06",
+      "quote": "one of the main requirements for getting solar is having a credit score above 650. Is that gonna be an issue for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, that's yeah. No problem. Okay. 88 plus.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "07:19",
+      "end_ts": "08:00",
+      "quote": "I'd love to just get your utility bill so we know how many panels you would need",
+      "customer_response": "resistant",
+      "customer_quote": "Yeah. So it'll take me two months to get that to you.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "10:06",
-      "quote": "Put you in for 2PM."
+      "ts": "09:38",
+      "end_ts": "10:10",
+      "quote": "Would morning time or afternoon time be better for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Tomorrow afternoon, would that work? Yep.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "10:13",
+      "end_ts": "10:26",
+      "quote": "I'll send you a text confirmation here in a little bit just so you can have it in writing.",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "04:17",
+      "quote": "How much panels can you fit in 10 by 23?",
+      "type": "roof_or_home",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "I'll be honest. I'm not too sure. I just I just dealt with the scheduling side of things.",
+        "I'd love to just get your utility bill so we know how many panels you would need, and then just send it over to my design team."
+      ],
+      "resolved": true,
+      "resolution_ts": "07:19",
+      "reasoning": "Customer's detailed roof-footprint/panel-fit skepticism is eventually resolved when the rep redirects to letting the design team run the real numbers, and the customer accepts this and drops the manual math himself."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Scope-discipline timing — deploy the escape hatch earlier",
+    "topic": "Deploy the design-team redirect on the FIRST technical spec question, not the third",
     "ts": "04:17",
     "quote": "How much panels can you fit in 10 by 23?",
-    "why": "Carter eventually made the correct move at 07:19, but let the customer run a multi-minute technical panel-count exercise for three exchanges first, costing credibility (evidenced at 02:48 and the specs-quiz at 05:15) before recovering. The fix is recognizing the FIRST specific technical question as the redirect trigger, not the fourth."
+    "why": "The customer pulled the rep through roughly three rounds of panel-count and roof-footprint math (04:17, 05:15, and continuing to 07:14) before the rep redirected at 07:19. The redirect phrase worked well when finally used — the coaching gap is timing, not the phrase itself. Replaying this stretch shows the rep exactly where to cut in earlier next time."
   },
   "key_moments": [
-    {
-      "ts": "02:48",
-      "quote": "immediately gives me pause. You said that, power would be, provided by you guys primarily",
-      "classification": "empathy_miss",
-      "stewart_read": "Customer directly names a trust wobble caused by the rep's own imprecise phrasing, not by an objection they brought in. This is a self-inflicted credibility cost from unclear language about the grid relationship, not a customer resistance pattern."
-    },
     {
       "ts": "04:17",
       "quote": "How much panels can you fit in 10 by 23?",
       "classification": "setter_scope_creep",
-      "stewart_read": "This is the first clean opportunity to deploy the escape hatch ('that's exactly what our design team maps out on-site'), but the rep stays engaged in the roof-math conversation for three more exchanges instead."
+      "stewart_read": "This is exactly the kind of closer/design-tier technical question the schema's escape hatch exists for, but the rep engages with 'I'll be honest, I'm not too sure' instead of redirecting to the design team immediately."
+    },
+    {
+      "ts": "05:15",
+      "quote": "What's your what's the size of your panel? Three by five?",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep says 'Yeah. I'm pretty sure. Let's see' and audibly starts searching rather than admitting he doesn't carry panel specs and redirecting — a soft version of guessing rather than clean admission-and-recovery."
     },
     {
       "ts": "07:19",
       "quote": "I'd love to just get your utility bill so we know how many panels you would need, and then just send it over to my design team.",
-      "classification": "other",
-      "stewart_read": "This is the correct move — the rep disengages from a technical debate he cannot win and redirects to the right data point (utility bill/usage) and the right owner (design team), matching the schema's universal escape hatch almost verbatim. It is the single cleanest structural recovery in the call."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "This line is the correct redirect and lands well, but it arrives after roughly three minutes of unstructured panel math that the rep could have shut down on the first ask with the same phrase."
     },
     {
       "ts": "07:26",
       "quote": "Yeah. So it'll take me two months to get that to you.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer reveals they haven't moved in and won't have usage data for a month — the rep pivots practically to square footage, but never re-anchors the customer's motivation or creates forward-pulling curiosity about savings once the home is occupied."
+      "classification": "cross_sell_miss",
+      "stewart_read": "Customer reveals he hasn't moved in and won't have real usage data for a month — an unusual scenario the rep handles reasonably by pivoting to square footage, but he never asks whether the customer wants a photo/text of a bill later or sets a plan to collect it before the appointment."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 32,
-    "verified": 32,
+    "checked": 46,
+    "verified": 46,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION12_c391bd4a",
   "rep_name": "Meg",
-  "trajectory_summary": "The call opens with confusion about the caller's identity and the customer's low recall of the original form, then moves into a qualifier sequence where the customer repeatedly discloses financial vulnerability (disability, fixed Social Security income, reliance on her daughter) that the rep never directly engages with beyond generic savings language. The call ends unresolved with the customer deferring to a credit check and a callback she initiates, not the rep.",
+  "trajectory_summary": "The call opens with a legitimacy/name mismatch, moves through a verify section made harder by likely language-barrier friction, and surfaces a genuine vulnerability disclosure (disability, fixed income, daughter subsidizing bills) that the rep repeatedly talks past rather than acknowledges. It ends without a booked appointment — the customer defers to a credit check and a conversation with her daughter, with only a vague 'call me back' as the next step.",
   "shape": "energy_leaked",
-  "outcome_dispute": "If v1 tagged this as a booked or tentative appointment, that is miscalled — no day/time was set; the customer says she will check her credit and call back, which is a customer-initiated soft exit, not a scheduled callback owned by the rep.",
+  "outcome_dispute": "v1 tag is unknown/unclear; based on the transcript this is not a booked or tentative appointment — it is a soft, unanchored callback with no date/time and no rep-owned follow-up mechanism, so it should be classified as 'callback' at best, arguably 'no_appointment' given the vagueness.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
-    "co_owner_confirmed": false,
+    "co_owner_confirmed": null,
     "ts": "05:53",
     "quote": "Let me check, and I talked to my daughter. She she can check. I'll let you know. I can call you back.",
-    "reasoning": "The call ends with the customer saying she will check her credit with her daughter's help and call the rep back — a callback framing, but with no specific time stated by either party, making it an unanchored callback rather than a booked or tentative appointment. The daughter, identified as a potential co-decision-maker, was never confirmed for any future appointment."
+    "reasoning": "No appointment day or time was ever set; the call ends with the customer promising to check her credit with her daughter and call back, with no specific date/time attached — a callback outcome, not a booking."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep asks 'what would you say your average electric bill is?' at 02:52 but the customer never gives a number — she instead redirects to her inability to pay and reliance on her daughter (03:03). No bill figure was ever captured in this call."
+    "reasoning": "The rep asked for an average bill at 02:52 ('So what would you say your average electric bill is?') but the customer never gave a dollar figure or usage number — she instead described her financial situation (disability, Social Security, mortgage-only payments) without stating a bill amount, so there is no number to flip."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call never reached a point where the rep raised getting the physical utility bill (mail/online, photo, text, email) — the conversation stalled at the bill-amount and credit-qualifier stage and ended before bill document collection was raised."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,229 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar; she moved directly from the address/homeowner verify questions into pitch language ('the solar panels... produce power for the home') and asked about prior quotes instead, so the specific interest-motivation question was skipped."
+    "reasoning": "The rep never explicitly asked 'what interested you in solar' — she moved from address verification into home-type verification and then straight into the pitch ('it replaces your electric bill') and asked about prior quotes at 01:36, but never asked the customer's own motivation for interest."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "Hey. This is Meg. I'm with Ion."
+      "end_ts": "01:09",
+      "quote": "Hey. This is Meg. I'm with Ion.",
+      "customer_response": "resistant",
+      "customer_quote": "I got a question. Where is it you calling?",
+      "resistance_reason": "trust",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:24",
-      "quote": "The address that I have here, 4156 Colby Avenue, Shiller Park, Illinois. Is that right?"
+      "end_ts": "02:12",
+      "quote": "Okay. And this is a single family home. Correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. I am own home, but I don't know. I need to talk my child when I",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:52",
-      "quote": "So what would you say your average electric bill is?"
+      "end_ts": "03:26",
+      "quote": "So what would you say your average electric bill is?",
+      "customer_response": "deflected",
+      "customer_quote": "I I don't know if I applied for that.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
-      "section": "tax_credit_qualifier",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "section": "credit_qualifier",
+      "status": "asked",
+      "ts": "04:36",
+      "end_ts": "05:52",
+      "quote": "So we do require a credit score above 670. Is that the case for you, or is it lower than 670?",
+      "customer_response": "deflected",
+      "customer_quote": "I don't know. I I think it's 6 and something. I have a long time to check my credit.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "01:36",
-      "quote": "Have you seen any solar quotes before?"
+      "end_ts": "01:53",
+      "quote": "Have you seen any solar quotes before?",
+      "customer_response": "cooperative",
+      "customer_quote": "Before, somebody was come to see that, but, I was, pay something for the tenant, like, rent or something",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "skipped",
+      "ts": "05:53",
+      "end_ts": "06:14",
+      "quote": "You've got it. You can call me back or you can text me back.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'll let you know. I can call you back.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:44",
+      "quote": "for me, it's not okay because I'm not working. I'm disability now, and I can I don't I'm not working, so I can pay? Okay.",
+      "type": "cost",
+      "rep_attempts": 4,
+      "attempt_quotes": [
+        "I think saving money is even even more necessary now. Right? Because you need to save as much as possible.",
+        "So you still pay for the solar panels, but it's less than what you're paying ComEd right now.",
+        "So this will this will make it so your electric bills are lower.",
+        "It's getting rid of your ComEd bill and replacing it with something that's cheaper. Right? So it's guaranteed savings."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The customer restates her inability to pay for anything beyond her mortgage across four separate turns, and the rep responds each time with a version of the savings pitch rather than resolving the underlying anxiety; the customer never affirmatively moves past the concern, instead ending the call by deferring to a credit check and her daughter."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Vulnerability disclosure + co-decision-maker signal both walked past",
-    "ts": "02:15",
-    "quote": "Yeah. I am own home, but I don't know. I need to talk my child when I",
-    "why": "The customer surfaces two high-value signals in the same breath — a disability/fixed-income constraint and a co-decision-maker (her daughter) — and the rep's script-driven momentum runs through both without acknowledgment or follow-up. This is the single most consequential pattern on the call: it repeats three more times (01:54, 03:10, and the daughter reference again at 04:15) and the rep never adapts."
+    "topic": "vulnerability disclosure went unacknowledged",
+    "ts": "01:44",
+    "quote": "I was, pay something for the tenant, like, rent or something, the rental. But for me, it's not okay because I'm not working. I'm disability now, and I can I don't I'm not working, so I can pay?",
+    "why": "The customer disclosed disability and fixed-income status directly, and the rep never once acknowledged it across the rest of the call — instead repeating savings framing three more times. This is the single biggest gap: the trust the customer extended was met with a form-filling response, which likely contributed to the guarded, deferred ending."
   },
   "key_moments": [
     {
       "ts": "00:42",
       "quote": "I got a question. Where is it you calling?",
-      "classification": "protocol_violation",
-      "stewart_read": "Customer is questioning the legitimacy/source of the call. The schema calls for honest specificity to reduce suspicion. Rep's first response ('I'm sorry. From from Ion Solar.') stumbles and only on the second attempt references the form."
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The customer had to interrupt the verify flow to ask who's calling, despite the rep having said 'I'm with Ion' and referenced the online form at 00:05-00:11. The intro didn't establish clear enough legitimacy to survive to this point, or the customer's comprehension of it was weak."
+    },
+    {
+      "ts": "00:01",
+      "quote": "Hello? Yeah. Sure. I'm here. Hi, Elena?",
+      "classification": "other",
+      "stewart_read": "The customer greets a name, 'Elena,' that never appears again — the rep introduces herself as Meg at 00:05. This looks like a lead-data or dialer mismatch (wrong name attached to this lead) rather than a rep error."
     },
     {
       "ts": "01:44",
-      "quote": "Before, somebody was come to see that, but, I was, pay something for the tenant, like, rent or something, the rental.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a prior solar-adjacent visit that involved a rental/tenant payment structure — potentially a lease or third-party financing pitch. Rep does not probe what company this was or what was offered."
-    },
-    {
-      "ts": "01:54",
-      "quote": "I'm disability now, and I can I don't I'm not working, so I can pay? Okay.",
+      "quote": "I was, pay something for the tenant, like, rent or something, the rental. But for me, it's not okay because I'm not working. I'm disability now, and I can I don't I'm not working, so I can pay? Okay.",
       "classification": "empathy_miss",
-      "stewart_read": "Customer discloses a disability status and inability to work, directly bearing on her ability to take on any new payment. Rep's next line pivots straight to homeowner confirmation without acknowledging the disclosure."
+      "stewart_read": "This is a direct disclosure of disability and fixed income — a trust gift per the schema. The rep's next line skips straight to reframing savings as necessary rather than acknowledging the disclosure at all."
     },
     {
-      "ts": "02:15",
-      "quote": "Yeah. I am own home, but I don't know. I need to talk my child when I",
-      "classification": "spouse_handling",
-      "stewart_read": "Customer signals her adult child is a co-decision-maker, the same structural pattern as spouse-on-title protocol. Rep responds 'For sure' and immediately pivots back into the savings pitch without ever circling back to identify or include the child."
+      "ts": "04:36",
+      "quote": "So we do require a credit score above 670. Is that the case for you, or is it lower than 670?",
+      "classification": "empathy_miss",
+      "stewart_read": "The rep runs the standard credit qualifier immediately after the customer has repeatedly described being on disability and unable to pay for anything beyond her mortgage. The qualifier itself is correct procedure, but it lands with no transition acknowledging the financial fragility just disclosed — a sequencing choice that reads as mechanical given the preceding four minutes."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 29,
-    "verified": 29,
-    "fuzzy": 0,
-    "wrong_ts": 0,
+    "checked": 38,
+    "verified": 36,
+    "fuzzy": 1,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

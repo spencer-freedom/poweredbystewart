@@ -1,8 +1,8 @@
 {
   "call_id": "SESSION16_fc41b0a2",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens with a customer pre-loaded with a cost objection and closes with a booked appointment and the customer volunteering enthusiasm and specific follow-up questions. The rep never directly resolves the payback-period math the customer raises three times, instead redirecting to incentives, trees, and garage roof space — which worked well enough to move the customer from skeptical to interested, but leaves an unaddressed thread for the closer.",
-  "shape": "energy_built",
+  "trajectory_summary": "The call opens with a customer who has essentially pre-objected to solar on payback-period grounds, and the rep never directly resolves that math — instead he redirects to incentives, qualifies credit, and pivots to the garage roof as a fresh angle, which successfully re-engages the customer's curiosity. The call ends booked with a locked day/time, but the core cost skepticism was talked around rather than flipped, leaving latent risk for the closer.",
+  "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "07:11",
     "quote": "Tuesday at five. Okay.",
-    "reasoning": "A specific day and time (Tuesday at 5) is explicitly confirmed by both parties, and the rep follows with call-logistics expectations (email access, no driving), making this a clean booked outcome via phone appointment. No co-owner was identified — customer confirmed he is the sole title holder."
+    "reasoning": "A specific day (Tuesday) and time (5PM Mountain) were locked and confirmed by both parties, with the rep restating it at the end of the call ('we'll talk to you Tuesday at five'). No co-owner exists to confirm since the customer stated he is the sole owner."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,145 +20,249 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer discusses an estimated system cost (~$20,000) and estimated savings (~$100/month) but the rep never asks for or captures the customer's actual current utility bill or usage — the entire bill_amount verify item was skipped."
+    "reasoning": "The rep never asked for or captured an actual utility bill amount or kWh usage figure — the only dollar figures discussed ($20,000 cost, $100/month savings) came from the customer's prior outside estimate, not a bill. No bill anchor exists to flip in this call."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "At no point does the rep ask Jim to send, photo, or read off his utility bill. The call closes with the appointment set and the specialist expected to gather design info directly, with no bill-collection step run by the setter."
   },
   "interest_reason_audit": {
-    "asked": true,
-    "ask_ts": "00:22",
+    "asked": false,
+    "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "00:17",
-    "reason_quote": "it might not be a worthwhile investment, but I was curious.",
+    "reason_ts": "08:19",
+    "reason_quote": "it would be nice to think that, I'm not having to pay much of a of a power bill anymore.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked an adaptive variant of the interest question ('What was it that kinda makes you think that?') and the customer's underlying motivation (curiosity plus payback-period doubt) surfaced, but the rep never explicitly reinforced 'curiosity' or the payback concern when setting the appointment — the booking was framed around incentives and roof space rather than tying back to why the customer engaged in the first place."
+    "reasoning": "The rep never explicitly asked 'what interested you in solar' — the conversation started from an inbound request and moved directly into objection handling. The customer did eventually volunteer his motivation near the end (wanting to eliminate his power bill), but the rep responded with generic validation ('Yeah. Exactly. No. I totally get that.') rather than tying it to the appointment or reinforcing it as the reason to show up Tuesday."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "quote": "Hey, Jim. This is Holland with Ion. I just got a request that you were looking into solar for your home."
+      "end_ts": "00:16",
+      "quote": "Hey, Jim. This is Holland with Ion. I just got a request that you were looking into solar for your home.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. It is.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "asked",
-      "ts": "00:22",
-      "quote": "What was it that kinda makes you think that?"
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "04:29",
-      "quote": "I have you down, Jim, as the property owner."
+      "end_ts": "04:43",
+      "quote": "I have you down, Jim, as the property owner.",
+      "customer_response": "cooperative",
+      "customer_quote": "Just me.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "04:34",
-      "quote": "Is there gonna be anybody else on the title of the home with you, or is it just gonna be you?"
+      "end_ts": "04:43",
+      "quote": "Is there gonna be anybody else on the title of the home with you, or is it just gonna be you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Just me.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "04:04",
-      "quote": "Do you know, like, how old that roof is on your garage?"
+      "end_ts": "04:20",
+      "quote": "Do you know, like, how old that roof is on your garage?",
+      "customer_response": "cooperative",
+      "customer_quote": "I think it's about five years.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "04:46",
-      "quote": "I'm assuming the electric company will just be Accel. Right?"
+      "end_ts": "04:59",
+      "quote": "I'm assuming the electric company will just be Accel. Right?",
+      "customer_response": "cooperative",
+      "customer_quote": "Sure. Yeah. Yeah.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:36",
-      "quote": "the only thing actually that you need to qualify for those is just that you have a credit score above 670."
+      "end_ts": "02:46",
+      "quote": "the only thing actually that you need to qualify for those is just that you have a credit score above 670. So do you know if that would be the case for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "I do. Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "01:26",
-      "quote": "when was the last time that you saw, like, an estimate for your home"
+      "end_ts": "01:45",
+      "quote": "when was the last time that you saw, like, an estimate for your home, if you have?",
+      "customer_response": "cooperative",
+      "customer_quote": "I this is the first time.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "07:03",
-      "quote": "Let's say let's do Tuesday at five."
+      "ts": "06:06",
+      "end_ts": "07:11",
+      "quote": "Monday afternoon or maybe even Tuesday. Would either of those work for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "let's do Tuesday at five.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "08:44",
-      "quote": "I'll text you your appointment details just so you have that reminder"
+      "status": "asked",
+      "ts": "07:15",
+      "end_ts": "08:56",
+      "quote": "all that they ask is that you aren't driving and that you do just have some way to access your email.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Great.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "00:17",
+      "quote": "it might not be a worthwhile investment,",
+      "type": "cost",
+      "rep_attempts": 3,
+      "attempt_quotes": [
+        "Yeah. I mean, we have different options.",
+        "The only incentive actually that was removed was the federal tax credit, which does actually sound like something that you're interested in.",
+        "Those incentives do cover a lot of the cost from my understanding."
+      ],
+      "resolved": true,
+      "resolution_ts": "05:25",
+      "reasoning": "Customer explicitly states interest after the incentive/credit-qualifier reframe ('The account is is is interested for sure'), showing the objection softened even though the underlying $20k/$100-month math was never directly re-argued."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "objection inversion on cost/payback",
-    "ts": "01:03",
-    "quote": "the cost is so high. I'm like, okay. So if it's gonna cost me about $20,000 and then, it's saving me only a $100 a month, then it's gonna take, it's gonna take a long time for it to pay for itself.",
-    "why": "The customer hands the rep a specific, quotable cost objection early in the call and the rep validates it rather than flipping it — one of several available inversion moments in this call, worth a look even though the rep's overall handling still landed the appointment."
+    "topic": "Objection inversion on cost/payback math",
+    "ts": "01:16",
+    "quote": "then it's gonna take, it's gonna take a long time for it to pay for itself.",
+    "why": "The customer volunteered specific numbers ($20,000 cost, $100/month savings, 20-year payback) as his stated reason for skepticism — a direct objection_inversion trigger per schema — and the rep never flipped it, instead routing around it to incentives. This is the single largest leverage move left on the table in this call."
   },
   "key_moments": [
     {
-      "ts": "00:22",
-      "quote": "Yeah. What was it that kinda makes you think that?",
+      "ts": "01:16",
+      "quote": "then it's gonna take, it's gonna take a long time for it to pay for itself.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "This is a strong adaptive capture of the interest/motivation verify item (strategy match to interest_question per llm_context_injection.strategy_recognition), but the objection embedded in the customer's answer ('might not be a worthwhile investment') is never inverted later — the rep treats it as a verify probe rather than the entry point for a bill-anchoring flip."
+      "stewart_read": "This is a textbook objection_inversion trigger — the customer states a specific dollar cost ($20,000) and specific savings ($100/month) as the reason NOT to move forward. The schema's flip pattern (quote their number back as the actual expense; what's expensive is staying on the current bill) was available and unused."
     },
     {
-      "ts": "01:03",
-      "quote": "the cost is so high. I'm like, okay. So if it's gonna cost me about $20,000 and then, it's saving me only a $100 a month, then it's gonna take, it's gonna take a long time for it to pay for itself.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "Textbook trigger for the inversion move (cost objection in first 5 minutes) — customer hands the rep a specific $20k/$100-month framework. Rep responds with 'Mhmm... Yeah. No. I see what you're saying,' validating the customer's framing instead of flipping it toward what their current utility bill is already costing them."
-    },
-    {
-      "ts": "02:00",
-      "quote": "The only incentive actually that was removed was the federal tax credit, which does actually sound like something that you're interested in. But, obviously, like, that's the biggest thing when it comes to solar was that incentive. So we knew that that would be an issue. Right? So we've been able to get a lot of new incentives such as state incentives, veteran incentives, stuff like that.",
+      "ts": "01:59",
+      "quote": "Yeah. No. I'm actually glad that you brought that up just because yeah. The only incentive actually that was removed was the federal tax credit, which does actually sound like something that you're interested in.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "Rep handles the incentive-lapse concern by naming replacement incentive categories rather than creating curiosity about the customer's specific numbers/design — a reasonable reassurance but a missed opportunity to redirect toward 'let's see what your actual design shows' framing."
+      "stewart_read": "Rather than creating curiosity about the customer's specific numbers, the rep moves into an explanation of incentive categories (state, veteran) — closer-tier content that borders on setter_scope_creep but is used here as a bridge to the credit qualifier, which is a legitimate qualify move."
+    },
+    {
+      "ts": "02:58",
+      "quote": "The only thing I am a little bit worried about is just I see on Google Maps that you have some trees around you.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "This moment sets up the garage-roof discovery — the rep's use of Google Maps to pre-scout the property is a strong proactive habit, and it leads directly to the customer volunteering a genuinely more valuable surface (a shade-free, newer garage roof) than the home itself."
     },
     {
       "ts": "03:09",
       "quote": "Yes. And, actually so I'm closing on this house this coming Monday, so it's not mine yet.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Customer is about to become a new homeowner and is already thinking about tree/roof maintenance — a strong signal of long-term tenure intent and active home-improvement mindset, both of which correlate with solar receptivity."
+      "stewart_read": "The customer discloses he isn't even the legal owner yet — closing is Monday, appointment is Tuesday. This is a genuine timing enthusiasm signal (brand-new homeowner, long planned tenure implied) but also a latent qualification risk the rep needs to flag since address_homeowner_confirmed technically fails until Monday's closing completes."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 35,
-    "verified": 34,
+    "checked": 46,
+    "verified": 46,
     "fuzzy": 0,
-    "wrong_ts": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

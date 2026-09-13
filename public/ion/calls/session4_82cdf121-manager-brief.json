@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION4_82cdf121",
   "rep_name": "Parker",
-  "trajectory_summary": "This is an inbound, self-motivated lead who stayed cooperative and engaged for the entire call despite a long, clumsy bill-retrieval detour. The rep secured the booking early and handled the roofing cross-sell well, but let roughly ten minutes of dead air burn on bill-searching without pivoting to a faster alternative path, and appointment logistics (time locked) preceded actual bill capture rather than the reverse.",
+  "trajectory_summary": "This call opens with unusually high customer-side energy — an inbound quote request — and the rep capitalizes on it early with a clean roofing cross-sell bridge and full bill-amount capture. The back half of the call is dragged down by a long, unmanaged bill-document retrieval that burns roughly 10+ minutes without the rep deploying the schema's faster alternative paths until very late. The appointment is booked and the bill is eventually captured, but the path there was inefficient rather than well-managed.",
   "shape": "mixed",
-  "outcome_dispute": "None on the outcome itself — a specific day and time were booked (Wednesday 5:00) — but the sequencing is notable: the appointment was locked at 07:36, well before the bill was actually captured (usage chart sent ~16:00), meaning the paid-lead bill-collection requirement was fulfilled only after the booking, not before it.",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "phone",
@@ -11,154 +11,243 @@
     "co_owner_confirmed": null,
     "ts": "07:36",
     "quote": "Awesome. I'll get you down for Wednesday at 05:00.",
-    "reasoning": "A specific day (Wednesday) and time (5:00) were explicitly locked on the call, and the rep reconfirmed it at the close ('I will plan to talk to him more tomorrow at at five' — noting a slight day-reference slip, but the appointment itself was firmly set)."
+    "reasoning": "A specific day (Wednesday) and time (5:00) were explicitly agreed and confirmed, with the customer's availability window (03:00-04:00 or after) driving the scheduling."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "03:58",
-    "bill_quote": "but it's been it's been stable at 500, and it's never been 500.",
-    "flip_executed": "no",
-    "flip_ts": "",
-    "flip_quote": null,
-    "reasoning": "Rep acknowledged the $500 figure emotionally ('I wouldn't wanna be paying $500 every month' at 04:16) but never explicitly turned it into a stated reason to act or reinforced it when booking the appointment or on the button-up; the flip line should have landed around 04:16 or at the 17:46 wrap where the rep instead said 'that's everything we need' without reconnecting to the bill pain."
+    "bill_quote": "it's been it's been stable at 500, and it's never been 500.",
+    "flip_executed": "yes",
+    "flip_ts": "04:16",
+    "flip_quote": "I wouldn't wanna be paying $500 every month.",
+    "reasoning": "The rep captured the customer's escalating $500/month bill and immediately reflected it back as a shared complaint ('I wouldn't wanna be paying $500 every month'), aligning against the utility cost rather than just filing the number."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "05:12",
+    "ask_quote": "we do look at your electric bill with the city of Manassas just so we can see, like, the actual electric consumption of your home... Do you normally get that in the mail, or do you get that online?",
+    "result": "received_on_call",
+    "method": "photo",
+    "result_ts": "17:23",
+    "result_quote": "Just the wave... off yeah. That's perfect. Thanks for taking the time to get that.",
+    "reasoning": "The rep asked for the bill/usage data early, offered a text-photo path, and after an extended live search the customer successfully sent a usage chart screenshot before the call ended."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:38",
     "reason_given": true,
     "reason_ts": "00:43",
-    "reason_quote": "the primary is, saving your your pockets. Right? And then second, you know, for the cleaner environment, try to, you know, promote the",
-    "reason_used": "no",
-    "use_ts": "",
-    "use_quote": null,
-    "reasoning": "Rep asked the interest question early and got a clear two-part answer (savings + environment), but never referenced either motivator again later in the call — not when discussing the escalating bill, not at booking, and not at button-up."
+    "reason_quote": "the primary is, saving your your pockets. Right? And then second, you know, for the cleaner environment",
+    "reason_used": "yes",
+    "use_ts": "04:16",
+    "use_quote": "I wouldn't wanna be paying $500 every month.",
+    "reasoning": "The customer named saving money as the primary motivator; the rep later reinforced this exact theme when reacting to the $500 bill figure, tying the appointment's value to the stated financial pain rather than the environmental secondary reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:19",
-      "quote": "I'm Parker. I'm with ION. So I I work with our design team to get you a good quote with design started."
+      "end_ts": "00:22",
+      "quote": "I'm Parker. I'm with ION. So I I work with our design team to get you a good quote with design started.",
+      "customer_response": "cooperative",
+      "customer_quote": "This is Parker. Hello, Parker. Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:38",
-      "quote": "what kinda got you interested in solar?"
+      "end_ts": "01:03",
+      "quote": "what kinda got you interested in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "the primary is, saving your your pockets. Right?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:16",
-      "quote": "you just to make sure, you own the roof. Is that right?"
+      "end_ts": "01:22",
+      "quote": "you just to make sure, you own the roof. Is that right?",
+      "customer_response": "cooperative",
+      "customer_quote": "I own the house.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:50",
-      "quote": "is it just an asphalt shingle, or do you know what kind of roof"
+      "end_ts": "02:38",
+      "quote": "with the roof, is it just an asphalt shingle, or do you know what kind of roof",
+      "customer_response": "cooperative",
+      "customer_quote": "I know for a fact, I've been here five years and the shingles are rotten and everything.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:58",
-      "quote": "what electric company were you working with at the moment?"
+      "end_ts": "03:26",
+      "quote": "what electric company were you working with at the moment?",
+      "customer_response": "cooperative",
+      "customer_quote": "I believe it's probably the City Of Manassas",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "03:37",
-      "quote": "do you know how much your like, an average bill for you has been lately?"
+      "end_ts": "04:16",
+      "quote": "do you know how much your like, an average bill for you has been lately?",
+      "customer_response": "cooperative",
+      "customer_quote": "it's been it's been stable at 500, and it's never been 500.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "04:52",
-      "quote": "you should have a credit score above 6 70. That's unlike the case for you?"
+      "ts": "04:45",
+      "end_ts": "05:09",
+      "quote": "you should have a credit score above 6 70. That's unlike the case for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm I'm probably in, high six nineties, almost 700 maybe",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "05:12",
-      "quote": "we do look at your electric bill with the city of Manassas just so we can see, like, the actual electric consumption"
+      "end_ts": "17:23",
+      "quote": "Do you normally get that in the mail, or do you get that online?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm sending it right now.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "07:36",
-      "quote": "I'll get you down for Wednesday at 05:00."
+      "ts": "06:38",
+      "end_ts": "07:36",
+      "quote": "Looking our earliest I mean, we have a 02:30, but then we have a five. Would a five work for you tomorrow or Thursday?",
+      "customer_response": "cooperative",
+      "customer_quote": "05:00 tomorrow.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "asked",
       "ts": "17:46",
-      "quote": "that's everything we need. So I'll get it all started in our in our system now."
+      "end_ts": "18:16",
+      "quote": "that's everything we need. So I'll get it all started in our in our system now. So we'll have it ready for you for tomorrow at five.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Sounds good.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "Tech-friction pivot timing on bill collection",
-    "ts": "08:10",
-    "quote": "Cool. Yeah. If you wanna log in real quick, just so I if I can see it before we hang up just to make sure. I know sometimes the bills are kinda kinda confusing.",
-    "why": "Roughly ten minutes of the call (05:41 to 16:00) were spent on the customer searching for his bill live, with the rep repeating the same reassurance three times instead of pivoting to a verbal kWh read-back within the schema's two-minute window. This is a repeatable, coachable time-efficiency gap distinct from any objection-handling issue on this call."
+    "topic": "Late pivot on bill-document friction",
+    "ts": "05:41",
+    "quote": "Yeah. Just tell us Yeah. I'm I'm trying to figure that out right now.",
+    "why": "Friction was visible within the first minute of bill collection but the rep didn't offer the defer-and-text-later alternative until roughly 15:21 — a 9+ minute gap against the schema's 2-minute guidance. This is the single largest time-inefficiency in the call and is a repeatable, coachable habit."
   },
   "key_moments": [
     {
-      "ts": "02:15",
-      "quote": "Yeah. We could totally can we do roofing as well? So we could look at and we would have someone look at it for you before we, you know, get get going completely so then we could see what would be the best fit for you so we can kinda look at both for you.",
+      "ts": "01:47",
+      "quote": "Yeah. We could totally can we do roofing as well? So we could look at and we would have someone look at it for you before we, you know, get get going completely so then we could see what would be the best fit for you",
       "classification": "cross_sell_miss",
-      "stewart_read": "This is actually a strong positive execution of the cross-sell bridge, not a miss — labeled here to give the manager a model clip. Rep caught the old-shingle disclosure and routed to roofing in real time."
+      "stewart_read": "This is actually a POSITIVE example, not a miss — the rep caught the roof-age disclosure and bridged to Ion's in-house roofing immediately, matching the schema's bridge_to_roofing_team pattern."
     },
     {
       "ts": "02:27",
-      "quote": "Well, I know for a fact, I've been here five years and the shingles are rotten and everything.",
+      "quote": "Well, I know for a fact, I've been here five years and the shingles are rotten and everything. And they're getting to that point that I need to upgrade them also.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Customer confirms roof age/condition unprompted, reinforcing the cross-sell opportunity and giving the rep a concrete anchor for the roofing bundle conversation."
+      "stewart_read": "Customer confirms a real, near-term roofing need beyond the initial mention — this strengthens the bundled roof+solar opportunity the rep already opened."
     },
     {
-      "ts": "03:58",
-      "quote": "but it's been it's been stable at 500, and it's never been 500.",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer hands over a strong bill-pain number unprompted. Rep acknowledges emotionally at 04:16 ('I wouldn't wanna be paying $500 every month') but never explicitly ties that number to the appointment's purpose or reinforces it later in the call."
-    },
-    {
-      "ts": "11:00",
-      "quote": "I think I got two neighbors bad neighbors. They they have solar panels already.",
+      "ts": "05:41",
+      "quote": "Yeah. Just tell us Yeah. I'm I'm trying to figure that out right now.",
       "classification": "other",
-      "stewart_read": "Customer volunteers a neighbor-adoption signal — a soft social-proof cue — and the rep does not acknowledge or reinforce it at all, moving straight to bill-format troubleshooting."
+      "stewart_read": "This is the first visible friction point in the bill-retrieval search. The reactive read is that the rep let the customer keep digging without offering an alternative; the strategic read would be that the rep judged the customer capable of finding it quickly — but the search runs another 10+ minutes, undermining that read."
+    },
+    {
+      "ts": "10:54",
+      "quote": "the whole neighborhood of, it's probably on that point. I think I got two neighbors bad neighbors. They they have solar panels already.",
+      "classification": "other",
+      "stewart_read": "Customer volunteers unsolicited social proof (neighbors already have solar) mid-search. The rep does not acknowledge or reflect this back at all before returning to the bill-chart hunt. This doesn't cleanly map to curiosity_over_features (which concerns the rep explaining features) — it's a missed social-proof callback with no existing schema hook."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 38,
-    "verified": 38,
+    "checked": 48,
+    "verified": 43,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 5,
     "not_found": 0
   }
 }

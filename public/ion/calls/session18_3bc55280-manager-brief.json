@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION18_3bc55280",
   "rep_name": "Randy",
-  "trajectory_summary": "The call runs a clean, efficient verify sequence with no scope creep and reasonable rapport, but stalls at the finish: the appointment channel was never disclosed until the close, the co-owner spouse was identified and then never folded into the appointment ask, and the call ends on a vague 'I'll email you and let you know when I'm free' with no locked time. The rep's process discipline early doesn't convert into a secured outcome.",
+  "trajectory_summary": "The call opens with an unresolved feasibility question, moves through a smooth and cooperative verify section with genuine rapport touches, then stalls at the finish line when an in-person appointment format surprises the customer and collides with his travel schedule. The rep never locks a day or time; the call ends on a vague promise to follow up after the customer sends his bill and checks his own calendar.",
   "shape": "mixed",
-  "outcome_dispute": "v1 tag is unknown/unclear from metadata, but the observed transcript shows no day or time was ever locked — this is a callback/no_appointment outcome, not a booked appointment, and should not be counted as a scheduled sit.",
+  "outcome_dispute": "This should not be tagged as a clean booked or tentative appointment. No date or time was set -- the rep states 'I'll just look out for your email, and then we can kinda just go from there' (05:44), which is a callback/pending-contact outcome, not a scheduled appointment. The customer explicitly deferred: 'I should have some availability at some point next week' (05:37) with no day or time attached.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": "in_person",
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "05:37",
-    "quote": "Okay. But I should have some availability at some point next week.",
-    "reasoning": "No specific day or time was ever locked; the customer deferred to 'next week' after learning the meeting would be in-person, and the rep did not secure a callback time or firm slot before ending the call. The spouse, though identified as co-owner, was never addressed regarding appointment inclusion, so co_owner_confirmed is left null rather than false since the topic was never revisited to test it either way."
+    "ts": "05:44",
+    "quote": "I'll just look out for your email, and then we can kinda just go from there.",
+    "reasoning": "No day or time was locked. The customer deferred both the bill and his own scheduling to a future, unspecified point ('I should have some availability at some point next week'), and the rep's closing line commits to nothing more than waiting for an email. This is a callback-adjacent no_appointment outcome, not a booked or tentative slot."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep acknowledges the figure ('Around $3.50. Okay. Yeah. It's a little bit higher during the summer, a little bit less during the winter.') but never ties it back to urgency or savings — the flip that should have gone here per coaching_philosophy.bill_anchoring never happens, and the call moves straight to 'is this your first time looking at a design.'"
+    "reasoning": "The rep captured the bill figure and responded only with acknowledgment and a seasonal comment ('It's a little bit higher during the summer, a little bit less during the winter') -- the flip into alignment-against-the-utility never happens; this line at 02:37 is where it should have gone."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:03",
+    "ask_quote": "Do you typically get those bills in the mail or online?",
+    "result": "promised_later",
+    "method": "email",
+    "result_ts": "03:57",
+    "result_quote": "Alright. Just sent you that email, Tom.",
+    "reasoning": "The rep sent the customer an email address to send the bill to, but the transcript ends without confirmation the customer actually sent the bill during the call -- it is a promised/pending exchange, not a bill received live."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,238 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks Tom what interested him in solar; the call opens by referencing an inbound request ('I just got a request here that you were looking at solar for your home') and moves directly into the regulatory tangent and then verify questions, so no interest-motivation was ever captured."
+    "reasoning": "The rep never explicitly asked what interested the customer in solar; the call moved straight from the intro into address/homeowner verification. The customer's opening comment about regulations is a feasibility concern, not a stated motivation for wanting solar."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "quote": "Hey, Tom. This is Randy with Ion. I just got a request here that you were looking at solar for your home."
+      "end_ts": "00:14",
+      "quote": "Hey, Tom. This is Randy with Ion. I just got a request here that you were looking at solar for your home.",
+      "customer_response": "cooperative",
+      "customer_quote": "Not too bad.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:43",
-      "quote": "I've got your address here at 9297 Lerwick Drive in Dublin, Ohio?"
+      "end_ts": "00:59",
+      "quote": "I've got your address here at 9297 Lerwick Drive in Dublin, Ohio? ... And is this a single family home?",
+      "customer_response": "cooperative",
+      "customer_quote": "Correct.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:41",
-      "quote": "Is there anyone else on the title of the home with you?"
+      "end_ts": "01:48",
+      "quote": "Is there anyone else on the title of the home with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "My wife.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:19",
-      "quote": "Just looking at your roof there, is that a asphalt shingle roof?"
+      "end_ts": "01:40",
+      "quote": "Just looking at your roof there, is that a asphalt shingle roof?",
+      "customer_response": "cooperative",
+      "customer_quote": "I don't know. If I had to guess... make it nine or ten years old.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:19",
-      "quote": "do you guys know who you're, doing your electricity here with?"
+      "end_ts": "02:26",
+      "quote": "And then do you guys know who you're, doing your electricity here with?",
+      "customer_response": "cooperative",
+      "customer_quote": "American Electric Power.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:29",
-      "quote": "how much are you guys currently paying for electricity?"
+      "end_ts": "02:37",
+      "quote": "And, how much are you guys currently paying for electricity?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm gonna guess the average is around $3.50,",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:08",
-      "quote": "I know the only requirement for that is just that you have a credit score that's above 670."
+      "ts": "01:53",
+      "end_ts": "02:17",
+      "quote": "I know the only requirement for that is just that you have a credit score that's above 670.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. It would.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "02:44",
-      "quote": "is this your first time looking at a a design for this property here, Tom?"
+      "end_ts": "02:49",
+      "quote": "And is this your first time looking at a design for this property here, Tom?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Yeah. It would be.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "03:03",
-      "quote": "So you can get that over to me either text or email"
+      "ts": "02:52",
+      "end_ts": "03:57",
+      "quote": "Do you typically get those bills in the mail or online?",
+      "customer_response": "cooperative",
+      "customer_quote": "We usually get them online... I see an email would be great?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
-      "ts": "05:37",
-      "quote": "Okay. But I should have some availability at some point next week."
+      "status": "asked",
+      "ts": "04:51",
+      "end_ts": "05:41",
+      "quote": "Does tomorrow afternoon work for you?",
+      "customer_response": "resistant",
+      "customer_quote": "Actually, we're we're pretty busy over the weekend.",
+      "resistance_reason": "timing",
+      "rep_followup": "alternative_offered",
+      "result": "declined"
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "asked",
       "ts": "05:41",
-      "quote": "I'll just look out for your email, and then we can kinda just go from there."
+      "end_ts": "05:52",
+      "quote": "I'll just look out for your email, and then we can kinda just go from there.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. But I should have some availability at some point next week.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "05:03",
+      "quote": "You you're talking about a phone call. Right?",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "No. So this is actually the in person meeting. Does that work for you?"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep clarifies the format directly but does not re-anchor a specific time after the correction; the customer immediately shifts to a scheduling deflection rather than confirming the corrected format works."
+    },
+    {
+      "ts": "05:11",
+      "quote": "Actually, we're we're pretty busy over the weekend. Tell you what, can I look at my schedule? And then when I email you the AEP information, I'll let you know, like, when I'm free, like because I I travel a handful for work, and then our family's gonna be out of town.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. Yeah. Not a problem at all. Yeah. That works. No worries."
+      ],
+      "resolved": true,
+      "resolution_ts": "05:36",
+      "reasoning": "The rep accepts the customer's deferred-scheduling proposal without pushing for even a provisional window, so the objection is 'resolved' only in the sense that the customer stopped objecting -- no concrete next step was secured."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored close / no locked appointment",
-    "ts": "05:41",
-    "quote": "I'll just look out for your email, and then we can kinda just go from there.",
-    "why": "The entire verify sequence was clean, but the call ends without a day, time, channel confirmation, or handshake — the single biggest value-destroying gap on this call, since no appointment exists to hand off to a closer."
+    "topic": "Appointment channel never set before booking attempt",
+    "ts": "05:03",
+    "quote": "You you're talking about a phone call. Right?",
+    "why": "The rep tries to book a slot without ever having told the customer the appointment is in-person, and the customer's surprised correction lands at the exact moment he's asked to commit -- directly preceding his pullback into scheduling avoidance. Stating the format early, before offering times, removes this friction point entirely."
   },
   "key_moments": [
     {
-      "ts": "01:48",
-      "quote": "My wife.",
-      "classification": "spouse_handling",
-      "stewart_read": "The rep gets confirmation that Tom's wife is a co-owner on the title but never circles back to invite her onto the appointment. This is a missed protocol step, not a deliberate deferral — there's no later reference to her at all in the call."
+      "ts": "00:19",
+      "quote": "the, actually, location where I live in near field, they have, I I think, pretty, stringent regulations on what's allowed, but I wasn't sure if maybe somebody had the ability to navigate whether or not that's that's possible.",
+      "classification": "knowledge_gap",
+      "stewart_read": "The customer raises a feasibility/regulatory question at the very start of the call. The rep never directly answers or confirms it was routed to the specialist -- he says only 'I gotcha' and moves to verify. This is a minor, low-severity gap: the customer does not resurface the concern and cooperates fully through the rest of the call, so it did not visibly cost engagement, but it was also never closed out with an explicit bridge to the specialist."
     },
     {
       "ts": "02:33",
       "quote": "I'm gonna I'm gonna guess the average is around $3.50,",
+      "classification": "bill_anchor",
+      "stewart_read": "The customer gives a bill figure and the rep acknowledges it factually ('Around $3.50. Okay.') then adds a seasonal comment, but never flips it into emotional leverage against the utility or ties it to savings motivation."
+    },
+    {
+      "ts": "03:22",
+      "quote": "Yeah. You can I see an email would be would be great?",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The rep captures a bill figure but responds with a flat acknowledgment and immediately pivots to design mechanics rather than using the number to build urgency or curiosity about savings."
+      "stewart_read": "The customer agrees to send the bill via email with no resistance, but the rep never uses this moment to build anticipation about what the design will show him -- it's treated as a pure logistics handoff."
     },
     {
       "ts": "05:03",
       "quote": "You you're talking about a phone call. Right?",
       "classification": "unanchored_soft_exit",
-      "stewart_read": "The customer's confusion here is a direct consequence of the rep never stating the appointment channel (phone vs. in-person) earlier in the call. This surfaces at the worst moment — right as the rep is trying to lock a time."
-    },
-    {
-      "ts": "05:11",
-      "quote": "Actually, we're we're pretty busy over the weekend. Tell you what, can I look at my schedule?",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "Once the in-person format lands, Tom immediately backs away from committing to a slot. The rep does not counter with a firm time anchor or attempt to lock a specific window; he accepts the deflection outright."
+      "stewart_read": "The appointment format (in-person vs. phone) was never stated anywhere earlier in the call before the rep tried to book a slot. The customer's assumption that it would be a phone call surfaces only at the moment of booking, and this surprise appears to contribute directly to his pullback into 'we're pretty busy.' This is a schema gap in this instance: Ion's button_up protocol specifies stating the appointment channel, and it was skipped until it caused friction."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 29,
-    "verified": 29,
-    "fuzzy": 0,
-    "wrong_ts": 0,
+    "checked": 48,
+    "verified": 44,
+    "fuzzy": 3,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

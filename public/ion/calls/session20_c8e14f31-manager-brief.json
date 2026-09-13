@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION20_c8e14f31",
   "rep_name": "Corey",
-  "trajectory_summary": "The call opens with a customer who is skeptical about what he was actually promised by the ad, and the rep never resolves that root tension — he runs the standard verify sequence competently but leaves the Tesla-branding gap open until the customer forces the issue at the end, at which point the call collapses immediately. Rapport looked to be recovering during the routine verify questions (address, roof, bill) but that was surface-level cooperation sitting on top of an unresolved legitimacy question.",
+  "trajectory_summary": "The call opens cold with the customer explicitly conditioning his engagement, dips into a real credibility test over the ad's cost claim, recovers through a cooperative verify section once the bill number lands, and then collapses when the same ad-vs-reality gap resurfaces around product expectations (Tesla shingle-style panels) that Ion cannot deliver. The rep answered the first version of the gap but had nothing for the second, and the call ends in an unresolved not-interested exit.",
   "shape": "energy_leaked",
   "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "no_appointment",
+    "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "03:40",
     "quote": "In that case, I'm probably not interested.",
-    "reasoning": "The call ends with the customer withdrawing interest after the Tesla-product mismatch is confirmed, and the rep accepts the exit with a closing goodbye rather than securing any next step, callback, or appointment."
+    "reasoning": "The call ends with the customer withdrawing interest after learning Ion doesn't carry the shingle-style panels he expected, and the rep closes the call with no appointment, no callback, and no next step — this is a disqualification driven by product-expectation mismatch, not a booked or tentative outcome."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep reacts with 'Oh, jeez... I can definitely see why you're looking into this' at 02:26 but immediately pivots to the credit qualifier at 02:29 without turning the bill figure into a forward-pulling reason to act or tying it to the appointment."
+    "reasoning": "The rep reacted emotionally to the number ('Oh, jeez... I can definitely see why you're looking into this') but never turned it into an explicit reason to proceed with the estimate or appointment — the flip should have landed right after the reaction, before moving to the credit qualifier."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "02:50",
+    "ask_quote": "You can find that on one of your electricity bills just as a bar graph.",
+    "result": "promised_later",
+    "method": "other",
+    "result_ts": "02:50",
+    "result_quote": "All that's needed to be done now to finish up your estimate is for my team to do what's called a sun study.",
+    "reasoning": "The rep references the bill's kWh bar graph as something the team will use, framing it as a next-step item rather than collecting it live on the call; the call ends before any method (text/email/photo) is specified."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,132 +41,236 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks what interested the customer in solar (verify.interest_in_solar); the closest substitute is the opening assumption 'you're looking at solar for your home,' which the customer only conditionally confirms, so no genuine motivation was ever surfaced or used."
+    "reasoning": "The rep never explicitly asked what interested the customer in solar; the customer's own comments about the ad and bill imply motivation, but no direct question-and-answer on 'why solar' occurred."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "quote": "This is Corey with Ion. I, gotten a request here you're looking at solar for your home."
+      "end_ts": "00:33",
+      "quote": "Great. This is Corey with Ion. I, gotten a request here you're looking at solar for your home. Is that right?",
+      "customer_response": "resistant",
+      "customer_quote": "The ad kinda inferred that there was no cost involved.",
+      "resistance_reason": "trust",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:19",
-      "quote": "Looks like I have you here at 2733 Clark Drive in Grove City?"
+      "end_ts": "01:33",
+      "quote": "Looks like I have you here at 2733 Clark Drive in Grove City?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:46",
-      "quote": "And is anybody else in the title of the home with you here, or is it just you?"
+      "end_ts": "01:57",
+      "quote": "And is anybody else in the title of the home with you here, or is it just you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. The title itself is, we've got it in a trust with our daughter's name on it.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:35",
-      "quote": "And then the roof on there, is that a asphalt shingle roof?"
+      "end_ts": "01:43",
+      "quote": "And then the roof on there, is that a asphalt shingle roof?",
+      "customer_response": "cooperative",
+      "customer_quote": "About two years old.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:04",
-      "quote": "And then are you guys doing your electricity with, Duke or what electricity company?"
+      "end_ts": "02:13",
+      "quote": "And then are you guys doing your electricity with, Duke or what electricity company?",
+      "customer_response": "cooperative",
+      "customer_quote": "AEP.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:14",
-      "quote": "How much would you say you're spending with them every month?"
+      "end_ts": "02:23",
+      "quote": "How much would you say you're spending with them every month?",
+      "customer_response": "cooperative",
+      "customer_quote": "It was almost, like, it was, like, $3.84 last month.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "asked",
-      "ts": "02:29",
-      "quote": "you just need to have a credit score above 650 to qualify for that"
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "02:50",
+      "end_ts": "03:05",
+      "quote": "You can find that on one of your electricity bills just as a bar graph.",
+      "customer_response": "deflected",
+      "customer_quote": "Sure. The ad showed that it was like Tesla, and these new panels look like shingles, actually.",
+      "resistance_reason": "trust",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "00:21",
+      "quote": "You're using the word estimate, but the ad I responded to said that Tesla was looking for people that... The ad kinda inferred that there was no cost involved.",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I'll confirm because Thursday is Tuesday. Yes. There isn't any cost involved for, like, the installation. So there isn't any upfront cost, but that doesn't mean the equipment itself is free."
+      ],
+      "resolved": true,
+      "resolution_ts": "01:17",
+      "reasoning": "The customer accepted the clarification and said 'Alright. Go ahead.', moving forward into the verify section."
+    },
+    {
+      "ts": "03:11",
+      "quote": "Sure. The ad showed that it was like Tesla, and these new panels look like shingles, actually. Or they weren't the ugly looking panels that sit on roofs. Are we still talking the same thing?",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Unfortunately, not. So those have been back ordered for the better half of this decade. We're probably not gonna see them for a minute just because nobody has them right now with them being so far back ordered."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep confirmed the product gap honestly but made no further attempt to redirect or salvage interest, and the customer disengaged immediately after."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Tesla-sourced lead expectation gap never resolved",
-    "ts": "00:33",
-    "quote": "The ad kinda inferred that there was no cost involved.",
-    "why": "The customer names the exact concern that ends the call in the first 40 seconds, and it resurfaces at 03:11 before killing the call at 03:40 — the rep had two separate chances to deploy the schema's Tesla-as-lead-source reframe and used neither, instead answering only the cost half of the question and later giving a vague back-order excuse for the product half."
+    "topic": "Tesla ad expectation gap ends the call",
+    "ts": "03:11",
+    "quote": "Sure. The ad showed that it was like Tesla, and these new panels look like shingles, actually. Or they weren't the ugly looking panels that sit on roofs. Are we still talking the same thing?",
+    "why": "The exact concern the customer raised at 00:21 about the ad's framing resurfaces in sharper form here and is the direct cause of the disqualification — this is the moment to review with the rep, since the first touch was handled fine but the second had no answer prepared."
   },
   "key_moments": [
     {
-      "ts": "00:04",
-      "quote": "Great. This is Corey with Ion. I, gotten a request here you're looking at solar for your home. Is that right?",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The customer's later comments confirm this is a Tesla-sourced lead ('the ad I responded to said that Tesla was looking for people'), but the rep opens with the generic standard-lead intro rather than the Tesla-certified-installer framing. He never attempted the Tesla variant at all — this isn't a degraded execution of it, it's a missed selection of the correct intro for this lead source."
+      "ts": "00:21",
+      "quote": "You're using the word estimate, but the ad I responded to said that Tesla was looking for people that... The ad kinda inferred that there was no cost involved.",
+      "classification": "trust_or_scam",
+      "stewart_read": "This is the customer directly checking the rep's language against a specific ad claim — a legitimacy test, not a generic cost objection. It also foreshadows the Tesla product-expectation gap that resurfaces at 03:11."
     },
     {
-      "ts": "00:33",
-      "quote": "The ad kinda inferred that there was no cost involved.",
-      "classification": "tesla_expectation_gap",
-      "stewart_read": "This is the customer naming, almost verbatim, the exact expectation-gap risk the schema flags for a subset of Tesla-sourced leads. It surfaces in the first 40 seconds, well before the rep has any qualification info, and signals the legitimacy conversation isn't finished yet."
+      "ts": "00:36",
+      "quote": "I'll confirm because Thursday is Tuesday. Yes. There isn't any cost involved for, like, the installation. So there isn't any upfront cost, but that doesn't mean the equipment itself is free.",
+      "classification": "rapport_repair",
+      "stewart_read": "This is a direct, specific answer to a customer-raised condition-of-continuing question, not unprompted technical content — the customer asked, the rep answered. It reads as legitimacy repair in the moment, and it worked: the customer said 'Alright. Go ahead.' immediately after."
     },
     {
-      "ts": "02:29",
-      "quote": "Well, you'll be happy to hear that with our program for the bill swap that I mentioned earlier, you just need to have a credit score above 650 to qualify for that. Is that the case, Story?",
+      "ts": "00:56",
+      "quote": "A lot of our customers really like it since, you know, you're not spending more than you are already. And if anything, you're spending less.",
       "classification": "other",
-      "stewart_read": "The rep states a 650 credit threshold, but the schema's documented qualifier is 670. This is the same drift pattern already flagged once in the corpus (SESSION18_fcbf33c1), suggesting either an outdated number circulating among reps or genuine confusion about current policy."
+      "stewart_read": "The rep asserts a savings outcome ('spending less') with no bill number on the table yet and no basis given — this is an ungrounded quantitative claim made before any qualification has happened."
     },
     {
-      "ts": "02:18",
-      "quote": "Well, you know, it varies greatly. It was almost, like, it was, like, $3.84 last month.",
-      "classification": "bill_anchor",
-      "stewart_read": "Rep captures the bill figure and reacts ('Oh, jeez. I can definitely see why you're looking into this') but never flips it into alignment-against-the-utility language or ties it forward to the appointment — he moves straight into the credit qualifier."
+      "ts": "01:57",
+      "quote": "Yeah. The title itself is, we've got it in a trust with our daughter's name on it.",
+      "classification": "spouse_handling",
+      "stewart_read": "This surfaces a co-owner situation (daughter named on the trust/title) but the rep says only 'Okay. Great.' and moves straight to utility company — no follow-up on whether the daughter needs to be part of any future appointment."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 30,
-    "verified": 30,
+    "checked": 44,
+    "verified": 44,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

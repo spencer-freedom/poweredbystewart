@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION22_41bbe21a",
   "rep_name": "Holly",
-  "trajectory_summary": "The call opens cold with an identity mismatch, warms into cooperative small talk, but stalls hard when the customer can't locate the bill and the rep waits through a multi-minute silence instead of pivoting to an alternative capture path. It ends without a locked appointment, a captured bill, or a stated reason for interest being reinforced — a soft, unanchored close.",
+  "trajectory_summary": "This call is a proxy-caller situation that was never resolved: the person on the phone is not the homeowner, is not on the title, and does not have access to the daughter's utility account, yet the rep ran the full verify-and-bill-collection script against her anyway. The call ends with no appointment, no bill, and no confirmed involvement from the actual homeowner (Amy).",
   "shape": "energy_leaked",
-  "outcome_dispute": null,
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata, but the observed transcript supports no_appointment, not booked or tentative — no day or time was ever offered or discussed; the call ends with 'we will stay in touch' and no scheduling language.",
   "observed_outcome": {
-    "outcome": "callback",
+    "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": false,
-    "ts": "10:31",
-    "quote": "Yeah. No problem. What I can do What I can do I can just send you a request and then if you have a call back later then you can do it that way as well.",
-    "reasoning": "No appointment day or time was ever set; the rep proposes sending a bill-collection request and a possible future callback, but no specific time is locked, and the actual homeowner (the daughter, Amy) was never brought onto the call or confirmed for any future step."
+    "ts": "11:09",
+    "quote": "Hey. Awesome. Well, thank you for your time, and we will stay in touch.",
+    "reasoning": "No day or time was ever proposed or agreed to; the call ends with a vague 'stay in touch' after the bill could not be retrieved, meeting the no_appointment definition rather than booked, tentative, or callback (no stated callback time)."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +20,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer gave a rough monthly estimate after several rounds of not knowing, and the rep simply echoed the number back ('Probably about 300 a month. Yeah.') at 05:40 without turning it into a reason to act or aligning it against the utility."
+    "reasoning": "The rep captured a rough $300/month estimate but immediately moved to 'everything looks good here on my end' and the bill-document request rather than using the number to build urgency or align it against the utility; the flip should have landed at 05:44 ('Well, yeah. So everything looks good here on my end.')."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "06:03",
+    "ask_quote": "Yeah. So we're Yeah. So we're looking for a copy of her twelve months of COVID in person.",
+    "result": "declined",
+    "method": "photo",
+    "result_ts": "10:25",
+    "result_quote": "hell, yeah. I won't be able to help you on that because I'm not finding anything.",
+    "reasoning": "The rep asked for a document (garbled phrasing likely meant '12 months of usage'), and after several minutes of searching the customer stated she could not find it, ending in a declined/unable-to-produce result on this call, with the rep pivoting to a follow-up request instead."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,238 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer volunteered her original motivation (cost/rebate curiosity) unprompted before the rep ever asked an interest question; the rep never asked the formal 'what interested you in solar' question at all and never circled back to the cost/rebate curiosity later in the call."
+    "reasoning": "The rep never explicitly asked 'what interested you in solar,' but the customer volunteered her original motivation (cost and rebates) unprompted; the rep acknowledged it in the moment ('I can definitely get you that information') but never circled back to answer the cost/rebate question or tie it into the close."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
-      "ts": "00:09",
-      "quote": "This is Holly. Oh, this is Holly. Is this Ira. Am I looking for an 88 DPO?"
+      "ts": "00:03",
+      "end_ts": "00:26",
+      "quote": "This is Holly. Oh, this is Holly.",
+      "customer_response": "resistant",
+      "customer_quote": "Who's this?",
+      "resistance_reason": "trust",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "01:45",
-      "quote": "5601 Hertford Court in Alexandria, Virginia 22315."
+      "ts": "01:37",
+      "end_ts": "03:34",
+      "quote": "I do wanna understand that. Do you understand that address? If you don't mind giving it to me.",
+      "customer_response": "cooperative",
+      "customer_quote": "5601 Hertford Court in Alexandria, Virginia 22315.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "03:34",
-      "quote": "Well, it says Amy is the homeowner. Are you on the title of the home as well?"
+      "end_ts": "03:53",
+      "quote": "Are you on the title of the home as well?",
+      "customer_response": "cooperative",
+      "customer_quote": "No. That's my daughter. I sold my house to her.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "03:06",
-      "quote": "Do you so Do you know how or your current research?"
+      "ts": "03:03",
+      "end_ts": "03:22",
+      "quote": "Do you so Do you know how or your current research?",
+      "customer_response": "cooperative",
+      "customer_quote": "Maybe five, seven years. Maybe next ten.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "05:01",
-      "quote": "And then do you know who her power Who her power company?"
+      "end_ts": "05:05",
+      "quote": "And then do you know who her power Who her power company?",
+      "customer_response": "cooperative",
+      "customer_quote": "Dominion.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "05:37",
-      "quote": "K. Yeah. Probably $300 a month or so."
+      "ts": "05:06",
+      "end_ts": "05:40",
+      "quote": "Dominion. And how much she's paying on average?",
+      "customer_response": "resistant",
+      "customer_quote": "I do not know. I don't even know.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "04:44",
-      "quote": "So that would be credit score above the 67. Is that the case for her?"
+      "end_ts": "04:58",
+      "quote": "So that would be credit score above the 67. Is that the case for her?",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, absolutely. She's probably closer to 800.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "00:52",
-      "quote": "This is for Stoler? This is for Stoler."
+      "ts": "00:49",
+      "end_ts": "01:19",
+      "quote": "This is for Stoler? This is for Stoler.",
+      "customer_response": "cooperative",
+      "customer_quote": "I just I was wondering how much it would cost and what's the rebates on it and all that, but I never got around to doing the rest of it.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "06:03",
-      "quote": "Yeah. So we're Yeah. So we're looking for a copy of her twelve months of COVID in person."
+      "end_ts": "10:31",
+      "quote": "Yeah. So we're Yeah. So we're looking for a copy of her twelve months of COVID in person.",
+      "customer_response": "resistant",
+      "customer_quote": "hell, yeah. I won't be able to help you on that because I'm not finding anything.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "03:43",
+      "quote": "No. That's my daughter. I sold my house to her.",
+      "type": "spouse_or_co_decider",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. So Okay. So your daughter is the home. The owner of the home? Yes."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep acknowledged the daughter is the owner but never resolved how the appointment or qualification would work without her present — the call proceeds as though the mother's answers are sufficient."
+    },
+    {
+      "ts": "10:25",
+      "quote": "hell, yeah. I won't be able to help you on that because I'm not finding anything.",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. No problem. What I can do What I can do I can just send you a request and then if you have a call back later then you can do it that way as well."
+      ],
+      "resolved": true,
+      "resolution_ts": "10:45",
+      "reasoning": "Customer cannot locate the bill; rep offers a single fallback (send a request / callback later) and the customer accepts it without further pushback, ending the thread but with no concrete next step locked."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Bill-collection friction pivot timing",
-    "ts": "09:15",
-    "quote": "You can find one? You can find one?",
-    "why": "The rep let roughly 8 minutes of dead air pass while the customer searched for a bill she couldn't locate, instead of pivoting early to a verbal estimate, an online-account walkthrough, or a scheduled callback — this single stretch is the largest energy leak in the call and directly maps to the schema's 2-minute pivot budget."
+    "topic": "Non-owner caller never redirected to actual homeowner",
+    "ts": "03:43",
+    "quote": "No. That's my daughter. I sold my house to her.",
+    "why": "The entire remaining call — credit qualifier, utility company, bill amount, bill collection — was run against someone who is not on the title and does not have access to the account. The rep should have paused at 03:43 to get Amy on the phone or explicitly schedule around her, instead of continuing the script with secondhand answers."
   },
   "key_moments": [
     {
-      "ts": "01:37",
-      "quote": "And I do wanna understand that. Do you understand that address? If you don't mind giving it to me.",
-      "classification": "other",
-      "stewart_read": "Rep is running the verify section as scripted, re-confirming the address methodically despite significant audio/transcription garble throughout the call."
-    },
-    {
-      "ts": "01:19",
-      "quote": "I just I was wondering how much it would cost and what's the rebates on it and all that, but I never got around to doing the rest of it.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer hands the rep a direct pricing/rebate question up front — exactly the scenario the price_estimate_before_design rebuttal is built for (redirect to design via a real number capture). The rep never uses this framing; instead she moves straight into address/title verification without acknowledging the cost curiosity at all."
-    },
-    {
       "ts": "03:34",
-      "quote": "Well, it says Amy is the homeowner. Are you on the title of the home as well?",
+      "quote": "Well, it says Amy is the homeowner. Are you on the title of the home as well? No. That's my daughter. I sold my house to her.",
       "classification": "spouse_handling",
-      "stewart_read": "The rep correctly identifies that the caller is not the homeowner and that the daughter (Amy) holds title, which is the right verify catch. However, the rep never circles back to ensure Amy will be present for the actual appointment/closer call."
+      "stewart_read": "This is the adult-child/proxy-decision-maker protocol: the actual decision-maker (Amy) is not on the call at all, yet the rep continued running verify and bill-collection with the non-owner mother. The correct move per schema is to redirect the appointment to include the actual titleholder."
+    },
+    {
+      "ts": "04:17",
+      "quote": "I don't speak with",
+      "classification": "empathy_miss",
+      "stewart_read": "The customer's sentence trails off mid-thought right as the rep is asking why she — not her daughter — is handling this. It reads as a possible disclosure about a strained relationship with her daughter, cut off by the rep's repeated 'I can't hear you.' The rep never circled back to what she was trying to say."
+    },
+    {
+      "ts": "04:44",
+      "quote": "So that would be credit score above the 67. Is that the case for her?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep asks the mother to state the credit score of her daughter Amy — a third party who is not present on the call. This produces an unverifiable, hearsay credit qualification ('she's probably closer to 800') that has no evidentiary value for the closer."
     },
     {
       "ts": "05:44",
-      "quote": "Well, yeah. So everything looks good here on my end.",
-      "classification": "other",
-      "stewart_read": "Rep declares verification complete at this point without ever capturing a confident bill figure (the customer had just said 'I do not know' twice) and without having asked what interested the customer in solar. This is a premature completion call against the schema's 6-of-8 threshold expectation."
+      "quote": "Well, yeah. So everything looks good here on my end. On my end.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "After capturing a $300/month estimate from the mother (a guess, not Amy's own figure), the rep simply says 'everything looks good' and moves straight to the bill request — no reflection of the number back as a hook, no acknowledgment of the efficient AC/heat detail the customer just volunteered."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 35,
-    "verified": 35,
-    "fuzzy": 0,
-    "wrong_ts": 0,
+    "checked": 49,
+    "verified": 47,
+    "fuzzy": 1,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION6_ceeb4fed",
   "rep_name": "Bucky",
-  "trajectory_summary": "This is a short, procedurally clean call that ends in a legitimate DQ once the rep discovers the solar-install address is in Wisconsin, outside Ion's service area. The bulk of the call time is consumed by an address-spelling struggle rather than substantive qualification, and the DQ arrives only after that friction — but the outcome would not have changed had the state check happened earlier. The rep's tone stayed even and the customer was cooperative throughout, so nothing was lost relationship-wise; the miss is efficiency, not persuasion.",
-  "shape": "stagnant",
-  "outcome_dispute": "The v1 tag is unknown; based on the transcript this is clearly a dq (region) at 02:07 — the rep explicitly states Wisconsin is not a serviceable state. No appointment was possible once that was established.",
+  "trajectory_summary": "This call never gets past address verification. Nearly two minutes are spent spelling and re-spelling 'Highway G' and 'Dells' before the rep realizes the property is in Wisconsin, a region Ion doesn't serve, and disqualifies the lead. No interest question, no bill discussion, no legitimacy statement beyond the opening line was ever reached.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag is unknown/unlabeled in metadata; observed outcome is a hard DQ on region (Wisconsin), compounded by a second undiscovered disqualifier (existing solar system) the customer mentions only after the rep has already ended the call. This is correctly a dq outcome, not a no_appointment or callback.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "02:07",
     "quote": "We we actually we're not allowed to do Wisconsin.",
-    "reasoning": "The rep explicitly states Ion does not service Wisconsin, which is a hard regional gate per dq_rules; no appointment could be booked and none was."
+    "reasoning": "The property is in Wisconsin, a region Ion doesn't serve, which is a hard disqualifier; no appointment was set or attempted after this point."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never progressed past address verification before the region DQ ended it; no bill or usage figure was ever requested or given."
+    "reasoning": "The call never progressed past address verification into any bill or usage discussion; the region DQ ended the call before that portion of the script."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call was disqualified on region before reaching bill collection; the rep never raised the utility bill."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,132 +41,211 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The call DQ'd during address verification, before the rep reached the interest question; the customer never stated a reason for interest in solar."
+    "reasoning": "The call stayed entirely in address verification and never reached the interest question before the region DQ ended it."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "quote": "This is Bucky with Ion. I'm reaching out about the solar form you filled out online."
+      "end_ts": "00:12",
+      "quote": "Hey. This is Bucky with Ion. I'm reaching out about the solar form you filled out online. How you doing?",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:19",
-      "quote": "You at 11540 Windsor Drive?"
+      "end_ts": "01:51",
+      "quote": "You at 11540 Windsor Drive?",
+      "customer_response": "resistant",
+      "customer_quote": "Yes. But that's not where I'm want the solar.",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "roof",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "sequence the hard-gate check before granular data entry",
-    "ts": "01:47",
-    "quote": "So this home this property is in Wisconsin?",
-    "why": "The rep spent from roughly 00:19 to 01:47 on address-spelling and formatting detail before confirming the state, which is the actual disqualifying fact. Moving the state/region check to the front of address verification would have surfaced this DQ in under a minute instead of nearly two, and folds in the related 01:16 mis-hearing ('Huntley, Illinois') as a symptom of the same rushed, out-of-order verification rather than a separate issue."
+    "topic": "Check service-area eligibility before investing in address detail",
+    "ts": "00:32",
+    "quote": "3508 Highway G, Wisconsin Dells.",
+    "why": "The customer stated a different, out-of-territory address at 00:32 but the rep spent until 02:07 — nearly 1:35 — on spelling and formatting before checking if Wisconsin is serviceable. Front-loading the region check would have ended the call respectfully in under 30 seconds and freed the rep for a live lead."
   },
   "key_moments": [
     {
-      "ts": "00:14",
-      "quote": "I've got a few questions to get started on your estimate. Is that cool?",
-      "classification": "other",
-      "stewart_read": "Clean, low-friction consent transition into the verify section — schema-aligned framing that treats qualifying questions as routine rather than interrogation."
+      "ts": "00:06",
+      "quote": "Hey. This is Bucky with Ion. I'm reaching out about the solar form you filled out online. How you doing?",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The intro references the form (partial legitimacy) but never states a state/region context or pauses meaningfully before diving into address verification. Given the eventual region DQ, an early 'what state is the property in' framing would have surfaced the issue in seconds."
     },
     {
-      "ts": "01:00",
-      "quote": "Is there a space after that g or before that g?",
-      "classification": "other",
-      "stewart_read": "Rep is burning time on granular address-formatting detail (space before/after 'G') that has no bearing on qualification, while the state-eligibility question — the actual gating fact — hasn't been asked yet."
+      "ts": "00:25",
+      "quote": "Yes. But that's not where I'm want the solar.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer reveals the property for solar is different from the address on file — a red flag that should trigger an immediate check of service area before continuing data collection."
     },
     {
-      "ts": "02:07",
-      "quote": "We we actually we're not allowed to do Wisconsin.",
-      "classification": "protocol_violation",
-      "stewart_read": "This is the correct, necessary DQ — Ion doesn't service Wisconsin, so ending the call here is right procedure, not a rep error. Classified under protocol_violation only in the sense that the DQ check itself is a protocol; execution here is compliant, not violated."
+      "ts": "00:56",
+      "quote": "Highway G. Is there a space after that g or before that g?",
+      "classification": "other",
+      "stewart_read": "This is unnecessary precision-chasing on a rural highway address that has no bearing on qualification; it burns call time while the actual disqualifying fact (Wisconsin) is sitting unaddressed since 00:33."
     },
     {
-      "ts": "02:13",
-      "quote": "Sorry to bother you.",
-      "classification": "other",
-      "stewart_read": "Rep's apologetic sign-off frames the call itself as an imposition rather than a normal, professional outcome of a disqualification. Minor tone signal, not a substantive failure."
+      "ts": "01:19",
+      "quote": "No. It's Wisconsin Dallas.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "This is the second time the customer states a state name (misheard as 'Dallas') without the rep pausing to check service-area eligibility; the rep continues spelling-focused questions instead."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 19,
-    "verified": 19,
+    "checked": 21,
+    "verified": 21,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

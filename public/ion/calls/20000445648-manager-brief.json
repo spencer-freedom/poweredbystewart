@@ -1,164 +1,268 @@
 {
   "call_id": "20000445648",
   "rep_name": "Parker",
-  "trajectory_summary": "The call moved through verify items and secured a phone appointment for the next day, but throughout, the customer showed comprehension friction and repeated, unresolved pressure for pricing in writing. The rep held the proposal-before-meeting rule correctly but repeated the same reassurance verbatim each time rather than deepening it, and the appointment landed with real ambiguity about whether the customer's concerns were actually resolved.",
+  "trajectory_summary": "The call moves efficiently through verify and bill capture in under three minutes, but the back half is dominated by a customer who three times asks for price/contract in writing and never gets a clear resolution -- only a repeated redirect to the phone call. The rep locks a day and time, but the appointment sits on top of an unresolved, restated concern, which is a fragile-booking pattern rather than a clean win.",
   "shape": "mixed",
-  "outcome_dispute": null,
+  "outcome_dispute": "v1 tag is unknown; based on the transcript this should be read as a booked appointment (specific day + time, 10AM tomorrow) but flagged as conditional/fragile given the customer's unresolved insistence on written pricing through 04:47, closer to schema's conditional_booking_detection pattern than a clean booked outcome.",
   "observed_outcome": {
-    "outcome": "tentative",
+    "outcome": "booked",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "04:24",
-    "quote": "Morning. Would a nine or a 10AM work for you? Ten, eleven. Okay. K. Okay.",
-    "reasoning": "A specific day (tomorrow) and time (10AM) were agreed to, but the button-up was never completed (no hour-block mention, no no-driving instruction, no explicit 'is that fair' handshake) and the exchange itself is clipped and unclear, making this a fragile/tentative booking rather than a fully secured one."
+    "ts": "04:27",
+    "quote": "Alright. Well, I'll start on your design now, and we'll we'll get you down for tomorrow at 10AM.",
+    "reasoning": "A specific day (tomorrow) and time (10AM) are stated and the customer confirms with \"Ten, eleven. Okay. K. Okay.\" just before, making this a booked phone appointment, though flagged elsewhere as conditional/fragile given the unresolved price demand."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "01:42",
-    "bill_quote": "$200",
+    "bill_quote": "$200 per month.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured both a dollar amount (01:42, '$200') and a usage figure (02:57, '13,000 kilowatt hours per year') but in both cases moved directly to the next verify item (tax credit qualifier, then appointment setting) without turning the number into a reason to act against the utility."
+    "reasoning": "The rep captures the $200/month figure and reacts (\"Oh, okay. Wow.\") but immediately asks a follow-up about whether it's always been that high rather than turning the number into a reason to act; the customer's confusion at 01:52 derails the thread and the bill is never flipped into emotional alignment against the utility."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "02:37",
+    "ask_quote": "Do you know do you normally get your electric bill, you know, by the mail or by email?",
+    "result": "declined",
+    "method": "read_aloud",
+    "result_ts": "02:46",
+    "result_quote": "I have I pay 2 to $100 per month. I use 13,000 kilowatt hours per year.",
+    "reasoning": "The rep asks about mail vs. email delivery of the bill, but the customer doesn't answer that question directly -- instead they volunteer the payment amount and annual kWh usage verbally, effectively giving usage data without the rep ever collecting the actual bill document (photo/text/email/login)."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:36",
     "reason_given": false,
-    "reason_ts": "",
-    "reason_quote": null,
+    "reason_ts": "00:45",
+    "reason_quote": "What do you need to information?",
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked 'what kinda got you interested in solar?' at 00:36 but the customer responded with confusion ('What do you need to information?') rather than giving an actual motivating reason, and the rep did not re-ask or recover the question later in the call."
+    "reasoning": "The rep asks what got the customer interested in solar, but the customer's reply is a confused deflection asking what information is needed rather than a stated reason, and the rep does not re-ask or recover the question -- it simply moves on to the property/roof check."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "quote": "This is Parker. I'm with Ion."
+      "end_ts": "00:15",
+      "quote": "Hey. This is Parker. I'm with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "Good.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:36",
-      "quote": "what kinda got you interested in solar?"
+      "end_ts": "00:47",
+      "quote": "what kinda got you interested in solar?",
+      "customer_response": "deflected",
+      "customer_quote": "What do you need to information?",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "01:16",
-      "quote": "I had here you were the homeowner. Was that right?"
+      "ts": "00:27",
+      "end_ts": "01:21",
+      "quote": "I had here you were the homeowner. Was that right?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. Right.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:08",
-      "quote": "Is it just a asphalt shingle roof?"
+      "ts": "00:52",
+      "end_ts": "01:13",
+      "quote": "Is it just a asphalt shingle roof?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. You know?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:28",
-      "quote": "what electric company are you working with at the moment?"
+      "end_ts": "01:33",
+      "quote": "what electric company are you working with at the moment?",
+      "customer_response": "cooperative",
+      "customer_quote": "ComEd.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:35",
-      "quote": "How much are you normally paying with ComEd?"
+      "end_ts": "01:42",
+      "quote": "How much are you normally paying with ComEd?",
+      "customer_response": "cooperative",
+      "customer_quote": "$200 per month.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:09",
-      "quote": "you need to be paying, like, income tax and have a credit score above six fifty"
+      "ts": "02:01",
+      "end_ts": "02:19",
+      "quote": "you need to be paying, like, income tax and have a credit score above six fifty. Does that sound like the case for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. That sounds.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "02:37",
-      "quote": "Do you know do you normally get your electric bill, you know, by the mail or by email?"
+      "end_ts": "02:58",
+      "quote": "Do you know do you normally get your electric bill, you know, by the mail or by email?",
+      "customer_response": "deflected",
+      "customer_quote": "I use 13,000 kilowatt hours per year.",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "04:24",
-      "quote": "Would a nine or a 10AM work for you?"
+      "ts": "03:05",
+      "end_ts": "04:27",
+      "quote": "the last thing we would need is is just a good day to have one of our specialists come by and kinda run through the design with you",
+      "customer_response": "resistant",
+      "customer_quote": "Please send me my email.",
+      "resistance_reason": "trust",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "04:27",
+      "end_ts": "05:01",
+      "quote": "we'll plan to call you around 10AM.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Thank you.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "03:37",
+      "quote": "Please send me my email.",
+      "type": "proposal_by_email",
+      "rep_attempts": 3,
+      "attempt_quotes": [
+        "We could do a phone call and an email.",
+        "that's what we'll go over in the phone call just because there is a lot of information.",
+        "I'll make sure we we show that show you that right away so we won't waste your time."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The customer restates the same demand for written price/contract three times (03:37, 04:01, 04:47) and the rep gives essentially the same redirect-to-call answer each time without ever securing explicit agreement that the phone-only path resolves the concern -- the customer's final line is still the unmet request."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Reassurance depth on repeated proposal-before-meeting request",
-    "ts": "04:47",
-    "quote": "The tomorrow, this is price and sentence.",
-    "why": "The customer asked for pricing in writing three separate times (03:34, 04:01, 04:47) and the rep gave essentially the same reassurance each time without acknowledging the repetition or varying the approach — this is the clearest, most repeatable coaching pattern on the call and directly maps to multi_angle_resilience."
+    "topic": "Resolving the written-price demand instead of just redirecting past it",
+    "ts": "03:37",
+    "quote": "Please send me my email.",
+    "why": "The customer raises the same unmet need three separate times (03:37, 04:01, 04:47) and the rep's response is the same redirect each time without ever explicitly telling the customer how the concern will be handled on the call itself. This appointment is booked on top of an unresolved anxiety that the closer needs to address in the first minute, or the sit is at risk."
   },
   "key_moments": [
     {
-      "ts": "00:45",
-      "quote": "What do you need to information?",
-      "classification": "knowledge_gap",
-      "stewart_read": "This is the customer's first comprehension-friction signal on the open-ended interest question, and it recurs at 01:52 with an explicit 'I don't understand.' The rep's response ('Just trying to get the information?') doesn't simplify or confirm understanding, it just restates intent."
-    },
-    {
-      "ts": "02:57",
-      "quote": "I use 13,000 kilowatt hours per year.",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer volunteers a specific, usable usage figure unprompted. The rep files it ('Perfect. That that will help a lot.') as design input but never reflects it back as leverage or ties it to bill pain later in the call."
-    },
-    {
-      "ts": "01:42",
-      "quote": "$200",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer gives a bill figure at 01:42 ('$200'), which the rep immediately reacts to at 01:44 ('per month. Oh, okay. Wow.'). The rep captures the number and shows verbal surprise but pivots straight into the tax-credit qualifier rather than using the number to build urgency or align against the utility."
-    },
-    {
-      "ts": "03:34",
-      "quote": "Please send me my email.",
+      "ts": "00:09",
+      "quote": "I was just reaching out because I had a request here you're looking at solar for the home. How are you doing today?",
       "classification": "other",
-      "stewart_read": "Customer's first ask for a written proposal instead of a call. Rep redirects to a phone call, correctly holding the hard rule against sending numbers before the specialist call, but the reassurance is generic ('typically, at our company, we just do...') rather than addressing why the customer wants it in writing."
+      "stewart_read": "The rep references the customer's own solar inquiry (\"a request here\"), satisfying intros.standard's reference_to_form_submission success signal, and names the company (\"This is Parker. I'm with Ion\") one line earlier. The intro is functional, not a legitimacy gap."
+    },
+    {
+      "ts": "01:52",
+      "quote": "Yeah. Please repeat, I don't understand.",
+      "classification": "knowledge_gap",
+      "stewart_read": "The customer explicitly signals a comprehension breakdown on the bill-history question. The rep responds with \"Okay. Gotcha.\" and immediately pivots to a different topic (federal incentives) rather than re-asking more simply or confirming understanding."
+    },
+    {
+      "ts": "02:09",
+      "quote": "you need to be paying, like, income tax and have a credit score above six fifty.",
+      "classification": "other",
+      "stewart_read": "The rep states a 650 credit threshold; the schema's stated threshold is 670. This mirrors the SESSION18_fcbf33c1 drift previously observed."
+    },
+    {
+      "ts": "02:50",
+      "quote": "I use 13,000 kilowatt hours per year.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The customer volunteers a specific, usable usage figure (13,000 kWh/year) unprompted. The rep's response is a flat acknowledgment (\"Perfect. That that will help a lot.\") with no reflection of what that figure means for system sizing or savings potential, missing a chance to build curiosity about their specific design."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 36,
-    "verified": 36,
+    "checked": 52,
+    "verified": 48,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 4,
     "not_found": 0
   }
 }

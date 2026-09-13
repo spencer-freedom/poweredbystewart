@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION25_b33caad9",
   "rep_name": null,
-  "trajectory_summary": "A warm, self-motivated inbound lead was disqualified within roughly 3.5 minutes based entirely on the rep's read of a Google Maps satellite image, without a single verify-section question asked (homeowner, co-owner, utility, bill, roof age, interest reason). Tracy tried three different location workarounds and was met with a DQ each time; the call ends with her giving up, not the rep resolving the technical question with any on-site or specialist-level assessment.",
+  "trajectory_summary": "The customer arrived warm and self-motivated, and stayed engaged through three separate site proposals even after being told the primary location wouldn't work. The rep, however, DQ'd the lead almost entirely off a Google Maps satellite view within the first two minutes and never captured a single verify-section item (bill, utility company, interest reason, co-owner) before ending the call. Energy leaked steadily as the customer kept offering solutions and the rep kept closing doors with the same underlying rationale.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unconfirmed; based on the transcript this is clearly a DQ call (roof/shade), but the manner of the DQ is the concern — it was rendered off a Google Maps image in under 90 seconds with no qualifying conversation, no bill capture, and no offer to route to a specialist for an actual shade study or to at least gather info in case circumstances change (e.g., tree removal).",
+  "outcome_dispute": "This should be tagged dq (roof/shade), which the v1 tag likely reflects, but the manner of the DQ is questionable: it was made solely off satellite imagery ('it's just kinda hard to see because on Google Maps, all the trees are in the way') rather than any bill data, utility info, or even asking about specific sun-hours on the customer's actual property. A same-day satellite photo cannot reliably show winter sun angles, which the customer explicitly raised at 02:20-02:27. The DQ may be premature rather than earned.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "03:44",
-    "quote": "But as of right now, we're we're not able. Yeah. I don't think that's what she's gonna do. Okay. Thank you.",
-    "reasoning": "The call ends with the customer accepting the rep's conclusion that none of the three proposed locations (main roof, detached garage, side yard) will work for solar given the tree coverage, and no appointment is set."
+    "ts": "01:11",
+    "quote": "So to be honest, Tracy, I do think that you don't have enough sun for solely for solar to work",
+    "reasoning": "The rep disqualified the property on shade grounds and the call ended with no appointment, no bill data, and no next step — a clean DQ outcome, though the grounds for the DQ (satellite imagery alone) are questionable per the trajectory_verdict."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reached bill collection — the rep disqualified the lead on shade/roof grounds within the first two minutes, before any verify-section questions including bill amount were asked."
+    "reasoning": "The call never reached the bill_amount portion of the verify section; the rep moved straight from address confirmation into a shade-based DQ conversation and the call ended without any bill or usage figure discussed."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The rep never raised getting the utility bill in any form; the call was consumed entirely by address/shade verification before ending."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,238 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked Tracy what interested her in solar. Tracy volunteered that she had just been researching solar companies and Ion was the fastest to call her back, but this is a lead-source observation, not a stated motivation, and the rep did not explore it."
+    "reasoning": "The rep never asked what interested the customer in solar. The customer's opening line ('I was just reading about y'all') hints at self-driven research interest, but the rep did not explore it further, moving directly into address verification instead."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
-      "status": "skipped",
-      "ts": "00:26",
-      "quote": "Well, yeah. So I actually work with our design team. I help get the solar designs created for the homes and everything."
+      "status": "asked",
+      "ts": "00:00",
+      "end_ts": "00:24",
+      "quote": "We just like to be quick. So Yeah. I like that. I like that.",
+      "customer_response": "cooperative",
+      "customer_quote": "I was just reading about y'all. You you're the first one that came up, and you're the first call.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:42",
-      "quote": "I got your address here as 11216 Bro Brooks Spring Road in Ashland, Virginia. Is that correct?"
+      "end_ts": "00:53",
+      "quote": "I got your address here as 11216 Bro Brooks Spring Road in Ashland, Virginia. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Correct. Yeah.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "00:58",
+      "end_ts": "03:40",
+      "quote": "And then so I pulled up the home, and it looks like you have quite a bit of trees right behind your house. Are all of those trees still there?",
+      "customer_response": "resistant",
+      "customer_quote": "I was looking at we have a a detached garage. Okay. Is that possible to put it out there at the garage?",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "declined"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:17",
+      "quote": "I was looking at we have a a detached garage. Okay. Is that possible to put it out there at the garage?",
+      "type": "roof_or_home",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Kind of the same thing. I do think that you have too much shade."
+      ],
+      "resolved": false,
+      "resolution_ts": "02:43",
+      "reasoning": "The customer proposed an alternate site to overcome the shade DQ; the rep applied the same conclusion after a brief look at the imagery, with no follow-up questions about actual sun exposure on the garage."
+    },
+    {
+      "ts": "02:53",
+      "quote": "On the side, you have the other option is on the side of the house. There's no trees there.",
+      "type": "roof_or_home",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. So for ground mounted systems, we don't offer them just because due to trenching and everything involved."
+      ],
+      "resolved": true,
+      "resolution_ts": "03:44",
+      "reasoning": "The customer proposed a third, shade-free site; the rep reframed it as a ground-mount request and closed it out on cost grounds without confirming whether that side of the roof itself could be used, and the customer ultimately conceded and ended the call."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "DQ delivered before any qualification, on unreliable evidence",
+    "topic": "Premature DQ from unverified satellite imagery",
     "ts": "01:11",
-    "quote": "So to be honest, Tracy, I do think that you don't have enough sun for solely for solar to work for you, unfortunately.",
-    "why": "This is the single most consequential moment on the call: a warm, self-motivated inbound lead was disqualified in the first 75 seconds using a satellite image the rep himself later admits is obscured by the very trees in question, with zero verify-section questions asked. The manager should review whether reps are trained to at least gather basic qualifying info (bill, utility, interest reason) before rendering a shade DQ, and whether a live/specialist shade assessment should be the standard instead of a Google Maps guess."
+    "quote": "So to be honest, Tracy, I do think that you don't have enough sun for solely for solar to work",
+    "why": "The rep disqualified a warm, self-motivated lead within the first 70 seconds of the call based solely on a Google Maps image the rep later admits is obstructed ('it's just kinda hard to see because on Google Maps, all the trees are in the way'), without asking a single qualifying question about actual sun hours or seasonal exposure, and without capturing bill, utility, or interest data. This is the single most consequential gap on the call — a motivated lead who proposed three separate site alternatives was let go without a real assessment."
   },
   "key_moments": [
     {
       "ts": "01:11",
-      "quote": "So to be honest, Tracy, I do think that you don't have enough sun for solely for solar to work for you, unfortunately.",
-      "classification": "non_standard_scenario_hold",
-      "stewart_read": "The rep renders a hard-sounding DQ within the first 75 seconds of the call, before any verify-section item is confirmed, based solely on a satellite image read. This is a fast, confident DQ on a thin evidentiary basis (an admittedly obscured aerial photo) rather than a documented protocol for shade/tree DQs."
+      "quote": "So to be honest, Tracy, I do think that you don't have enough sun for solely for solar to work",
+      "classification": "other",
+      "stewart_read": "The rep disqualifies the property off a satellite image alone, before any verify items were captured. There is no shade/tree-coverage criterion defined in dq_rules today — this is a schema gap Ion needs to formalize (what counts as disqualifying shade, and what evidence standard is required before telling a customer their home won't work)."
     },
     {
       "ts": "01:42",
-      "quote": "It's just kinda hard to see because on Google Maps, all the trees are in the way.",
+      "quote": "It's just kinda hard to see because on Google Maps, all the trees are in the way. So",
       "classification": "knowledge_gap",
-      "stewart_read": "The rep admits the tool he's using to make the DQ decision (Google Maps aerial imagery) is obscured by the very trees in question, yet proceeds to use it as the basis for the disqualification anyway rather than flagging uncertainty or offering a live assessment."
+      "stewart_read": "The rep admits the imagery itself is unclear right after using it to justify a DQ conclusion on the main house. This undercuts the confidence of the initial disqualification and should have prompted the rep to ask the customer directly about sun exposure rather than relying on a visual the rep just admitted was obstructed."
     },
     {
-      "ts": "01:24",
-      "quote": "I was looking at we have a a detached garage. Okay. Is that possible to put it out there at the garage?",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Tracy is actively problem-solving to make solar work on her property, offering a detached garage as an alternative site. This is a highly engaged customer generating her own solution paths rather than accepting the first no."
-    },
-    {
-      "ts": "02:39",
-      "quote": "Kind of the same thing. I do think that you have too much shade. These solar panels, they need as much sun as they can get.",
+      "ts": "02:20",
+      "quote": "Now the wintertime, it would work perfectly because, like, right now, the sun is shining so brightly into this room.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "Rather than exploring specifics (how many hours of direct sun the garage gets, its orientation, or offering a professional shade study), the rep repeats a generic solar-panel-sun-need explanation and closes the option. No question was asked back to Tracy to gather any real data about the garage's exposure."
+      "stewart_read": "The customer hands the rep a specific, useful data point about seasonal sun exposure that directly counters the shade concern. The rep responds with a flat 'Mhmm. Okay' and then restates the same shade conclusion without engaging the point."
+    },
+    {
+      "ts": "02:53",
+      "quote": "On the side, you have the other option is on the side of the house. There's no trees there.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "This is the customer's third independent attempt to find a workable location on her property (main roof, garage, side yard) — a level of persistence and motivation that most leads never show. The rep's response pivots straight to a ground-mount cost explanation without first asking whether a roof-mount was possible on that side of the house."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 23,
-    "verified": 23,
+    "checked": 30,
+    "verified": 29,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

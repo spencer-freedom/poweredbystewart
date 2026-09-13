@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION8_79e7fa2d",
   "rep_name": "Bucky",
-  "trajectory_summary": "This is a short, low-friction call where the customer is cooperative throughout and gives the rep an easy path to a booked appointment. The rep executes the verify sequence quickly but skips the interest-question and bill-anchor entirely, and answers a live pricing question with a bare deflection instead of using it as a hook. The call ends booked but thin — the rep leaves real curiosity-building and cross-sell material (new-build home, no bill yet) unused.",
-  "shape": "mixed",
-  "outcome_dispute": "The v1 tag is unknown/unclear; based on the transcript this is clearly a booked appointment with day and time both stated (tomorrow at 2PM), so it should be tagged booked, not tentative or callback.",
+  "trajectory_summary": "This is a short, mechanical but ultimately successful setter call: the rep moves through verify items quickly, hits a structural dead end on the bill (customer moved in last week, no bill exists yet), and still locks a specific day and time for the closer call. Energy neither builds nor leaks meaningfully — the customer stays evenly cooperative throughout, and the rep's checklist pace matches that low-friction posture, though the call closes without much rapport-building or curiosity-creation.",
+  "shape": "stagnant",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "phone",
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "02:11",
     "quote": "How's if we call you at 2PM, is that cool?",
-    "reasoning": "A specific day (tomorrow) and time (2PM) are both stated and the customer agrees, meeting the definition of booked with a phone appointment channel."
+    "reasoning": "The rep and customer agree on a specific day (tomorrow) and specific time (2PM) for a phone appointment with the specialist, meeting the day+time threshold for a booked outcome despite the thin button-up that follows."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Customer explicitly has no bill yet since they just moved into a newly built home; there is nothing for the rep to capture or flip on this call."
+    "reasoning": "The customer moved in a week prior and has not yet received a first utility bill, so there is no dollar figure or usage number available to anchor or flip. The rep's acknowledgment and move-on is the correct handling of a structural absence, not a missed capture."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The rep never raised getting a physical or digital copy of the utility bill (text/email/photo/login), likely because the customer explicitly stated no bill exists yet at 01:19. No follow-up plan to collect the bill once it arrives was mentioned before the appointment was booked."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,226 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks what interested the customer in solar; the call moves directly from intro through verify items to scheduling without this step, so no reason was ever surfaced or available to use."
+    "reasoning": "The rep never asked what interested the customer in solar at any point in the call; the customer's only spontaneous signal of interest was the unprompted pricing question at 02:19, which the rep did not build into a reason to anchor the appointment."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "Hey. This is Bucky with Ion. I'm reaching out about the solar form you filled out online."
+      "end_ts": "00:10",
+      "quote": "Hey. This is Bucky with Ion. I'm reaching out about the solar form you filled out online. How are you doing?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm doing good.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:19",
-      "quote": "at 1177 Austin Road?"
+      "end_ts": "00:57",
+      "quote": "at 1177 Austin Road? ... So the title's in your name?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "asked",
-      "ts": "00:55",
-      "quote": "the title's in your name?"
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:23",
-      "quote": "You have a roof that's a shingle, or what is it?"
+      "ts": "01:27",
+      "end_ts": "01:31",
+      "quote": "You have a roof that's a shingle, or what is it?",
+      "customer_response": "cooperative",
+      "customer_quote": "Shingle.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:03",
-      "quote": "What is anybody or what utility company are you with?"
+      "end_ts": "01:18",
+      "quote": "What is anybody or what utility company are you with?",
+      "customer_response": "cooperative",
+      "customer_quote": "Central Virginia Electric? Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:19",
-      "quote": "you don't know how much you're paying in and all that?"
+      "end_ts": "01:23",
+      "quote": "And then you don't know how much you're paying in and all that?",
+      "customer_response": "resistant",
+      "customer_quote": "No. Because I just moved in. I haven't got my first bill yet.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
-      "section": "tax_credit_qualifier",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "section": "credit_qualifier",
+      "status": "asked",
+      "ts": "01:32",
+      "end_ts": "01:36",
+      "quote": "Do you have a credit score over 670?",
+      "customer_response": "cooperative",
+      "customer_quote": "800.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "02:11",
-      "quote": "How's if we call you at 2PM, is that cool?"
+      "ts": "01:58",
+      "end_ts": "02:14",
+      "quote": "Can you do a phone call tomorrow? ... How's if we call you at 2PM, is that cool?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "02:15",
+      "end_ts": "02:29",
+      "quote": "Alright. Sounds good. I'll text you after this to remind you, and then we'll call you 2PM tomorrow.",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, okay. Uh-huh.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "02:19",
+      "quote": "Do you hey. Do you have a price?",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "They're gonna give you it tomorrow."
+      ],
+      "resolved": true,
+      "resolution_ts": "02:21",
+      "reasoning": "This is a soft pricing question rather than a true objection; the rep's single deferral to the specialist satisfied the customer, who accepted it without pushback."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "button-up discipline and closing the pricing question with intent",
-    "ts": "02:21",
-    "quote": "They're gonna give you it tomorrow.",
-    "why": "The customer handed the rep a live buying signal (unsolicited price question) right as the call was ending, and the rep's flat deflection plus the complete absence of the button-up recap (hour block, no-driving/computer instruction, 'is that fair?' handshake) leaves a booked appointment structurally fragile against a no-show."
+    "topic": "button-up discipline missing",
+    "ts": "02:23",
+    "quote": "Oh, okay. Uh-huh. You have a great day. Oh, you too. Thank you. Yep.",
+    "why": "The appointment was successfully booked with a day and time, but the call ends without the hour-block statement, no-driving/computer instruction, or an 'is that fair?' handshake — these are the mechanics that protect show rate, and none were run despite a clean booking opportunity."
   },
   "key_moments": [
     {
-      "ts": "00:46",
-      "quote": "Okay. Yeah. I see. I see. So we just got billed. Have you moved in? Yes.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer just moved in last week and has no bill history yet — a new-build home is an enthusiasm signal (fresh usage baseline, likely full electric appliances) that the rep doesn't explore at all."
+      "ts": "00:26",
+      "quote": "So all I see is just trees.",
+      "classification": "other",
+      "stewart_read": "The rep stumbles on address verification because the home is a new build not yet mapped. This is a minor operational friction point, not a customer-facing failure, but it costs a few seconds of composure at the top of the call."
     },
     {
       "ts": "01:19",
-      "quote": "Okay. And then you don't know how much you're paying in and all that?",
-      "classification": "bill_anchor",
-      "stewart_read": "Bill question is asked but the customer has no bill yet since they just moved in; this is a no_bill_captured scenario rather than a missed flip, since there's genuinely nothing to anchor on."
+      "quote": "No. Because I just moved in. I haven't got my first bill yet.",
+      "classification": "other",
+      "stewart_read": "There is no bill to capture or flip here — the customer is a week into ownership with no utility history. The rep's flat acknowledgment (\"Yeah. That's fine.\") is procedurally correct given the structural absence; this is not a withheld-number failure."
+    },
+    {
+      "ts": "01:32",
+      "quote": "Do you have a credit score over 670?",
+      "classification": "other",
+      "stewart_read": "Rep runs the credit qualifier correctly at the schema's stated 670 threshold, and the customer clears it instantly with \"800.\" Clean execution of a hard qualifier with no drift from the documented number."
     },
     {
       "ts": "02:19",
       "quote": "Do you hey. Do you have a price?",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "The customer volunteers a pricing question at the very end of the call — a strong buying signal — and the rep gives a flat deflection instead of using the schema's redirect-to-design framing to build anticipation."
-    },
-    {
-      "ts": "02:21",
-      "quote": "They're gonna give you it tomorrow.",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "The call ends immediately after this line with no recap, no hour-block statement, no no-driving/computer instruction, and no explicit 'is that fair?' handshake — the button-up is almost entirely skipped despite a locked day/time."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The customer voluntarily asks for pricing at the very end of the call — a genuine enthusiasm/engagement signal. The rep's response is a flat deferral with zero curiosity-building."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 24,
-    "verified": 23,
-    "fuzzy": 1,
-    "wrong_ts": 0,
+    "checked": 36,
+    "verified": 35,
+    "fuzzy": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

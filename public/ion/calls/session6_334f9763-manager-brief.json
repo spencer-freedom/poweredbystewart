@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION6_334f9763",
   "rep_name": "Bucky",
-  "trajectory_summary": "This is a short, correctly-executed hard DQ: the customer lives in a rental apartment, which is a not_homeowner disqualifier per Ion's rules. The rep identifies this quickly and ends the call, but offers no referral resource and admits outright he doesn't know who else could help her, leaving the customer to find an alternative provider on her own.",
-  "shape": "stagnant",
-  "outcome_dispute": "The v1 tag is unknown; the correct outcome here is dq (not_homeowner/rental — hard gate). No appointment was possible or attempted after the apartment/rental disclosure.",
+  "trajectory_summary": "This is a short, correctly-triggered hard DQ — the address turns out to be an apartment, which the schema disqualifies outright. The rep followed the gate correctly but then had nothing to offer the customer once she asked for alternatives, and the call fizzles into her asking the rep to call a competitor for her.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata; observed outcome here is a clean dq — not a booked or tentative appointment. No dispute with a stated v1 tag since none was given, but this should be recorded as dq, not any setting outcome.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "01:27",
     "quote": "Okay. So we don't do solar on apartments.",
-    "reasoning": "The customer's address is an apartment that is also a rental house, triggering the hard not_homeowner disqualifier; the call ends with no appointment set and no path forward with Ion."
+    "reasoning": "The address reveals an apartment unit, triggering the hard not_homeowner disqualifier; no appointment was set and the call ends shortly after."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call ended on a hard DQ (apartment/rental, not_homeowner) before the verify section reached bill collection; no bill amount or usage figure was ever discussed."
+    "reasoning": "The call never reaches the bill-amount verify item — it disqualifies on the apartment/homeowner gate right after the address is confirmed."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "Call ends at the address/homeowner verify step with a hard DQ before bill collection would ever be raised."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,132 +41,222 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The call was disqualified at the address/homeowner-status verify step, before the rep reached the interest question; the customer never stated a reason for solar interest."
+    "reasoning": "The rep never reaches the 'what interested you in solar' question — the call is disqualified during the address/homeowner check before verify continues."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "Hey, Jamie. This is Bucky with Ion. I got a request you're looking at solar for your home."
+      "end_ts": "00:11",
+      "quote": "Hey, Jamie. This is Bucky with Ion. I got a request you're looking at solar for your home. How you doing?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm doing fine.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:26",
-      "quote": "still at 123 West Avenue, Baltimore?"
+      "ts": "00:24",
+      "end_ts": "01:27",
+      "quote": "Are you still at 123 West Avenue, Baltimore?",
+      "customer_response": "cooperative",
+      "customer_quote": "The address is 4819 Sedonia Avenue, Apartment C.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "roof",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:22",
+      "quote": "The address is 4819 Sedonia Avenue, Apartment C.",
+      "type": "roof_or_home",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": true,
+      "resolution_ts": "01:27",
+      "reasoning": "Not a persuasion objection but a hard property-type gate; rep correctly disqualified immediately rather than attempting to overcome it, so zero 'attempts' is the right procedural response, not a coaching gap."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "no referral resource for disqualified leads",
-    "ts": "01:43",
+    "topic": "No resource/referral on hard DQ",
+    "ts": "01:41",
     "quote": "I have no idea.",
-    "why": "This customer was disqualified correctly but left the call with a repeated, unanswered request for help finding an alternative provider. A stock, neutral referral line for this common DQ scenario (apartment/rental) would materially improve the customer's experience without costing the rep anything."
+    "why": "Once the apartment DQ hits, the rep softens the initial delivery with 'I'm sorry to tell you' but then gives the customer nothing to work with when she asks who else could help — leaving her to grasp for a competitor's name herself. A simple fallback line would close the call on a helpful note instead of a dead end."
   },
   "key_moments": [
     {
       "ts": "01:27",
       "quote": "Okay. So we don't do solar on apartments.",
-      "classification": "other",
-      "stewart_read": "Rep correctly identifies and applies the hard DQ the moment apartment status is disclosed — this is procedurally sound and fast."
+      "classification": "protocol_violation",
+      "stewart_read": "This is correct procedure, not a violation — apartments are a hard DQ per schema. Flagging here to confirm the gate was applied correctly and immediately, which is the right call."
     },
     {
-      "ts": "01:48",
-      "quote": "Could you could you could you could you could you could you could you could you do this? It's also a rental house as well.",
+      "ts": "01:34",
+      "quote": "Okay. Yeah. So we we just don't do solar for apartments. I'm sorry to tell you. Oh, who does it? Who does it?",
+      "classification": "knowledge_gap",
+      "stewart_read": "The rep does soften the DQ with an apology ('I'm sorry to tell you') before echoing the customer's question rather than answering it — a partial recovery, not a bare non-answer."
+    },
+    {
+      "ts": "01:30",
+      "quote": "So it also is a business.",
       "classification": "other",
-      "stewart_read": "Customer independently volunteers a second, separate disqualifying fact (rental house) beyond the apartment status, fully confirming the not_homeowner gate applies regardless of unit type."
+      "stewart_read": "Customer volunteers that the property is also used as a business, seemingly hoping this changes the qualification. The rep does not engage with this at all."
     },
     {
       "ts": "01:41",
-      "quote": "Okay. Yeah. So we we just don't do solar for apartments. I'm sorry to tell you. Oh, who does it? Who does it?",
-      "classification": "knowledge_gap",
-      "stewart_read": "The rep rhetorically raises the question of who else could serve this customer, then immediately admits he has no answer. This isn't a customer question going unanswered — it's the rep surfacing his own gap in real time with no referral resource prepared."
-    },
-    {
-      "ts": "01:43",
       "quote": "I have no idea.",
       "classification": "knowledge_gap",
-      "stewart_read": "Rep admits total lack of a referral answer for a disqualified customer who is actively asking for help finding an alternative."
+      "stewart_read": "After the earlier softened line, this is the rep's actual substantive answer to 'who does solar for apartments' — and it offers nothing. No redirect, no resource, no acknowledgment that he'd look into it."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 18,
-    "verified": 18,
+    "checked": 25,
+    "verified": 25,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION23",
   "rep_name": "Meg",
-  "trajectory_summary": "This is a short, low-friction recycled-lead call: the customer didn't initially recognize the caller, but the rep re-oriented him fast and moved directly into scheduling. The call closes with a specific day and time, but the rep never re-establishes the bill, never confirms who else is on the title, and leaves the appointment channel ambiguous between an in-person walkthrough and a phone-confirmed visit.",
+  "trajectory_summary": "A short reactivation call that recovers cleanly from a confused open — the customer didn't initially know who was calling or why — into a booked appointment with a specific day and time. The rep handled the day/time back-and-forth efficiently and checked the slot fit against the customer's night-shift schedule, but did no bill-document work beyond a verbal reminder for the appointment itself.",
   "shape": "energy_built",
-  "outcome_dispute": "The v1 tag is unknown, so there is nothing to dispute directly, but this should be read as a fragile/conditional booking rather than a clean booked outcome: the bill was never captured on this call (customer explicitly says he wasn't present for the prior appointment where it may have been collected), leaving a required qualification item resolved only by a future promise ('make sure you have it ready for the appointment') rather than by the rep herself.",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
-    "appointment_channel": "unclear",
+    "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "01:21",
     "quote": "So I'll get you scheduled for 05:30 on Friday, which is the first.",
-    "reasoning": "A specific day (Friday, the 1st) and time (05:30) are agreed, meeting the bar for 'booked.' However, the appointment channel is ambiguous: 00:35 uses 'bring it by' language suggesting in-person, while 01:26-01:34 describes a call/text reminder flow that could imply either a phone appointment or just a pre-appointment reminder for an in-person visit — the rep never explicitly clarifies which during button-up, so this is recorded as unclear rather than asserted as either channel."
+    "reasoning": "A specific day (Friday, the first) and time (05:30) are locked in, and the rep's earlier line 'I'm just looking for a better day to bring it by' (00:35) establishes this as an in-person visit rather than a phone appointment. No co-owner/spouse was identified in this transcript, so that field is null."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep asks about the bill only retrospectively ('did we end up getting a copy of your electric bill?') and the customer responds with uncertainty ('I wasn't there for that appointment'). No bill figure or usage number is captured on this call, so there is nothing to flip."
+    "reasoning": "No bill amount or usage figure is mentioned anywhere in this call — the conversation is a reactivation/reschedule call focused entirely on booking logistics, not qualification."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "01:37",
+    "ask_quote": "Last time we spoke with you, did we end up getting a copy of your electric bill?",
+    "result": "promised_later",
+    "method": "other",
+    "result_ts": "01:54",
+    "result_quote": "Let's do this. Make sure that when when we meet with you that you have your recent copy of your electric bill. We just need to get some details from that.",
+    "reasoning": "The rep raises the bill, learns it wasn't collected previously, and defers collection to the in-person appointment rather than attempting to get it on this call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,134 +41,213 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "This call is a re-engagement of a recycled lead with an existing design already on file, so the rep does not ask what interested the customer in solar at any point — the call skips straight from re-orientation into scheduling."
+    "reasoning": "This call is a reschedule of an existing design appointment, not an initial qualification call, so the 'what interested you in solar' question was never raised — likely already captured on a prior touch not present in this transcript."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:13",
-      "quote": "From ION Solar. Are you returning a missed call?"
+      "end_ts": "00:21",
+      "quote": "From ION Solar. Are you returning a missed call?",
+      "customer_response": "resistant",
+      "customer_quote": "From where?",
+      "resistance_reason": "trust",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "co_owner",
       "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "ts": "01:37",
+      "end_ts": "01:52",
+      "quote": "Last time we spoke with you, did we end up getting a copy of your electric bill?",
+      "customer_response": "deflected",
+      "customer_quote": "I I I don't I wasn't there for that appointment. My mom must have been there. I'm not a 100% sure.",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "roof",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "utility_company",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
-      "status": "skipped",
-      "ts": "01:37",
-      "quote": "Last time we spoke with you, did we end up getting a copy of your electric bill?"
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "skipped",
+      "status": "asked",
       "ts": "00:26",
-      "quote": "We built a solar design for your home."
+      "end_ts": "00:35",
+      "quote": "We built a solar design for your home. And on my end, it says we actually never had the chance to show it to you or get you the details.",
+      "customer_response": "cooperative",
+      "customer_quote": "K. Is Wednesday?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
-      "status": "skipped",
-      "ts": "02:00",
-      "quote": "make sure that when when we meet with you that you have your recent copy of your electric bill"
+      "status": "asked",
+      "ts": "01:37",
+      "end_ts": "02:00",
+      "quote": "Make sure that when when we meet with you that you have your recent copy of your electric bill.",
+      "customer_response": "cooperative",
+      "customer_quote": "I I I don't I wasn't there for that appointment. My mom must have been there. I'm not a 100% sure.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "01:21",
-      "quote": "So I'll get you scheduled for 05:30 on Friday, which is the first."
+      "ts": "00:55",
+      "end_ts": "01:21",
+      "quote": "Looks like so here's all the times I have open for Friday. I have 11:30, 02:30, or 05:30.",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, 05:30 is better. Because I work nights, so I'll probably be asleep most of the day.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "01:26",
+      "end_ts": "02:14",
+      "quote": "Just to let you know, we'll give you a call, couple hours beforehand, and we'll text you just to make sure that time still works.",
+      "customer_response": "cooperative",
+      "customer_quote": "You too. Thank you. Thanks. Yep. Bye bye.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "bill collection deferred instead of captured live",
-    "ts": "02:00",
-    "quote": "That's fine. Thank you.",
-    "why": "The rep learns the bill was likely never collected on a prior touch and, instead of attempting to collect it live on this call (text/email), defers the entire requirement to appointment day. This is the single highest-leverage miss — a required qualification anchor left unresolved when the customer was live, willing, and cooperative on the phone."
+    "topic": "probe the household co-decider signal",
+    "ts": "01:37",
+    "quote": "Last time we spoke with you, did we end up getting a copy of your electric bill?",
+    "why": "The customer's answer reveals his mom took the prior call and may be a co-decider on this address; the rep didn't ask who she is or whether she should join Friday's appointment, leaving a potential decision-maker gap for the closer to discover cold."
   },
   "key_moments": [
     {
-      "ts": "00:11",
-      "quote": "From where?",
+      "ts": "00:13",
+      "quote": "From ION Solar. Are you returning a missed call?",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The rep's opening ('Hi. Hi. This is This is Meg. Hi.') never states the company before the customer has to ask. On a recycled lead this matters more, not less, since the customer has no fresh memory of Ion to anchor to."
+      "stewart_read": "The rep gives a company name but no state, referral context, or reason beyond a missed call — thin legitimacy anchor for a customer who audibly didn't recognize the call."
     },
     {
       "ts": "00:26",
       "quote": "We built a solar design for your home. And on my end, it says we actually never had the chance to show it to you or get you the details.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "The rep discloses that a design already exists from a prior touch but never probes what happened on that prior contact (who was spoken to, why it didn't get shown, whether the customer's mother engaged with a competitor or other rep). This is a recycled lead with a documented history the rep is not exploring."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "This line is actually a solid curiosity hook (an existing design the customer hasn't seen) but the rep doesn't build on it — no mention of what the design might show or why it's worth seeing, before moving straight to scheduling."
     },
     {
-      "ts": "01:37",
-      "quote": "Last time we spoke with you, did we end up getting a copy of your electric bill?",
-      "classification": "bill_anchor",
-      "stewart_read": "This is the rep's only attempt to capture the bill, and it's framed as a records check rather than a live collection effort — she asks about the past instead of asking the customer directly for his current bill on this call."
+      "ts": "00:35",
+      "quote": "So I'm just looking for a better day to bring it by.",
+      "classification": "conditional_booking",
+      "stewart_read": "This line establishes the appointment as an in-person visit ('bring it by'), which resolves the channel ambiguity later in the call — the rep never states this explicitly again, but the framing here is the clearest signal of format."
     },
     {
-      "ts": "02:00",
-      "quote": "we should be good. Okay.",
-      "classification": "bill_anchor",
-      "stewart_read": "After learning the bill was likely never captured, the rep defers the entire requirement to the day of the appointment ('as long as you have it ready for the appointment') instead of collecting it live on this call via text or email, per bill_collection.branching. This is a bill-anchoring depth miss, not a features/curiosity issue — no product content is being oversold here, the gap is that a required qualification anchor is left to a future promise rather than captured now."
+      "ts": "01:12",
+      "quote": "Gotcha. So 05:30, you like, you'll be home still, and we're not waking you up or anything?",
+      "classification": "rapport_repair",
+      "stewart_read": "Rep checks the slot against the customer's stated night-shift schedule before locking it in, a small but real fit-check that reduces no-show risk."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 21,
-    "verified": 21,
+    "checked": 30,
+    "verified": 29,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION2_77086e3f",
   "rep_name": "Holland",
-  "trajectory_summary": "This is a short, low-friction verify call that ran cleanly through most of the script but never reached an appointment — it stalled at bill collection when the customer had to leave for a trip, and the rep settled for a soft callback instead of locking a booked closer appointment. The call didn't leak energy through conflict; it leaked through under-anchoring — the environmental/cost interest reason and the bill figure were both captured but never flipped into urgency before the customer walked out the door.",
+  "trajectory_summary": "This is a clean, low-friction verify call that ran the script structurally in order with a cooperative customer, but it ends softly: the bill wasn't captured on the call, the follow-up day was floated as a soft 'maybe' rather than a locked appointment, and no button-up mechanics (time block, no-driving/computer expectation, handshake) were run because there was never an appointment to button up — this was a bill-collection call that became a callback, not a booked closer appointment.",
   "shape": "mixed",
-  "outcome_dispute": "V1 tag is unknown/unclear; based on the transcript this is a callback, not a booked or tentative appointment — no closer appointment day/time was ever discussed, only a rep-to-customer follow-up on Friday to collect the bill.",
+  "outcome_dispute": "V1 tag is unknown, but the observed outcome should be read as callback, not booked or tentative. The rep never offered a specific closer appointment day/time; the only concrete commitment is a bill-photo follow-up with a loosely-anchored 'maybe Friday' check-in, phrased conditionally ('If I don't hear from you, maybe I'll just follow-up on Friday. Would that work?').",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "04:46",
     "quote": "So maybe I'll if I don't hear from you, maybe I'll just follow-up on Friday. Would that work?",
-    "reasoning": "No closer appointment day/time was set — the rep agreed only to call the customer back on Friday to collect the bill, with no specific time locked, so this is a callback outcome rather than booked or tentative."
+    "reasoning": "No specific day-and-time closer appointment is set; the rep proposes a hedged Friday check-in for the bill, and the customer agrees loosely ('That'd be fine') — this is a callback with a day but no time, not a booked or tentative closer appointment."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,144 +20,246 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured a corrected bill figure but immediately pivoted to the credit qualifier at 02:38 without tying the $250/month figure to any urgency or savings framing — the flip line should have landed right after the customer's correction, before the qualifier question."
+    "reasoning": "The rep captures and even lets the customer self-correct the bill figure, but never turns it into a reason to act — the flip should have landed right after the correction at 02:31 ('okay, so over $250 going to Dominion every month — that's exactly what solar is built to eliminate') but the rep instead moves straight into the credit qualifier."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:31",
+    "ask_quote": "But everything looks good on my end. So the only thing I'll need from you, Dave, is just a copy of your kilowatt usage on your Dominion bill.",
+    "result": "promised_later",
+    "method": "text",
+    "result_ts": "04:24",
+    "result_quote": "Well, I just sent you a text. So, yeah, whenever you have a minute, if you can just send me a photo of that, then we can Get that estimate all finished up for you guys.",
+    "reasoning": "Rep clearly raised the bill-photo ask and set up a text channel, but the customer could not produce the bill live (heading out on a trip) and agreed to send it later, so it lands as promised_later via text, not received on the call."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "01:17",
     "reason_given": true,
     "reason_ts": "01:22",
-    "reason_quote": "I would say primary, you know, just wanting to be cleaner and greener. And, also, as I'm sure you noticed and a lot of you noticed, the energy bills for your regular electricity that's going very regular... fossil fuel powered energy is going up, up, up, up.",
+    "reason_quote": "Basically, you know, the combination of, I would say primary, you know, just wanting to be cleaner and greener. And, also, as I'm sure you noticed and a lot of you noticed, the energy bills for your regular electricity that's going very regular.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep acknowledged the cost complaint generically ('electric bills have been going crazy lately') but never referenced David's specific environmental motive or his 'fossil fuel going up' framing again, including at the point where the bill number was corrected or at call close."
+    "reasoning": "The rep acknowledges the answer generically ('Yeah. No. Of course. Yeah.') and pivots straight to the next verify item without tying the environmental or cost motivation back into the bill discussion, the qualifier pitch, or the callback close."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:03",
-      "quote": "Hey, David. This is Holland with Ion. So I just got a request that you were looking into solar for your home."
+      "end_ts": "00:12",
+      "quote": "Hey, David. This is Holland with Ion. So I just got a request that you were looking into solar for your home.",
+      "customer_response": "cooperative",
+      "customer_quote": "Doing fine. Thanks.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:17",
-      "quote": "I also was kinda curious what got you guys looking into solar?"
+      "end_ts": "01:46",
+      "quote": "And then I also was kinda curious what got you guys looking into solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "Basically, you know, the combination of, I would say primary, you know, just wanting to be cleaner and greener.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:23",
-      "quote": "I've got your address here as 5309 Salzman Street in Williamsburg, Virginia. Is that correct?"
+      "end_ts": "00:31",
+      "quote": "So first off, I've got your address here as 5309 Salzman Street in Williamsburg, Virginia. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "That's right.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "01:01",
-      "quote": "Is there anybody else on the title of the home with you? I believe it's probably my wife as well."
+      "ts": "01:00",
+      "end_ts": "01:14",
+      "quote": "I also have you down as the property owner, Dave. Is there anybody else on the title of the home with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "I believe it's probably my wife as well.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "00:51",
-      "quote": "Is your roof, is it just a regular asphalt single roof?"
+      "end_ts": "01:00",
+      "quote": "Is your roof, is it just a regular asphalt single roof?",
+      "customer_response": "cooperative",
+      "customer_quote": "Kinda standard. Yeah.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:55",
-      "quote": "Who are you with currently?"
+      "end_ts": "02:11",
+      "quote": "Who are you with currently?",
+      "customer_response": "cooperative",
+      "customer_quote": "It's just Dominion Energy.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:11",
-      "quote": "I have down here that you guys pay about $3.50 plus a month."
+      "end_ts": "02:38",
+      "quote": "And then I have down here that you guys pay about $3.50 plus a month. Does that sound accurate?",
+      "customer_response": "cooperative",
+      "customer_quote": "So, basically, we're right around around $2.50 a month.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:38",
-      "quote": "As long as you have a credit score above 6 70, then you'll qualify."
+      "end_ts": "03:13",
+      "quote": "As long as you have a credit score above 6 70, then you'll qualify. Is that the case for you guys?",
+      "customer_response": "cooperative",
+      "customer_quote": "Last time I checked, it was right around there.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "03:07",
-      "quote": "Have you guys ever really looked into solar days, or is this your first time?"
+      "ts": "03:13",
+      "end_ts": "03:23",
+      "quote": "And then have you guys ever really looked into solar days, or is this your first time?",
+      "customer_response": "cooperative",
+      "customer_quote": "First time.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:31",
-      "quote": "I'll need from you, Dave, is just a copy of your kilowatt usage on your Dominion bill."
+      "end_ts": "04:39",
+      "quote": "So the only thing I'll need from you, Dave, is just a copy of your kilowatt usage on your Dominion bill.",
+      "customer_response": "resistant",
+      "customer_quote": "I'm not I'm not seeing it at the moment, so it's not something I can probably produce right this morning.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "04:16",
+      "quote": "I'm not I'm not seeing it at the moment, so it's not something I can probably produce right this morning. I'm also about to head out on a three day trip in about ten minutes.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Well, I just sent you a text. So, yeah, whenever you have a minute, if you can just send me a photo of that"
+      ],
+      "resolved": true,
+      "resolution_ts": "04:52",
+      "reasoning": "Customer's inability to produce the bill is a genuine logistics constraint, not resistance; rep offers a single alternative (text-later) and the customer accepts, resolving it, though the resulting callback commitment is soft."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "bill anchor never flipped into urgency",
-    "ts": "02:26",
-    "quote": "So, basically, we're right around around $2.50 a month.",
-    "why": "David corrected the bill figure and gave the rep a live number to work with, but Holland moved straight to the credit qualifier without connecting that number to any savings or urgency framing — the single highest-leverage moment on the call was let pass silently."
+    "topic": "locking the callback instead of a hedged maybe",
+    "ts": "04:46",
+    "quote": "So maybe I'll if I don't hear from you, maybe I'll just follow-up on Friday. Would that work?",
+    "why": "This is the single line that determines whether this lead converts to a booked appointment or evaporates into an untracked callback; per analysis_directives.soft_outcome_distinction, callbacks with locked times behave very differently from 'we'll touch base' language, and this call ends in the latter despite an otherwise clean, cooperative verify run."
   },
   "key_moments": [
     {
-      "ts": "00:03",
-      "quote": "Hey, David. This is Holland with Ion. So I just got a request that you were looking into solar for your home.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The intro names the company and references an inbound request but gives no state/region or referral-source anchor, which is a thinner legitimacy hook than the schema's standard or Tesla intro templates."
+      "ts": "02:11",
+      "quote": "And then I have down here that you guys pay about $3.50 plus a month. Does that sound accurate?",
+      "classification": "bill_anchor",
+      "stewart_read": "Rep captures a bill figure, and the customer self-corrects to a more accurate number, but the rep never flips either figure into emotional leverage against the utility — it's captured and filed, not used."
     },
     {
       "ts": "01:17",
       "quote": "And then I also was kinda curious what got you guys looking into solar?",
-      "classification": "other",
-      "stewart_read": "Rep asks the required interest question directly from the script and gets a substantive two-part answer (environmental + rising fossil-fuel costs), satisfying the audit requirement."
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer gives a full, motivated answer citing both environmental values and rising fossil-fuel-driven costs — genuine, above-average depth for this question — but the rep's response is a generic acknowledgment."
     },
     {
-      "ts": "01:46",
-      "quote": "Yeah. No. Of course. Yeah. And the electric bills have been going crazy lately, so I do not blame you guys for wanting to get away from that. Yeah.",
+      "ts": "04:24",
+      "quote": "I just get back to you. Yeah. Let me get back to you on that. Yeah. K. Yeah. Well, I just sent you a text.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "Rep acknowledges the cost motive generically but doesn't reflect back David's specific 'fossil fuel going up up up' framing or use it to build curiosity about what solar-locked rates would look like for him specifically."
+      "stewart_read": "Customer discloses he's leaving on a trip in ten minutes and can't find the bill; rep's response is reactive filler ('let me get back to you on that') rather than a clean pivot (e.g., verbal read-back of usage numbers, or a clear text-now instruction) — the moment is handled adequately but without the crispness the schema's alternative_paths guidance calls for."
     },
     {
-      "ts": "02:11",
-      "quote": "And then I have down here that you guys pay about $3.50 plus a month.",
-      "classification": "bill_anchor",
-      "stewart_read": "Rep opens with the pre-existing record figure rather than asking David to state it fresh, which let the correction happen but also meant the number driving the pitch was never confirmed as David's own words first."
+      "ts": "04:46",
+      "quote": "So maybe I'll if I don't hear from you, maybe I'll just follow-up on Friday. Would that work?",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "The call ends on a hedged, rep-initiated maybe rather than a locked callback time or a booked closer appointment — this is exactly the soft-outcome delta the schema's soft_outcome_distinction directive flags as consequential for no-show/no-follow-through rates."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 31,
-    "verified": 31,
-    "fuzzy": 0,
+    "checked": 44,
+    "verified": 42,
+    "fuzzy": 2,
     "wrong_ts": 0,
     "not_found": 0
   }

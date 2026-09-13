@@ -1,17 +1,17 @@
 {
   "call_id": "30000547525",
   "rep_name": "Carter",
-  "trajectory_summary": "This is a short, low-friction call: legitimacy and verify items moved quickly, the bill photo exchange was efficient, and an appointment time was negotiated to accommodate the wife's likely schedule. The call built steadily rather than leaking energy, though the rep left some available anchor material (the customer's stated reason, the bill number) unused and never nailed down a firm read on roof age.",
+  "trajectory_summary": "This is a low-friction, efficient call: the customer was cooperative from the first word, the rep ran the verify sequence in order, captured the bill amount and the actual utility bill document on the call, and landed a specific day/time. The only softness is the spouse's attendance, which was pursued but not locked, and a bill-amount flip that never happened despite a clean opening (rate-hike concern volunteered by the customer).",
   "shape": "energy_built",
-  "outcome_dispute": "The call ends with a specific day and time stated (\"we'll plan on 7PM on Tuesday\") plus a follow-up confirmation text promised, which is a booked outcome, not merely tentative — the v1 tag should be checked against this if it says otherwise.",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "phone",
     "datetime_captured": true,
-    "co_owner_confirmed": null,
+    "co_owner_confirmed": false,
     "ts": "07:05",
     "quote": "we'll plan on 7PM on Tuesday",
-    "reasoning": "A specific day and time were locked verbally with a follow-up text promised. The wife's attendance at that specific time carries some ambiguity in the customer's own words (\"she should be available at that time\"), so co_owner_confirmed is marked null rather than a firm yes or no, since the transcript doesn't cleanly resolve it either way."
+    "reasoning": "A specific day (Tuesday) and time (7PM) are locked verbally and followed by a promised text confirmation, but the wife's attendance — the identified co-owner — was left explicitly unconfirmed (\"I'm not sure on her schedule\")."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,145 +20,261 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the $200 figure and immediately tied it to the future rate hike (\"it's supposed to climb quite a bit with the spike there\") rather than flipping the current $200 itself into present-tense pain or dissatisfaction — the number was filed, not weaponized against the utility."
+    "reasoning": "Rep captures the $200 figure and briefly notes the projected rate hike (\"it's supposed to climb quite a bit with the spike there\") but never turns this into an explicit reason to act now or ties it to the appointment's urgency — the flip line where this should have landed is right after 01:17."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "02:49",
+    "ask_quote": "the last thing I need from you in order to build that design is your most current utility bill that just shows us your exact usage for the home.",
+    "result": "received_on_call",
+    "method": "photo",
+    "result_ts": "05:47",
+    "result_quote": "Sweet. Yeah. I just got that.",
+    "reasoning": "Rep asks for the bill, walks the customer through emailing a screenshot of the usage graph, and confirms receipt live on the call before moving to scheduling."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:16",
     "reason_given": true,
-    "reason_ts": "01:05",
-    "reason_quote": "Yeah. So there's gonna be, like, an energy hike with the grid. So we're just kinda trying to be proactive with that and stuff.",
+    "reason_ts": "00:53-01:10",
+    "reason_quote": "So there's gonna be, like, an energy hike with the grid. So we're just kinda trying to be proactive with that and stuff.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep acknowledged the reason briefly (\"For sure. Yeah. That's a good plan.\") but never referenced the rate-hike motivation again later in the call, including at button-up where it could have been used to personalize the close or the follow-up text."
+    "reasoning": "Customer explains across several lines (00:53-01:10) that they're being proactive ahead of an anticipated AEP rate hike near Columbus; rep acknowledges (\"For sure. Yeah. That's a good plan\") but never references this reasoning again when setting the appointment or discussing the bill."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "quote": "This is Carter with ION. I got a request that you're looking into solar options for your home."
+      "end_ts": "00:14",
+      "quote": "This is Carter with ION. I got a request that you're looking into solar options for your home.",
+      "customer_response": "cooperative",
+      "customer_quote": "Doing pretty good. How are you?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:16",
-      "quote": "But what was you interested in solar?"
+      "end_ts": "01:10",
+      "quote": "But what was you interested in solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "So there's gonna be, like, an energy hike with the grid. So we're just kinda trying to be proactive with that and stuff.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:26",
-      "quote": "the address I have is 791 South Richardson Avenue. Is that correct?"
+      "end_ts": "01:31",
+      "quote": "the address I have is 791 South Richardson Avenue. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:35",
-      "quote": "is there anyone else on the title with you?"
+      "end_ts": "01:44",
+      "quote": "is there anyone else on the title with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. My wife.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
-      "status": "skipped",
-      "ts": "02:05",
-      "quote": "how old is the roof on the home?"
+      "status": "asked",
+      "ts": "01:57",
+      "end_ts": "02:21",
+      "quote": "how old is the roof on the home?",
+      "customer_response": "cooperative",
+      "customer_quote": "It was I think it was recently, but I couldn't, like, before we moved in about so I mean, fairly fairly new",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:10",
-      "quote": "how much on average are you paying right now?"
+      "end_ts": "01:16",
+      "quote": "how much on average are you paying right now?",
+      "customer_response": "cooperative",
+      "customer_quote": "About 200.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:29",
-      "quote": "the main requirements are that you pay income tax and have a credit score above six fifty"
+      "end_ts": "02:39",
+      "quote": "the main requirements are that you pay income tax and have a credit score above six fifty. Is that the case for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
       "status": "asked",
       "ts": "02:42",
-      "quote": "are you or your wife active duty or retired military?"
+      "end_ts": "02:48",
+      "quote": "are you or your wife active duty or retired military?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "02:21",
-      "quote": "will this be the first time selling seeing a solar design for your home?"
+      "end_ts": "02:26",
+      "quote": "will this be the first time selling seeing a solar design for your home?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "02:49",
-      "quote": "the last thing I need from you in order to build that design is your most current utility bill"
+      "end_ts": "05:47",
+      "quote": "the last thing I need from you in order to build that design is your most current utility bill",
+      "customer_response": "cooperative",
+      "customer_quote": "Sweet. Yeah. I just got that.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "07:05",
-      "quote": "we'll plan on 7PM on Tuesday"
+      "ts": "05:50",
+      "end_ts": "07:10",
+      "quote": "would tomorrow morning or afternoon be better?",
+      "customer_response": "cooperative",
+      "customer_quote": "Maybe seven.",
+      "resistance_reason": "timing",
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "07:20",
-      "quote": "I'll go ahead and shoot you a text just with the date and time so you have it in writing"
+      "status": "asked",
+      "ts": "07:12",
+      "end_ts": "07:27",
+      "quote": "we'll slot you in for an hour. It usually doesn't take that long, though... I'll go ahead and shoot you a text just with the date and time so you have it in writing",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "05:50",
+      "quote": "Would next week would probably be better if we could do that.",
+      "type": "timing_or_callback",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "Are you gonna be around on Monday?",
+        "Tuesday should work. Morning or afternoon?"
+      ],
+      "resolved": true,
+      "resolution_ts": "06:18",
+      "reasoning": "Customer pushes the appointment out from 'tomorrow' to next week; rep flexibly re-offers Monday then Tuesday until a day and time land."
+    },
+    {
+      "ts": "06:22",
+      "quote": "Probably not.",
+      "type": "spouse_or_co_decider",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "Yeah. I mean, we'd prefer she's there.",
+        "We could do six or seven in the evening if she'll both be around."
+      ],
+      "resolved": true,
+      "resolution_ts": "07:05",
+      "reasoning": "Customer initially says his wife likely won't be available at 10AM; rep holds the line on wanting her present and shifts to an evening slot, landing on 7PM Tuesday, though her actual attendance remains unconfirmed."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "button-up completeness",
-    "ts": "07:20",
-    "quote": "And then I'll go ahead and shoot you a text just with the date and time so you have it in writing, and then you should be set.",
-    "why": "The call ends without the \"is that fair?\" verbal handshake or the no-driving/computer instruction from button_up — both are schema-required elements tied to show-rate, and this is a clean, easy fix for an otherwise well-run call."
+    "topic": "bill/interest-reason flip missed",
+    "ts": "01:10",
+    "quote": "So there's gonna be, like, an energy hike with the grid. So we're just kinda trying to be proactive with that and stuff.",
+    "why": "The customer handed the rep a perfect, self-generated objection-inversion setup (anticipated utility rate hike) plus a clean $200 bill figure minutes later, and the rep validated both without ever tying them together into urgency for the appointment. This is the single highest-leverage moment on the call to build a stronger habit around."
   },
   "key_moments": [
     {
       "ts": "01:10",
-      "quote": "For sure. Yeah. That's a good plan. And then how much on average are you paying right now?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer gave a specific, motivated reason (anticipated AEP rate hike) and the rep validated it in three words before pivoting straight to the bill question. The reason was never picked back up later as a hook for the appointment."
+      "quote": "So there's gonna be, like, an energy hike with the grid. So we're just kinda trying to be proactive with that and stuff.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Customer volunteers a strong forward-looking anchor — anticipated rate hikes with AEP — that practically hands the rep the alignment-against-utility flip. The rep replies only with agreement, not reinforcement."
     },
     {
       "ts": "01:16",
       "quote": "About 200.",
-      "classification": "bill_anchor",
-      "stewart_read": "Bill figure captured cleanly, but the rep's follow-up (\"it's supposed to climb quite a bit with the spike there\") ties the number to the grid hike, not to the customer's own $200 as a present-tense pain point."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The $200 bill figure is captured cleanly but the rep immediately pivots to the address verification with no acknowledgment of what that number means for the customer or the design."
+    },
+    {
+      "ts": "02:29",
+      "quote": "the main requirements are that you pay income tax and have a credit score above six fifty.",
+      "classification": "other",
+      "stewart_read": "Rep states a 650 threshold where the schema records 670. This is the second call in the corpus where a rep has stated 650, but two instances is not enough to call this a floor-wide pattern."
     },
     {
       "ts": "02:05",
       "quote": "It was I think it was recently, but I couldn't, like, before we moved in about so I mean, fairly fairly new, but as far as that, I can't I can't give you the next",
-      "classification": "knowledge_gap",
-      "stewart_read": "Customer's answer is non-responsive to the actual question (roof type/age) — he gives a vague timeline about when the roof might have been done relative to move-in, but no age or type is actually captured. Rep accepts \"pretty new for a roof\" without a real number."
-    },
-    {
-      "ts": "04:30",
-      "quote": "So do you just need, like, a screenshot? Or",
-      "classification": "other",
-      "stewart_read": "Customer proactively offers the exact format needed, and the rep confirms in one clean exchange — this is a smooth, low-friction execution of bill collection, worth noting as a positive contrast to the corpus's slower bill-collection calls."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer gives a vague, unconfirmed roof age. Rep accepts \"pretty new for a roof\" without probing for an actual age or asking if there's documentation, leaving the qualifier soft heading into the closer call."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 31,
-    "verified": 31,
+    "checked": 56,
+    "verified": 55,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

@@ -1,17 +1,17 @@
 {
   "call_id": "SESSION2_2c257286",
   "rep_name": "Humphrey",
-  "trajectory_summary": "The call opens with the customer in control of the agenda — she leads with her own questions rather than being walked through verify — and the rep spends the whole call reactively answering rather than steering. Audio problems compound the friction, and by the end the customer extracts what she wanted (cost, credit threshold, utility confirmation) and exits on her own terms without an appointment being offered or booked.",
+  "trajectory_summary": "The call opens with the customer driving her own qualification questions (cost, tax credit, utility company) rather than the rep controlling the flow, and the rep answers reactively without ever pivoting to book an appointment. It ends with the customer thanking the rep for 'information' and hanging up — no appointment, no bill capture, no next step. The shape is energy leaking from an already customer-led starting point down to a self-closed exit.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unclear; observed outcome should be tagged no_appointment — the call ends with the customer saying goodbye and no day/time, no next step, and no button-up sequence was ever attempted by the rep.",
+  "outcome_dispute": "v1 tag is unknown/unclear; observed transcript shows no appointment was ever proposed, no date/time offered, and the call ends with the customer thanking the rep and hanging up — this should be recorded as no_appointment, not any form of booked or tentative outcome.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "04:16",
-    "quote": "Okay. I okay. You gave me the information I needed. That's that's helpful. So, thank you for calling.",
-    "reasoning": "The call ends with the customer thanking the rep and hanging up; no day/time was proposed or agreed, no bill collection occurred, and no button-up sequence was run by the rep at any point."
+    "quote": "You gave me the information I needed. That's that's helpful. So, thank you for calling.",
+    "reasoning": "The call ends with the customer thanking the rep for information and hanging up. No date, time, or appointment of any kind was proposed or agreed to at any point in the transcript."
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +20,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep never asked for or captured a bill amount or usage figure anywhere in the call — the conversation stayed entirely on cost/credit/tax-credit questions the customer raised, and the call ended before bill collection was ever attempted."
+    "reasoning": "The customer's own bill amount or usage figure was never asked for or given; the call focused on upfront cost, tax credit, and utility company rather than her actual electric bill."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The rep never raised getting the customer's utility bill, in mail, online, photo, or any other form, at any point in this short call."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,134 +41,226 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question early and got a reasonable answer (long-standing interest, just hadn't gotten around to researching), but never referenced this later — for example, never said something like 'since you've been wanting to look into this for a while, let's get you that information on a call with our specialist,' which would have tied her stated motivation directly to booking."
+    "reasoning": "The rep asked what made her interested and she gave a reason (longstanding interest, lack of time to research), but the rep never referenced this later — for example, to frame the appointment as finally giving her the time/information she'd been meaning to get."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:08",
-      "quote": "This is Humphrey with Allian. I got a request that you're looking at solar panels for your home."
+      "end_ts": "00:16",
+      "quote": "Good afternoon, ma'am. This is Humphrey with Allian. I got a request that you're looking at solar panels for your home.",
+      "customer_response": "cooperative",
+      "customer_quote": "I just wanted to find out more information.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:39",
-      "quote": "what made you interested in looking at solar panels now?"
+      "end_ts": "00:54",
+      "quote": "what made you interested in looking at solar panels now?",
+      "customer_response": "cooperative",
+      "customer_quote": "I've been interested for a while. I just haven't haven't had time to to get any more information.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:19",
-      "quote": "you're currently at 11250 Dallas Shortcutt Road?"
+      "end_ts": "00:31",
+      "quote": "Just to verify, you're currently at 11250 Dallas Shortcutt Road? And this is a single family home?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "00:34",
+      "end_ts": "00:38",
+      "quote": "So I'm going to look at your home right now via Google Maps to check mainly on your group.",
+      "customer_response": "no_answer",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:24",
-      "quote": "currently working with Santee co co op"
+      "end_ts": "02:34",
+      "quote": "And based on our system, yes, currently working with Santee co co op.",
+      "customer_response": "cooperative",
+      "customer_quote": "do you work with Santee Cooper?",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "01:26",
-      "quote": "there are no tax incentive available. It ended last year."
+      "ts": "02:40",
+      "end_ts": "03:52",
+      "quote": "You just have to have a credit score of at least 650 to qualify for that program.",
+      "customer_response": "resistant",
+      "customer_quote": "I I don't know if I do or not.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "02:46",
+      "quote": "Why why do I have to have a, a credit score of 650 if there's nothing out of pocket?",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Well, because, that's for documentation and for qualification because, you do have two or two option on how to own the system that we offer."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep gave one explanation tying the credit check to documentation/ownership options but never fully resolved the customer's logical objection (why check credit if nothing is owed upfront); the conversation moved to whether she knows her score rather than settling the concern."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "no attempt to book an appointment",
-    "ts": "04:16",
-    "quote": "Okay. I okay. You gave me the information I needed. That's that's helpful. So, thank you for calling.",
-    "why": "The customer answered every qualifying question the rep needed (address, home type, interest reason, utility company, credit awareness) and the rep never once pivoted to scheduling the closer — the call ends on the customer's terms with zero next step, which is the single biggest revenue leak on this call."
+    "topic": "unresolved hard qualifier / no next-step ownership",
+    "ts": "03:52",
+    "quote": "I I don't know if I do or not.",
+    "why": "The customer could not confirm she meets the 650/670 credit threshold and the rep never converted this into a callback or conditional appointment — this single gap explains why the call ends with no appointment at all."
   },
   "key_moments": [
     {
-      "ts": "00:08",
-      "quote": "This is Humphrey with Allian. I got a request that you're looking at solar panels for your home.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The intro names a company ('Allian') that does not match Ion branding used elsewhere in the schema and gives no state, no Tesla/certified-installer framing, no form-source specificity beyond 'a request' — thin legitimacy anchor for a cold-ish inbound."
-    },
-    {
-      "ts": "01:00",
-      "quote": "Well, I wanna know what the upfront cost is to me and is there tax credits for it.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer volunteers her actual buying-decision anchors (cost, tax credit, utility compatibility) unprompted — a strong signal of what she cares about — but the rep never asks her a follow-up to deepen this into an interest_in_solar verify item or ties it back to an appointment later."
+      "ts": "00:34",
+      "quote": "So I'm going to look at your home right now via Google Maps to check mainly on your group.",
+      "classification": "other",
+      "stewart_read": "Rep narrates a real verification step (satellite/roof check) transparently to the customer, which is a legitimacy-building move consistent with process transparency, though the phrasing is garbled enough to raise (not resolve) the data-mining-concern rebuttal noted in the schema TBD list."
     },
     {
       "ts": "01:26",
       "quote": "However, there are no tax incentive available. It ended last year.",
       "classification": "knowledge_gap",
-      "stewart_read": "This contradicts the schema's own qualifier note that tax credit is possibly still claimable on installs completed before year-end ('We can no longer guarantee the Tax Credit... it's possible they can still claim it if we install prior to end of year'). The rep states a flat, incorrect denial instead of the schema's actual conditional framing."
+      "stewart_read": "The schema's actual tax credit disclosure language is nuanced — the credit 'can no longer be guaranteed' on purchased systems, not flatly gone, and purchase options without the credit exist as an alternative. The rep's blanket 'no tax incentive available, it ended last year' is an imprecise, incomplete version of that disclosure rather than the fuller schema framing."
     },
     {
-      "ts": "02:46",
-      "quote": "Why why do I have to have a, a credit score of 650 if there's nothing out of pocket?",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is the customer directly challenging the internal logic of the pitch — a prime moment for a flip ('the credit check protects you — it's what lets us guarantee the no-upfront-cost structure') but the rep instead explains internal mechanics (buy vs. lease options) that don't resolve her question."
+      "ts": "02:40",
+      "quote": "You just have to have a credit score of at least 650 to qualify for that program.",
+      "classification": "other",
+      "stewart_read": "Schema lists the threshold as 670; this rep states 650, consistent with a prior observed instance of the same drift (SESSION18_fcbf33c1). Two data points is a pattern worth flagging to Kenny for reconciliation, not yet a confirmed floor-wide training gap."
+    },
+    {
+      "ts": "01:58",
+      "quote": "I see. You're cutting out really bad. I I'm only hearing about one out of five words.",
+      "classification": "other",
+      "stewart_read": "This is audio/connection friction, not customer resistance. The rep responded quickly ('I'm sorry. Let me see if I could fix that... How about now? Can you hear me?') and the customer confirmed improvement, so this should be credited as a well-handled friction moment rather than flagged as a gap."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 28,
-    "verified": 28,
-    "fuzzy": 0,
-    "wrong_ts": 0,
+    "checked": 36,
+    "verified": 34,
+    "fuzzy": 1,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

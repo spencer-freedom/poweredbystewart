@@ -1,26 +1,36 @@
 {
   "call_id": "SESSION4_8b413dfd",
   "rep_name": "Tyke",
-  "trajectory_summary": "This is a procedurally clean, low-drama verify-and-book call: the rep runs through address, interest, roof, title, utility, credit, and a full 12-month usage pull in order, and lands a tentative appointment. Energy neither spikes nor leaks dramatically -- the customer stays cooperative throughout and the rep stays task-focused -- so this reads closer to steady/competent execution than a build from resistance to enthusiasm. The read is genuinely mixed: strategic discipline is visible in the qualifier and full usage-history capture, but reactive box-checking is visible in the missed bill-flip and missed competitive probe.",
-  "shape": "mixed",
-  "outcome_dispute": "V1 tag is unknown/unclear in metadata. Observed outcome is a tentative appointment: a day (tomorrow) and an approximate time window were agreed, later firmed to 12:00, but the rep's own line 'we'll shoot you a reminder text just to double check that time still works' introduces conditionality into a nominally locked slot -- this is closer to tentative than a fully hardened booked appointment.",
+  "trajectory_summary": "The call opens with mild friction over lead staleness and a disclosed prior negative solar experience, but the rep holds a steady verification cadence and the customer actively cooperates through a lengthy, effortful bill-retrieval process. The call ends with a locked appointment day and time, showing energy built across the call despite a rough open.",
+  "shape": "energy_built",
+  "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "tentative",
+    "outcome": "booked",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": false,
-    "ts": "06:41",
-    "quote": "Let's just shoot for twelve then because it looks like we have a lot more availability at that time.",
-    "reasoning": "A specific day (tomorrow) and time (12:00) were agreed, which supports 'booked', but the rep's own framing at 06:56 ('we'll shoot you a reminder text just to double check that time still works') and the fact the wife/co-owner was never addressed for appointment attendance push this toward tentative rather than a fully hardened booking."
+    "ts": "06:29",
+    "quote": "Yeah. Looks like we could do would eleven or twelve work better for you?",
+    "reasoning": "A specific day (tomorrow) and time (twelve) were locked, a callback number was collected and read back for confirmation, and the rep confirmed email access for the design — this is a fully booked phone appointment. The co-owner (wife) was identified on title but never invited or confirmed for the call, so co_owner_confirmed is false."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "05:09",
-    "bill_quote": "Yeah. I have here from May 2025 to April 2026.",
+    "bill_ts": "04:41",
+    "bill_quote": "So March to April, I used a 172 kilowatts per hour.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep obtained a full 12-month usage history (05:09-06:11), including a clear winter/summer swing peaking at 1,892 kWh in February, but never reflected the pain of those numbers back to the customer -- the response at 06:12 ('Awesome. No. Thank you so much. That's exactly what we're looking for.') is administrative gratitude, not an emotional flip. The flip should have landed around 05:41-06:12, tying the high months to the bill-pain reason he gave at 00:48."
+    "reasoning": "The rep captured twelve full months of kWh usage data (04:41-06:12) but never turned any of it into an emotional or curiosity-driven reason to act — the flip should have landed around 06:12 when the rep says 'That's exactly what we're looking for,' which could easily have included a reflection of the winter usage spike instead of a generic close. Note also that the schema's separate verify.average_bill dollar-figure item was never actually answered — the customer supplied kWh usage only, never a monthly dollar amount, which is a distinct minor gap from the usage-history capture."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "02:09",
+    "ask_quote": "I also need that usage history. So that's great you're pulling up.",
+    "result": "received_on_call",
+    "method": "online_login",
+    "result_ts": "05:09",
+    "result_quote": "Yeah. I have here from May 2025 to April 2026.",
+    "reasoning": "The rep asked for usage history and the customer logged into his Dominion Energy online account live on the call, then read off twelve months of kWh figures verbally — a read-aloud from an online login rather than a photo or document send, fully satisfying the bill-document requirement despite taking several minutes of login friction."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -31,134 +41,226 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question early and got a clear bill-pain answer, but never referenced it again -- not at the usage-history read-out, not at booking, and not in the button-up. The reason was captured and filed, not carried forward."
+    "reasoning": "Customer clearly states the motivation is reducing/eliminating the electric bill, but the rep never ties this reason back into the close or the scheduling pitch — the appointment-setting language at 06:12 is generic and doesn't reference the bill-reduction goal the customer named."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:01",
-      "quote": "Hey, Enrique. This is, Tyke with Ion. I was giving you a call because I received a request for a better debt solar for the home."
+      "end_ts": "00:14",
+      "quote": "Hey, Enrique. This is, Tyke with Ion. I was giving you a call because I received a request for a better debt solar for the home.",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, man. That request was sold.",
+      "resistance_reason": "timing",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:41",
-      "quote": "And what was your main interest in looking at solar?"
+      "end_ts": "00:48",
+      "quote": "And what was your main interest in looking at solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. So I don't have to get the electric bill every month.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:31",
-      "quote": "First thing I wanted to clarify was the address. I get 2427 Camille Mills Road in Alexandria."
+      "end_ts": "00:41",
+      "quote": "First thing I wanted to clarify was the address. I get 2427 Camille Mills Road in Alexandria.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. Awesome.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:41",
-      "quote": "Is there anybody else with title with you, or is it just My wife. Your wife."
+      "end_ts": "01:48",
+      "quote": "Is there anybody else with title with you, or is it just",
+      "customer_response": "cooperative",
+      "customer_quote": "My wife.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:23",
-      "quote": "Is that an asphalt shingle roof? It looks like it is."
+      "end_ts": "01:41",
+      "quote": "I did also just wanna clarify, take a look at the roof there. Is that an asphalt shingle roof?",
+      "customer_response": "cooperative",
+      "customer_quote": "It looks like it is.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:48",
-      "quote": "Who's the current utility company for you guys?"
+      "end_ts": "01:54",
+      "quote": "And, who's the current utility company for you guys?",
+      "customer_response": "cooperative",
+      "customer_quote": "Virginia Power.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "02:02",
-      "quote": "And do you know how much you're kinda paying on average per month with them?"
+      "ts": "01:59",
+      "end_ts": "02:04",
+      "quote": "And do you know how much you're kinda paying on average per month with them?",
+      "customer_response": "deflected",
+      "customer_quote": "Yes. Let me take it. Hold on a second.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
-      "section": "tax_credit_qualifier",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "section": "credit_qualifier",
+      "status": "asked",
+      "ts": "02:17",
+      "end_ts": "02:30",
+      "quote": "In order to qualify for the current programs, all we ask of the homeowner is you just have a credit score of at least 670.",
+      "customer_response": "cooperative",
+      "customer_quote": "No. Not at all. I have an excellent credit score, 800 and something.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "00:47",
-      "quote": "Have you already received a couple designs, or is this your first time doing so?"
+      "ts": "00:41",
+      "end_ts": "01:23",
+      "quote": "Have you already received a couple designs, or is this your first time doing so?",
+      "customer_response": "cooperative",
+      "customer_quote": "I don't know. It didn't convince me.",
+      "resistance_reason": "already_have_quote",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "04:41",
-      "quote": "So March to April, I used a 172 kilowatts per hour."
+      "ts": "02:09",
+      "end_ts": "06:12",
+      "quote": "I also need that usage history. So that's great you're pulling up.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. I have here from May 2025 to April 2026.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "06:41",
-      "quote": "Let's just shoot for twelve then because it looks like we have a lot more availability at that time."
+      "ts": "06:12",
+      "end_ts": "06:41",
+      "quote": "We can do that as early as tomorrow. Do you prefer mornings, afternoons?",
+      "customer_response": "cooperative",
+      "customer_quote": "Tomorrow morning is fine. After eleven.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "06:56",
-      "quote": "We'll shoot you a reminder text just to double check that time still works so we're not calling you out of the blue."
+      "ts": "06:41",
+      "end_ts": "07:41",
+      "quote": "We'll shoot you a reminder text just to double check that time still works so we're not calling you out of the blue.",
+      "customer_response": "cooperative",
+      "customer_quote": "That's my landline at home.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "completed"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "01:08",
+      "quote": "I have I have received it, like, before, but, I don't know. It didn't convince me.",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "When's the when was the last time you looked into it? Was it, like, a year ago, a couple years ago?"
+      ],
+      "resolved": true,
+      "resolution_ts": "01:23",
+      "reasoning": "Customer discloses a prior unconvincing design; rep asks only for the timeframe rather than probing what specifically didn't convince him, but the customer moves past it on his own and continues cooperating with qualification."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "prior-contact competitive probe",
-    "ts": "01:10",
-    "quote": "I don't know. It didn't convince me.",
-    "why": "The customer handed over a direct opening -- a prior design existed and failed -- and the rep let it pass with 'Okay.' twice across the call (01:14, 01:23) without asking which company or what specifically fell short. This is free intel for the closer that costs the rep almost nothing to collect and was missed both times it surfaced."
+    "topic": "bill/usage anchor never flipped into curiosity or urgency",
+    "ts": "06:02",
+    "quote": "February, 1,892,",
+    "why": "The rep captured an unusually rich, high-variance twelve-month usage history — exactly the raw material the schema calls the setter's primary anchor — but filed it silently and moved straight to scheduling without reflecting a single number back to the customer. This is the single largest missed leverage point on the call."
   },
   "key_moments": [
     {
       "ts": "00:14",
       "quote": "Oh, looks like we've we've been speaking to you a couple days ago.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer immediately corrects the rep's timeline ('that was at least like a month ago'), a minor factual friction point. Rep doesn't acknowledge or resolve the discrepancy, just moves into verify."
+      "stewart_read": "The rep acknowledges the record mismatch but doesn't resolve it — customer says the request was actually a month old, a discrepancy the rep never investigates (recycled lead misfiled as fresh?). The call moves on without correcting the record or probing why the timing is off."
     },
     {
-      "ts": "00:48",
-      "quote": "Yes. So I don't have to get the electric bill every month, or at least I can get a lower electric bill every month.",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer states his interest reason directly (bill pain / lower bill), but the rep's next line pivots straight into the prior-design verify question without reflecting the reason back or flagging it for later use."
+      "ts": "01:08",
+      "quote": "I have I have received it, like, before, but, I don't know. It didn't convince me.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a prior solar design that failed to convince him. The rep asks when (\"two or three years ago\") but never asks WHAT wasn't convincing — price, savings numbers, company, panel type. This is exactly the competitive intel a closer would want."
     },
     {
-      "ts": "02:02",
-      "quote": "Yes. Let me take it. Hold on a second. Yeah. Okay. Let's see if I can pull it out.",
-      "classification": "bill_anchor",
-      "stewart_read": "Rep asks for average bill and the customer goes to retrieve it, but this kicks off a multi-minute utility-portal login struggle instead of the rep offering a faster verbal-estimate fallback first."
+      "ts": "02:17",
+      "quote": "In order to qualify for the current programs, all we ask of the homeowner is you just have a credit score of at least 670.",
+      "classification": "other",
+      "stewart_read": "Rep states the credit threshold correctly at 670, matching the schema (unlike the 650 drift seen in other calls) and times the question efficiently while the customer is occupied pulling up his utility account."
     },
     {
-      "ts": "05:41",
-      "quote": "September, down to eighty fifty six.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer reads out a full year of usage including a July peak of 1,280 kWh and a February peak of 1,892 kWh -- real anchor material -- and the rep's only response after the full read-out is a flat administrative close-out."
+      "ts": "01:41",
+      "quote": "Is there anybody else with title with you, or is it just My wife. Your wife.",
+      "classification": "spouse_handling",
+      "stewart_read": "Rep correctly identifies a co-owner (wife) on title but never returns to this fact when booking the appointment — the appointment is set with only Enrique's phone number, no mention of including his wife on the closer call."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 35,
-    "verified": 35,
-    "fuzzy": 0,
-    "wrong_ts": 0,
+    "checked": 49,
+    "verified": 46,
+    "fuzzy": 2,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

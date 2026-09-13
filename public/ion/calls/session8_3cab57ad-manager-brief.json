@@ -1,162 +1,278 @@
 {
   "call_id": "SESSION8_3cab57ad",
   "rep_name": "Meg",
-  "trajectory_summary": "The call opens on a false premise (customer denies the form) and never recovers legitimacy; the rep then spends nearly two minutes debating solar mechanics with a resistant customer instead of pivoting to qualification or a clean exit. The call ends abruptly when the rep discovers a utility-company mismatch, closing the call as a DQ but only after burning time on an unwinnable feature debate.",
+  "trajectory_summary": "The call opens cold, with the customer denying the form and immediately refusing solar. The rep tries to keep the conversation alive by rebutting a recurring neighbor anecdote three times with essentially one argument, without ever creating curiosity or anchoring on the customer's own bill pain before asking for it. The call ends not on a resolved objection but on an abrupt disqualification once the customer names his utility provider — a DQ that had nothing to do with the extended debate that preceded it.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is 'unknown' — observed_outcome here is dq. The disqualification (Valley Electric not serviced) was knowable early and should have been checked before the multi-minute feature debate, meaning the DQ came too late, not too early.",
+  "outcome_dispute": "v1 tag is unknown/unclear; this should be recorded as dq. The rep explicitly disqualifies the customer at 02:51 because Ion doesn't service Valley Electric — a hard service-area gate, not a soft objection outcome. No appointment was set or attempted.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "02:51",
-    "quote": "Gotcha. So I actually know that we we don't work with Valley Electric anyway. So I'll just take you off my list here. I appreciate your time.",
-    "reasoning": "The rep explicitly disqualifies the lead based on the customer's utility provider not being serviced by Ion, ending the call with no appointment and no next step."
+    "quote": "So I actually know that we we don't work with Valley Electric anyway. So I'll just take you off my list here. I appreciate your time.",
+    "reasoning": "The rep explicitly disqualifies the customer because Ion does not service his utility provider (Valley Electric), a hard service-area gate. No appointment was booked, tentative, or attempted, and the call ends immediately after this line."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "02:46",
     "bill_quote": "Yeah. I'm paying 240 a month.",
-    "flip_executed": "no",
+    "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer volunteers a $240/month bill figure at 02:46, but the call ends within seconds on a DQ (wrong utility provider) — the rep never had the chance to flip it because the DQ took priority, and the DQ appears legitimate."
+    "reasoning": "The bill figure was captured but the call ended one line later on a utility-provider disqualification before the rep had any chance to flip it — there was no window in which a flip attempt failed, so this is not a skill miss, just a call that ended too fast for the figure to be used."
   },
-  "interest_reason_audit": {
+  "bill_document_audit": {
     "asked": false,
     "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call never reached bill-document collection; it ended on a DQ immediately after the bill amount and utility provider were named."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "00:38",
     "reason_given": false,
     "reason_ts": "",
     "reason_quote": null,
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar (in fact the customer denied any interest or form submission from the start), so no interest reason was ever solicited or given."
+    "reasoning": "The rep asks 'Have you ever explored solar before?' at 00:38, which functions as an interest probe, but the customer never gives an affirmative interest reason — he immediately refuses ('No. I don't want any of those.') and then only explains his objection (neighbor losing money), not a reason for interest."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "quote": "Hi. This is Meg. I'm with Ion."
+      "end_ts": "00:23",
+      "quote": "Hi. This is Meg. I'm with Ion. I'm reaching out here about the solar form you filled out online.",
+      "customer_response": "resistant",
+      "customer_quote": "How are you doing today? Got no form. I'm in got no form.",
+      "resistance_reason": "trust",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "interest_question",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "00:38",
+      "end_ts": "00:51",
+      "quote": "Have you ever explored solar before?",
+      "customer_response": "resistant",
+      "customer_quote": "No. I don't want any of those.",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "declined"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:18",
-      "quote": "I've I've got it here for a 1320 Greta Boulevard."
+      "end_ts": "00:23",
+      "quote": "I've I've got it here for a 1320 Greta Boulevard.",
+      "customer_response": "resistant",
+      "customer_quote": "That I'm in for I don't know. I I don't know anything about that.",
+      "resistance_reason": "trust",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "co_owner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "roof",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "02:44",
-      "quote": "Are you with the Valley Electric? Is that your power provider?"
+      "ts": "02:38",
+      "end_ts": "02:46",
+      "quote": "Are you with the Valley Electric? Is that your power provider?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. I'm paying 240 a month.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "02:46",
-      "quote": "Okay."
+      "ts": "02:38",
+      "end_ts": "02:46",
+      "quote": "Are you with the Valley Electric? Is that your power provider?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. I'm paying 240 a month.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "00:51",
+      "quote": "No. I don't want any of those.",
+      "type": "not_interested",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. Any specific reason why?"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep asks for the reason rather than accepting the refusal, which surfaces the neighbor anecdote, but the flat refusal itself is never directly resolved — the conversation moves into a new objection thread instead."
+    },
+    {
+      "ts": "01:09",
+      "quote": "It our neighbor on the street has it. And, you don't pay how much for the electric, but still he's paying for the for the solar energy panels and everything like that. He's losing money.",
+      "type": "trust_or_scam",
+      "rep_attempts": 3,
+      "attempt_quotes": [
+        "No. Not at all. I mean, it's replacing your current electric bill.",
+        "Right. But you you would be paying more to the electric company.",
+        "Do you know if the solar is covering all of his electric needs or just parts or I don't know."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The customer restates this same neighbor-based skepticism three times (01:09, 01:38-01:44, 02:19) and the rep tries three variations of the same underlying rebuttal without ever fully resolving the customer's belief; the objection is still live when the call ends on an unrelated DQ."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Verify-sequencing before feature debate",
-    "ts": "02:44",
-    "quote": "Are you with the Valley Electric? Is that your power provider?",
-    "why": "The rep spent over two minutes arguing solar mechanics with a resistant, ultimately-disqualified customer before asking the one qualifier (utility provider) that would have ended the call immediately. Front-loading basic verify questions avoids wasted, escalating conversations."
+    "topic": "objection inversion on cost/value pushback",
+    "ts": "01:09",
+    "quote": "It our neighbor on the street has it. And, you don't pay how much for the electric, but still he's paying for the for the solar energy panels and everything like that. He's losing money.",
+    "why": "The customer raises functionally the same objection three times (00:51, 01:09-01:19, 02:19) and the rep answers each with the same mechanical explanation instead of the schema's flip move — this is the single most consequential, repeatable skill gap on this call because it's a pattern, not a one-off."
   },
   "key_moments": [
     {
       "ts": "00:14",
       "quote": "How are you doing today? Got no form. I'm in got no form.",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The customer denies recognizing the form immediately, and the rep's recovery ('I've got it here for a 1320 Greta Boulevard') doesn't resolve the legitimacy question — it just restates the address, which the customer also doesn't confirm clearly."
+      "stewart_read": "The rep's opening reference to 'the solar form you filled out online' is immediately disputed by the customer, and the rep never offers a specific detail (date, source, address confirmation beyond reading it back) to re-establish legitimacy before pivoting into the pitch."
     },
     {
-      "ts": "01:00",
-      "quote": "Right. Yeah. I'm I'm just curious why that is. All they do is replace your current power bill with something cheaper, so it's saving money every month.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "This is unsolicited feature-selling ('all they do is...') in response to a flat refusal, rather than a curiosity-creating question about the customer's own bill or usage. This invites exactly the mechanism debate that follows."
-    },
-    {
-      "ts": "01:23",
-      "quote": "No. Not at all. I mean, it's replacing your current electric bill.",
+      "ts": "01:09",
+      "quote": "It our neighbor on the street has it. And, you don't pay how much for the electric, but still he's paying for the for the solar energy panels and everything like that. He's losing money.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "Customer's neighbor-anecdote objection is a classic cost-skepticism trigger. Instead of flipping it toward the customer's own bill pain, the rep argues the mechanism directly, which keeps the conversation on the customer's chosen (losing) ground."
+      "stewart_read": "This is a textbook cost/value objection dressed as an anecdote. The schema's flip pattern (reframe the customer's own framing — 'what's expensive is not switching') is available here, but the rep instead argues logically point-by-point ('No. Not at all. I mean, it's replacing your current electric bill.'), which keeps the customer arguing rather than creating the pattern-interrupt the inversion move is designed to produce."
     },
     {
       "ts": "02:19",
-      "quote": "Okay. Do you know if the solar is covering all of his electric needs or just parts or I don't know.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Rep admits uncertainty ('or I don't know') on the same neighbor-anecdote thread she had flatly denied two exchanges earlier ('No. Not at all.'). The inconsistency signals the rep was improvising the rebuttal rather than working from a clear framework."
+      "quote": "They got panels all over the roof there and everything. And he still pays electric bill.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "By the third repetition of the neighbor objection, the rep has an opening to pivot entirely away from defending solar mechanics and instead create curiosity about the customer's own numbers (e.g., 'let's just see what your specific numbers would look like'), but instead asks a clarifying question about the neighbor's system, keeping the conversation on someone else's situation rather than the prospect's own bill."
+    },
+    {
+      "ts": "02:46",
+      "quote": "Yeah. I'm paying 240 a month.",
+      "classification": "bill_anchor",
+      "stewart_read": "The customer gives a concrete, usable bill figure ($240/month) after nearly three minutes of objection handling — a real anchor point. The rep never gets the chance to use it because the very next line disqualifies the customer on utility provider."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
-    "revision_applied": false
+    "run_at": "2026-09-13T19:17:38+00:00",
+    "revision_applied": true
   },
   "quote_verification": {
-    "checked": 26,
-    "verified": 26,
+    "checked": 39,
+    "verified": 39,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

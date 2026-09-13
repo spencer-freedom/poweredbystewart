@@ -1,162 +1,262 @@
 {
   "call_id": "SESSION14_b1e8ab55",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens with real promise — the customer volunteers a $429 bill and a stated interest in government solar incentives within the first two minutes — but the rep pivots to the credit qualifier almost immediately and, once the customer reveals a sub-670 score, closes the call out entirely rather than exploring alternatives or owning a follow-up. The energy that was built in the first 90 seconds leaks out completely by the end.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "This should be tagged dq (credit) rather than a generic no_appointment/callback — the rep explicitly ended pursuit of the appointment on the stated credit answer per qualifiers.credit_qualifier, but did so without confirming a hard callback time, which also makes this an unanchored_soft_exit within the DQ.",
+  "trajectory_summary": "The call opens with quick rapport and a strong bill-pain anchor ($429/month), but the rep runs the credit qualifier ambiguously — asking about both Leroy's and Armadina's scores without ever cleanly separating whose number governs — and then disqualifies the household on a self-reported, unverified number from the husband who isn't even on the call. The call ends with a bare callback suggestion and no next step owned by the rep.",
+  "shape": "mixed",
+  "outcome_dispute": "v1 outcome is unclear from metadata; observed outcome should be recorded as dq. The DQ is soft and premature: it rests entirely on the customer's uncertain, secondhand estimate of her husband's credit ('I think he's only it's 630'), which per qualifiers.credit_qualifier's own drift/policy tension is not a reliable pull-equivalent number, and Armadina's own score was never determined before ending the call.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "02:53",
-    "quote": "So to qualify for those grants and those credits, you do need to have a credit score above 670.",
-    "reasoning": "The rep DQ's the lead on stated credit below 670 per qualifiers.credit_qualifier and ends the call without booking any appointment or owned callback time — this is a hard-gate disqualification, not a callback or tentative outcome."
+    "ts": "03:02",
+    "quote": "So if I were you, I would just give us a callback when your guys' credit is high enough, and then we would be able to get you all of those incentives.",
+    "reasoning": "The rep ends the call by disqualifying the household on the credit threshold and instructing the customer to call back later, with no appointment, date, or time ever discussed."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "00:30",
     "bill_quote": "Well, right now, I pay 429 every month.",
-    "flip_executed": "no",
-    "flip_ts": "",
-    "flip_quote": null,
-    "reasoning": "The rep reacts genuinely to the bill amount at 00:34-00:50 ('that can be quite expensive') but never returns to it as leverage — the conversation pivots to incentives and then the credit qualifier, and the bill is never used to justify urgency or push toward the appointment/next step."
+    "flip_executed": "yes",
+    "flip_ts": "00:45",
+    "flip_quote": "No. I I am glad that you guys are looking into solar because $429 can add up. That can be quite expensive. So",
+    "reasoning": "The rep does react to the bill figure with an evaluative, expense-framing statement rather than silently logging it and moving on, which meets the strategy-match bar for a flip, though the moment is brief and never revisited or tied forward to the appointment value later in the call."
   },
-  "interest_reason_audit": {
+  "bill_document_audit": {
     "asked": false,
     "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call ends at the credit qualifier before the rep ever reaches bill-collection; no request for the physical utility bill (text, email, photo, login) was made."
+  },
+  "interest_reason_audit": {
+    "asked": true,
+    "ask_ts": "01:45",
     "reason_given": true,
     "reason_ts": "01:53",
     "reason_quote": "Yes. I've seen I've been seeing that the government is helping out with, with the solar. I don't know.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' — the customer volunteered the incentive interest in response to the rep's assumption ('I'm assuming that you guys were just looking into it to hopefully save some money'). The rep briefly references state incentives right after but doesn't tie it back to the bill or sustain it as a reason to move forward before the credit DQ ends the call."
+    "reasoning": "The rep asks a leading version of the interest question ('I'm assuming that you guys were just looking into it to hopefully save some money. Right?') and the customer adds an incentive-awareness detail, but the rep pivots directly into the credit qualifier without expanding on or returning to this stated interest."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:08",
-      "quote": "So this is Holland with Ion."
+      "end_ts": "00:16",
+      "quote": "So this is Holland with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. I would be looking, but,",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:45",
-      "quote": "I'm assuming that you guys were just looking into it to hopefully save some money. Right?"
+      "end_ts": "02:01",
+      "quote": "Well yeah. So I'm assuming that you guys were just looking into it to hopefully save some money. Right?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. I've seen I've been seeing that the government is helping out with, with the solar. I don't know.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:03",
-      "quote": "I've got your address here as 458 Jurells Road in Bella, New Mexico. Is that correct?"
+      "end_ts": "01:34",
+      "quote": "I've got your address here as 458 Jurells Road in Bella, New Mexico. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:26",
-      "quote": "I have Leroy as the property owner. Are you on the title of the home as well?"
+      "end_ts": "01:34",
+      "quote": "I have I have Leroy as the property owner. Are you on the title of the home as well?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "00:40",
-      "quote": "Is that with PNM?"
+      "end_ts": "00:42",
+      "quote": "Is that with PNM?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "00:24",
-      "quote": "So, yeah, I so, like, the program or just kind of the process?"
+      "ts": "00:30",
+      "end_ts": "00:39",
+      "quote": "429 a month?",
+      "customer_response": "cooperative",
+      "customer_quote": "Well, right now, I pay 429 every month.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:12",
-      "quote": "The only thing that you need to qualify for those programs is that you have a credit score above 670."
+      "end_ts": "02:36",
+      "quote": "The only thing that you need to qualify for those programs is that you have a credit score above 670.",
+      "customer_response": "resistant",
+      "customer_quote": "I think he's only it's 630.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "declined"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "02:36",
+      "quote": "I think he's only it's 630.",
+      "type": "other",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "03:02",
+      "reasoning": "This is a qualification gate (credit threshold) rather than a persuasion objection; the rep made zero attempts to explore alternatives (Armadina's own score, purchase-without-tax-credit options per qualifiers.credit_qualifier.notes.tax_credit_disclosure) before ending the call with a callback suggestion."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "owning the next step on a credit DQ",
-    "ts": "03:02",
-    "quote": "So if I were you, I would just give us a callback when your guys' credit is high enough, and then we would be able to get you all of those incentives.",
-    "why": "The rep had a warm, engaged customer with a real bill-pain anchor and an unprompted incentive interest, but ends the call by pushing all re-engagement responsibility onto the customer with no owned follow-up date. This is the single biggest recoverable value left on the table."
+    "topic": "credit qualifier ambiguity leading to premature DQ",
+    "ts": "02:19",
+    "quote": "So is that the case for you or for your husband?",
+    "why": "The rep never resolves whose credit score actually controls qualification, then disqualifies the household on an uncertain, secondhand number for a spouse who isn't even on the call, without ever getting Armadina's own score or mentioning purchase-without-tax-credit alternatives — closing out a motivated, engaged lead on incomplete information."
   },
   "key_moments": [
     {
-      "ts": "00:34",
-      "quote": "Oh my goodness. You're paying 429 a month?",
+      "ts": "00:45",
+      "quote": "No. I I am glad that you guys are looking into solar because $429 can add up. That can be quite expensive. So",
       "classification": "bill_anchor",
-      "stewart_read": "This is the genuine bill-anchor moment in the call — spontaneous, emotionally real reaction. It briefly builds trust but is never followed with a flip tying the number to urgency or to what the appointment would show the customer."
+      "stewart_read": "This is a partial flip — the rep does react to the bill with an emotional framing ('that can be quite expensive') rather than silently logging it, but it's a passing comment, not a hook the rep returns to later (e.g., tying it to what the appointment could show her). The flip is present but shallow."
     },
     {
       "ts": "02:19",
-      "quote": "The only thing that you need to qualify for those programs is that you have a credit score above 670.",
-      "classification": "other",
-      "stewart_read": "The rep states the 670 threshold correctly per script, and the schema itself flags this as an open policy question (stated credit vs. pulled credit) rather than a rep error. This is not a protocol violation — the rep followed procedure as documented."
+      "quote": "So is that the case for you or for your husband?",
+      "classification": "knowledge_gap",
+      "stewart_read": "The rep asks a compound, ambiguous question that never gets cleanly resolved — the customer answers about her husband ('I think he's only it's 630') but her own score is left as 'I don't know' and never followed up. Since qualifiers.credit_qualifier is a hard DQ gate, leaving ambiguity on whose score controls the decision is a structural gap, not just a phrasing issue."
     },
     {
-      "ts": "02:04",
-      "quote": "I've seen I've been seeing that the government is helping out with, with the solar. I don't know.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer names a real interest driver (government incentives). The rep does briefly reference state incentives right after this ('we have lots of in like, state incentives...that will help pay for your guys' system'), so the reason wasn't ignored outright, but the acknowledgment is generic and immediately pivots into the credit qualifier rather than being sustained or tied back to the bill pain just established."
+      "ts": "02:36",
+      "quote": "I think he's only it's 630.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a soft, uncertain self-report ('I think') on a number that is 40 points below threshold and belongs to a household member not on the call. Per the schema's own credit-drift note, stated credit is unreliable, and the rep treats it as final rather than pursuing Armadina's own score or discussing alternative purchase options mentioned in qualifiers.credit_qualifier.notes.tax_credit_disclosure."
     },
     {
-      "ts": "03:02",
-      "quote": "So if I were you, I would just give us a callback when your guys' credit is high enough, and then we would be able to get you all of those incentives.",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "This is a soft exit with no owned next step — the rep tells the customer to call back rather than setting any kind of callback date or check-in the rep owns. This is a reactive close, not a strategic deferral; there's no mechanism to re-engage this lead."
+      "ts": "01:53",
+      "quote": "Yes. I've seen I've been seeing that the government is helping out with, with the solar. I don't know.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer is proactively referencing government incentives, a sign of active research and genuine motivation beyond just cost, offered unprompted before the rep's own probe about incentives."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 29,
-    "verified": 29,
+    "checked": 36,
+    "verified": 36,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

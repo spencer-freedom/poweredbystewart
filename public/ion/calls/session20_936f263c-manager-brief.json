@@ -1,164 +1,294 @@
 {
   "call_id": "SESSION20_936f263c",
   "rep_name": "Joe",
-  "trajectory_summary": "The call opens with the customer leading — voicing a rooftop-placement objection before the rep gets through any verify — and the rep responds with direct, honest feasibility answers instead of scope-creep deflection. Energy dips through a long, disorganized bill-retrieval segment but the rep keeps the customer engaged by validating frustration at the utility rather than defending Ion, and the call closes with a specific day/time appointment. This is a customer-driven call that the rep successfully redirected into a booked outcome without over-promising on the elimination-of-bill claim.",
-  "shape": "mixed",
-  "outcome_dispute": null,
+  "trajectory_summary": "This call opens with an unusually engaged customer who quickly surfaces several real objections (roof aversion, cost skepticism, prior bad experience with Sunrun) but resolves each one through direct conversation and ultimately self-proposes the appointment. The bill-document collection stalls badly because the customer's utility does not display kWh usage, but the rep pivots to a square-footage-based estimate rather than losing the appointment. The call ends with a booked appointment, a captured bill amount, and unresolved formatting confusion (AM/PM) that should be double-checked before the follow-up text goes out.",
+  "shape": "energy_built",
+  "outcome_dispute": "v1 tag is unknown; based on the transcript this is clearly 'booked' — a specific day (Thursday) and time (2:30 PM) were agreed, with the rep committing to a confirmation text. The AM/PM stumble at 12:20-12:29 is a minor execution risk, not enough to downgrade to tentative, since both parties align on PM by the end of the exchange.",
   "observed_outcome": {
     "outcome": "booked",
-    "appointment_channel": "phone",
+    "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "12:15",
     "quote": "Can we be 02:30 or 5PM?",
-    "reasoning": "Rep and customer agree on Thursday at 02:30 PM for a design/evaluation call, with the rep confirming 'Let's do 02:30' at 12:17 and PM clarified at 12:24. No spouse or co-owner was mentioned anywhere in the call."
+    "reasoning": "A specific day (Thursday, 'tomorrow') and time (2:30 PM) were agreed upon, confirmed again at the close of the call ('We'll see you tomorrow at 02:30'), and the appointment is described as an in-person evaluation visit ('coming down') rather than a phone call."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "06:16",
-    "bill_quote": "about how much is your typical bill with them? $2.41.",
+    "bill_ts": "07:16",
+    "bill_quote": "Yes. Like, about how much is your typical bill with them? $2.41.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures the ~$241 bill figure but never explicitly ties it back as the customer's reason to move forward ('that's exactly the number solar would offset') — the conversation moves straight to bill-retrieval logistics instead. The flip should have landed right after the bill number was given, using it to reinforce the value of the design appointment."
+    "reasoning": "The $241 bill figure was captured but never explicitly turned into a direct 'this is your reason to act' statement — the rep instead moved into discussing utility bill formatting and later fell back to a square-footage-based estimate. The flip should have landed around 07:24 ('It's a few ways you wanna look into your alternatives... it's ridiculous') where the rep gestures at the bill being excessive but doesn't tie it concretely to urgency for booking."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "07:32",
+    "ask_quote": "Yeah. If you happen to have a a utility bill handy, do you get them in the mail, or is it all online?",
+    "result": "declined",
+    "method": "photo",
+    "result_ts": "09:10",
+    "result_quote": "Damn. They don't even have a copy of the bill here. They just show it as an amount and when it's due.",
+    "reasoning": "The customer actively attempted multiple times to retrieve bill/kWh data via Gmail and the utility portal but the utility simply does not display kWh usage or a downloadable bill copy — this is better characterized as 'unavailable / no kWh data on the account' than a refusal, though 'declined' is the closest available enum value since the bill was never successfully produced on the call."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
     "reason_ts": "02:33",
-    "reason_quote": "And what attracted me is I keep getting these advertisements that solar's free. The government pays for it.",
+    "reason_quote": "And what attracted me is I keep getting these advertisements that solar's free. The government pays for it. How realistic is those advertisements",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer volunteers his interest trigger (free-solar advertisements) unprompted since the rep never explicitly asked 'what interested you in solar.' The rep corrects the misconception factually but never reconnects this ad-driven curiosity to the appointment value later in the call."
+    "reasoning": "The customer volunteered their interest trigger (advertisements about free/government-paid solar) unprompted rather than the rep asking directly. The rep corrected the myth accurately but never circled back to this as a motivator when setting the appointment or building urgency."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:02",
-      "quote": "Hi. This is Joe with Ion."
+      "end_ts": "00:41",
+      "quote": "Hi. This is Joe with Ion. Joe Joe, hi. This is Lisa Chris Smith. Kevin called and left me a message.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Absolutely. You're to the right place.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "02:33",
+      "end_ts": "02:46",
+      "quote": "And what attracted me is I keep getting these advertisements that solar's free.",
+      "customer_response": "cooperative",
+      "customer_quote": "That's not that's not realistic at all. It's not completely free.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "06:48",
-      "quote": "This is for, 703 Maddox Avenue?"
+      "ts": "06:44",
+      "end_ts": "06:51",
+      "quote": "This is for, 703 Maddox Avenue?",
+      "customer_response": "cooperative",
+      "customer_quote": "Correct.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:44",
-      "quote": "It's a brand new house with a brand new roof. It's only four months old."
+      "end_ts": "02:11",
+      "quote": "And here's my problem. It's a brand new house with a brand new roof. It's only four months old.",
+      "customer_response": "cooperative",
+      "customer_quote": "It's only four months old.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "03:02",
-      "quote": "Northneck or something, whatever it is."
+      "ts": "07:13",
+      "end_ts": "07:16",
+      "quote": "And you said you're you're with, North Neck currently?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "06:16",
-      "quote": "about how much is your typical bill with them?"
+      "ts": "07:16",
+      "end_ts": "07:20",
+      "quote": "Like, about how much is your typical bill with them?",
+      "customer_response": "cooperative",
+      "customer_quote": "$2.41.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "asked",
-      "ts": "05:44",
-      "quote": "I had solar on my roof... through Sunrun Solar"
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "07:32",
-      "quote": "if you happen to have a a utility bill handy, do you get them in the mail, or is it all online?"
+      "end_ts": "09:10",
+      "quote": "Yeah. If you happen to have a a utility bill handy, do you get them in the mail, or is it all online?",
+      "customer_response": "resistant",
+      "customer_quote": "Damn. They don't even have a copy of the bill here. They just show it as an amount and when it's due.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "12:15",
-      "quote": "Can we be 02:30 or 5PM?"
+      "ts": "11:33",
+      "end_ts": "12:15",
+      "quote": "I'll just do this tomorrow, if tomorrow works for you.",
+      "customer_response": "cooperative",
+      "customer_quote": "Let's do 02:30.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "12:40",
-      "quote": "I can send you a a text message... to confirm that time."
+      "status": "asked",
+      "ts": "13:19",
+      "end_ts": "13:59",
+      "quote": "I can send you a a text message either later today or tomorrow morning just to confirm that time.",
+      "customer_response": "cooperative",
+      "customer_quote": "Perfect. Okay. Works for me.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "00:44",
+      "quote": "Well, here's my question, though. I don't I really don't wanna put anything on my roof.",
+      "type": "roof_or_home",
+      "rep_attempts": 3,
+      "attempt_quotes": [
+        "So we we just do the the rooftop solar. That's really the best spot for solar, and it's gonna be the most cost effective.",
+        "I don't I don't think so. No. I think the the panels would be a bit too heavy for that.",
+        "That's a good deal."
+      ],
+      "resolved": true,
+      "resolution_ts": "02:11",
+      "reasoning": "Customer cycled through ground-mount, shed-mount, and new-roof concerns; each was addressed factually by the rep, and the customer ultimately asked for an evaluation anyway rather than dropping out."
+    },
+    {
+      "ts": "03:09",
+      "quote": "Here's my question then. If it's not in a position to buy the solar outright because it's very expensive, I take it your monthly bill would be in perpetuity.",
+      "type": "cost",
+      "rep_attempts": 3,
+      "attempt_quotes": [
+        "Our goal would be to eliminate your Northneck bill completely so that you don't purchase electricity from them at all.",
+        "Our goal would be to eliminate the the bill completely. And if we're not able to, then then we would let you know that solar is not a not a good fit for your home.",
+        "Sometimes we're not able to offset it a 100%. Sometimes we're only able to cover, you know, half of the usage."
+      ],
+      "resolved": true,
+      "resolution_ts": "06:11",
+      "reasoning": "Customer pressed the double-billing concern three times with increasing specificity (hypothetical math, then a real prior Sunrun example), and each time the rep responded with a different angle culminating in an honest disclosure about partial offset, after which the customer proposed the appointment himself."
+    },
+    {
+      "ts": "10:04",
+      "quote": "Printed bills turned off, it says. Well, that's bullshit. Oh, no. Oh, hell no. You are not gonna turn off my bill.",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. I don't think it's It's essentially updated"
+      ],
+      "resolved": true,
+      "resolution_ts": "10:28",
+      "reasoning": "This was a misunderstanding about the utility's own portal settings, not an Ion-related trust issue; it resolved once the confusion about paper-bill delivery vs. account shutoff was clarified."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "competitive-intel probe / objection inversion on prior-solar experience",
-    "ts": "05:33",
-    "quote": "Yet, I still had a $63 electric bill from the electric company.",
-    "why": "The customer volunteers a named competitor (Sunrun), a specific monthly figure, and an explicit trust concern in one breath. The rep answered honestly but didn't probe for details or flip the story toward the customer's own bill pain — this is a repeatable, coachable skill gap distinct from the mechanical bill-collection slog later in the call."
+    "topic": "Button-up mechanics: explicit date/time restate + missing handshake",
+    "ts": "12:20",
+    "quote": "And you said that oh, wait a minute. 02:30 would be the time I want. I don't want AM. My PM is preferred.",
+    "why": "The appointment is the entire output of this call, and the AM/PM confusion plus the absence of a clear one-hour-block statement, no-driving/computer instruction, or an explicit 'is that fair?' handshake are all schema-required button-up elements that were skipped. A confirmed, unambiguous appointment protects the setter's paycheck (setters are paid on sits, not bookings) — tightening this mechanic directly reduces no-show risk."
   },
   "key_moments": [
     {
-      "ts": "00:44",
-      "quote": "I don't I really don't wanna put anything on my roof.",
+      "ts": "00:02",
+      "quote": "Hi. This is Joe with Ion. Joe Joe, hi. This is Lisa Chris Smith. Kevin called and left me a message.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The intro is garbled and appears to be a callback-to-a-missed-message scenario rather than a clean outbound intro; the rep explains the cut-off phone number as the reason for calling, which is a reasonable improvised legitimacy anchor, but it is not the clean company+reason template."
+    },
+    {
+      "ts": "01:44",
+      "quote": "And here's my problem. It's a brand new house with a brand new roof. It's only four months old.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "This opening line sets the entire arc of the call — a structural/placement objection raised before any verify has happened. The rep answers it factually (rooftop is standard, most cost-effective) but never flips it toward the customer's actual pain (why they want solar at all, i.e., the bill). This is the seed of every later re-litigation of the 'will my bill actually go down' question."
+      "stewart_read": "The customer frames a brand-new roof as a reason to avoid drilling holes. The rep validates ('That's a good deal') rather than flipping the frame — e.g., a brand-new roof is actually the ideal, lowest-risk time to install solar since there's no re-roof needed for 25+ years."
     },
     {
-      "ts": "01:06",
-      "quote": "So we we just do the the rooftop solar. That's really the best spot for solar, and it's gonna be the most cost effective.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "This is closer-tier product/installation reasoning delivered directly to the customer at minute one, before any qualification. It's a defensible, honest answer to a legitimate feasibility gate rather than a technical spec debate, so the scope-creep risk here is low."
-    },
-    {
-      "ts": "05:33",
-      "quote": "Yet, I still had a $63 electric bill from the electric company.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "Customer discloses a prior Ion-competitor (Sunrun) experience where the bill was NOT eliminated, directly challenging the rep's claim. The rep responds honestly ('sometimes we're not able to offset it a 100%') but never inverts this into the customer's Northneck bill pain as the reason to still move forward, nor probes competitive intel on the Sunrun deal."
-    },
-    {
-      "ts": "05:33",
-      "quote": "Yet, I still had a $63 electric bill from the electric company.",
+      "ts": "05:18",
+      "quote": "That's I just came from Massachusetts. I had solar on my roof. And the solar bill that I had was through Sunrun Solar, and the bill was $250 a month. Yet, I still had a $63 electric bill from the electric company.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer names a specific prior installer (Sunrun) and a specific monthly figure ($250 solar bill). This is a competitive-intel goldmine the rep let pass without a follow-up question about what happened, why he left it behind, or what the actual system size/state was."
+      "stewart_read": "Customer discloses a full prior solar relationship with a named competitor (Sunrun) including exact dollar figures. The rep addresses the trust concern generally but never probes for more competitive intel — system size, why it under-offset, whether the system is still active, whether they still own that home."
+    },
+    {
+      "ts": "09:24",
+      "quote": "This is bullshit. This is Virginia. This is what I'm getting used to in Virginia.",
+      "classification": "rapport_repair",
+      "stewart_read": "Customer vents frustration at the utility's lack of transparency. The rep validates without being defensive: 'I've heard quite a few people tell me, like, the same thing, not just from North Neck but from utility companies.' This kept the frustration pointed at the utility, not Ion."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 39,
-    "verified": 31,
-    "fuzzy": 2,
-    "wrong_ts": 6,
+    "checked": 54,
+    "verified": 53,
+    "fuzzy": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

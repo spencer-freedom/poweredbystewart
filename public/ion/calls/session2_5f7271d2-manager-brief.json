@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION2_5f7271d2",
   "rep_name": "Meg",
-  "trajectory_summary": "This is a short, low-yield call that runs into a hard disqualifier: the customer leases her existing Vivint system with no loan, which Ion's dq_rules cannot service. The rep asks the right orphaned-flow questions to get there, but along the way answers a specs question that belonged to the closer and lets a clear bill-pain disclosure go unaddressed. The call ends cleanly and professionally once the DQ is confirmed.",
+  "trajectory_summary": "The call opens with a soft decline that the rep correctly avoids treating as a hard no, probing for battery/panel upsell and surfacing a real bill-pain complaint ($200+ vs. previously much lower). But the bill signal is not flipped or even acknowledged before the customer starts to withdraw, and the rep pivots to verification questions that quickly surface a hard DQ (leased system, no loan) which ends the call cleanly and correctly. Net shape is mixed: a real opportunity to build curiosity was opened and then walked past, but the DQ execution itself was disciplined and appropriate.",
   "shape": "mixed",
-  "outcome_dispute": "v1 tag is unknown; observed outcome is a clean dq — the customer leases through Vivint with no loan, which trips dq_rules.ppa_existing_system logic (leasing = disqualified). This is not a booked or callback outcome.",
+  "outcome_dispute": "v1 tag is unknown/unconfirmed but the transcript clearly supports a dq outcome — the customer's system is leased with no loan taken out, which is an explicit hard_dq trigger per orphaned_flow.steps[0] (hard_dq_answers include lease_with_no_buyout). Any outcome tag other than dq would be miscalled.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,152 +11,266 @@
     "co_owner_confirmed": null,
     "ts": "02:20",
     "quote": "So, yeah, you would be leasing it. And in that case, we actually are not able to help out. So I'll just take you off my list.",
-    "reasoning": "Customer confirms she leases her existing Vivint system with no loan taken out, which trips the existing-system-lease hard disqualifier; the rep closes the call accordingly with no appointment set."
+    "reasoning": "Customer confirmed she is leasing her existing Vivint system and did not take out a loan, which matches orphaned_flow.steps[0]'s hard_dq_answers (lease_with_no_buyout) — the rep correctly disqualified and ended the call."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "01:08",
-    "bill_quote": "It sure is. And I got a 200 and somebody dollar electric bill. I wouldn't have to",
+    "bill_ts": "01:19",
+    "bill_quote": "My electric bill used to be, like, $15.20 dollars, and to go from there to, like, 200 and something wasn't gonna happen.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer gave a specific bill figure and a comparison to her prior ~$150 bill at 01:19, but the rep never acknowledged or flipped it into emotional leverage — the transcript moves directly into address verification without responding to either mention."
+    "reasoning": "The customer volunteers a specific and dramatic bill increase, but no rep line in the transcript reflects it, questions it, or uses it to build urgency — the call moves straight to the customer's withdrawal and then to verification/DQ questions."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The call never reached bill_collection — it was disqualified at the ownership/lease-structure step before any request for the physical bill was made."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "01:08",
-    "reason_quote": "It sure is. And I got a 200 and somebody dollar electric bill. I wouldn't have to",
-    "reason_used": "no_reason_given",
+    "reason_ts": "00:13",
+    "reason_quote": "Oh, I see. I'm okay. But I I I have solar panels on on my house. I'm with Vivint Solar already.",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' — the customer had already disclosed an existing system, so the standard interest question wasn't run. The customer volunteered a bill-pain reason unprompted, but the rep didn't use it before the call moved to DQ verification."
+    "reasoning": "The rep never explicitly asked 'what interested you in solar' — this was an orphaned/existing-solar lead so the standard interest question didn't apply the same way — but the customer did volunteer a reason for reconsidering (bill jump) that went unused, as covered in the bill anchor audit."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "Hey, Wendy. My name is Meg. I'm with Ion. I'm reaching out here about the solar form you filled out online."
+      "end_ts": "00:13",
+      "quote": "Hey, Wendy. My name is Meg. I'm with Ion. I'm reaching out here about the solar form you filled out online.",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, I see. I'm okay.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:47",
-      "quote": "the address that I have, 1309 Old Muscat Lane, Fort Washington. Is that correct?"
+      "end_ts": "01:55",
+      "quote": "Alright. So the address that I have, 1309 Old Muscat Lane, Fort Washington. Is that correct?",
+      "customer_response": "cooperative",
+      "customer_quote": "Mhmm. Okay.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "roof",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "utility_company",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:05",
-      "quote": "Do you need more panels? Is your current system not covering your electric bill?"
+      "end_ts": "01:27",
+      "quote": "Do you need more panels? Is your current system not covering your electric bill?",
+      "customer_response": "cooperative",
+      "customer_quote": "It sure is. And I got a 200 and somebody dollar electric bill.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "already_have_quote",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     }
   ],
-  "primary_coaching_focus": {
-    "topic": "setter_scope_creep on spec/pricing questions",
-    "ts": "00:47",
-    "quote": "The panels we use, I believe that they are 440 watts.",
-    "why": "The rep answered a technical wattage question directly, which invited a harder follow-up question about house-level power output that she then had to admit she couldn't answer — the scope creep created the exact knowledge-gap moment that followed. Redirecting immediately with the escape hatch avoids both problems."
-  },
-  "key_moments": [
+  "objections": [
     {
       "ts": "00:13",
       "quote": "Oh, I see. I'm okay. But I I I have solar panels on on my house. I'm with Vivint Solar already.",
-      "classification": "other",
-      "stewart_read": "Customer self-identifies as an orphaned lead (existing solar) at the very top of the call. The rep's next line correctly begins orphaned-flow-style qualification (battery/additional panels), which is the right instinct even though the schema's orphaned_flow steps don't explicitly cover a satisfaction check."
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. Were you looking for battery backups or additional panels?"
+      ],
+      "resolved": false,
+      "resolution_ts": "02:20",
+      "reasoning": "Rep tried one angle (battery/additional panels upsell) which the customer declined; the objection was ultimately resolved not by persuasion but by the call reaching a hard DQ once lease terms were confirmed."
+    },
+    {
+      "ts": "01:30",
+      "quote": "I I I'll think about it and perhaps call back.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. Yeah. I mean, what we could do is is look at some options and see what we could do here for you, Wendy."
+      ],
+      "resolved": true,
+      "resolution_ts": "01:46",
+      "reasoning": "Rep offered a concrete alternative (a few qualifying questions) which brought the customer back into the conversation rather than letting the call end at the soft exit."
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "Bill-pain anchor handed over but not used",
+    "ts": "01:19",
+    "quote": "My electric bill used to be, like, $15.20 dollars, and to go from there to, like, 200 and something wasn't gonna happen.",
+    "why": "This is the single richest curiosity hook in the call — a huge, specific bill jump volunteered unprompted — and the transcript shows no rep line reflecting it back before the customer started to withdraw two lines later. This is the moment to replay with the rep."
+  },
+  "key_moments": [
+    {
+      "ts": "00:27",
+      "quote": "Okay. Y'all out and out sell panels?",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer, despite declining upfront, asks an unprompted question about Ion's product directly — a sign of live curiosity the rep could use to keep the conversation open rather than answer flatly and move to a technical spec."
     },
     {
       "ts": "00:47",
       "quote": "The panels we use, I believe that they are 440 watts.",
       "classification": "setter_scope_creep",
-      "stewart_read": "Customer asks a spec/pricing-adjacent question and the rep answers with a technical detail (wattage) instead of using the escape hatch to redirect to the specialist. This is a clearer scope-creep instance than a simple yes/no answer because it invites further technical debate."
-    },
-    {
-      "ts": "00:59",
-      "quote": "Well, that's that's something I don't know. We would need to gather a couple details to see, you know, what it would do for you.",
-      "classification": "knowledge_gap",
-      "stewart_read": "After the 440-watt scope creep, the rep recovers well here — admitting she doesn't know the answer and redirecting to the qualification process rather than guessing or fabricating a savings/output figure. This is the correct knowledge-gap pattern (admit and recover with transparency)."
+      "stewart_read": "Rep answers a technical spec question (panel wattage) directly instead of redirecting to the closer/specialist — minor scope creep, though brief and not escalating into a debate."
     },
     {
       "ts": "01:19",
       "quote": "My electric bill used to be, like, $15.20 dollars, and to go from there to, like, 200 and something wasn't gonna happen.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "The customer hands over a vivid bill-pain anchor — a jump from roughly $150 to $200+ a month — that is exactly the kind of number coaching_philosophy.bill_anchoring says should be flipped into emotional alignment against the utility. The rep says nothing in response and the transcript moves straight to address verification."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The customer hands the rep a striking bill-jump anchor unprompted — this is a stronger curiosity hook than most calls get, but no rep line in the transcript reflects it back, questions it, or uses it before she starts to withdraw two lines later."
+    },
+    {
+      "ts": "01:30",
+      "quote": "I I I'll think about it and perhaps call back.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "Customer begins to exit softly right after the unaddressed bill complaint; rep does pull her back with a next-step offer at 01:34, so this isn't a full miss, but it shows the cost of not flipping the bill pain immediately before."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 26,
-    "verified": 26,
+    "checked": 32,
+    "verified": 32,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

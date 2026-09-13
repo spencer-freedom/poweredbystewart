@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION24_fdb34bc9",
   "rep_name": "Meg",
-  "trajectory_summary": "This is a short, low-energy call where the customer arrives already decided and states a specific, quantified reason (sub-$100 bill, new roof, short payback skepticism) for disinterest. The rep gathers a bill figure and offers one generic value line, but the customer closes the call immediately after, with no appointment, no callback time, and no cross-sell or curiosity move attempted.",
-  "shape": "stagnant",
-  "outcome_dispute": "v1 tag is unknown/unclear; observed outcome is best read as no_appointment — the customer explicitly declines twice more after the rep's value statement and the call ends with no next step of any kind, not even a soft callback.",
+  "trajectory_summary": "The call opens cold with the customer stating he's already spoken to another rep and isn't interested, and it never recovers — the customer repeats some form of decline four times and the rep never directly engages any of them, instead running scope-clarification and bill-qualifier questions. The rep's late program pitch lands after the customer has already disclosed a low bill and a self-assessed long payback period, which undercuts rather than supports the pitch.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "No dispute — the transcript supports no_appointment; the customer explicitly ends the call twice ('I'm all squared away' and 'I got what I need') without any appointment offered or booked.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
@@ -11,7 +11,7 @@
     "co_owner_confirmed": null,
     "ts": "02:11",
     "quote": "No. That's that's fine. I, I got what I need. I I yeah. I got what I needed. So thank you very much.",
-    "reasoning": "Customer declines a third time after the rep's value statement and the call ends with pleasantries only — no appointment, callback time, or next step was secured."
+    "reasoning": "The call ends with the customer declining and the rep signing off with no appointment day/time offered or booked at any point in the transcript."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,143 +20,257 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep captures the bill figure but the follow-up line at 01:56 is a generic program description not tied to the customer's stated low usage or payback skepticism — the flip should have engaged directly with the 'payback period is probably too long' objection voiced at 01:12."
+    "reasoning": "The rep captured the bill figure but the very next rep line (01:56) delivers a generic program description rather than tying the number to the customer's stated payback-period objection; the flip should have landed there."
+  },
+  "bill_document_audit": {
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The rep only asked for a rough dollar range verbally ('is your electric bill, is it over a $100 a month or is it less?') and never asked the customer to send or read from the actual utility bill document."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "00:55",
-    "reason_quote": "the leading ad that I saw showed that the, there were still subsidies available for solar installations.",
+    "reason_ts": "01:06",
+    "reason_quote": "there were still subsidies available for solar installations. And, my roof is too new to require a new roof, so I was interested in just seeing what the cost of solar panels might be.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never directly asks what interested the customer in solar; the customer volunteers it unprompted (tax subsidy ad) while explaining his confusion, and the rep never references the subsidy angle again despite it being a concrete hook."
+    "reasoning": "The rep never explicitly asked 'what interested you in solar,' but the customer volunteered his reason (subsidies, curiosity about panel cost) unprompted; the rep did not reference or build on this reason at any later point in the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "quote": "Hey. This is Meg. I'm with ION reaching out here about the solar form you filled out online."
+      "end_ts": "00:07",
+      "quote": "Hey. This is Meg. I'm with ION reaching out here about the solar form you filled out online.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. I already talked to somebody about that.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "00:47",
+      "end_ts": "01:19",
+      "quote": "So you were looking more of, like, just the equipment aspects, not like a full installation or anything like that?",
+      "customer_response": "cooperative",
+      "customer_quote": "I was interested in just seeing what the cost of solar panels might be.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "skipped",
-      "ts": "01:06",
-      "quote": "my roof is too new to require a new roof"
+      "ts": "01:19",
+      "end_ts": "01:19",
+      "quote": "",
+      "customer_response": "no_answer",
+      "customer_quote": "I don't need a roof",
+      "resistance_reason": "already_have_quote",
+      "rep_followup": "moved_on",
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:35",
-      "quote": "is your electric bill, is it over a $100 a month or is it less?"
+      "end_ts": "01:50",
+      "quote": "Is your electric bill, is it over a $100 a month or is it less?",
+      "customer_response": "cooperative",
+      "customer_quote": "It probably averages a little less than 100 a month probably for year round.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "skipped",
+      "ts": "00:38",
+      "end_ts": "00:38",
+      "quote": "",
+      "customer_response": "no_answer",
+      "customer_quote": "I got my questions answered by the previous gentleman",
+      "resistance_reason": "already_have_quote",
+      "rep_followup": "moved_on",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
-      "ts": "",
-      "quote": ""
+      "status": "skipped",
+      "ts": "02:11",
+      "end_ts": "02:18",
+      "quote": "Alright. Well, hey. You have a good one. Stay safe.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. You too. Bye bye.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "declined"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "00:13",
+      "quote": "and, yeah, I'm not not really interested. I was just getting some information about, you know, solar panels themselves.",
+      "type": "not_interested",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Just to make sure, you know, we're on the same page. So you were looking more of, like, just the equipment aspects, not like a full installation or anything like that?"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep made one clarifying attempt but never directly countered the not-interested statement itself; the customer restates decline two more times before the call ends, and the rep never runs a second distinct angle."
+    },
+    {
+      "ts": "01:19",
+      "quote": "I really don't need solar panels. My electricity usage is relatively small, and payback period is probably too long.",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Gotcha. Well, I know that our program, it just replaces your current electric bill with a a cheaper solar payment. Right?"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "The rep first asked a bill-capture qualifying question (01:35-01:50) between the objection and the response, then delivered one generic program-benefit line without tailoring it to the stated payback concern; the customer closed the call immediately after, unpersuaded."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "objection engagement on marginal leads",
-    "ts": "01:12",
-    "quote": "My electricity usage is relatively small, and payback period is probably too long.",
-    "why": "The customer hands the rep a specific, reasoned objection (low usage, weak payback) and the rep moves straight to a qualifying question instead of engaging it at all — even a brief acknowledgment or reframe attempt would be a better rep habit to reinforce, though the manager should recognize this is a low-usage lead where a flip may not have converted the call regardless."
+    "topic": "Objection inversion / bill-anchor flip",
+    "ts": "01:56",
+    "quote": "Gotcha. Well, I know that our program, it just replaces your current electric bill with a a cheaper solar payment. Right?",
+    "why": "The rep had both the customer's explicit payback-period objection and the actual bill figure in hand and still delivered a generic program line instead of a tailored flip — this is the single highest-leverage missed move on the call."
   },
   "key_moments": [
     {
       "ts": "00:20",
-      "quote": "I thought you were a solar panel provider, but it sounds like you install complete roofs and solar panels.",
-      "classification": "other",
-      "stewart_read": "Customer voices a genuine offering-confusion (thinks Ion is roofing-first, not solar-first) rather than a Tesla-brand expectation gap — this call used the standard form-fill intro, not the Tesla intro, so there is no Tesla lead-source context here. The rep never corrects the misunderstanding about what Ion actually installs."
+      "quote": "I, thought you were a solar panel provider, but it sounds like you install complete roofs and solar panels.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The customer surfaces a scope-confusion about what Ion does (roofing vs. panels) stemming from an earlier touch, not from this rep's intro. This is a general legitimacy/clarity gap in how the company's offering was previously represented to him, not the Tesla-specific expectation gap since this is a standard form-fill lead, not a Tesla-sourced one."
     },
     {
-      "ts": "00:13",
-      "quote": "I already talked to somebody about that. I called back. I was in a in an appointment. I couldn't respond.",
-      "classification": "other",
-      "stewart_read": "Customer discloses a prior Ion touch and a prior conversation ('the previous gentleman') where he says his questions were already answered. The rep never asks what was discussed or by whom, losing the chance to reconcile this call with what was already promised or explained."
+      "ts": "00:38",
+      "quote": "but, anyway, I I'm good. I I got my questions answered by the previous gentleman, so I'm I'm all squared away.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a prior conversation with another Ion rep who apparently answered his questions. The rep never asks what was covered or what the prior rep told him, losing a chance to reconcile information and re-engage using that context."
     },
     {
-      "ts": "01:12",
-      "quote": "My electricity usage is relatively small, and payback period is probably too long.",
+      "ts": "00:38",
+      "quote": "but, anyway, I I'm good. I I got my questions answered by the previous gentleman, so I'm I'm all squared away.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "This is a textbook cost/payback objection that the schema flags for an inversion flip. The rep does not attempt any reframe here, moving instead to a bill-amount qualifying question."
+      "stewart_read": "This is the customer's second decline signal within the first minute of the call, which the script's hello_objection protocol treats as a trigger for an acknowledge-then-small-ask response. The rep does not run that protocol at all — no 30-second ask, no acknowledgment of the objection before pivoting to a scope-clarifying question."
     },
     {
-      "ts": "01:35",
-      "quote": "is your electric bill, is it over a $100 a month or is it less?",
-      "classification": "bill_anchor",
-      "stewart_read": "Rep does capture a bill anchor, but asks it as a binary threshold rather than an open figure, and asks it after two explicit declines rather than early in the call."
+      "ts": "01:19",
+      "quote": "I really don't need solar panels. My electricity usage is relatively small, and payback period is probably too long.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a textbook cost/payback objection that the schema's objection_inversion pattern is built for, but the rep's next move (01:35) is a bill-amount qualifying question, not a flip. No version of 'what's actually costly is staying on a bill that never goes away, even a small one' is attempted."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 26,
-    "verified": 25,
+    "checked": 35,
+    "verified": 34,
     "fuzzy": 0,
     "wrong_ts": 1,
     "not_found": 0

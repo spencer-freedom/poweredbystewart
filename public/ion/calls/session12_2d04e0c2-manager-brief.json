@@ -1,164 +1,267 @@
 {
   "call_id": "SESSION12_2d04e0c2",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens neutral and stays mostly flat — verify items are collected efficiently but without depth, and the one real anchor (a wide $50-300 bill range) is acknowledged generically rather than flipped into urgency. The call ends without a locked appointment, a locked bill-delivery time, or a booked closer call, just a loose 'keep in touch.'",
-  "shape": "energy_leaked",
-  "outcome_dispute": "The transcript never produces a scheduled closer appointment, a specific day/time, or even a firm bill-delivery deadline — the rep ends with 'around the end of day' as their own guess, not a customer commitment. This should be scored no_appointment, not booked or tentative.",
+  "trajectory_summary": "The call moves through verify items efficiently and captures strong qualifiers (18-year homeowner, 3-year roof, ~800 credit score, high bill range) but ends soft: no bill on hand, no locked appointment day/time, and a vague 'end of the day' expectation for follow-up. Energy neither builds sharply nor collapses — it's a workmanlike qualify-and-punt call that leaves the actual appointment step unresolved.",
+  "shape": "mixed",
+  "outcome_dispute": "The call never states a day/time appointment at all — there is no appointment_set beat in this transcript. This should be scored no_appointment / callback rather than any 'booked' tag, since the only forward commitment is the customer sending a bill 'maybe' by end of day.",
   "observed_outcome": {
-    "outcome": "no_appointment",
+    "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "04:40",
     "quote": "Yeah. That sounds great. I'll look forward to that, around the end of the day, and then we will keep in touch.",
-    "reasoning": "No closer appointment day/time was ever set on this call; the only 'commitment' is the customer possibly sending a bill by an unconfirmed timeframe the rep himself proposed, which does not meet the bar for tentative or booked."
+    "reasoning": "No day/time appointment is ever stated. The only forward motion is the customer possibly sending his bill by end of day and the rep saying they'll 'keep in touch' — a vague callback posture, not a booked or tentative appointment."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "02:11",
-    "bill_quote": "Between 50 to 300?",
+    "bill_quote": "Between 50",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep acknowledged the bill as 'quite high' at 02:22 but only offered generic reassurance ('we'll definitely help get that cut down for you') rather than tying it to urgency or reason-to-act; the flip should have landed at that exact line."
+    "reasoning": "The customer's answer trails off at 'Between... 50' and the rep fills in 'to 300?' himself without an explicit re-confirmation, making the captured number ambiguous. The rep acknowledges it's high ('That is quite high, so we'll definitely help get that cut down for you') but never flips it into leverage later in the call — no tieback to the bill when pushing for the document or closing."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "03:03",
+    "ask_quote": "the only thing I'll need from you is just a copy of your kilowatt usage on your Pepco bill.",
+    "result": "promised_later",
+    "method": "text",
+    "result_ts": "03:55",
+    "result_quote": "Maybe I'll send you later on.",
+    "reasoning": "Rep asked for the bill, offered to text a link for the customer to send usage data, but the customer could not do it live and deferred to send it at an unspecified later time — no firm commitment window was locked."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "01:26",
     "reason_given": true,
-    "reason_ts": "01:33",
+    "reason_ts": "01:37",
     "reason_quote": "Just like the my neighbor, they got installed solar last week. So let me also check what are the subsidy, how much the thing that is. I'm just checking.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked what got them interested and the customer gave a specific neighbor-driven reason plus a subsidy question, but the rep's reply ('you're just kinda seeing what solar would look like for you') filed the reason away without ever returning to the neighbor proof-point or subsidy curiosity later in the call."
+    "reasoning": "Customer gives a clear reason (neighbor influence, curiosity about subsidies) but the rep never references the neighbor or the subsidy question again later in the call — no tieback in the close or bill-collection push."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:08",
-      "quote": "This is Holland with Ion. I got a request for looking into solar for your home."
+      "end_ts": "00:15",
+      "quote": "This is Holland with Ion. I got a request for looking into solar for your home.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm doing good.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:26",
-      "quote": "what kind of got you guys looking into solar?"
+      "end_ts": "01:50",
+      "quote": "what kind of got you guys looking into solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "Just like the my neighbor, they got installed solar last week.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:23",
-      "quote": "I've got your address here as 265 Shadow Glen Court"
+      "end_ts": "00:40",
+      "quote": "First off, I've got your address here as 265 Shadow Glen Court in Gettysburg, Maryland. Is that correct?",
+      "customer_response": "no_answer",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:15",
-      "quote": "Is there anybody else on the title of the home with you?"
+      "end_ts": "01:26",
+      "quote": "Is there anybody else on the title of the home with you?",
+      "customer_response": "cooperative",
+      "customer_quote": "My wife.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:03",
-      "quote": "I see that your roof is just regular asphalt shingle. Do you know how old your roof is?"
+      "end_ts": "01:13",
+      "quote": "I see that your roof is just regular asphalt shingle. Do you know how old your roof is?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm three years old.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:58",
-      "quote": "Who is your electric company?"
+      "end_ts": "02:02",
+      "quote": "Who is your electric company?",
+      "customer_response": "cooperative",
+      "customer_quote": "PECO.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:06",
-      "quote": "how much are you spending on average a month with Petco?"
+      "end_ts": "02:22",
+      "quote": "how much are you spending on average a month with Petco?",
+      "customer_response": "cooperative",
+      "customer_quote": "Between 50",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:22",
-      "quote": "As long as you have a credit score above 670, then you'll qualify."
+      "end_ts": "02:40",
+      "quote": "As long as you have a credit score above 670, then you'll qualify. So is that the case for you or your wife?",
+      "customer_response": "cooperative",
+      "customer_quote": "We are above almost 800.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "02:44",
-      "quote": "have you ever looked into solar before, or is this your first time?"
+      "end_ts": "02:50",
+      "quote": "have you ever looked into solar before, or is this your first time?",
+      "customer_response": "cooperative",
+      "customer_quote": "Not really. Not really.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:03",
-      "quote": "the only thing I'll need from you is just a copy of your kilowatt usage on your Pepco bill"
+      "end_ts": "03:59",
+      "quote": "the only thing I'll need from you is just a copy of your kilowatt usage on your Pepco bill.",
+      "customer_response": "resistant",
+      "customer_quote": "And then you could just I can't do it right now.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "persisted",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "quote": ""
+      "status": "asked",
+      "ts": "04:40",
+      "end_ts": "04:47",
+      "quote": "I'll look forward to that, around the end of the day, and then we will keep in touch.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Thank you.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "03:30",
+      "quote": "And then you could just I can't do it right now. I'll maybe it'll give me some text.",
+      "type": "timing_or_callback",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "Well, the so the usage is what we need to actually build out the estimate. That's how we determine how many solar panels you need.",
+        "So if you can send that over to me, then I can get this all finished and we can"
+      ],
+      "resolved": true,
+      "resolution_ts": "03:55",
+      "reasoning": "Customer resists sending the bill live; rep explains the technical necessity and then re-asks for it to be sent over before conceding to a delayed send, which the customer accepts."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored call close / no locked next step",
+    "topic": "unanchored close / no appointment locked",
     "ts": "04:40",
     "quote": "Yeah. That sounds great. I'll look forward to that, around the end of the day, and then we will keep in touch.",
-    "why": "The call ends with zero concrete commitment — no appointment, no confirmed bill-delivery time, just the rep's own guess at a timeframe. This is a paycheck-relevant gap since nothing here converts to a sit without a disciplined follow-up trigger."
+    "why": "The entire call produces zero booked appointment and zero specific follow-up time — the rep never states a day/time for either the bill follow-up or a closer appointment, which is the single deliverable of a setter call."
   },
   "key_moments": [
     {
-      "ts": "00:08",
-      "quote": "Awesome. This is Holland with Ion. I got a request for looking into solar for your home.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "Rep names the company and references an inbound request, which is a reasonable legitimacy anchor for a warm/organic lead, but there's no state or referral-source specificity to further reduce scam suspicion."
+      "ts": "00:23",
+      "quote": "First off, I've got your address here as 265 Shadow Glen Court in Gettysburg, Maryland. Is that correct?",
+      "classification": "protocol_violation",
+      "stewart_read": "The rep reads the address but the transcript shows no clear customer confirmation before the rep moves to 'Let me pull that up here' — a hard-DQ-relevant verify item (homeowner/address) is left unconfirmed on the record."
     },
     {
-      "ts": "01:33",
-      "quote": "Just like the my neighbor, they got installed solar last week. So let me also check what are the subsidy, how much the thing that is.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer hands the rep a strong anchor — a neighbor's recent install plus an explicit ask about subsidy amounts — and the rep's response ('you're just kinda seeing what solar would look like for you') flattens it into disinterest rather than building on the neighbor-proof-point or the subsidy curiosity."
+      "ts": "01:44",
+      "quote": "let me also check what are the subsidy, how much the thing that is. I'm just checking.",
+      "classification": "knowledge_gap_handling",
+      "stewart_read": "Customer raises a subsidy/incentive question that borders on closer-tier financial content. The rep does not address it directly in the transcript — he moves straight to 'Yeah. Okay. So you're just kinda seeing what solar would look like for you?' without answering or bridging to the specialist."
     },
     {
       "ts": "02:11",
-      "quote": "Between 50 to 300?",
+      "quote": "Between 50",
       "classification": "bill_anchor",
-      "stewart_read": "The customer's answer is a wide, vague range rather than a specific number, but the rep repeats it back and files it as 'quite high' without clarifying or narrowing it into a concrete figure to anchor against."
+      "stewart_read": "The customer's answer trails off after 'Between... 50' and the rep supplies the rest of the range himself ('to 300? Okay.') without an explicit re-confirmation that this is accurate. This is ambiguous: it could be the rep finishing a sentence he half-heard, or the rep guessing a number the customer never stated cleanly."
     },
     {
-      "ts": "02:22",
+      "ts": "02:15",
       "quote": "That is quite high, so we'll definitely help get that cut down for you.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "This is the exact flip point — bill captured, and the rep's own language ('quite high') is teed up to pivot into alignment-against-the-utility, but the line stays generic reassurance instead of turning the number into the customer's reason to act now."
+      "stewart_read": "The rep acknowledges the bill is high and moves on — capture-and-drop rather than capture-and-flip. He never turns the number into the customer's own reason to act later in the call."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 35,
-    "verified": 34,
+    "checked": 49,
+    "verified": 49,
     "fuzzy": 0,
-    "wrong_ts": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

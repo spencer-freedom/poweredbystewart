@@ -1,26 +1,36 @@
 {
   "call_id": "SESSION12_93ede28c",
   "rep_name": null,
-  "trajectory_summary": "The call opens with a legitimacy-thin intro and a customer who is traveling and audibly distracted, yet the rep pushes through the full verify script rather than adapting to the stated constraint. The call ends without a locked appointment — only a vague plan to text the bill and 'schedule' later, with the customer's preferred callback window captured almost as an afterthought.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "V1 tag is unknown/unclear; the observed transcript supports 'callback' at best, not 'booked' — no day or time was set for an appointment, only a promise to follow up once the customer sends a bill photo or email.",
+  "trajectory_summary": "This is a logistically messy call — the customer is distracted, traveling, and hard to hear, and the transcript itself is difficult to parse with confidence. The rep pushes through the verify sequence largely on schedule, captures a bill figure (with a notable inconsistency), and lands on a reasonable fallback plan (text later, call back to schedule) rather than forcing an appointment the customer can't commit to cleanly. It's a soft, deferred outcome rather than a clean booked appointment.",
+  "shape": "mixed",
+  "outcome_dispute": "The call does not end with a locked day/time appointment — the rep says 'I'll call you back to schedule you' after receiving the bill photo, which is a callback-pending-document outcome, not a booked or even clearly tentative appointment. This should be read as callback, not booked.",
   "observed_outcome": {
     "outcome": "callback",
-    "appointment_channel": "unclear",
+    "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "06:16",
-    "quote": "That's no problem. So I'm gonna text you. And then whenever you get back, you can text me a picture of that graph, and then I can schedule you. Okay?",
-    "reasoning": "No day or time was locked for an appointment; the rep's plan is to text the customer, wait for a bill photo/email once the customer returns home, and schedule at that later point. The customer also offered a preferred callback window (10am-noon mountain time) that was never confirmed by the rep, leaving the outcome as an open callback rather than a booked or even tentative appointment."
+    "quote": "So I'm gonna text you. And then whenever you get back, you can text me a picture of that graph, and then I can schedule you. Okay?",
+    "reasoning": "No day or time was locked; the rep explicitly plans to call back to schedule once the bill photo is received, and the customer separately states a preferred callback window, making this a callback-pending-document outcome rather than a booked or tentative appointment."
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "05:37",
-    "bill_quote": "The power is about $1.80 a month.",
+    "bill_ts": "03:08",
+    "bill_quote": "I would say around $2.50, $2.75.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "A bill figure was spoken by the customer, but the transcription is visibly garbled ('$1.80 a month' is not a plausible utility bill), so this should be treated as a low-confidence capture — the rep never verbally confirmed or repeated the number back. Regardless of the true figure, the rep did not flip it into an emotional anchor; the rep instead moved immediately to asking about online bill access without acknowledging the number at all."
+    "reasoning": "The rep captured a bill figure at 03:08 ('around $2.50, $2.75') and a conflicting second figure at 05:40 ('$1.80 a month') but never used either number to build urgency or align the customer against the utility — both instances were logged and the conversation moved on. The discrepancy between the two figures also went unaddressed, which compounds the missed flip since the rep never even confirmed which number was accurate."
+  },
+  "bill_document_audit": {
+    "asked": true,
+    "ask_ts": "05:21",
+    "ask_quote": "So are you able to access the power bill online, like, through Excel?",
+    "result": "promised_later",
+    "method": "text",
+    "result_ts": "06:16",
+    "result_quote": "So I'm gonna text you. And then whenever you get back, you can text me a picture of that graph, and then I can schedule you. Okay?",
+    "reasoning": "The customer could not access the bill on the call because he was traveling; the rep set up a text-based photo submission for when the customer returns home, with the customer additionally asking that it be sent to his email as well."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -31,133 +41,225 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar; the call moved straight from intro into address/title verification and never circled back to motivation."
+    "reasoning": "The rep never explicitly asked what interested the customer in solar; the call jumped from the form-fill reference straight into address/title/utility verify questions, and the customer never volunteered a motivation."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:36",
-      "quote": "This is with ION. I'm reaching out about that solar form you filled out online."
+      "end_ts": "00:50",
+      "quote": "Hey. This is with ION. I'm reaching out about that solar form you filled out online. How are you doing?",
+      "customer_response": "resistant",
+      "customer_quote": "I'm doing okay. Who who you calling from?",
+      "resistance_reason": "trust",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "interest_question",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:52",
-      "quote": "Are you at 7989 South Country Club Parkway?"
+      "end_ts": "01:58",
+      "quote": "Are you at 7989 South Country Club Parkway?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:58",
-      "quote": "Is there anybody else on the title but you?"
+      "end_ts": "02:03",
+      "quote": "Is there anybody else on the title but you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. My wife.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "03:16",
-      "quote": "And then your roof, is it a shingle?"
+      "end_ts": "03:35",
+      "quote": "And then your roof, is it a shingle?",
+      "customer_response": "deflected",
+      "customer_quote": "I just well, they're not like wood shingle. I I I couldn't you know, I'm I'm trying to visualize, but, yeah.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:07",
-      "quote": "What utility company you're with?"
+      "end_ts": "02:57",
+      "quote": "What power company are you with?",
+      "customer_response": "deflected",
+      "customer_quote": "I wonder if you could... Yeah. I think it is because, there are two companies that I deal with, and I think one of them has, burglar alarms and stuff like that, and the other one is the electric.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "03:01",
-      "quote": "How much do you spend on your electric every month?"
+      "end_ts": "03:15",
+      "quote": "How much do you spend on your electric every month?",
+      "customer_response": "cooperative",
+      "customer_quote": "I would say around $2.50, $2.75. It all depends.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "military",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
       "status": "not_reached",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "05:21",
-      "quote": "So are you able to access the power bill online, like, through Excel?"
+      "end_ts": "06:16",
+      "quote": "So are you able to access the power bill online, like, through Excel?",
+      "customer_response": "deflected",
+      "customer_quote": "No. I'm I'm with my wife. I I haven't seen her for a long time, and and she's been over here, in Philadelphia. That's where I am right now for the next couple of days. I'll be back home on Friday.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "skipped",
-      "ts": "06:16",
-      "quote": "I can schedule you"
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "button_up",
       "status": "skipped",
       "ts": "",
-      "quote": ""
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    }
+  ],
+  "objections": [
+    {
+      "ts": "05:59",
+      "quote": "No. Not no. I'm I'm with my wife. I I haven't seen her for a long time, and and she's been over here, in Philadelphia.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "That's no problem. So I'm gonna text you. And then whenever you get back, you can text me a picture of that graph, and then I can schedule you. Okay?"
+      ],
+      "resolved": true,
+      "resolution_ts": "06:24",
+      "reasoning": "Customer cannot access the bill because he's traveling; rep adapts with a single alternative (text later) which the customer accepts without further pushback."
     }
   ],
   "primary_coaching_focus": {
-    "topic": "converting a customer-offered callback window into a locked appointment",
-    "ts": "06:31",
-    "quote": "I yeah. You know, if you call me, like, between ten and noon, my time mountain time... it's really a it's it's a good time for me if you're available at that time.",
-    "why": "The customer handed the rep a specific, unprompted availability window at the very end of the call, and the rep let the call close without repeating it back or locking it — this is the single highest-leverage fixable moment on the call, turning a soft, contingent follow-up into a real scheduled touch."
+    "topic": "Unreconciled bill-figure discrepancy",
+    "ts": "05:40",
+    "quote": "$1.80 a month.",
+    "why": "The customer gave two different monthly bill figures ($250-275 at 03:08, then $1.80 — likely meant $180 — at 05:40) and the rep never paused to reconcile which is correct; since the entire design and pitch anchors on this number, this is the most consequential data-quality gap on the call."
   },
   "key_moments": [
     {
       "ts": "00:43",
       "quote": "I'm doing okay. Who who you calling from?",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The customer's immediate question about call origin is a legitimacy check the rep answers with a bare 'Ion Solar' rather than the fuller specificity the protocol calls for (referencing the online form directly and with more context)."
+      "stewart_read": "The customer questions the caller's origin almost immediately after the rep's opening line, suggesting the initial company framing didn't land clearly on first pass."
     },
     {
-      "ts": "03:55",
-      "quote": "you know, if I could see that guy, I probably would throw him off the cliff.",
+      "ts": "01:37",
+      "quote": "Oh, okay. I can just And I just got a few questions to get started. And then I mean, I can start right now. Is that cool?",
+      "classification": "conditional_booking",
+      "stewart_read": "Rather than accepting the customer's offer to call back when he's home and less distracted, the rep pushes to run verify immediately — a reasonable move to not lose the live contact, but it produces a garbled utility-company answer and a bill-figure inconsistency later."
+    },
+    {
+      "ts": "03:54",
+      "quote": "if I could see that guy, I probably would throw him off the cliff.",
       "classification": "empathy_miss",
-      "stewart_read": "The customer discloses being burned by a refinance scam that damaged his credit score — a trust-gift vulnerability moment. The rep's response is a flat acknowledgment before returning to script."
+      "stewart_read": "Customer discloses a lengthy, emotionally charged story about a refinance scam that tanked his credit — a vulnerability disclosure per schema. The rep's response is minimal."
     },
     {
       "ts": "04:56",
       "quote": "Yeah. That's okay. So",
       "classification": "empathy_miss",
-      "stewart_read": "This is the rep's actual response to the extended scam/credit-score story, and it is minimal — a two-word acknowledgment before attempting to redirect back to script."
-    },
-    {
-      "ts": "05:21",
-      "quote": "So are you able to access the power bill online, like, through Excel?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer had just given a bill figure ('$1.80 a month' — almost certainly a garbled transcription of a real number) and the rep does not acknowledge or reflect the figure at all, jumping straight to asking about online access."
+      "stewart_read": "This is the rep's actual reply to the scam/credit-damage story — a flat, non-specific acknowledgment that moves past the disclosure without engaging its content."
     }
   ],
   "pipeline": {
     "version": "v3.1",
-    "prompt_hash": "e8cdaf80b4dc",
+    "prompt_hash": "39bf251eeb6b",
     "stage3_model": "claude-sonnet-5",
     "stage4_model": "claude-sonnet-5",
     "batch": true,
-    "run_at": "2026-09-12T23:31:17+00:00",
+    "run_at": "2026-09-13T19:17:38+00:00",
     "revision_applied": true
   },
   "quote_verification": {
-    "checked": 29,
-    "verified": 29,
-    "fuzzy": 0,
+    "checked": 40,
+    "verified": 39,
+    "fuzzy": 1,
     "wrong_ts": 0,
     "not_found": 0
   }
