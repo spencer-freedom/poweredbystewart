@@ -93,7 +93,7 @@ export const INVARIANTS: Invariant[] = [
       "What pain/excitement are we anchoring this conversation around — preferably multiple anchors?",
     job: "Capture two anchors — the customer's utility bill AND whatever has them interested in solar. Pain on one side, excitement on the other; both become the frames the rest of the call references back to. The script asks 'what has you interested in solar' for a reason. For a smaller % of customers the excitement is the bigger anchor than the bill swap — don't stop at the bill and assume that's everything.",
     failure_state:
-      "Bill becomes a checklist data point instead of leverage. The 'what interested you in solar' answer gets captured once and never referenced again — reps gloss over it and move on. Customer feels processed, not heard. Reframe opportunities downstream collapse because there's no anchor to point back to. Ion corpus: 0 of 332 calls flipped the bill.",
+      "Bill becomes a checklist data point instead of leverage. The 'what interested you in solar' answer gets captured once and never referenced again — reps gloss over it and move on. Customer feels processed, not heard. Reframe opportunities downstream collapse because there's no anchor to point back to. Ion corpus, measured: 5 of the 189 calls that captured the bill flipped it.",
     maturity: {
       l1: {
         label: "Mechanical execution",
