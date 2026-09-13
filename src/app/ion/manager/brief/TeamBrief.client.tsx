@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AudioClip, tsToSeconds } from "../../(public)/_components/AudioClip.client";
 import { CallDetailDrawer } from "../../(public)/calls/CallDetailDrawer.client";
 import { FUNNEL_SECTIONS, ScriptFunnel, type FunnelInput } from "../../present/_components/ScriptFunnel.client";
-import type { TriageComponents, TriageIndex, TriageRow } from "../types";
+import type { ExemplarClip, TriageComponents, TriageIndex, TriageRow } from "../types";
 import { NowPlaying, useBriefPlayer, type Segment } from "./BriefPlayer.client";
 
 // The morning brief, organized the way a manager thinks: my team, one rep
@@ -114,16 +114,25 @@ export function TeamBrief({ index }: { index: TriageIndex }) {
           .filter((g): g is NonNullable<typeof g> => g !== null && g.gap > 0.1)
           .sort((a, b) => b.gap - a.gap)
           .slice(0, 3);
+        // Learn from: for each gap, the teammate who runs that section most
+        // (and sets when they do), with their clip — or the floor's best clip.
+        const learn = gaps.map((g) => {
+          const sec = index.exemplars?.[g.key];
+          const best = sec?.best_reps.find((b) => b.rep !== rep) ?? null;
+          const others = (sec?.clips ?? []).filter((c) => c.rep !== rep);
+          const clip: ExemplarClip | null = (best && others.find((c) => c.rep === best.rep)) || others[0] || null;
+          return { ...g, best, clip };
+        });
         return {
           rep, rs, ranked, today,
           set: rs.filter(isSet).length,
           coachedCount: rs.filter((r) => coached.has(r.call_id)).length,
-          gaps,
+          gaps: learn,
           funnel: funnelOf(rs),
         };
       })
       .sort((a, b) => (b.today?.score ?? 0) - (a.today?.score ?? 0));
-  }, [rows, coached, floorRates]);
+  }, [rows, coached, floorRates, index.exemplars]);
 
   const totalToday = team.filter((t) => t.today).length;
   const listening = Math.max(1, Math.round((totalToday * CLIP_LEN) / 60));
@@ -139,6 +148,16 @@ export function TeamBrief({ index }: { index: TriageIndex }) {
       segs.push({ kind: "clip", callId: r.call_id, start, end: start + CLIP_LEN, label: `${t.rep} at ${ts}` });
     } else {
       segs.push({ kind: "full", callId: r.call_id, label: `${t.rep} — the call` });
+    }
+    const g = t.gaps[0];
+    if (g?.best && g.clip) {
+      const who = g.clip.rep === g.best.rep ? g.best.rep : `${g.clip.rep}, one of the floor's best runs`;
+      segs.push({
+        kind: "say",
+        label: `${t.rep} — learn from ${g.best.rep}`,
+        text: `Where to take ${t.rep} next: ${g.label.toLowerCase()}. ${t.rep} runs it on ${Math.round(g.mine * 100)} percent of calls that reach it. ${g.best.rep} runs it on ${Math.round(g.best.rate * 100)} percent${g.best.set_rate_when_ran !== null ? ` and sets ${Math.round(g.best.set_rate_when_ran * 100)} percent when they do` : ""}. Here's ${who}, at ${g.clip.ts.replace(":", " ")}.`,
+      });
+      segs.push({ kind: "clip", callId: g.clip.call_id, start: g.clip.start_sec, end: g.clip.end_sec, label: `${g.clip.rep} — ${g.label}` });
     }
     return segs;
   };
@@ -272,9 +291,29 @@ export function TeamBrief({ index }: { index: TriageIndex }) {
                       <p className="text-[10px] uppercase tracking-wider text-stewart-muted mb-1">Runs these least, vs. the floor</p>
                       <ul className="space-y-1">
                         {t.gaps.map((g) => (
-                          <li key={g.key} className="flex items-baseline justify-between gap-2 text-xs">
-                            <span className="text-stewart-text">{g.short === "Bill $" ? "Bill amount" : g.label}</span>
-                            <span className="font-mono text-stewart-warning">{Math.round(g.mine * 100)}% <span className="text-stewart-muted">vs {Math.round(g.floor * 100)}%</span></span>
+                          <li key={g.key} className="text-xs">
+                            <div className="flex items-baseline justify-between gap-2">
+                              <span className="text-stewart-text">{g.short === "Bill $" ? "Bill amount" : g.label}</span>
+                              <span className="font-mono text-stewart-warning">{Math.round(g.mine * 100)}% <span className="text-stewart-muted">vs {Math.round(g.floor * 100)}%</span></span>
+                            </div>
+                            {g.best ? (
+                              <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-stewart-muted">
+                                <span>
+                                  Learn from <span className="font-semibold text-stewart-accent">{g.best.rep}</span> — {Math.round(g.best.rate * 100)}%
+                                  {g.best.set_rate_when_ran !== null ? <>, sets {Math.round(g.best.set_rate_when_ran * 100)}%</> : null}
+                                </span>
+                                {g.clip ? (
+                                  <button
+                                    type="button"
+                                    onClick={() => player.start([{ kind: "clip", callId: g.clip!.call_id, start: g.clip!.start_sec, end: g.clip!.end_sec, label: `${g.clip!.rep} — ${g.label}` }])}
+                                    className="inline-flex items-center gap-1 rounded border border-stewart-border px-1.5 py-0.5 text-[10px] text-stewart-text hover:border-stewart-accent/50"
+                                    title={`${g.clip.rep} at ${g.clip.ts}: “${g.clip.quote}”`}
+                                  >
+                                    ▶ {g.clip.rep} at {g.clip.ts}
+                                  </button>
+                                ) : null}
+                              </div>
+                            ) : null}
                           </li>
                         ))}
                       </ul>
