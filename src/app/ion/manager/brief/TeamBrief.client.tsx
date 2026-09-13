@@ -5,6 +5,7 @@ import { AudioClip, tsToSeconds } from "../../(public)/_components/AudioClip.cli
 import { CallDetailDrawer } from "../../(public)/calls/CallDetailDrawer.client";
 import { FUNNEL_SECTIONS, ScriptFunnel, type FunnelInput } from "../../present/_components/ScriptFunnel.client";
 import type { TriageComponents, TriageIndex, TriageRow } from "../types";
+import { NowPlaying, useBriefPlayer, type Segment } from "./BriefPlayer.client";
 
 // The morning brief, organized the way a manager thinks: my team, one rep
 // at a time. For each rep — the one call to train on today (highest
@@ -56,8 +57,18 @@ function runRate(rs: TriageRow[], key: string): number | null {
   return reached ? ran / reached : null;
 }
 
+// What Stewart says before each clip. Short, plain, in the manager's ear.
+function narrationFor(rep: string, calls: number, set: number, r: TriageRow, pos: number, total: number): string {
+  const lead = pos === 0 ? `Good morning. ${total} reps, one call each. First up, ${rep}.` : pos === total - 1 ? `Last one. ${rep}.` : `Next, ${rep}.`;
+  const flag = r.booked && r.unresolved_concerns ? "booked, but fragile" : r.shape === "stagnant" ? "stalled" : r.shape === "energy_built" ? "a good one to share" : "worth recovering";
+  const head = (r.headline || r.focus?.topic || "").replace(/\s+/g, " ").trim();
+  const why = (r.why || "").replace(/\s+/g, " ").trim();
+  return `${lead} ${calls} calls read, ${set} set. Today's call is ${flag}: ${head}. ${why} Here's the moment${r.focus?.ts ? `, at ${r.focus.ts.replace(":", " ")}` : ""}.`;
+}
+
 export function TeamBrief({ index }: { index: TriageIndex }) {
   const weights = index.default_weights;
+  const player = useBriefPlayer();
   const [coached, setCoached] = useState<Set<string>>(new Set());
   const [open, setOpen] = useState<TriageRow | null>(null);
   const [expanded, setExpanded] = useState<Record<string, "calls" | "script" | null>>({});
@@ -117,6 +128,23 @@ export function TeamBrief({ index }: { index: TriageIndex }) {
   const totalToday = team.filter((t) => t.today).length;
   const listening = Math.max(1, Math.round((totalToday * CLIP_LEN) / 60));
 
+  // The brief as audio: for each rep with a call today, Stewart's line, then the tape.
+  const withToday = team.filter((t) => t.today);
+  const segmentsFor = (t: (typeof team)[number], pos: number, total: number): Segment[] => {
+    const r = t.today!;
+    const ts = r.focus?.ts ?? null;
+    const segs: Segment[] = [{ kind: "say", text: narrationFor(t.rep, t.rs.length, t.set, r, pos, total), label: `${t.rep} — ${r.headline || r.focus?.topic || "today's call"}` }];
+    if (ts) {
+      const start = Math.max(0, tsToSeconds(ts) - CLIP_LEAD);
+      segs.push({ kind: "clip", callId: r.call_id, start, end: start + CLIP_LEN, label: `${t.rep} at ${ts}` });
+    } else {
+      segs.push({ kind: "full", callId: r.call_id, label: `${t.rep} — the call` });
+    }
+    return segs;
+  };
+  const playAll = () => player.start(withToday.flatMap((t, i) => segmentsFor(t, i, withToday.length)));
+  const playRep = (t: (typeof team)[number]) => player.start(segmentsFor(t, 1, 3));
+
   return (
     <div className="mx-auto max-w-md px-4 py-5">
       <header className="mb-4">
@@ -127,6 +155,17 @@ export function TeamBrief({ index }: { index: TriageIndex }) {
         <p className="text-xs text-stewart-muted mt-1">
           {index.total_calls} calls read · {totalToday} to coach today · ~{listening} min of listening
         </p>
+        {withToday.length ? (
+          <button
+            type="button"
+            onClick={playAll}
+            className="mt-3 inline-flex items-center gap-2 rounded-full bg-stewart-accent px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M8 5v14l11-7z" /></svg>
+            Play the brief
+            <span className="text-xs font-normal text-white/80">— Stewart reads it, the tape plays</span>
+          </button>
+        ) : null}
       </header>
 
       <ul className="space-y-3">
@@ -157,6 +196,15 @@ export function TeamBrief({ index }: { index: TriageIndex }) {
                   <p className="mt-1 text-sm font-semibold text-stewart-text leading-snug">{today.headline || today.focus?.topic || "Open the read"}</p>
                   <p className="mt-1 text-xs text-stewart-muted leading-relaxed">{today.why}</p>
                   <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => playRep(t)}
+                      title="Stewart reads this one, then plays the moment"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded border border-stewart-accent/50 bg-stewart-accent/10 text-[11px] font-semibold text-stewart-accent hover:bg-stewart-accent/20"
+                    >
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M8 5v14l11-7z" /></svg>
+                      Play
+                    </button>
                     {start !== null ? (
                       <AudioClip callId={today.call_id} startSec={start} endSec={start + CLIP_LEN} label="Play the moment" />
                     ) : (
@@ -249,6 +297,8 @@ export function TeamBrief({ index }: { index: TriageIndex }) {
       <p className="mt-5 text-[10px] text-stewart-muted italic leading-relaxed">
         Ranked from every call Stewart read. Reps with fewer than {TEAM_MIN_CALLS} calls aren&apos;t shown here yet.
       </p>
+
+      <NowPlaying player={player} />
 
       {open ? (
         <CallDetailDrawer
