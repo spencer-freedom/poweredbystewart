@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SCRIPT_SECTIONS, loadCorpusStats } from "../present/_lib/corpus";
+import { ScriptFunnel, type FunnelInput } from "../present/_components/ScriptFunnel.client";
 
 export const dynamic = "force-dynamic";
 
@@ -64,6 +65,20 @@ export default async function IonStatsPage() {
             <Tile label="Booked" big={`${s.outcomes.booked ?? 0}`} sub={`${pct(s.outcomes.booked ?? 0, s.calls)} of calls · +${s.outcomes.tentative ?? 0} tentative`} />
             <Tile label="Quotes grounded" big={`${(q.grounded_rate * 100).toFixed(1)}%`} sub={`${q.checked.toLocaleString()} checked · ${q.not_found} not found · ${q.wrong_ts} wrong timestamp`} good />
           </div>
+        </section>
+
+        {/* The script as a funnel — floor, or any rep */}
+        <section>
+          <h2 className="text-lg font-bold">Where the calls go</h2>
+          <p className="text-sm text-stewart-muted mt-1 mb-4">The script in order, wide at the intro and narrowing wherever calls end. Pick a rep to see their funnel against the floor&apos;s.</p>
+          <ScriptFunnel
+            floor={{ calls: s.calls, sections: Object.fromEntries(Object.entries(s.script_coverage).map(([k, v]) => [k, { asked: v.asked, skipped: v.skipped, not_reached: v.not_reached }])) }}
+            reps={Object.fromEntries(
+              Object.entries(s.reps)
+                .filter(([name, r]) => name !== "Unknown" && r.coverage && r.calls >= 5)
+                .map(([name, r]) => [name, { calls: r.calls, sections: Object.fromEntries(Object.entries(r.coverage!).map(([k, v]) => [k, { asked: v.asked, skipped: v.skipped, not_reached: v.not_reached }])) } as FunnelInput])
+            )}
+          />
         </section>
 
         {/* Script coverage */}

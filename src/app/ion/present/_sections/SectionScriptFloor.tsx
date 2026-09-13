@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Bridge } from "../_components/Bridge";
 import { SCRIPT_SECTIONS, loadCorpusStats } from "../_lib/corpus";
+import { ScriptFunnel } from "../_components/ScriptFunnel.client";
 
 // The floor against its own script — measured, not asserted. Every number
 // here is a count over the published corpus (public/ion/corpus-stats.json):
@@ -54,32 +55,17 @@ export async function SectionScriptFloor() {
           />
         </div>
 
-        {/* Coverage bars */}
+        {/* The script as a funnel — wide at the intro, narrowing where calls end. */}
         <div className="mt-12">
-          <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-muted mb-4">
-            Did the rep run it? &mdash; of the calls that got that far
-          </p>
-          <ol className="space-y-2.5">
-            {rows.map((row) => {
-              const pct = Math.round(row.rate_of_reached * 100);
-              const tone =
-                pct >= 75 ? "bg-stewart-success/70" : pct >= 45 ? "bg-stewart-accent/70" : "bg-stewart-warning/80";
-              return (
-                <li key={row.key} title={`ran it ${row.asked} · skipped ${row.skipped} · ${row.not_reached} calls ended before this`} className="grid grid-cols-[minmax(0,1fr)_3.25rem] sm:grid-cols-[minmax(0,18rem)_minmax(0,1fr)_3.25rem] items-center gap-3">
-                  <span className="text-sm text-stewart-text leading-tight">{row.label}</span>
-                  <div className="hidden sm:block h-2.5 rounded-full bg-white/5 overflow-hidden">
-                    <div className={"h-full rounded-full " + tone} style={{ width: `${pct}%` }} />
-                  </div>
-                  <span className="font-mono text-sm text-right text-stewart-text">{pct}%</span>
-                </li>
-              );
-            })}
-          </ol>
+          <ScriptFunnel
+            title="Your script, as a funnel"
+            floor={{ calls: s.calls, sections: Object.fromEntries(rows.map((r) => [r.key, { asked: r.asked, skipped: r.skipped, not_reached: r.not_reached }])) }}
+          />
           <p className="mt-4 text-xs text-stewart-muted">
-            &ldquo;Ran it&rdquo; means any phrasing, not the script&apos;s words. Each bar is out of the calls
-            that reached that section &mdash; a call that disqualified at the roof doesn&apos;t count against
-            button-up. Hover for the counts. &ldquo;Set&rdquo; is
-            Stewart&apos;s read of the call &mdash; booked or tentative &mdash; until your sits and closes are joined.
+            &ldquo;Ran it&rdquo; means any phrasing, not the script&apos;s words. A call that disqualified at the
+            roof never got to button-up, so it doesn&apos;t count against it. Hover a row for the counts.
+            &ldquo;Set&rdquo; is Stewart&apos;s read of the call &mdash; booked or tentative &mdash; until your sits
+            and closes are joined. The same funnel exists for every rep.
           </p>
         </div>
 

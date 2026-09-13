@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AudioClip, tsToSeconds } from "../(public)/_components/AudioClip.client";
 import { CallDetailDrawer } from "../(public)/calls/CallDetailDrawer.client";
 import type { TriageComponents, TriageIndex, TriageRow } from "./types";
+import { FUNNEL_SECTIONS, ScriptFunnel, type FunnelInput } from "../present/_components/ScriptFunnel.client";
 
 // The manager surface, for real. Three views:
 //   Today  — the N calls worth a manager's time, ranked by the triage score,
@@ -748,8 +749,36 @@ function Floor({ rows, onPick }: { rows: TriageRow[]; onPick: (rep: string) => v
   const shown = reps.filter((r) => r.calls >= minCalls);
   const pct = (v: number | null) => (v === null ? "–" : `${Math.round(v * 100)}`);
 
+  // Funnel inputs from the same rows: floor, and every rep with enough calls.
+  const funnel = useMemo(() => {
+    const build = (rs: TriageRow[]): FunnelInput => ({
+      calls: rs.length,
+      sections: Object.fromEntries(
+        FUNNEL_SECTIONS.map((s) => [
+          s.key,
+          {
+            asked: rs.filter((r) => r.coverage?.[s.key] === "asked").length,
+            skipped: rs.filter((r) => r.coverage?.[s.key] === "skipped").length,
+            not_reached: rs.filter((r) => !r.coverage?.[s.key] || r.coverage[s.key] === "not_reached").length,
+          },
+        ])
+      ),
+    });
+    const byRep: Record<string, FunnelInput> = {};
+    for (const r of reps) if (r.calls >= minCalls && r.rep !== "Unknown") byRep[r.rep] = build(rows.filter((x) => (x.rep_id || "Unknown") === r.rep));
+    return { floor: build(rows), byRep };
+  }, [rows, reps, minCalls]);
+
   return (
     <div>
+      <div className="mb-8">
+        <p className="text-xs uppercase tracking-wider text-stewart-muted">Where the calls go</p>
+        <h1 className="text-xl sm:text-2xl font-bold mt-1">The script as a funnel.</h1>
+        <div className="mt-3 rounded-lg border border-stewart-border bg-stewart-card p-4">
+          <ScriptFunnel floor={funnel.floor} reps={funnel.byRep} compact />
+        </div>
+      </div>
+
       <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-wider text-stewart-muted">The script, by rep</p>
