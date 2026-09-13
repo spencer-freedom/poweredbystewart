@@ -43,11 +43,44 @@ export type TriageRow = {
   score: number;
 };
 
+// Exemplar retrieval (build_ion_triage.py → exemplars): per script section,
+// the reps who run it most and the clips a manager should hand a rep.
+export type ExemplarClip = {
+  call_id: string;
+  slug: string;
+  rep: string | null;
+  ts: string;
+  start_sec: number;
+  end_sec: number;
+  quote: string;
+  customer_quote: string;
+  customer_response: string | null;
+  rep_followup: string | null;
+  set: boolean;
+  tier: 1 | 2 | 3;
+  score: number;
+};
+export type ExemplarBestRep = {
+  rep: string;
+  rate: number;
+  ran: number;
+  reached: number;
+  set_rate_when_ran: number | null;
+};
+export type ExemplarSection = {
+  label: string;
+  best_reps: ExemplarBestRep[];
+  clips: ExemplarClip[];
+  pool: number;
+};
+
 export type TriageIndex = {
   version: string;
   default_weights: TriageComponents;
   weight_labels: Record<keyof TriageComponents, string>;
   total_calls: number;
   reps: { rep_id: string; calls: number }[];
+  sections: { key: string; label: string }[];
+  exemplars: Record<string, ExemplarSection>;
   calls: TriageRow[];
 };

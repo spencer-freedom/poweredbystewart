@@ -38,6 +38,27 @@ DEFAULT_WEIGHTS = {
 }
 SHAPE_LEAK = {"energy_leaked": 1.0, "stagnant": 0.7, "mixed": 0.4, "energy_built": 0.0}
 
+# The 13 script sections, in script order. The model occasionally drifts a
+# name (credit_qualifier) — alias it back rather than drop the event.
+SECTIONS = [
+    "intro_legitimacy", "interest_question", "address_homeowner", "co_owner", "roof",
+    "utility_company", "bill_amount", "tax_credit_qualifier", "military", "prior_design",
+    "bill_collection", "appointment_set", "button_up",
+]
+SECTION_ALIAS = {"credit_qualifier": "tax_credit_qualifier", "credit_score_qualifier": "tax_credit_qualifier"}
+SECTION_LABEL = {
+    "intro_legitimacy": "Intro", "interest_question": "Interest question", "address_homeowner": "Address / homeowner",
+    "co_owner": "Co-owner", "roof": "Roof", "utility_company": "Utility", "bill_amount": "Bill amount",
+    "tax_credit_qualifier": "Tax-credit qualifier", "military": "Military", "prior_design": "Prior design",
+    "bill_collection": "Bill collection", "appointment_set": "Appointment", "button_up": "Button-up",
+}
+# Exemplar tiers — what a manager should have a rep listen to, best first:
+#   3  the customer pushed back, the rep stayed with it, and got it
+#   2  a clean run of the section on a call that set
+#   1  a clean run
+EXEMPLAR_FOLLOWUP = ("persisted", "alternative_offered")
+MIN_REACHED_FOR_BEST = 8
+
 FLIP_NEG = ("never", "not flipped", "no flip", "without", "doesn't flip", "does not flip",
             "fails to flip", "unused", "moves on", "moved on", "filed", "captured but", "capture alone")
 
@@ -64,6 +85,127 @@ def bill_flip_status(brief: dict | None, cps: list) -> str:
         return "no_bill"
     text = " ".join((m.get("stewart_read") or "") for m in bills).lower()
     return "not_flipped" if any(k in text for k in FLIP_NEG) else "unclear"
+
+
+def norm_section(name: str | None) -> str | None:
+    return SECTION_ALIAS.get(name or "", name)
+
+
+def ts_sec(ts: str | None) -> int | None:
+    if not ts or ":" not in str(ts):
+        return None
+    m, s = str(ts).split(":", 1)
+    try:
+        return int(m) * 60 + int(s)
+    except ValueError:
+        return None
+
+
+def event_exemplar(ev: dict, brief: dict, cid: str, slug: str, is_set: bool) -> dict | None:
+    """Score one script event as a training clip; None if it isn't one."""
+    if ev.get("status") != "asked":
+        return None
+    start = ts_sec(ev.get("ts"))
+    if start is None:
+        return None
+    resisted = ev.get("customer_response") == "resistant"
+    # Button-up is a checklist; the model marks it partial on almost every
+    # call. A partial button-up on a set call is still the thing to hear.
+    completed = ev.get("result") == "completed" or (ev.get("_section") == "button_up" and ev.get("result") == "partial")
+    if resisted and completed and ev.get("rep_followup") in EXEMPLAR_FOLLOWUP:
+        tier = 3
+    elif completed and is_set:
+        tier = 2
+    elif completed:
+        tier = 1
+    else:
+        return None
+    quote = (ev.get("quote") or "").strip()
+    cq = (ev.get("customer_quote") or "").strip()
+    score = tier * 10 + (2 if is_set else 0) + (1 if 25 <= len(quote) <= 220 else 0) + (1 if cq else 0)
+    end = ts_sec(ev.get("end_ts"))
+    end = max(end or 0, start + 10)
+    end = min(end, start + 45)
+    return {
+        "call_id": cid,
+        "slug": slug,
+        "rep": brief.get("rep_name"),
+        "ts": ev.get("ts"),
+        "start_sec": max(0, start - 2),
+        "end_sec": end,
+        "quote": quote,
+        "customer_quote": cq,
+        "customer_response": ev.get("customer_response"),
+        "rep_followup": ev.get("rep_followup"),
+        "set": is_set,
+        "tier": tier,
+        "score": score,
+    }
+
+
+def build_exemplars(rows: list[dict], events_by_call: dict[str, list[dict]]) -> dict:
+    """Per section: the reps who run it most (and set when they do) + the clips to learn from.
+
+    Deterministic. Diversity rules: one clip per call per section, at most two
+    per rep per section, six per section.
+    """
+    per_sec_clips: dict[str, list[dict]] = {s: [] for s in SECTIONS}
+    per_rep: dict[str, dict[str, dict]] = {}
+    for r in rows:
+        rep = r["rep_id"] or "Unknown"
+        stats = per_rep.setdefault(rep, {s: {"ran": 0, "reached": 0, "set_when_ran": 0} for s in SECTIONS})
+        for sec, st in r["coverage"].items():
+            if sec not in stats or st == "not_reached":
+                continue
+            stats[sec]["reached"] += 1
+            if st == "asked":
+                stats[sec]["ran"] += 1
+                if r["booked"]:
+                    stats[sec]["set_when_ran"] += 1
+        seen = set()
+        for ev in events_by_call.get(r["call_id"], []):
+            sec = ev.get("_section")
+            if sec not in per_sec_clips or sec in seen:
+                continue
+            x = event_exemplar(ev, ev["_brief"], r["call_id"], r["slug"], r["booked"])
+            if x:
+                seen.add(sec)
+                per_sec_clips[sec].append(x)
+
+    out = {}
+    for sec in SECTIONS:
+        best = []
+        for rep, stats in per_rep.items():
+            st = stats[sec]
+            if st["reached"] < MIN_REACHED_FOR_BEST or rep == "Unknown":
+                continue
+            best.append({
+                "rep": rep,
+                "rate": round(st["ran"] / st["reached"], 3),
+                "ran": st["ran"],
+                "reached": st["reached"],
+                "set_rate_when_ran": round(st["set_when_ran"] / st["ran"], 3) if st["ran"] else None,
+            })
+        best.sort(key=lambda b: (-b["rate"], -(b["set_rate_when_ran"] or 0), -b["reached"]))
+        # The reps who run the section best each bring their own best clip
+        # (so "learn from Tyke" comes with Tyke's tape), then the floor's best.
+        ranked = sorted(per_sec_clips[sec], key=lambda c: (-c["score"], c["call_id"]))
+        clips, per_rep_n = [], Counter()
+        for b in best[:3]:
+            own = next((c for c in ranked if c["rep"] == b["rep"]), None)
+            if own:
+                clips.append(own)
+                per_rep_n[own["rep"]] += 1
+        for c in ranked:
+            if c in clips or per_rep_n[c["rep"]] >= 2:
+                continue
+            per_rep_n[c["rep"]] += 1
+            clips.append(c)
+            if len(clips) >= 8:
+                break
+        out[sec] = {"label": SECTION_LABEL[sec], "best_reps": best[:5], "clips": clips,
+                    "pool": len(per_sec_clips[sec])}
+    return out
 
 
 def build_row(summary: dict) -> dict:
@@ -117,7 +259,9 @@ def build_row(summary: dict) -> dict:
         "observed_outcome": (brief.get("observed_outcome") or {}).get("outcome"),
         "reason_asked": (brief.get("interest_reason_audit") or {}).get("asked"),
         "reason_used": (brief.get("interest_reason_audit") or {}).get("reason_used"),
-        "coverage": {c["section"]: c["status"] for c in (brief.get("script_coverage") or []) if isinstance(c, dict) and c.get("section")},
+        "coverage": {norm_section(c["section"]): c["status"] for c in (brief.get("script_coverage") or []) if isinstance(c, dict) and c.get("section")},
+        "_events": [dict(c, _section=norm_section(c.get("section")), _brief=brief)
+                    for c in (brief.get("script_coverage") or []) if isinstance(c, dict) and c.get("section")],
         "counts": {
             "moments": len(cps),
             "protocol_violation": cls["protocol_violation"],
@@ -147,6 +291,9 @@ def main() -> None:
         r["score"] = round(sum(DEFAULT_WEIGHTS[k] * v for k, v in r["components"].items()), 3)
     rows.sort(key=lambda r: -r["score"])
 
+    events_by_call = {r["call_id"]: r.pop("_events") for r in rows}
+    exemplars = build_exemplars(rows, events_by_call)
+
     reps = Counter(r["rep_id"] or "Unknown" for r in rows)
     out = {
         "version": "1.0",
@@ -162,12 +309,15 @@ def main() -> None:
         "total_calls": len(rows),
         "reps": [{"rep_id": k, "calls": v} for k, v in reps.most_common()],
         "flip_summary": Counter(r["bill_flip"] for r in rows),
+        "sections": [{"key": k, "label": SECTION_LABEL[k]} for k in SECTIONS],
+        "exemplars": exemplars,
         "calls": rows,
     }
     (PUB / "triage-index.json").write_text(json.dumps(out, indent=1))
     print(f"wrote {len(rows)} rows → public/ion/triage-index.json")
     print("flip:", dict(out["flip_summary"]))
     print("grounded:", Counter(r["quotes"]["grounded"] for r in rows))
+    print("exemplars:", {k: (len(v["clips"]), v["pool"], v["best_reps"][0]["rep"] if v["best_reps"] else None) for k, v in exemplars.items()})
     print("top 6:")
     for r in rows[:6]:
         print(f"  {r['score']:5.2f} {r['rep_id'] or '?':8} {r['call_id']:22} {r['shape'] or '?':14} {r['headline'] or ''}")

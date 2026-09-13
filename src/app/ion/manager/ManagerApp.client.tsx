@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AudioClip, tsToSeconds } from "../(public)/_components/AudioClip.client";
 import { CallDetailDrawer } from "../(public)/calls/CallDetailDrawer.client";
-import type { TriageComponents, TriageIndex, TriageRow } from "./types";
+import type { ExemplarClip, ExemplarSection, TriageComponents, TriageIndex, TriageRow } from "./types";
 import { FUNNEL_SECTIONS, ScriptFunnel, type FunnelInput } from "../present/_components/ScriptFunnel.client";
 
 // The manager surface, for real. Three views:
@@ -159,6 +159,7 @@ export function ManagerApp({ index }: { index: TriageIndex }) {
   }, [ranked, coached, floorStats]);
 
   const max = maxScore(weights);
+  const byId = useMemo(() => new Map(ranked.map((r) => [r.call_id, r])), [ranked]);
 
   return (
     <div className="min-h-screen bg-stewart-bg text-stewart-text">
@@ -211,6 +212,8 @@ export function ManagerApp({ index }: { index: TriageIndex }) {
             reps={reps}
             max={max}
             labels={index.weight_labels}
+            exemplars={index.exemplars}
+            byId={byId}
             onPick={(rep) => {
               setRepFilter(rep);
               setTab("today");
@@ -459,6 +462,8 @@ function Reps({
   reps,
   max,
   labels,
+  exemplars,
+  byId,
   onPick,
   onOpen,
   coached,
@@ -466,6 +471,8 @@ function Reps({
   reps: RepRow[];
   max: number;
   labels: Record<WeightKey, string>;
+  exemplars: Record<string, ExemplarSection>;
+  byId: Map<string, TriageRow>;
   onPick: (rep: string) => void;
   onOpen: (r: TriageRow) => void;
   coached: Set<string>;
@@ -479,8 +486,8 @@ function Reps({
         <p className="text-sm text-stewart-muted mt-1">
           Biggest gap = the score component that runs highest across that rep&apos;s calls. Train here = the script
           sections this rep runs least often relative to the floor (points under, among calls that reached the section),
-          nudged toward the sections that move the set rate. Click a rep to see their calls; &ldquo;today&rdquo; filters the
-          morning list to them.
+          nudged toward the sections that move the set rate. Open a rep and Stewart names the teammate who runs that
+          section best, with the tape to learn it from; &ldquo;today&rdquo; filters the morning list to them.
         </p>
       </div>
       <div className="rounded-lg border border-stewart-border overflow-hidden">
@@ -490,7 +497,7 @@ function Reps({
               <th className="text-left px-3 py-2">Rep</th>
               <th className="text-right px-3 py-2">Calls</th>
               <th className="text-right px-3 py-2 hidden sm:table-cell">Avg score</th>
-              <th className="text-left px-3 py-2">Biggest gap</th>
+              <th className="text-left px-3 py-2 hidden sm:table-cell">Biggest gap</th>
               <th className="text-left px-3 py-2">Train here</th>
               <th className="text-left px-3 py-2 hidden md:table-cell">Shape mix</th>
               <th className="px-3 py-2" />
@@ -498,7 +505,7 @@ function Reps({
           </thead>
           <tbody>
             {reps.map((x) => (
-              <RepLine key={x.rep} x={x} max={max} labels={labels} expanded={expanded === x.rep} onExpand={() => setExpanded(expanded === x.rep ? null : x.rep)} onPick={onPick} onOpen={onOpen} coached={coached} />
+              <RepLine key={x.rep} x={x} max={max} labels={labels} exemplars={exemplars} byId={byId} expanded={expanded === x.rep} onExpand={() => setExpanded(expanded === x.rep ? null : x.rep)} onPick={onPick} onOpen={onOpen} coached={coached} />
             ))}
           </tbody>
         </table>
@@ -511,6 +518,8 @@ function RepLine({
   x,
   max,
   labels,
+  exemplars,
+  byId,
   expanded,
   onExpand,
   onPick,
@@ -520,6 +529,8 @@ function RepLine({
   x: RepRow;
   max: number;
   labels: Record<WeightKey, string>;
+  exemplars: Record<string, ExemplarSection>;
+  byId: Map<string, TriageRow>;
   expanded: boolean;
   onExpand: () => void;
   onPick: (rep: string) => void;
@@ -547,7 +558,7 @@ function RepLine({
         <td className="px-3 py-2 text-right font-mono text-stewart-muted hidden sm:table-cell">
           {x.avg.toFixed(1)} <span className="text-[10px]">/ {max.toFixed(0)}</span>
         </td>
-        <td className="px-3 py-2 text-stewart-text">{labels[x.gap.k]}</td>
+        <td className="px-3 py-2 text-stewart-text hidden sm:table-cell">{labels[x.gap.k]}</td>
         <td className="px-3 py-2">
           {x.train.length ? (
             <span className="flex flex-wrap gap-1">
@@ -577,6 +588,14 @@ function RepLine({
       {expanded ? (
         <tr className="border-t border-stewart-border/60 bg-stewart-bg/60">
           <td colSpan={7} className="px-3 py-3">
+            {x.train.length ? (
+              <div className="mb-4 space-y-3">
+                {x.train.map((t) => (
+                  <LearnFrom key={t.key} rep={x.rep} train={t} section={exemplars[t.key]} byId={byId} onOpen={onOpen} />
+                ))}
+              </div>
+            ) : null}
+            <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-1">All calls, ranked</p>
             <ul className="divide-y divide-stewart-border/60">
               {x.rows.map((r) => (
                 <li key={r.call_id} className="py-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
@@ -593,6 +612,110 @@ function RepLine({
         </tr>
       ) : null}
     </>
+  );
+}
+
+// ── Learn from ──────────────────────────────────────────────────────────
+// "Train here" says where the gap is. This says who on the floor closes it
+// and hands over the tape: the teammate who runs the section most (and sets
+// when they do), then the best clips of that section — resisted-and-won
+// first, then clean runs on set calls. Deterministic, from the same reads.
+
+const FOLLOWUP_LABEL: Record<string, string> = {
+  persisted: "stayed with it",
+  alternative_offered: "offered another way",
+};
+
+function pickClips(rep: string, section: ExemplarSection | undefined, teammate: string | null): ExemplarClip[] {
+  if (!section) return [];
+  const others = section.clips.filter((c) => c.rep !== rep);
+  const mine = teammate ? others.filter((c) => c.rep === teammate) : [];
+  const rest = others.filter((c) => !mine.includes(c));
+  return [...mine, ...rest].slice(0, 2);
+}
+
+function LearnFrom({
+  rep,
+  train,
+  section,
+  byId,
+  onOpen,
+}: {
+  rep: string;
+  train: RepRow["train"][number];
+  section: ExemplarSection | undefined;
+  byId: Map<string, TriageRow>;
+  onOpen: (r: TriageRow) => void;
+}) {
+  const best = section?.best_reps.find((b) => b.rep !== rep) ?? null;
+  const clips = pickClips(rep, section, best?.rep ?? null);
+  const mine = Math.round((train.ran / train.reached) * 100);
+  return (
+    <div className="rounded-lg border border-stewart-border bg-stewart-card/70 p-3">
+      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+        <span className="text-[10px] uppercase tracking-wider font-mono rounded px-1.5 py-0.5 border border-stewart-warning/50 text-stewart-warning">
+          {train.label} −{Math.round(train.gap * 100)}
+        </span>
+        <span className="text-[11px] uppercase tracking-wider text-stewart-muted">Learn from</span>
+        {best ? (
+          <span className="text-sm">
+            <span className="font-semibold text-stewart-accent">{best.rep}</span>
+            <span className="text-stewart-muted">
+              {" "}— runs it on {Math.round(best.rate * 100)}% of calls that reach it
+              {best.set_rate_when_ran !== null ? <>, sets {Math.round(best.set_rate_when_ran * 100)}% when they do</> : null}. {rep}: {mine}%.
+            </span>
+          </span>
+        ) : (
+          <span className="text-sm text-stewart-muted">nobody on the floor has enough calls here yet.</span>
+        )}
+      </div>
+      {clips.length ? (
+        <ul className="mt-2 space-y-2">
+          {clips.map((c) => {
+            const row = byId.get(c.call_id);
+            return (
+              <li key={c.call_id + c.ts} className="rounded border border-stewart-border/60 bg-stewart-bg/60 p-2.5">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-stewart-muted">
+                  <span className="font-semibold text-stewart-text">{c.rep ?? "?"}</span>
+                  <span className="font-mono">{c.ts}</span>
+                  {c.tier === 3 ? (
+                    <span className="text-stewart-success">customer pushed back · rep {FOLLOWUP_LABEL[c.rep_followup ?? ""] ?? "kept going"} · got it</span>
+                  ) : c.set ? (
+                    <span className="text-stewart-success">clean run · appointment set</span>
+                  ) : (
+                    <span>clean run</span>
+                  )}
+                </div>
+                <p className="mt-1 text-sm leading-snug">&ldquo;{c.quote}&rdquo;</p>
+                {c.customer_quote ? (
+                  <p className="mt-0.5 text-xs text-stewart-muted leading-snug">
+                    <span className="uppercase tracking-wider text-[10px]">customer</span> &ldquo;{c.customer_quote}&rdquo;
+                  </p>
+                ) : null}
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  <AudioClip callId={c.call_id} startSec={c.start_sec} endSec={c.end_sec} label="Play the moment" />
+                  {row ? (
+                    <button
+                      type="button"
+                      onClick={() => onOpen(row)}
+                      className="px-2.5 py-1 rounded border border-stewart-border text-xs text-stewart-muted hover:text-stewart-text hover:border-stewart-accent/40 transition-colors"
+                    >
+                      Open the read
+                    </button>
+                  ) : null}
+                  <Link
+                    href={`/ion/listen?call=${encodeURIComponent(c.call_id)}&m=${c.start_sec}-${c.end_sec}:${encodeURIComponent(train.label)}`}
+                    className="text-xs text-stewart-muted hover:text-stewart-accent"
+                  >
+                    share clip ↗
+                  </Link>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
+    </div>
   );
 }
 
