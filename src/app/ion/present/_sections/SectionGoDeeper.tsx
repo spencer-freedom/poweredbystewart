@@ -32,12 +32,12 @@ const DEEPER = [
   {
     href: "/ion/manager",
     title: "The manager's surface",
-    body: "Today's calls, the floor by rep, the script as a funnel, and the weights behind the ranking — the thing a manager would actually open.",
+    body: "Today's calls, the floor by rep, the script as a funnel, every objection and what worked against it, and where every lead sits — the thing a manager would actually open.",
   },
   {
     href: "/ion/sow",
     title: "Scope of work",
-    body: "Phases, pricing, terms, and what Spencer will and won't do.",
+    body: "Setup, monthly, terms, and what Spencer will and won't do.",
   },
 ];
 

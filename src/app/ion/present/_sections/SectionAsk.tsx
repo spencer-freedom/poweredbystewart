@@ -12,7 +12,7 @@ const PHASES = [
     price: "$10,000 one-time",
     bullets: [
       "Five9 and Salesforce connected: every call, every lead, sit and close",
-      "Lead tracking and routing from the moment a lead comes in to wherever it ends up",
+      "Every lead in a bucket from day one — credit DQ, needs the spouse, quote first, fumbled hot — by rule over the read",
       "Calibrated to your script with Kenny and the managers; five on-site days",
       "Live the first Monday every manager opens a brief on the join",
     ],
@@ -24,7 +24,7 @@ const PHASES = [
     price: "$9,000 / month",
     bullets: [
       "Every call read; daily briefs and the manager surface for six managers",
-      "Lead tracking live: set strength, sit rate by what the set rested on, buckets by rule",
+      "Lead buckets live, and sit rate by what each set rested on once Salesforce is joined",
       "Weekly call with Kenny, quarterly re-calibration, model spend included",
       "Three months, then month-to-month",
     ],

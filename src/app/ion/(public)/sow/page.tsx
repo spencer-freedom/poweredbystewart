@@ -76,7 +76,8 @@ function SectionA() {
           price="$10,000 one-time"
           bullets={[
             "Mechanical integration: Five9 recordings feeding Stewart (two channels, which also fixes speaker separation); Salesforce read access for leads, sets, sits and closes; accounts for six managers and Kenny",
-            "Lead tracking and routing from the moment a lead comes in to wherever it ends up and the path it took — every call on it, every set and what it rested on, sit and close, and the bucket Stewart routed it to",
+            "Lead buckets from day one: the state of every lead after its call — credit DQ, needs the spouse, wants a quote first, roof or trees, hot lead the setter fumbled, set with or without the bill — by rule over the read, on the manager surface. Per call until the Salesforce lead ID ties calls together",
+            "Stewart's existing lead system (built for a dealership floor: source, status, appointment, show, sold) connected to Ion's Salesforce feed",
             "Calibration: the schema's open questions with Kenny; what-good-looks-like sessions with the managers on the few sections the corpus can't decide; the morning list's weights set by the managers",
             "Five on-site days, written in",
             "Go-live is concrete: the first Monday every manager opens a brief with the Salesforce join live",
@@ -91,7 +92,7 @@ function SectionA() {
           bullets={[
             "Every call read: the script as events, the bill, the objections and what the rep tried, the outcome, the coaching beat",
             "Daily briefs for six managers; the manager surface — today, reps, floor, objections, weights — with the tape one click away",
-            "Lead tracking and routing, live: set strength, sit rate by what the set rested on, buckets by rule (no credit goes to the credit bucket, not to a rep's queue)",
+            "Lead buckets live on every call, and sit rate by what each set rested on once the join is in — the report Ion has never been able to pull",
             "Weekly synthesis call with Kenny; quarterly re-calibration; all model spend included",
             "A grounding standard in writing: the corpus runs at 98.5% of quoted lines verified against the transcript, and it's checked on every call",
           ]}
@@ -196,6 +197,10 @@ function SectionB() {
 
       <ul className="mt-6 space-y-3">
         {[
+          {
+            title: "The lead clock and the write-back",
+            body: "Lead in → first contact (and the dials before it) → set → sit → sold, with the time between each and fresh-vs-rehash side by side. Buckets written into Salesforce notes so the follow-up happens where the reps already work. Stewart already sees every state; this is the wiring.",
+          },
           {
             title: "Historical 6-month backfill with revenue attribution",
             body: "Stewart processes your full prior corpus and tells you 'you would have recovered $X in the last 6 months if Stewart had been catching these patterns.'",

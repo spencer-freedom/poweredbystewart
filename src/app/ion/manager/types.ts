@@ -62,7 +62,11 @@ export type TriageRow = {
   components: TriageComponents;
   share: boolean;
   score: number;
+  // the state of the lead after this call, by rule (per call until Salesforce ties calls to a lead)
+  bucket: { key: string; flag: string | null };
 };
+
+export type BucketDef = { label: string; action: string; tone: "success" | "warning" | "accent" | "danger" | "muted" };
 
 // Exemplar retrieval (build_ion_triage.py → exemplars): per script section,
 // the reps who run it most and the clips a manager should hand a rep.
@@ -103,5 +107,6 @@ export type TriageIndex = {
   reps: { rep_id: string; calls: number }[];
   sections: { key: string; label: string }[];
   exemplars: Record<string, ExemplarSection>;
+  buckets: Record<string, BucketDef>;
   calls: TriageRow[];
 };

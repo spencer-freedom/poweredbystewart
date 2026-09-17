@@ -231,6 +231,65 @@ def objection_row(o: dict) -> dict:
     }
 
 
+# ── Lead buckets ──────────────────────────────────────────────────────
+# The state of the lead after this call, decided by rules over the read.
+# Per CALL until Salesforce ties calls to a lead. Order matters: the first
+# rule that fires wins. Each bucket carries the action a manager takes.
+BUCKETS = {
+    "set_with_bill":     {"label": "Set, bill in hand",            "action": "Confirm the sit. This one is real.",                       "tone": "success"},
+    "set_bill_promised": {"label": "Set, bill promised",           "action": "Chase the bill before the appointment — 54% set-rate territory until it lands.", "tone": "warning"},
+    "set_no_bill":       {"label": "Set, no bill asked",           "action": "Someone has to get the bill or the design can't be built.", "tone": "warning"},
+    "credit_dq":         {"label": "Credit DQ",                    "action": "Don't rehash. Tag it and move on.",                        "tone": "muted"},
+    "dq_other":          {"label": "DQ — roof, ownership, region", "action": "Don't rehash unless the reason changes (new roof, moved).", "tone": "muted"},
+    "needs_co_owner":    {"label": "Needs the spouse / co-owner",  "action": "Hot. Real follow-up with both on the line.",              "tone": "accent"},
+    "quote_first":       {"label": "Wants a quote first",          "action": "Follow up with the specialist's answer, then re-ask for the appointment.", "tone": "accent"},
+    "roof_or_trees":     {"label": "Roof or trees first",          "action": "Dated follow-up — after the roof, after the trees.",     "tone": "warning"},
+    "fumbled_hot":       {"label": "Hot lead, setter fumbled",     "action": "Manager calls today. Save it.",                            "tone": "danger"},
+    "callback":          {"label": "Callback at a stated time",    "action": "Make sure it happens. Time kills leads.",                  "tone": "warning"},
+    "no_appointment":    {"label": "No next step",                 "action": "Rehash queue — lower odds than fresh, still worth a dial.", "tone": "muted"},
+    "no_contact":        {"label": "No contact",                   "action": "Back to the dialer.",                                      "tone": "muted"},
+}
+
+
+def lead_bucket(brief: dict, cps: list, shape: str | None) -> dict:
+    oo = brief.get("observed_outcome") or {}
+    outcome = oo.get("outcome")
+    conds = oo.get("set_conditions") or {}
+    objs = [o for o in (brief.get("objections") or []) if isinstance(o, dict)]
+    cls = Counter(m.get("classification", "other") for m in cps)
+    reason = (oo.get("reasoning") or "").lower()
+    doc = brief.get("bill_document_audit") or {}
+
+    def unresolved(t: str) -> bool:
+        return any(o.get("type") == t and not (o.get("resolved") or o.get("resolved_by_tape")) for o in objs)
+
+    if outcome in ("booked", "tentative"):
+        key = oo.get("set_strength") or ("set_with_bill" if outcome == "booked" else "set_no_bill")
+        if conds.get("co_owner") == "identified_unconfirmed":
+            return {"key": key, "flag": "co-owner not on the appointment"}
+        return {"key": key, "flag": None}
+    if outcome == "dq":
+        return {"key": "credit_dq" if ("credit" in reason or "tax" in reason) else "dq_other", "flag": None}
+    if outcome == "no_contact":
+        return {"key": "no_contact", "flag": None}
+    if conds.get("co_owner") == "identified_unconfirmed" or unresolved("spouse_or_co_decider"):
+        return {"key": "needs_co_owner", "flag": None}
+    if unresolved("proposal_by_email") or ("quote" in (doc.get("reasoning") or "").lower() and doc.get("result") == "declined"):
+        return {"key": "quote_first", "flag": None}
+    if unresolved("roof_or_home") or cls.get("non_standard_scenario_hold"):
+        return {"key": "roof_or_trees", "flag": None}
+    # "Hot" needs evidence on the tape: a buying signal, or a stated reason / bill amount
+    # the rep had in hand and still lost the call.
+    reason_given = bool((brief.get("interest_reason_audit") or {}).get("reason_given"))
+    bill_known = bool((brief.get("bill_anchor_audit") or {}).get("bill_captured"))
+    if outcome in ("no_appointment", "callback") and (cls.get("enthusiasm_signal") or (shape == "energy_leaked" and (reason_given or bill_known))):
+        why = "buying signals on the tape" if cls.get("enthusiasm_signal") else ("bill and reason in hand" if reason_given and bill_known else "reason in hand" if reason_given else "bill in hand")
+        return {"key": "fumbled_hot", "flag": f"{why}, no set"}
+    if outcome == "callback":
+        return {"key": "callback", "flag": None}
+    return {"key": "no_appointment", "flag": None}
+
+
 def build_row(summary: dict) -> dict:
     cid = summary["call_id"]
     slug = cid.lower() if cid.upper().startswith("SESSION") else cid
@@ -307,6 +366,7 @@ def build_row(summary: dict) -> dict:
         },
         "components": components,
         "share": shape == "energy_built",
+        "bucket": lead_bucket(brief, cps, shape or None),
     }
 
 
@@ -337,12 +397,14 @@ def main() -> None:
         "flip_summary": Counter(r["bill_flip"] for r in rows),
         "sections": [{"key": k, "label": SECTION_LABEL[k]} for k in SECTIONS],
         "exemplars": exemplars,
+        "buckets": BUCKETS,
         "calls": rows,
     }
     (PUB / "triage-index.json").write_text(json.dumps(out, indent=1))
     print(f"wrote {len(rows)} rows → public/ion/triage-index.json")
     print("flip:", dict(out["flip_summary"]))
     print("grounded:", Counter(r["quotes"]["grounded"] for r in rows))
+    print("buckets:", dict(Counter(r["bucket"]["key"] for r in rows).most_common()))
     print("exemplars:", {k: (len(v["clips"]), v["pool"], v["best_reps"][0]["rep"] if v["best_reps"] else None) for k, v in exemplars.items()})
     print("top 6:")
     for r in rows[:6]:

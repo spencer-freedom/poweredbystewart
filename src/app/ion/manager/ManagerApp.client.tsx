@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AudioClip, tsToSeconds } from "../(public)/_components/AudioClip.client";
 import { CallDetailDrawer } from "../(public)/calls/CallDetailDrawer.client";
-import type { ExemplarClip, ExemplarSection, ObjectionRow, TriageComponents, TriageIndex, TriageRow } from "./types";
+import type { BucketDef, ExemplarClip, ExemplarSection, ObjectionRow, TriageComponents, TriageIndex, TriageRow } from "./types";
 import { FUNNEL_SECTIONS, ScriptFunnel, type FunnelInput } from "../present/_components/ScriptFunnel.client";
 
 // The manager surface, for real. Three views:
@@ -20,7 +20,7 @@ import { FUNNEL_SECTIONS, ScriptFunnel, type FunnelInput } from "../present/_com
 const COACHED_KEY = "stewart-ion-coached";
 const CLIP_LEAD_SEC = 5;
 const CLIP_LEN_SEC = 22;
-type Tab = "today" | "reps" | "floor" | "weights";
+type Tab = "today" | "reps" | "floor" | "leads" | "weights";
 type WeightKey = keyof TriageComponents;
 const WEIGHT_KEYS: WeightKey[] = ["leak", "fragile", "protocol", "bill", "signals"];
 
@@ -244,7 +244,7 @@ export function ManagerApp({ index }: { index: TriageIndex }) {
             </span>
           </div>
           <nav className="flex items-center gap-1">
-            {(["today", "reps", "floor", "weights"] as Tab[]).map((t) => (
+            {(["today", "reps", "floor", "leads", "weights"] as Tab[]).map((t) => (
               <button
                 key={t}
                 type="button"
@@ -293,6 +293,8 @@ export function ManagerApp({ index }: { index: TriageIndex }) {
           />
         ) : tab === "floor" ? (
           <Floor rows={ranked} onPick={(rep) => { setRepFilter(rep); setTab("today"); }} />
+        ) : tab === "leads" ? (
+          <Leads rows={ranked} buckets={index.buckets} onOpen={setOpen} />
         ) : (
           <Weights
             weights={weights}
@@ -884,6 +886,142 @@ function ObjectionsFloor({ rows, reps, minCalls }: { rows: TriageRow[]; reps: { 
               })}
             </tbody>
           </table>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+// ── Leads ────────────────────────────────────────────────────────────────
+// The state of every lead after its call, by rule over the read. A car
+// dealership runs its leads like a machine; this is the report Ion could
+// never pull — not conversion rate, but where every lead sits and what to do
+// about it. Per call until Salesforce ties calls to a lead.
+
+const BUCKET_ORDER = [
+  "fumbled_hot", "needs_co_owner", "quote_first", "roof_or_trees", "callback",
+  "set_bill_promised", "set_no_bill", "set_with_bill",
+  "no_appointment", "credit_dq", "dq_other", "no_contact",
+];
+const TONE_CLS: Record<BucketDef["tone"], string> = {
+  success: "border-stewart-success/40 text-stewart-success",
+  warning: "border-stewart-warning/40 text-stewart-warning",
+  accent: "border-stewart-accent/50 text-stewart-accent",
+  danger: "border-stewart-danger/50 text-stewart-danger",
+  muted: "border-stewart-border text-stewart-muted",
+};
+
+function Leads({ rows, buckets, onOpen }: { rows: TriageRow[]; buckets: Record<string, BucketDef>; onOpen: (r: TriageRow) => void }) {
+  const [openKey, setOpenKey] = useState<string | null>("fumbled_hot");
+  const byKey = useMemo(() => {
+    const m = new Map<string, TriageRow[]>();
+    for (const r of rows) {
+      const k = r.bucket?.key ?? "no_appointment";
+      m.set(k, [...(m.get(k) ?? []), r]);
+    }
+    return m;
+  }, [rows]);
+  const keys = BUCKET_ORDER.filter((k) => buckets[k] && (byKey.get(k)?.length ?? 0) > 0);
+  const actionable = ["fumbled_hot", "needs_co_owner", "quote_first", "roof_or_trees", "callback", "set_bill_promised", "set_no_bill"]
+    .reduce((n, k) => n + (byKey.get(k)?.length ?? 0), 0);
+  const inBucket = openKey ? byKey.get(openKey) ?? [] : [];
+  const reps = useMemo(() => {
+    const m = new Map<string, Record<string, number>>();
+    for (const r of rows) {
+      const rep = r.rep_id || "Unknown";
+      const k = r.bucket?.key ?? "no_appointment";
+      const row = m.get(rep) ?? {};
+      row[k] = (row[k] ?? 0) + 1;
+      row.__total = (row.__total ?? 0) + 1;
+      m.set(rep, row);
+    }
+    return [...m.entries()].filter(([rep, row]) => rep !== "Unknown" && row.__total >= 5).sort((a, b) => b[1].__total - a[1].__total);
+  }, [rows]);
+  const followCols = ["fumbled_hot", "needs_co_owner", "quote_first", "roof_or_trees", "set_bill_promised", "set_no_bill"];
+
+  return (
+    <div>
+      <div className="mb-5">
+        <p className="text-xs uppercase tracking-wider text-stewart-muted">Where every lead sits</p>
+        <h1 className="text-xl sm:text-2xl font-bold mt-1">{actionable} leads with a next move nobody has pulled a report on.</h1>
+        <p className="text-sm text-stewart-muted mt-1 leading-relaxed">
+          The state of each lead after its call, decided by rule over Stewart&apos;s read — not conversion rate, but what happened and what to do about it.
+          Per call until Salesforce ties calls to a lead; then the clock (lead in → first contact → set → sit → sold) lights up on the same screen.
+        </p>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {keys.map((k) => {
+          const def = buckets[k];
+          const n = byKey.get(k)?.length ?? 0;
+          const active = openKey === k;
+          return (
+            <button
+              key={k}
+              type="button"
+              onClick={() => setOpenKey(active ? null : k)}
+              className={"text-left rounded-lg border bg-stewart-card p-4 transition-colors " + (active ? "ring-1 ring-stewart-accent/50 " : "") + TONE_CLS[def.tone]}
+            >
+              <div className="flex items-baseline justify-between gap-2">
+                <p className="text-sm font-semibold text-stewart-text">{def.label}</p>
+                <p className="font-mono text-2xl font-bold">{n}</p>
+              </div>
+              <p className="mt-1 text-xs text-stewart-muted leading-snug">{def.action}</p>
+            </button>
+          );
+        })}
+      </div>
+
+      {openKey && inBucket.length ? (
+        <div className="mt-6 rounded-lg border border-stewart-border overflow-hidden">
+          <div className="px-3 py-2 bg-stewart-card flex items-baseline justify-between gap-3">
+            <p className="text-[11px] uppercase tracking-wider text-stewart-muted">{buckets[openKey].label} · {inBucket.length} calls</p>
+            <p className="text-xs text-stewart-muted">{buckets[openKey].action}</p>
+          </div>
+          <ul className="divide-y divide-stewart-border/60">
+            {inBucket.map((r) => (
+              <li key={r.call_id} className="px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+                <span className="font-semibold w-20 truncate">{r.rep_id ?? "?"}</span>
+                <button type="button" onClick={() => onOpen(r)} className="flex-1 min-w-[12rem] text-left hover:text-stewart-accent">
+                  {r.headline || r.focus?.topic || r.call_id}
+                </button>
+                {r.bucket?.flag ? <span className="text-[11px] text-stewart-muted">{r.bucket.flag}</span> : null}
+                {r.focus?.ts ? (
+                  <AudioClip callId={r.call_id} startSec={Math.max(0, tsToSeconds(r.focus.ts) - CLIP_LEAD_SEC)} endSec={tsToSeconds(r.focus.ts) + CLIP_LEN_SEC} label="Play" />
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      {reps.length ? (
+        <div className="mt-8">
+          <p className="text-xs uppercase tracking-wider text-stewart-muted">Follow-up buckets, by rep</p>
+          <div className="mt-2 rounded-lg border border-stewart-border overflow-x-auto">
+            <table className="w-full text-sm min-w-[640px]">
+              <thead className="bg-stewart-card text-[10px] uppercase tracking-wider text-stewart-muted">
+                <tr>
+                  <th className="text-left px-3 py-2">Rep</th>
+                  <th className="text-right px-3 py-2">Calls</th>
+                  {followCols.map((k) => (
+                    <th key={k} className="text-right px-3 py-2">{buckets[k]?.label ?? k}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {reps.map(([rep, row]) => (
+                  <tr key={rep} className="border-t border-stewart-border">
+                    <td className="px-3 py-2 font-semibold">{rep}</td>
+                    <td className="px-3 py-2 text-right font-mono text-stewart-muted">{row.__total}</td>
+                    {followCols.map((k) => (
+                      <td key={k} className={"px-3 py-2 text-right font-mono " + ((row[k] ?? 0) ? "" : "text-stewart-muted/50")}>{row[k] ?? 0}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : null}
     </div>
