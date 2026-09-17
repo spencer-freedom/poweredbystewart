@@ -1,36 +1,45 @@
 {
   "call_id": "SESSION24_5b26feca",
   "rep_name": "Meg",
-  "trajectory_summary": "The call opens combative — customer wants a number, rep won't give one — and cycles through four rounds of the same friction before the rep pivots to a full verbal read-back of twelve months of billing data plus the current bill's charge breakdown. Once that data was extracted, the rep converted cleanly into a booked appointment with a specific day and time. The shape is mixed: real energy leaked during the repeated 'runaround' standoff, but the rep recovered by adapting to the customer's actual constraint (won't send a photo) and still closed.",
+  "trajectory_summary": "The call opens on a cost-anxious note, spirals into real hostility over the bill-photo insistence (customer accuses the rep of giving him a runaround), and only recovers once the rep lets him read the full 12-month history aloud. It closes calm and booked, but the middle third burned significant time and trust on a process fight that could have been shortened.",
   "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "booked",
-    "appointment_channel": "phone",
+    "outcome": "tentative",
+    "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "18:11",
     "quote": "So Friday, the sixth at 02:30.",
-    "reasoning": "A specific day and time were confirmed and the rep laid out a Thursday reminder call plus a text confirmation, meeting the booked bar; no co-owner or spouse was ever identified on this call."
+    "reasoning": "Rep and customer agree on a specific day (Friday the sixth) and time (02:30) for the specialist visit, and the rep confirms a reminder call/text protocol — a locked booking, though no co-owner was ever identified in the verified events (co_owner section skipped).",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "declined",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "booked by time, tentative by rule: bill declined",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "01:42",
+    "bill_ts": "01:47",
     "bill_quote": "Last month, the last bill I got was $700.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep reacted with surprise ('Woah. Okay.') and briefly attributed the spike to weather, but never turned the $700 figure into an explicit reason-to-act ('that $700 becomes a lower solar payment') at any later point in the call, including at the close when scheduling the appointment."
+    "reasoning": "The $700 bill was captured and acknowledged ('Woah. Okay.') but never explicitly flipped into alignment-against-the-utility language; the flip should have landed right after 01:47, e.g. tying '$700' directly to the reason to act before moving to address verification."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "04:59",
+    "ask_ts": "04:58",
     "ask_quote": "Would it be easier for you to text or email a photo of that bill to me?",
     "result": "declined",
-    "method": "read_aloud",
+    "method": "none",
     "result_ts": "09:19",
-    "result_quote": "K. I mean, if if it's easier, you know, you could you could send it after the phone call.",
-    "reasoning": "Customer refused to send a photo ('Not right now.' at 09:22) despite multiple asks, and the rep pivoted to having him read the full year of billing data aloud instead, which is the schema's elderly_low_tech/landline alternative path even though the trigger here was refusal rather than tech friction."
+    "result_quote": "Not right now.",
+    "reasoning": "Rep asked for a photo of the bill (04:58, reiterated 07:29). The customer stated they could not send it right then ('Not right now.' at 09:19) and ultimately read numbers aloud instead, so no document was received."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,14 +50,14 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' — the call moved directly from intro into the bill-swap pitch triggered by the customer's own cost question, so the interest-reason verify item was skipped entirely."
+    "reasoning": "The rep did not ask why the customer was interested in solar; the customer asked about costs but no 'why' interest question was posed."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "end_ts": "00:30",
+      "end_ts": "00:16",
       "quote": "Hey, Herbert. This is Meg. I'm with ION Solar.",
       "customer_response": "cooperative",
       "customer_quote": "Alright.",
@@ -72,8 +81,8 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "02:29",
-      "end_ts": "02:46",
-      "quote": "Now just to make sure I've got the right address, Herbert, I have 270 Wilson Acres Road, Tappahannock, Virginia.",
+      "end_ts": "02:48",
+      "quote": "Now just to make sure I've got the right address, Herbert, I have 270",
       "customer_response": "cooperative",
       "customer_quote": "That's right.",
       "resistance_reason": "",
@@ -94,21 +103,21 @@
     },
     {
       "section": "roof",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "02:41",
+      "end_ts": "02:48",
+      "quote": "I'm assuming it's a single family home. Right?",
+      "customer_response": "cooperative",
+      "customer_quote": "That's right.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:08",
-      "end_ts": "01:12",
+      "end_ts": "01:19",
       "quote": "Now I'm assuming you're with Rappahannock for your power. Is that right?",
       "customer_response": "cooperative",
       "customer_quote": "That's right.",
@@ -121,7 +130,7 @@
       "status": "asked",
       "ts": "01:14",
       "end_ts": "01:47",
-      "quote": "Okay. How much do you pay Rappahannock on average?",
+      "quote": "How much do you pay Rappahannock on average?",
       "customer_response": "cooperative",
       "customer_quote": "Last month, the last bill I got was $700.",
       "resistance_reason": "",
@@ -129,11 +138,11 @@
       "result": "completed"
     },
     {
-      "section": "credit_qualifier",
+      "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:50",
-      "end_ts": "03:00",
-      "quote": "The only requirement is that you have a credit score above 670. Is that the case for you?",
+      "ts": "02:54",
+      "end_ts": "03:02",
+      "quote": "The only requirement is that you have a credit score above 670.",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
@@ -156,10 +165,10 @@
       "section": "prior_design",
       "status": "asked",
       "ts": "03:04",
-      "end_ts": "03:22",
+      "end_ts": "03:29",
       "quote": "Now have you seen any solar options before, or is this the first look?",
       "customer_response": "cooperative",
-      "customer_quote": "I've looked into it before. As a matter of fact, I currently have a solar panel on the roof, but it's only for hot water.",
+      "customer_quote": "No. I've looked into it before. As a matter of fact, I currently have a solar panel on the roof, but it only",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -167,14 +176,14 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "03:43",
-      "end_ts": "16:52",
-      "quote": "Do you get a paper bill online, or do you do online billing?",
-      "customer_response": "resistant",
-      "customer_quote": "Alright. Well, I don't understand why you can't just give me a general idea of what what we're talking about rather than wasting a lot of time.",
-      "resistance_reason": "trust",
-      "rep_followup": "persisted",
-      "result": "completed"
+      "ts": "04:58",
+      "end_ts": "07:31",
+      "quote": "Would it be easier for you to text or email a photo of that bill to me?",
+      "customer_response": "deflected",
+      "customer_quote": "Well, I'll tell you what it is. I've got it right in front of me.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "appointment_set",
@@ -183,110 +192,146 @@
       "end_ts": "18:11",
       "quote": "Would you have a preference of mornings, afternoons, or evenings?",
       "customer_response": "cooperative",
-      "customer_quote": "Friday would be better.",
+      "customer_quote": "Afternoons.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "18:14",
-      "end_ts": "19:02",
-      "quote": "So Friday, the sixth at 02:30. What I'll do here, I'll get it all scheduled, taken care of for you.",
+      "ts": "18:11",
+      "end_ts": "18:32",
+      "quote": "So Friday, the sixth at 02:30.",
       "customer_response": "cooperative",
-      "customer_quote": "Alright. Thank you. Yep. Bye bye.",
+      "customer_quote": "02:30.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:31",
-      "quote": "just first thing All I wanna know is what's the what's the, you know, general range of cost for something like that.",
-      "type": "other",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "So let me explain how the program works. It's called a bill swap."
-      ],
-      "resolved": true,
-      "resolution_ts": "01:08",
-      "reasoning": "Customer accepted the redirect into the qualifying questions without pressing further at this point, so this specific instance resolved, though the underlying want-a-number theme resurfaces later as a distinct escalation."
-    },
-    {
       "ts": "07:44",
-      "quote": "Alright. Well, I don't understand why you can't just give me a general idea of what what we're talking about rather than wasting a lot of time.",
-      "type": "trust_or_scam",
+      "quote": "I don't understand why you can't just give me a general idea of what what we're talking about rather than wasting a lot of time.",
+      "type": "cost",
       "rep_attempts": 3,
       "attempt_quotes": [
         "the way that we design these systems is based on a bunch of different factors",
-        "there isn't necessarily an average, Herbert, because there's a bunch of different things",
+        "there isn't necessarily an average, Herbert, because there's there's a bunch of different things",
         "you haven't sent me your bill, and that's how we build your designs"
       ],
       "resolved": true,
-      "resolution_ts": "16:54",
-      "reasoning": "The customer escalated this same complaint three times (07:44, 08:17, 12:45) with the rep repeating similar justifications each time until the customer finally agreed to read every month's data aloud, after which he settled into cooperative reporting through 16:52."
+      "resolution_ts": "13:41",
+      "reasoning": "Customer repeatedly demanded a cost ballpark/average across three touches; rep never used the schema's price_estimate_before_design redirect or a bill flip, only reiterated the accuracy-requires-data reasoning until the customer relented and read the bill aloud.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "reason",
+        "reason",
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@17:24",
+      "resolution_agrees": true
     },
     {
-      "ts": "09:07",
-      "quote": "that's that's why we ask you Then you've gotta come out and look at it.",
-      "type": "roof_or_home",
-      "rep_attempts": 1,
+      "ts": "05:05",
+      "quote": "Well, I'll tell you what it is. I've got it right in front of me.",
+      "type": "other",
+      "rep_attempts": 2,
       "attempt_quotes": [
-        "we start with the satellite imagery, and we use the details from the bill... I'll have a specialist bring it out to you"
+        "I just need to see it. I need to see the bar graph and the breakdown of the charges.",
+        "if it's easier, you know, you could you could send it after the phone call."
       ],
       "resolved": true,
-      "resolution_ts": "10:12",
-      "reasoning": "Customer raised the tree/sunlight concern once and the rep's single explanation of the satellite-imagery/sun-study process satisfied the question before moving to scheduling."
+      "resolution_ts": "13:41",
+      "reasoning": "Customer refused to photograph/send the bill electronically; rep pushed for the photo twice before finally accepting a verbal read-back, which is the correct alternative path but deployed late.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "reason",
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@17:24",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "19:38",
+      "quote": "I can't do it tomorrow.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Alright. Would Thursday or Friday be better for you?"
+      ],
+      "resolved": true,
+      "resolution_ts": "18:06",
+      "reasoning": "Customer rejected the first offered appointment slot; rep immediately offered alternative days and customer accepted Friday 02:30.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Bill captured but never flipped into the reason to act",
-    "ts": "01:42",
-    "quote": "Last month, the last bill I got was $700.",
-    "why": "A $700 winter bill is the single strongest piece of leverage on this call and it's acknowledged with 'Woah, okay' and then never referenced again as the number solar replaces — this is the highest-value, most fixable gap for this rep on this call."
+    "topic": "Objection inversion missed on repeated cost-ballpark demand",
+    "ts": "07:44",
+    "quote": "I don't understand why you can't just give me a general idea... rather than wasting a lot of time.",
+    "why": "This objection surfaced three separate times (07:44, 08:17, 12:45) and each time the rep defended process instead of flipping the bill pain or using the schema's redirect_to_design rebuttal — the single biggest driver of the call's mid-section hostility."
   },
   "key_moments": [
     {
-      "ts": "00:31",
-      "quote": "just first thing All I wanna know is what's the what's the, you know, general range of cost for something like that.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is a price_estimate_before_design trigger per rebuttals.price_estimate_before_design. The rep's actual response ('let me explain how the program works... bill swap') is a reasonable redirect-to-design strategy match, but never flips the $700 bill (once captured) back at the customer as the real cost he's already paying — the flip opportunity is available later and never used."
-    },
-    {
-      "ts": "01:42",
-      "quote": "Last month, the last bill I got was $700.",
-      "classification": "bill_anchor",
-      "stewart_read": "Strong bill capture — a $700 winter bill is exactly the pain-anchor the schema wants. The rep's response ('Woah. Okay.') acknowledges the shock but never flips it into 'that's the amount solar replaces' language for the rest of the call."
-    },
-    {
       "ts": "07:44",
-      "quote": "Alright. Well, I don't understand why you can't just give me a general idea of what what we're talking about rather than wasting a lot of time.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer is explicitly frustrated by the perceived stall. Rather than re-anchoring to his own $700 bill pain or creating curiosity about his specific savings, the rep repeats the generic 'bunch of different factors' explanation, which reads as friction-management rather than value-creation."
+      "quote": "I don't understand why you can't just give me a general idea of what what we're talking about rather than wasting a lot of time.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a cost/time objection wrapped in impatience — the schema's flip point ('what's expensive is not switching', reframe using his own $700 bill) was available and unused; rep instead defended methodology."
     },
     {
       "ts": "08:17",
-      "quote": "I feel like I'm getting a runaround for, you know, for another reason.",
-      "classification": "empathy_miss",
-      "stewart_read": "The customer directly states he suspects an ulterior motive — this is a trust-rupture moment, not just a process objection. The rep's next line moves straight back into the on-peak/off-peak technical explanation without acknowledging the suspicion itself."
+      "quote": "I feel like I'm getting a runaround right now... for another reason.",
+      "classification": "trust_or_scam",
+      "stewart_read": "Customer voices a legitimacy/trust suspicion mid-process; rep does not name it directly or reassure on trust, just continues explaining the data requirement."
+    },
+    {
+      "ts": "12:45",
+      "quote": "You're still not answering my question. Just evading everything I want to know about what what's the cost of installation?",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Third occurrence of the same cost-ballpark objection; the canonical rebuttal (redirect_to_design, fair-to-ask framing) exists in the schema and was never deployed verbatim or in spirit."
+    },
+    {
+      "ts": "09:30",
+      "quote": "Okay. Well, don't you need to look at the house and see what kind of sunlight it gets? There's a lot of trees around.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer volunteering shading/tree detail is useful design info and mild engagement signal — he's thinking about his specific roof, not just resisting."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 56,
-    "verified": 52,
-    "fuzzy": 3,
+    "checked": 60,
+    "verified": 55,
+    "fuzzy": 0,
     "wrong_ts": 1,
-    "not_found": 0
+    "not_found": 4
   }
 }

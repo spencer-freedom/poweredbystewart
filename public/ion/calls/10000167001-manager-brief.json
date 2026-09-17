@@ -1,17 +1,26 @@
 {
   "call_id": "10000167001",
   "rep_name": "Joel",
-  "trajectory_summary": "The call opens with the customer effectively closing the door (already signed with a competitor) and the rep recovers with a reasonable comparison-framing rebuttal, moving the call from resistant to a booked in-person visit. But the booking is fragile: the son — who is both the utility account holder and the person who chose the competitor — is disclosed three times as absent and uninvolved, and this is already a second attempt after a missed Sunday appointment. The rep never probes the competitor design, never addresses the son's absence as a risk, and closes on procedural momentum rather than resolving the underlying decision-maker problem.",
+  "trajectory_summary": "The call opens on a competitor-sign objection and never recovers structure — nearly every verify item (homeowner, co-owner, roof, utility, bill) is skipped in favor of a fast rebook. The rep gets a time on the calendar, but does so with the wrong decision-maker present and without probing the disclosed competitor design or bill, leaving the appointment thin on the facts a closer needs.",
   "shape": "mixed",
-  "outcome_dispute": "V1 tag is unknown/unconfirmed; observed outcome is 'booked' with a specific day (Saturday the 22nd) and time (12PM noon) agreed in-person. However this booking should be flagged as high no-show risk given it is a repeat attempt and excludes the actual decision-maker/account holder.",
+  "outcome_dispute": "V1 tag is unclear from metadata, but this should be read as a fragile 'booked' — a specific day/time was set (Saturday 12PM) but with son (the actual utility account holder) confirmed absent, and no bill or design details captured.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": false,
-    "ts": "02:44",
-    "quote": "Saturday, the twenty second at, yeah, 12PM noon.",
-    "reasoning": "A specific day and time were agreed for an in-person specialist visit. The son, identified as utility-account holder and the person who selected the competitor, is explicitly confirmed as not attending ('It'll just be me because my son is not would not be here'), so co_owner_confirmed is false rather than null."
+    "ts": "02:36",
+    "quote": "Yeah. 12PM noon.",
+    "reasoning": "A specific day (Saturday the 22nd) and time (12PM) are agreed by both sides, meeting the booked threshold on time alone. The son, identified as the actual utility account holder, is explicitly confirmed absent from the appointment.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "identified_unconfirmed",
+      "credit": "not_asked"
+    },
+    "set_rule": "booked by time, tentative by rule: bill not_asked",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "This call is a reschedule of a design-review appointment, not a fresh qualification call — no bill amount or usage figure is discussed at any point in the transcript."
+    "reasoning": "No bill amount or kWh usage was asked for or provided on the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +39,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep asks for the competitor's design to be available for comparison but never raises the utility bill itself — likely because this account is past the initial qualification stage and already has a design built."
+    "reasoning": "The rep asked for the other company's design to be available but never requested a utility bill or bill photo/email."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,24 +50,24 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "This is a reschedule call for an existing design, not an initial qualification call, so the standard 'what interested you in solar' question does not appear and is not applicable in the same way."
+    "reasoning": "The rep did not ask why the customer was interested in solar and no reason was volunteered in response to such a question."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:12",
-      "end_ts": "00:19",
+      "end_ts": "00:27",
       "quote": "My name is Joel. I'm calling from ION Solar.",
       "customer_response": "cooperative",
-      "customer_quote": "Hello?",
+      "customer_quote": "I'm doing okay.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -66,11 +75,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -78,23 +87,23 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "co_owner",
       "status": "skipped",
-      "ts": "01:39",
-      "end_ts": "01:51",
-      "quote": "Gotcha.",
-      "customer_response": "cooperative",
-      "customer_quote": "Yeah. Because he's the one everything is in his name as for utilities right now.",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,11 +111,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,11 +123,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,11 +135,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +147,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,18 +159,18 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "00:51",
-      "end_ts": "01:06",
-      "quote": "So did you guys sign with them already, or you just signed?",
-      "customer_response": "cooperative",
-      "customer_quote": "About last week.",
+      "ts": "00:27",
+      "end_ts": "00:39",
+      "quote": "this just last Sunday to share that solar design that we built for your home.",
+      "customer_response": "resistant",
+      "customer_quote": "We have already picked one.",
       "resistance_reason": "already_have_quote",
-      "rep_followup": "alternative_offered",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -180,25 +189,29 @@
       "section": "appointment_set",
       "status": "asked",
       "ts": "02:12",
-      "end_ts": "02:41",
-      "quote": "Looking at my calendar, we do have someone here in your area. We could do tomorrow or Monday.",
+      "end_ts": "02:46",
+      "quote": "we do have someone here in your area. We could do tomorrow or Monday.",
       "customer_response": "cooperative",
-      "customer_quote": "You said twelve?",
+      "customer_quote": "Yeah. That'd be fine.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "02:47",
+      "ts": "03:07",
       "end_ts": "03:13",
-      "quote": "if you'll if you could have that available to show to our specialist there, then we could kinda compare apples to apples",
+      "quote": "we'll see you here tomorrow at 12PM noon.",
       "customer_response": "cooperative",
       "customer_quote": "Mhmm. Okay.",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "moved_on",
+      "result": "partial",
+      "parts_done": [
+        "recap"
+      ],
+      "parts_score": "1/4"
     }
   ],
   "objections": [
@@ -208,60 +221,74 @@
       "type": "already_have_quote_or_system",
       "rep_attempts": 2,
       "attempt_quotes": [
-        "we'd love to just kinda show you our design here and, you know, just in case we could offer you a better system or better price.",
-        "We're actually pretty competitive here with our our, designs here."
+        "So did you guys sign with them already, or you just signed?",
+        "we'd love to just kinda show you our design here and, you know, just in case we could offer you a better system or better price"
       ],
       "resolved": true,
       "resolution_ts": "01:27",
-      "reasoning": "Customer agrees to the in-person visit after the comparison-framing rebuttal, moving past the objection, though it is softened rather than fully overcome (the competitor signing stands)."
+      "reasoning": "Customer agrees to a visit after the rep's comparison-framing pitch, moving past the objection, though the rep never learned the competitor's actual terms.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "question_back",
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@02:12",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "adult-child decision-maker excluded from booking",
+    "topic": "Booking the appointment without the actual utility account holder (son) present",
     "ts": "01:39",
     "quote": "Yeah. Because he's the one everything is in his name as for utilities right now.",
-    "why": "The son is disclosed three times as both the utility account holder and the person who already picked a competitor online — he is the actual decision-maker, and the rep books an in-person visit with only the mother present. Per protocols.adult_child_decision_maker, this appointment should have been scheduled to include him; as booked, it's structurally vulnerable to a repeat no-decision outcome."
+    "why": "The customer states twice that his son holds the utility account and won't be at the appointment; the rep locks the time anyway, setting up a closer call that likely can't close without the real decision-maker."
   },
   "key_moments": [
     {
       "ts": "00:39",
-      "quote": "My son, even my son that was here looking, but they were gonna send it to me. They went online. They got with the company they wanted to go with, and they already picked one.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "This is the first and clearest disclosure that the son researched and selected a competitor online — real competitive intelligence (which company, what they saw) that the rep never asks about. This predates and is more specific than the later utility-account mention."
+      "quote": "We have already picked one.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Customer states an already-have-quote objection; rep asks logistics (when did you sign) rather than flipping to bill/value comparison or probing the competitor's terms."
     },
     {
-      "ts": "01:07",
-      "quote": "we'd love to just kinda show you our design here and, you know, just in case we could offer you a better system or better price.",
-      "classification": "other",
-      "stewart_read": "This is a reasonable strategy-match to the signed_with_someone rebuttal (validation/comparison framing) — the rep doesn't argue or concede, he offers to compare. It's soft in delivery (heavy hedging: 'kinda,' 'just in case') but the underlying move is correct."
+      "ts": "00:41",
+      "quote": "My son, even my son that was here looking, but they were gonna send it to me.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a prior design/quote process involving his son; rep never asks which company or what was shown."
     },
     {
       "ts": "01:39",
       "quote": "Yeah. Because he's the one everything is in his name as for utilities right now.",
       "classification": "spouse_handling",
-      "stewart_read": "Customer states the son holds the utility account and, per the 00:39 disclosure, is the one who picked the competitor — this is squarely the adult_child_decision_maker protocol trigger. Rep says 'Gotcha' and moves straight to scheduling without looping the son in."
+      "stewart_read": "Customer explicitly states his son holds the utility account, a strong signal the son is the true decision-maker, but the rep does not attempt to include him."
     },
     {
-      "ts": "02:12",
-      "quote": "When do you wanned to try to do it?",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer volunteers to move to scheduling on his own initiative rather than being pushed there — a positive engagement signal the rep could have named back ('glad you're ready to get this locked in') before jumping straight into calendar options."
+      "ts": "01:31",
+      "quote": "It'll just be me because my son is not would not be here.",
+      "classification": "spouse_handling",
+      "stewart_read": "Customer directly states the son (utility holder) will not be present for the appointment and the rep accepts this without attempting to find a time that works for both."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 36,
-    "verified": 35,
+    "checked": 34,
+    "verified": 34,
     "fuzzy": 0,
     "wrong_ts": 0,
-    "not_found": 1
+    "not_found": 0
   }
 }

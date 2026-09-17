@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION14_e255df05",
   "rep_name": "Tyk",
-  "trajectory_summary": "The call runs efficiently through the verify section with a cooperative customer, but stalls when the utility company check reveals a possible service-area disqualification. The rep handles the uncertainty correctly by deferring to the design team rather than guessing, but the call ends with no locked next step beyond a vague promise to call back.",
-  "shape": "mixed",
-  "outcome_dispute": "v1 tag is unknown; observed outcome is best read as callback, not booked or dq — the rep did not confirm a hard DQ, only flagged a possible net-metering issue and promised to check with the design team, so 'dq' would overstate certainty and 'no_appointment' would understate the rep's stated next step.",
+  "trajectory_summary": "The call opens cleanly and builds mild energy through the interest and prior-design questions, but stalls hard when the utility company check flags a possible net-metering issue. The rep does not book anything and instead defers to a callback, ending the call on an open loop rather than a next step the rep owns.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag is unknown/unclear; this should be read as a callback (rep explicitly promises to check with the design team and call back), not a booked or no_appointment outcome, since a specific commitment was made even though no time was locked.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "03:16",
-    "quote": "So let me ask them, and then I can give you a callback here shortly. Does that work for you?",
-    "reasoning": "The rep explicitly commits to a future callback pending internal design-team review of a possible utility disqualification; no appointment day/time was set, and the call ended on this pending status rather than a booked or DQ'd outcome. No co-owner was identified since the customer confirmed she is the sole title holder, so this field is not applicable rather than an incomplete step."
+    "quote": "let me ask them, and then I can give you a callback here shortly. Does that work for you?",
+    "reasoning": "Rep explicitly commits to calling the customer back after checking with the design team on the utility/net-metering issue, but no specific day or time was stated, so it is a callback without a locked time rather than a booked appointment.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reached the bill-amount verify item — it stalled at the utility-company check when a possible service-area disqualifier surfaced, so no bill figure was ever captured."
+    "reasoning": "No monthly bill amount or kWh usage was requested or captured on the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,18 +38,18 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call ended during the utility-company qualification step, before the rep reached bill collection; getting the physical bill or usage document was never raised."
+    "reasoning": "The rep never asked the customer to provide a utility bill or to text/email a bill."
   },
   "interest_reason_audit": {
     "asked": true,
-    "ask_ts": "00:13",
+    "ask_ts": "00:38",
     "reason_given": true,
     "reason_ts": "00:41",
-    "reason_quote": "for, since before I even bought my house.",
+    "reason_quote": "since before I even bought my house.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked what got her interested in solar and she gave a long-standing personal-interest reason, but the rep did not reference or reinforce this reason later in the call — the conversation moved to roof type and then stalled on utility qualification before any reason-based close could happen."
+    "reasoning": "Customer's stated reason (lifelong interest since before buying the house) was acknowledged with 'Okay. Awesome.' at 00:44 but never referenced again or tied to next steps before the call stalled on the utility gate."
   },
   "script_coverage": [
     {
@@ -49,23 +57,23 @@
       "status": "asked",
       "ts": "00:05",
       "end_ts": "00:12",
-      "quote": "Hey, Georgia. This is Tyk with Ion. I received a request you're looking at solar for the home.",
+      "quote": "Hey, Georgia. This is Tyk with Ion. I received a request you're looking at solar for the home. How are you doing today?",
       "customer_response": "cooperative",
       "customer_quote": "I'm doing good.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
-      "ts": "00:13",
-      "end_ts": "01:04",
-      "quote": "what got you interested in looking at solar?",
+      "ts": "00:38",
+      "end_ts": "00:41",
+      "quote": "And, what got you interested in looking at solar?",
       "customer_response": "cooperative",
-      "customer_quote": "I've been interested for, since before I even bought my house.",
+      "customer_quote": "since before I even bought my house.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -73,11 +81,11 @@
       "status": "asked",
       "ts": "00:13",
       "end_ts": "00:30",
-      "quote": "The first one I wanted to clarify was just the address. Looks like I have you at 10 Southeast East Williams Avenue in Depot Bay?",
+      "quote": "Looks like I have you at 10 Southeast East Williams Avenue in Depot Bay?",
       "customer_response": "cooperative",
-      "customer_quote": "Yes. That's right.",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
@@ -85,24 +93,24 @@
       "status": "asked",
       "ts": "01:17",
       "end_ts": "01:23",
-      "quote": "Is there anybody else for the title with you, or is it just you?",
+      "quote": "Looks like I have you down as the property owner as well. Is there anybody else for the title with you, or is it just you?",
       "customer_response": "cooperative",
-      "customer_quote": "Just me.",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:04",
+      "ts": "01:05",
       "end_ts": "01:15",
       "quote": "Is that an asphalt shingle roof? It looks like it is.",
-      "customer_response": "cooperative",
-      "customer_quote": "Yes.",
+      "customer_response": "no_answer",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
@@ -113,12 +121,12 @@
       "customer_response": "cooperative",
       "customer_quote": "Okay. It's Central Lincoln, PUD. Sugar.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "completed"
+      "rep_followup": "persisted",
+      "result": "deferred"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,11 +134,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +146,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,18 +158,18 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "00:53",
+      "ts": "00:58",
       "end_ts": "01:04",
       "quote": "Have you ever looked at it, previously before in terms of, like, getting a design, or is this your kind of your first time doing so?",
       "customer_response": "cooperative",
       "customer_quote": "I'm just starting.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
@@ -190,62 +198,70 @@
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "03:16",
-      "end_ts": "03:33",
-      "quote": "So let me ask them, and then I can give you a callback here shortly. Does that work for you?",
-      "customer_response": "cooperative",
-      "customer_quote": "Alright. Yeah. That works. Thank you.",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "unanchored callback / no concrete next-step time",
+    "topic": "Unanchored callback promise",
     "ts": "03:16",
-    "quote": "So let me ask them, and then I can give you a callback here shortly. Does that work for you?",
-    "why": "The call ends on a pending disqualification with only a vague 'shortly' promise instead of a specific day/time for the callback, leaving the lead with no committed next touch — this is the single most consequential gap since it determines whether this lead gets recovered at all."
+    "quote": "I can give you a callback here shortly. Does that work for you?",
+    "why": "The call ends with no locked time for follow-up, which is the single biggest risk to this lead going cold after a promising, cooperative conversation."
   },
   "key_moments": [
     {
+      "ts": "00:38",
+      "quote": "since before I even bought my house.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer discloses a long-held, pre-homeownership interest in solar — a strong intrinsic motivation the rep could dig into for depth."
+    },
+    {
       "ts": "00:44",
-      "quote": "Since I was a I thought I would maybe take this route since I was since I was a little kid.",
+      "quote": "Okay. Awesome. Is this kind of your first time in the house?",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer gives a strong, lifelong-interest reason for going solar, but the rep's next line pivots to a generic verify question rather than reflecting the reason back. Confidence on this read is lowered by likely diarization overlap around this exchange (the 00:44-00:53 lines are hard to cleanly attribute), so this should be treated as a lower-confidence observation rather than a firm miss."
+      "stewart_read": "Rep files the customer's emotional anchor with a generic acknowledgment and pivots immediately rather than expanding on it."
     },
     {
-      "ts": "01:29",
-      "quote": "Who is the current utility company for you?",
+      "ts": "01:17",
+      "quote": "Is there anybody else for the title with you, or is it just you?",
       "classification": "other",
-      "stewart_read": "The rep asks the required utility-company verify question here, but the actual answer doesn't come until nearly 90 seconds later after an unexplained pause, splitting what should be a quick exchange into two disconnected moments."
+      "stewart_read": "Co-owner check completed cleanly and quickly with a clear single-owner answer, no follow-up needed."
     },
     {
-      "ts": "01:37",
-      "quote": "What? Hold on.",
-      "classification": "rapport_repair",
-      "stewart_read": "Customer pauses abruptly mid-question and disappears for close to a minute; the rep simply waits and checks in once ('You okay?') rather than filling the dead air or losing patience."
-    },
-    {
-      "ts": "02:55",
-      "quote": "Okay. It's Central Lincoln, PUD. Sugar.",
-      "classification": "other",
-      "stewart_read": "This is the point where the utility company name is actually confirmed, nearly 90 seconds after the rep first asked. The delayed answer is what triggers the rep's subsequent qualification check."
+      "ts": "03:12",
+      "quote": "It does look like we're not able to work with the utility company.",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "Rep hits a utility/net-metering gate outside the standard flow and defers to the design team rather than resolving live, which is the correct procedural move for an edge case."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 32,
-    "verified": 31,
+    "checked": 27,
+    "verified": 26,
     "fuzzy": 0,
     "wrong_ts": 1,
     "not_found": 0

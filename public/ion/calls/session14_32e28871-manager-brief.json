@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION14_32e28871",
   "rep_name": "Carter",
-  "trajectory_summary": "The call opens with clean, efficient qualification — address, home type, title, credit, utility — but stalls hard once bill collection begins, consuming nearly five minutes on a confused, multi-attempt portal search that surfaces three inconsistent dollar figures and one kWh figure before the call disconnects. No appointment is set and no design or next step is confirmed before the line drops.",
-  "shape": "mixed",
-  "outcome_dispute": "This call should be tagged no_contact/no_appointment, not any booked/tentative outcome — the transcript ends mid-troubleshooting with the call dropping ('It disappeared.' / 'Maybe he'll call back.') and no appointment, day, or time was ever discussed.",
+  "trajectory_summary": "Call opens cooperative and moves cleanly through verify, but stalls hard on bill/kWh collection as the customer struggles with the PGE portal navigation. Energy leaks steadily from there — no pivot to a faster alternative path, no appointment ever proposed, and the call appears to drop mid-sentence.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag is unknown/unclear; based on the transcript this is a no_appointment (call cut off during bill collection, before appointment_set was ever attempted) rather than any booked/tentative outcome.",
   "observed_outcome": {
-    "outcome": "no_contact",
+    "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "08:30",
-    "quote": "It disappeared.",
-    "reasoning": "The call disconnects mid-troubleshooting with no appointment day/time ever discussed, no design confirmed, and the customer speculating a callback would be needed ('Maybe he'll call back.') — this is a dropped call with no next step secured by the rep, closer to no_contact/no_appointment than any completed outcome."
+    "ts": "08:46",
+    "quote": "Maybe he'll call back.",
+    "reasoning": "Call cuts off during bill/kWh collection troubleshooting; appointment_set was never reached per verified events, and no next step was proposed or owned by the rep before the apparent disconnection.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,17 +28,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured a bill figure but never flipped it into urgency or alignment-against-the-utility; his only reaction, 'Oh, okay. So pretty expensive,' came three figures later at 05:34 and was flat, not a pain-anchor. Compounding this, the customer disclosed at 05:37 that he's on flat-rate/budget billing ('I paid the same thing every month'), which means none of the captured dollar figures are confirmed as true usage costs — the flip point never had a solid number to work with."
+    "reasoning": "Bill was captured ($527/month at 04:42, later $170/month and 1,200 kWh figures) but never flipped into emotional leverage; the flip should have landed at 05:34 ('Oh, okay. So pretty expensive.') by tying the number to what solar replaces, not just noting it and moving to more data questions."
   },
   "bill_document_audit": {
     "asked": true,
     "ask_ts": "03:22",
-    "ask_quote": "Okay. Would you be able to pull up one of those bills for me?",
-    "result": "declined",
-    "method": "online_login",
-    "result_ts": "08:30",
-    "result_quote": "It disappeared.",
-    "reasoning": "The rep asked the customer to pull up the bill via his email/utility portal, and the customer attempted for several minutes, but the numbers he read off were inconsistent and unconfirmed, and the call disconnected before any bill or clean figure was actually delivered or confirmed — this is closer to an incomplete/failed attempt than a successful on-call retrieval."
+    "ask_quote": "Would you be able to pull up one of those bills for me?",
+    "result": "received_on_call",
+    "method": "read_aloud",
+    "result_ts": "04:42",
+    "result_quote": "About $527 a month.",
+    "reasoning": "The rep requested a bill at 03:22 and the customer read bill details aloud during the call (monthly dollar amount and later kilowatt usage), so the document information was received on the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +49,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what interested the customer in solar at any point in the transcript; the call moved straight from address/home verification into bill collection without this qualifying question."
+    "reasoning": "The rep never asked why the customer was interested in solar and no motivating reason was given."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:01",
-      "end_ts": "00:14",
+      "end_ts": "00:04",
       "quote": "Hi. This is Carter.",
       "customer_response": "cooperative",
-      "customer_quote": "Carter, this is Greg Mulvey. You started calling me about solar panels?",
+      "customer_quote": "Carter, this is Greg Mulvey. You started calling me about solar panels? Yeah. I just",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -71,8 +79,8 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:17",
-      "end_ts": "00:44",
+      "ts": "00:15",
+      "end_ts": "00:21",
       "quote": "Is this for the 1512 Northeast Park Lane?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
@@ -84,8 +92,8 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "02:26",
-      "end_ts": "02:36",
-      "quote": "And then is there anyone else on the title of the home with you?",
+      "end_ts": "02:34",
+      "quote": "is there anyone else on the title of the home with you?",
       "customer_response": "cooperative",
       "customer_quote": "My wife and I.",
       "resistance_reason": "",
@@ -96,7 +104,7 @@
       "section": "roof",
       "status": "asked",
       "ts": "02:11",
-      "end_ts": "02:19",
+      "end_ts": "02:17",
       "quote": "And how old is the roof?",
       "customer_response": "cooperative",
       "customer_quote": "About seven years.",
@@ -107,8 +115,8 @@
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "02:44",
-      "end_ts": "02:50",
+      "ts": "02:43",
+      "end_ts": "02:51",
       "quote": "And then what utility company are you with?",
       "customer_response": "cooperative",
       "customer_quote": "Portland General Electric.",
@@ -119,20 +127,20 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "04:29",
-      "end_ts": "05:34",
-      "quote": "trying to get the kilowatt usage for the home to build that solar estimate.",
+      "ts": "04:47",
+      "end_ts": "07:51",
+      "quote": "And do you know the kilowatt usage?",
       "customer_response": "cooperative",
-      "customer_quote": "About $527 a month.",
+      "customer_quote": "So in January, it was a 100 so 1,200 kilowatts.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
-      "result": "partial"
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:36",
-      "end_ts": "02:43",
+      "end_ts": "02:44",
       "quote": "And is your credit score above 670?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
@@ -168,13 +176,13 @@
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:22",
-      "end_ts": "08:30",
-      "quote": "Okay. Would you be able to pull up one of those bills for me?",
-      "customer_response": "resistant",
-      "customer_quote": "So now it's telling me I have a wrong.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "persisted",
-      "result": "partial"
+      "end_ts": "03:27",
+      "quote": "Would you be able to pull up one of those bills for me?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes, sir.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "appointment_set",
@@ -198,54 +206,62 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "Bill figure reconciliation before proceeding",
-    "ts": "05:32",
-    "quote": "So it's a $170 a month.",
-    "why": "Three different, unreconciled dollar figures ($527, $160, $170) plus a flat-rate billing disclosure are captured in this call and none are resolved into a single trustworthy anchor — this directly undermines the design the customer was told would be built from this data, and the rep never paused to sort it out."
+    "topic": "Failure to pivot off bill/kWh portal struggle",
+    "ts": "07:55",
+    "quote": "Does it show you a a monthly average or an annual, or is it just month by month?",
+    "why": "The customer already gave usable numbers ($170-527/month, 1200 kWh) but the rep kept chasing portal precision, burning the call into a dead line with no appointment ever attempted."
   },
   "key_moments": [
     {
       "ts": "00:52",
-      "quote": "Give me just one second. Okay? I need to check into something. I'll I'll put you on hold for a sec. They just have some rules with townhouses.",
+      "quote": "I need to check into something. I'll I'll put you on hold for a sec. They just have some rules with townhouses.",
       "classification": "non_standard_scenario_hold",
-      "stewart_read": "Row house/townhouse ownership structure triggers an internal check before the rep will proceed, consistent with a non-standard-scenario protocol rather than the rep simply not knowing standard qualification."
+      "stewart_read": "Rep places customer on hold to check on eligibility rules for the townhouse/row-house structure — a non-standard home type outside the default single-family script."
     },
     {
-      "ts": "05:37",
-      "quote": "Yeah. I'm on this info pen thing. Mhmm. So I paid the same thing every month.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "Customer discloses he's on a flat-rate/budget billing plan, meaning the $527 and $170 figures pulled are not his true variable usage cost — this is a critical data-quality signal for bill anchoring, and the rep does not acknowledge or probe it."
-    },
-    {
-      "ts": "04:42",
-      "quote": "About $527 a month.",
-      "classification": "bill_anchor",
-      "stewart_read": "This is the first bill figure captured, a strong pain point if verified, but the rep moves immediately to asking for kWh instead of acknowledging or flagging the number."
-    },
-    {
-      "ts": "05:34",
-      "quote": "Oh, okay. So pretty expensive.",
+      "ts": "04:47",
+      "quote": "And do you know the kilowatt usage?",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "This is the rep's only acknowledgment of bill pain across the whole call, and it's a flat, low-energy aside rather than a flip into curiosity or urgency — especially notable since it comes right after a third, lower figure ($170) that contradicts the earlier $527."
+      "stewart_read": "Customer just gave a real bill figure ($527/month) and the rep pivots immediately to a data field instead of reflecting the number back as pain/leverage."
+    },
+    {
+      "ts": "07:55",
+      "quote": "Does it show you a a monthly average or an annual, or is it just month by month?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer already surfaced both a $170/month figure and 1,200 kWh in January; rep keeps chasing exact monthly breakdown from the portal instead of using what's already sufficient to move forward."
+    },
+    {
+      "ts": "08:11",
+      "quote": "600? Okay. Does it give you an exact for each month, or does it just show the line?",
+      "classification": "knowledge_gap",
+      "stewart_read": "Customer is visibly struggling with the utility portal (errors, disappearing screens) and the rep keeps requesting more granular data instead of pivoting to a verbal readback or ending the exercise."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 45,
-    "verified": 44,
+    "checked": 40,
+    "verified": 39,
     "fuzzy": 0,
     "wrong_ts": 1,
     "not_found": 0

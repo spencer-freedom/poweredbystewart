@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION28_a095b823",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens with an unresolved reference to a prior emailed quote that the rep never clarifies, moves through a mechanical verify sequence that triggers visible customer frustration, and ends in a clean hard DQ once the ground-mount preference surfaces. There is no bill-flip, no cross-sell attempt, and no protocol recovery — the call simply runs out of runway when the structural mismatch (ground mount vs. roof-only) is disclosed.",
+  "trajectory_summary": "The call opens cold, curdles into open hostility over redundant qualifying questions, and ends in a hard DQ once the ground-mount requirement surfaces. The rep never regains control — no probe on the prior quote, no cushioning of the swearing, and the roof/mount gate is delivered flatly with no bridge or alternative before the customer exits.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown, but this is unambiguously a dq (roof/mounting-type hard disqualifier) — not a no_appointment miss or reactive rep failure. The rep correctly identified and stated the disqualifying condition; there was no viable path to booking once ground-mount-only was disclosed.",
+  "outcome_dispute": "This is a legitimate DQ (ground-mount only, Ion residential-roof-only) rather than a rep failure to close, but the rep's flat delivery at 02:08 gave the customer no reason to stay on the line even a moment longer.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "02:12",
-    "quote": "residential roofs for the home. We can't do ground mounts.",
-    "reasoning": "Customer's ground-mount-only preference on a five-acre property is structurally incompatible with Ion's roof-only installation capability, and the customer withdraws interest immediately after, ending the call with no appointment path."
+    "ts": "02:03",
+    "quote": "I don't want it mounted on my roof. I got five acres. I like it mounted on the ground.",
+    "reasoning": "Customer requires a ground-mount install, which Ion does not offer (residential roof-mount only per rep's own statement at 02:08); this is a hard capability gate, and the customer exits immediately after ('I'm not interested').",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +28,7 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the bill figure at 01:54 ('Okay. 340.') but immediately moved to the roof question at 01:59 without reflecting the number back as pain or leverage — the flip never happened before the call ended on the ground-mount DQ."
+    "reasoning": "Rep captured the $340 bill at 01:54 but only echoed '340' back at 01:57 with no emotional flip; the call ended in DQ two lines later before any flip could occur."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call ended on the ground-mount disqualifier immediately after the bill figure and roof question, before the rep reached bill-document collection."
+    "reasoning": "The rep never requested a copy or photo of the utility bill during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +49,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what interested the customer in solar; the call moved directly from intro into address/homeowner verify and never reached this item before the DQ."
+    "reasoning": "The rep did not ask why the customer was interested in solar, and the customer did not volunteer a motivating reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "end_ts": "00:19",
-      "quote": "Hey. This is Bucky with Ion. I'm reaching out about the solar form you filled online. How you doing?",
-      "customer_response": "deflected",
-      "customer_quote": "Alright. I had something. You guys just emailed me a quote over.",
-      "resistance_reason": "other",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "end_ts": "00:13",
+      "quote": "This is Bucky with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -72,47 +80,47 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:29",
-      "end_ts": "00:45",
+      "end_ts": "01:09",
       "quote": "Is, you're at 202 South Nelson Avenue?",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah.",
+      "customer_quote": "It's a single family home.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:09",
-      "end_ts": "01:14",
+      "end_ts": "01:16",
       "quote": "Anybody",
       "customer_response": "cooperative",
       "customer_quote": "Nobody else on the title.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:59",
-      "end_ts": "02:08",
+      "end_ts": "02:18",
       "quote": "And then your roof, you know what kind it is?",
-      "customer_response": "resistant",
+      "customer_response": "cooperative",
       "customer_quote": "I don't want it mounted on my roof. I got five acres. I like it mounted on the ground.",
       "resistance_reason": "other",
-      "rep_followup": "moved_on",
-      "result": "declined"
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:18",
-      "end_ts": "01:22",
-      "quote": "Just a sec. What utility company are you with?",
-      "customer_response": "resistant",
+      "end_ts": "01:31",
+      "quote": "What utility company are you with?",
+      "customer_response": "cooperative",
       "customer_quote": "Black Hills. Those are some of the questions on your fucking questionnaire.",
-      "resistance_reason": "other",
+      "resistance_reason": "",
       "rep_followup": "moved_on",
       "result": "completed"
     },
@@ -120,7 +128,7 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:28",
-      "end_ts": "01:54",
+      "end_ts": "01:56",
       "quote": "Do you know what you're spending on a monthly average?",
       "customer_response": "cooperative",
       "customer_quote": "About $340.",
@@ -154,7 +162,7 @@
     },
     {
       "section": "prior_design",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -162,7 +170,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
@@ -198,10 +206,27 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
+    {
+      "ts": "01:22",
+      "quote": "Black Hills. Those are some of the questions on your fucking questionnaire.",
+      "type": "not_interested",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer vents frustration at repetitive qualifying questions; rep does not acknowledge and simply continues to the next script question, so the underlying irritation was never addressed, only bypassed.",
+      "blocked_section": "utility_company",
+      "attempt_moves": [],
+      "resolved_by_tape": true,
+      "next_event": "bill_amount@01:28",
+      "resolution_agrees": false
+    },
     {
       "ts": "02:03",
       "quote": "I don't want it mounted on my roof. I got five acres. I like it mounted on the ground.",
@@ -210,51 +235,64 @@
       "attempt_quotes": [
         "Okay. We only do roofs and many like, residential roofs for the home. We can't do ground mounts."
       ],
-      "resolved": true,
-      "resolution_ts": "02:15",
-      "reasoning": "This is a genuine hard capability gap (Ion doesn't install ground mounts), not a persuadable objection — the rep stated the limitation once and the customer immediately withdrew interest, which is the correct and only available outcome."
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "This is a hard capability gate, not resistance the rep could overcome — rep stated the limitation once and the customer disqualified themselves out of the call.",
+      "blocked_section": "roof",
+      "attempt_moves": [
+        "reason"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "acknowledging customer frustration mid-verify",
-    "ts": "01:22",
-    "quote": "Black Hills. Those are some of the questions on your fucking questionnaire.",
-    "why": "This is the clearest visible frustration spike on the call and the rep gave it zero acknowledgment, moving straight into the next verify question — a repeatable, coachable habit distinct from the unavoidable ground-mount DQ that ended the call."
+    "topic": "Flat, unbridged hard-gate delivery",
+    "ts": "02:08",
+    "quote": "Okay. We only do roofs and many like, residential roofs for the home. We can't do ground mounts.",
+    "why": "The DQ itself is correct, but Bucky delivers it with zero cushioning or alternative offered, giving the already-hostile customer nothing to do but hang up immediately — a scripted close here would preserve the relationship even on a dead lead."
   },
   "key_moments": [
     {
       "ts": "00:13",
       "quote": "Alright. I had something. You guys just emailed me a quote over.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer references a prior emailed quote as their very first substantive line on the call — this is competitive/prior-touch intelligence the rep never asks about."
-    },
-    {
-      "ts": "00:19",
-      "quote": "Oh, I just I'm with the design team. I help, like, get you their design going so we can find out what we can offer you.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The customer's comment about an emailed quote directly questioned what this call even is, and the rep's answer is vague filler that doesn't explain why he's calling now or reference the form submission per the standard intro script."
+      "stewart_read": "Customer discloses a prior touch (a quote already sent) and the rep does not ask which company, what it showed, or why he's calling again."
     },
     {
       "ts": "01:22",
       "quote": "Black Hills. Those are some of the questions on your fucking questionnaire.",
       "classification": "empathy_miss",
-      "stewart_read": "This is a sharp irritation spike mid-verify — likely fatigue from repetitive-feeling questions layered on top of the unresolved quote confusion from 00:13. The rep does not acknowledge the tone at all and moves straight to the next question."
+      "stewart_read": "Customer is venting frustration at repetitive intake, and the rep moves straight to the next scripted question with zero acknowledgment."
     },
     {
-      "ts": "01:59",
-      "quote": "And then your roof, you know what kind it is?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The roof question is asked as a flat checklist item immediately after the bill figure was captured, with no acknowledgment of the $340/month number the customer just gave."
+      "ts": "02:03",
+      "quote": "I don't want it mounted on my roof. I got five acres. I like it mounted on the ground.",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "Ground-mount request is outside Ion's standard residential-roof install — a real hard-gate scenario, not a soft objection."
+    },
+    {
+      "ts": "02:08",
+      "quote": "Okay. We only do roofs and many like, residential roofs for the home. We can't do ground mounts.",
+      "classification": "protocol_violation",
+      "stewart_read": "Rep states the disqualification with no cushioning, no alternative (e.g., checking on future ground-mount offerings, or a warm close), and no attempt to leave the door open."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
     "checked": 34,

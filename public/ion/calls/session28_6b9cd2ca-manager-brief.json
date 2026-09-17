@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION28_6b9cd2ca",
   "rep_name": "Parker",
-  "trajectory_summary": "This is a fast, low-friction call that ends in a booked time slot, but nearly every verification answer is soft, uncertain, or deferred to a third party (the son), and the rep books anyway without resolving the shading issue, the son's involvement, or the bill collection. The call has the shape of a smooth booking but the underlying qualification is thin.",
-  "shape": "mixed",
-  "outcome_dispute": "V1 tag is unknown; the observed outcome is best read as 'tentative' rather than a clean 'booked' — a day and time were set (Monday at 10AM) but the credit qualifier answer was ambiguous ('Yeah' to a compound question), the bill was never collected, the shading tree issue was left as 'I would consider it,' and the actual bill-payer/account holder (the son) was never confirmed for the appointment despite being referenced three times.",
+  "trajectory_summary": "The call is flat and procedural — Barbara never resists but also never engages, and the rep runs the script beat by beat without adapting to clear signals that she isn't the person who can actually qualify the household. It ends in a booked appointment, but one built on an unconfirmed co-owner and no bill.",
+  "shape": "stagnant",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": false,
-    "ts": "04:19",
-    "quote": "Monday? Okay. And then would you prefer mornings or afternoons",
-    "reasoning": "A specific day and time (Monday 10AM) are set, but the son — the identified co-owner and the person with all the relevant financial/utility information — is never directly confirmed as attending; Barbara only says 'I don't know without checking with my son.'"
+    "ts": "04:44",
+    "quote": "probably either of them. Okay. Well, I'll get you down for a 10AM then.",
+    "reasoning": "A specific day and time (Monday at 10AM) were set, but the co-owner (son) was never directly confirmed to attend — only referenced by Barbara who said she'd need to check with him — and no bill was captured, making this a fragile/tentative set rather than a fully secured booking.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "declined",
+      "bill_amount_known": false,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,77 +29,77 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep never gets an actual dollar amount or usage figure — Barbara states her son handles the electric bill and doesn't know the details, and the rep does not follow up to get a number from her or arrange to get one from the son."
+    "reasoning": "No dollar amount or kWh was captured; the rep asked about the bill delivery but did not obtain any usage or amount."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "03:20",
+    "ask_ts": "03:02",
     "ask_quote": "Do you normally get the bill in the mail, or do you get that online?",
     "result": "declined",
     "method": "none",
     "result_ts": "03:26",
     "result_quote": "I don't know. We haven't lived here that long.",
-    "reasoning": "The rep raised bill collection directly but Barbara could not answer since her son manages it, and the rep did not pivot to arranging bill collection through the son or scheduling it before the appointment."
+    "reasoning": "The rep asked for the bill method, but the customer said they didn't know and noted they recently moved in, so no bill was provided or promised."
   },
   "interest_reason_audit": {
     "asked": true,
-    "ask_ts": "00:47",
+    "ask_ts": "00:57",
     "reason_given": true,
     "reason_ts": "00:57",
     "reason_quote": "Well, it makes sense.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Barbara's answer is vague and generic and falls short of the schema's depth_grading expectation for verify.interest_in_solar; the rep accepts it with 'Yeah. For sure.' and never probes further or ties it back later when setting the appointment."
+    "reasoning": "Barbara's stated reason ('Well, it makes sense.') was acknowledged with a generic 'Yeah. For sure.' at 00:59 and never referenced again when booking or button-up, leaving the interest reason unused as a hook."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:15",
-      "end_ts": "00:22",
-      "quote": "Hey, Barbara. This is Parker. I'm with Ion.",
+      "end_ts": "00:18",
+      "quote": "This is Parker. I'm with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "I'm fine.",
+      "customer_quote": "Yes.",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
-      "ts": "00:47",
+      "ts": "00:57",
       "end_ts": "00:59",
       "quote": "what kinda got you, you know, looking at solar for the home?",
       "customer_response": "cooperative",
       "customer_quote": "Well, it makes sense.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:29",
       "end_ts": "00:45",
-      "quote": "was it the 4309 Northeast 114th Street",
+      "quote": "Just to make sure I have the correct address here",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:48",
-      "end_ts": "01:57",
+      "end_ts": "01:59",
       "quote": "Was there anyone else with you on the title of the home?",
       "customer_response": "cooperative",
       "customer_quote": "Oh, my son.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "roof",
@@ -101,20 +110,20 @@
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:21",
-      "end_ts": "02:29",
-      "quote": "what electric company were you currently working with, Barbara?",
-      "customer_response": "deflected",
+      "end_ts": "02:30",
+      "quote": "And then what electric company were you currently working with, Barbara?",
+      "customer_response": "cooperative",
       "customer_quote": "I don't know. My son handles that.",
-      "resistance_reason": "dont_have_it",
+      "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "declined"
+      "result": "partial"
     },
     {
       "section": "bill_amount",
@@ -132,13 +141,13 @@
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:33",
-      "end_ts": "02:56",
-      "quote": "you can have a credit score above 670. Is that sound like the case for you or your son?",
+      "end_ts": "02:57",
+      "quote": "you can have a credit score above 670.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "military",
@@ -167,81 +176,92 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "03:20",
-      "end_ts": "03:26",
+      "ts": "03:02",
+      "end_ts": "03:30",
       "quote": "Do you normally get the bill in the mail, or do you get that online?",
       "customer_response": "deflected",
       "customer_quote": "I don't know. We haven't lived here that long.",
       "resistance_reason": "dont_have_it",
       "rep_followup": "moved_on",
-      "result": "declined"
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "04:01",
-      "end_ts": "04:47",
-      "quote": "I know we have some availability as early as tomorrow or Monday or Tuesday.",
+      "ts": "03:55",
+      "end_ts": "04:52",
+      "quote": "I know we have some availability as early as tomorrow",
       "customer_response": "cooperative",
-      "customer_quote": "I can probably next Monday.",
+      "customer_quote": "probably next Monday.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
       "ts": "04:52",
-      "end_ts": "05:30",
-      "quote": "our specialist will just drop by and plan to talk to your you and your son on Monday at ten",
+      "end_ts": "05:12",
+      "quote": "plan to talk to your you and your son on Monday at ten",
       "customer_response": "cooperative",
       "customer_quote": "Okay.",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "persisted",
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "co-decider inclusion for the son",
-    "ts": "03:03",
-    "quote": "I know you said your son does all the electric bill.",
-    "why": "The son is referenced three times as the person who holds the title, the utility info, and possibly the credit qualifier, yet the rep never gets a direct line to him or firmly confirms his attendance beyond Barbara's uncertain 'I don't know without checking with my son.' This appointment is booked around the person who actually has the information needed to move the deal forward."
+    "topic": "Qualifying the wrong household member without looping in the actual decision-maker",
+    "ts": "02:27",
+    "quote": "I don't know. My son handles that.",
+    "why": "Barbara cannot answer utility, credit, or bill questions accurately — every qualifier from this point forward rests on an unverified proxy answer, making the entire booking fragile."
   },
   "key_moments": [
     {
-      "ts": "01:07",
-      "quote": "I do see that big tree kinda in front. Is that still there by chance?",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "This is actually a feasibility-risk flag, not an enthusiasm signal in the positive sense, but the rep does raise it proactively via satellite imagery, which is a good verification instinct. The follow-through is where it breaks down — see the next moment."
+      "ts": "01:48",
+      "quote": "Was there anyone else with you on the title of the home?",
+      "classification": "spouse_handling",
+      "stewart_read": "Son is on title — this triggers the adult-child co-decision-maker protocol, but rep doesn't secure his direct involvement until button-up."
     },
     {
-      "ts": "01:24",
-      "quote": "I would consider it.",
-      "classification": "conditional_booking",
-      "stewart_read": "The rep asked a binary willingness question and got a hedge, then proceeded to book the appointment on the assumption of cooperation ('as long as you're willing to consider it'). This is a real unresolved barrier to system feasibility, not just a procedural gap."
+      "ts": "02:27",
+      "quote": "I don't know. My son handles that.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Rep says 'okay, no worries' and moves on instead of probing whether son should be looped in for this and the remaining financial questions."
     },
     {
-      "ts": "02:06",
-      "quote": "What'd you say?",
-      "classification": "empathy_miss",
-      "stewart_read": "Barbara needs a simple yes/no question repeated, which combined with her later inability to recall her move-in date, suggests possible hearing or comprehension difficulty. The rep repeats the question flatly and moves on without checking in on her."
+      "ts": "02:50",
+      "quote": "Do you do you or your son have a credit score above 670?",
+      "classification": "protocol_violation",
+      "stewart_read": "Rep asks Barbara to answer the credit qualifier on behalf of her son, who is the actual financial decision-maker — this is a self-report through a proxy who has already said she doesn't know the household's finances."
     },
     {
-      "ts": "02:43",
-      "quote": "Is that sound like the case for you or your son?",
-      "classification": "knowledge_gap_handling",
-      "stewart_read": "The rep asks a compound qualifying question (Barbara OR her son) and accepts a bare 'Yeah' at 02:56 without clarifying whose credit actually qualifies. Since Barbara has already said her son handles finances, this is the one hard qualifier in the call and it's left genuinely ambiguous."
+      "ts": "03:26",
+      "quote": "I don't know. We haven't lived here that long.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Bill collection fails and rep pivots to move-in date instead of finding an alternate path (e.g., asking the son to text the bill before Monday)."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
     "checked": 47,

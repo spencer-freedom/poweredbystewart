@@ -1,17 +1,25 @@
 {
   "call_id": "10000520497",
   "rep_name": "Carter",
-  "trajectory_summary": "The call opens efficiently with a low-friction, appointment-already-exists framing that gets the customer engaged fast, and the rep runs the tax/credit qualifier cleanly. But the call disintegrates in the back half: the customer surfaces real scheduling chaos (no scheduler, no computer, needs a callback after 3PM tomorrow) and the rep responds with a vague 'callback or text' offer instead of locking the specific window the customer just gave, ending in an unconfirmed 40-minute phone-call proposal that the customer never explicitly accepts before hanging up.",
-  "shape": "mixed",
-  "outcome_dispute": "This should not be read as a clean 'callback' or 'tentative' outcome. No day or time was locked — the customer named 'after 3PM tomorrow' as their availability at 02:27, but the rep never repeated it back or confirmed it, and the call ends with the customer saying 'I gotta go' before agreeing to the rep's 40-minute-call proposal. This is closer to an unanchored soft exit than a real booked callback.",
+  "trajectory_summary": "The call opens with quick, easy cooperation and a customer volunteering his own availability — a strong start the rep barely had to work for. But the rep never locks the offered Tuesday 1:30 slot before qualifying and address-checking, and once the customer's schedule falls apart, the rep settles for an unanchored text-and-callback with no committed time. Energy leaked from a promising open into a soft, ownerless exit.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "This should not be read as tentative/booked — no day or time was actually confirmed by the end; it is best read as a callback with only a vague 'after 3PM tomorrow' window, and even that wasn't restated or locked by the rep.",
   "observed_outcome": {
-    "outcome": "no_appointment",
+    "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "03:04",
-    "quote": "Does that sound good? I gotta go. I yeah. I gotta go. Yeah. Do that. Thank you. Yep. Take care.",
-    "reasoning": "No day or time is ever locked. The customer gave a specific window ('after 3PM tomorrow') at 02:24-02:27, but the rep responded with an undefined callback-or-text offer at 02:40 rather than confirming that window, and the call ends with the customer rushing off ('I gotta go') without a clear yes to the proposed 40-minute phone call or any confirmed date/time. This is best read as no_appointment, not a locked callback."
+    "ts": "02:40",
+    "quote": "Okay. Yeah. We can give you a callback to set something up. Or would it be best if I just texted",
+    "reasoning": "No day or time was locked by either party by the end of the call; the rep agreed to text and wait for the customer to state availability, with only a vague 'call me after 3PM tomorrow' from the customer, so this is a callback without a confirmed slot rather than booked or tentative.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches a bill-amount discussion — the rep frames this as a recycled/existing-estimate lead ('we got that solar estimate built for your home') and the entire call is consumed by scheduling logistics before any bill figure is raised."
+    "reasoning": "No monthly bill amount or kWh usage was requested or given during the call, so no flip could be executed."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "No mention of a utility bill or usage document occurs anywhere in the transcript; the call frames the estimate as already built, so bill collection never comes up."
+    "reasoning": "The rep did not request the customer's utility bill or ask for a photo/email of it; they offered to text and set up scheduling instead."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +49,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks what interested the customer in solar; the call treats this as a recycled lead with a pre-existing estimate rather than a fresh qualification conversation, so this script beat is entirely skipped."
+    "reasoning": "The rep did not ask why the customer was interested in solar, and the customer did not volunteer a reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "end_ts": "00:23",
+      "end_ts": "00:11",
       "quote": "Hey, John. This is Carter calling from ION. How are you today?",
       "customer_response": "cooperative",
       "customer_quote": "I'm fine.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -71,11 +79,11 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "01:26",
+      "ts": "01:34",
       "end_ts": "01:38",
       "quote": "It's the 26170.",
       "customer_response": "cooperative",
-      "customer_quote": "Which house did you do it for? The 26,170 or the 26474?",
+      "customer_quote": "The 26,",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -133,7 +141,7 @@
       "status": "asked",
       "ts": "01:05",
       "end_ts": "01:16",
-      "quote": "there's a huge tax incentive. You just need to pay income tax and have a credit score above six fifty. Is that the case for you?",
+      "quote": "you just need to pay income tax and have a credit score above six fifty. Is that the case for you?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
@@ -154,42 +162,6 @@
     },
     {
       "section": "prior_design",
-      "status": "asked",
-      "ts": "00:13",
-      "end_ts": "00:23",
-      "quote": "we got that solar estimate built for your home",
-      "customer_response": "cooperative",
-      "customer_quote": "Oh, let's see.",
-      "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
-    },
-    {
-      "section": "bill_collection",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "appointment_set",
-      "status": "asked",
-      "ts": "00:29",
-      "end_ts": "02:59",
-      "quote": "It looks like it'd be easier for us to do a phone call. So the phone call would be just forty minutes long. We would just go over everything.",
-      "customer_response": "deflected",
-      "customer_quote": "I can't do it on Tuesday. Sorry. I have an appointment then",
-      "resistance_reason": "timing",
-      "rep_followup": "alternative_offered",
-      "result": "partial"
-    },
-    {
-      "section": "button_up",
       "status": "skipped",
       "ts": "",
       "end_ts": "",
@@ -199,6 +171,47 @@
       "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "skipped"
+    },
+    {
+      "section": "bill_collection",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "01:02",
+      "end_ts": "02:38",
+      "quote": "Yeah. Let me look if that's available.",
+      "customer_response": "deflected",
+      "customer_quote": "3PM",
+      "resistance_reason": "timing",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
+    },
+    {
+      "section": "button_up",
+      "status": "asked",
+      "ts": "02:49",
+      "end_ts": "03:02",
+      "quote": "Okay. I'll text you. And then once you know when you're available, just let me know.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "partial",
+      "parts_done": [
+        "hour_block",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
@@ -206,61 +219,89 @@
       "ts": "01:52",
       "quote": "I'm I'm real busy right now.",
       "type": "timing_or_callback",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep did not address the time-pressure signal at all, continuing to search the calendar silently, and the call subsequently unraveled into a vague callback.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [],
+      "resolved_by_tape": true,
+      "next_event": "button_up@02:49",
+      "resolution_agrees": false
+    },
+    {
+      "ts": "01:55",
+      "quote": "I can't do it on Tuesday. Sorry. I have an appointment then",
+      "type": "timing_or_callback",
       "rep_attempts": 1,
       "attempt_quotes": [
         "Okay. Yeah. We can give you a callback to set something up. Or would it be best if I just texted"
       ],
       "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "The customer's time pressure and scheduling chaos (no scheduler, broken computer) is never fully resolved into a locked appointment; the rep offers only a single, vague alternative before the call ends."
+      "resolution_ts": "02:46",
+      "reasoning": "Rep offered an alternative channel (text/callback) but never got a specific date/time locked, so the objection was deflected rather than resolved.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@02:49",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Lock the customer's own stated window instead of offering a vague alternative",
+    "topic": "Unanchored close — no locked date/time",
     "ts": "02:40",
     "quote": "Okay. Yeah. We can give you a callback to set something up. Or would it be best if I just texted",
-    "why": "The customer gave an exact, actionable callback time ('after 3PM tomorrow') at 02:24-02:27, and the rep's next line ignored it in favor of an open-ended choice. This is the single most consequential miss on the call — it turns a specific, capturable next step into an unanchored soft exit."
+    "why": "The call ends with zero specific commitment (day, time, or channel confirmed); this is the single biggest procedural gap costing the appointment."
   },
   "key_moments": [
     {
-      "ts": "00:13",
-      "quote": "I'm just calling because we got that solar estimate built for your home. Just haven't been able to get it out to you yet.",
-      "classification": "other",
-      "stewart_read": "Rep skips a formal company/legitimacy framing (no 'ION Solar', no state, no referral source beyond naming ION once) but substitutes urgency-of-delivery framing that gets past the 'who is this' friction quickly. Effective but thin on legitimacy-building per the schema's intent."
+      "ts": "01:00",
+      "quote": "Say say Tuesday at, 01:30.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "Customer hands the rep a specific day and time unprompted; the rep should have immediately locked it verbally before doing anything else."
     },
     {
-      "ts": "00:56",
-      "quote": "Tuesday? Okay. Yes. Say say Tuesday at, 01:30.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer proactively offers a specific day and time. Instead of confirming it immediately ('Great, Tuesday at 1:30 — let me lock that in'), the rep says he'll 'look' and pivots straight into the qualifier questions, leaving the slot unconfirmed while other business gets handled."
+      "ts": "01:05",
+      "quote": "So there's a huge tax incentive. You You probably heard that. You just need to pay income tax and have a credit score above six fifty.",
+      "classification": "bill_anchor",
+      "stewart_read": "Rep runs a qualifier gate correctly in wording but at the wrong moment — after the customer already committed to a time, risking losing that momentum."
     },
     {
-      "ts": "01:55",
-      "quote": "Oh, I see it. I can't do it on Tuesday. Sorry. I have an appointment then",
-      "classification": "timing_or_callback",
-      "stewart_read": "The Tuesday 1:30 slot the customer offered collapses because the rep took too long confirming it and the conflict surfaced only once the rep checked availability. This is the direct cost of not locking the window immediately at 00:56."
+      "ts": "01:52",
+      "quote": "I'm I'm real busy right now.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "This is a time-pressure signal the rep should treat per protocol — anchor a firm short ask or time, not let the call drift."
     },
     {
-      "ts": "02:24",
-      "quote": "Give me a call. I think today is give me a call, tomorrow, that my scheduler will be back, tomorrow. Call me tell me call me after 3PM tomorrow",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer hands the rep a specific, actionable instruction — call back after 3PM tomorrow. This is a clean anchor. The rep's very next line at 02:40 does not repeat this window back or commit to it; instead he offers an open-ended 'callback... or text' choice, effectively discarding the specific instruction the customer just gave seconds earlier."
+      "ts": "02:08",
+      "quote": "My scheduler is not here right now, and my computer is not working.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "This is the moment the appointment fully falls apart — the customer offers a vague future window instead of a time, and the rep never presses for specificity."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 34,
-    "verified": 31,
-    "fuzzy": 1,
-    "wrong_ts": 2,
+    "checked": 37,
+    "verified": 36,
+    "fuzzy": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

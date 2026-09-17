@@ -1,26 +1,35 @@
 {
   "call_id": "SESSION15",
   "rep_name": "Joe",
-  "trajectory_summary": "This was a low-friction, already-warm call handed off from customer service, and the rep moved through verify, bill capture, and scheduling efficiently without major stumbles. The call stayed flat and cooperative throughout rather than showing dramatic energy shifts, and ended with a real appointment time locked, though the rep's honest admission of a financial knowledge gap left one customer question unresolved.",
+  "trajectory_summary": "The call opens with unusually high goodwill (a warm internal handoff) and the rep coasts through verify items efficiently, but never builds on the momentum — no interest question, no bill flip, no reason tie-back. It ends on a genuinely curious customer question that the rep handles honestly but leaves unresolved, and the appointment settles on a phone-not-computer format the schema flags as a no-show risk.",
   "shape": "mixed",
-  "outcome_dispute": "v1 outcome is unknown; observed outcome is booked — a specific day (tomorrow) and time (4 PM) were agreed for a follow-up call after the rep adjusted from the original 10 AM offer to fit the customer's work schedule.",
+  "outcome_dispute": "v1 tag is unknown; based on the transcript this is a tentative booking — a day and time (4PM tomorrow) were agreed, but the computer/no-driving requirement was negotiated away in favor of a phone-at-work setup, which weakens the button-up.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "06:04",
-    "quote": "Okay. Yeah. Of course. We'll we'll do that. I'll give you a call at four instead.",
-    "reasoning": "A specific day (tomorrow) and time (4 PM) were agreed upon after the rep adjusted from the original 10 AM slot to accommodate the customer's work schedule, and the rep confirmed it verbally."
+    "quote": "I'll give you a call at four instead.",
+    "reasoning": "A specific day (tomorrow) and time (4PM) were agreed, but the button-up requirement of being at a computer, not driving, was undermined when the customer said he'd be at work on his phone — the format was never firmly locked back down, making this a tentative rather than a clean booked outcome. No co-owner or spouse was identified on this call.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "02:25",
-    "bill_quote": "I'm I'm paying $2.32 this month.",
+    "bill_ts": "04:00",
+    "bill_quote": "1103",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the bill figure cleanly but responded with 'That's pretty average, actually' (02:32), normalizing rather than flipping it into urgency — the flip should have gone right there, tying the $232 figure to what solar would replace."
+    "reasoning": "Rep captured the bill ($232/month, $1103 graph total) and only noted it was 'a little bit more than average' — he never turned it into a reason to act; the flip should have landed right after 02:36 or again at the 04:35 wrap-up before scheduling."
   },
   "bill_document_audit": {
     "asked": true,
@@ -28,52 +37,52 @@
     "ask_quote": "Do you happen to have a paper bill handy you could look at or, able to log in?",
     "result": "received_on_call",
     "method": "read_aloud",
-    "result_ts": "04:00",
-    "result_quote": "1103 Mhmm. 100265, 100632 Mhmm. 200213200358100910100242892100147100431153910491025.",
-    "reasoning": "Customer offered a screenshot, but the rep pivoted him to reading the monthly kWh numbers aloud off his online bill, and the customer complied fully on the call, consistent with the schema's alternative_paths guidance for efficient live capture."
+    "result_ts": "04:33",
+    "result_quote": "1025.",
+    "reasoning": "Rep asked for the bill at 03:21 and the customer read the monthly numbers aloud during the call, concluding with '1025.' at 04:33."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": false,
-    "reason_ts": "",
-    "reason_quote": null,
-    "reason_used": "no_reason_given",
+    "reason_given": true,
+    "reason_ts": "01:00",
+    "reason_quote": "I was hoping to I was hoping to get a quote,",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what got you interested in solar' — the closest is a confirmation ('Looks like you had some questions about solar for your home. Does that sound right?' at 01:00), but no open-ended interest reason was solicited or given beyond wanting a quote."
+    "reasoning": "Customer's stated reason ('I was hoping to get a quote') at 01:00 was never referenced again at booking or button-up; a tie-back like 'tomorrow we'll get you that quote' was available and skipped."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
-      "ts": "00:49",
-      "end_ts": "00:57",
+      "ts": "00:01",
+      "end_ts": "00:04",
       "quote": "Hi. This is Joe with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "Hi, Joe. This is Corey Hoffman.",
+      "customer_quote": "Hey, Joe. This is Austin in customer service. I've got,",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "asked",
-      "ts": "01:00",
-      "end_ts": "01:19",
-      "quote": "Looks like you had some questions about solar for your home. Does that sound right?",
-      "customer_response": "cooperative",
-      "customer_quote": "I was hoping to I was hoping to get a quote",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "01:19",
+      "ts": "01:25",
       "end_ts": "01:27",
-      "quote": "Let's see if you filled out the contact form. So is it 961 North Haven Circle?",
+      "quote": "North Haven Circle?",
       "customer_response": "cooperative",
       "customer_quote": "Yes. That's it. Yes, sir.",
       "resistance_reason": "",
@@ -96,8 +105,8 @@
       "section": "roof",
       "status": "asked",
       "ts": "01:46",
-      "end_ts": "01:59",
-      "quote": "I have your home pulled up here just on Google Maps. You're you're in a good area for solar. Looks like there might be a bit of shade on your roof.",
+      "end_ts": "01:53",
+      "quote": "I have your home pulled up here just on Google Maps.",
       "customer_response": "cooperative",
       "customer_quote": "Oh, no. Actually, the trees are far enough away.",
       "resistance_reason": "",
@@ -120,10 +129,10 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:20",
-      "end_ts": "02:32",
+      "end_ts": "04:33",
       "quote": "And about how much per month is your typical Dominion bill, like, on average?",
       "customer_response": "cooperative",
-      "customer_quote": "I'm I'm paying $2.32 this month.",
+      "customer_quote": "1025.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -131,11 +140,11 @@
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:42",
+      "ts": "02:50",
       "end_ts": "03:10",
-      "quote": "In order to qualify for the program, you just need to be on the title of the home and have a credit score above 670.",
+      "quote": "Is that the case for you?",
       "customer_response": "cooperative",
-      "customer_quote": "I have a credit score higher than that.",
+      "customer_quote": "Oh, I mean, I I pay a mortgage. So I think that's what I mean. I think Yeah. That counts.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -159,7 +168,7 @@
       "end_ts": "01:38",
       "quote": "Have you seen any solar designs for your home before, or is this, like, the very first that you're ever looking into?",
       "customer_response": "cooperative",
-      "customer_quote": "Very first. I'm getting another quote from another company on Sunday.",
+      "customer_quote": "Very first. I'm getting another quote from another company on Sunday. Mhmm.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -171,96 +180,134 @@
       "end_ts": "04:33",
       "quote": "Do you happen to have a paper bill handy you could look at or, able to log in?",
       "customer_response": "cooperative",
-      "customer_quote": "I can shoot you a screenshot or something.",
+      "customer_quote": "1025.",
       "resistance_reason": "",
-      "rep_followup": "alternative_offered",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "04:44",
-      "end_ts": "06:04",
-      "quote": "We can have someone give you a call as soon as tomorrow morning.",
+      "ts": "04:56",
+      "end_ts": "06:08",
+      "quote": "Tomorrow at ten would work.",
       "customer_response": "cooperative",
       "customer_quote": "We could do 4PM tomorrow.",
-      "resistance_reason": "timing",
-      "rep_followup": "alternative_offered",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "05:17",
-      "end_ts": "05:49",
-      "quote": "The only thing we do ask is just that you're, like, at home in front of a computer, with access to email so they can give you a visual while you're going over the numbers.",
-      "customer_response": "resistant",
-      "customer_quote": "Yeah. I'll be at work with my phone, and I'll be able to pull it up.",
-      "resistance_reason": "timing",
-      "rep_followup": "alternative_offered",
-      "result": "partial"
+      "ts": "06:04",
+      "end_ts": "06:08",
+      "quote": "I'll give you a call at four instead.",
+      "customer_response": "cooperative",
+      "customer_quote": "We could do 4PM tomorrow.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed",
+      "parts_done": [
+        "recap",
+        "hour_block",
+        "no_driving",
+        "reconfirm"
+      ],
+      "parts_score": "4/4"
     }
   ],
   "objections": [
     {
+      "ts": "05:00",
+      "quote": "Is there a way to email me a quote?",
+      "type": "proposal_by_email",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. Of course. We'll send you an email as well."
+      ],
+      "resolved": true,
+      "resolution_ts": "05:04",
+      "reasoning": "Customer's request to skip the call format is a soft version of the send-proposal-before-meeting pattern; rep conceded immediately rather than holding the line that the numbers need explanation on the call.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "concede"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@06:04",
+      "resolution_agrees": true
+    },
+    {
       "ts": "05:31",
       "quote": "Yeah. I'll be at work with my phone, and I'll be able to pull it up.",
-      "type": "timing_or_callback",
-      "rep_attempts": 2,
+      "type": "other",
+      "rep_attempts": 1,
       "attempt_quotes": [
-        "Would there be, like, a better time? We could do, like, later in the evening after work.",
-        "Okay. Yeah. Of course. We'll we'll do that. I'll give you a call at four instead."
+        "Would there be, like, a better time? We could do, like, later in the evening after work."
       ],
       "resolved": true,
       "resolution_ts": "06:04",
-      "reasoning": "Customer flagged he'd only have phone access at the originally scheduled 10 AM slot; rep offered an evening alternative and the customer proposed 4 PM, which the rep locked in."
+      "reasoning": "Customer pushed back on the computer requirement; rep's only counter-move was offering a different time, not re-asserting the computer/no-driving rule, so the requirement itself was quietly dropped.",
+      "blocked_section": "button_up",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@06:04",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "bill capture without the flip",
-    "ts": "02:32",
-    "quote": "That's pretty average, actually.",
-    "why": "The rep got the exact bill number ($232) cleanly but responded by normalizing it instead of using it as the emotional anchor for urgency, which is the single highest-leverage move available on this call per coaching_philosophy.bill_anchoring."
+    "topic": "Button-up requirement diluted instead of held",
+    "ts": "05:31",
+    "quote": "Yeah. I'll be at work with my phone, and I'll be able to pull it up.",
+    "why": "The computer/no-driving rule exists to protect show/qualify rate; rep adjusted the time but let the format (phone at work) slide, which the schema flags as a no-show risk factor."
   },
   "key_moments": [
     {
-      "ts": "02:10",
-      "quote": "Yeah. Now it makes sense why you'd wanna look into your solar options. I know they've been using their rates like crazy. I think it was, like, 20% just this year.",
-      "classification": "bill_anchor",
-      "stewart_read": "Rep pre-frames the utility as the villain using a rate-hike claim before the actual bill number is even captured — this is priming for the anchor rather than the anchor/flip itself, which happens two lines later."
+      "ts": "01:00",
+      "quote": "I was hoping to I was hoping to get a quote,",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer's stated reason for calling is filed and never referenced again — no flip, no tie-back at booking."
     },
     {
-      "ts": "02:32",
-      "quote": "That's pretty average, actually.",
+      "ts": "02:20",
+      "quote": "And about how much per month is your typical Dominion bill, like, on average?",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer gives a live bill figure ($232) and the rep's response downplays it as average rather than using it as leverage — a missed flip opportunity right where the schema calls for ask+acknowledge+flip."
+      "stewart_read": "Bill amount ($232, later graph total $1103) is captured but the rep never flips it into alignment-against-Dominion; he just says it's 'a little bit more than average' and moves to qualifiers."
+    },
+    {
+      "ts": "02:10",
+      "quote": "I know they've been using their rates like crazy. I think it was, like, 20% just this year.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep volunteers a specific rate-increase statistic about Dominion without grounding — borderline fabricated number per numeric_discipline, and it's premature villain-framing better suited to the bill flip than a passing comment."
     },
     {
       "ts": "05:00",
       "quote": "Is there a way to email me a quote?",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer proactively asks for a specific delivery channel for his quote — a sign of active engagement and intent to review materials on his own, not a service request outside solar (so not a cross-sell trigger)."
-    },
-    {
-      "ts": "05:39",
-      "quote": "I think we we would need you to kinda it'll be about thirty to forty minutes. So I just don't wanna give, like, bad expectations.",
-      "classification": "other",
-      "stewart_read": "Rep states a 30-40 minute window for the follow-up call, which drifts from the schema's standard one-hour block framing — similar to the credit-threshold drift observed elsewhere in the corpus (650 vs 670)."
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is the send-proposal-before-meeting pattern in soft form; rep concedes immediately instead of holding the line that the call explains the numbers."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 46,
-    "verified": 42,
-    "fuzzy": 3,
+    "checked": 53,
+    "verified": 52,
+    "fuzzy": 0,
     "wrong_ts": 1,
     "not_found": 0
   }

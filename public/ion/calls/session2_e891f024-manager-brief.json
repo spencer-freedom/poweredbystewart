@@ -1,47 +1,56 @@
 {
   "call_id": "SESSION2_e891f024",
   "rep_name": "Meg",
-  "trajectory_summary": "The call opens cold and stays transactional through a confusing bill-swap explanation and a lengthy Android photo-share struggle, but the rep holds the line, gets the bill photo, and converts a stated in-person discomfort into a phone appointment that the customer accepts. It ends booked with a specific day/time, though the pricing explanation midway created avoidable friction.",
+  "trajectory_summary": "The call opens flat, dips into confusion when the rep over-explains the bill-swap mechanism, recovers once the bill photo lands, and closes with a wobble over the in-person visit before settling into a booked phone appointment. Energy leaked in the middle third from scope creep and tech friction, but the rep recovered by simplifying at the close.",
   "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "phone",
     "datetime_captured": true,
-    "co_owner_confirmed": null,
-    "ts": "11:37",
+    "co_owner_confirmed": false,
+    "ts": "11:36",
     "quote": "Twelve's fine.",
-    "reasoning": "Customer explicitly agrees to a specific day (tomorrow) and time (12PM) for a phone appointment with the specialist, meeting the day+time bar for booked."
+    "reasoning": "Customer explicitly agrees to a specific day (tomorrow) and time (noon) for a phone call; the son identified as co-owner at 00:45 is never mentioned again or confirmed for the appointment.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "01:30",
-    "bill_quote": "Oh, probably a little over probably over 200 or something, I don't know.",
-    "flip_executed": "yes",
-    "flip_ts": "01:39",
-    "flip_quote": "Yeah. Let's definitely see what we can do to get that lower, our program.",
-    "reasoning": "Rep captures the ~$200/month figure and immediately pivots to the program lowering it, a direct (if generic) flip into the reason to act."
+    "bill_ts": "06:31",
+    "bill_quote": "You know what? Yes. It's 929.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "Rep captured the $200/mo and later $929 bill figures but never flipped them into an emotional against-the-utility frame; the flip should have landed at 03:55 ('No. I'm not following you.') using the $200/mo figure directly instead of re-explaining program mechanics."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "02:23",
-    "ask_quote": "Do you get a paper bill, or do you do online billing?",
+    "ask_ts": "06:04",
+    "ask_quote": "So what we can do, if you can just take a photo of both of those bills,",
     "result": "received_on_call",
     "method": "text",
-    "result_ts": "09:53",
-    "result_quote": "Perfect. Okay. That is exactly what we're looking for.",
-    "reasoning": "Rep asked about bill format, then walked the customer through texting a photo of the bar graph; after a multi-minute tech struggle the customer successfully sent it and the rep confirmed receipt on the call."
+    "result_ts": "09:55",
+    "result_quote": "That is exactly what we're looking for. K.",
+    "reasoning": "The rep asked for photos at 06:04; the customer indicated they sent it and the rep confirmed receipt around 09:55."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:49",
     "reason_given": true,
     "reason_ts": "00:57",
-    "reason_quote": "Well, I can have no electric bill, and I might have to pay for the big bucks for this, and it works well.",
+    "reason_quote": "have no electric bill, and I might have to pay for the big bucks for this, and it works well.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Customer's stated motivation was eliminating his electric bill entirely, but the rep's later bill-flip and appointment close never explicitly looped back to 'no electric bill' as the framing — it stayed generic ('save some money')."
+    "reasoning": "Customer's stated interest ('have no electric bill, and I might have to pay for the big bucks for this') was acknowledged with a generic 'Absolutely' but never reinforced later when booking the appointment or button-up."
   },
   "script_coverage": [
     {
@@ -49,9 +58,9 @@
       "status": "asked",
       "ts": "00:04",
       "end_ts": "00:10",
-      "quote": "Hey, Dave. This is Meg. I'm with Ion. I'm reaching out about the solar forms you filled out online.",
+      "quote": "Hey, Dave. This is Meg. I'm with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "Yes.",
+      "customer_quote": "Fine.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -60,20 +69,20 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "00:49",
-      "end_ts": "01:03",
+      "end_ts": "00:57",
       "quote": "Now what's the interest in solar for you and your son?",
       "customer_response": "cooperative",
-      "customer_quote": "Well, I can have no electric bill, and I might have to pay for the big bucks for this, and it works well.",
+      "customer_quote": "have no electric bill, and I might have to pay for the big bucks for this, and it works well.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:22",
-      "end_ts": "00:37",
-      "quote": "I wanted to start by making sure I've got the address correct.",
+      "end_ts": "00:31",
+      "quote": "I wanted to start by making sure I've got the address correct. 103",
       "customer_response": "cooperative",
       "customer_quote": "Correct.",
       "resistance_reason": "",
@@ -84,12 +93,12 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "00:40",
-      "end_ts": "00:45",
+      "end_ts": "00:47",
       "quote": "And you're the property owner. Is there anyone else on the title with you?",
       "customer_response": "cooperative",
       "customer_quote": "My son.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -108,10 +117,10 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "01:12",
-      "end_ts": "01:23",
+      "end_ts": "01:24",
       "quote": "What electric company are you with, Dave?",
       "customer_response": "cooperative",
-      "customer_quote": "Correct. Yeah.",
+      "customer_quote": "Well, C and T Electric.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -120,10 +129,10 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:27",
-      "end_ts": "01:37",
+      "end_ts": "01:30",
       "quote": "And how much are you paying on average?",
       "customer_response": "cooperative",
-      "customer_quote": "Oh, probably a little over probably over 200 or something, I don't know.",
+      "customer_quote": "Oh, probably a little over probably over 200 or something, I don't know. Wow. Okay.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -132,13 +141,13 @@
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:48",
-      "end_ts": "02:07",
-      "quote": "Now the only requirement is that you have a credit score above 670. Is that true for you?",
-      "customer_response": "resistant",
+      "end_ts": "01:54",
+      "quote": "Now the only requirement is that you have a credit score above 670.",
+      "customer_response": "cooperative",
       "customer_quote": "I have an excellent credit score. But why would I need credit?",
-      "resistance_reason": "trust",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
@@ -168,65 +177,68 @@
       "section": "bill_collection",
       "status": "asked",
       "ts": "02:23",
-      "end_ts": "09:55",
+      "end_ts": "06:04",
       "quote": "Do you get a paper bill, or do you do online billing?",
       "customer_response": "cooperative",
-      "customer_quote": "I get a paper bill, but it comes out automatically, I think.",
-      "resistance_reason": "dont_have_it",
+      "customer_quote": "I have them.",
+      "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "10:07",
+      "ts": "10:16",
       "end_ts": "11:37",
       "quote": "Do you have a preference of mornings, afternoons, or evenings?",
-      "customer_response": "resistant",
-      "customer_quote": "I don't know if I'm comfortable with it.",
-      "resistance_reason": "trust",
-      "rep_followup": "alternative_offered",
+      "customer_response": "cooperative",
+      "customer_quote": "Tomorrow is good. Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "11:45",
-      "end_ts": "12:28",
-      "quote": "Now with with a phone call, there's a couple things that we ask. We wanna make sure you're not driving and that you have access to your email so you can see the photos that we'll send you.",
+      "ts": "11:40",
+      "end_ts": "12:09",
+      "quote": "Tomorrow at twelve, we'll give you a phone call to go through all the information.",
       "customer_response": "cooperative",
       "customer_quote": "Nope.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "no_driving",
+        "reconfirm"
+      ],
+      "parts_score": "3/4"
     }
   ],
   "objections": [
     {
-      "ts": "01:54",
-      "quote": "I have an excellent credit score. But why would I need credit?",
-      "type": "trust_or_scam",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "It's just one of the factors that I guess you take into account. I honestly don't know."
-      ],
-      "resolved": true,
-      "resolution_ts": "02:07",
-      "reasoning": "Customer drops the credit question and moves on without further pushback after rep's weak explanation, but it was resolved by customer disengagement rather than a strong rep answer."
-    },
-    {
-      "ts": "02:56",
-      "quote": "Why don't you give me the is there an upfront cost, or what's what's the deal? I don't wanna waste your time or mine.",
+      "ts": "02:52",
+      "quote": "is there an upfront cost, or what's what's the deal? I don't wanna waste your time or mine.",
       "type": "cost",
       "rep_attempts": 3,
       "attempt_quotes": [
         "So the the way the program works, there's no upfront cost, and you don't have to pay for install.",
         "So you're there's a a payment each month, but it's replacing the bill that you already paid, and we're required to make it cheaper.",
-        "So when you go solar, you're producing your own electricity, so you don't need to pay the electric provider anymore."
+        "So let's say so we've got the the CNT bill. Right? You're paying them every single month."
       ],
       "resolved": false,
-      "resolution_ts": "04:37",
-      "reasoning": "Customer never explicitly says he understands or is satisfied; the topic is dropped only because the rep redirects to needing the bill data ('And that's why I need to see the usage on your bill for'), not because the objection was resolved."
+      "resolution_ts": "",
+      "reasoning": "The initial cost/upfront question was never cleanly resolved in this segment; customer explicitly says he's still not following at 03:55, and the rep moves to bill collection instead of confirming understanding.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "reason",
+        "restate",
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@10:16",
+      "resolution_agrees": false
     },
     {
       "ts": "10:33",
@@ -234,57 +246,89 @@
       "type": "trust_or_scam",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "We could always do a phone call."
+        "Yeah. So they'll come by with the design to show you."
       ],
       "resolved": true,
       "resolution_ts": "10:40",
-      "reasoning": "Customer immediately accepts the phone-call alternative, resolving the discomfort with the in-person visit format."
+      "reasoning": "Customer resists the in-person visit; rep immediately offers a phone-call alternative which the customer accepts, resolving the concern in one move.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@11:40",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "10:52",
+      "quote": "if I gotta put a bunch of money in it, then it wasn't worth it to me to say so",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "that's the nice thing about our program is you don't have to put any money into it."
+      ],
+      "resolved": true,
+      "resolution_ts": "11:06",
+      "reasoning": "Customer's cash-conscious concern near the close is resolved quickly with a no-money-down reassurance, and he proceeds to book.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "reassure"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@11:40",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Repeated pricing-mechanism over-explanation instead of redirect-to-design",
-    "ts": "03:37",
-    "quote": "So there's no cost for the panel?",
-    "why": "The customer asked a cost-adjacent question four separate times (02:56, 03:37, 03:55, 04:31) and the rep re-explained the bill-swap mechanism each time instead of using the schema's price_estimate_before_design redirect strategy, which cost clarity and time and visibly confused the customer ('No. I'm not following you.')."
+    "topic": "Setter scope creep on bill-swap mechanics",
+    "ts": "03:03",
+    "quote": "So the the way the program works, there's no upfront cost, and you don't have to pay for install.",
+    "why": "Three straight minutes explaining program financials confused the customer instead of reassuring him — this is the single biggest energy leak in the call and a repeatable coaching pattern (scope creep) rather than a one-off."
   },
   "key_moments": [
     {
       "ts": "01:54",
       "quote": "I have an excellent credit score. But why would I need credit?",
       "classification": "knowledge_gap",
-      "stewart_read": "Customer directly questions the qualifier's relevance, and rep has no ready answer, responding with an unpolished 'bottom of the food chain' admission rather than a clean rationale."
+      "stewart_read": "Rep admits ignorance instead of using the tax-credit rationale from the script's disclosure note."
     },
     {
-      "ts": "02:03",
-      "quote": "I'm I'm kind of on the the bottom of the food chain here.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Rep admits lack of knowledge but does so in a self-deprecating, credibility-denting way rather than a confident 'that's exactly what the specialist covers' redirect."
+      "ts": "03:03",
+      "quote": "So the the way the program works, there's no upfront cost, and you don't have to pay for install.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep volunteers financial mechanism detail (bill swap) unprompted, closer-tier content that confused rather than reassured."
     },
     {
       "ts": "03:55",
       "quote": "No. I'm not following you.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "Rep's attempt to explain the 'bill swap' mechanism in financial/mechanical detail (four separate exchanges) is closer-tier explanation territory; the schema's guidance is to create curiosity about the customer's own numbers, not explain the payment mechanism repeatedly."
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is the cost-objection moment where a bill flip ('what's expensive is your current C&T bill') would land better than another mechanics explanation."
     },
     {
-      "ts": "08:39",
-      "quote": "I'm not sure how to add one or how to put you in there.",
-      "classification": "non_standard_scenario_hold",
-      "stewart_read": "A ~4 minute Android photo-share struggle unfolds (05:59 to 09:55); the schema's elderly_low_tech_protocol recommends pivoting to verbal read-back within 2 minutes rather than continuing the walkthrough, especially given the customer states he's 73 later in the call."
+      "ts": "06:31",
+      "quote": "You know what? Yes. It's 929.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "A $929 bill (annual or on top of the ~$200/mo figure) is a striking anchor point the rep files without reflecting it back for emotional weight."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 60,
-    "verified": 59,
+    "checked": 64,
+    "verified": 63,
     "fuzzy": 1,
     "wrong_ts": 0,
     "not_found": 0

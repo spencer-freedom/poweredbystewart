@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION9_6504f4b1",
-  "rep_name": "Randy",
-  "trajectory_summary": "This is a short, low-drama reschedule call: the caller (likely the homeowner, 'Gregory'/labeled 'rep') phoned in to cancel a same-day appointment because he got called into work, and the Ion agent (likely the actual rep, labeled 'customer') looked up the record and proposed a new Tuesday slot at the same time. The caller repeatedly signals his schedule isn't firm until his work schedule posts Friday, so the new date is agreed to only conditionally ('We can try it. Yeah.').",
+  "rep_name": null,
+  "trajectory_summary": "This is almost certainly a mislabeled transcript: the speaker tagged 'rep' is behaving like the homeowner calling to cancel an existing appointment, and the speaker tagged 'customer' is the Ion-side scheduler working to find the record and rebook. No sales script — intro, verify, bill, pitch — was run because this was never an outbound qualifying call; it was an inbound reschedule. The call ends with a same-time-next-Tuesday placeholder but no locked time or button-up.",
   "shape": "stagnant",
-  "outcome_dispute": "The v1 tag is unknown, but based on the transcript this should be read as tentative, not a clean booked appointment. The caller's own words — 'they can call me back tomorrow if they want,' 'I hate to set it up until they set the schedule on Friday,' and 'We can try it' — all show the Tuesday slot is provisional on his shift schedule, not a locked commitment. The agent never re-anchors with a firm handshake or contingency plan for what happens if Friday's schedule conflicts.",
+  "outcome_dispute": "v1 tag is unknown, but this should not be scored as a standard setter call — no qualification or pitch beats apply here since it is a reschedule of a pre-existing appointment, not a new lead conversation.",
   "observed_outcome": {
     "outcome": "tentative",
-    "appointment_channel": "phone",
-    "datetime_captured": true,
+    "appointment_channel": "unclear",
+    "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "02:06",
     "quote": "We can try it. Yeah.",
-    "reasoning": "A specific new day (next Tuesday) and time ('same time' as the original 2:30) were stated, but the caller's own words throughout the call — needing his Friday-posted work schedule to confirm availability, and the hedge 'we can try it' — mean this is not a locked commitment. It should be read as tentative rather than a clean booked outcome."
+    "reasoning": "A day (next Tuesday) is agreed but no specific clock time is restated verbally, and the acceptance language ('We can try it') is hedged rather than confirmed, especially given the customer's earlier stated uncertainty about their work schedule.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "This call is a short reschedule of an existing appointment, not a qualification call — no bill amount or usage figure is discussed anywhere in the transcript."
+    "reasoning": "No monthly bill or kWh amount was asked for or given on the call, so no flip was possible."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +39,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "No mention of a utility bill or document collection occurs in this call; it is purely a scheduling/reschedule conversation."
+    "reasoning": "The rep never requested a bill or asked the customer to send bill documentation."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,24 +50,12 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The call is a reschedule of an already-set appointment, not an initial qualification call, so the interest-in-solar question was never raised and no reason was given."
+    "reasoning": "The rep did not ask why the customer was interested in solar and no reason was volunteered."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
-      "status": "asked",
-      "ts": "00:08",
-      "end_ts": "00:12",
-      "quote": "Yeah. Yeah. This is Ion Solar. How are you doing today, sir?",
-      "customer_response": "cooperative",
-      "customer_quote": "Fine. Fine. I,",
-      "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
-    },
-    {
-      "section": "interest_question",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -66,23 +63,35 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
+    },
+    {
+      "section": "interest_question",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:42",
-      "end_ts": "02:16",
-      "quote": "Would it help with my address?",
+      "ts": "02:16",
+      "end_ts": "02:19",
+      "quote": "Correct.",
       "customer_response": "cooperative",
-      "customer_quote": "Correct.",
+      "customer_quote": "Greenfield Road, Front Royal in Virginia?",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,11 +99,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,11 +111,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,11 +123,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,11 +135,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +147,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,23 +159,23 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "00:19",
+      "end_ts": "00:29",
+      "quote": "I was supposed to have an appointment today with a gentleman, and I had to cancel because I got called in to work.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Yeah. Give me one second. Do you know what time that was for?",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -174,31 +183,33 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "02:01",
-      "end_ts": "02:06",
-      "quote": "I'm just gonna shoot for next Tuesday same time?",
+      "ts": "02:06",
+      "end_ts": "02:29",
+      "quote": "We can try it. Yeah.",
       "customer_response": "cooperative",
-      "customer_quote": "We can try it. Yeah.",
-      "resistance_reason": "timing",
+      "customer_quote": "Awesome. Well, I'll just get you rescheduled for next Tuesday at the same time.",
+      "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "asked",
-      "ts": "02:19",
-      "end_ts": "02:29",
-      "quote": "I'll just get you rescheduled for next Tuesday at the same time. And, you know, if anything changes, you can just let us know",
-      "customer_response": "cooperative",
-      "customer_quote": "Okay.",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "n_a",
+      "result": "skipped",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
@@ -212,53 +223,66 @@
       ],
       "resolved": true,
       "resolution_ts": "02:06",
-      "reasoning": "The caller's scheduling uncertainty (shift work, schedule posts Friday) is a timing objection. The agent tried one angle — proposing a specific day/time rather than accepting the open-ended callback offer — and got a hedged agreement, not a firm resolution."
+      "reasoning": "Customer raises real scheduling uncertainty (work schedule not posted until Friday) as a soft barrier to committing to a new time; the Ion-side rep pushes past it with a single proposed date rather than addressing the stated constraint.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@02:06",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "locking a firm commitment on reschedules",
-    "ts": "02:06",
-    "quote": "We can try it. Yeah.",
-    "why": "The new appointment was accepted only as a hedge because the caller's shift schedule isn't finalized until Friday. The agent should have either set a specific Friday check-in call or gotten an explicit yes/no rather than letting the ambiguity carry into the calendar as if it were settled."
+    "topic": "Reschedule locked without addressing stated scheduling conflict",
+    "ts": "01:41",
+    "quote": "I hate to set it up until they set the schedule on Friday, to make sure I'm gonna be off.",
+    "why": "Customer explicitly says they won't know their own work schedule until Friday, yet the rep locks 'next Tuesday' anyway instead of proposing a callback after Friday — this rebooked slot is likely to fail again for the same reason as today's no-show."
   },
   "key_moments": [
     {
-      "ts": "00:08",
-      "quote": "Yeah. Yeah. This is Ion Solar. How are you doing today, sir?",
+      "ts": "00:19",
+      "quote": "I was supposed to have an appointment today with a gentleman, and I had to cancel because I got called in to work.",
       "classification": "other",
-      "stewart_read": "This line is diarized as 'customer' but the content — confirming the company name and asking how the caller is doing — is a rep/agent move, not something a homeowner says. This supports the hypothesis that speaker labels are swapped throughout the transcript."
+      "stewart_read": "This line is the homeowner (mislabeled 'rep') explaining a missed appointment, not a setter running a script — the whole call is an inbound reschedule call, not a standard prospecting call."
     },
     {
-      "ts": "00:59",
-      "quote": "Gregory. Correct?",
-      "classification": "other",
-      "stewart_read": "The speaker labeled 'customer' asks to confirm the name 'Gregory,' which is a record-lookup action performed by an agent verifying a customer's identity, not something a customer says about themselves."
-    },
-    {
-      "ts": "01:11",
-      "quote": "It looks like we had you down for today at 02:30.",
+      "ts": "01:29",
+      "quote": "Is there a better time and day that would work good for you so we can get you",
       "classification": "unanchored_soft_exit",
-      "stewart_read": "The agent confirms the original time was 2:30 but the rescheduled appointment is never anchored with an explicit new time — only 'same time' is used going forward, and no hour-block, no-driving/computer instruction, or verbal 'is that fair?' handshake appears anywhere in the call."
+      "stewart_read": "The Ion-side rep attempts to pin a new time but doesn't firmly anchor it with a specific hour or a fairness handshake."
     },
     {
-      "ts": "01:35",
-      "quote": "they can call me back tomorrow if they want, and I can check my schedule to see if",
-      "classification": "conditional_booking",
-      "stewart_read": "The caller offers an alternative — a callback tomorrow to check his schedule — but the agent does not take this path; instead they push toward locking Tuesday now despite the caller's own stated uncertainty about his shift schedule."
+      "ts": "02:01",
+      "quote": "I'm just gonna shoot for next Tuesday same time?",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "A day is proposed but the exact clock time is never restated verbally on this call, and the customer's reply is a soft 'We can try it' rather than a firm commitment."
+    },
+    {
+      "ts": "02:06",
+      "quote": "We can try it. Yeah.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "This is a weak, hedged acceptance of the rescheduled slot, not a confident confirmation — no 'is that fair?' handshake follows."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 27,
-    "verified": 27,
+    "checked": 23,
+    "verified": 23,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

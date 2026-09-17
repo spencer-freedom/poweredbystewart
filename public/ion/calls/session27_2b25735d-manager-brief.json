@@ -1,26 +1,35 @@
 {
   "call_id": "SESSION27_2b25735d",
   "rep_name": null,
-  "trajectory_summary": "This call opens messy — a confused, tangential customer who takes over a minute to clarify that his existing camper solar has nothing to do with the house system he wants — but the rep patiently sorts it out without forcing the orphaned_flow protocol onto a system that turns out not to apply. Once scope is clarified, the rep efficiently pivots to a bill-photo text when verbal kWh readback stalls, and closes with a booked appointment for the next day. The call is short and functional rather than deeply diagnostic, but it lands the outcome cleanly.",
+  "trajectory_summary": "The call opens with a confusing existing-solar disclosure that the rep logs and moves past without running the orphaned_flow questions, then recovers efficiency on bill collection by pivoting to a photo text. It ends in a fast, low-friction booking with no objections and no button-up protocol run. Energy stayed flat-cooperative throughout — nothing built, nothing leaked, but also nothing secured procedurally at the close.",
   "shape": "mixed",
-  "outcome_dispute": null,
+  "outcome_dispute": "V1 tag is unknown; based on transcript this should be tentative, not booked — day (tomorrow) and time (12:30) were both verbally agreed, but the button_up protocol (one-hour block, no-driving/computer instruction, 'is that fair' handshake, text-follow-up promise) was never run, leaving the booking procedurally thin.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "05:50",
-    "quote": "Yeah. Then we can do we can do 12:30 then.",
-    "reasoning": "A specific day (tomorrow) and time (12:30) are agreed upon verbally, meeting the bar for a booked appointment even though the rep skips the full button-up handshake."
+    "ts": "05:45",
+    "quote": "Then we can do we can do 12:30 then.",
+    "reasoning": "A day (tomorrow) and time (12:30) were both stated and William accepted, but the button_up handshake ('is that fair?'), hour-block framing, and no-driving instruction were never delivered, making this a thin agreement rather than a fully secured booking. No co-owner was identified in this call.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "02:20",
-    "bill_quote": "$90.80.",
+    "bill_ts": "02:28",
+    "bill_quote": "80 kilowatts.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer gives a dollar figure and a kWh number, immediately caveating that it's low because he hasn't used the home much, but the rep never turns this into emotional leverage — the flip should have landed right after the number, e.g. acknowledging the number and tying it to what a full-usage bill would look like, but the rep instead moves straight into troubleshooting how to read the graph."
+    "reasoning": "Rep captured both the $90.80 bill figure and 80 kWh usage but never reflected either back as pain-to-solve; the flip should have landed right after 'Oh, okay. Awesome. Yeah. I got that usage.' at 04:51, tying the number to savings motivation before pivoting to scheduling."
   },
   "bill_document_audit": {
     "asked": true,
@@ -28,9 +37,9 @@
     "ask_quote": "I can shoot you a text. Would you be able to just take a picture of that graph?",
     "result": "received_on_call",
     "method": "photo",
-    "result_ts": "03:56",
-    "result_quote": "Did you get that text?",
-    "reasoning": "The rep asks for a photo of the bill graph via text, and the customer successfully sends it during the call, confirmed by the rep refreshing the site and seeing the usage data come through."
+    "result_ts": "04:51",
+    "result_quote": "I got that usage.",
+    "reasoning": "Rep asked for a picture by text at 02:43; customer sent it and the rep confirmed receipt at 04:51."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +50,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar' — the call moves straight from confirming the request to sorting out the camper/house scope confusion, and no clear motivating reason (bill pain, environmental, etc.) is ever surfaced or used."
+    "reasoning": "The rep did not ask why the customer was interested in solar; the customer mentioned wanting whole-house power voluntarily but no explicit 'why' question was asked by the rep."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:14",
-      "quote": "I was just reaching out from Ion Solar in regards to a solar design for the home. Did you put in that request?",
-      "customer_response": "deflected",
+      "end_ts": "00:05",
+      "quote": "I was just reaching out from Ion Solar in regards to a solar design for the home.",
+      "customer_response": "cooperative",
       "customer_quote": "Okay.",
-      "resistance_reason": "other",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -119,14 +128,14 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "01:34",
-      "end_ts": "02:20",
-      "quote": "Okay. Yeah. Do you know your kilowatt usage?",
+      "ts": "01:36",
+      "end_ts": "02:28",
+      "quote": "Do you know your kilowatt usage?",
       "customer_response": "cooperative",
-      "customer_quote": "$90.80.",
+      "customer_quote": "80 kilowatts.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
@@ -154,24 +163,24 @@
     },
     {
       "section": "prior_design",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "00:40",
+      "end_ts": "01:08",
+      "quote": "Well, so you already have solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "Somewhat. Yeah. I've I've got six panels. I have six, 100 watt panels.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "02:43",
-      "end_ts": "03:56",
+      "end_ts": "04:51",
       "quote": "I can shoot you a text. Would you be able to just take a picture of that graph?",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. I can do that.",
+      "customer_quote": "And Yeah. I can do that. Yeah. Okay.",
       "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
@@ -179,13 +188,13 @@
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "05:24",
+      "ts": "05:17",
       "end_ts": "05:55",
-      "quote": "we can schedule the time with you as early as tomorrow, William, but what day would work best for you?",
+      "quote": "And so, yeah, we can schedule the time with you as early as tomorrow, William, but what day would work best for you?",
       "customer_response": "cooperative",
       "customer_quote": "Tomorrow would be fine. Yeah. I'll I'll I'll be here.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -198,56 +207,64 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "skipped",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "button-up completeness",
-    "ts": "05:38",
-    "quote": "and so, yeah, we can schedule the time with you as early as tomorrow, William, but what day would work best for you?",
-    "why": "The appointment gets booked but the rep skips the one-hour block statement, the no-driving/computer instruction, and the 'is that fair?' handshake — all of which the schema ties to show-rate. This is the most consequential, fixable gap on an otherwise successful call."
+    "topic": "button_up never run",
+    "ts": "05:55",
+    "quote": "Okay. Yeah. That work. Yeah. That'll Okay. K. Awesome then.",
+    "why": "A day and time were agreed but none of the four button_up elements (hour block, no-driving/computer instruction, handshake, text-followup promise) were delivered, leaving a fragile booking with higher no-show risk."
   },
   "key_moments": [
     {
-      "ts": "00:40",
-      "quote": "Yeah. Well, so you already have solar?",
-      "classification": "non_standard_scenario_hold",
-      "stewart_read": "Rep correctly recognizes the 'existing solar' trigger and checks it, but the situation resolves within the same exchange (01:19-01:23) as the customer clarifying the camper system is unrelated to the house request. This is a correctly-judged non-application of orphaned_flow, not an unresolved gap."
+      "ts": "00:43",
+      "quote": "Somewhat. Yeah. I've I've got six panels. I have six, 100 watt panels.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "William discloses an existing solar system on his camper — a clear orphaned_flow trigger — but the rep never asks ownership status, install company, or working condition."
     },
     {
-      "ts": "01:34",
-      "quote": "Something like 6,000? Probably I have to have about about 12 panels, I guess. I mean, I don't know if you could go 100 watt or 200 watt panels here.",
+      "ts": "01:19",
+      "quote": "Oh, okay. But you want it on your camper?",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep visibly loses track of what William is asking for immediately after William stated it, indicating the rep wasn't tracking the conversation."
+    },
+    {
+      "ts": "01:23",
+      "quote": "Something like 6,000? Probably I have to have about about 12 panels, I guess.",
       "classification": "setter_scope_creep",
-      "stewart_read": "This segment of the transcript is heavily ASR-garbled and speaker turns blend together; it is not clear from the raw text whether this panel-count/wattage speculation is the rep or the customer talking. Given the uncertainty, this should be treated as a low-confidence flag rather than a confirmed scope-creep instance."
-    },
-    {
-      "ts": "02:20",
-      "quote": "$90.80.",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer gives a dollar figure and a kWh figure but the rep never verbally acknowledges or reflects the number back — the call moves straight into troubleshooting how to read the bill graph."
+      "stewart_read": "Rep speculates on system size and panel count before even collecting the bill — this is closer-tier design content offered unprompted."
     },
     {
       "ts": "02:43",
-      "quote": "Oh, it's just a graph. Okay. What if you A bargain. I wanna get this design built out for you, William. I can shoot you a text. Would you be able to just take a picture of that graph?",
+      "quote": "I can shoot you a text. Would you be able to just take a picture of that graph?",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer had no actual smartphone-navigation trouble here — the photo request succeeds on the first try — so this isn't a tech-friction pivot in the elderly_low_tech_protocol sense. It's a clean, efficient bill-collection pivot from verbal readback to photo once the graph proved unreadable aloud, consistent with the general alternative_paths guidance to switch methods quickly rather than burn call time."
+      "stewart_read": "This is actually a good procedural pivot for bill capture, but the rep never uses the captured $90.80/80kWh figures as an emotional anchor once received."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 30,
-    "verified": 27,
+    "checked": 35,
+    "verified": 34,
     "fuzzy": 0,
-    "wrong_ts": 3,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

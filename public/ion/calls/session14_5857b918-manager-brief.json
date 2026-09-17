@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION14_5857b918",
   "rep_name": null,
-  "trajectory_summary": "This is a short, low-friction callback where the customer arrived already motivated and the rep ran the orphaned-system qualifiers (ownership, credit) before locking a phone appointment. The call never dips into resistance or objection-handling because the customer wasn't resistant to begin with, and the rep's job was largely administrative — but that administrative simplicity meant real schema gaps (panel size, system-working status, competitor probe) were never opened up.",
-  "shape": "mixed",
+  "trajectory_summary": "This was an efficient, low-friction call: a self-motivated returning customer with a clear ask (battery backup, cost, timeline) was routed to a specialist phone call in under 3 minutes with a locked day and time. Energy stayed steady to slightly building throughout, with the only real gaps being missed depth on the existing-system status and a fully generic verify pass.",
+  "shape": "energy_built",
   "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "02:47",
     "quote": "How about four?",
-    "reasoning": "Customer proposes and rep confirms a specific day (Tuesday) and time (4PM) for a specialist phone call, meeting the booked threshold of day+time agreed."
+    "reasoning": "Customer and rep land on a specific day (Tuesday) and time (4PM) for a phone call with a specialist, both sides confirming; no co-owner/spouse was identified in this call.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "booked by time, tentative by rule: bill not_asked",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "This call is a battery-backup add-on for an already-solar-owning customer; no bill amount or usage figure was ever raised, which is consistent with the request being about backup capacity rather than a new solar sizing conversation."
+    "reasoning": "No bill amount or kWh was captured on the call, so no flip could be executed."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,18 +39,18 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "No utility bill was requested; the call focused on ownership status and credit qualification for a battery add-on, and the specialist call was set up to cover cost/timeline/process instead."
+    "reasoning": "The rep never asked for the customer's utility bill or a method to receive it."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "00:21",
-    "reason_quote": "I wanted to get an idea kind of, cost timeline opportunity for, you know, some kind of battery backup type approach.",
+    "reason_ts": "00:32",
+    "reason_quote": "opportunity for, you know, some kind of battery",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' since this was a callback on an existing request, but the customer volunteered his motivation (battery backup, cost/timeline) unprompted; the rep acknowledged it operationally ('Yeah. We do backups.') but never reflected it back when booking the appointment."
+    "reasoning": "Customer's stated reason (battery backup, cost, timeline curiosity) was captured at 00:32 and used to route to a specialist, but the rep never explicitly reinforced it when confirming the appointment at 02:51 (e.g., 'so he can walk you through the battery cost and timeline')."
   },
   "script_coverage": [
     {
@@ -49,24 +58,24 @@
       "status": "asked",
       "ts": "00:10",
       "end_ts": "00:16",
-      "quote": "Kenny is with my my coworkers. We are just calling about a we had a solar request from you here.",
+      "quote": "we had a solar request from you here.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. I was trying to reach you at Kenny. You left me a voice mail the other day.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "asked",
-      "ts": "00:16",
-      "end_ts": "00:36",
-      "quote": "Just kinda following up with you asking if that's something you're still checking out.",
-      "customer_response": "cooperative",
-      "customer_quote": "I wanted to get an idea kind of, cost timeline opportunity for, you know, some kind of battery backup type approach.",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "completed"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
@@ -132,8 +141,8 @@
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:15",
-      "end_ts": "01:22",
-      "quote": "And then for batteries, I think you seem to have a credit score above 670. Does that sound like the case for you?",
+      "end_ts": "01:23",
+      "quote": "I think you seem to have a credit score above 670.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
@@ -156,13 +165,13 @@
       "section": "prior_design",
       "status": "asked",
       "ts": "00:38",
-      "end_ts": "01:06",
-      "quote": "Let me did you get solar with us, or was it with a different company?",
+      "end_ts": "00:59",
+      "quote": "did you get solar with us, or was it with a different company?",
       "customer_response": "cooperative",
-      "customer_quote": "It was Freedom at the time. I don't know if that's you guys now or someone different.",
+      "customer_quote": "It was Freedom at the time. I don't know if that's you guys now or",
       "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "bill_collection",
@@ -179,13 +188,13 @@
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "01:27",
-      "end_ts": "02:47",
+      "ts": "01:38",
+      "end_ts": "02:56",
       "quote": "Let's see. I know we have some availability as early as, like, tomorrow.",
       "customer_response": "cooperative",
-      "customer_quote": "How about four?",
+      "customer_quote": "Next Tuesday is probably better.",
       "resistance_reason": "",
-      "rep_followup": "alternative_offered",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -193,12 +202,17 @@
       "status": "asked",
       "ts": "02:51",
       "end_ts": "03:09",
-      "quote": "I'll get everything started then for you for Tuesday at four, and then I'll send you a text as well just with my number",
+      "quote": "I'll get everything started then for you for Tuesday at four,",
       "customer_response": "cooperative",
       "customer_quote": "Yep. You too. Thanks. Thank you. Bye bye.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
@@ -208,59 +222,72 @@
       "type": "timing_or_callback",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Yeah. For sure. For sure."
+        "For sure. For sure. Yeah. It would just be a a quick phone call so they kinda get you a a good idea of it."
       ],
       "resolved": true,
       "resolution_ts": "02:02",
-      "reasoning": "Customer sets a boundary (phone only, not ready for in-person), and the rep immediately accommodates it by confirming it will just be a phone call, resolving the concern without pushback since it wasn't a hard objection to begin with."
+      "reasoning": "Customer sets a boundary against an in-person visit; rep reframes as a phone-only call and the customer accepts, continuing to booking.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@02:51",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "orphaned_flow completion — panel size and system status never captured",
-    "ts": "01:06",
-    "quote": "No. We own it.",
-    "why": "Rep correctly ran the ownership and prior-company qualifiers but never asked panel wattage or whether the existing system is currently working — both schema-required orphaned_flow fields that materially change what the specialist needs to prepare for a battery-backup consult."
+    "topic": "Incomplete orphaned-system flow",
+    "ts": "00:47",
+    "quote": "It was Freedom at the time. I don't know if that's you guys now or",
+    "why": "System status (working/broken) and panel size were never captured despite a clean opening to ask — this is the DQ-relevant gate for an existing-system lead and it's the single most consequential skipped step on this call."
   },
   "key_moments": [
     {
+      "ts": "00:32",
+      "quote": "opportunity for, you know, some kind of battery backup type approach.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer volunteers a battery-backup interest unprompted — a strong buying signal the rep correctly routes to a specialist rather than trying to explain Powerwall specs himself."
+    },
+    {
       "ts": "00:47",
-      "quote": "It was Freedom at the time. I don't know if that's you guys now or someone different. But",
+      "quote": "It was Freedom at the time. I don't know if that's you guys now or",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses the name of the prior installer (Freedom) unprompted. The rep confirms it's a different company and moves on without asking what happened with Freedom, why the customer is now looking at battery backup instead of going back to them, or what shape that original system/relationship is in."
+      "stewart_read": "Customer discloses a prior installer and genuine confusion about company continuity, but the rep answers the identity question and pivots straight to ownership type without asking if the system works or its size."
     },
     {
-      "ts": "00:38",
-      "quote": "Yeah. For sure. That's something you guys do? Yeah. We do backups. Alright. Let me did you get solar with us, or was it with a different company? You know?",
+      "ts": "01:15",
+      "quote": "I think you seem to have a credit score above 670. Does that sound like the case for you?",
       "classification": "other",
-      "stewart_read": "This is the rep confirming Ion offers battery backup and then correctly pivoting into the orphaned-flow ownership/company question — a routine qualifying move, not premature closer-tier content since battery backup is a real Ion offering the customer directly asked about."
-    },
-    {
-      "ts": "01:06",
-      "quote": "No. We own it.",
-      "classification": "other",
-      "stewart_read": "Rep clears the ownership qualifier (not PPA/lease), which is the correct first orphaned-flow gate, but never follows up with the schema's other orphaned-flow items — panel size in watts and whether the existing system is currently working."
+      "stewart_read": "Odd phrasing implies the rep is guessing/assuming the customer's credit rather than neutrally asking, which could bias a self-report either way."
     },
     {
       "ts": "01:50",
-      "quote": "Yeah. I mean, if they if he just wants to give me a call, he or she, that's fine. I'm not ready to have anybody come out yet.",
+      "quote": "I'm not ready to have anybody come out yet. I kinda wanna understand cost, time frame, process, etcetera.",
       "classification": "conditional_booking",
-      "stewart_read": "Customer sets an explicit channel constraint (phone only, no in-person visit) before agreeing to book. Rep accepts this smoothly without pushback, which is appropriate since it's the customer's stated comfort level, not a hard objection to overcome."
+      "stewart_read": "Customer sets an explicit condition on the appointment format (phone only, informational) before agreeing to book."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 33,
-    "verified": 31,
-    "fuzzy": 0,
-    "wrong_ts": 1,
-    "not_found": 1
+    "checked": 34,
+    "verified": 33,
+    "fuzzy": 1,
+    "wrong_ts": 0,
+    "not_found": 0
   }
 }

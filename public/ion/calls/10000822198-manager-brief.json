@@ -1,17 +1,26 @@
 {
   "call_id": "10000822198",
   "rep_name": "Carter",
-  "trajectory_summary": "This is a short, functional call where the rep moves efficiently through verify items and lands a booked appointment, but leaves value on the table: the bill amount is captured and never flipped, a wheelchair disclosure gets a flat acknowledgment before pivoting to logistics, and an ambiguous credit answer is neither confirmed nor resolved before booking. The call ends with a locked day and time, which is a real win given the customer's stated mobility constraint made in-person bill collection impossible on the call itself.",
+  "trajectory_summary": "The call moves through the verify script efficiently and lands a booked time, but energy stays flat throughout — the bill number and interest reason are captured and then dropped rather than used as leverage. The vulnerability disclosure (wheelchair) gets a soft acknowledgment but no real empathy bridge before the rep pivots straight to booking.",
   "shape": "mixed",
-  "outcome_dispute": null,
+  "outcome_dispute": "v1 tag is unknown; based on the transcript this is a booked appointment with a locked day and time (Monday 3PM), though the bill was not captured on the call itself, only promised via text/callback.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "03:20",
     "quote": "Yes. That's good.",
-    "reasoning": "The rep proposes 3PM on Monday and Beth confirms, and the rep's language ('let me find a time we can come by and meet with you') indicates this is an in-person appointment with a specific day and time locked."
+    "reasoning": "Rep proposed 3PM Monday and customer explicitly agreed; rep's phrasing ('find a time we can come by and meet with you') suggests an in-person visit rather than a phone appointment, deviating from the standard phone-appointment script element.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_rule": "booked by time, tentative by rule: bill promised_later",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +29,7 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures the bill range and responds only with 'Okay. Pretty expensive,' then moves directly to scheduling logistics; the number is never used later to reinforce urgency or justify the appointment."
+    "reasoning": "The bill amount ($500-1000/month) was captured at 00:36 but the rep only responded 'Okay. Pretty expensive.' at 01:41 — the flip should have gone here, reframing the bill itself as the reason to act rather than a passive acknowledgment."
   },
   "bill_document_audit": {
     "asked": true,
@@ -29,8 +38,8 @@
     "result": "promised_later",
     "method": "text",
     "result_ts": "02:26",
-    "result_quote": "Alright. I'll have to call you back with that.",
-    "reasoning": "The rep asks for a text photo of the bill, offers a verbal read-aloud alternative, but Beth cannot act on either during the call due to her disclosed mobility limitation and defers it to a later callback."
+    "result_quote": "I'll have to call you back with that.",
+    "reasoning": "Rep asked for a photo of the bill and offered alternatives; customer said they would call back and could not send immediately due to mobility, so they promised to provide it later."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -41,17 +50,17 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asks the interest question early and Beth gives a clear bill-pain reason, but the rep never explicitly ties the appointment or bill discussion back to that stated motivation later in the call."
+    "reasoning": "Beth's stated reason ('I'm low on my electric bill') was acknowledged at 00:31 with 'that's great reasons' but never referenced again when booking the appointment or in the closing recap."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "end_ts": "00:16",
-      "quote": "Hey, Beth. This is Carter calling from ION.",
+      "end_ts": "00:10",
+      "quote": "This is Carter calling from ION.",
       "customer_response": "cooperative",
-      "customer_quote": "Yes.",
+      "customer_quote": "Good.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -60,20 +69,20 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "00:18",
-      "end_ts": "00:28",
+      "end_ts": "00:31",
       "quote": "What has you interested in checking that out?",
       "customer_response": "cooperative",
       "customer_quote": "I'm low on my electric bill.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:51",
-      "end_ts": "01:00",
-      "quote": "But the address I'm seeing is the 21150 South 78th Avenue in Frankfort Frankfort?",
+      "end_ts": "01:01",
+      "quote": "But the address I'm seeing is the 21150",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
@@ -108,7 +117,7 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "01:35",
-      "end_ts": "01:39",
+      "end_ts": "01:40",
       "quote": "And then you're with ComEd. Is that correct?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
@@ -119,25 +128,25 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "00:31",
-      "end_ts": "00:40",
+      "ts": "00:36",
+      "end_ts": "00:38",
       "quote": "How much are you paying a month usually?",
       "customer_response": "cooperative",
       "customer_quote": "Between 500",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
-      "section": "credit_qualifier",
+      "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:08",
-      "end_ts": "01:28",
-      "quote": "And then one of the main requirements for getting solar right now is having a credit score above 650.",
-      "customer_response": "deflected",
-      "customer_quote": "I'm not sure what it is. I have a bigger credit score.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "moved_on",
+      "end_ts": "01:25",
+      "quote": "one of the main requirements for getting solar right now is having a credit score above 650.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm not sure what it is.",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "partial"
     },
     {
@@ -167,11 +176,11 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "01:42",
-      "end_ts": "02:31",
-      "quote": "Would you be able to text a picture of your utility bill to me?",
-      "customer_response": "resistant",
-      "customer_quote": "Alright. I'll have to call you back with that.",
+      "ts": "02:04",
+      "end_ts": "02:26",
+      "quote": "Would you be able to text a picture",
+      "customer_response": "cooperative",
+      "customer_quote": "I should have one.",
       "resistance_reason": "dont_have_it",
       "rep_followup": "alternative_offered",
       "result": "deferred"
@@ -179,26 +188,31 @@
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "03:16",
-      "end_ts": "03:20",
-      "quote": "Can we do 3PM on Monday?",
+      "ts": "02:42",
+      "end_ts": "03:22",
+      "quote": "Are mornings or afternoons better for you?",
       "customer_response": "cooperative",
-      "customer_quote": "Yes. That's good.",
+      "customer_quote": "Afternoons.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
       "ts": "03:22",
-      "end_ts": "03:46",
-      "quote": "I'll plan on 3PM on Monday. And then if you could send me that utility bill, that would be great.",
+      "end_ts": "03:43",
+      "quote": "I'll plan on 3PM on Monday.",
       "customer_response": "cooperative",
-      "customer_quote": "Okay. Thank you.",
+      "customer_quote": "Yes. That's good.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
@@ -208,59 +222,72 @@
       "type": "timing_or_callback",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Yeah. If you wanna look and see if it's too hard to send a picture, you could even just read off to me what it says. Either way works."
+        "Well, real quick, let me find a time we can come by and meet with you."
       ],
       "resolved": true,
-      "resolution_ts": "02:38",
-      "reasoning": "The rep offers one alternative (read the bill aloud) before Beth reveals her mobility constraint; the rep then pivots to booking the appointment without pushing a third angle, which is a defensible single pivot given the disclosed physical limitation rather than premature abandonment."
+      "resolution_ts": "03:20",
+      "reasoning": "Customer deferred sending the bill; rather than pushing further on the bill itself, rep pivoted immediately to locking the appointment time, which the customer accepted.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@02:42",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "vulnerability disclosure acknowledgment",
-    "ts": "02:31",
-    "quote": "No. I'm in a wheelchair, and it takes me a while.",
-    "why": "Beth handed the rep a trust gift explaining a real physical constraint, and the rep's flat 'Oh, okay' before pivoting straight to scheduling missed the chance to build rapport at exactly the moment it mattered most for a customer who may need extra consideration around bill collection and the eventual in-person visit."
+    "topic": "Bill anchor captured but never flipped",
+    "ts": "01:41",
+    "quote": "Okay. Pretty expensive.",
+    "why": "A $500-1000/month bill is the single biggest leverage point on this call and the rep let it pass with a throwaway acknowledgment instead of turning it into the reason to act."
   },
   "key_moments": [
     {
       "ts": "00:36",
-      "quote": "Between 500",
-      "classification": "bill_anchor",
-      "stewart_read": "Beth volunteers a wide bill range (500 to 1,000) immediately after stating she's motivated by a low electric bill. The rep captures the number ('Okay. Pretty expensive.') but never returns to it to build urgency or tie it to the appointment."
-    },
-    {
-      "ts": "01:08",
-      "quote": "And then one of the main requirements for getting solar right now is having a credit score above 650.",
-      "classification": "other",
-      "stewart_read": "The rep states 650 rather than the schema's 670 threshold. Given no other indication of deliberate policy variation in the call, this reads as simple drift or misstatement rather than intentional strategy."
-    },
-    {
-      "ts": "01:19",
-      "quote": "I'm not sure what it is. I have a bigger credit score.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Beth's answer is genuinely ambiguous — she doesn't confirm a number and the statement doesn't clearly indicate she is above or below threshold. The rep says 'Okay. We can check it out.' and moves on, neither confirming qualification nor flagging it as unresolved before booking the appointment."
+      "quote": "Between 500 and 1,000.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "A $500-1000 monthly bill is an extreme anchor and the rep only replies 'Pretty expensive,' filing it instead of flipping it into alignment-against-the-utility."
     },
     {
       "ts": "02:31",
       "quote": "No. I'm in a wheelchair, and it takes me a while.",
       "classification": "empathy_miss",
-      "stewart_read": "Beth discloses a mobility limitation explaining why she can't immediately locate or send her bill. The rep's response, 'Oh, okay,' does not acknowledge the disclosure before pivoting straight into scheduling."
+      "stewart_read": "Beth discloses a real mobility limitation and the rep's response is a flat 'Oh, okay' before pivoting immediately to scheduling."
+    },
+    {
+      "ts": "02:04",
+      "quote": "Would you be able to text a picture of your utility bill to me?",
+      "classification": "bill_anchor",
+      "stewart_read": "Rep offers the standard text-photo ask, then correctly follows with a verbal-readback alternative when friction appears — good instinct, matches schema's elderly_low_tech_protocol spirit."
+    },
+    {
+      "ts": "00:28",
+      "quote": "I'm low on my electric bill.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer gives the core motivator (bill pain) and the rep moves straight to the bill-amount question without expanding or validating the reason."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 44,
-    "verified": 43,
-    "fuzzy": 0,
-    "wrong_ts": 1,
+    "checked": 49,
+    "verified": 45,
+    "fuzzy": 1,
+    "wrong_ts": 3,
     "not_found": 0
   }
 }

@@ -1,7 +1,7 @@
 {
   "call_id": "SESSION24_672c78b5",
   "rep_name": "Parker",
-  "trajectory_summary": "The call opens hostile with a scam/misinformation objection and could easily have ended there, but the rep stays calm, avoids fabricating numbers, and the customer self-escalates into full cooperation — pulling her own Dominion usage data unprompted. The back half is efficient verify-and-book, closing with a locked next-day time. The unresolved thread is that the rep never fully answers whether the 'free installation / Elon Musk' claim is true or false — he reframes it as a bill-swap without ever saying yes or no to the underlying misinformation.",
+  "trajectory_summary": "The call opens cold and skeptical on a false 'free solar' premise, dips into a prolonged pricing/mechanics debate, then flips hard into cooperation once the customer pulls her own utility data and starts volunteering home details. Energy clearly built from suspicion to warmth, but the rep spent real time in scope-creep territory before the redirect worked, and never captured why she wants solar. Outcome is a booked appointment with a specific day/time locked, though the interest_question was skipped entirely per verified events.",
   "shape": "energy_built",
   "outcome_dispute": null,
   "observed_outcome": {
@@ -10,8 +10,17 @@
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "09:14",
-    "quote": "let's do, let's do, 11AM.",
-    "reasoning": "Customer explicitly selects a specific day (tomorrow) and time (11AM) for the specialist to drop by, and the rep confirms it and promises a text follow-up — a fully locked appointment, not merely tentative."
+    "quote": "let's do, 11AM.",
+    "reasoning": "A specific day (tomorrow) and time (11AM) were mutually agreed, and the rep confirmed it will be an in-person specialist visit ('our specialist to drop by'); no co-owner exists to confirm since customer stated she is sole titleholder.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,17 +29,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer read off a full year of detailed kWh data, but the rep only acknowledged it ('Perfect. Yeah. That's awesome. That really helps us out.') and moved to address verification rather than turning the usage swing (348 to 1277 kWh) into an explicit reason to act now."
+    "reasoning": "Rep captured the bill/usage data cleanly (05:02) and acknowledged it ('Perfect. Yeah. That's awesome. That really helps us out.' at 06:23) but never flipped it into emotional alignment against the utility or tied it forward to the appointment's value; the flip should have landed right after 06:23 before pivoting to address verification."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "03:52",
-    "ask_quote": "Yeah. That would be exactly what we're looking for. And I I wouldn't I would be able to use that, and I'd send it off to my design team where they would build it up.",
+    "ask_ts": "04:39",
+    "ask_quote": "And if it is easier, I could even text you if you wanna send, like, a screenshot.",
     "result": "received_on_call",
     "method": "read_aloud",
     "result_ts": "05:02",
     "result_quote": "My average is six seventy four kilowatt hours.",
-    "reasoning": "The customer pulled up her Dominion account and read her monthly kWh usage aloud for the full year directly on the call after the rep confirmed that data would work; the rep also offered a text/screenshot alternative at 04:39."
+    "reasoning": "The rep asked for a bill screenshot at 04:39, but the customer instead read monthly usage aloud during the call (captured at 05:02)."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +50,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what has you interested in solar' — the call instead opened directly into the customer's skepticism about a viral ad, and the rep never circled back to ask her underlying motivation for looking into solar in the first place."
+    "reasoning": "The customer volunteered initial skepticism about 'free installation' but the rep did not ask an explicit interest/reason question to record or use."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
-      "ts": "00:10",
-      "end_ts": "00:16",
-      "quote": "Yeah. I'm with ION Solar. Did you miss a call from us?",
+      "ts": "00:03",
+      "end_ts": "00:10",
+      "quote": "Hello. This is Parker.",
       "customer_response": "cooperative",
-      "customer_quote": "I did.",
+      "customer_quote": "Parker, are you with a solar system installation company?",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -71,8 +80,8 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "06:26",
-      "end_ts": "06:36",
+      "ts": "06:28",
+      "end_ts": "06:37",
       "quote": "just to kinda confirm that I had the right address for you, I had the two one two Overview View Street in Waynesboro. Is that still the right address for you?",
       "customer_response": "cooperative",
       "customer_quote": "It is.",
@@ -84,8 +93,8 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "07:39",
-      "end_ts": "07:47",
-      "quote": "Was there anyone else with you on the title of the home?",
+      "end_ts": "07:48",
+      "quote": "I had here as well that you were the homeowner. Was there anyone else with you on the title of the home?",
       "customer_response": "cooperative",
       "customer_quote": "No. It's just myself.",
       "resistance_reason": "",
@@ -119,9 +128,9 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "02:11",
+      "ts": "04:15",
       "end_ts": "06:23",
-      "quote": "Yeah. Great question. So with with ION, we would actually look at your electric bill that you're getting right now",
+      "quote": "if you have each month, we try to look at each month just so we can see, you know, where it fluctuates throughout the year.",
       "customer_response": "cooperative",
       "customer_quote": "My average is six seventy four kilowatt hours.",
       "resistance_reason": "",
@@ -167,9 +176,9 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "03:52",
+      "ts": "04:39",
       "end_ts": "05:02",
-      "quote": "That would be exactly what we're looking for. And I I wouldn't I would be able to use that, and I'd send it off to my design team",
+      "quote": "And if it is easier, I could even text you if you wanna send, like, a screenshot.",
       "customer_response": "cooperative",
       "customer_quote": "My average is six seventy four kilowatt hours.",
       "resistance_reason": "",
@@ -181,88 +190,128 @@
       "status": "asked",
       "ts": "08:25",
       "end_ts": "09:17",
-      "quote": "let's see. Really, the last thing now is just a good day to kinda show you that design, Tracy.",
+      "quote": "I know we have a few availabilities as early as, like, tomorrow or Thursday for our specialist to drop by.",
       "customer_response": "cooperative",
-      "customer_quote": "let's do, let's do, 11AM.",
+      "customer_quote": "11AM",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "09:22",
-      "end_ts": "10:10",
-      "quote": "I'll get this everything set up to my design team right now, so we'll get that design built up for you.",
+      "ts": "09:27",
+      "end_ts": "09:53",
+      "quote": "And then we'll plan to drop by just tomorrow at eleven, kinda run through that design.",
       "customer_response": "cooperative",
-      "customer_quote": "Thank you. You too. Thank you. Alright. Bye bye. Bye bye.",
+      "customer_quote": "And what is the name of your company again?",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "hour_block",
+        "reconfirm"
+      ],
+      "parts_score": "3/4"
     }
   ],
   "objections": [
     {
       "ts": "00:24",
-      "quote": "for basically free installation of the solar panels. If that's not true, I'm not interested.",
+      "quote": "If that's not true, I'm not interested.",
       "type": "trust_or_scam",
       "rep_attempts": 3,
       "attempt_quotes": [
-        "Yeah. Good question. So we do take care of everything up front for you. So there's actually nothing out of your pocket.",
-        "Well, so you I mean, the pro how long ago do they get solar? I mean, the programs have changed.",
-        "we we can't even sell a system to anybody unless it it saves them money, if that makes sense."
+        "So we do take care of everything up front for you. So there's actually nothing out of your pocket.",
+        "we we can't even sell a system to anybody unless it it saves them money, if that makes sense.",
+        "That's kinda why we build the design. That's why we give you a call. We get some information, and then we would have our specialist kinda run through it all with you."
       ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "The rep never explicitly confirmed or denied the viral free-installation/Elon Musk claim; he reframed it as a bill-swap savings pitch each time, and the customer moved on to pull up her own usage data rather than because the objection was actually resolved — she simply shifted tactics to verify legitimacy herself via her own account data."
+      "resolved": true,
+      "resolution_ts": "03:29",
+      "reasoning": "Customer's skepticism about free-install claims and savings mechanics was cycled through several reassurances before she moved past it herself by pulling her own utility data, showing the objection softened more from her own initiative than a definitive rep answer.",
+      "blocked_section": "interest_question",
+      "attempt_moves": [
+        "reassure",
+        "reason",
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "bill_amount@04:15",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "02:54",
+      "quote": "But how much of a savings are you talking about percentage wise on average?",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "That's kinda why we build the design. That's why we give you a call. We get some information, and then we would have our specialist kinda run through it all with you."
+      ],
+      "resolved": true,
+      "resolution_ts": "03:25",
+      "reasoning": "Rep admitted no known savings percentage and redirected to the specialist/design process; customer accepted this and moved into providing her usage data, so the deflection worked despite being a scope-creep risk up to that point.",
+      "blocked_section": "bill_amount",
+      "attempt_moves": [
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "bill_amount@04:15",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Unresolved legitimacy/misinformation objection",
-    "ts": "00:39",
-    "quote": "for basically free installation of the solar panels. If that's not true, I'm not interested.",
-    "why": "The call's opening objection about viral free-installation/government/Elon Musk claims is never explicitly confirmed or denied — the rep reframes to bill-swap savings but leaves the customer's actual factual question (is the ad true or false) unanswered. This is the single highest-leverage gap: a clean, direct answer here would either build trust faster or prevent a later no-show when the customer discovers no 'free' program exists."
+    "topic": "Correcting the false 'free solar' premise instead of reinforcing it",
+    "ts": "00:46",
+    "quote": "So we do take care of everything up front for you. So there's actually nothing out of your pocket.",
+    "why": "The customer opened with a specific, incorrect expectation (free install, Elon Musk program) and conditioned her continued interest on it being true; the rep never actually corrected the misconception, just reframed around it, leaving a credibility gap that could resurface at proposal."
   },
   "key_moments": [
     {
-      "ts": "00:39",
-      "quote": "for basically free installation of the solar panels. If that's not true, I'm not interested.",
-      "classification": "other",
-      "stewart_read": "This is an unscripted trust/legitimacy objection driven by viral misinformation (Instagram ads, Elon Musk claims) rather than a standard 'how did you get my number' privacy question. The schema has no canonical rebuttal for viral-ad misinformation specifically — this is a gap for Ion to fill (see rebuttals TBD list), not a case of protocols.how_did_you_get_my_number."
+      "ts": "00:46",
+      "quote": "So we do take care of everything up front for you. So there's actually nothing out of your pocket.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep answers a pricing/mechanism question with financial framing instead of redirecting to the specialist immediately, feeding the customer's 'free solar' misconception rather than correcting it."
     },
     {
-      "ts": "01:25",
-      "quote": "Well, so you I mean, the pro how long ago do they get solar? I mean, the programs have changed.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Customer raised a specific factual comparison (friend gets $8 bills and buyback credits from Dominion) that plausibly needed correction for trust-building — this isn't pure unprompted feature-selling, it's responding to a direct comparative claim. The rep's stammering answer is a genuine knowledge gap (uncertain how buyback programs work) rather than scope creep, since silence here would have left a false claim unaddressed."
-    },
-    {
-      "ts": "02:56",
+      "ts": "02:54",
       "quote": "But how much of a savings are you talking about percentage wise on average?",
       "classification": "objection_inversion_miss",
-      "stewart_read": "This is the customer's third pass at pressuring for a concrete savings number. Rather than flipping the frame (e.g., anchoring on her own bill pain as the real cost to escape), the rep answers procedurally — 'I don't know if there's a requirement' — and pivots to scheduling. No fabricated number (correct per numeric_discipline) but also no emotional flip toward her own bill as the villain."
+      "stewart_read": "Third ask for a number; rep could have flipped to the bill itself as leverage ('that's exactly why we look at your actual kWh usage — your bill is telling you the real story') but instead stays in generic process explanation."
+    },
+    {
+      "ts": "03:29",
+      "quote": "Hold on. I'm just going into my Dominion account now,",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer self-escalates from skeptic to active participant, pulling her own usage data unprompted — a strong buying signal the rep should register as momentum."
     },
     {
       "ts": "05:02",
       "quote": "My average is six seventy four kilowatt hours.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "Softened per schema guidance: the customer hands over a full year of granular usage data unprompted, and the rep's response ('Perfect. Yeah. That's awesome. That really helps us out.') is an appropriately restrained acknowledgment rather than an unprompted feature pitch — consistent with curiosity_over_features favoring restraint. This is closer to a neutral capture than a failure."
+      "stewart_read": "Bill/usage data was captured but never flipped into an emotional hook tying it to savings or utility pain — rep says only 'that really helps us out' and moves straight to address verification."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 44,
-    "verified": 43,
+    "checked": 50,
+    "verified": 47,
     "fuzzy": 0,
-    "wrong_ts": 1,
-    "not_found": 0
+    "wrong_ts": 2,
+    "not_found": 1
   }
 }

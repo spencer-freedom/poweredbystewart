@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION23_9b81d10b",
   "rep_name": "Meg",
-  "trajectory_summary": "A short, procedurally clean call that moves through intro, address/homeowner verify, bill capture, and utility company quickly before hitting a hard stop on the credit qualifier. The call ends on a credit-score DQ with a deferred follow-up plan (text when score improves) rather than a booked appointment.",
-  "shape": "stagnant",
-  "outcome_dispute": "v1 tag is unknown; observed outcome is a DQ, not a booked or callback appointment in the standard sense — the rep's 'text you and you let me know' plan is a deferred-recheck, not a scheduled appointment, so if v1 tagged this as any flavor of booked/tentative that would be miscalled.",
+  "trajectory_summary": "This call never builds energy — it runs straight through the verify checklist in under 90 seconds with no interest question, no bill-flip, and no rapport, then dies cleanly on the credit qualifier. The rep's handling of the DQ (offer a text, wait for score to rise) is procedurally correct but the call had no momentum to lose because none was ever built.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag unknown; this is clearly a dq call — the hard credit_below_670 gate failed and the rep ended pursuit on it (text-and-wait is a deferral, not a booked or tentative appointment).",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "01:55",
-    "quote": "K. We would need to wait for that to go up. What I'll do is, I'll send you a text message.",
-    "reasoning": "The customer is disqualified on the stated credit-score threshold per qualifiers.credit_qualifier; no appointment day/time is set, and the resolution is a deferred text-based check-in rather than a booking."
+    "ts": "01:51",
+    "quote": "No.",
+    "reasoning": "Beverly's credit score fails the qualifier stated by the rep (below 650), and the rep ends the appointment pursuit, instead offering a text to check back once her score rises — a clear hard-gate DQ, not a booked or callback outcome with a set time.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +28,7 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures the $80-90/month figure and immediately moves to the utility company question without reflecting the number back as pain or leverage; the call is cut short by the credit DQ before any flip could occur, so this is better read as a call-length constraint than a clear-cut missed opportunity."
+    "reasoning": "The $80/month bill was captured and logged ('80 to 90. I got that here') but never reflected back or turned into a motivator; the flip should have landed right after capture, before pivoting to the credit qualifier."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call never reaches bill-document collection because the credit qualifier DQ's the customer before that stage of the script is run."
+    "reasoning": "The rep never asked the customer to provide a bill or read numbers from a bill."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,17 +49,17 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks what interested Beverly in solar; the call moves directly from address/homeowner verify into the bill-amount question without the interest_question beat."
+    "reasoning": "The rep did not ask why the customer was interested in solar, so no reason was given or used."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "end_ts": "00:13",
-      "quote": "This is Meg. I'm with Ion. I'm reaching out about the solar form you filled out online.",
+      "end_ts": "00:09",
+      "quote": "This is Meg. I'm with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "I'm doing fine.",
+      "customer_quote": "Yes. Who is this? Hey.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -72,10 +80,10 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:25",
-      "end_ts": "00:40",
-      "quote": "Is this a single family home, Beverly?",
+      "end_ts": "00:34",
+      "quote": "I wanted to start by checking the address that you gave me. 104",
       "customer_response": "cooperative",
-      "customer_quote": "Yes.",
+      "customer_quote": "Correct.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -84,7 +92,7 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "00:43",
-      "end_ts": "00:47",
+      "end_ts": "00:48",
       "quote": "And I have you here as the property owner. Is there anyone else?",
       "customer_response": "cooperative",
       "customer_quote": "No.",
@@ -111,7 +119,7 @@
       "end_ts": "01:31",
       "quote": "What company is that going to? Is it Dominion?",
       "customer_response": "cooperative",
-      "customer_quote": "Virginia Dominion. Dominion Virginia.",
+      "customer_quote": "Virginia",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -119,9 +127,9 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "00:51",
-      "end_ts": "01:20",
-      "quote": "how much would you say you're paying on average for your electric bill?",
+      "ts": "00:55",
+      "end_ts": "01:15",
+      "quote": "But given that, how much would you say you're paying on average for your electric bill?",
       "customer_response": "cooperative",
       "customer_quote": "About $80 a month.",
       "resistance_reason": "",
@@ -129,16 +137,16 @@
       "result": "completed"
     },
     {
-      "section": "credit_qualifier",
+      "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:39",
-      "end_ts": "01:55",
+      "end_ts": "02:01",
       "quote": "you just need to have a credit score above 650.",
       "customer_response": "resistant",
       "customer_quote": "No.",
-      "resistance_reason": "other",
+      "resistance_reason": "dont_have_it",
       "rep_followup": "alternative_offered",
-      "result": "declined"
+      "result": "deferred"
     },
     {
       "section": "military",
@@ -198,67 +206,64 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "01:51",
-      "quote": "No.",
-      "type": "other",
-      "rep_attempts": 0,
-      "attempt_quotes": [],
-      "resolved": true,
-      "resolution_ts": "01:55",
-      "reasoning": "This is a hard qualifier gate rather than a persuadable objection under current schema policy (qualifiers.credit_qualifier is hard_dq=true), so the rep's zero-attempt move to deferral is procedurally consistent with the documented rule, not a resistance-handling failure."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "credit threshold number drift",
-    "ts": "01:41",
-    "quote": "you just need to have a credit score above 650.",
-    "why": "This is the second observed instance (after SESSION18_fcbf33c1) of a rep stating 650 instead of the schema's documented 670 — a pattern worth surfacing to Kenny as a possible floor-wide training/script drift issue rather than a one-off rep error."
+    "topic": "Interest question never asked — no emotional anchor captured",
+    "ts": "00:00",
+    "quote": "interest_question: skipped",
+    "why": "Without any 'why solar' answer, the rep has nothing to tie into a follow-up text or future re-engagement once Beverly's credit improves — this call leaves zero reusable context for next contact."
   },
   "key_moments": [
+    {
+      "ts": "00:09",
+      "quote": "I'm reaching out about the solar form you filled out online.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "The lead-source reference is present but bare — no state mention, no warmth, and it's rushed straight into 'how are you' without a pause for the legitimacy anchor to land."
+    },
+    {
+      "ts": "00:00",
+      "quote": "interest_question: skipped",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The interest question — the required emotional anchor — was never asked at all, per verified events. This is the single biggest structural gap in the call."
+    },
+    {
+      "ts": "01:15",
+      "quote": "About $80 a month.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Bill captured cleanly but immediately filed as a number ('80 to 90. I got that here') with zero emotional reflection back to Beverly."
+    },
     {
       "ts": "01:41",
       "quote": "you just need to have a credit score above 650.",
       "classification": "other",
-      "stewart_read": "The schema's documented credit threshold is 670; this rep states 650. This is the same drift pattern flagged in SESSION18_fcbf33c1, suggesting either outdated rep training or genuine floor-wide inconsistency in the stated number."
-    },
-    {
-      "ts": "01:51",
-      "quote": "No.",
-      "classification": "other",
-      "stewart_read": "The rep DQs the customer immediately on a self-reported credit score with no follow-up probing (e.g., approximate range, whether she's checked recently) before ending the qualification path."
-    },
-    {
-      "ts": "01:55",
-      "quote": "K. We would need to wait for that to go up. What I'll do is, I'll send you a text message.",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "The call ends without any locked next step — the plan is 'text her, she lets us know when her score improves' with no date, no verbal handshake, and no owned follow-up trigger from the rep's side."
-    },
-    {
-      "ts": "02:01",
-      "quote": "Can you receive those at this number?",
-      "classification": "micro_trade",
-      "stewart_read": "The rep confirms a texting channel before sending anything, which is a reasonable low-friction trust-check given no bill or appointment data is at stake here."
+      "stewart_read": "Rep states 650 rather than the schema's 670 — matches the same drift noted in SESSION18_fcbf33c1, suggesting this may be current floor policy rather than rep error."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 32,
-    "verified": 32,
+    "checked": 30,
+    "verified": 28,
     "fuzzy": 0,
     "wrong_ts": 0,
-    "not_found": 0
+    "not_found": 2
   }
 }

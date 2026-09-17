@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION12_f512ffb9",
   "rep_name": "Tim",
-  "trajectory_summary": "This is a short, garbled continuation call where diarization is unreliable at several key junctures, most notably the credit-score disclosure at 01:02-01:18 and the '670' line at 01:15. Despite the confusion, the call ends with a concrete next-day, 6PM appointment locked — a positive outcome — but the button-up is thin (no explicit day/date confirmation beyond 'tomorrow,' no one-hour block statement, no computer/no-driving instruction, no verbal 'is that fair' handshake, no text-follow-up promise stated on the call).",
-  "shape": "mixed",
-  "outcome_dispute": "The v1 tag is unknown, so no dispute is registered, but note the observed outcome (booked, in-person, 6PM tomorrow) is clear despite significant diarization noise in the middle of the call regarding who is speaking about credit score.",
+  "trajectory_summary": "This call is a fast, low-friction re-engagement of an existing lead rather than a full setter script run — nearly every standard verify beat is skipped because the groundwork was apparently done in a prior call with 'John.' The rep and customer move directly from credit-score confusion to a locked appointment time in under two minutes, with the customer driving much of the pace.",
+  "shape": "stagnant",
+  "outcome_dispute": "V1 tag is unknown; this should be read as booked (day + time both stated and mutually confirmed) despite the near-total absence of verify/bill/interest capture, because this is evidently a continuation call on a lead already qualified in a prior touch.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "02:20",
     "quote": "6PM tomorrow.",
-    "reasoning": "A specific day (tomorrow) and time (6PM) are confirmed for an in-person visit ('We could come by as soon as tomorrow... at 06:00'), meeting the criteria for a booked outcome with a locked datetime."
+    "reasoning": "Both parties explicitly agree on a specific day (tomorrow) and time (6PM) for someone to 'come by,' meeting the booked bar on time alone; no co-owner was raised in this compressed call.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "booked by time, tentative by rule: bill not_asked",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "No bill amount or usage figure appears anywhere in this transcript — the call is focused entirely on re-confirming credit qualification and scheduling the in-person visit, consistent with this being a continuation of a prior call where the bill may have already been captured."
+    "reasoning": "No monthly bill amount or kWh usage was requested or provided on the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +39,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "No mention of the utility bill, mail/online access, or any document-collection step occurs in this transcript — likely because this call is a scheduling continuation of a prior visit ('run through all the paperwork again') rather than an initial qualification call."
+    "reasoning": "The rep did not ask for the utility bill or request it be sent during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +50,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "This call is a continuation/rescheduling call referencing a prior conversation ('I believe I talked to a John yesterday') rather than a fresh qualification call, so the interest-reason question is not run here — it was presumably covered in the prior touch."
+    "reasoning": "The rep did not ask why the customer was interested in solar and no reason was stated in response to such a question."
   },
   "script_coverage": [
     {
@@ -49,16 +58,16 @@
       "status": "asked",
       "ts": "00:06",
       "end_ts": "00:15",
-      "quote": "Hi, Carter. My name is Tim. I just missed a call from IIM Solar. I believe I talked to a John yesterday about having someone come out to",
+      "quote": "My name is Tim.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. Let me look here.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -66,11 +75,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -78,11 +87,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,11 +99,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,11 +111,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,11 +123,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,14 +135,14 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:02",
       "end_ts": "01:49",
-      "quote": "670.",
+      "quote": "my credit score is",
       "customer_response": "cooperative",
       "customer_quote": "Is it up to that now?",
       "resistance_reason": "",
@@ -142,7 +151,7 @@
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,23 +159,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "asked",
-      "ts": "00:53",
-      "end_ts": "00:58",
-      "quote": "Yeah. We can run through that with you. It looks like you looked into it.",
-      "customer_response": "cooperative",
-      "customer_quote": "Was it about a month ago? Is that what it was?",
-      "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
-    },
-    {
-      "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -174,18 +171,30 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
+    },
+    {
+      "section": "bill_collection",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "01:55",
-      "end_ts": "02:20",
+      "ts": "02:03",
+      "end_ts": "02:21",
       "quote": "What time tomorrow?",
       "customer_response": "cooperative",
       "customer_quote": "6PM tomorrow.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
@@ -197,70 +206,64 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "skipped"
+      "rep_followup": "n_a",
+      "result": "skipped",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "01:02",
-      "quote": "Yeah. We we're pretty much on board to get everything signed, but, because I just bought a house, my credit score is",
-      "type": "cost",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "669.",
-        "Yep. That's perfect."
-      ],
-      "resolved": true,
-      "resolution_ts": "01:49",
-      "reasoning": "Diarization at 01:02 and 01:15 is unreliable — the personal credit-score disclosure reads as customer content despite the 'rep' label, and the resolving lines at 01:47-01:49 ('669.' / 'Yep. That's perfect.') are similarly ambiguous as to speaker. Treating this conservatively as a single resolved exchange: regardless of which party said which line, the credit-qualification concern is voiced and the conversation moves past it toward booking without further debate, so the objection functions as resolved in one pass rather than a multi-angle rep-driven resolution. This should not be coached as a demonstrated rep skill (e.g., 'good multi-angle handling') given the attribution uncertainty."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "recap discipline on continuation/re-engaged leads",
-    "ts": "00:48",
-    "quote": "Yeah. I don't really see anything here.",
-    "why": "The customer's own uncertainty about deal continuity ('I don't really see anything here') combined with the confusing intro at 00:06 shows neither party clearly re-established what was covered in the prior conversation before moving into qualification and booking — the rep should recap prior context explicitly at the start of any re-engaged lead call rather than assuming shared memory."
+    "topic": "Credit qualifier resolution is unclear and possibly wrong",
+    "ts": "01:47",
+    "quote": "669.",
+    "why": "Rep books an appointment on a stated 669 credit score against a stated 670 threshold, calling it 'perfect' without resolving whether stated or pulled credit governs — a hard-gate qualifier handled loosely."
   },
   "key_moments": [
     {
-      "ts": "01:02",
-      "quote": "Yeah. We we're pretty much on board to get everything signed, but, because I just bought a house, my credit score is",
-      "classification": "other",
-      "stewart_read": "This line is labeled 'rep' but the content — personal home purchase, personal credit score disclosure — is customer-shaped disclosure, not something a rep would say about themselves. This is very likely a diarization mis-attribution: the customer is disclosing their own credit situation, not the rep."
+      "ts": "01:08",
+      "quote": "just barely below. So I think it's, like, 660 or 669 that you guys were, needing.",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep is unsure of Ion's own stated credit threshold, citing two different numbers in the same breath."
     },
     {
       "ts": "01:15",
       "quote": "670.",
-      "classification": "other",
-      "stewart_read": "Labeled 'customer' but reads as the correction of a threshold number — 'Is it up to that now?' immediately follows in the same customer-labeled block, which is odd phrasing for someone who just stated their own score. This exchange is diarization-ambiguous: it's unclear whether the rep or customer is stating/correcting the 670 threshold."
+      "classification": "knowledge_gap",
+      "stewart_read": "The other party on the line supplies the correct threshold, which is backwards — the rep should be the authority on this number, not correcting off the customer's recollection."
     },
     {
-      "ts": "00:48",
-      "quote": "Yeah. I don't really see anything here.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Whoever is checking records here ('I don't really see anything here') surfaces that the prior touch ('John yesterday') isn't cleanly documented on this side of the call. Neither party pauses to reconcile what was actually promised or discussed in that prior conversation before moving forward."
+      "ts": "01:47",
+      "quote": "669.",
+      "classification": "protocol_violation",
+      "stewart_read": "Rep declares a score of 669 — one point under even the lower threshold mentioned — as 'perfect' and proceeds to book, without a clear pull-vs-stated distinction being resolved."
     },
     {
-      "ts": "01:55",
-      "quote": "Yeah. We could come by as soon as tomorrow,",
-      "classification": "conditional_booking",
-      "stewart_read": "The appointment is offered and accepted quickly but the button-up that follows is minimal — no restated date, no one-hour block, no no-driving/computer instruction, no explicit 'is that fair' handshake."
+      "ts": "00:06",
+      "quote": "I just missed a call from IIM Solar. I believe I talked to a John yesterday",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "Rep garbles the company name and opens by referencing an unverified prior contact rather than a clean, confident legitimacy anchor."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 28,
-    "verified": 27,
-    "fuzzy": 1,
+    "checked": 26,
+    "verified": 26,
+    "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0
   }

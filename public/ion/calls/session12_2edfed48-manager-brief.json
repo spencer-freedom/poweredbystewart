@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION12_2edfed48",
   "rep_name": "Meg",
-  "trajectory_summary": "A short, low-friction disqualification call. The customer (a relative fielding the call for the actual lead) supplies two independent disqualifying facts — mobile home and a strong ground-mount preference — and the rep confirms both hard gates and closes the file cleanly. The rep never resolves Kimberly's specific underpinning question, but the DQ itself is doubly grounded and not actually in doubt.",
-  "shape": "stagnant",
-  "outcome_dispute": "The v1 tag should reflect a DQ, and that DQ is solid — confirmed independently by both the mobile-home hard gate and the no-ground-mount hard gate. There is no dispute about the appointment outcome. The open item for Kenny is a policy question, not an outcome dispute: does brick underpinning ever change the mobile-home eligibility determination, since Kimberly raised it twice and it was never directly addressed.",
+  "trajectory_summary": "Call opens as a third-party contact, quickly surfaces a mobile-home/manufactured-home hard gate, and the rep DQs on both roof-mount and ground-mount without escalating or verifying the brick underpinning detail the customer raises twice. Energy leaked from cooperative to resigned as the customer offered alternatives the rep didn't pursue.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag is unknown; this is clearly a dq call — home type (manufactured/mobile home with no viable mount option per rep) ended the pursuit. Worth flagging that the rep never checked whether 'ground mount' is genuinely outside Ion's capability or just outside this rep's knowledge — schema doesn't list ground-mount exclusion as a documented hard DQ.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "02:12",
     "quote": "Okay. We don't do ground mounts either, so we wouldn't be able to do anything for you.",
-    "reasoning": "Two independent hard gates confirm the DQ: mobile home (dq_rules) at 01:15, and no-ground-mount capability at 02:12, the latter surfaced by the customer's own stated preference. Call ends with the rep removing the lead from the list."
+    "reasoning": "Rep explicitly ends pursuit on the hard gate of home type (manufactured/mobile home, no roof-mount or ground-mount option), and confirms removal from the calling list — a clear DQ close, not merely no next step.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Call never reached the bill-collection stage — it was disqualified via the mobile-home and ground-mount hard gates before any usage or bill discussion began."
+    "reasoning": "No dollar amount or kWh figure was requested or provided in the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call was disqualified before reaching bill or utility discussion; the rep never raised getting a utility bill."
+    "reasoning": "The rep did not request the utility bill or a photo/link during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +49,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never reached the interest question — the call was cut short by the mobile-home and ground-mount hard gates immediately after establishing who was on the phone."
+    "reasoning": "The rep did not ask why the customer was interested in solar; the customer did state a preference for ground mounts but it was not elicited by an interest question."
   },
   "script_coverage": [
     {
@@ -53,12 +61,12 @@
       "customer_response": "cooperative",
       "customer_quote": "I can take a message for you.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -66,23 +74,23 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "01:08",
+      "end_ts": "01:15",
+      "quote": "Oh, okay. Yeah. Is that what what the home is?",
+      "customer_response": "cooperative",
+      "customer_quote": "A double wide.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,17 +98,17 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:08",
-      "end_ts": "02:12",
-      "quote": "Oh, okay. Yeah. Is that what what the home is?",
+      "ts": "02:12",
+      "end_ts": "02:17",
+      "quote": "Okay. We don't do ground mounts either, so we wouldn't be able to do anything for you.",
       "customer_response": "cooperative",
-      "customer_quote": "A double wide.",
-      "resistance_reason": "dont_have_it",
+      "customer_quote": "K. Well, I guess just, take that off the take her off the list because I would definitely want ground mounts.",
+      "resistance_reason": "",
       "rep_followup": "moved_on",
       "result": "completed"
     },
@@ -154,15 +162,15 @@
     },
     {
       "section": "prior_design",
-      "status": "asked",
-      "ts": "00:58",
-      "end_ts": "01:08",
-      "quote": "Oh, okay. Yeah. Is that what what the home is?",
-      "customer_response": "cooperative",
-      "customer_quote": "Someone called back right after she did that form, and they said that, they didn't do it for mobile homes.",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "completed"
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
@@ -190,7 +198,7 @@
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -198,7 +206,9 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
@@ -206,60 +216,72 @@
       "ts": "01:31",
       "quote": "K. Well, I see other people getting it in mobile homes. It's got the brick underpending, so that's why I think she put it on, you know, was questioning it.",
       "type": "roof_or_home",
-      "rep_attempts": 2,
+      "rep_attempts": 1,
       "attempt_quotes": [
-        "Yeah. That we don't install on those. Yeah.",
-        "Here, I am we don't we don't do it on mobile homes just because the weight of the panels, it actually will do structure to the or, like, damage to the structure of the home, and we obviously don't want that."
+        "Yeah. Here, I am we don't we don't do it on mobile homes just because the weight of the panels, it actually will do structure to the or, like, damage to the structure of the home"
       ],
-      "resolved": true,
-      "resolution_ts": "02:28",
-      "reasoning": "Kimberly raises the underpinning distinction, the rep restates the rule and then gives a structural rationale (panel weight/damage) without directly addressing the brick underpinning point; Kimberly ultimately drops the pushback herself and asks to be removed after revealing she wanted ground mount anyway, which independently disqualified her regardless of the underpinning question."
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer pushes back on the blanket mobile-home DQ citing brick underpinning and other people getting solar on mobile homes; rep restates the same generic reasoning once and does not investigate further or escalate before the customer's ground-mount pivot ends the thread.",
+      "blocked_section": "roof",
+      "attempt_moves": [
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "roof@02:12",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Unanswered underpinning distinction on mobile-home DQ",
-    "ts": "01:31",
-    "quote": "K. Well, I see other people getting it in mobile homes. It's got the brick underpending, so that's why I think she put it on, you know, was questioning it.",
-    "why": "Kimberly raises the same specific point twice (brick underpinning as a possible exception) and the rep never directly answers it — she restates the categorical rule instead. Worth a quick training-content confirmation with Kenny so reps have a crisp answer next time this comes up, even though it didn't change this call's outcome."
+    "topic": "DQ'd a persistent, interested customer without escalation or verification",
+    "ts": "02:12",
+    "quote": "We don't do ground mounts either, so we wouldn't be able to do anything for you.",
+    "why": "Customer offered two distinguishing details (brick underpinning, willingness to ground-mount) and the rep closed the file on both without checking with a supervisor — this is the single biggest lost-lead risk on the call."
   },
   "key_moments": [
     {
-      "ts": "00:01",
-      "quote": "Hey, Debbie?",
+      "ts": "00:20",
+      "quote": "She filled out a form online for solar options on the home. I just wanted to kinda touch base with her.",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "Rep opens by guessing a name before establishing who she is or why she's calling — legitimacy-first framing is inverted from the start."
+      "stewart_read": "Rep does reference the form for legitimacy, which is correct, but never confirms who Kimberly is relative to Debbie or gets buy-in that Kimberly can speak for the household."
     },
     {
-      "ts": "00:06",
-      "quote": "Kimberly, I'm looking for Debbie Clark. Is she available?",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "Rep asks for the lead by full name before introducing herself or Ion; she doesn't state her own name and company until 00:11, after the gatekeeping exchange has already started."
-    },
-    {
-      "ts": "01:15",
-      "quote": "Yeah. We can't install on those. I can just remove you from the list then.",
-      "classification": "protocol_violation",
-      "stewart_read": "This is not a violation of DQ procedure — it's a fast, correct application of the mobile-home hard gate. Flagging only the pace: the rep moves to removal before Kimberly finishes raising the underpinning nuance she's building toward."
+      "ts": "01:05",
+      "quote": "they didn't do it for mobile homes.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a prior Ion contact and disqualification; rep does not ask when that call happened, who handled it, or whether circumstances changed."
     },
     {
       "ts": "01:31",
       "quote": "K. Well, I see other people getting it in mobile homes. It's got the brick underpending, so that's why I think she put it on, you know, was questioning it.",
       "classification": "knowledge_gap",
-      "stewart_read": "Kimberly raises a specific technical distinction (brick underpinning, seeing other mobile homes get solar) that the rep never directly answers — she restates the same rule without addressing the distinction."
+      "stewart_read": "Customer directly challenges the blanket mobile-home DQ with a specific structural detail (brick underpinning) that could change the calculus; rep repeats the generic structural-damage line rather than checking with anyone."
+    },
+    {
+      "ts": "02:03",
+      "quote": "I I wouldn't I wouldn't want them on the home to set at at all anyway. I would want them in the yard.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer is still trying to make this work by proposing a ground-mount alternative — a sign of real interest, not a brush-off."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 31,
-    "verified": 31,
+    "checked": 27,
+    "verified": 27,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION16_da8e5ba6",
   "rep_name": "Tyke",
-  "trajectory_summary": "The call opens with a customer misconception (government-funded program) that the rep never directly corrects, runs a bill-swap pitch that has to be repeated because it didn't land, briefly builds some rapport through the verify section, then ends abruptly on a stated sub-670 credit score with a vague 'follow up in a couple months' close. There's no booked appointment and no real handoff value beyond a soft callback promise.",
+  "trajectory_summary": "The call opens with the customer's own agenda (a government ZIP-code program) that the rep never addresses, then leaks energy through an unrequested, confusing program explanation that the customer explicitly calls out. It ends in a clean credit DQ with a vague follow-up promise and no locked next step.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unclear from metadata, but the observed transcript clearly ends in a credit-based DQ with only a vague future-follow-up promise — this should be coded as dq, not any form of booked/tentative appointment.",
+  "outcome_dispute": "v1 tag unknown; this is a hard DQ on stated credit (650 vs 670 threshold) with the rep explicitly ending pursuit — dq is the correct read, not no_appointment or callback, though the vague 'couple months' mention lacks a specific date so it does not qualify as a real callback.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "03:53",
     "quote": "Unfortunately, then at the moment, it wouldn't really make sense.",
-    "reasoning": "The call ends on a credit-score disqualification (self-reported ~650 vs. stated 670 threshold) with only a vague, undated follow-up promise — no appointment, date, or time is set."
+    "reasoning": "Rep ends pursuit on the stated sub-670 credit score, a hard gate per qualifiers.credit_qualifier; only a vague 'couple months' non-dated follow-up is offered, not a real callback.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +28,7 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "CAVEAT: the '$25,300' figure is almost certainly a transcription/diarization artifact — the customer immediately clarifies 'around $2.50' (likely $250) with the grandson's unit running '4 or 500,' so the real anchor is roughly $250-500/month, not a clean captured number. The rep's response at 03:30 ('biggest reason why most people look into it, get them to get a roof from those rising rates') gestures at a flip but is generic and garbled rather than a clear, deliberate use of her specific number as the reason to act — scoring this as a full 'yes' flip would overstate what happened."
+    "reasoning": "Rep captured the bill ($250+/month, rising) and even reacted ('Oh, jeez') but never flipped it into a reason to act — the flip should have landed right after 03:24 when the customer described ever-rising rates, before pivoting to the credit qualifier."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,18 +38,18 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call was cut short by the credit-based DQ before the rep reached bill-collection; no request for the physical utility bill (mail/online, photo, text, email) occurs anywhere in the transcript."
+    "reasoning": "The rep never raised collecting the utility bill or a photo/link during the call."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": true,
-    "reason_ts": "00:15",
-    "reason_quote": "if, I I wanted to find out if I was in the ZIP code that the government is paying for this.",
-    "reason_used": "no",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar' — the customer volunteers her framing (a government-funded ZIP code program) unprompted, and the rep neither confirms nor corrects this premise before moving into the pitch, so the stated reason is never engaged with directly."
+    "reasoning": "The rep did not ask the customer why they were interested in solar; the customer mentioned ZIP-code subsidy and neighbors independently, but the rep didn't solicit a motivation."
   },
   "script_coverage": [
     {
@@ -49,11 +57,11 @@
       "status": "asked",
       "ts": "00:05",
       "end_ts": "00:11",
-      "quote": "Hey, Mary. This is Tyke with Ion. I received a request you're looking at struggle for the home.",
+      "quote": "This is Tyke with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "I'm doing fine.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
@@ -73,31 +81,31 @@
       "status": "asked",
       "ts": "00:25",
       "end_ts": "00:29",
-      "quote": "Is the address, 1198 Park Avenue Northeast in Salem?",
+      "quote": "Is the address,",
       "customer_response": "cooperative",
       "customer_quote": "Correct.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "02:13",
-      "end_ts": "02:41",
-      "quote": "Heavy down as the property owner. Is there anybody else in the title with you, or is it just you?",
+      "end_ts": "02:42",
+      "quote": "is there anybody else in the title with you",
       "customer_response": "cooperative",
-      "customer_quote": "No. Just me.",
+      "customer_quote": "No. Just me. Just you. K.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:58",
+      "ts": "01:54",
       "end_ts": "02:13",
-      "quote": "And then, is that an asphalt shingle roof? It looks like it is.",
+      "quote": "is that an asphalt shingle roof?",
       "customer_response": "no_answer",
       "customer_quote": "",
       "resistance_reason": "",
@@ -109,36 +117,36 @@
       "status": "asked",
       "ts": "02:42",
       "end_ts": "02:51",
-      "quote": "Is PGE the current utility company for the home, or is it somebody different?",
+      "quote": "is PGE the current utility company for the home",
       "customer_response": "cooperative",
       "customer_quote": "No. That's my that's my electric vehicle, PGE.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "02:52",
-      "end_ts": "03:30",
-      "quote": "And do you know how much you're kinda paying on average per month with them?",
+      "ts": "02:51",
+      "end_ts": "03:03",
+      "quote": "do you know how much you're kinda paying on average per month with them?",
       "customer_response": "cooperative",
       "customer_quote": "At least $25,300.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
-      "section": "credit_qualifier",
+      "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "03:37",
-      "end_ts": "03:56",
-      "quote": "In order to qualify for all those programs I mentioned earlier, all we ask of the homeowner is you just have a credit score of at least 670.",
-      "customer_response": "resistant",
-      "customer_quote": "Yeah. It is. Mine's about 650, I believe.",
-      "resistance_reason": "other",
-      "rep_followup": "none",
-      "result": "declined"
+      "ts": "03:44",
+      "end_ts": "03:57",
+      "quote": "Is that gonna be an issue for you at all?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. It is. Mine's about 650,",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "military",
@@ -190,73 +198,70 @@
     },
     {
       "section": "button_up",
-      "status": "asked",
-      "ts": "04:02",
-      "end_ts": "04:23",
-      "quote": "I'll get it notated down here to just follow-up with you in a couple months",
-      "customer_response": "cooperative",
-      "customer_quote": "Okay. Thank you for calling.",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "03:49",
-      "quote": "Yeah. It is. Mine's about 650, I believe.",
-      "type": "cost",
-      "rep_attempts": 0,
-      "attempt_quotes": [],
-      "resolved": false,
-      "resolution_ts": "03:53",
-      "reasoning": "The rep accepts the self-reported credit figure at face value and immediately closes the qualification path with no attempt to probe further, offer alternative financing, or note that the closer's actual credit pull could differ."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "pitch clarity before qualification",
+    "topic": "Unprompted, confusing program pitch before verify completes",
     "ts": "00:35",
-    "quote": "We call the bill swap to our swapping what you're currently paying with your electricity company to a less than silver rate.",
-    "why": "The customer explicitly says she understood nothing, forcing a full redo and burning the first 90 seconds of the call before any real qualification began — this is the single largest efficiency and trust cost on the call."
+    "quote": "All we're doing is we call the bill swap to our swapping what you're currently paying with your electricity company to a less than silver rate.",
+    "why": "Directly caused customer confusion ('I didn't understand anything') and burned call time before qualification was even underway — classic setter scope creep costing clarity."
   },
   "key_moments": [
     {
       "ts": "00:15",
-      "quote": "if, I I wanted to find out if I was in the ZIP code that the government is paying for this.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The customer states a specific misconception — that a government program is paying for the system — and the rep never directly corrects this framing anywhere in the call. This is distinct from the interest-reason question; it's a factual misunderstanding about who pays that should be corrected before any pitch, or it resurfaces later as a trust problem."
+      "quote": "if I was in the ZIP code that the government is paying for this.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer handed the rep a direct hook (her own reason for calling) and it was filed silently, never answered."
     },
     {
       "ts": "00:35",
-      "quote": "We call the bill swap to our swapping what you're currently paying with your electricity company to a less than silver rate.",
+      "quote": "All we're doing is we call the bill swap to our swapping what you're currently paying with your electricity company to a less than silver rate.",
       "classification": "setter_scope_creep",
-      "stewart_read": "This is a jargon-heavy, garbled explanation of the mechanism delivered before any qualification has happened, and the customer's immediate response confirms it failed. This is over-explaining program mechanics rather than creating curiosity about her specific numbers."
+      "stewart_read": "Rep volunteers a full program-mechanism explanation unprompted and before verify is complete, which is closer-tier content at this stage."
     },
     {
       "ts": "00:59",
       "quote": "I didn't understand anything you've just said.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer flatly states the pitch didn't land — a clear signal the rep led with mechanism explanation instead of a simple curiosity hook tied to her bill."
+      "classification": "knowledge_gap",
+      "stewart_read": "Direct customer feedback that the unsolicited pitch failed; rep re-explains almost verbatim rather than simplifying."
     },
     {
-      "ts": "02:26",
-      "quote": "See, the people across the street had solar put in, but that's all I really paid attention to.",
-      "classification": "cross_sell_miss",
-      "stewart_read": "Customer volunteers a neighbor-influence signal (a known interest driver per the schema's customer_demographics) but the rep does not pick it up or use it as a curiosity or urgency hook."
+      "ts": "02:51",
+      "quote": "do you know how much you're kinda paying on average per month with them?",
+      "classification": "bill_anchor",
+      "stewart_read": "Bill captured but not flipped into emotional alignment-against-utility before the call ended on the credit DQ."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 39,
-    "verified": 39,
+    "checked": 34,
+    "verified": 34,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

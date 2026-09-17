@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION14_e2dbb30e",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens on resistance and never recovers: the customer is working from a grant/sponsorship mental model that the rep never identifies or corrects, so every 'no cost' reassurance the rep offers lands as more confusing rather than clarifying. The call ends in a clean credit disqualification, but the deeper failure is that the rep never diagnosed why the same question kept recurring.",
+  "trajectory_summary": "The call skipped the verify sequence almost entirely and jumped straight into program-pitch content because the customer led with a cost question the rep felt compelled to answer. Energy leaked steadily as the customer's confusion about 'free vs not free' was never resolved, and the credit-score qualifier landed as a contradiction rather than a natural gate, ending the call in a soft deferral with no next step.",
   "shape": "energy_leaked",
-  "outcome_dispute": "No prior v1 tag value was supplied in this call's metadata to dispute. Based on the transcript alone, this is a hard qualifier DQ per qualifiers.credit_qualifier (stated credit '6650 or something' is below the 670 threshold) with no cash-pay follow-through, so 'dq' is the correct observed_outcome classification rather than any softer no_appointment or callback read.",
+  "outcome_dispute": "v1 tag is unknown; this call should be scored no_appointment — the customer explicitly deferred ('Next time, I will contact you') and the rep did not attempt to secure a callback time or push past the credit objection.",
   "observed_outcome": {
-    "outcome": "dq",
+    "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "03:48",
-    "quote": "Yes. But you need a credit score over 670 to qualify for it.",
-    "reasoning": "The customer states a sub-670 credit score at 02:47-02:50 ('No. I no. Only 6650 or something.'), the rep reiterates the hard credit gate at 03:48, and the customer disengages at 03:59 without any appointment being offered or set — a clean qualifier-based DQ per qualifiers.credit_qualifier."
+    "ts": "03:59",
+    "quote": "Oh, okay. Next time, I will contact you.",
+    "reasoning": "The call ends with a customer-initiated deferral and no rep-secured callback time, appointment, or next step — the rep simply thanked him and ended the call.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches the bill-amount stage of verify — the customer's mention of 'power bill' at 00:27 is the rep's own description of the program mechanism, not a captured customer figure. The call breaks down over the free/grant confusion and credit qualifier before any bill number is asked for or given."
+    "reasoning": "No monthly amount or kWh figure was obtained from the customer during the call, so no bill flip was possible."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call disqualifies on stated credit before reaching the bill-collection stage of the script; the rep never asks for the utility bill itself in any form."
+    "reasoning": "The rep described the bill-swap program but never requested the utility bill or a photo/email of it."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +49,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never gets past the customer's cost/trust interrogation to ask what interested him in solar; the call stays locked on 'is this free' and the credit qualifier for its entire duration."
+    "reasoning": "The rep did not ask what motivated the customer to consider solar, and the customer did not volunteer a reason."
   },
   "script_coverage": [
     {
@@ -49,12 +57,12 @@
       "status": "asked",
       "ts": "00:06",
       "end_ts": "00:11",
-      "quote": "This is Bucky with Ion. I'm reaching out about the solar form you filled online. How you doing?",
-      "customer_response": "no_answer",
+      "quote": "This is Bucky with Ion.",
+      "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -132,13 +140,13 @@
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:05",
-      "end_ts": "03:48",
+      "end_ts": "02:13",
       "quote": "Do you have a credit score over 670?",
-      "customer_response": "resistant",
-      "customer_quote": "No. I no. Only 6650 or something.",
-      "resistance_reason": "cost",
+      "customer_response": "cooperative",
+      "customer_quote": "No. Not yet.",
+      "resistance_reason": "",
       "rep_followup": "alternative_offered",
-      "result": "declined"
+      "result": "completed"
     },
     {
       "section": "military",
@@ -198,84 +206,108 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:16",
-      "quote": "No. I would like to question this. Is there, what, what is the fees for for the solar?",
-      "type": "trust_or_scam",
-      "rep_attempts": 4,
+      "ts": "00:22",
+      "quote": "what is the fees for for the solar?",
+      "type": "cost",
+      "rep_attempts": 3,
       "attempt_quotes": [
         "So we have a bill swap program where we look at your power bill, and we remove it, and then we replace it with a lower and cheaper solar bill.",
-        "There's no cost at all. All you have to pay is just a cheaper monthly bill.",
-        "The installation and the panels itself, there is no cost at all. It's just the monthly payment that's cheaper than what you're paying now.",
-        "Yes. This is for, like, people who qualify, and you I think you qualify."
+        "the only thing you'll have to pay is a cheaper monthly bill than what you're paying now. That's it.",
+        "There's no cost at all. All you have to pay is just a cheaper monthly bill."
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The customer repeats variations of the same 'is this free / what do I pay' question at least four times (00:22, 01:15, 01:42, 03:03) and the rep restates the same no-cost-except-cheaper-bill framing each time without ever resolving the customer's confusion about the program's actual mechanism; the objection is never resolved, it's cut off by the credit disqualification."
+      "reasoning": "The customer repeats variants of the same cost question three times and never accepts the rep's explanation as resolving it — he keeps re-asking in different words through 01:40.",
+      "blocked_section": "interest_question",
+      "attempt_moves": [
+        "reason",
+        "restate",
+        "restate"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "tax_credit_qualifier@02:05",
+      "resolution_agrees": false
     },
     {
-      "ts": "02:05",
-      "quote": "Do you have a credit score over 670?",
+      "ts": "02:20",
+      "quote": "No. Not yet.",
       "type": "cost",
       "rep_attempts": 2,
       "attempt_quotes": [
         "Do you wanna try, like, to see what we can do for cash offers?",
-        "Yes. But you need a credit score over 670 to qualify for it."
+        "If you pay in cash, yes. But if you don't wanna do that, you need a credit score over 670."
       ],
       "resolved": false,
-      "resolution_ts": "03:59",
-      "reasoning": "The customer's stated credit score (6650/'or something') fails the qualifier; the rep offers a cash-pay alternative but the customer doesn't commit to it and instead exits with 'Next time, I will contact you,' leaving the objection unresolved rather than converted."
+      "resolution_ts": "",
+      "reasoning": "Credit score under 670 blocks the free/grant framing the customer wanted; rep offers a cash alternative but customer never accepts it and the call ends in deferral.",
+      "blocked_section": "tax_credit_qualifier",
+      "attempt_moves": [
+        "alternative_offered",
+        "reason"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Diagnosing the customer's actual mental model before re-pitching",
-    "ts": "03:38",
-    "quote": "I know that some of the NGO, making the, what, the grand grand program, and the house owner have nothing to pay it.",
-    "why": "The customer names his confusion directly — he believes this is a no-cost grant/NGO program — and the rep never addresses it, instead repeating the bill-swap explanation and credit requirement in a loop from 00:27 through 03:48. The fix isn't a better rebuttal, it's stopping to ask what the customer thinks the program is before re-explaining it a fourth time."
+    "topic": "Scope creep replacing the verify sequence",
+    "ts": "00:27",
+    "quote": "So we have a bill swap program where we look at your power bill, and we remove it, and then we replace it with a lower and cheaper solar bill.",
+    "why": "Because the rep answered the cost question with full program mechanics instead of redirecting, the entire call became a confused back-and-forth about 'is it free' that never got resolved, none of verify was captured, and the call ended in an unanchored deferral. This single choice at 00:27 shaped the whole trajectory."
   },
   "key_moments": [
     {
-      "ts": "00:16",
-      "quote": "No. I would like to question this. Is there, what, what is the fees for for the solar?",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is a cost/trust objection arriving before any qualification has happened. The rep answers it literally with the bill-swap explanation rather than using a pattern-interrupt flip; strategically this could have been an opening to redirect to the bill itself, but no bill exists yet to anchor to."
+      "ts": "00:27",
+      "quote": "So we have a bill swap program where we look at your power bill, and we remove it, and then we replace it with a lower and cheaper solar bill.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep answers a cost question with a full program mechanics explanation instead of redirecting to the specialist or completing the verify section first."
+    },
+    {
+      "ts": "01:15",
+      "quote": "when when you bill, how how much I have to pay?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Second touch on the same 'is it free' confusion; rep repeats the same line rather than trying a different angle or pivoting to specifics that would create curiosity (e.g., asking about his actual bill)."
+    },
+    {
+      "ts": "01:40",
+      "quote": "you say all all are free? Free program?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Third touch on the same confusion; rep again restates 'no cost... cheaper bill' verbatim, the objection is not resolved, just repeated at."
     },
     {
       "ts": "01:58",
       "quote": "It is a grant?",
       "classification": "knowledge_gap",
-      "stewart_read": "The customer names the exact source of his confusion — he thinks this is a grant program. The rep's 'Yes' response at 02:05 partially agrees with this incorrect frame instead of clarifying the actual mechanism (a financed bill-swap, not a grant), compounding the misunderstanding for the rest of the call."
-    },
-    {
-      "ts": "03:38",
-      "quote": "I know that some of the NGO, making the, what, the grand grand program, and the house owner have nothing to pay it.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "This is the customer's clearest, most explicit statement of his root misunderstanding — he believes there's a zero-cost NGO-style program he should qualify for instead. The rep gives no response to this line at all and moves straight to repeating the credit requirement at 03:48, missing the last chance to reset the customer's frame before the call ends."
-    },
-    {
-      "ts": "02:52",
-      "quote": "you wanna try, like, to see what we can do for cash offers?",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "The rep pivots to a cash-pay alternative immediately after the credit DQ, which is a reasonable improvisation, but note no bill amount was ever captured in this call — there was no dollar figure to anchor a bill-swap pitch to at any point, so this is a structural limitation of an early, trust-contested call rather than a rep oversight of an anchor that existed and was dropped."
+      "stewart_read": "Rep says 'Yes' to the grant framing and only then introduces the credit-score requirement, which directly undercuts the 'grant/free' idea he had just validated."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 38,
-    "verified": 34,
-    "fuzzy": 4,
+    "checked": 32,
+    "verified": 30,
+    "fuzzy": 2,
     "wrong_ts": 0,
     "not_found": 0
   }

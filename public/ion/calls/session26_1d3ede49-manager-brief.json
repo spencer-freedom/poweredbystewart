@@ -1,81 +1,90 @@
 {
   "call_id": "SESSION26_1d3ede49",
   "rep_name": "Randy",
-  "trajectory_summary": "This is a smooth, cooperative call that ends in a booked appointment with the bill-text sent and confirmed live. The rep executes verify items in order, holds scope correctly on pricing questions, and locks a date/time — but leaves several value-building opportunities (bill-pain acknowledgment, tree-removal enthusiasm, repeated cost curiosity) unaddressed, and the co-owner/title question is muddled by a likely mis-transcription.",
+  "trajectory_summary": "The call runs smoothly through verify and bill capture with a cooperative customer, and the rep correctly holds scope on two pricing questions rather than guessing. But the bill-pain signal at 04:05 ('That will go up') is filed and not flipped, and the interest-question reason was never actually captured, leaving the appointment without an emotional anchor tying Lauren back to why she's meeting the specialist.",
   "shape": "mixed",
-  "outcome_dispute": null,
+  "outcome_dispute": "v1 tag unknown; transcript shows a specific day and time agreed (Wednesday the 29th at 10:30) with rep confirming aloud, so this should read as booked, not tentative or callback.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": false,
-    "ts": "09:03",
-    "quote": "Got you down for, Wednesday next Wednesday, the, twenty ninth at 10:30. And, yeah, we'll see you then.",
-    "reasoning": "A specific day (Wednesday the 29th) and time (10:30) are confirmed verbally by the rep and not disputed by the customer, meeting the booked threshold. However, the confirmed co-owner from 02:13 is never named or invited to the appointment, so co_owner_confirmed is false despite the appointment being locked."
+    "ts": "08:55",
+    "quote": "Got you down for, Wednesday next Wednesday, the, twenty ninth at 10:30.",
+    "reasoning": "A specific day and time were agreed and confirmed aloud by the rep, meeting the booked bar; the co-owner/decision-maker identified at 02:13 was never explicitly confirmed to join the appointment.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "booked by time, tentative by rule: bill promised_later",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "04:02",
-    "bill_quote": "$100,145 a month year round.",
+    "bill_quote": "$100,145",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the bill figure and even had the customer flag it as rising ('that that will go up') but responded only with 'Right. Okay. So it's going up. Gotcha. Okay.' — acknowledgment without turning it into urgency or emotional alignment against the utility."
+    "reasoning": "Bill was captured ($100,145/month or year — likely $145) and the customer even said 'that will go up' at 04:05, but the rep only replied 'Right. Okay. So it's going up' without reframing it as a reason to act now."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "04:24",
-    "ask_quote": "Do you typically get those in the mail or online?",
+    "ask_ts": "04:31",
+    "ask_quote": "we just need to see the, the last twelve months of kilowatt hours on your recent bill from ComEd.",
     "result": "promised_later",
-    "method": "text",
-    "result_ts": "08:45",
-    "result_quote": "Were you able to receive that text message? Just wanna make sure you you have it. I got a text, and I'm getting a second. Oh, yes. I was able to get that text.",
-    "reasoning": "The rep sent a text link and confirmed the customer received the text itself, but the actual bill photo was not sent or received by the end of the call — the appointment is booked pending the customer sending the photo afterward, so this is promised_later rather than received_on_call."
+    "method": "photo",
+    "result_ts": "04:49",
+    "result_quote": "Mhmm. Send me the text. I'll send you a picture.",
+    "reasoning": "Customer agreed to receive a text and send a picture of the bill but did not transmit the bill during the call."
   },
   "interest_reason_audit": {
-    "asked": false,
-    "ask_ts": "",
+    "asked": true,
+    "ask_ts": "00:21",
     "reason_given": false,
     "reason_ts": "",
     "reason_quote": null,
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what got you interested in solar' — the call moves from address/homeowner verification directly into roof and program details without a dedicated interest-motivation question, so no reason was captured to reinforce later."
+    "reasoning": "The rep asked what direction the customer was looking to go in, but the customer did not state a specific motivating reason during the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "end_ts": "00:15",
-      "quote": "Hey, Lauren. This is Randy with Ion. I just got a request here. You were looking at solar for your home here in Wheaton.",
+      "end_ts": "00:16",
+      "quote": "This is Randy with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "Yes. That's no. I shouldn't say it. Yep. We are interested.",
+      "customer_quote": "We are interested.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
+      "status": "asked",
+      "ts": "00:21",
+      "end_ts": "00:28",
+      "quote": "see what direction you're looking to go in.",
+      "customer_response": "cooperative",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:32",
-      "end_ts": "00:47",
-      "quote": "And is this a single family home?",
+      "end_ts": "00:42",
+      "quote": "I've got your address here at 910",
       "customer_response": "cooperative",
-      "customer_quote": "It is a single family home.",
+      "customer_quote": "That is the address.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -85,31 +94,31 @@
       "status": "asked",
       "ts": "02:04",
       "end_ts": "02:17",
-      "quote": "And then, have you done as a property owner, Lauren? Is there anyone else on the title of the home with you?",
+      "quote": "Is there anyone else on the title of the home with you?",
       "customer_response": "cooperative",
       "customer_quote": "There is. And anyone who makes the decisions.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "02:21",
-      "end_ts": "02:42",
-      "quote": "And then, looking at your roof there, is that an asphalt shingle roof?",
+      "end_ts": "02:34",
+      "quote": "is that an asphalt shingle roof?",
       "customer_response": "cooperative",
-      "customer_quote": "Got it two years ago, and I don't know the answer.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "alternative_offered",
+      "customer_quote": "Got it two years ago, and",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "03:51",
-      "end_ts": "03:57",
-      "quote": "It says here you're doing your electricity with ComEd. Is that right?",
+      "end_ts": "03:58",
+      "quote": "you're doing your electricity with ComEd. Is that right?",
       "customer_response": "cooperative",
       "customer_quote": "That is correct.",
       "resistance_reason": "",
@@ -120,10 +129,10 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "03:58",
-      "end_ts": "04:08",
-      "quote": "And how much are you currently paying for electricity on average?",
+      "end_ts": "04:05",
+      "quote": "how much are you currently paying for electricity on average?",
       "customer_response": "cooperative",
-      "customer_quote": "$100,145 a month year round. Okay. That that will go up.",
+      "customer_quote": "$100,145",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -131,14 +140,14 @@
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:44",
-      "end_ts": "02:56",
-      "quote": "To qualify for our current program we're offering, you just need to have a credit score above 670.",
+      "ts": "02:42",
+      "end_ts": "02:51",
+      "quote": "you just need to have a credit score above 670.",
       "customer_response": "no_answer",
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "military",
@@ -156,32 +165,32 @@
       "section": "prior_design",
       "status": "asked",
       "ts": "04:14",
-      "end_ts": "04:23",
-      "quote": "Is this your first time looking at solar for this property here, Lauren?",
+      "end_ts": "04:25",
+      "quote": "is this your first time looking at solar for this property here, Lauren?",
       "customer_response": "cooperative",
       "customer_quote": "It is not.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "04:24",
-      "end_ts": "05:00",
-      "quote": "Do you typically get those in the mail or online?",
+      "ts": "04:31",
+      "end_ts": "04:52",
+      "quote": "we just need to see the, the last twelve months of kilowatt hours on your recent bill from ComEd.",
       "customer_response": "cooperative",
-      "customer_quote": "I get them in the mail, and I have them.",
+      "customer_quote": "Mhmm. Send me the text. I'll send you a picture.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "alternative_offered",
       "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "05:45",
-      "end_ts": "07:10",
-      "quote": "Are you typically free mornings or afternoons, Lauren?",
+      "ts": "06:59",
+      "end_ts": "09:07",
+      "quote": "I can be available from 10:30 to 11:30.",
       "customer_response": "cooperative",
       "customer_quote": "It's I'm available between nine and eleven.",
       "resistance_reason": "",
@@ -191,86 +200,93 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "08:26",
+      "ts": "07:10",
       "end_ts": "09:07",
-      "quote": "Well, I do appreciate your time, Lauren. Is there anything else you wanted me to include here for the specialist?",
+      "quote": "",
       "customer_response": "cooperative",
-      "customer_quote": "There is not anything that I need right now that you're gonna be able to tell me.",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "hour_block",
+        "reconfirm"
+      ],
+      "parts_score": "3/4"
     }
   ],
   "objections": [
     {
-      "ts": "03:31",
-      "quote": "What can I expect for the cheaper payment?",
-      "type": "cost",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Yeah. So that's something a specialist can kinda go over with you once we get that design put together."
-      ],
-      "resolved": true,
-      "resolution_ts": "03:47",
-      "reasoning": "Not a hard objection but a genuine pricing question; rep deferred once to the specialist and the customer accepted the deferral without pushing further."
-    },
-    {
       "ts": "07:56",
-      "quote": "Do you charge for the installation? So yeah. For the you or you rent them out?",
-      "type": "cost",
+      "quote": "Do you charge for the installation?",
+      "type": "other",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Yeah. So there's multiple options you can look at, and, I would definitely bring that up to the specialist because I'm not a 100% versed on on all the options that we offer."
+        "I would definitely bring that up to the specialist because I'm not a 100% versed on on all the options that we offer."
       ],
       "resolved": true,
-      "resolution_ts": "08:22",
-      "reasoning": "Same cost/ownership-structure curiosity resurfacing later in the call; rep again deferred to the specialist and the customer accepted it with a simple thank-you."
+      "resolution_ts": "08:16",
+      "reasoning": "This is a curiosity question the rep answered by redirecting to the specialist, and the customer accepted it and moved on — closer to a knowledge-gap moment than a script-stalling objection, but flagged since it tested rep's scope.",
+      "blocked_section": "button_up",
+      "attempt_moves": [
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "co-owner not identified or invited to appointment",
-    "ts": "02:13",
-    "quote": "There is. And anyone who makes the decisions.",
-    "why": "Customer clearly confirms a co-owner/decision-maker exists on the title, and the rep never follows up to get a name or invite them to Wednesday's appointment — this is the single highest-leverage gap on the call per protocols.spouse_decision, and it structurally weakens the booked appointment."
+    "topic": "Bill anchor captured but never flipped",
+    "ts": "04:05",
+    "quote": "Okay. That that will go up.",
+    "why": "The customer volunteered a forward bill-pain cue and the rep didn't turn it into urgency or tie it to the appointment — a direct miss of coaching_philosophy.bill_anchoring's ask+acknowledge+flip pattern."
   },
   "key_moments": [
     {
+      "ts": "04:05",
+      "quote": "Okay. That that will go up.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer hands the rep a forward-looking bill-pain anchor and rep only echoes it back neutrally."
+    },
+    {
       "ts": "00:47",
-      "quote": "It is a single family home. We do have a couple of trees. We we do have some and I am happy to take them out or part of them or cut them way back",
+      "quote": "We do have a couple of trees. We we do have some and I am happy to take them out",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Customer proactively volunteers to remove trees to improve solar viability — a strong buying signal showing she's already problem-solving toward a system, not just curious."
-    },
-    {
-      "ts": "02:13",
-      "quote": "There is. And anyone who makes the decisions.",
-      "classification": "spouse_handling",
-      "stewart_read": "The customer confirms there is a co-owner on the title who is also a decision-maker. This is a direct, unambiguous affirmative to the rep's co-owner question and triggers the spouse/co-owner inclusion protocol — the rep never asks who this person is or attempts to include them on the appointment."
-    },
-    {
-      "ts": "02:17",
-      "quote": "Okay. No worries. If I surprise it, we can go ahead.",
-      "classification": "spouse_handling",
-      "stewart_read": "This follow-on line is garbled by the transcription but reads as the customer suggesting she can proceed and surprise the co-owner/decision-maker rather than requiring their attendance — it does not resolve whether the co-owner will actually be present, it just signals the customer's own workaround. It does not substitute for the rep confirming co-owner attendance per protocol."
+      "stewart_read": "Customer proactively offers to remove/trim trees to reduce shading, a strong qualification-supporting signal."
     },
     {
       "ts": "03:36",
-      "quote": "Yeah. So that's something a specialist can kinda go over with you once we get that design put together.",
-      "classification": "other",
-      "stewart_read": "This is a clean, correct execution of the universal escape hatch — the rep does not guess at savings numbers and redirects to the specialist appropriately."
+      "quote": "that's something a specialist can kinda go over with you once we get that design put together.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "This is actually correct scope discipline, not creep — rep redirects a payment-mechanism question to the specialist instead of improvising numbers."
+    },
+    {
+      "ts": "07:56",
+      "quote": "Do you charge for the installation?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Second pricing probe; rep again holds scope and admits gap transparently rather than fabricating."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 51,
-    "verified": 51,
+    "checked": 48,
+    "verified": 48,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION26_3f71f076",
   "rep_name": "Corey",
-  "trajectory_summary": "The call opens cold, spirals through an escalating business-model interrogation the rep is unequipped and unauthorized to answer, and ends in an explicit customer-initiated shutdown with no appointment or next step. The root cause traces to the rep pitching the bill-swap mechanism before any qualification occurred, which handed the customer a hook to interrogate rather than a reason to engage.",
+  "trajectory_summary": "The call opens on a skeptical, business-model-probing customer and never recovers: the rep skips the interest question, gets pulled into three rounds of financial-mechanism explanation, and only redirects to the specialist after the customer has already begun disengaging. Energy leaked steadily from mild skepticism to explicit refusal, with no anchor (bill, reason-use, or curiosity hook) ever deployed to arrest the slide.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is unknown; based on the transcript this is unambiguously no_appointment — the customer explicitly told the rep to move on and the rep did not attempt a close, callback, or any next step.",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "05:53",
-    "quote": "I I don't wanna go through with this. So, you know, you should just move on.",
-    "reasoning": "The customer explicitly declines to continue and the rep does not secure any appointment, callback time, or next step — the call ends with disqualification-by-disinterest rather than any scheduled follow-up."
+    "quote": "I I don't wanna go through with this.",
+    "reasoning": "Call ends with an explicit customer decline and no appointment, callback, or next step secured by the rep.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reached the bill_amount verify item — it broke down during intro/program-pitch stage on a business-model interrogation, so no bill figure or usage number was ever captured."
+    "reasoning": "No monthly dollar amount or kWh usage was captured from the customer during the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,31 +38,31 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call never progressed to bill collection; it ended during the trust/legitimacy interrogation phase before any request for the actual utility bill document was made."
+    "reasoning": "The rep never requested a bill or asked the customer to send a bill/photo during the call."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": false,
-    "reason_ts": "",
-    "reason_quote": null,
-    "reason_used": "no_reason_given",
+    "reason_given": true,
+    "reason_ts": "01:29",
+    "reason_quote": "in solar if I pay, like, nothing for",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar. The customer's statement 'I'm only interested in solar if I pay, like, nothing for it' (01:26-01:34) is a conditional willingness tied to cost, not a stated positive motivation (bill pain, environment, reliability, etc.), and the customer's other line at 00:59 ('are you tied with Pacific Power') is a legitimacy/trust probe, not an interest reason. Neither qualifies as a genuine interest_reason under the schema's definition, so this is marked no_reason_given rather than forcing a mismatch."
+    "reasoning": "Customer stated his reason for interest ('pay, like, nothing for it') at 01:29, and the rep acknowledged it once at 01:34 ('Perfect. Yeah... no upfront cost') but never returned to it later to re-anchor as the customer grew skeptical."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:48",
+      "end_ts": "00:11",
       "quote": "Hi. This is, Corey with Ions.",
-      "customer_response": "resistant",
-      "customer_quote": "I'm fine. Who are you with?",
-      "resistance_reason": "trust",
-      "rep_followup": "persisted",
-      "result": "partial"
+      "customer_response": "cooperative",
+      "customer_quote": "Thanks. Please stay on the line.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -73,16 +81,16 @@
       "status": "asked",
       "ts": "02:35",
       "end_ts": "02:42",
-      "quote": "Looks like I have you here at 193 West Jerome Avenue in Astoria, Oregon. Is that right?",
+      "quote": "Looks like I have you here at 193",
       "customer_response": "deflected",
       "customer_quote": "That's how do you make your money?",
-      "resistance_reason": "trust",
-      "rep_followup": "moved_on",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
       "result": "partial"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,11 +98,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,19 +110,19 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:04",
       "end_ts": "01:10",
-      "quote": "So we're not tied with them specifically, but we do work with Pacific Power to set up the system and connect it to the meter.",
+      "quote": "we do work with Pacific Power",
       "customer_response": "cooperative",
-      "customer_quote": "are you tied with Pacific Power",
+      "customer_quote": "are you tied with Pacific Power or is what's the deal?",
       "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "bill_amount",
@@ -198,7 +206,9 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
@@ -212,19 +222,14 @@
       ],
       "resolved": true,
       "resolution_ts": "01:10",
-      "reasoning": "Customer accepted this answer and moved to the next question without pushback on this specific point."
-    },
-    {
-      "ts": "01:57",
-      "quote": "I live in Astoria, and it's overcast most of the time. So... no one has solar here.",
-      "type": "roof_or_home",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Fair enough. Well, yeah. So with the program, we do the bill swap."
+      "reasoning": "Customer accepted the utility clarification and moved on to the next line temporarily.",
+      "blocked_section": "utility_company",
+      "attempt_moves": [
+        "reason"
       ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "The rep acknowledged briefly ('Fair enough') then pivoted back to the generic program pitch without addressing the climate/neighborhood-fit doubt directly; the customer never explicitly dropped this concern."
+      "resolved_by_tape": true,
+      "next_event": "utility_company@01:04",
+      "resolution_agrees": true
     },
     {
       "ts": "02:42",
@@ -232,73 +237,95 @@
       "type": "trust_or_scam",
       "rep_attempts": 3,
       "attempt_quotes": [
-        "not by because we're not charging you kilowatt hours like the way the electricity company does.",
+        "not by because we're not charging you per kilowatt that you use.",
         "we just sell you the system. And with the system purchase, that's where we make our money.",
-        "so I will be honest with you, Richard. I'm only in the scheduling department, so I don't need with the financial aspect of things."
+        "I'm only in the scheduling department, so I don't need with the financial aspect of things. But I can write these questions down to have my specialist answer that for you"
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The rep cycled through explanation attempts before finally deferring to the specialist, but by then the customer had moved to suggesting the rep abandon the call — the objection was never actually resolved, just abandoned by the customer's disengagement."
+      "reasoning": "Rep never got a clean acceptance from the customer; the redirect to specialist came only after the customer had already started disengaging, and the underlying skepticism was never actually resolved.",
+      "blocked_section": "address_homeowner",
+      "attempt_moves": [
+        "reason",
+        "restate",
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     },
     {
       "ts": "04:44",
-      "quote": "I I think you're gonna end up, wasting your time with me. So you you might wander move on to your next name",
+      "quote": "I think you're gonna end up, wasting your time with me.",
       "type": "not_interested",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Well, that's the thing. It's a free estimate. And if you don't like the numbers, there's no problem at all, Richard, because we're just building out a free estimate."
+        "that's the thing. It's a free estimate. And if you don't like the numbers, there's no problem at all"
       ],
       "resolved": false,
-      "resolution_ts": "05:53",
-      "reasoning": "The rep tried the free-estimate/no-risk reframe once, and again with more detail at 05:21, but the customer explicitly declined at 05:53 and the call ended without an appointment."
+      "resolution_ts": "",
+      "reasoning": "Customer restated skepticism ('it never turns into free') immediately after, and the rep's single reassurance attempt did not overcome it; call ended in decline.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "reassure"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "premature program pitch triggering scope-creep spiral",
-    "ts": "01:34",
-    "quote": "Perfect. Yeah. Because with the program that's going on right now, there's no upfront cost involved, and we we cover the installation.",
-    "why": "Delivering the bill-swap pitch before any verify/qualification work gave the customer a financial mechanism to interrogate for the next three minutes, and the rep's escape hatch ('I'm only in the scheduling department') didn't appear until 04:28 — by then the customer was already exiting. Fixing the sequencing (qualify first, pitch second, redirect financial questions immediately) addresses the root cause rather than the symptom."
+    "topic": "Objection inversion / scope discipline on the business-model question",
+    "ts": "02:42",
+    "quote": "That's how do you make your money?",
+    "why": "Rep answered the same trust objection three separate times with technical financial explanation instead of flipping or redirecting to specialist on the first ask — this is the single loop that burned the whole call."
   },
   "key_moments": [
-    {
-      "ts": "01:34",
-      "quote": "Perfect. Yeah. Because with the program that's going on right now, there's no upfront cost involved, and we we cover the installation.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "Rep leads with the bill-swap program pitch before any verify items (homeowner, roof, utility, bill) are captured. This is premature program_pitch that gives the customer financial mechanics to interrogate instead of curiosity to follow."
-    },
     {
       "ts": "02:42",
       "quote": "That's how do you make your money?",
       "classification": "objection_inversion_miss",
-      "stewart_read": "This is a trust/legitimacy question best handled with honest specificity and a quick redirect, not a financial deep-dive. The rep should have used a short, confident line and pivoted back to qualification rather than opening a mechanism debate."
+      "stewart_read": "This is a trust/skepticism objection; the schema calls for a pattern-interrupt flip, not a literal financial explanation."
+    },
+    {
+      "ts": "03:43",
+      "quote": "Okay. So that break even, how how do you make money?",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Second touch of the same objection; rep repeats the same content instead of escalating to a redirect or reframe."
     },
     {
       "ts": "03:22",
-      "quote": "not by because we're not charging you kilowatt hours like the way the electricity company does.",
+      "quote": "not by because we're not charging you per kilowatt that you use.",
       "classification": "setter_scope_creep",
-      "stewart_read": "Rep engages fully in explaining the financial mechanism of the program — closer-tier content — instead of using the universal escape hatch. This is the same content the schema flags as SESSION10's failure mode."
+      "stewart_read": "Rep explains billing mechanics/system-purchase economics — closer-tier financial content — instead of using the escape hatch."
     },
     {
       "ts": "04:28",
-      "quote": "so I will be honest with you, Richard. I'm only in the scheduling department, so I don't need with the financial aspect of things.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "The correct escape-hatch language finally appears, but roughly three minutes and multiple rounds of financial interrogation too late — the customer has already begun to disengage by this point."
+      "quote": "I'm only in the scheduling department, so I don't need with the financial aspect of things.",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep finally admits scope limit and offers to escalate — the right move, but three exchanges late."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 43,
-    "verified": 35,
-    "fuzzy": 8,
-    "wrong_ts": 0,
+    "checked": 38,
+    "verified": 37,
+    "fuzzy": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

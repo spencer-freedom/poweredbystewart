@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION10_971ecc9f",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens shakily (wrong address), moves into a customer who is clearly comparison-shopping against Sunrun and technically engaged (his own panel count, battery ask), and the rep repeatedly gets pulled into closer-tier technical territory instead of redirecting. Despite the scope creep, the rep does land a booked appointment with a specific day and time, and handles a spontaneous bereavement disclosure adequately if minimally.",
+  "trajectory_summary": "The call starts neutral, dips into skepticism around the tax credit topic, briefly lifts with genuine customer curiosity (battery interest, panel count math), then stalls in a long, inefficient bill-data collection segment. It closes on a vulnerable disclosure that the rep handles with brief but adequate empathy before locking a booked time.",
   "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
-    "co_owner_confirmed": null,
-    "ts": "13:10",
-    "quote": "we'll see you Friday, the eighth at twelve.",
-    "reasoning": "A specific day (Friday the 8th) and time (noon) are locked verbally by both parties, and the rep confirms he'll text appointment details, meeting the booked bar; the wife/co-owner mentioned earlier is never explicitly invited to the appointment."
+    "co_owner_confirmed": false,
+    "ts": "12:41",
+    "quote": "So 12:00, May 8. And this guy's gonna come over and check my stuff out or whatever?",
+    "reasoning": "Customer explicitly agrees to a specific day and time (Friday the 8th at noon) and confirms an in-person visit by 'this guy'; the wife identified as co-owner at 01:47 is never confirmed for the appointment.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "identified_unconfirmed",
+      "credit": "asked"
+    },
+    "set_rule": "booked by time, tentative by rule: bill promised_later",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,28 +29,28 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures the monthly bill amount but immediately moves to asking for the kWh usage on the ComEd bill without ever reflecting the $151.50 back as pain or tying it to the pitch; the flip should have landed right after 04:38, e.g. acknowledging that number as the target to eliminate."
+    "reasoning": "The rep captured the $151.50 bill cleanly at 04:38 but moved straight into panel-sizing logistics ('the only thing I'll need from you is just a copy of that kilowatt usage') rather than reflecting the bill back as the customer's reason to act; the flip should have landed right after 04:38 before pivoting to data collection."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "04:45",
+    "ask_ts": "04:54",
     "ask_quote": "the only thing I'll need from you is just a copy of that kilowatt usage on your ComEd bill",
-    "result": "received_on_call",
+    "result": "promised_later",
     "method": "photo",
-    "result_ts": "10:41",
-    "result_quote": "Yeah. I guess if I I'll show you both of them. I mean, it's k. Some on the back. I'll send you two pictures.",
-    "reasoning": "Rep asks for the bill/usage data, customer struggles to read it aloud, and the rep pivots to texting the customer for a photo, which the customer sends and the rep confirms receipt of ('Yeah. That is perfect. Thank you.')."
+    "result_ts": "09:13",
+    "result_quote": "I mean, it's k. Some on the back. I'll send you two pictures.",
+    "reasoning": "Rep requested a copy of the kilowatt usage at 04:54 and the customer agreed to send two pictures at 09:13, so the bill document was promised for later delivery."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "01:54",
     "reason_given": true,
-    "reason_ts": "02:02",
+    "reason_ts": "02:00",
     "reason_quote": "Oh, my neighbors have it, and I had some guy come from Sunrun who gave me a quote.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asks what got him looking into solar and the customer cites a neighbor and a competitor quote, but the rep never circles back to the neighbor-influence angle or uses it to frame value later in the call."
+    "reasoning": "Customer's stated reason for looking into solar — neighbors having it and a Sunrun quote — is acknowledged at 02:07 but never referenced again when booking or confirming the appointment."
   },
   "script_coverage": [
     {
@@ -49,36 +58,36 @@
       "status": "asked",
       "ts": "00:18",
       "end_ts": "00:26",
-      "quote": "this is this is Holland with Ion. I just got a request that you were looking into solar for your home.",
+      "quote": "So this is this is Holland with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "I'm doing okay.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:54",
-      "end_ts": "02:16",
+      "end_ts": "02:07",
       "quote": "what what actually got you looking into solar?",
       "customer_response": "cooperative",
       "customer_quote": "Oh, my neighbors have it, and I had some guy come from Sunrun who gave me a quote.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:40",
-      "end_ts": "00:53",
-      "quote": "So first off is I've got your address here as 2417 Campbell Street in Joliet, Illinois. Is that correct?",
-      "customer_response": "resistant",
-      "customer_quote": "No. Okay. That's 07/14.",
+      "end_ts": "01:02",
+      "quote": "So first off is I've got your address here as 2417",
+      "customer_response": "deflected",
+      "customer_quote": "No.",
       "resistance_reason": "other",
       "rep_followup": "persisted",
-      "result": "completed"
+      "result": "partial"
     },
     {
       "section": "co_owner",
@@ -87,58 +96,58 @@
       "end_ts": "01:52",
       "quote": "I have you down as the property owner. Is there anybody else on the title of the home with you?",
       "customer_response": "cooperative",
-      "customer_quote": "My wife, probably. Yeah. She's on there.",
+      "customer_quote": "My wife, probably.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:24",
+      "ts": "01:28",
       "end_ts": "01:38",
-      "quote": "the roof looks great. I mean, it looks like it's in decent condition still. Do you know how old those current shingles are?",
+      "quote": "Do you know how old those current shingles are?",
       "customer_response": "cooperative",
       "customer_quote": "It's, like, three or four years old.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "03:41",
-      "end_ts": "04:04",
+      "end_ts": "03:57",
       "quote": "are you just with Dominion Energy for your electric bill or for your electric company?",
-      "customer_response": "cooperative",
-      "customer_quote": "I have a a secondary, Just Energy.",
-      "resistance_reason": "",
+      "customer_response": "deflected",
+      "customer_quote": "Dominion?",
+      "resistance_reason": "other",
       "rep_followup": "moved_on",
-      "result": "completed"
+      "result": "partial"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "04:33",
-      "end_ts": "04:38",
+      "end_ts": "04:45",
       "quote": "how much would you say that you're spending on average a month on your electric bill?",
       "customer_response": "cooperative",
       "customer_quote": "$151.50.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:21",
-      "end_ts": "03:39",
+      "end_ts": "02:32",
       "quote": "you just need to have that credit score of 670. Is that the case for you?",
       "customer_response": "deflected",
       "customer_quote": "What do you mean incentives?",
       "resistance_reason": "other",
       "rep_followup": "persisted",
-      "result": "completed"
+      "result": "partial"
     },
     {
       "section": "military",
@@ -155,113 +164,151 @@
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "02:02",
-      "end_ts": "02:05",
-      "quote": "",
+      "ts": "00:31",
+      "end_ts": "00:37",
+      "quote": "I just spoke with our design team, and I helped get those designs put together for the home and everything.",
       "customer_response": "cooperative",
-      "customer_quote": "I had some guy come from Sunrun who gave me a quote.",
+      "customer_quote": "Okay. That's 07/14.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "04:45",
-      "end_ts": "10:41",
-      "quote": "the only thing I'll need from you is just a copy of that kilowatt usage on your ComEd bill",
+      "ts": "06:23",
+      "end_ts": "09:17",
+      "quote": "So on your comment bill, would you mind just sending me a photo of that",
       "customer_response": "cooperative",
-      "customer_quote": "Let me see if I can pull up my bill.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "persisted",
-      "result": "completed"
+      "customer_quote": "I mean, it's k. Some on the back. I'll send you two pictures.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "10:46",
+      "ts": "12:03",
       "end_ts": "13:10",
-      "quote": "the last thing we need to do is find a time that my specialist can stop by and review our information with you.",
+      "quote": "Yeah. We could do Friday, the eighth.",
       "customer_response": "cooperative",
-      "customer_quote": "Alright. Noon?",
-      "resistance_reason": "timing",
-      "rep_followup": "alternative_offered",
+      "customer_quote": "So 12:00, May 8.",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "13:00",
-      "end_ts": "13:15",
+      "ts": "13:03",
+      "end_ts": "13:10",
       "quote": "I'll send you a text with the appointment details so you can add it to your calendar.",
       "customer_response": "cooperative",
       "customer_quote": "Okay. Bye.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
-      "ts": "11:01",
-      "quote": "Well, I'm not gonna be available for poverty tone. ... My mom passed away. We're having a funeral on May 2, so it's gonna have to be after that.",
+      "ts": "02:55",
+      "quote": "But this guy told me that from Sunrise, there was gonna spent a great big beautiful bill next to them.",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. No. That the bill that passed, so that did get rid of government tax credit. But, obviously, we knew that that would be an issue. So we've been able to get a lot of new incentives in place of that."
+      ],
+      "resolved": true,
+      "resolution_ts": "03:24",
+      "reasoning": "Customer raises a competitor's claim as a challenge to whether incentives still apply; rep addresses it once at a policy level and customer drops it without further pushback.",
+      "blocked_section": "tax_credit_qualifier",
+      "attempt_moves": [
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "utility_company@03:41",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "11:02",
+      "quote": "Well, I'm not gonna be available for poverty tone.",
       "type": "timing_or_callback",
       "rep_attempts": 2,
       "attempt_quotes": [
         "Okay. After the second. Alright. I'm sorry to hear that, by the way.",
-        "let's see. So you could do, like, the fourth or the fifth. That's Monday or Tuesday."
+        "But do, like, the let's see. So you could do, like, the fourth or the fifth. That's Monday or Tuesday."
       ],
       "resolved": true,
       "resolution_ts": "12:03",
-      "reasoning": "Customer states unavailability due to a funeral; rep offers two nearby dates, customer rejects those and counters with Friday the 8th, which the rep accepts, resolving the scheduling objection."
+      "reasoning": "A funeral creates a real scheduling barrier; rep offers alternative dates until customer lands on Friday the 8th at noon.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "reassure",
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@12:03",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "setter scope creep on technical specs",
+    "topic": "Setter scope creep into panel specs/wattage debate",
     "ts": "05:57",
     "quote": "So my only, worry is that there so our panels are 440 watt panels.",
-    "why": "This is the third instance in the call where the rep engages in panel/wattage/technical debate instead of redirecting to the specialist, and it happens with a customer who is clearly comparison-shopping — the rep is giving away the closer's value and risking sounding unsure at the same time."
+    "why": "Rep spends significant time defending panel wattage and count math instead of redirecting to the specialist, the single largest scope violation on this call and a pattern flagged floor-wide as costly."
   },
   "key_moments": [
+    {
+      "ts": "05:12",
+      "quote": "And do you have a battery?",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer volunteers interest in battery backup unprompted — a strong buying signal Ion can act on (Tesla Powerwall)."
+    },
     {
       "ts": "05:57",
       "quote": "So my only, worry is that there so our panels are 440 watt panels.",
       "classification": "setter_scope_creep",
-      "stewart_read": "Rep engages in a panel-count/wattage debate with the customer instead of using the escape hatch to defer to the specialist. This is accurate-but-premature content exactly matching the setter_scope_creep definition."
+      "stewart_read": "Rep gets pulled into a technical debate about panel wattage and count instead of redirecting to the specialist."
     },
     {
-      "ts": "02:59",
-      "quote": "Oh, yeah. I got that. But this guy told me that from Sunrise, there was gonna spent a great big beautiful bill next to them.",
+      "ts": "02:32",
+      "quote": "What do you mean incentives?",
+      "classification": "knowledge_gap",
+      "stewart_read": "Customer doesn't understand the incentive framing; rep recovers by explaining state/veteran incentives reasonably clearly."
+    },
+    {
+      "ts": "02:55",
+      "quote": "But this guy told me that from Sunrise, there was gonna spent a great big beautiful bill next to them.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a specific prior Sunrun quote and a claim the competitor made about legislation, but the rep never asks what Sunrun actually quoted or offered — pure competitive intel left on the table."
-    },
-    {
-      "ts": "05:12",
-      "quote": "And do you have a battery? ... But I definitely want a battery.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer volunteers strong interest in a battery add-on without being prompted — a clear signal of a larger potential deal (Tesla Powerwall)."
-    },
-    {
-      "ts": "11:19",
-      "quote": "My mom passed away. We're having a funeral on May 2, so it's gonna have to be after that.",
-      "classification": "empathy_miss",
-      "stewart_read": "The rep's response ('Okay. After the second. Alright. I'm sorry to hear that, by the way.') is a brief courtesy but immediately pivots back to scheduling logistics without pausing on the disclosure."
+      "stewart_read": "Customer references a Sunrun rep's specific claim about legislation but rep never asks what exactly was quoted or promised."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 56,
-    "verified": 52,
+    "checked": 61,
+    "verified": 60,
     "fuzzy": 0,
-    "wrong_ts": 3,
-    "not_found": 1
+    "wrong_ts": 1,
+    "not_found": 0
   }
 }

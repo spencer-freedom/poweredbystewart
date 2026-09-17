@@ -1,47 +1,56 @@
 {
   "call_id": "20000768066",
   "rep_name": "Joel",
-  "trajectory_summary": "The call opens rocky — the rep misidentifies the product interest as solar panels when the customer actually inquired about a Tesla Powerwall — but the rep recovers cleanly by asking an open question and correcting course once the notes loaded. From there the call is a fast, cooperative march through qualification and booking, closing in under 4.5 minutes with a locked appointment and a bill-document ask resolved via email.",
-  "shape": "mixed",
+  "trajectory_summary": "The call opens hostile and nearly derails on a product mismatch (solar vs. Powerwall), but the rep recovers by re-anchoring to the correct product and the customer warms steadily through verify and booking. It ends with a locked appointment time but a fragile bill-collection promise via email instead of the immediate photo the script wants.",
+  "shape": "energy_built",
   "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "03:23",
-    "quote": "And 11:00 will work.",
-    "reasoning": "A specific day (Friday the 14th / tomorrow) and time (11 AM) were agreed and confirmed by the rep at 04:16 ('we'll talk to you tomorrow at 11AM'), meeting the booked threshold with no stated co-owner to confirm."
+    "quote": "And 11:00 will work. Eleven. K. Perfect.",
+    "reasoning": "A specific day (tomorrow, Friday the 14th) and time (11AM) were mutually agreed and reconfirmed at button-up ('we'll talk to you tomorrow at 11AM'), meeting the booked bar; no co-owner was ever identified in this call.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "booked by time, tentative by rule: bill promised_later",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "02:12",
-    "bill_quote": "About 300 now. Yeah. 300. K.",
+    "bill_quote": "About 300 now.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the $300 average bill figure but immediately moved to 'Sounds good' and closed out the question list without tying the number to the customer's reason for interest or the value of the Powerwall/solar program."
+    "reasoning": "Rep captured the $300 bill at 02:12 but only acknowledged it flatly ('Sounds good') and moved straight to scheduling questions without tying the number to urgency or the appointment's value."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "03:33",
-    "ask_quote": "we just need to take a look at just the usage information from a recent Dominion bill.",
+    "ask_ts": "03:42",
+    "ask_quote": "If I sent you a text, would you be able to send me just a photo of that?",
     "result": "promised_later",
     "method": "email",
-    "result_ts": "04:04",
-    "result_quote": "I'll send you that email. If you could get that sent over by today just so we can have that ready for you, by tomorrow, that'd be perfect.",
-    "reasoning": "Customer declined the text-photo method due to link-safety concerns and gave an email address instead; the bill itself was not sent during the call but the rep secured a commitment to send it before the appointment."
+    "result_ts": "04:16",
+    "result_quote": "Okay. I can do that.",
+    "reasoning": "Rep asked for a photo of the bill at 03:42; customer preferred email and agreed to send the bill by today at 04:16."
   },
   "interest_reason_audit": {
-    "asked": false,
-    "ask_ts": "",
+    "asked": true,
+    "ask_ts": "00:40",
     "reason_given": false,
     "reason_ts": "",
     "reason_quote": null,
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked why the customer was interested in the Powerwall (e.g., 'what's got you looking at battery backup?'); the only signal is the customer's initial rejection of solar and confirmation he only wants the Powerwall, with no stated motivation captured."
+    "reasoning": "Rep asked why the customer was asking about solar at 00:40, but the customer denied interest rather than giving a motivating reason."
   },
   "script_coverage": [
     {
@@ -49,33 +58,33 @@
       "status": "asked",
       "ts": "00:05",
       "end_ts": "00:08",
-      "quote": "Hey, Wayne. This is Joel with ION. We're a certified solar installer for Tesla.",
-      "customer_response": "resistant",
-      "customer_quote": "No. I don't want any solar.",
-      "resistance_reason": "other",
+      "quote": "Hey, Wayne. This is Joel with ION.",
+      "customer_response": "deflected",
+      "customer_quote": "Can I help you?",
+      "resistance_reason": "",
       "rep_followup": "persisted",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
-      "ts": "00:11",
-      "end_ts": "00:39",
-      "quote": "You kinda changed your mind since looking into it?",
+      "ts": "00:40",
+      "end_ts": "00:48",
+      "quote": "Right. So why are you asking about the solar?",
       "customer_response": "resistant",
       "customer_quote": "No. I never wanted solar. That's not what I asked for.",
       "resistance_reason": "other",
       "rep_followup": "persisted",
-      "result": "completed"
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:14",
       "end_ts": "01:21",
-      "quote": "wanna make sure I have the right address here. It's the one one seven Gatehouse Boulevard in Williamsburg?",
+      "quote": "So first, wanna make sure I have the right address here.",
       "customer_response": "cooperative",
-      "customer_quote": "Correct.",
+      "customer_quote": "Correct. Yep. K. Perfect.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -121,7 +130,7 @@
       "status": "asked",
       "ts": "02:06",
       "end_ts": "02:12",
-      "quote": "how much is an average electric bill with them costing you?",
+      "quote": "And how much is an average electric bill with them costing you?",
       "customer_response": "cooperative",
       "customer_quote": "About 300 now.",
       "resistance_reason": "",
@@ -142,18 +151,6 @@
     },
     {
       "section": "military",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "prior_design",
       "status": "skipped",
       "ts": "",
       "end_ts": "",
@@ -165,25 +162,37 @@
       "result": "skipped"
     },
     {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "00:52",
+      "end_ts": "00:55",
+      "quote": "Do you have panels on the home already?",
+      "customer_response": "resistant",
+      "customer_quote": "No. I'm not doing any panels.",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "completed"
+    },
+    {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "03:33",
-      "end_ts": "04:04",
+      "ts": "03:42",
+      "end_ts": "04:16",
       "quote": "If I sent you a text, would you be able to send me just a photo of that?",
-      "customer_response": "resistant",
-      "customer_quote": "No. I send you an I'll send I don't I don't do a lot with text. There's too many Okay. Links that are getting crazy.",
-      "resistance_reason": "trust",
+      "customer_response": "cooperative",
+      "customer_quote": "I could send you an email instead. The email I have for you is thewayne.cmiles@gmail.com.",
+      "resistance_reason": "privacy",
       "rep_followup": "alternative_offered",
-      "result": "completed"
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "02:22",
-      "end_ts": "03:23",
-      "quote": "Either of those times were good for you?",
+      "ts": "03:11",
+      "end_ts": "03:27",
+      "quote": "we have an 11AM",
       "customer_response": "cooperative",
-      "customer_quote": "And 11:00 will work.",
+      "customer_quote": "And 11:00 will work. Eleven. K. Perfect.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -192,88 +201,114 @@
       "section": "button_up",
       "status": "asked",
       "ts": "04:16",
-      "end_ts": "04:23",
-      "quote": "thank you so much for your time today, Wayne, and, we'll talk to you tomorrow at 11AM.",
+      "end_ts": "04:16",
+      "quote": "we'll talk to you tomorrow at 11AM.",
       "customer_response": "cooperative",
-      "customer_quote": "Alright. Thank you.",
+      "customer_quote": "Okay. I can do that.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:08",
-      "quote": "No. I don't want any solar.",
+      "ts": "00:04",
+      "quote": "Can I help you?",
       "type": "not_interested",
       "rep_attempts": 2,
       "attempt_quotes": [
-        "You kinda changed your mind since looking into it?",
+        "This is Joel with ION. We're a certified solar installer for Tesla.",
         "Oh, gotcha. What were you kinda looking into?"
       ],
       "resolved": true,
       "resolution_ts": "00:35",
-      "reasoning": "The objection was actually a product mismatch, not true disinterest; once the rep identified the customer wanted the Powerwall rather than solar panels, the customer engaged cooperatively for the rest of the call."
+      "reasoning": "Customer's flat denial of interest was resolved once rep identified the actual Powerwall inquiry in the notes, redirecting the conversation productively.",
+      "blocked_section": "intro_legitimacy",
+      "attempt_moves": [
+        "reason",
+        "question_back"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "intro_legitimacy@00:05",
+      "resolution_agrees": true
     },
     {
-      "ts": "03:39",
-      "quote": "No. I send you an I'll send I don't I don't do a lot with text. There's too many Okay. Links that are getting crazy.",
+      "ts": "03:47",
+      "quote": "There's too many Okay. Links that are getting crazy.",
       "type": "trust_or_scam",
       "rep_attempts": 1,
       "attempt_quotes": [
         "Yeah. For sure. I could send you an email instead."
       ],
       "resolved": true,
-      "resolution_ts": "03:56",
-      "reasoning": "Customer's link-safety concern was resolved in a single pivot to email, which the customer accepted immediately."
+      "resolution_ts": "04:16",
+      "reasoning": "Customer's link/text wariness was resolved by switching to email, which the customer accepted, though the underlying scam concern was never verbally acknowledged.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@04:16",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "product-mismatch recovery and clean intro delivery",
-    "ts": "00:00",
-    "quote": "Hi. I'm looking for a Chevy. Hi. Is this Wayne?",
-    "why": "The call opened with a garbled/incorrect intro and a product mismatch (solar vs. Powerwall) that cost the first 35 seconds; while the rep recovered well, a cleaner open avoids the customer's initial flat rejection entirely."
+    "topic": "Product mismatch at open — verify lead intent before framing",
+    "ts": "00:08",
+    "quote": "We're a certified solar installer for Tesla.",
+    "why": "The call nearly died in the first 20 seconds because the rep pitched solar to a Powerwall-only lead; this is the single highest-leverage fix since it caused the hostile open."
   },
   "key_moments": [
     {
-      "ts": "00:00",
-      "quote": "Hi. I'm looking for a Chevy. Hi. Is this Wayne?",
+      "ts": "00:08",
+      "quote": "We're a certified solar installer for Tesla.",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The opening line is garbled ('looking for a Chevy'), likely a transcription artifact or a rep stumbling over a script line, and the company/reason-for-call framing is delayed until 00:05. This is a rocky start regardless of transcription noise."
+      "stewart_read": "Rep used the standard solar/Tesla intro on a lead that actually requested Powerwall only, triggering immediate pushback."
     },
     {
-      "ts": "00:27",
-      "quote": "Oh, gotcha. What were you kinda looking into?",
-      "classification": "rapport_repair",
-      "stewart_read": "After the customer flatly denies wanting solar, the rep doesn't argue or defend — he asks an open question that surfaces the actual product (Powerwall) and de-escalates in one move."
+      "ts": "00:35",
+      "quote": "Yeah. It looks like you were looking into the Powerwall, the test Powerwall. Okay.",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep transparently corrects course once the actual lead detail loads, recovering credibility instead of arguing the original frame."
     },
     {
       "ts": "01:30",
       "quote": "The only requirement to qualify is that you have a credit score of 6 50 or higher.",
       "classification": "other",
-      "stewart_read": "The schema's stated threshold is 670; this rep states 650, matching the same drift already documented on SESSION18_fcbf33c1 (Meg). This is a second data point that the 650 number may be a floor-wide training artifact rather than an isolated rep error."
+      "stewart_read": "Rep states 650 as the threshold, matching the schema's noted drift from the documented 670 standard."
     },
     {
       "ts": "02:12",
       "quote": "About 300 now. Yeah. 300. K.",
-      "classification": "bill_anchor",
-      "stewart_read": "The rep captures the $300 bill figure but immediately moves to closing the call ('Sounds good... that's about all the questions I have here') without reflecting the number back or tying it to the Powerwall/solar conversation."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Rep captures the $300 bill and immediately files it with a flat acknowledgment, no reflection or flip."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 45,
-    "verified": 44,
+    "checked": 54,
+    "verified": 54,
     "fuzzy": 0,
-    "wrong_ts": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

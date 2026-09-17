@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION20_56ff9f86",
   "rep_name": "Colin",
-  "trajectory_summary": "The call runs efficiently through the verify sequence with a cooperative customer, but stalls at the credit qualifier when the customer discloses a recent unemployment and a 530 credit score, well below the 670 threshold. This is a legitimate hard DQ per qualifiers.credit_qualifier, but the rep's handling of the disclosure itself was purely transactional — no acknowledgment of the vulnerability, no bridge to any future contact or alternative path.",
-  "shape": "mixed",
-  "outcome_dispute": null,
+  "trajectory_summary": "The call builds cleanly through verify with genuine cooperation and even an emotional bill-pain reason, then hits a hard credit gate and simply ends. There was no attempt to bridge the vulnerability disclosure or explore any alternative path, so a warm, high-effort call closes cold in under 4 minutes.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag is unknown/unclear; observed transcript shows a legitimate hard DQ on credit (530 vs 670 threshold), so outcome should be recorded as dq, not no_appointment or no_contact.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,16 +11,24 @@
     "co_owner_confirmed": null,
     "ts": "03:33",
     "quote": "530?",
-    "reasoning": "Customer's credit score of 530 is well below the 670 threshold stated by the rep, triggering the hard DQ per qualifiers.credit_qualifier; no appointment was offered or set."
+    "reasoning": "Customer's credit score of 530 fails the schema's 670 hard-gate threshold (qualifiers.credit_qualifier, dq_rules.credit_below_670_no_alternative), and the rep ends pursuit of the appointment immediately after confirming the number.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "01:49",
     "bill_quote": "No. I mean, I think about a 120.",
-    "flip_executed": "no_bill_captured",
+    "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "A bill figure was raised but three different numbers appear in quick succession (120, 223, 150) without the rep ever confirming a single figure, and the call was DQ'd on credit before any flip could be attempted — the bill was never functionally established as a clean anchor."
+    "reasoning": "Bill of $120 was captured at 01:49 but never flipped into emotional alignment-against-the-utility; rep only acknowledged rising energy costs generically at 01:40 ('Energy cost. Yeah. They've been going up like crazy') before pivoting straight to the program pitch and credit gate."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call was disqualified on the credit gate before the rep reached bill-collection; the utility bill document itself was never requested."
+    "reasoning": "The rep never asked for the customer's utility bill or a photo/link during the call."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -41,31 +49,31 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Rep acknowledged the energy-cost reason briefly ('Yeah. Energy cost. Yeah. They've been going up like crazy lately') but the call was disqualified on credit shortly after, so the reason was never reinforced or tied to any next step."
+    "reasoning": "Customer's stated reason ('reduce the energy cost') was acknowledged in passing but never reinforced or tied back to a value proposition later in the call — the call terminated on the credit DQ shortly after."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:08",
-      "end_ts": "00:18",
-      "quote": "Hey, Andrew. This is Colin with Ion. So I just got a request that you were looking into solar for your home.",
+      "end_ts": "00:10",
+      "quote": "Hey, Andrew. This is Colin",
       "customer_response": "cooperative",
       "customer_quote": "I'm doing good. I'm doing well.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:29",
-      "end_ts": "01:40",
+      "end_ts": "01:36",
       "quote": "what kind of got you looking into solar in the first place?",
       "customer_response": "cooperative",
       "customer_quote": "I mean, just reduce the energy cost at all.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -73,11 +81,11 @@
       "status": "asked",
       "ts": "00:36",
       "end_ts": "00:43",
-      "quote": "I've got your address as 6862 Woodridge Road in Newmarket, Maryland. Is that correct?",
+      "quote": "First off, I've got your address as 6862",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. That's correct.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -85,23 +93,23 @@
       "status": "asked",
       "ts": "01:18",
       "end_ts": "01:26",
-      "quote": "And then I've got you down as the property owner. Is there anybody else on the title of the home with you?",
+      "quote": "Is there anybody else on the title of the home with you?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. My wife.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:04",
-      "end_ts": "01:16",
+      "end_ts": "01:12",
       "quote": "Do you happen to know how old your current roof is?",
       "customer_response": "cooperative",
       "customer_quote": "Same, same same number. Yes.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -111,38 +119,38 @@
       "end_ts": "02:07",
       "quote": "And what what electric company is that with?",
       "customer_response": "cooperative",
-      "customer_quote": "That is with Potomac Edison.",
+      "customer_quote": "That is with\n\nPotomac Edison.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:45",
-      "end_ts": "01:57",
+      "end_ts": "01:54",
       "quote": "How much would you say you're spending on average?",
       "customer_response": "cooperative",
       "customer_quote": "No. I mean, I think about a 120.",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:22",
-      "end_ts": "03:44",
-      "quote": "as long as you or your wife has a credit score above 670. So is that the case for either of you?",
-      "customer_response": "resistant",
-      "customer_quote": "We recently were unemployed, and so, I cannot drop our credit score. We just recently got back working again. So",
-      "resistance_reason": "other",
+      "end_ts": "03:33",
+      "quote": "as long as you or your wife has a credit score above 670.",
+      "customer_response": "cooperative",
+      "customer_quote": "It's 530.",
+      "resistance_reason": "dont_have_it",
       "rep_followup": "persisted",
-      "result": "declined"
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,11 +158,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -162,7 +170,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
@@ -198,67 +206,62 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "02:29",
-      "quote": "We recently were unemployed, and so, I cannot drop our credit score. We just recently got back working again. So",
-      "type": "cost",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "I was gonna ask, do you know what it is sitting around?"
-      ],
-      "resolved": true,
-      "resolution_ts": "03:31",
-      "reasoning": "This is not a persuadable objection but a hard qualifier failure; the rep's single follow-up was to get the actual score (530), which confirmed the DQ rather than something to overcome, so no further angles were attempted or needed."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "acknowledging vulnerability disclosures before continuing the qualifier",
-    "ts": "02:29",
-    "quote": "We recently were unemployed, and so, I cannot drop our credit score. We just recently got back working again. So",
-    "why": "The DQ outcome itself was correct and unavoidable given the 530 score, but the rep moved straight past a disclosed hardship without any human acknowledgment, which is a repeatable, coachable habit distinct from the DQ result."
+    "topic": "Vulnerability disclosure ignored at the DQ moment",
+    "ts": "02:33",
+    "quote": "were unemployed, and so, I cannot drop our credit score.",
+    "why": "Customer volunteered a real hardship right before the call ended cold; per coaching_philosophy.empathy_on_vulnerability_disclosure this is the single highest-leverage miss on an otherwise clean call."
   },
   "key_moments": [
     {
-      "ts": "01:49",
-      "quote": "No. I mean, I think about a 120.",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer gives a bill figure but the numbers get muddled in the next few seconds (223, then 150), and the rep never resolves which figure is accurate or writes it down cleanly before moving to utility company and then the credit gate."
-    },
-    {
-      "ts": "01:54",
-      "quote": "About a 120. Okay. 223.",
-      "classification": "bill_anchor",
-      "stewart_read": "This is the moment the bill number should have been locked down; instead the rep introduces a second number (223) that doesn't match either the customer's 120 or later 150, and never reconciles it."
-    },
-    {
-      "ts": "02:22",
-      "quote": "as long as you or your wife has a credit score above 670.",
-      "classification": "other",
-      "stewart_read": "Rep correctly states the schema's 670 threshold (unlike the 650 drift seen in other calls) and appropriately runs the qualifier for both title-holders since the wife is on title."
-    },
-    {
-      "ts": "02:29",
-      "quote": "We recently were unemployed, and so, I cannot drop our credit score. We just recently got back working again. So",
+      "ts": "02:33",
+      "quote": "were unemployed, and so, I cannot drop our credit score. We just recently got back working again.",
       "classification": "empathy_miss",
-      "stewart_read": "Customer discloses a job-loss/financial-hardship situation unprompted while explaining the credit issue. The rep's next line moves straight into asking for the score number with no acknowledgment of the hardship."
+      "stewart_read": "Andrew discloses a job-loss/financial-hardship situation unprompted — a trust gift per the schema — and the rep does not acknowledge it at all before moving straight to the number."
+    },
+    {
+      "ts": "03:36",
+      "quote": "I would just recommend looking into solar once that is above $6.70.",
+      "classification": "empathy_miss",
+      "stewart_read": "The DQ delivery is procedurally correct (670 threshold matches schema) but the close is purely transactional with zero bridge to future recontact or resource."
+    },
+    {
+      "ts": "01:36",
+      "quote": "I mean, just reduce the energy cost at all.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Rep captured the bill-pain reason but only reflected it generically ('energy cost yeah they've been going up like crazy') instead of using it to build forward-pulling curiosity toward the appointment."
+    },
+    {
+      "ts": "02:50",
+      "quote": "Okay. I was gonna ask, do you know what it is sitting around?",
+      "classification": "protocol_violation",
+      "stewart_read": "Rep correctly probes for the actual credit number rather than accepting a vague 'below' answer, which is good procedure toward confirming the hard DQ."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 38,
-    "verified": 38,
+    "checked": 34,
+    "verified": 34,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

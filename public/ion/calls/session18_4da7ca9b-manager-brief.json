@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION18_4da7ca9b",
   "rep_name": "Brandon",
-  "trajectory_summary": "The call opens cold with a cost objection and stays in a skepticism loop for roughly four minutes before the rep manages to extract bill data through an unusually long, clumsy navigation exchange. The rep never sharpens the vague 'replacing your bill' answer into a real cost anchor, and the appointment that eventually gets set (14:30) is booked without any button-up handshake, leaving it structurally fragile despite the customer's late-call warming.",
+  "trajectory_summary": "The call opens hostile-to-cold with an immediate cost objection and drifts through repeated 'what's the catch' probes and a long, friction-heavy bill-retrieval slog before landing a booked appointment. Energy is mixed: the customer warms via vulnerability disclosure and eventual cooperation, but the rep leans on premature financial explanations rather than a clean bill-flip or scope redirect. The appointment is booked on a date/time but is fragile — no bill dollar amount was ever captured and the button-up is thin.",
   "shape": "mixed",
-  "outcome_dispute": "The appointment is real (specific day, date, and time agreed) so 'no_appointment' would be wrong, but the complete absence of button-up elements (no hour-block statement, no no-driving/computer instruction, no 'is that fair' handshake) makes this closer to a fragile tentative booking than a clean 'booked' outcome in the schema's full sense — the manager should read it as booked-but-procedurally-thin.",
+  "outcome_dispute": "v1 tag unknown; observed outcome is booked (day+time agreed) but bill amount was never captured in dollars, only a kWh screenshot, which the pipeline should treat as a fragile/conditional set per Ion's bill-required rule.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "14:30",
     "quote": "May 25, that's a Monday, at 12:00.",
-    "reasoning": "A specific day, date, and time are agreed by both parties, but no button-up handshake follows, and the husband mentioned at 05:17 is never confirmed as a co-owner or included in the appointment, leaving co_owner_confirmed null since no title question was asked."
+    "reasoning": "Both parties agree to a specific day and time ('That sounds good.' at 14:33), meeting the booked bar; no co-owner/spouse was identified in this transcript so co_owner_confirmed is null.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "booked by time, tentative by rule: bill promised_later",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,40 +29,40 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep spends nearly five minutes navigating the customer to a usable kWh figure but never turns it into a savings-potential hook or ties it back to the earlier 'nothing is free' skepticism — the number is filed, not flipped."
+    "reasoning": "The rep captured a kWh figure (505 kWh) and got 'Too much'/'I don't know' on the dollar ask, but never flipped either into emotional alignment-against-Xcel; the flip should have landed at 01:17 or 02:34 when the customer directly asked about eventual cost."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "03:26",
-    "ask_quote": "If you have an Excel bill, it would show us it has a graph, and then it has a breakdown of what you're being charged for get a lot. If you can send me that, then we can build an evaluation",
-    "result": "received_on_call",
-    "method": "online_login",
-    "result_ts": "12:20",
-    "result_quote": "Thank you. For our idea. I guess that's what I meant. Just, take a screenshot of that and send it to me.",
-    "reasoning": "The customer navigates her Xcel online account live on the call and reads usage figures aloud; the rep asks her to screenshot and send it, and she agrees at 12:25 ('That I can send to you because that doesn't have any of my information on you')."
+    "ask_ts": "04:07",
+    "ask_quote": "if you have a PDF of your energy bill,",
+    "result": "promised_later",
+    "method": "photo",
+    "result_ts": "13:30",
+    "result_quote": "I'll send it to my phone here. 836-0415.",
+    "reasoning": "Rep asked for a PDF/photo of the bill at 04:07 and the customer agreed to send it later, providing a phone number at 13:30."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": false,
-    "reason_ts": "",
-    "reason_quote": null,
-    "reason_used": "no_reason_given",
+    "reason_given": true,
+    "reason_ts": "00:14",
+    "reason_quote": "Good. Good. I am, but I don't think it's something I can afford right now.",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never directly asks 'what has you interested in solar' — the call jumps from the intro straight into cost-objection handling and qualification, so no explicit interest reason is ever solicited or given."
+    "reasoning": "The customer's stated reason for hesitation ('I don't think it's something I can afford right now,' 00:14) was acknowledged with a program reframe at 00:24-00:35 but never revisited or tied back to the appointment when booking it at 14:30."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "end_ts": "00:12",
-      "quote": "Hi. My name is Brandon. I'm here with the solar programs in Colorado.",
+      "end_ts": "00:09",
+      "quote": "My name is Brandon.",
       "customer_response": "cooperative",
-      "customer_quote": "Good. Good.",
+      "customer_quote": "Good. Good. I am, but I don't think it's something I can afford right now.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -72,12 +81,12 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:04",
-      "end_ts": "01:41",
-      "quote": "Yes. You but you need to be the homeowner. So there's a few things that would qualify you.",
+      "end_ts": "01:11",
+      "quote": "You but you need to be the homeowner.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. Well, I am.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -95,37 +104,37 @@
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:58",
-      "end_ts": "02:12",
-      "quote": "There's there's a separate okay. And then you need to own the roof.",
+      "ts": "02:05",
+      "end_ts": "02:13",
+      "quote": "That's not the case for you, is it? You you own the roof and you have a separate meter?",
       "customer_response": "cooperative",
       "customer_quote": "I own the roof. Yeah.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "01:24",
-      "end_ts": "01:29",
-      "quote": "We gotta work with a utility company. So are you with Xcel Energy?",
+      "ts": "01:29",
+      "end_ts": "01:31",
+      "quote": "are you with Xcel Energy?",
       "customer_response": "cooperative",
       "customer_quote": "Yes. Xcel Energy.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "13:14",
-      "end_ts": "13:23",
+      "end_ts": "13:25",
       "quote": "Because I'm seeing here how much are you paying? Do you know? On average?",
-      "customer_response": "resistant",
-      "customer_quote": "Too much. Actually, no. I I don't know. I I I fluctuate during the year.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "moved_on",
+      "customer_response": "cooperative",
+      "customer_quote": "Too much.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
       "result": "partial"
     },
     {
@@ -167,20 +176,20 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "03:26",
-      "end_ts": "12:25",
-      "quote": "If you have an Excel bill, it would show us it has a graph, and then it has a breakdown of what you're being charged",
-      "customer_response": "resistant",
-      "customer_quote": "Let me just meet I don't wanna send you anything because I don't know who you are.",
-      "resistance_reason": "trust",
-      "rep_followup": "persisted",
-      "result": "completed"
+      "ts": "04:07",
+      "end_ts": "13:36",
+      "quote": "if you have a PDF of your energy bill,",
+      "customer_response": "cooperative",
+      "customer_quote": "I'll send it to my phone here. 836-0415.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "14:30",
-      "end_ts": "14:34",
+      "end_ts": "14:35",
       "quote": "May 25, that's a Monday, at 12:00.",
       "customer_response": "cooperative",
       "customer_quote": "That sounds good.",
@@ -190,15 +199,21 @@
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "14:30",
+      "end_ts": "14:39",
+      "quote": "When we get closer to the day, we will reach out just to confirm with you.",
+      "customer_response": "cooperative",
+      "customer_quote": "That sounds good.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "hour_block",
+        "reconfirm"
+      ],
+      "parts_score": "3/4"
     }
   ],
   "objections": [
@@ -206,28 +221,62 @@
       "ts": "00:14",
       "quote": "Good. Good. I am, but I don't think it's something I can afford right now.",
       "type": "cost",
-      "rep_attempts": 2,
+      "rep_attempts": 1,
       "attempt_quotes": [
-        "So right now, we're offering a new solar program where you can switch over to solar at no cost to you.",
-        "It's just replacing your current electric bill."
+        "So right now, we're offering a new solar program where you can switch over to solar at no cost to you."
       ],
       "resolved": true,
-      "resolution_ts": "03:49",
-      "reasoning": "Customer moves past the affordability framing after the second explanation but immediately reframes it as generalized skepticism about 'free' offers rather than a resolved cost concern."
+      "resolution_ts": "00:56",
+      "reasoning": "Rep reframes with the no-cost program pitch; customer moves past it into curiosity ('So you're going to install something in my home free of charge?').",
+      "blocked_section": "intro_legitimacy",
+      "attempt_moves": [
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "address_homeowner@01:04",
+      "resolution_agrees": true
     },
     {
       "ts": "01:17",
       "quote": "But it's gotta be a catch to it. What am I what am I eventually gonna pay?",
-      "type": "trust_or_scam",
+      "type": "cost",
       "rep_attempts": 3,
       "attempt_quotes": [
+        "We gotta work with a utility company. So are you with Xcel Energy?",
         "It's just replacing your current electric bill.",
-        "You were paying for what the solar panels produce. That's how you're able to get a lower energy bill.",
-        "It's a great alternative, like, because you're always gonna pay your utility bills. You're always gonna have Excel, and they can raise the rates anytime they want."
+        "Yeah. You were paying for what the solar panels produce."
+      ],
+      "resolved": true,
+      "resolution_ts": "03:41",
+      "reasoning": "Customer keeps pressing on eventual cost across three exchanges; rep never inverts the objection, instead answering with mechanism explanations (scope creep) until the customer verbally drops it and shifts to being 'very interested.'",
+      "blocked_section": "bill_amount",
+      "attempt_moves": [
+        "question_back",
+        "reason",
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "utility_company@01:29",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "03:49",
+      "quote": "I'm always curious when someone tells me they're gonna, you know, give me something for for free. It's, it's questionable.",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I sent you a text message, but if you have a PDF of your energy bill,"
       ],
       "resolved": true,
       "resolution_ts": "12:43",
-      "reasoning": "Customer voices distrust of the 'free' claim multiple times through the middle of the call; she only verbally signals openness ('I'm willing to listen to you guys') after the bill data exchange, suggesting the trust gap closed through data-sharing rapport rather than a direct rebuttal."
+      "reasoning": "Rep doesn't directly address the scam anxiety, just redirects to the bill ask; resolution only comes much later when customer says 'I'm I'm willing to listen to you guys.'",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "bill_collection@04:07",
+      "resolution_agrees": true
     },
     {
       "ts": "05:06",
@@ -235,70 +284,92 @@
       "type": "trust_or_scam",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Okay. Yeah. I sent you a text message, but if you have a PDF of your energy bill, then you can I'll send you my email."
-      ],
-      "resolved": true,
-      "resolution_ts": "12:25",
-      "reasoning": "Customer eventually agrees to send the screenshot once she confirms it contains no personal information, resolving the specific privacy concern rather than the rep persuading her out of it."
-    },
-    {
-      "ts": "05:17",
-      "quote": "Do they meet on Sundays?",
-      "type": "timing_or_callback",
-      "rep_attempts": 1,
-      "attempt_quotes": [
         "No. Not on Sundays. So they do meet Saturdays."
       ],
       "resolved": true,
-      "resolution_ts": "14:30",
-      "reasoning": "Timing negotiation extends across several turns (surgery date, work schedule) before landing on May 25 at 12:00; the rep accommodates rather than pushing back on any of the stated constraints."
-    }
-  ],
-  "primary_coaching_focus": {
-    "topic": "button-up handshake skipped entirely",
-    "ts": "14:39",
-    "quote": "Okay. Great. When we get closer to the day, we will reach out just to confirm with you.",
-    "why": "The rep locks a real date/time but never runs the hour-block, no-driving/computer instruction, or 'is that fair' handshake — on a five-week-out, surgery-constrained booking, this procedural gap is the single highest-leverage fix to protect the sit."
-  },
-  "key_moments": [
-    {
-      "ts": "01:17",
-      "quote": "But it's gotta be a catch to it. What am I what am I eventually gonna pay? Nothing is free. So",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is a textbook cost-objection opening for the flip ('what's not free is what you're already paying Xcel'), but the rep answers with the evaluation-process explanation instead of inverting the frame."
-    },
-    {
-      "ts": "02:52",
-      "quote": "So instead of paying your utility company, I'm paying you guys.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "The customer restates the rep's vague line back almost verbatim, signaling she isn't hearing a clear savings story — just a lateral cost shift. This was the moment to flip toward 'you're paying Xcel forever with rate increases; you'd be paying for panels you own.'"
+      "resolution_ts": "13:30",
+      "reasoning": "Rep sidesteps the trust concern entirely and moves to scheduling; the customer eventually sends a screenshot anyway (13:30), so it resolves procedurally rather than through rep persuasion.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "bill_amount@13:14",
+      "resolution_agrees": true
     },
     {
       "ts": "05:17",
-      "quote": "My husband I am really never home.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer references a husband in the middle of explaining her availability, but the rep never confirms whether the husband is a co-owner or should be included on the appointment."
+      "quote": "I am really never home.",
+      "type": "timing_or_callback",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "No. Not on Sundays. So they do meet Saturdays.",
+        "You're not available this Saturday?"
+      ],
+      "resolved": true,
+      "resolution_ts": "14:33",
+      "reasoning": "Customer's busy schedule and impending surgery repeatedly complicate finding a time; rep works through multiple date offers until landing on May 25 at 12:00, which customer accepts.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "alternative_offered",
+        "question_back"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "bill_amount@13:14",
+      "resolution_agrees": true
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "Missed objection inversion on recurring cost skepticism",
+    "ts": "01:17",
+    "quote": "But it's gotta be a catch to it. What am I what am I eventually gonna pay?",
+    "why": "The same 'what's the catch/real cost' question repeats three times and each time Brandon answers with closer-tier financial mechanics instead of the bill-flip — this is the single biggest lever this call demonstrates, and it directly caused the scope creep at 02:49 and 02:59."
+  },
+  "key_moments": [
+    {
+      "ts": "02:49",
+      "quote": "It's just replacing your current electric bill.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep explains the financial mechanism of solar payment replacement, which is closer-tier content that should be deferred to the specialist."
     },
     {
-      "ts": "05:41",
-      "quote": "And oh, you know what? I go I'm I'm gonna go through surgery in a couple weeks.",
-      "classification": "empathy_miss",
-      "stewart_read": "Customer discloses an upcoming hernia surgery unprompted — a vulnerability disclosure per the schema — and the rep moves straight into scheduling logistics without any acknowledgment."
+      "ts": "01:17",
+      "quote": "But it's gotta be a catch to it. What am I what am I eventually gonna pay?",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a cost-skepticism objection that maps directly to the bill-flip trigger, but rep answers with qualification questions instead of flipping to 'what's expensive is staying with Excel.'"
+    },
+    {
+      "ts": "02:34",
+      "quote": "How much is it ever how much something is gonna cost me something eventually?",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Second occurrence of the same cost objection; rep again answers with feature/mechanism explanation rather than inverting."
+    },
+    {
+      "ts": "05:06",
+      "quote": "Let me just meet I don't wanna send you anything because I don't know who you are.",
+      "classification": "protocol_violation",
+      "stewart_read": "A trust/legitimacy objection surfaces mid-call because the intro never gave a strong legitimacy anchor (no mention of the lead source specifics beyond 'a form')."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 56,
-    "verified": 54,
-    "fuzzy": 1,
+    "checked": 64,
+    "verified": 63,
+    "fuzzy": 0,
     "wrong_ts": 1,
     "not_found": 0
   }

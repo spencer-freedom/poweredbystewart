@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION12_2b42afc0",
   "rep_name": "Pike",
-  "trajectory_summary": "This is a short reschedule call, not a fresh set: a prior Ion door-knock appointment fell through, and the rep is calling to find a new time. The rep's slow, live account lookup burns the first 70+ seconds, but once oriented the call moves quickly and cleanly to a locked day, time, and hard constraint from the customer.",
-  "shape": "mixed",
-  "outcome_dispute": "This call is a genuine reschedule-booking with a specific day (Monday) and time (5PM) confirmed, plus a customer-stated hard constraint (done by 05:45) the rep accepted -- this should read as 'booked', not an ambiguous or soft outcome, despite the rocky opening.",
+  "trajectory_summary": "This is a thin, procedural reschedule call, not a fresh setter call — most script sections were skipped because the lead was recycled from a missed door appointment. The rep gets to a booked time but the call is structurally weak: no bill, no interest reason, no address confirmation depth, and a soft handshake at the end. Energy stayed flat throughout; nothing was built beyond logistics.",
+  "shape": "stagnant",
+  "outcome_dispute": "V1 tag unknown; based on transcript this is best read as tentative/booked-with-fragility — a day and time (Monday 5PM) were agreed, but the rep never confirmed 'is that fair' or addressed the 5:45 constraint against session length.",
   "observed_outcome": {
-    "outcome": "booked",
-    "appointment_channel": "phone",
+    "outcome": "tentative",
+    "appointment_channel": "unclear",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "02:19",
     "quote": "I'll get that set for five, and we will shoot you a reminder text just to double check that time still works for you.",
-    "reasoning": "A specific day (Monday) and time (5PM) are agreed and the rep confirms he is setting it, plus commits to a reminder text -- this meets the bar for 'booked' despite the compressed button-up."
+    "reasoning": "A day (Monday) and time (5PM) were agreed, satisfying datetime_captured, but the rep's own language ('reminder text just to double check that time still works') signals the booking isn't fully locked, and no explicit fairness handshake occurred — tentative is the more accurate read than a clean booked.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "This call is a pure reschedule of a previously-set design appointment; no utility bill, usage figure, or bill amount is discussed anywhere in the transcript."
+    "reasoning": "No bill amount or kWh was captured on the call; therefore no flip could be executed."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +39,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "No mention of the utility bill document is made; the call is scoped entirely to finding a new appointment time, consistent with this being a reschedule of an already-qualified lead rather than a fresh set."
+    "reasoning": "The rep never raised collecting a utility bill or a photo/link during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +50,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks what interested the customer in solar, and none is volunteered -- this call skips straight from account lookup to rescheduling since the qualifying conversation presumably happened at the earlier door visit."
+    "reasoning": "The rep did not ask what motivated the customer to consider solar, and no reason was volunteered."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:00",
-      "end_ts": "00:16",
-      "quote": "Oh, and this is Pike with ION. Did you put in some information looking at solar for the home?",
+      "end_ts": "00:02",
+      "quote": "Hi. This is Pike.",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah.",
+      "customer_quote": "Hi. How are you?",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -72,12 +81,12 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:24",
-      "end_ts": "00:34",
+      "end_ts": "00:30",
       "quote": "What was, your your address?",
       "customer_response": "cooperative",
       "customer_quote": "611 Rising Sun Road.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -156,17 +165,17 @@
       "section": "prior_design",
       "status": "asked",
       "ts": "01:13",
-      "end_ts": "01:45",
-      "quote": "It looks like, yeah, it looks like we we had time set up to share a solar design with you. It looks like a a, a week or so ago, that ended up falling through.",
+      "end_ts": "01:41",
+      "quote": "we we had time set up to share a solar design with you.",
       "customer_response": "cooperative",
-      "customer_quote": "Also next week?",
+      "customer_quote": "Looks like you said I got rescheduled at the door unless they reached out to me.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -174,18 +183,18 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "02:03",
       "end_ts": "02:19",
-      "quote": "the times we have available would be 09:30, 12PM, 02:30, 5PM, and 07:30PM.",
+      "quote": "So, the times we have available would be 09:30, 12PM,",
       "customer_response": "cooperative",
-      "customer_quote": "Five. But I have to be done by 05:45 to go to track practice.",
-      "resistance_reason": "timing",
-      "rep_followup": "alternative_offered",
+      "customer_quote": "Five.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -195,71 +204,69 @@
       "end_ts": "02:19",
       "quote": "I'll get that set for five, and we will shoot you a reminder text just to double check that time still works for you.",
       "customer_response": "cooperative",
-      "customer_quote": "Okay. You're welcome. Bye bye.",
+      "customer_quote": "So I would say\nMonday\nAt\n4PM.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
-    }
-  ],
-  "objections": [
-    {
-      "ts": "02:17",
-      "quote": "Five. But I have to be done by 05:45 to go to track practice.",
-      "type": "timing_or_callback",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "So that's fine. No. It should be fine. Yeah. We should be able to make that work."
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
       ],
-      "resolved": true,
-      "resolution_ts": "02:19",
-      "reasoning": "This is best read through protocols.time_constraint (a scheduling boundary to anchor, not an objection to overcome) -- the customer isn't resisting the appointment, she's stating a hard stop time. The rep accommodates it in one pass and the appointment proceeds, so it resolves cleanly, but the rep never restates the constraint back for confirmation or flags the shortened window against Ion's one-hour block practice."
+      "parts_score": "2/4"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "pre-call account prep on reschedule/callback calls",
-    "ts": "00:20",
-    "quote": "so it looks like I pulled up the the right account here.",
-    "why": "The rep spends the first 70+ seconds of a short call (00:20 through 01:13) live-searching and narrating the account history instead of opening already oriented -- this is the single biggest time-and-confidence cost on an otherwise efficient call, and it recurs three times (00:20, 00:47, 01:13), making it the clearest coachable pattern."
+    "topic": "Recycled lead treated as pure logistics, not re-qualified",
+    "ts": "01:13",
+    "quote": "we we had time set up to share a solar design with you",
+    "why": "No bill, interest reason, roof, or utility info was gathered on a lead that already fell through once — the rep is booking a second appointment with zero more qualification than the first attempt had, risking another no-show or disqualification at the door."
   },
   "key_moments": [
     {
-      "ts": "00:00",
-      "quote": "Hi. This is Pike.",
+      "ts": "00:10",
+      "quote": "Did you put in some information looking at solar for the home?",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The opening carries no company name, no reference to the prior door visit or design appointment, and no context for why the rep is calling -- the customer has to supply that ('I just got a call from you guys') before the rep re-anchors with 'this is Pike with ION' two lines later."
-    },
-    {
-      "ts": "00:20",
-      "quote": "so it looks like I pulled up the the right account here.",
-      "classification": "other",
-      "stewart_read": "This is pre-call-prep failure, not knowledge_gap (knowledge_gap is about not being able to answer a customer question) -- the rep hadn't pulled up the account before dialing and is searching for it live while the customer waits."
-    },
-    {
-      "ts": "00:47",
-      "quote": "Okay. Sorry. Just give me one more second here.",
-      "classification": "other",
-      "stewart_read": "A second apology for search time follows a 13-second silent gap (00:34 to 00:47) in the transcript -- compounding evidence that the rep opened the call without the account ready, costing real time on a call that otherwise runs efficiently."
+      "stewart_read": "Rep never establishes a clean company/lead-source frame before diving into account lookup; legitimacy is thin for a customer who says she 'just got a call.'"
     },
     {
       "ts": "01:13",
-      "quote": "Okay. It looks like, yeah, it looks like we we had time set up to share a solar design with you. It looks like a a, a week or so ago, that ended up falling through.",
-      "classification": "other",
-      "stewart_read": "The rep is narrating CRM notes aloud to the customer in real time as he reads them, rather than opening with a pre-digested summary of what happened last time. This is the same pre-call-prep gap surfacing again at the moment it matters most -- explaining a missed appointment to the customer."
+      "quote": "we we had time set up to share a solar design with you",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Rep surfaces that a prior design/door visit was scheduled but never asks what happened when Jose came by or probes for any details from that visit."
+    },
+    {
+      "ts": "01:56",
+      "quote": "Monday",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "Customer offers Monday 4PM directly; rep does not have that slot, and the eventual booking never gets an explicit 'does that work / is that fair' confirmation."
+    },
+    {
+      "ts": "02:17",
+      "quote": "Five. But I have to be done by 05:45",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "Customer states a hard 45-minute ceiling on the appointment window; rep says 'it should be fine' without confirming the appointment's actual expected length against that window."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
     "checked": 31,
-    "verified": 31,
-    "fuzzy": 0,
+    "verified": 30,
+    "fuzzy": 1,
     "wrong_ts": 0,
     "not_found": 0
   }

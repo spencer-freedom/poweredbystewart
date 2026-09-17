@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION19",
   "rep_name": "Randy",
-  "trajectory_summary": "This call has an unusual dual-intake structure: the rep is simultaneously qualifying Nick as a new customer AND capturing referral details for his father-in-law Leland, which the rep handles smoothly without confusing the two threads. The core verify sequence (homeowner, roof, title, credit, utility, first-time interest) runs cleanly and the appointment gets locked to a specific day and time. The call is a steady, low-friction booking with a couple of soft spots — the bill wasn't captured on the call and the spouse was never explicitly invited onto the appointment, only assumed via the customer's own comment.",
-  "shape": "energy_built",
-  "outcome_dispute": null,
+  "trajectory_summary": "The call opens with unusually high customer warmth (a self-motivated referral) and the rep coasts on that goodwill through verify and scheduling, landing a tentative Saturday 2PM appointment with the spouse included. Energy never really builds beyond the starting warmth because the rep never anchors the bill emotionally or probes the solar-farm disclosure, so the call stays essentially flat rather than escalating curiosity.",
+  "shape": "stagnant",
+  "outcome_dispute": "v1 tag is unknown/unclear; observed transcript shows a day+time verbally agreed (Saturday 2PM) but the bill was only promised via email, not captured, so per Ion's rule this is a tentative/conditional set rather than a fully locked booked appointment.",
   "observed_outcome": {
-    "outcome": "booked",
-    "appointment_channel": "in_person",
+    "outcome": "tentative",
+    "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": true,
-    "ts": "07:36",
-    "quote": "we'll shoot for this Saturday at 2PM.",
-    "reasoning": "A specific day (Saturday the 18th) and time (2PM) are locked, the wife's availability was factored into the time selection ('work good for you and your wife?'), and the appointment is framed as a local specialist dropping by, indicating an in-person visit."
+    "ts": "06:58",
+    "quote": "a two or 3PM work good for you and your wife?",
+    "reasoning": "A specific day (Saturday the 18th) and time (2PM) were verbally agreed and the wife/co-owner was explicitly included, but the bill was never captured on the call and remains a promised future email, which per Ion's rule keeps the set conditional/tentative rather than fully booked.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": false,
+      "co_owner": "confirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,71 +29,71 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep never asked for a dollar bill amount or usage figure verbally; the conversation moved straight to requesting the actual bill document via email, so there was no number on the call to flip."
+    "reasoning": "No dollar amount or kWh usage was captured from the customer; the rep requested the last 12 months of kWh but the customer only agreed to email the bill later."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "05:36",
-    "ask_quote": "You can typically get those in the mail or online?",
+    "ask_ts": "05:41",
+    "ask_quote": "So you can either text or email it over to me, whichever one works better for you.",
     "result": "promised_later",
     "method": "email",
     "result_ts": "05:47",
-    "result_quote": "I'll probably just email it to you. I'm I'm at work now, so I gotta it'll probably take a little bit to dig that up.",
-    "reasoning": "The rep asked how the customer normally accesses the bill and offered text or email; the customer committed to emailing it later rather than producing it on the call, and the rep accepted that timeline without resistance."
+    "result_quote": "I'll probably just email it to you.",
+    "reasoning": "Rep asked for the bill and the customer agreed to email it later; no receipt on the call."
   },
   "interest_reason_audit": {
-    "asked": false,
-    "ask_ts": "",
+    "asked": true,
+    "ask_ts": "00:11",
     "reason_given": true,
     "reason_ts": "00:15",
-    "reason_quote": "Yeah. I was referred from my father-in-law who's gonna be getting it through you guys and just kinda wanted to get a little bit of the rundown and a little bit of maybe a consultation on the on the process.",
+    "reason_quote": "I was referred from my father-in-law",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar,' but the customer volunteered his reason (family referral) unprompted at the top of the call; the rep acknowledged it in the moment ('Yeah. Sounds good. I'd love to help you out with that.') but never circled back to it later when setting or confirming the appointment."
+    "reasoning": "Customer's stated reason for calling was the father-in-law referral (00:15), but the rep never tied the appointment or close back to that referral context — the closing lines at 07:32 focus only on the bill and the Saturday time, not on the referral motivation."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:02",
-      "end_ts": "00:11",
-      "quote": "Hey. This is Randy.",
+      "end_ts": "00:05",
+      "quote": "This is Randy.",
       "customer_response": "cooperative",
-      "customer_quote": "Hey, Randy. This is I'm Solar?",
+      "customer_quote": "Hey, Randy.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:11",
-      "end_ts": "00:26",
+      "end_ts": "00:20",
       "quote": "Are you looking at solar for your home?",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. I was referred from my father-in-law who's gonna be getting it through you guys",
+      "customer_quote": "I was referred from my father-in-law",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "03:18",
-      "end_ts": "03:27",
-      "quote": "And is this a single family home that you're looking into it for?",
+      "ts": "01:33",
+      "end_ts": "03:09",
+      "quote": "can I get your address here real quick, Nick?",
       "customer_response": "cooperative",
-      "customer_quote": "It is.",
+      "customer_quote": "Yep. It's 20963.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "04:06",
-      "end_ts": "04:16",
+      "end_ts": "04:18",
       "quote": "Is there anyone else on the, title of the home with you?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. That'd be my wife, Tamara,",
@@ -96,12 +105,12 @@
       "section": "roof",
       "status": "asked",
       "ts": "03:39",
-      "end_ts": "04:04",
+      "end_ts": "03:57",
       "quote": "Is that a asphalt shingle roof I see on the home?",
       "customer_response": "cooperative",
       "customer_quote": "That is correct.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -113,31 +122,31 @@
       "customer_response": "cooperative",
       "customer_quote": "You have the Xcel Energy.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_amount",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "05:28",
+      "end_ts": "05:47",
+      "quote": "We just need to see the last, twelve months of kilowatt hours.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'll probably just email it to you.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "04:20",
-      "end_ts": "04:35",
-      "quote": "you just need to have a credit score above 670. Would that be the case for you?",
+      "ts": "04:24",
+      "end_ts": "04:33",
+      "quote": "you just need to have a credit score above 670.",
       "customer_response": "cooperative",
       "customer_quote": "That's definitely the case. Yep.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -156,96 +165,128 @@
       "section": "prior_design",
       "status": "asked",
       "ts": "05:13",
-      "end_ts": "05:19",
-      "quote": "is this your first time looking into solar for this property, Nick?",
+      "end_ts": "05:20",
+      "quote": "And is this your first time looking into solar for this property, Nick?",
       "customer_response": "cooperative",
       "customer_quote": "It is.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "05:36",
+      "ts": "05:41",
       "end_ts": "05:47",
-      "quote": "Great. So you can either text or email it over to me, whichever one works better for you.",
+      "quote": "So you can either text or email it over to me, whichever one works better for you.",
       "customer_response": "cooperative",
-      "customer_quote": "I'll probably just email it to you. I'm I'm at work now, so I gotta it'll probably take a little bit to dig that up.",
-      "resistance_reason": "dont_have_it",
+      "customer_quote": "I'll probably just email it to you.",
+      "resistance_reason": "",
       "rep_followup": "alternative_offered",
-      "result": "deferred"
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "06:58",
+      "ts": "06:12",
       "end_ts": "07:39",
-      "quote": "a two or 3PM work good for you and your wife?",
-      "customer_response": "cooperative",
-      "customer_quote": "Yeah. I think 02:00 should work.",
-      "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "quote": "we'll be free these next couple days.",
+      "customer_response": "deflected",
+      "customer_quote": "I don't know if this the eighteenth, this Saturday is an option.",
+      "resistance_reason": "timing",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "07:09",
+      "ts": "07:10",
       "end_ts": "07:39",
       "quote": "I'll block off that spot for an hour just to ensure you guys don't feel rushed as well.",
       "customer_response": "cooperative",
-      "customer_quote": "Alright. Sounds great. Thanks for your help.",
+      "customer_quote": "Alright. Sounds great.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "hour_block",
+        "reconfirm"
+      ],
+      "parts_score": "3/4"
     }
   ],
-  "objections": [],
+  "objections": [
+    {
+      "ts": "06:20",
+      "quote": "Unfortunately, at work do you guys do Saturdays at all?",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. Yeah. We do Saturdays."
+      ],
+      "resolved": true,
+      "resolution_ts": "07:08",
+      "reasoning": "Customer's weekday unavailability stalled the initial time offer; rep immediately confirmed Saturday availability and moved to lock a specific afternoon time with the spouse, resolving it in one attempt.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@07:10",
+      "resolution_agrees": true
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "button_up completeness — missing handshake and computer/no-driving instruction",
-    "ts": "07:39",
-    "quote": "we'll shoot for this Saturday at 2PM.",
-    "why": "The appointment is booked but the call closes without the 'is that fair?' verbal commitment or the no-driving/computer expectation, both of which the schema flags as predictive of show rate — an easy, low-cost fix for an otherwise clean call."
+    "topic": "No bill captured — appointment left conditional",
+    "ts": "05:47",
+    "quote": "I'll probably just email it to you. I'm I'm at work now, so I gotta it'll probably take a little bit to dig that up.",
+    "why": "The single highest-leverage miss: no bill number, no kWh figure, nothing verbal was captured before falling back to a promised email, so the appointment has no financial anchor and is fragile per Ion's tentative-set rule."
   },
   "key_moments": [
     {
       "ts": "04:47",
-      "quote": "actually, the other thing too is we are I am tied into one of those, like, solar farms where they give you, like, a percentage of the, you know, they're kind of associated with Excel sort of.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Customer discloses participation in a community-solar/subscription program tied to Xcel, a scenario not covered in Ion's script. The rep's response is a generic acknowledgment rather than a probe into how this affects his usage or offset calculation."
+      "quote": "we are I am tied into one of those, like, solar farms where they give you, like, a percentage of the",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses an existing energy arrangement tied to Xcel that could materially affect design/net-metering, and the rep just logs it without asking what company runs it or how it works."
     },
     {
-      "ts": "05:08",
-      "quote": "Okay. Yes. Sounds good. No problem. I'll go ahead and put that down here. I appreciate you for letting me know.",
+      "ts": "00:15",
+      "quote": "Yeah. I was referred from my father-in-law who's gonna be getting it through you guys and",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "A warm referral from a family member already in the pipeline is a strong qualifying signal — this customer is pre-sold on legitimacy."
+    },
+    {
+      "ts": "00:28",
+      "quote": "So, yeah, we do have referral bonuses. So,",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep spends the opening moments on referral-bonus administration rather than exploring the customer's actual interest or bill pain, a low-value use of the first minute."
+    },
+    {
+      "ts": "05:41",
+      "quote": "Great. So you can either text or email it over to me, whichever one works better for you.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The rep files the solar-farm disclosure as data without reflecting it back or using it to build anticipation for what the closer will show him — a missed hook given curiosity_over_features guidance."
-    },
-    {
-      "ts": "06:48",
-      "quote": "Probably afternoon. I think my wife would wanna be there. She works in a Saturday morning.",
-      "classification": "spouse_handling",
-      "stewart_read": "The customer, not the rep, surfaces that his wife needs to be present. The rep never proactively asked whether Tamara (identified earlier as co-title-holder) should be on the appointment — this wasn't a spouse objection to overcome, so the schema's objection-handling frame doesn't strictly apply, but the rep also never confirmed her by name or made a deliberate move to include her."
-    },
-    {
-      "ts": "05:47",
-      "quote": "I'll probably just email it to you. I'm I'm at work now, so I gotta it'll probably take a little bit to dig that up.",
-      "classification": "bill_anchor",
-      "stewart_read": "No dollar bill amount is ever captured on this call — only the commitment to send usage data later. This leaves the pitch without an emotional anchor to the customer's actual pain point."
+      "stewart_read": "The rep never got an actual bill number or kWh figure on the call — the bill was deferred entirely to a future email, so there is no anchor to flip."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 43,
-    "verified": 43,
+    "checked": 54,
+    "verified": 54,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

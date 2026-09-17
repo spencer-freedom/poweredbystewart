@@ -1,7 +1,7 @@
 {
   "call_id": "SESSION4",
   "rep_name": "Bucky",
-  "trajectory_summary": "This is a short, cooperative call where the customer answered every qualifier without resistance and ended with a booked phone appointment. The rep held setter scope correctly on a plan-details question but left real value on the table twice: the $680 bill and the customer's own usage-down-but-cost-up observation both went unflipped, and the customer's explicit comparison-shopping question at 02:25 wasn't tied back into the close.",
+  "trajectory_summary": "The call moves efficiently through verify and bill collection with a cooperative customer, but the rep leaves two live openings — an unsolicited bill-pain spike and a repeated differentiation question — unaddressed before booking. The appointment gets set, but on a customer who still has an open 'why you vs everyone else' question hanging.",
   "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
@@ -10,27 +10,36 @@
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "05:02",
-    "quote": "We'll call you at ten tomorrow. I'll text you up just to remind you, and then Okay. You guys will go from there. Okay?",
-    "reasoning": "A specific day (tomorrow) and time (10:00) were agreed for a phone appointment, meeting the booked threshold even though the button-up mechanics were incomplete."
+    "quote": "Let's just do ten... We'll call you at ten tomorrow.",
+    "reasoning": "A specific day (tomorrow) and time (10am) were agreed by both parties, with the rep confirming a text reminder. No co-owner was identified since customer confirmed she is sole title holder.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "01:14",
-    "bill_quote": "A lot. Like, it's about $680.",
+    "bill_quote": "it's about $680.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the bill quickly but responded with a generic reassurance ('Well, we can definitely help with that') rather than turning the $680 into an explicit reason to act; the better flip opportunity, at 03:24 when the customer volunteered rising costs despite falling usage, was also left unflipped."
+    "reasoning": "Bill of $680 was captured at 01:14 but the rep only said 'Well, we can definitely help with that' — never flipped it into alignment-against-the-utility; the clearest missed flip point was 03:24 after her 'astronomically more' comment."
   },
   "bill_document_audit": {
     "asked": true,
     "ask_ts": "02:57",
-    "ask_quote": "Do you see a graph on there? It shows your yearly kilowatt usage. ... If I text you, can you just take a picture of that graph?",
+    "ask_quote": "do you have a paper copy?",
     "result": "received_on_call",
     "method": "photo",
     "result_ts": "04:06",
     "result_quote": "Alright. I just sent that back.",
-    "reasoning": "The rep asked for a photo of the usage graph via text and the customer confirmed she sent it back during the call, completing the bill-document collection live."
+    "reasoning": "The rep asked for a paper bill/graph at 02:57 and the customer indicated they sent it back during the call at 04:06."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,17 +50,17 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar; the call moved directly from intro into address/title/utility/bill qualifiers without this beat, so no stated motivation exists to reinforce later."
+    "reasoning": "The rep did not ask why the customer was interested in solar; no explicit reason was captured."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:34",
-      "end_ts": "00:42",
-      "quote": "Hey. This is Bucky with Ion. I'm reaching out about the solar form you filled out online.",
+      "end_ts": "00:34",
+      "quote": "This is Bucky with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "Yes. Good. Thank you. Yes. How are you?",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -73,9 +82,9 @@
       "status": "asked",
       "ts": "00:42",
       "end_ts": "00:53",
-      "quote": "Are you at 4724 Carmo Carmichaels Court?",
+      "quote": "Are you at 4724",
       "customer_response": "cooperative",
-      "customer_quote": "Yes.",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -97,7 +106,7 @@
       "status": "asked",
       "ts": "01:21",
       "end_ts": "01:27",
-      "quote": "Do you know what kind of roof you got? Is it shingle?",
+      "quote": "Do you do you know what kind of roof you got? Is it shingle?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
@@ -123,22 +132,22 @@
       "end_ts": "01:18",
       "quote": "How do you know how much you're spending on a monthly average?",
       "customer_response": "cooperative",
-      "customer_quote": "A lot. Like, it's about $680.",
+      "customer_quote": "it's about $680.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "01:29",
+      "end_ts": "01:37",
+      "quote": "Do you have a credit score over 670?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
@@ -167,9 +176,9 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "02:57",
+      "ts": "02:17",
       "end_ts": "04:06",
-      "quote": "If I text you, can you just take a picture of that graph? That's all we need to know how much we can save you.",
+      "quote": "Are you able to access the power bill real quick?",
       "customer_response": "cooperative",
       "customer_quote": "Alright. I just sent that back.",
       "resistance_reason": "",
@@ -179,7 +188,7 @@
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "04:44",
+      "ts": "04:41",
       "end_ts": "05:02",
       "quote": "Can you do a phone call tomorrow?",
       "customer_response": "cooperative",
@@ -193,84 +202,107 @@
       "status": "asked",
       "ts": "05:02",
       "end_ts": "05:02",
-      "quote": "We'll call you at ten tomorrow. I'll text you up just to remind you",
+      "quote": "I'll text you up just to remind you,",
       "customer_response": "cooperative",
-      "customer_quote": "Okay. Alright. Awesome. Thank you so much.",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
-      "ts": "01:34",
-      "quote": "Over 670? No.",
-      "type": "other",
-      "rep_attempts": 0,
-      "attempt_quotes": [],
-      "resolved": true,
-      "resolution_ts": "01:37",
-      "reasoning": "The customer states a sub-threshold credit score, which the rep does not address as a qualifier issue; the call simply proceeds to the financing-preference question, leaving the schema's hard-DQ question unresolved on this call."
-    },
-    {
-      "ts": "02:25",
-      "quote": "What like, how long is it for you, like, your lease term or those kinds of things?",
-      "type": "other",
+      "ts": "02:26",
+      "quote": "everyone has, like, slightly different, like, packages or plans for what they offer.",
+      "type": "already_have_quote_or_system",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Honestly, I have no idea because I'm not the specialist. That's who I Oh, okay. Set you up to talk to. He knows everything."
+        "Honestly, I have no idea because I'm not the specialist."
       ],
       "resolved": true,
       "resolution_ts": "02:52",
-      "reasoning": "The customer's comparison-shopping question is handled with a single scope-appropriate redirect to the specialist, and the customer accepts this and moves on to bill questions."
+      "reasoning": "Customer moved on to bill logistics after the redirect, but the underlying comparison question resurfaces later at 04:30, indicating a soft resolution rather than a true one.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@04:41",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "04:30",
+      "quote": "I just I just wanna know what, like, you guys offer, like, you know, that kind of stuff. Like, how how it's different.",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep did not respond to this restated concern at all, moving directly into 'Can you do a phone call tomorrow?' without a bridge or reassurance.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@04:41",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "flipping customer-volunteered anchors instead of filing them",
+    "topic": "Missed bill-pain flip at peak emotional moment",
     "ts": "03:24",
-    "quote": "I'm at the same time. Crazy because it looks like we are using less than what we used last year based on this graph, but I'm paying, like, astronomically more.",
-    "why": "This is the single richest moment in the call — the customer built her own case against the utility — and the rep's response was a passive agreement rather than a reflection that builds curiosity toward the appointment."
+    "quote": "I'm paying, like, astronomically more.",
+    "why": "Customer handed the rep a live urgency anchor and the rep responded flatly instead of tying it to the appointment's value — the single biggest leverage moment in the call went unused."
   },
   "key_moments": [
     {
       "ts": "01:14",
       "quote": "A lot. Like, it's about $680.",
       "classification": "bill_anchor",
-      "stewart_read": "The bill was captured cleanly and quickly (within the first 90 seconds), which is good pace, but the very next rep line is a generic reassurance rather than a flip that turns the $680 into the customer's reason to act."
-    },
-    {
-      "ts": "01:34",
-      "quote": "Over 670? No.",
-      "classification": "other",
-      "stewart_read": "The customer states a sub-670 credit score, which the schema marks as a hard DQ on stated credit, yet the rep does not acknowledge this as disqualifying and moves straight into financing preference. Two readings are open here: the rep may be following an informal 'let the closer's pull decide' practice, or the rep simply didn't register the number as DQ-relevant."
-    },
-    {
-      "ts": "02:25",
-      "quote": "What like, how long is it for you, like, your lease term or those kinds of things?",
-      "classification": "setter_scope_creep",
-      "stewart_read": "This is actually a case of the rep correctly avoiding scope creep — the customer asks a plan-detail question and the rep declines to answer it, redirecting to the specialist. Tagged here to flag the moment even though the handling was correct."
+      "stewart_read": "Bill captured but the rep's response ('we can definitely help with that') is a generic acknowledgment, not a flip into alignment-against-the-utility."
     },
     {
       "ts": "03:24",
-      "quote": "I'm at the same time. Crazy because it looks like we are using less than what we used last year based on this graph, but I'm paying, like, astronomically more.",
+      "quote": "I'm paying, like, astronomically more.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer handed the rep a perfect anchor — falling usage, rising cost — that maps directly onto the objection_inversion pattern (the utility, not solar, is the expensive choice). The rep's response, 'Yeah. It's gonna keep going up too. So there's that,' acknowledges the fact but doesn't turn it into forward-pulling curiosity about what the specialist will show them."
+      "stewart_read": "Customer hands the rep a live, unsolicited bill-pain anchor mid-call and the rep files it with a flat agreement instead of using it to build urgency."
+    },
+    {
+      "ts": "02:26",
+      "quote": "everyone has, like, slightly different, like, packages or plans for what they offer.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep correctly avoids answering lease-term specifics and redirects to the specialist — good scope discipline, not a miss."
+    },
+    {
+      "ts": "04:30",
+      "quote": "I just I just wanna know what, like, you guys offer, like, you know, that kind of stuff. Like, how how it's different.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Same differentiation question recurs and the rep moves straight to scheduling without any comparison-framing reassurance."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 43,
-    "verified": 43,
+    "checked": 45,
+    "verified": 44,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

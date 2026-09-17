@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION20_d57498f9",
   "rep_name": "Bucky",
-  "trajectory_summary": "This call runs almost entirely on the customer's improvisation rather than the rep's steering — she is not the account holder, cannot produce a bill, and has to guess at a number from an unrelated property just to give the rep something to write down. The rep completes his verification checklist mechanically but never adapts to the fact that the actual qualified party (Ernest) is unreachable, leaving the call ending on an unconfirmed bill figure and a promised-but-unlikely text follow-up.",
+  "trajectory_summary": "The call opens on a mix-up (wrong sibling on the line) but the customer stays cooperative and even curious. It drifts into a long, low-value stretch of her rifling through paperwork for a bill neither she nor the rep can produce, with a vulnerability disclosure (mother's passing) surfacing unaddressed. The call ends softly with a vague callback promise, not a locked appointment.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is unknown, but this should not be read as a clean booked/tentative appointment: no day or time was ever offered or discussed, and the bill data anchoring the whole pitch is secondhand and from a different household. This is best classified as callback/no_appointment — a text was sent for a bill photo with a vague 'I'll call you back whenever' rather than any scheduled next step.",
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata; this should be read as callback, not booked or tentative — no day/time was ever proposed or agreed, only 'I'll call you back whenever.'",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "07:29",
     "quote": "I sent you a text, and then you can just send a picture of that back. And then I'll call you back whenever, and then I'll schedule you. Okay?",
-    "reasoning": "No day or time was ever set; the rep commits to calling back once the bill photo is received, which is a callback with no locked time rather than a booked or tentative appointment."
+    "reasoning": "No day or time was proposed or agreed; the rep commits to calling back once the bill photo arrives, an open-ended callback rather than a booked or tentative appointment. Co-owner Ernest was identified as a required title-holder but never confirmed for any future appointment since no appointment time exists yet.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,17 +28,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "A number was obtained, but it is explicitly unconfirmed and secondhand — recalled by the customer's husband about her mother's house, not the townhouse being qualified — so it is a weak, caveated capture at best, not a clean bill anchor. The rep also never flips it into emotional alignment against the utility; he simply moves straight to the roof question at 04:24 without acknowledging or using the figure at all."
+    "reasoning": "The $140 bill figure was captured at 04:16 but the rep moved immediately to the roof question at 04:26 without reflecting the number back or tying it to the pitch — the flip should have landed right after 'the cove bill, he said, was around about 140.'"
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "04:52",
-    "ask_quote": "I'll text you right now. The last thing we need is your yearly kilowatt usage on that house. It's on the power bill. So if you just send a picture of that over at any point, I can get you scheduled.",
+    "ask_ts": "02:02",
+    "ask_quote": "we would need access to, like you probably would need to get access to your power bill",
     "result": "promised_later",
-    "method": "text",
-    "result_ts": "07:24",
-    "result_quote": "A text. I sent it.",
-    "reasoning": "The rep asks for a photo of the bill via text and the customer searches for a paper copy on the call but cannot find one, ultimately agreeing to send it later once located."
+    "method": "photo",
+    "result_ts": "07:27",
+    "result_quote": "I sent you a text, and then you can just send a picture of that back. And then I'll call you back whenever, and then I'll schedule you.",
+    "reasoning": "Rep asked for the power bill and arranged for the customer to send a photo via text; the bill was not received on the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +49,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks what interested the customer in solar; the call moves straight from the intro into property/ownership qualifiers, and the customer never volunteers a motivation."
+    "reasoning": "The rep never asked what specifically motivated the customer to explore solar, and the customer did not volunteer a reason."
   },
   "script_coverage": [
     {
@@ -49,11 +57,11 @@
       "status": "asked",
       "ts": "00:13",
       "end_ts": "00:18",
-      "quote": "so this is Bucky with ION. I'm reaching out about the solar form you filled out online. How you doing?",
+      "quote": "this is Bucky with ION.",
       "customer_response": "cooperative",
       "customer_quote": "I'm fine.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -72,19 +80,19 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:29",
-      "end_ts": "00:40",
-      "quote": "And just let me look. Do you own it?",
+      "end_ts": "00:31",
+      "quote": "Do you own it?",
       "customer_response": "cooperative",
       "customer_quote": "Yes. We're part owners.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:34",
-      "end_ts": "00:53",
+      "end_ts": "00:36",
       "quote": "Who's the other part?",
       "customer_response": "cooperative",
       "customer_quote": "Ernest and I, and we have another sister.",
@@ -95,9 +103,9 @@
     {
       "section": "roof",
       "status": "asked",
-      "ts": "04:24",
+      "ts": "04:26",
       "end_ts": "04:33",
-      "quote": "what, what kind of roof do you have? Is it shingle?",
+      "quote": "what kind of roof do you have? Is it shingle?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. It's a brand new roof, actually.",
       "resistance_reason": "",
@@ -108,12 +116,12 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "00:55",
-      "end_ts": "01:23",
+      "end_ts": "01:17",
       "quote": "And then what utility company are you with?",
       "customer_response": "cooperative",
       "customer_quote": "No. It's a Vepco. Is it Vepco? Okay. It's Vepco.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -121,12 +129,12 @@
       "status": "asked",
       "ts": "01:24",
       "end_ts": "04:19",
-      "quote": "And then how much are you spending on a monthly average?",
-      "customer_response": "resistant",
-      "customer_quote": "Now that, I have to ask Ernest because he is the one staying in it right now.",
+      "quote": "how much are you spending on a monthly average?",
+      "customer_response": "cooperative",
+      "customer_quote": "the cove bill, he said, was around about 140.",
       "resistance_reason": "dont_have_it",
       "rep_followup": "persisted",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
@@ -167,18 +175,18 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "04:52",
-      "end_ts": "07:29",
-      "quote": "I'll text you right now. The last thing we need is your yearly kilowatt usage on that house. It's on the power bill. So if you just send a picture of that over at any point, I can get you scheduled.",
-      "customer_response": "resistant",
-      "customer_quote": "I thought I had, one of them here. I thought I saw one.",
+      "ts": "02:02",
+      "end_ts": "07:27",
+      "quote": "we would need access to, like you probably would need to get access to your power bill",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay. Let me see if I can if I can get reach him.",
       "resistance_reason": "dont_have_it",
       "rep_followup": "alternative_offered",
       "result": "deferred"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -186,11 +194,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -198,68 +206,63 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "01:24",
-      "quote": "Now that, I have to ask Ernest because he is the one staying in it right now.",
-      "type": "other",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "So we would we would need access to, like you probably would need to get access to your power bill for us to go forward because we need a couple of things."
-      ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "The customer cannot answer the required bill question because she doesn't live at the property; the rep's one attempt was to explain why the bill is needed, not to solve the access problem, and Ernest was ultimately unreachable — the objection was never truly resolved, only worked around with a secondhand estimate."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "Qualifying through a proxy who lacks the data",
+    "topic": "Slow pivot to bill-photo alternative path",
     "ts": "01:50",
     "quote": "Now that, I have to ask Ernest because he is the one staying in it right now.",
-    "why": "The entire back half of the call is spent trying to extract bill and usage data from someone who repeatedly says she doesn't have it and can't reach the person who does; the rep never paused to consider rescheduling the call for when Ernest could join, instead pushing through to a secondhand, unrelated-property number."
+    "why": "Per bill_collection.alternative_paths, friction should trigger a pivot within 2 minutes; here it took 5+ minutes of dead-end paperwork searching and an unanswered phone call before the rep offered the text-and-photo path, burning most of the call on a low-value activity."
   },
   "key_moments": [
     {
-      "ts": "00:10",
-      "quote": "This is, his sister.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The rep learns immediately that the person answering is not Ernst, the form-filler, yet proceeds directly into the standard intro and qualifier flow without addressing who she is, whether Ernest is expected to join, or re-anchoring legitimacy for her specifically."
+      "ts": "05:32",
+      "quote": "When when my mom passed away, they Oh, Oh, I'm sorry.",
+      "classification": "empathy_miss",
+      "stewart_read": "Customer discloses her mother's recent death mid-search for the bill; rep says nothing in response on the transcript."
+    },
+    {
+      "ts": "00:21",
+      "quote": "Do you all do solars on townhouses?",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer volunteers a proactive qualifying question before the rep even starts, signaling real interest."
     },
     {
       "ts": "01:50",
       "quote": "Now that, I have to ask Ernest because he is the one staying in it right now.",
-      "classification": "other",
-      "stewart_read": "This is a co-owner-absent-with-data scenario the schema doesn't explicitly cover — it isn't a spouse-decision protocol (no decision being resisted) and isn't quite adult_child_decision_maker (no title/decision framing, just 'he's the one who lives there and knows the bill'). This is a genuine gap: the schema has no protocol for 'the person who can answer the required verify items isn't on the call.'"
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "First sign the bill isn't accessible; rep presses forward asking if she can reach him rather than immediately pivoting to the text/photo path."
     },
     {
-      "ts": "04:16",
-      "quote": "the cove bill, he said, was around about 140.",
-      "classification": "bill_anchor",
-      "stewart_read": "A number was captured, but the rep never distinguished on the call that this figure is for a different property (the mother's house) recalled secondhand by the customer's husband — not a confirmed bill for the townhouse being qualified. Treating this as a clean bill capture would overstate what actually happened."
-    },
-    {
-      "ts": "05:07",
-      "quote": "Do you have any, bills of mom's Depco's at all?",
-      "classification": "empathy_miss",
-      "stewart_read": "The customer's search for a bill surfaces a reference to her mother having passed away ('When my mom passed away...') while she digs through paperwork — a vulnerability disclosure the rep does not acknowledge at all in the available transcript."
+      "ts": "03:40",
+      "quote": "His mailbox is full, and he's not answering.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Second touch on the same bill-access friction; the failed call to Ernest confirms the paper/phone path is dead, but rep still doesn't redirect immediately."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
     "checked": 44,
-    "verified": 43,
-    "fuzzy": 0,
+    "verified": 42,
+    "fuzzy": 1,
     "wrong_ts": 1,
     "not_found": 0
   }

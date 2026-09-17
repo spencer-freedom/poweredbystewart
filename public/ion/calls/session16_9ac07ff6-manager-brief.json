@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION16_9ac07ff6",
   "rep_name": "Meg",
-  "trajectory_summary": "The call opens cold with the customer demanding identity confirmation, warms once the rep pivots to a roof-plus-solar cross-sell, and closes with a booked appointment. The rep's cross-sell instinct was strong and fast, but she left the customer's direct questions (roof material efficiency, insurance help, missing shingles) under-addressed, and the appointment was locked without capturing a bill, interest reason, or robust closer-ready detail on the roof concern.",
+  "trajectory_summary": "The call opens cold with a legitimacy challenge, but the rep recovers by pivoting cleanly into a roofing cross-sell opportunity, and the customer warms into a booked appointment. However the pivot came at the cost of the entire solar Verify sequence — no bill, no interest reason, no address/homeowner/co-owner confirmation — leaving the closer with almost no solar qualification data.",
   "shape": "mixed",
-  "outcome_dispute": null,
+  "outcome_dispute": "v1 tag unknown; observed data supports a tentative/booked hybrid — a day and time were agreed (Thursday 9:30) but button_up is marked partial and no bill or verify data was captured, making this a fragile set per Ion's own bill-gating rule.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "03:21",
     "quote": "So we'll plan on Thursday, which is the thirtieth, 09:30AM.",
-    "reasoning": "A specific day and time (Thursday the 30th at 9:30 AM) is confirmed by the rep and accepted by the customer, with the specialist bringing the roof and solar information by in person."
+    "reasoning": "A specific day and time were agreed and the customer confirmed ('Okay. Great.'), meeting the booked bar on time alone; co-owner was never identified so that field is null.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "booked by time, tentative by rule: bill not_asked",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "This call is a callback about a previously-built solar design and pivots almost entirely into a roofing conversation once the customer discloses a needed roof replacement; no bill amount or usage figure is ever raised or captured."
+    "reasoning": "No monthly bill or kWh amount was captured on the call, so there was nothing to flip or use."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +39,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never raises getting the utility bill during this call; the conversation is focused on scheduling the specialist visit to review the existing solar design plus a new roofing option."
+    "reasoning": "The rep did not request the utility bill or ask the customer to send a bill during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +50,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks what interested the customer in solar; this is a callback to review a pre-built design, so the interest-question section of the script was not run, likely because it was covered on a prior touch not captured in this transcript."
+    "reasoning": "The rep did not ask why the customer was interested in solar and no clear reason for solar was stated by the customer."
   },
   "script_coverage": [
     {
@@ -49,12 +58,12 @@
       "status": "asked",
       "ts": "00:00",
       "end_ts": "00:22",
-      "quote": "Yeah. So I'm here with Ion Solar.",
-      "customer_response": "resistant",
-      "customer_quote": "May I ask, who are you with? What organization?",
-      "resistance_reason": "trust",
-      "rep_followup": "persisted",
-      "result": "partial"
+      "quote": "This is Meg.",
+      "customer_response": "cooperative",
+      "customer_quote": "who are you with? What organization?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -65,7 +74,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -77,7 +86,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -89,17 +98,17 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:06",
-      "end_ts": "02:36",
+      "end_ts": "01:17",
       "quote": "Are you needing, like, a full roof replacement or partial?",
       "customer_response": "cooperative",
-      "customer_quote": "No. Full.",
+      "customer_quote": "Full.",
       "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
@@ -113,7 +122,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -125,7 +134,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -137,7 +146,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -149,7 +158,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -157,12 +166,12 @@
       "status": "asked",
       "ts": "00:22",
       "end_ts": "00:30",
-      "quote": "I was reaching out because we built a solar design for the home, and we were supposed to go through it with you last week but never had the chance.",
-      "customer_response": "cooperative",
+      "quote": "we built a solar design for the home",
+      "customer_response": "deflected",
       "customer_quote": "No. I'm I'm in the process of a replacement early first.",
-      "resistance_reason": "",
-      "rep_followup": "alternative_offered",
-      "result": "completed"
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "bill_collection",
@@ -173,15 +182,15 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "02:54",
-      "end_ts": "03:21",
-      "quote": "So we'll plan on Thursday, which is the thirtieth, 09:30AM.",
+      "ts": "03:12",
+      "end_ts": "03:26",
+      "quote": "as a 09:30 or a twelve?",
       "customer_response": "cooperative",
       "customer_quote": "09:30 would be fine.",
       "resistance_reason": "",
@@ -191,76 +200,94 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "03:26",
-      "end_ts": "04:15",
-      "quote": "we'll actually we'll probably send you a text message tomorrow night just with a reminder of the day and time to confirm that it still works for you.",
+      "ts": "03:21",
+      "end_ts": "03:26",
+      "quote": "we'll plan on Thursday, which is the thirtieth, 09:30AM.",
       "customer_response": "cooperative",
       "customer_quote": "Okay. Great.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
       "ts": "00:36",
       "quote": "No. I'm I'm in the process of a replacement early first.",
-      "type": "roof_or_home",
+      "type": "already_have_quote_or_system",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "The reason I ask is because here at Ion, we actually do the roof and the solar. So I'm more than happy to put together a a roof option as well just so you can see what that looks like"
+        "here at Ion, we actually do the roof and the solar"
       ],
       "resolved": true,
-      "resolution_ts": "01:06",
-      "reasoning": "The customer surfaces a potential DQ (needs roof replacement first) and the rep immediately reframes it as a bundled roof+solar opportunity, which the customer accepts by continuing to answer roof-detail questions."
+      "resolution_ts": "01:14",
+      "reasoning": "Customer's deflection (already mid-process on a roof) stalled the original solar-design pitch; rep pivoted once to the in-house roofing cross-sell and the customer engaged, resolving the stall.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "roof@01:06",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "closing the loop on direct customer questions",
-    "ts": "01:56",
-    "quote": "What's more energy efficient?",
-    "why": "The customer asked a specific question the rep never answered or bridged, and the same acknowledgment-only pattern repeats at 02:22 with the missing-shingles/insurance disclosure — this is a recurring gap in this call where the rep gathers data but doesn't engage the customer's actual questions and concerns."
+    "topic": "Solar Verify sequence abandoned after roofing pivot",
+    "ts": "00:54",
+    "quote": "here at Ion, we actually do the roof and the solar",
+    "why": "Once the roofing cross-sell landed, the rep never returned to capture bill amount, interest reason, homeowner/co-owner, or utility — the appointment is booked with almost no solar qualification data for the closer."
   },
   "key_moments": [
     {
-      "ts": "00:00",
-      "quote": "Hi. This is Meg.",
+      "ts": "00:14",
+      "quote": "who are you with? What organization?",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The rep opens with only her name, no company name, no reason for calling, before asking to confirm the customer's identity — this is likely why the customer immediately demanded to know the organization at 00:14. No callback-specific intro variant exists in the schema; this call type (following up on a missed design-review appointment) is a gap in the current intro catalog, but the sequencing failure (ask-for-ID before self-ID) is a coachable pattern regardless."
+      "stewart_read": "Rep's opening 'Hi. This is Meg' didn't name the company or reference the lead source, forcing the customer to demand it himself."
     },
     {
-      "ts": "00:08",
-      "quote": "Let's see. Is this Wahid?",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The rep asks to verify the customer's name before stating the company or reason for the call, which forces the customer into a defensive posture — his very next line demands to know who is calling. The identity-verification-before-self-identification sequencing is likely the direct trigger for the guarded opening, more so than the missing company name alone."
+      "ts": "00:36",
+      "quote": "No. I'm I'm in the process of a replacement early first.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer reveals he's mid-process on a roof replacement elsewhere, but the rep never asks which company, what stage, or timeline — key info for both the roofing bridge and solar sequencing."
+    },
+    {
+      "ts": "00:54",
+      "quote": "here at Ion, we actually do the roof and the solar",
+      "classification": "cross_sell_miss",
+      "stewart_read": "This is actually a correctly-executed cross-sell bridge, not a miss — rep identifies the roof-replacement signal and immediately offers Ion's in-house roofing option."
     },
     {
       "ts": "01:56",
       "quote": "What's more energy efficient?",
-      "classification": "setter_scope_creep",
-      "stewart_read": "The customer asks a direct technical question about roofing material efficiency and the rep never answers it or bridges to the specialist — she instead logs 'full roof replacement' and moves on. This isn't scope creep in the sense of over-answering; it's a missed opportunity to use the universal escape hatch ('that's exactly what the specialist will cover') to close the loop on the customer's question."
-    },
-    {
-      "ts": "02:22",
-      "quote": "K. Gotcha. See if you guys can help with that because there are some shingles missing in my roof.",
-      "classification": "empathy_miss",
-      "stewart_read": "The customer volunteers a specific, concrete pain point (missing shingles, hope for insurance help) and the rep's response is a bare 'K' before moving straight to scheduling. This mirrors the schema's 'ask + acknowledge + move on' failure pattern from bill_anchoring, applied here to a non-bill concern — capture without engagement."
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer volunteers an unprompted question about material efficiency, showing active interest beyond passive compliance."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 32,
-    "verified": 31,
+    "checked": 35,
+    "verified": 35,
     "fuzzy": 0,
-    "wrong_ts": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

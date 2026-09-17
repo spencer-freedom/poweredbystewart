@@ -1,26 +1,35 @@
 {
   "call_id": "SESSION13_278815e8",
   "rep_name": "Carter",
-  "trajectory_summary": "The call opens with the rep visibly disoriented about who he's speaking to, but recovers quickly into a clean, in-order verify sequence and lands the utility bill despite real email friction, using a text fallback rather than repeating a failing ask. It closes with a locked in-person appointment for 07:30 the next day, making this a mixed-to-positive trajectory: reactive at the open, strategic in the bill-capture recovery.",
+  "trajectory_summary": "The call moved efficiently through qualification with a cooperative customer, hit real friction during bill collection that the rep worked through with a text-message backup, then closed on a specific in-person time despite a late wobble about phone/Zoom. Energy dipped mid-call on tech friction but recovered by the end.",
   "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "in_person",
     "datetime_captured": true,
-    "co_owner_confirmed": null,
+    "co_owner_confirmed": false,
     "ts": "07:55",
-    "quote": "We could do five or 07:30.",
-    "reasoning": "A specific day (tomorrow) and time (07:30) are locked for an in-person visit; the son named as co-title-holder is never confirmed for the appointment, so co_owner_confirmed is null/unresolved rather than a clear yes or no."
+    "quote": "Okay. Let's just go first again. Which ones? 07:30? K. 07:30. Yeah.",
+    "reasoning": "A specific day (tomorrow) and time (7:30) were locked in-person, but the identified co-owner (son) was never confirmed to attend.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
-    "bill_captured": false,
-    "bill_ts": "",
-    "bill_quote": null,
+    "bill_captured": true,
+    "bill_ts": "06:38",
+    "bill_quote": "I just sent it now. I sent it.",
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep never asks for a dollar amount or usage figure verbally — instead he goes straight to collecting the actual bill document via email/text, so there is no spoken bill number to capture or flip in this call."
+    "reasoning": "The bill_amount verify step was explicitly skipped per verified events; only the bill document itself was collected for design purposes, so there was no dollar figure to flip into emotional leverage."
   },
   "bill_document_audit": {
     "asked": true,
@@ -30,7 +39,7 @@
     "method": "email",
     "result_ts": "06:38",
     "result_quote": "I just sent it now. I sent it.",
-    "reasoning": "The rep asks for the Dominion bill directly and, after repeated email delivery friction, adds a text fallback and confirms receipt live on the call before scheduling."
+    "reasoning": "The rep asked for the bill at 02:07 and the customer confirmed sending the bill during the call at 06:38 via email."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +50,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep confirms the customer submitted a solar information request ('Did you put in a request to get some information on solar?') but never asks what specifically interested her in solar — the call moves straight into the verify checklist without an emotional anchor question."
+    "reasoning": "The rep did not ask why the customer was interested in solar, and the customer did not volunteer a motivating reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "end_ts": "00:29",
+      "end_ts": "00:06",
       "quote": "Hi. This is Carter.",
       "customer_response": "cooperative",
-      "customer_quote": "Mhmm. That's correct.",
+      "customer_quote": "Hello. Good afternoon. Can I speak to Kenny?",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -72,10 +81,10 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:33",
-      "end_ts": "00:49",
-      "quote": "Is this for the 13683 Saint Johns Wood Place?",
+      "end_ts": "00:39",
+      "quote": "Is this for the 13683",
       "customer_response": "cooperative",
-      "customer_quote": "Yes. It is.",
+      "customer_quote": "That's correct. Yeah.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -83,25 +92,25 @@
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "01:26",
+      "ts": "01:25",
       "end_ts": "01:32",
       "quote": "And then is there anyone else on the title of the home with you?",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. But it's my son.",
+      "customer_quote": "Yeah. But it's my son. I guess so. Your son. I make it a good one. Yeah.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "00:49",
-      "end_ts": "01:18",
-      "quote": "So just for townhomes, you do need to own your own section of the roof and have your own electric meter.",
+      "end_ts": "01:00",
+      "quote": "So just for townhomes, you do need to own your",
       "customer_response": "cooperative",
-      "customer_quote": "We do, but we do not have the end.",
+      "customer_quote": "Yes. I think everybody has the\nelectric meter on it.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -131,7 +140,7 @@
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "01:34",
+      "ts": "01:36",
       "end_ts": "01:42",
       "quote": "And is your credit score above 6670?",
       "customer_response": "cooperative",
@@ -172,8 +181,8 @@
       "quote": "Would you have a second to pull that up and send it over to me?",
       "customer_response": "cooperative",
       "customer_quote": "I just sent it now. I sent it.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "alternative_offered",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -181,10 +190,10 @@
       "status": "asked",
       "ts": "06:47",
       "end_ts": "07:55",
-      "quote": "Are mornings or afternoons better for you?",
+      "quote": "Are mornings or\nafternoons better for you?",
       "customer_response": "deflected",
-      "customer_quote": "So, is there something you can do over the phone or online, you know, over Zoom?",
-      "resistance_reason": "timing",
+      "customer_quote": "is there something you can\ndo over the phone or online,\nyou know, over Zoom?",
+      "resistance_reason": "other",
       "rep_followup": "persisted",
       "result": "completed"
     },
@@ -192,74 +201,94 @@
       "section": "button_up",
       "status": "asked",
       "ts": "07:55",
-      "end_ts": "08:14",
-      "quote": "It'll be about a forty minute appointment. We'll just come by to your home.",
+      "end_ts": "07:55",
+      "quote": "Okay. Let's just go first again. Which ones? 07:30? K. 07:30. Yeah. Mhmm. Awesome. K. It'll be about a forty minute appointment. We'll just come by to your home. We'll be super quick in and out, but, yeah, we'll plan on seeing you tomorrow.",
       "customer_response": "cooperative",
-      "customer_quote": "Sounds good. Alright. Thank you.",
+      "customer_quote": "Sounds good. Alright. Thank you. Yeah. Of course. We'll talk to you then.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "hour_block",
+        "reconfirm"
+      ],
+      "parts_score": "3/4"
     }
   ],
   "objections": [
     {
       "ts": "07:09",
-      "quote": "So, is there something you can do over the phone or online, you know, over Zoom?",
-      "type": "other",
+      "quote": "is there something you can do over the phone or online, you know, over Zoom?",
+      "type": "timing_or_callback",
       "rep_attempts": 2,
       "attempt_quotes": [
         "Over the phone would be better.",
         "Would in person not work? We're pretty close to your home, so we would prefer in person if possible."
       ],
       "resolved": true,
-      "resolution_ts": "07:41",
-      "reasoning": "This is a channel-preference check rather than a hard objection — the customer's own follow-up 'What's Zoom?' suggests low commitment to that ask, and she drops it herself, proposing an in-person time immediately after the rep's proximity rationale."
+      "resolution_ts": "07:55",
+      "reasoning": "Customer preferred a remote format but rep reversed course and anchored on in-person, which she accepted with a specific time.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "concede",
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@07:55",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Co-owner disclosed but not routed to the appointment",
+    "topic": "Co-owner identified but not included in appointment",
     "ts": "01:26",
     "quote": "And then is there anyone else on the title of the home with you?",
-    "why": "The son is confirmed as a co-title-holder and the rep never asks whether he should be on the call tomorrow — per protocols.adult_child_decision_maker this is a live risk to the sit if he turns out to be a real decision-maker, and it's a one-line fix the rep can build into habit."
+    "why": "Son is confirmed on the title but never invited to the in-person appointment, leaving the sit structurally vulnerable per protocols.adult_child_decision_maker."
   },
   "key_moments": [
     {
-      "ts": "00:21",
-      "quote": "Who do we have?",
+      "ts": "00:10",
+      "quote": "Kenny is unavailable right now. Did you just miss a call?",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The rep never re-establishes who he is or re-anchors legitimacy for a callback scenario — he skips straight to 'Kenny is unavailable' without confirming the lead context for himself first, producing visible confusion on the line before he orients."
+      "stewart_read": "Rep never re-established who he is, what company he represents, or referenced a form/lead source clearly to the customer beyond implying solar interest — legitimacy is thin for a customer who thought she was speaking to a different named person."
     },
     {
       "ts": "01:26",
       "quote": "And then is there anyone else on the title of the home with you?",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses her son is also on the title ('Yeah. But it's my son.'), a co-decision-maker per Ion's adult-child protocol, but the rep never asks whether the son should join the appointment — he moves straight to the credit question."
+      "stewart_read": "Customer confirms her son is also on the title, but rep never circles back to confirm the son will be present for the appointment."
     },
     {
-      "ts": "02:12",
-      "quote": "No. I can do that. So let's go email go email.",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer readily agrees to send the bill and picks the channel herself; the rep facilitates cleanly by confirming the email address rather than assuming."
+      "ts": "02:07",
+      "quote": "Would you have a second to pull that up and send it over to me?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Bill is requested purely as a document to build the estimate; rep never asks about the bill amount or reflects it back as pain, despite the bill_amount step being skipped entirely per verified events."
     },
     {
-      "ts": "07:34",
-      "quote": "Would in person not work? We're pretty close to your home, so we would prefer in person if possible.",
-      "classification": "conditional_booking",
-      "stewart_read": "Customer raised a phone/Zoom preference at 07:09, but her own follow-up ('What's Zoom?' at 07:26) suggests she wasn't firmly anchored to that channel — the rep's proximity rationale was thin but sufficient, and she dropped the ask herself and moved straight to proposing a time."
+      "ts": "04:37",
+      "quote": "Okay. Can you resend this? I don't know why it it got deleted.",
+      "classification": "knowledge_gap",
+      "stewart_read": "Second email attempt fails; rep pivots to texting the link as a backup within about a minute, which matches the schema's guidance to pivot on tech friction quickly."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 51,
-    "verified": 50,
+    "checked": 52,
+    "verified": 51,
     "fuzzy": 0,
     "wrong_ts": 1,
     "not_found": 0

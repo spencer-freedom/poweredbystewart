@@ -1,17 +1,26 @@
 {
   "call_id": "10000160568",
   "rep_name": "Joel",
-  "trajectory_summary": "This is an efficient, low-friction call: the customer was cooperative throughout, qualification moved quickly, and a specific day/time appointment was locked in around the customer's unusual night-shift schedule. The rep missed the chance to flip the customer's bill and cost-fear into a sharper close, and let a credit-threshold discrepancy pass silently, but nothing structurally broke the booking.",
-  "shape": "energy_built",
+  "trajectory_summary": "The call is efficient and procedurally clean — verify items completed, roof and credit qualifiers cleared, appointment booked around a tight work schedule. But the rep never converts Robert's bill number or his self-disclosed cost fear into a forward-pulling hook, so the call stays flat rather than building real urgency.",
+  "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
-    "co_owner_confirmed": null,
+    "co_owner_confirmed": false,
     "ts": "04:48",
-    "quote": "So that's tomorrow, the nineteenth, at 03:30PM.",
-    "reasoning": "Rep confirms a specific day and time and references someone stopping by, indicating an in-person appointment; the wife/co-owner is never explicitly invited or confirmed for the appointment despite being on the title."
+    "quote": "that's tomorrow, the nineteenth, at 03:30PM.",
+    "reasoning": "A specific day and time (tomorrow the 19th at 3:30PM) were mutually agreed, and the rep frames it as a specialist stopping by ('one of our specialists to stop by'), indicating in-person. The wife, identified as co-owner, is never explicitly named as attending.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "booked by time, tentative by rule: bill not_asked",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +29,7 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep captures the bill range but never returns to it as leverage — not when the customer restates his cost fear at 05:19, and not anywhere else. The flip should have gone right after the 05:19 restatement, using the $100-200 figure to reframe the expense fear."
+    "reasoning": "The bill was captured at 02:37 ('a 100 and $200') but the rep responded only with 'That's quite the range there. It's crazy' at 02:39 and never circled back to tie that number to the cost fear Robert raised at 00:46 and 05:19 — the flip should have landed at either of those moments."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,28 +39,28 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep captured a verbal bill range but never asked for the actual utility bill document (mail/online, photo, text) at any point in the call."
+    "reasoning": "The rep never requested the actual utility bill or asked for a photo/email of it."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:34",
     "reason_given": true,
-    "reason_ts": "00:44",
-    "reason_quote": "I've just seen a lot of advertisement about it, and I haven't done it because I figured it'd be expensive to do.",
+    "reason_ts": "00:46",
+    "reason_quote": "about it, and I haven't done it because I figured it'd be expensive to do.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Rep asked what got the customer interested and got a clear answer (ads + cost hesitation), but never circled back to directly address the cost hesitation with specifics later, even when the customer repeated it verbatim at the end of the call."
+    "reasoning": "Robert's stated reason ('figured it'd be expensive to do') was acknowledged with generic reassurance at 00:57 but never reinforced later — even at the close (05:14-05:27) when Robert restated the exact same concern, the rep responded with vague enthusiasm rather than tying the appointment back to solving that specific fear."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "end_ts": "00:16",
-      "quote": "This is Joel with Ion. I just, got a request you're looking in a solar for your home.",
+      "end_ts": "00:04",
+      "quote": "This is Joel with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "I'm doing good. Thanks for asking.",
+      "customer_quote": "Hello?",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -60,12 +69,12 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "00:34",
-      "end_ts": "00:55",
-      "quote": "I'm just curious. What got you interested in solar?",
+      "end_ts": "00:44",
+      "quote": "What got you interested in solar?",
       "customer_response": "cooperative",
-      "customer_quote": "I've just seen a lot of advertisement about it, and I haven't done it because I figured it'd be expensive to do.",
+      "customer_quote": "about it, and I haven't done it because I figured it'd be expensive to do.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -73,7 +82,7 @@
       "status": "asked",
       "ts": "00:25",
       "end_ts": "00:34",
-      "quote": "Is that correct?",
+      "quote": "I have your address here as the 2028",
       "customer_response": "cooperative",
       "customer_quote": "Yes, sir.",
       "resistance_reason": "",
@@ -84,7 +93,7 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "01:20",
-      "end_ts": "01:26",
+      "end_ts": "01:27",
       "quote": "Is there anyone else on the title of the home with you at all?",
       "customer_response": "cooperative",
       "customer_quote": "My wife.",
@@ -96,10 +105,10 @@
       "section": "roof",
       "status": "asked",
       "ts": "01:36",
-      "end_ts": "01:47",
-      "quote": "As far as the roof itself, is it just asphalt shingle roof?",
+      "end_ts": "01:44",
+      "quote": "is it just asphalt shingle roof?",
       "customer_response": "cooperative",
-      "customer_quote": "I believe two years old.",
+      "customer_quote": "Yes, sir.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -109,7 +118,7 @@
       "status": "asked",
       "ts": "02:16",
       "end_ts": "02:25",
-      "quote": "are you guys going through OG and E, or who's your electric company?",
+      "quote": "who's your electric company?",
       "customer_response": "cooperative",
       "customer_quote": "PSO.",
       "resistance_reason": "",
@@ -119,23 +128,23 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "02:25",
-      "end_ts": "03:11",
+      "ts": "02:35",
+      "end_ts": "02:39",
       "quote": "how much did you say an average PSO bill is costing you?",
       "customer_response": "cooperative",
-      "customer_quote": "Between a 100 and $200 roughly.",
+      "customer_quote": "a 100 and $200",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:50",
-      "end_ts": "02:15",
-      "quote": "the requirements to qualify are to have a form of taxable income and a credit score of six fifty or higher.",
+      "end_ts": "02:09",
+      "quote": "credit score of six fifty or higher.",
       "customer_response": "cooperative",
-      "customer_quote": "I think I have, like, a six zero four.",
+      "customer_quote": "I think I have, like, a six zero four. My wife has a higher one. She's close to 700,",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -156,7 +165,7 @@
       "section": "prior_design",
       "status": "asked",
       "ts": "03:12",
-      "end_ts": "03:23",
+      "end_ts": "03:24",
       "quote": "Have you kinda looked into solar before, or is this your first time looking into it?",
       "customer_response": "cooperative",
       "customer_quote": "No. This is the first time I've really looked into it.",
@@ -179,87 +188,85 @@
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "03:41",
-      "end_ts": "04:48",
-      "quote": "would a morning or afternoon time work best for you?",
+      "ts": "04:36",
+      "end_ts": "04:51",
+      "quote": "We could do a 03:30 for you tomorrow. Would tomorrow work good for you guys?",
       "customer_response": "cooperative",
-      "customer_quote": "It doesn't matter what day if they're able to do that.",
-      "resistance_reason": "timing",
-      "rep_followup": "alternative_offered",
+      "customer_quote": "Yeah. K. Yeah. That'd work.",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "04:51",
-      "end_ts": "05:52",
-      "quote": "I'll send you a text as well with just the day and time.",
+      "ts": "04:48",
+      "end_ts": "05:00",
+      "quote": "that's tomorrow, the nineteenth, at 03:30PM.",
       "customer_response": "cooperative",
-      "customer_quote": "Thank you.",
+      "customer_quote": "Yes, sir. K. Awesome.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
-    }
-  ],
-  "objections": [
-    {
-      "ts": "00:44",
-      "quote": "I haven't done it because I figured it'd be expensive to do.",
-      "type": "cost",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "you're not actually paying any money out of pocket, and then it's just kind of a bill swap from there."
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
       ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "Rep offered one generic reassurance and moved to qualification; the customer repeated the same concern verbatim at the end of the call, indicating it was never fully resolved."
+      "parts_score": "2/4"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "unresolved cost objection at call close",
+    "topic": "Bill flip never executed despite two open invitations",
     "ts": "05:19",
-    "quote": "Well, that's been my biggest concern is I always heard how expensive it was",
-    "why": "The customer names the exact same expense fear at the very end of the call that he opened with, and the rep never flips it using the PSO bill figure captured mid-call — the fear is handed to the closer unresolved instead of being pre-softened."
+    "quote": "that's been my biggest concern is I always heard how expensive it was",
+    "why": "Robert names the cost fear twice — at 00:46 and again at 05:19 after booking — and both times Joel answers with generic reassurance instead of using the captured $100-200 bill number to reframe the fear as 'you're already paying this, just to the wrong company.' This is the single highest-leverage, repeatable move missing from an otherwise clean call."
   },
   "key_moments": [
     {
-      "ts": "00:44",
+      "ts": "00:46",
       "quote": "I haven't done it because I figured it'd be expensive to do.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is a textbook trigger for the bill-swap flip — 'what's expensive is your current bill, not solar' — but the rep answers with a generic incentives pitch instead of anchoring to Robert's own soon-to-be-known PSO bill."
-    },
-    {
-      "ts": "01:50",
-      "quote": "the requirements to qualify are to have a form of taxable income and a credit score of six fifty or higher.",
-      "classification": "other",
-      "stewart_read": "Schema states the credit threshold is 670; this rep states 650, matching the same drift already logged in SESSION18_fcbf33c1. This is a second data point suggesting either the active policy has genuinely moved to 650 or reps are inconsistently trained on the number."
-    },
-    {
-      "ts": "02:03",
-      "quote": "I think I have, like, a six zero four. My wife has a higher one. She's close to 700, and she's on she's on the mortgage too.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer discloses his own credit score is below even the stated 650 threshold, but the rep immediately pivots to the wife's higher score and title status to keep qualification alive rather than probing or flagging this clearly for the closer."
+      "stewart_read": "Robert hands the rep a textbook flip opportunity ('what's expensive is your current bill') unprompted, in the interest question itself."
     },
     {
-      "ts": "02:44",
-      "quote": "Well, so it's been winter. We just bought the house, two months ago, and, everything in it is primarily gas.",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer gives context that undercuts the bill number just captured (new home, gas-heavy, winter) — a rich moment to note but the rep doesn't press for a summer estimate or explicitly capture the usage trajectory, just acknowledges and moves on."
+      "ts": "00:57",
+      "quote": "I mean, you're not actually paying any money out of pocket, and then it's just kind of a bill swap from there.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "This is the moment the flip should have landed but the rep used generic reassurance instead of Robert's own number (not yet captured at this point, but could have been sequenced earlier)."
+    },
+    {
+      "ts": "02:39",
+      "quote": "roughly. Dang. Yeah. That's quite the range there. It's crazy.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Rep reacts with mild surprise but files the number rather than reflecting it back as leverage ('that's real money you're sending to PSO every month')."
+    },
+    {
+      "ts": "05:19",
+      "quote": "that's been my biggest concern is I always heard how expensive it was",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Second occurrence of the same cost fear, post-booking — rep again responds with vague enthusiasm rather than tying it to Robert's own bill."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 46,
-    "verified": 45,
-    "fuzzy": 1,
+    "checked": 47,
+    "verified": 47,
+    "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0
   }

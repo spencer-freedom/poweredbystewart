@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION10_47852cf9",
   "rep_name": "Randy",
-  "trajectory_summary": "The call moves smoothly and efficiently through verify with a cooperative customer, but the rep gives away closer-tier content when a real cost objection surfaces, and misses the spouse-inclusion protocol despite explicitly confirming the wife is a co-owner. The appointment gets booked, but structurally it's fragile: the wife is treated only as bill-locator, not as an invited decision-maker.",
+  "trajectory_summary": "The call opens with quick rapport-building (home compliment, area chat) that warms a mildly guarded customer, then holds through verify cleanly. It dips when the customer's pricing skepticism draws the rep into an unsure, hedging explanation before he recovers with the bill-swap framing and books a tentative time. Energy is mostly built but has one legitimate wobble in the middle.",
   "shape": "mixed",
-  "outcome_dispute": null,
+  "outcome_dispute": "v1 tag is unknown/unclear; observed transcript shows a specific day and time agreed (tomorrow at 5PM) but bill was only promised via text-photo, not delivered on the call — this is a tentative/conditional set per Ion's bill-in-hand rule, not a clean booked appointment.",
   "observed_outcome": {
     "outcome": "tentative",
     "appointment_channel": "in_person",
@@ -11,26 +11,35 @@
     "co_owner_confirmed": false,
     "ts": "06:24",
     "quote": "I'll go ahead and just pencil you in for tomorrow at five.",
-    "reasoning": "A specific day (tomorrow) and time (5PM) were agreed and the rep explicitly says 'in person meeting,' but the appointment is conditional on the wife locating and sending the bill first, and the wife (a confirmed co-owner) was never invited to attend, so co_owner_confirmed is false rather than null."
+    "reasoning": "A specific day and time were agreed, but the rep says 'pencil you in' and the appointment is explicitly conditioned on the customer sending a bill photo afterward — 'then I can get you guys on the schedule' — meaning the booking was not fully locked on the call itself. Wife was identified as co-owner but never confirmed as attending.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "02:45",
     "bill_quote": "I think it's, like, about 50 a month.",
-    "flip_executed": "no",
-    "flip_ts": "",
-    "flip_quote": null,
-    "reasoning": "The rep captures a monthly figure (restated by the rep as '$150', which is itself an inference/mishearing not confirmed by the customer) but immediately moves to the next verify item ('is this your first time looking at solar') without turning the number into leverage against the utility bill."
+    "flip_executed": "yes",
+    "flip_ts": "04:15",
+    "flip_quote": "our program here, all it is is a bill swap. All we'll be doing is, replacing your electric bill with, ComEd and, swapping that out for a cheaper solar payment.",
+    "reasoning": "Rep ties the captured bill directly into the value proposition, framing the existing ComEd payment as replaceable — a soft but real execution of the bill-swap flip strategy."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "03:20",
-    "ask_quote": "You should be able to find that on your recent bill. Do you typically get them in the mail or online?",
+    "ask_ts": "05:34",
+    "ask_quote": "I can shoot you a text message so you can just take a picture of that bill",
     "result": "promised_later",
     "method": "photo",
-    "result_ts": "05:36",
-    "result_quote": "I can shoot you a text message so you can just take a picture of that bill",
-    "reasoning": "The rep raises the bill and proposes a text-photo method, but the customer indicates his wife handles the account and the bill is not produced on the call — it's deferred to before the appointment ('get with your wife and see if you can just, take a picture of of, your bill and send it over')."
+    "result_ts": "06:33",
+    "result_quote": "get with your wife and see if you can just, take a picture of of, your bill and send it over",
+    "reasoning": "The rep asked for the bill via text/photo at 05:34 and the customer agreed to get with his wife and send a picture later (confirmed at 06:33)."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -41,17 +50,17 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The transcription of the customer's reason is garbled ('I'd like to come through. It's pretty honest sometimes'), likely a Deepgram artifact for a bill-pain or cost-related statement given the rep's response ('that is definitely one of the biggest reasons people look into it'). It is an inference, not a confirmed fact, that this was bill pain — and regardless of the exact content, the rep never circles back to this stated reason later in the call to reinforce it when booking the appointment."
+    "reasoning": "Customer's stated interest reason ('I'd like to come through. It's pretty honest sometimes') was acknowledged briefly at 00:40 but never tied back to the appointment or reinforced later in the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:13",
-      "end_ts": "00:18",
-      "quote": "Randy with Ion. I just got a request here that you were looking at solar for your home.",
+      "end_ts": "00:13",
+      "quote": "Randy with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. Who's speaking?",
+      "customer_quote": "I'm okay. How about yourself?",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -60,20 +69,20 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "00:22",
-      "end_ts": "00:40",
+      "end_ts": "00:35",
       "quote": "What got you interested in looking at solar?",
       "customer_response": "cooperative",
       "customer_quote": "I'd like to come through. It's pretty honest sometimes.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:46",
-      "end_ts": "01:07",
-      "quote": "I just wanted to start here by confirming your address to make sure we're looking at the correct property.",
+      "end_ts": "01:04",
+      "quote": "confirming your address to make sure we're looking at the correct property.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. Yeah. Algonquin. Okay. Awesome.",
       "resistance_reason": "",
@@ -84,19 +93,19 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "02:04",
-      "end_ts": "02:10",
+      "end_ts": "02:13",
       "quote": "Is there anyone else on the title of the home with you?",
       "customer_response": "cooperative",
       "customer_quote": "Yes. My wife.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:43",
-      "end_ts": "01:57",
+      "end_ts": "02:02",
       "quote": "Is that a asphalt shingle roof?",
       "customer_response": "cooperative",
       "customer_quote": "Oh, I think we just had somebody come out, and they said we got another ten ten years left.",
@@ -109,9 +118,9 @@
       "status": "asked",
       "ts": "02:33",
       "end_ts": "02:41",
-      "quote": "And then it says here you guys are doing your electricity with ComEd.",
+      "quote": "you guys are doing your electricity with ComEd.",
       "customer_response": "cooperative",
-      "customer_quote": "Yes, sir.",
+      "customer_quote": "Yes. Yes, sir.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -120,19 +129,19 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:41",
-      "end_ts": "02:56",
+      "end_ts": "02:50",
       "quote": "And how much are you guys currently paying for electricity?",
       "customer_response": "cooperative",
       "customer_quote": "I think it's, like, about 50 a month.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:15",
-      "end_ts": "02:31",
+      "ts": "02:24",
+      "end_ts": "02:32",
       "quote": "All you really need is a credit score that's above 670.",
       "customer_response": "cooperative",
       "customer_quote": "Absolutely.",
@@ -142,7 +151,7 @@
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -167,23 +176,23 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "03:20",
-      "end_ts": "05:42",
+      "ts": "03:16",
+      "end_ts": "06:33",
       "quote": "Do you typically get them in the mail or online?",
-      "customer_response": "resistant",
-      "customer_quote": "I think so. That's not my department.",
-      "resistance_reason": "dont_have_it",
+      "customer_response": "cooperative",
+      "customer_quote": "I think they're no. I'm pretty sure they mail them to us.",
+      "resistance_reason": "",
       "rep_followup": "alternative_offered",
-      "result": "deferred"
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "06:03",
-      "end_ts": "06:19",
-      "quote": "we can do a 04:30 or 5PM. Is that late enough for you?",
+      "ts": "05:06",
+      "end_ts": "06:28",
+      "quote": "Can you call him tomorrow?",
       "customer_response": "cooperative",
-      "customer_quote": "I think for about, you know, five would be would be better.",
+      "customer_quote": "Late afternoon.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -191,74 +200,94 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "06:43",
-      "end_ts": "07:29",
-      "quote": "I'll just send you a confirmation text with the, date and time of the meeting.",
+      "ts": "06:24",
+      "end_ts": "07:25",
+      "quote": "I'll go ahead and just pencil you in for tomorrow at five.",
       "customer_response": "cooperative",
       "customer_quote": "Okay.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
       "ts": "03:49",
-      "quote": "what what does, entail? Because I've heard a lot of people some people get them for free. I don't believe that. And then some people are alone. Like, it's it's really, really expensive.",
+      "quote": "some people get them for free. I don't believe that. And then some people are alone. Like, it's it's really, really expensive.",
       "type": "cost",
-      "rep_attempts": 1,
+      "rep_attempts": 2,
       "attempt_quotes": [
-        "But yeah. So our program here, all it is is a bill swap. All we'll be doing is, replacing your electric bill with, ComEd and, swapping that out for a cheaper solar payment."
+        "So it really just depends. I mean, different companies have, you know, different programs. So I'm really not sure, you know, what kind of deals they got",
+        "our program here, all it is is a bill swap... swapping that out for a cheaper solar payment"
       ],
       "resolved": true,
       "resolution_ts": "04:39",
-      "reasoning": "Customer affirms understanding ('Yeah. Absolutely.') after a single explanatory pass; rep did not use the objection-inversion flip, just one mechanics explanation, which happened to land."
+      "reasoning": "Customer's skepticism about cost/free claims stalled forward momentum; rep's first response was a hedge, second was the bill-swap reframe which the customer accepted with 'Yeah. Absolutely.'",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "reason",
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@05:06",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "spouse-on-title not invited to appointment",
-    "ts": "02:10",
-    "quote": "Is there anyone else on the title of the home with you?",
-    "why": "The rep asks the qualifying question correctly but never converts the wife's co-owner status into an invitation to join the appointment — she's referenced twice afterward purely as the bill-locator (03:35, 06:41). This is the exact schema-flagged pattern (protocols.spouse_decision) with both a positive exemplar (SESSION18_fd078269) and negative exemplar (SESSION20) already on file, making it a high-leverage, specific coaching moment for this rep."
+    "topic": "Objection inversion on cost skepticism",
+    "ts": "03:49",
+    "quote": "some people get them for free. I don't believe that. And then some people are alone. Like, it's it's really, really expensive.",
+    "why": "This was the clearest opening in the call for the bill-swap flip; instead the rep hedged with uncertainty about competitor programs before recovering. Coaching this sharpens the single highest-leverage move available on this call."
   },
   "key_moments": [
     {
-      "ts": "02:04",
-      "quote": "Is there anyone else on the title of the home with you?",
-      "classification": "spouse_handling",
-      "stewart_read": "Rep correctly surfaces that the wife is a co-owner, but never invites her onto the appointment itself — she's only referenced later as the person who needs to find the bill (05:35 'This is my wife...I'll have to see where how she does it'). The schema explicitly requires co-owners to be present for the close."
+      "ts": "01:31",
+      "quote": "Very beautiful home, by the way, Raymond.",
+      "classification": "rapport_repair",
+      "stewart_read": "Personalized, specific compliment (not generic) that visibly warms the customer's later responses."
     },
     {
       "ts": "03:49",
-      "quote": "what what does, entail? Because I've heard a lot of people some people get them for free. I don't believe that. And then some people are alone. Like, it's it's really, really expensive.",
+      "quote": "some people get them for free. I don't believe that. And then some people are alone. Like, it's it's really, really expensive.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "This is a cost/skepticism objection that maps cleanly to the objection_inversion trigger — customer is worried solar is 'really expensive.' Rep does not flip it back to the customer's own electric bill as the real expense; instead pivots into explaining the bill-swap mechanic."
+      "stewart_read": "Customer hands the rep a cost-confusion objection that is a textbook trigger for the bill-swap flip."
     },
     {
-      "ts": "04:00",
-      "quote": "Yeah. Yeah. So it really just depends. I mean, different companies have, you know, different programs. So I'm really not sure, you know, what kind of deals they got or what the programs they were offering. But yeah. So our program here, all it is is a bill swap.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "Rep explains program mechanics (bill swap, cheaper solar payment) in detail rather than using the universal escape hatch to bridge to the specialist. This is accurate-but-premature content delivery."
+      "ts": "04:03",
+      "quote": "So it really just depends. I mean, different companies have, you know, different programs. So I'm really not sure, you know, what kind of deals they got",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep openly admits uncertainty about competitor pricing structures rather than redirecting immediately to the specialist."
     },
     {
-      "ts": "01:31",
-      "quote": "Very beautiful home, by the way, Raymond. Looks like the home gets, perfect sun exposure and, plenty of roof space there.",
-      "classification": "rapport_repair",
-      "stewart_read": "Rep uses Google Maps research to build genuine, specific rapport rather than generic flattery, reinforcing legitimacy and personal attention early in verify."
+      "ts": "04:15",
+      "quote": "our program here, all it is is a bill swap. All we'll be doing is, replacing your electric bill with, ComEd and, swapping that out for a cheaper solar payment.",
+      "classification": "bill_anchor",
+      "stewart_read": "Rep recovers and links back to the earlier captured bill amount, framing it as replaceable — this is the flip, though soft."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 49,
-    "verified": 49,
+    "checked": 55,
+    "verified": 55,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

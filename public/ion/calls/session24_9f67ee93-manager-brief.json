@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION24_9f67ee93",
   "rep_name": "Gabe",
-  "trajectory_summary": "This is a short, low-stakes duplicate-lead call: the customer had already been contacted by another Ion rep (Jake) and was mid-process with him, including preparing to send his bill. Gabe correctly identified the duplicate and closed the call cleanly rather than re-running a full verify/booking flow on a lead already in another rep's pipeline. The call has no sales outcome to build toward, and the correct move — defer to the existing rep relationship — was made, even though the rep's attention was split during the key disclosure.",
-  "shape": "stagnant",
-  "outcome_dispute": "v1 tag is unknown/unclear from metadata; based on the transcript this is not a booked, tentative, or callback outcome — it resolves as a duplicate-record cleanup with no new appointment action taken by this rep. 'no_appointment' is the most accurate tag, distinct from a disqualification or missed-opportunity call.",
+  "trajectory_summary": "This call never got past verify — the customer disclosed a live, more-advanced prior contact with another ION rep (Jake), and Gabe's entire remaining energy went into confirming/clearing a system duplicate rather than serving the customer. The call ends abruptly with the lead handed back to Jake, no qualification progress made, no appointment, no bill captured.",
+  "shape": "energy_leaked",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "02:05",
     "quote": "just keep working with Jake. He he's got you set up, so I'll go ahead and get this clear.",
-    "reasoning": "The call resolves as a duplicate-record cleanup, not a booking; the rep correctly declines to re-run the process since the customer is already being handled by another Ion rep. No appointment, no DQ, and no voicemail/no-contact scenario applies."
+    "reasoning": "Call ends with the rep clearing a duplicate lead record and deferring the customer entirely to another rep (Jake); no appointment, no next step owned by Gabe.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer mentions he was 'getting ready to send' his bill to Jake, but no bill amount or usage figure was ever stated to this rep — there is nothing numeric to capture or flip on this call."
+    "reasoning": "No numeric bill amount or kWh usage was captured on the call; the customer only volunteered they would send a bill to Jake, not any figures."
   },
   "bill_document_audit": {
     "asked": false,
@@ -28,28 +36,28 @@
     "ask_quote": null,
     "result": "not_asked",
     "method": "none",
-    "result_ts": "01:20",
-    "result_quote": "Matter of fact, I was getting ready to send him a copy of my bill.",
-    "reasoning": "The rep never raised bill collection on this call since it became clear within the first minute the customer was a duplicate lead already being worked by another rep; the customer volunteers that he's sending his bill to Jake instead."
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The rep did not request the bill; the customer volunteered they were going to send a copy to Jake but did not send it on this call."
   },
   "interest_reason_audit": {
     "asked": true,
-    "ask_ts": "00:38",
-    "reason_given": true,
-    "reason_ts": "00:47",
-    "reason_quote": "I just talked with Jake from ION.",
+    "ask_ts": "00:47",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the standard interest question, but the customer's response wasn't a solar-interest reason at all — it was a disclosure of prior contact with another rep, which redirected the call entirely. There was no genuine 'interest in solar' reason for the rep to use."
+    "reasoning": "The rep asked why they're interested in solar, but the customer only said they had already spoken with another rep (Jake), not a substantive reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "end_ts": "00:12",
-      "quote": "Hey, Daniel. This is Gabe with with ION. I was just calling about that solar form you filled out online.",
+      "end_ts": "00:04",
+      "quote": "Hey, Daniel. This is Gabe with with ION.",
       "customer_response": "cooperative",
       "customer_quote": "Good.",
       "resistance_reason": "",
@@ -59,21 +67,21 @@
     {
       "section": "interest_question",
       "status": "asked",
-      "ts": "00:38",
-      "end_ts": "00:47",
+      "ts": "00:47",
+      "end_ts": "01:12",
       "quote": "what's mainly got you guys interested in solar?",
       "customer_response": "deflected",
       "customer_quote": "I just talked with Jake from ION.",
       "resistance_reason": "other",
-      "rep_followup": "moved_on",
+      "rep_followup": "persisted",
       "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:19",
-      "end_ts": "00:30",
-      "quote": "So I've got your address here at 8347 Lytle Trails Road in Waynesville?",
+      "end_ts": "00:31",
+      "quote": "So I've got your address here at 8347",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
@@ -83,9 +91,9 @@
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "00:26",
-      "end_ts": "00:36",
-      "quote": "is there anybody else on the title of that home with you?",
+      "ts": "00:31",
+      "end_ts": "00:38",
+      "quote": "And is there anybody else on the title of that home with you?",
       "customer_response": "cooperative",
       "customer_quote": "My wife.",
       "resistance_reason": "",
@@ -94,7 +102,7 @@
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,11 +110,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,11 +122,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,11 +134,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +146,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,23 +158,23 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "00:47",
-      "end_ts": "02:05",
-      "quote": "let me see if there's a duplicate here",
+      "ts": "01:09",
+      "end_ts": "01:12",
+      "quote": "And Jake shots you a call?",
       "customer_response": "cooperative",
-      "customer_quote": "I just talked with Jake from ION.",
-      "resistance_reason": "already_have_quote",
-      "rep_followup": "alternative_offered",
+      "customer_quote": "Yeah.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "bill_collection",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -174,11 +182,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -186,79 +194,74 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "02:05",
-      "end_ts": "02:15",
-      "quote": "K. Bye bye. Goodbye.",
-      "customer_response": "cooperative",
-      "customer_quote": "Okay.",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "00:47",
-      "quote": "I just talked with Jake from ION. Is is this the same thing?",
-      "type": "already_have_quote_or_system",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Yeah. Let me let me see if there's a, let me see if there's a duplicate here. Give me just a second."
-      ],
-      "resolved": true,
-      "resolution_ts": "02:05",
-      "reasoning": "This isn't a sales objection but a legitimate duplicate-contact flag; the rep resolves it by checking the system and deferring to the existing rep, which the customer accepts without pushback."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "Attention-splitting during system lookups",
+    "topic": "Dead-air on a hot signal during a duplicate-lead handling",
     "ts": "01:20",
     "quote": "Matter of fact, I was getting ready to send him a copy of my bill.",
-    "why": "The rep's pattern of narrating tool/system work while the customer is actively talking (00:38, 01:20, 01:48) caused a near-30-second silent gap at the exact moment the customer shared the most concrete detail on the call. On a call with real stakes this habit would cost more; worth flagging now while it's low-cost."
+    "why": "A customer actively mid-bill-collection with another rep is about as qualified a signal as exists, and it was met with silence and eventually a full lead handoff with zero attempt to capture or accelerate it."
   },
   "key_moments": [
     {
-      "ts": "00:26",
-      "quote": "K. Awesome. And is there anybody else on the title of that home with you?",
-      "classification": "other",
-      "stewart_read": "Rep runs the co-owner verify item correctly and gets a direct answer ('My wife'). Note: the transcript shows visible speaker-tag noise in this exact span (00:26-00:38, lines alternate oddly between rep/customer for very short utterances) — treat the literal attribution here as lower-confidence diarization, not a confirmed rep-answering-own-question error."
+      "ts": "00:47",
+      "quote": "I just talked with Jake from ION.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a duplicate/prior touch; rep should probe what Jake covered and at what stage, not just confirm it happened."
     },
     {
-      "ts": "00:38",
-      "quote": "Perfect. Well, let me go ahead and get this, opened up on the map here so I can take a look at it. While I'm doing that, what's mainly got you guys interested in solar?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Rep asks the interest question while narrating a separate system task, splitting his own attention right as the customer is about to reveal the duplicate-lead context. This is the first touch of a recurring attention-split pattern that continues at 01:20 and 01:48."
+      "ts": "01:09",
+      "quote": "And Jake shots you a call?",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Second touch on the same prior-contact signal; still only confirms the fact, no depth."
     },
     {
       "ts": "01:20",
       "quote": "Matter of fact, I was getting ready to send him a copy of my bill.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "The customer discloses he is actively preparing to send his bill to Jake — a concrete, actionable signal about where the other rep's process stands. The rep never acknowledges or logs this detail; the transcript shows a 28-second gap with no rep response before 'Hello? Can you hear me?' at 01:48."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "This is a live anchor — the customer is mid-bill-collection with another rep — and it is met with total silence for nearly 30 seconds."
     },
     {
       "ts": "02:05",
-      "quote": "And so I'll go ahead and get this clear. And, yeah, just keep working with Jake. He he's got you set up, so I'll go ahead and get this clear.",
-      "classification": "other",
-      "stewart_read": "Rep closes the call efficiently and correctly for a duplicate-lead scenario — no appointment is owed here since the customer is already in an active process with another rep. This is not a standard button-up moment (no appointment being set), so button_up mechanics don't directly apply; it is best read as a clean, correctly-scoped call closure."
+      "quote": "just keep working with Jake. He he's got you set up, so I'll go ahead and get this clear.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "Call ends with no next step owned by Gabe, no confirmation of what happens next for the customer, and no handshake."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 34,
-    "verified": 34,
+    "checked": 29,
+    "verified": 29,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

@@ -1,26 +1,35 @@
 {
   "call_id": "SESSION6_478ab769",
   "rep_name": "Randy",
-  "trajectory_summary": "The call opens with the customer taking control and stays that way throughout — he answers his own qualification questions, volunteers a detailed and accurate breakdown of lease economics, and ends by coaching the rep on his own career. The rep completes the verify checklist competently but never re-asserts control, never flips the bill into urgency, and settles for a vague 'Monday, anytime' appointment without locking a time or reinforcing why the specialist call matters.",
-  "shape": "mixed",
-  "outcome_dispute": "This is better read as a callback/tentative than a clean booked appointment — no specific time was locked ('anybody can call me anytime'), only a day (Monday) was agreed, and the rep never restates or confirms the appointment mechanics (no hour-block, no 'is that fair' handshake).",
+  "trajectory_summary": "The call starts with an unusually cooperative, highly informed customer who takes over pacing and content almost immediately; the rep never regains control, drifting into passive filler while the customer self-qualifies, self-pitches, and eventually coaches the rep on his own career. An appointment gets loosely set for 'Monday' but with no locked time and no button-up, leaving it structurally fragile despite the customer's apparent readiness.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "V1 tag unknown but this should not be read as a clean booked win — no specific time was locked and button_up never occurred, so it is tentative/callback at best despite high customer receptivity.",
   "observed_outcome": {
     "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "05:24",
-    "quote": "I got a college visit tomorrow morning. Okay. So that's something How about Monday?",
-    "reasoning": "Only a day (Monday) is agreed for a specialist phone call; no specific time is locked, and the rep never restates a firm time or confirms with a handshake before ending the call."
+    "quote": "Monday, you can call anytime. You know? Okay.",
+    "reasoning": "Customer agrees in principle to a specialist call on Monday but no specific time is locked, and button_up (time confirmation, 'is that fair' handshake, no-driving instruction) never occurs — the call ends abruptly after the customer's monologue.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "02:33",
-    "bill_quote": "It let's just say Ballpark 250.",
+    "bill_ts": "02:36",
+    "bill_quote": "Ballpark 250.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures both the dollar amount ($250) and usage (11,000 kWh/year) but responds only with 'Okay' and moves straight to sending the email — no reflection of the number back as leverage against the utility."
+    "reasoning": "Bill amount ($250, 11,000 kWh) was captured at 02:36 but never referenced again to build urgency; the flip should have landed around 05:48 when the customer himself was calculating BGE cost projections — rep could have anchored back to the captured $250 as the current pain point being replaced."
   },
   "bill_document_audit": {
     "asked": true,
@@ -28,9 +37,9 @@
     "ask_quote": "I can send you a bill if you want.",
     "result": "promised_later",
     "method": "email",
-    "result_ts": "02:16",
-    "result_quote": "That'd be great. Yeah. That way we can get that activated and built out for you. Yeah. So send me an email at steve@sudser.com,",
-    "reasoning": "The rep offers to email something to the customer and the customer commits to replying with his BGE bill after the call rather than producing it live — a promised-later result via email exchange."
+    "result_ts": "02:23",
+    "result_quote": "and I'll reply with I think it's March's bill, but you'll be able to see the past twelve months.",
+    "reasoning": "Rep asked for the bill and the customer agreed to email it and said they'd reply with March's bill; it was not received on the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +50,7 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar' but the customer volunteers his motivation (lease-only, driven by loss of tax incentives and an old removed system) unprompted; the rep never circles back to reinforce or tie the appointment to this stated preference."
+    "reasoning": "Customer stated he's 'looking to lease' at 01:22, but the rep never reinforced leasing as the reason for the appointment or tied the specialist meeting back to it explicitly."
   },
   "script_coverage": [
     {
@@ -49,12 +58,12 @@
       "status": "asked",
       "ts": "00:04",
       "end_ts": "00:11",
-      "quote": "Hey, Steve. This is Randy with Ion.",
+      "quote": "This is Randy with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "Sucker. May I help you?",
+      "customer_quote": "May I help you?",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -72,8 +81,8 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:40",
-      "end_ts": "00:54",
-      "quote": "So, yeah, I've got your address here.",
+      "end_ts": "00:49",
+      "quote": "I've got your address here. 10928",
       "customer_response": "cooperative",
       "customer_quote": "Yep.",
       "resistance_reason": "",
@@ -83,8 +92,8 @@
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "01:48",
-      "end_ts": "01:54",
+      "ts": "01:54",
+      "end_ts": "01:57",
       "quote": "Is there anyone else on the title besides you?",
       "customer_response": "cooperative",
       "customer_quote": "Just me.",
@@ -95,9 +104,9 @@
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:34",
+      "ts": "01:43",
       "end_ts": "01:46",
-      "quote": "Okay. Awesome. Sounds good. So roof is, roof is new then?",
+      "quote": "So roof is, roof is new then?",
       "customer_response": "cooperative",
       "customer_quote": "Brands, bank, and new a month.",
       "resistance_reason": "",
@@ -109,21 +118,21 @@
       "status": "asked",
       "ts": "02:08",
       "end_ts": "02:16",
-      "quote": "And then do you know who you're currently doing your electricity with?",
+      "quote": "do you know who you're currently doing your electricity with?",
       "customer_response": "cooperative",
       "customer_quote": "BG and E.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "alternative_offered",
       "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "02:28",
-      "end_ts": "02:53",
-      "quote": "And how much are you, currently paying for electricity?",
+      "ts": "02:33",
+      "end_ts": "02:40",
+      "quote": "how much are you, currently paying for electricity?",
       "customer_response": "cooperative",
-      "customer_quote": "It let's just say Ballpark 250.",
+      "customer_quote": "Ballpark 250.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -135,7 +144,7 @@
       "end_ts": "02:07",
       "quote": "you just need to have a credit score that's over 6 70.",
       "customer_response": "cooperative",
-      "customer_quote": "That's not a problem.",
+      "customer_quote": "not a problem. Great.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -154,15 +163,15 @@
     },
     {
       "section": "prior_design",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "01:43",
+      "end_ts": "01:46",
+      "quote": "So roof is, roof is new then?",
+      "customer_response": "cooperative",
+      "customer_quote": "The panels are no longer up there because I had to redo my roof, and the panels are freaking almost 20 years old.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
@@ -173,20 +182,20 @@
       "customer_response": "cooperative",
       "customer_quote": "and I'll reply with I think it's March's bill, but you'll be able to see the past twelve months.",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "deferred"
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "03:46",
-      "end_ts": "05:24",
+      "ts": "03:54",
+      "end_ts": "05:32",
       "quote": "when would be a good time we can have you meet with a specialist, Steve, so they can kinda go over that option with you?",
-      "customer_response": "resistant",
-      "customer_quote": "How about Monday? Monday, you can call anytime.",
-      "resistance_reason": "timing",
-      "rep_followup": "alternative_offered",
-      "result": "partial"
+      "customer_response": "cooperative",
+      "customer_quote": "Monday, you can call anytime. You know? Okay.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "button_up",
@@ -198,69 +207,64 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "skipped",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "03:54",
-      "quote": "So specialist, I e, just on the phone? Because I don't need anybody to come out.",
-      "type": "already_have_quote_or_system",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Yeah. Okay. Yeah."
-      ],
-      "resolved": true,
-      "resolution_ts": "04:35",
-      "reasoning": "Customer resists an in-person visit and asserts he already knows the technical process; rep offers minimal pushback and the customer self-resolves by agreeing to a phone-only specialist call."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "self-diminishing framing undercuts authority and appointment value",
-    "ts": "04:19",
-    "quote": "I think so. I'm I am just a scheduler,",
-    "why": "When the customer explicitly validates the rep's knowledge, the rep deflects to 'just a scheduler,' which the customer then pushes back on unprompted at 06:22 — this pattern likely reduces the customer's confidence that the upcoming specialist call carries real weight, directly threatening show-rate on a loosely-timed appointment."
+    "topic": "Failure to lock a specific appointment time",
+    "ts": "05:19",
+    "quote": "Do you wanna just shoot for, like, tomorrow morning or afternoon?",
+    "why": "Despite a highly engaged, self-qualifying customer, the call ends on 'Monday, you can call anytime' with no locked time and no button-up — this is the single biggest procedural miss given how easy this customer was to close."
   },
   "key_moments": [
     {
-      "ts": "01:20",
-      "quote": "because I've gotten all the government money, which there is none anymore.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Customer states a flatly inaccurate belief about tax credit availability that the schema explicitly requires clarifying language for ('we can no longer guarantee the Tax Credit... it's possible they can still claim it'). The rep says nothing to correct or clarify this."
+      "ts": "00:22",
+      "quote": "So I guess question number one is do you guys just sell or do you lease?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer hands the rep a direct qualifying/interest question up front and the rep answers vaguely instead of using it to anchor toward the specialist conversation."
     },
     {
-      "ts": "01:43",
-      "quote": "Brands, bank, and new a month.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer confirms the roof was just replaced within the last month — this removes the roof-age DQ risk entirely and is a strong qualification positive, since a brand-new roof means no re-roof barrier before install."
+      "ts": "01:00",
+      "quote": "So hence why I will not buy",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Customer states a cost-based reason for not buying (only leasing); rep does not flip this into bill-pain leverage, just continues the verify checklist."
     },
     {
-      "ts": "02:33",
-      "quote": "It let's just say Ballpark 250.",
-      "classification": "bill_anchor",
-      "stewart_read": "Bill is captured cleanly along with a usage figure (11,000 kWh/year) moments later, but the rep never flips it into emotional leverage against the utility — he simply logs it and moves to the next verify item."
+      "ts": "03:55",
+      "quote": "specialist, I e, just on the phone? Because I don't need anybody to come out.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Customer starts dictating what the specialist call should look like and what it should NOT need to cover; rep doesn't reassert what the specialist actually does, letting the customer define the appointment's scope."
     },
     {
-      "ts": "05:07",
-      "quote": "comes through with my phone as potential spam. I think your car all came through as potential spam, but I answer them because I like to give people who spam grief.",
-      "classification": "other",
-      "stewart_read": "Customer references treating Ion's calls as likely spam and enjoying antagonizing spam callers — a scam-anxiety-adjacent signal the schema's analysis_directives flag for a customer-initiated appointment reframe. The rep does not acknowledge or reframe this at all."
+      "ts": "04:44",
+      "quote": "I don't need to be explained what solar is and what the savings are. I know what they are.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Second instance of the customer signaling he wants a numbers-focused, no-explainer call; rep does not adjust the framing of what the specialist will deliver."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
     "checked": 46,
-    "verified": 42,
+    "verified": 44,
     "fuzzy": 0,
-    "wrong_ts": 4,
+    "wrong_ts": 2,
     "not_found": 0
   }
 }

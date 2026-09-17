@@ -1,36 +1,44 @@
 {
   "call_id": "SESSION4_0b8352e1",
   "rep_name": "Joe",
-  "trajectory_summary": "The call opens with a live, returning customer and a clean scope-discipline move from the rep, but flattens into an unmanaged personal/political monologue from Kenneth about trucking logistics and utility policy that the rep never redirects. No qualifying bill document is captured, no appointment time is locked, and the call ends on a vague 'I'll get back to you' rather than a scheduled callback.",
+  "trajectory_summary": "The call opens warm and cooperative but the rep never anchors the bill pain, never locks a time, and lets the customer's long tangents (weather, travel, utility grievance) run the clock without redirecting. Energy leaked steadily as the rep let the customer's monologues substitute for qualification and closing, ending in a soft, unowned goodbye.",
   "shape": "energy_leaked",
-  "outcome_dispute": "This should not be tagged as a booked or tentative appointment. The rep sends a text for the bill photo and mentions scheduling 'another phone call' in the abstract (03:34), but no day or time is ever stated, and the call ends with Kenneth saying he'll reach back out on his own timeline ('I'll get back to you as soon as I can') — this is an unanchored soft exit / callback-without-a-locked-time, not a booking.",
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata; observed transcript shows no appointment time set and bill only 'promised later' via text — this should register as callback/no_appointment, not booked or tentative.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "07:23",
-    "quote": "I look forward to getting that in there, and I'll get back to you as soon as I can. Okay?",
-    "reasoning": "No specific day or time is ever agreed for a next call; the rep references scheduling 'another phone call' in the abstract and sets up a text for the bill photo, but the actual next step is Kenneth reaching back out on his own initiative — a callback without a locked time, not a booked or tentative appointment."
+    "ts": "07:32",
+    "quote": "we can get the next phone call scheduled over text for you",
+    "reasoning": "No day or time was agreed on the call; the rep explicitly defers scheduling to a future text exchange contingent on the customer sending the bill photo, making this a callback rather than a booked or tentative appointment.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "01:23",
-    "bill_quote": "Might as well say roughly it. If you've divided it all up, it's roughly 1,000 a a month.",
+    "bill_ts": "01:31",
+    "bill_quote": "it's roughly 1,000",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures the $1,000/month figure but never returns to flip it into urgency; the closest attempt at 03:45 ('I've seen a lot of people... now their bills are like 700, 800 a month') references OTHER customers' bills rather than reflecting Kenneth's own number back as his reason to act."
+    "reasoning": "The $1,000/month figure at 01:31 and the escalating $1.70-$1.80 figure at 03:19 were both captured but never flipped into urgency; the rep's only nearby line, 'I've seen a lot of people... now their bills are like 700, 800 a month' at 03:45, is social proof, not a flip tying the customer's own number to a reason to act."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "01:17",
-    "ask_quote": "And then you just need to look at a recent utility bill in order to see the kilowatt graph.",
+    "ask_ts": "02:37",
+    "ask_quote": "You could send me a picture of the graph.",
     "result": "promised_later",
     "method": "text",
     "result_ts": "02:58",
-    "result_quote": "I'll, I'll shoot you a quick text message from an 801 number.",
-    "reasoning": "The rep sets up a text-based photo exchange for the bill but Kenneth does not send it during the call; he says he'll look for one and may need to wait for the next billing cycle (05:55-06:04), making this a promised-later result via text, not a same-call capture."
+    "result_quote": "I'll shoot you a quick text message from an 801 number.",
+    "reasoning": "The rep asked for a picture of the utility graph and then confirmed they would send a text from an 801 number; the customer agreed to send later but did not transmit the document on the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,14 +49,14 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar' — the call is framed around Kenneth returning a call about existing questions ('you had some questions about solar for your home?' at 00:11), and no clear standalone interest reason (bill pain, environmental, neighbor) is elicited or stated by Kenneth beyond his generalized utility-cost frustration."
+    "reasoning": "The rep did not ask what specifically motivated the customer's interest in solar; no explicit reason was solicited."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:02",
-      "end_ts": "00:11",
+      "end_ts": "00:07",
       "quote": "Hi. This is Joe with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. I'm returning the call.",
@@ -71,9 +79,9 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:49",
-      "end_ts": "00:58",
-      "quote": "This is for 206, Hahn Place? Hahn.",
+      "ts": "00:54",
+      "end_ts": "00:57",
+      "quote": "Hahn Place? Hahn.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
@@ -83,14 +91,14 @@
     {
       "section": "co_owner",
       "status": "skipped",
-      "ts": "01:04",
-      "end_ts": "01:12",
-      "quote": "You just need to be on the title of the home and have a credit score of 670.",
-      "customer_response": "no_answer",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
@@ -106,37 +114,37 @@
     },
     {
       "section": "utility_company",
-      "status": "asked",
-      "ts": "03:34",
-      "end_ts": "03:42",
-      "quote": "Which which company is that? Is it Dominion or Dominion.",
-      "customer_response": "cooperative",
-      "customer_quote": "Okay. Dominion. Yeah.",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "01:23",
+      "ts": "01:15",
       "end_ts": "01:34",
-      "quote": "If you could put it in the mail, or is it all online now for you?",
+      "quote": "you just need to look at a recent utility bill in order to see the kilowatt graph.",
       "customer_response": "cooperative",
-      "customer_quote": "Might as well say roughly it... it's roughly 1,000 a a month.",
+      "customer_quote": "it's roughly 1,000",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:04",
-      "end_ts": "01:12",
-      "quote": "the qualifications are a little bit different from from last time now. You just need to be on the title of the home and have a credit score of 670.",
+      "end_ts": "01:15",
+      "quote": "you just need to be on the title of the home and have a credit score of 670.",
       "customer_response": "resistant",
       "customer_quote": "That's not right.",
-      "resistance_reason": "trust",
+      "resistance_reason": "other",
       "rep_followup": "moved_on",
       "result": "partial"
     },
@@ -156,10 +164,10 @@
       "section": "prior_design",
       "status": "asked",
       "ts": "00:31",
-      "end_ts": "00:41",
-      "quote": "We'll get you an updated design then.",
+      "end_ts": "00:47",
+      "quote": "You guys came out a couple years ago. So",
       "customer_response": "cooperative",
-      "customer_quote": "You guys came out a couple years ago.",
+      "customer_quote": "I still don't know that I'm ready for it, but,",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -168,28 +176,16 @@
       "section": "bill_collection",
       "status": "asked",
       "ts": "02:37",
-      "end_ts": "02:58",
-      "quote": "Is this a good number for for text messages? You could send me a picture of the graph.",
+      "end_ts": "03:02",
+      "quote": "You could send me a picture of the graph.",
       "customer_response": "cooperative",
-      "customer_quote": "Okay. Yeah.",
-      "resistance_reason": "",
+      "customer_quote": "can I send it to you in a picture or a text from this number?",
+      "resistance_reason": "other",
       "rep_followup": "alternative_offered",
-      "result": "deferred"
+      "result": "declined"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
-      "ts": "03:34",
-      "end_ts": "03:41",
-      "quote": "the very last step is we we would just schedule, like, another phone call to fill over the the numbers and stuff in a bit more detail.",
-      "customer_response": "deflected",
-      "customer_quote": "Yeah. I mean, I closed last night. I opened today, headed to Richmond, next.",
-      "resistance_reason": "timing",
-      "rep_followup": "moved_on",
-      "result": "skipped"
-    },
-    {
-      "section": "button_up",
       "status": "skipped",
       "ts": "",
       "end_ts": "",
@@ -199,78 +195,93 @@
       "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "skipped"
+    },
+    {
+      "section": "button_up",
+      "status": "asked",
+      "ts": "07:32",
+      "end_ts": "07:39",
+      "quote": "I sent that text message. You can just reply to that, and then we can get the next phone call scheduled over text for you as",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright. Thank you very much. Appreciate you. Have a great day. Okay?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "reconfirm"
+      ],
+      "parts_score": "1/4"
     }
   ],
   "objections": [
     {
       "ts": "01:15",
       "quote": "That's not right.",
-      "type": "trust_or_scam",
+      "type": "other",
       "rep_attempts": 0,
       "attempt_quotes": [],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "Kenneth disputes the stated qualification terms and the rep offers no clarification or defense before moving on to the next topic; the pushback is never resolved on the call."
-    },
-    {
-      "ts": "03:03",
-      "quote": "I'm gonna be I'm in I'm headed to another location right now or whatever. So, and I travel I travel a lot,",
-      "type": "timing_or_callback",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "And you have a crazy schedule, so, yeah, we we would work around that."
-      ],
-      "resolved": true,
-      "resolution_ts": "04:47",
-      "reasoning": "Rep acknowledges the scheduling difficulty once with a general 'we'll work around that' but never follows up with a concrete flexible-window offer; Kenneth accepts this passively and the topic drops without a locked plan."
+      "reasoning": "Customer directly disputes the qualifier statement and the rep moves straight into the bill-collection line without acknowledging or correcting it.",
+      "blocked_section": "tax_credit_qualifier",
+      "attempt_moves": [],
+      "resolved_by_tape": true,
+      "next_event": "bill_collection@02:37",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored soft exit — no locked callback time",
-    "ts": "07:17",
-    "quote": "So yeah. Cool. Yeah. That sounds good. I'll hold I'll hold you up. I'm sure you got other people you gotta talk to, and, I look forward to getting that in there, and I'll get back to you as soon as I can. Okay?",
-    "why": "The rep never regains control of the close after Kenneth's long tangent; the call ends with the customer setting the terms of follow-up rather than the rep locking a specific day/time, which is the single biggest structural gap on this call and the reason it can't be scored as a real booked or tentative appointment."
+    "topic": "Bill anchor captured but never flipped or referenced again",
+    "ts": "01:31",
+    "quote": "it's roughly 1,000 a a month.",
+    "why": "The customer gives a strong bill figure and later an even stronger escalating-cost complaint, but the rep never ties either to urgency or the appointment — the single highest-leverage moment of the call was left on the table."
   },
   "key_moments": [
     {
-      "ts": "00:24",
-      "quote": "Oh, I just work in the scheduling department to get, like, the the designs built.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "This is actually the CORRECT move — the rep deflects a plans/pricing question using the universal escape hatch pattern rather than explaining lease vs. purchase mechanics. Flagging as a positive instance of scope discipline, not a violation."
-    },
-    {
-      "ts": "01:15",
-      "quote": "That's not right.",
-      "classification": "other",
-      "stewart_read": "The rep stated a program change ('We don't go by the end of the month or anymore') that is not documented anywhere in the schema, and the customer directly disputes it. This is a schema_drift_detection instance — the rep is either using outdated or incorrect information, similar to the SESSION18_fcbf33c1 650-vs-670 credit drift — not a case of the rep facing an unanswerable customer question."
+      "ts": "01:04",
+      "quote": "You just need to be on the title of the home and have a credit score of 670.",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep merges the title qualifier and credit qualifier awkwardly into one run-on line, and the customer immediately disputes it without the rep clarifying or correcting."
     },
     {
       "ts": "01:15",
       "quote": "That's not right.",
       "classification": "knowledge_gap",
-      "stewart_read": "Regardless of whether the underlying term is right or wrong, the rep never responds to this pushback at all — no clarification, no acknowledgment, the transcript moves straight to the utility bill ask. That non-response is a distinct coaching gap from the drift itself."
+      "stewart_read": "Customer flags the qualifier statement as wrong and the rep never circles back to clarify what was actually inaccurate."
     },
     {
-      "ts": "03:22",
-      "quote": "getting, you know, in the $1.70 to, you know, $1.80 range. You know, it's supposed to be a budget plan, but they're doing all this fuel stuff or whatever.",
+      "ts": "01:31",
+      "quote": "it's roughly 1,000 a a month.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "This figure is ambiguous in context — surrounded by 'fuel stuff', 'lowest fuel costs', and trucking per-diem talk, it more plausibly refers to diesel price per gallon than an electric bill dollar amount. The rep does not clarify which cost this is, and does not reconnect it to the clean $1,000/month utility figure captured earlier at 01:23. This is a missed anchoring opportunity regardless of which cost it represents."
+      "stewart_read": "A striking bill figure is given and the rep does not flip it, react to it, or use it as leverage anywhere in the rest of the call."
+    },
+    {
+      "ts": "03:19",
+      "quote": "$1.70 to, you know, $1.80 range.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer volunteers escalating bill figures unprompted — a second, stronger anchor than the earlier $1,000 estimate — and the rep lets it pass without reflection."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
     "checked": 43,
-    "verified": 40,
-    "fuzzy": 2,
-    "wrong_ts": 1,
+    "verified": 43,
+    "fuzzy": 0,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

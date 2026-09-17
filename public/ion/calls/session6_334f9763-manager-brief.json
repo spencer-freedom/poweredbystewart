@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION6_334f9763",
   "rep_name": "Bucky",
-  "trajectory_summary": "This is a short, correctly-triggered hard DQ — the address turns out to be an apartment, which the schema disqualifies outright. The rep followed the gate correctly but then had nothing to offer the customer once she asked for alternatives, and the call fizzles into her asking the rep to call a competitor for her.",
+  "trajectory_summary": "The call opens cooperatively but collapses into confusion during address verification, and the rep DQs on the word 'apartment' without probing further — missing that the customer also mentions a rental house she may own. Energy leaks steadily from confusion to the customer begging for a referral the rep can't even provide. No qualification, no bill, no interest question — the call ends in under two and a half minutes with nothing gained.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unclear from metadata; observed outcome here is a clean dq — not a booked or tentative appointment. No dispute with a stated v1 tag since none was given, but this should be recorded as dq, not any setting outcome.",
+  "outcome_dispute": "v1 tag is unknown; this should be recorded as dq, but a weak one — the rep DQ'd on 'apartment' without verifying if the rental house she mentioned is a separately owned qualifying property.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "01:27",
     "quote": "Okay. So we don't do solar on apartments.",
-    "reasoning": "The address reveals an apartment unit, triggering the hard not_homeowner disqualifier; no appointment was set and the call ends shortly after."
+    "reasoning": "Rep ends pursuit of the appointment on the apartment gate, matching the hard DQ pattern, though the DQ itself was applied without full clarity on which property/ownership was in play.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches the bill-amount verify item — it disqualifies on the apartment/homeowner gate right after the address is confirmed."
+    "reasoning": "No bill amount or usage was requested or provided on the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "Call ends at the address/homeowner verify step with a hard DQ before bill collection would ever be raised."
+    "reasoning": "The rep did not request the customer's utility bill or a method to obtain it."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +49,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never reaches the 'what interested you in solar' question — the call is disqualified during the address/homeowner check before verify continues."
+    "reasoning": "The rep did not ask why the customer was interested in solar and the customer did not volunteer a reason."
   },
   "script_coverage": [
     {
@@ -49,7 +57,7 @@
       "status": "asked",
       "ts": "00:05",
       "end_ts": "00:11",
-      "quote": "Hey, Jamie. This is Bucky with Ion. I got a request you're looking at solar for your home. How you doing?",
+      "quote": "This is Bucky with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "I'm doing fine.",
       "resistance_reason": "",
@@ -58,7 +66,7 @@
     },
     {
       "section": "interest_question",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -66,18 +74,18 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:24",
-      "end_ts": "01:27",
-      "quote": "Are you still at 123 West Avenue, Baltimore?",
+      "ts": "00:26",
+      "end_ts": "01:22",
+      "quote": "123 West Avenue, Baltimore?",
       "customer_response": "cooperative",
-      "customer_quote": "The address is 4819 Sedonia Avenue, Apartment C.",
+      "customer_quote": "Yes. Yes, I am.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -198,65 +206,62 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "01:22",
-      "quote": "The address is 4819 Sedonia Avenue, Apartment C.",
-      "type": "roof_or_home",
-      "rep_attempts": 0,
-      "attempt_quotes": [],
-      "resolved": true,
-      "resolution_ts": "01:27",
-      "reasoning": "Not a persuasion objection but a hard property-type gate; rep correctly disqualified immediately rather than attempting to overcome it, so zero 'attempts' is the right procedural response, not a coaching gap."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "No resource/referral on hard DQ",
-    "ts": "01:41",
-    "quote": "I have no idea.",
-    "why": "Once the apartment DQ hits, the rep softens the initial delivery with 'I'm sorry to tell you' but then gives the customer nothing to work with when she asks who else could help — leaving her to grasp for a competitor's name herself. A simple fallback line would close the call on a helpful note instead of a dead end."
+    "topic": "Unprobed second property = dropped lead",
+    "ts": "01:48",
+    "quote": "It's also a rental house as well.",
+    "why": "Customer explicitly offers a second, potentially qualifying property (a rental house) after the apartment DQ, and the rep never follows up — this is a live lead left on the table."
   },
   "key_moments": [
     {
+      "ts": "00:26",
+      "quote": "123 West Avenue, Baltimore?",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Rep reads an address that the customer never confirms cleanly before switching to a completely different address, and this mismatch is never reconciled."
+    },
+    {
       "ts": "01:27",
       "quote": "Okay. So we don't do solar on apartments.",
-      "classification": "protocol_violation",
-      "stewart_read": "This is correct procedure, not a violation — apartments are a hard DQ per schema. Flagging here to confirm the gate was applied correctly and immediately, which is the right call."
+      "classification": "empathy_miss",
+      "stewart_read": "The DQ is delivered flatly with no acknowledgment of the customer's effort spelling out her address, and no attempt to check if she owns any qualifying property."
     },
     {
-      "ts": "01:34",
-      "quote": "Okay. Yeah. So we we just don't do solar for apartments. I'm sorry to tell you. Oh, who does it? Who does it?",
-      "classification": "knowledge_gap",
-      "stewart_read": "The rep does soften the DQ with an apology ('I'm sorry to tell you') before echoing the customer's question rather than answering it — a partial recovery, not a bare non-answer."
-    },
-    {
-      "ts": "01:30",
-      "quote": "So it also is a business.",
-      "classification": "other",
-      "stewart_read": "Customer volunteers that the property is also used as a business, seemingly hoping this changes the qualification. The rep does not engage with this at all."
+      "ts": "01:48",
+      "quote": "It's also a rental house as well.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer hands the rep a second potential lead (a rental house she may own) and the rep never asks a single clarifying question about it."
     },
     {
       "ts": "01:41",
       "quote": "I have no idea.",
       "classification": "knowledge_gap",
-      "stewart_read": "After the earlier softened line, this is the rep's actual substantive answer to 'who does solar for apartments' — and it offers nothing. No redirect, no resource, no acknowledgment that he'd look into it."
+      "stewart_read": "Rep has no fallback resource or referral list when asked who services apartments, leaving the customer without help of any kind."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 25,
-    "verified": 25,
+    "checked": 22,
+    "verified": 22,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

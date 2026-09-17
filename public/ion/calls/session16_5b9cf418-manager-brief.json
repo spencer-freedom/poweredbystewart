@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION16_5b9cf418",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens hostile with a customer citing a prior professional disqualification and repeat-contact fatigue, and it never recovers — the rep's one attempted workaround (tree trimming) is checked with a manager and confirmed dead, closing the call on the customer's original terms. This is a legitimate disqualification, not a lost save; the rep's process (verify via map, float a workaround, confirm with manager) was reasonable, but execution was halting and he left several of the customer's stacked reasons (orientation, HOA) unaddressed rather than working them individually.",
+  "trajectory_summary": "Call opens already cold from a prior DQ and unwanted-contact complaint, and never recovers — the rep skips the intro/verify sequence entirely and jumps straight into re-litigating a shading disqualification. The rep's one soft-close attempt (phone call offer) is flatly rejected, and the call ends with the customer asking to be removed from the list after a supervisor hold confirms the DQ.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unclear; based on the transcript this is a dq (hard gate: insufficient usable roof surface due to shade/orientation/HOA, confirmed by rep's manager at 03:57) rather than a no_appointment or callback — the call ends with the rep confirming the home cannot be serviced.",
+  "outcome_dispute": "v1 outcome unknown; this is legitimately a dq (shading/roof) — the transcript shows the rep pursuing it via a manager check before conceding, which is the correct pattern for a real hard gate, not a missed sale.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,16 +11,24 @@
     "co_owner_confirmed": null,
     "ts": "03:57",
     "quote": "So you were right. We're not allowed to do anything because it is too shaky.",
-    "reasoning": "The rep's manager confirms the home cannot be serviced due to shade/roof orientation, a hard gate under dq_rules-style logic (insufficient usable roof surface), and the call ends with the customer requesting removal from the contact list rather than any appointment."
+    "reasoning": "Rep confirms after a manager check that the home is disqualified due to shading, matching dq_rules.roof_too_old_no_replacement-style hard gate logic (shading prevents viable install); customer then asks to be removed from contact list, closing the pursuit.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
-    "bill_captured": false,
-    "bill_ts": "",
-    "bill_quote": null,
-    "flip_executed": "no_bill_captured",
+    "bill_captured": true,
+    "bill_ts": "01:27",
+    "bill_quote": "It would be, like, half of the power bill",
+    "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer references her power bill only in the context of arguing solar wouldn't meaningfully reduce it ('It would be, like, half of the power bill be taken care of'), but no specific dollar amount or usage figure was ever captured by the rep, and the call resolves as a roof/shade DQ before bill discussion could occur."
+    "reasoning": "Bill amount was captured indirectly at 01:27 ('It would be, like, half of the power bill') but the rep never used it — the call moved straight into the shading DQ resolution and never tied the bill pain to a next step."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call never progressed past the roof/shade disqualification debate, so the rep never reached the bill-collection stage of the script."
+    "reasoning": "The rep never requested a bill or a photo; no collection occurred."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +49,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what interested the customer in solar; the call was consumed almost entirely by the customer's prior disqualification and the rep's attempt to re-verify eligibility, so this section of the script was never reached."
+    "reasoning": "The rep did not ask what motivated the customer to look at solar; the customer instead reported prior findings and shade issues."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "end_ts": "00:12",
-      "quote": "Hey. It's Bucky with Ion. I'm reaching out about the solar form you still got online. How are you doing?",
-      "customer_response": "resistant",
+      "end_ts": "00:06",
+      "quote": "Hey. It's Bucky with Ion. I'm reaching out about the solar form you still got online.",
+      "customer_response": "cooperative",
       "customer_quote": "Hi. I did that a long time ago.",
-      "resistance_reason": "trust",
-      "rep_followup": "persisted",
-      "result": "partial"
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -70,7 +78,7 @@
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -78,7 +86,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "co_owner",
@@ -95,78 +103,78 @@
     {
       "section": "roof",
       "status": "asked",
+      "ts": "00:51",
+      "end_ts": "01:07",
+      "quote": "Oh, yeah. These do you have tall trees?",
+      "customer_response": "cooperative",
+      "customer_quote": "Because I get too much shade.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
+    },
+    {
+      "section": "utility_company",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "bill_amount",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "military",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
       "ts": "00:32",
-      "end_ts": "02:00",
-      "quote": "They say why it wouldn't work? Because I'm looking on the map, so it looks fine.",
-      "customer_response": "resistant",
-      "customer_quote": "there's not enough surface area on the back of the house that doesn't get shade",
+      "end_ts": "00:39",
+      "quote": "I just I'm a little did they say why it wouldn't work? Because I'm looking on the map, so it looks fine.",
+      "customer_response": "cooperative",
+      "customer_quote": "I was told that solar will not work on my house",
       "resistance_reason": "already_have_quote",
       "rep_followup": "persisted",
       "result": "partial"
     },
     {
-      "section": "utility_company",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "bill_amount",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "tax_credit_qualifier",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "military",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "prior_design",
-      "status": "asked",
-      "ts": "00:17",
-      "end_ts": "00:30",
-      "quote": "Okay.",
-      "customer_response": "resistant",
-      "customer_quote": "I was told that solar will not work on my house",
-      "resistance_reason": "already_have_quote",
-      "rep_followup": "moved_on",
-      "result": "partial"
-    },
-    {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -174,23 +182,23 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "asked",
       "ts": "02:05",
-      "end_ts": "02:16",
+      "end_ts": "02:13",
       "quote": "I can here. I can help you get a phone call. That way you don't have to sit and meet with anybody and waste your time.",
       "customer_response": "resistant",
       "customer_quote": "No. I'd be wasting my time.",
-      "resistance_reason": "already_have_quote",
-      "rep_followup": "moved_on",
+      "resistance_reason": "timing",
+      "rep_followup": "none",
       "result": "declined"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -198,71 +206,84 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:17",
-      "quote": "I was told that solar will not work on my house",
-      "type": "already_have_quote_or_system",
-      "rep_attempts": 3,
+      "ts": "02:05",
+      "quote": "No. I'd be wasting my time.",
+      "type": "not_interested",
+      "rep_attempts": 1,
       "attempt_quotes": [
-        "I just I'm a little did they say why it wouldn't work? Because I'm looking on the map, so it looks fine.",
-        "Are you willing to, like, use trimming trees?",
-        "I can help you get a phone call. That way you don't have to sit and meet with anybody and waste your time."
+        "I can here. I can help you get a phone call. That way you don't have to sit and meet with anybody and waste your time."
       ],
-      "resolved": true,
-      "resolution_ts": "03:57",
-      "reasoning": "The rep made three distinct attempts to work past the prior disqualification — checking the satellite map, proposing a tree-trimming workaround, and offering a low-commitment phone follow-up — before confirming with his manager that the original DQ stands, at which point the customer accepts the outcome and asks to be removed from the list."
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep offered one alternative (phone-only call) after the shading discussion; customer rejected it outright and the rep did not attempt a second angle, instead moving to the manager hold on the shading question itself.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Acknowledge stated frustration before pivoting to verification",
-    "ts": "00:21",
-    "quote": "Okay.",
-    "why": "The customer opens with two real grievances (prior DQ from Ion itself, repeat contact) and the rep's flat 'Okay' treats both as non-events before jumping to the map check — this sets a cold tone that never recovers across the call."
+    "topic": "Unaddressed complaint about repeat contact",
+    "ts": "00:27",
+    "quote": "you guys keep calling me and texting me.",
+    "why": "Customer's core hostility driver was never acknowledged, compounding the already-cold open and likely contributing to the opt-out request at the end."
   },
   "key_moments": [
     {
-      "ts": "00:21",
-      "quote": "Okay.",
-      "classification": "empathy_miss",
-      "stewart_read": "The customer just disclosed she was previously told by Ion itself that her home is disqualified and that the company keeps calling/texting her — a legitimate frustration. The rep's flat 'Okay' does not acknowledge either the prior disqualification or the contact-frequency complaint before pivoting to the map check."
+      "ts": "00:06",
+      "quote": "I'm reaching out about the solar form you still got online.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "Intro references the form but the rep never re-establishes legitimacy given the customer's known prior contact/complaint history — no acknowledgment of the repeat-contact issue up front."
     },
     {
       "ts": "00:27",
-      "quote": "and you guys keep calling me and texting me.",
-      "classification": "other",
-      "stewart_read": "This is an excessive-contact complaint (a known pattern from other Ion calls) that goes entirely unaddressed — the rep never responds to it at any point in the call."
+      "quote": "you guys keep calling me and texting me.",
+      "classification": "empathy_miss",
+      "stewart_read": "Customer raises a contact-frequency complaint and the rep's only response is a flat 'Okay.' with no acknowledgment or resolution."
     },
     {
-      "ts": "01:07",
-      "quote": "Are you willing to, like, use trimming trees?",
-      "classification": "non_standard_scenario_hold",
-      "stewart_read": "The rep is working a non-standard scenario (prior shade disqualification) without a clear script step, improvising a tree-trimming condition before eventually taking it to a manager. This is the correct broad instinct — verify before accepting the DQ — but it is executed without structure."
-    },
-    {
-      "ts": "02:24",
-      "quote": "Let me And my husband, who's an engineer, is like, there's there's just no way.",
+      "ts": "00:17",
+      "quote": "I was told that solar will not work on my house",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses her husband is an engineer who has independently assessed the situation and reached the same negative conclusion — a co-decider with technical credibility. The rep does not acknowledge or probe this at all; his next line jumps straight to the manager question."
+      "stewart_read": "Rep asks a vague version of 'did they say why' but never asks which company/rep, when, or what specifically was shown — schema calls for investigate_first with a clean probe."
+    },
+    {
+      "ts": "01:53",
+      "quote": "surface area on the back of the house that doesn't get shade",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer volunteers detailed roof/HOA constraints (front blocked by HOA, insufficient rear space) that confirm the DQ; rep does not reflect this back or use it to close cleanly, instead pivots straight to a phone-call alternative."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 35,
-    "verified": 34,
+    "checked": 32,
+    "verified": 32,
     "fuzzy": 0,
-    "wrong_ts": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

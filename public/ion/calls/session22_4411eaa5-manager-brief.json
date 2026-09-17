@@ -1,26 +1,34 @@
 {
   "call_id": "SESSION22_4411eaa5",
   "rep_name": null,
-  "trajectory_summary": "The call opens in a genuinely rocky spot — wrong-name confusion layered on top of the customer's pre-existing belief that calls about this address are scam attempts to buy his elderly mother's house — but the rep recovers within the first minute and the customer's tone climbs steadily through the pitch and verify section. The call ends without a locked appointment; instead the rep sets up a text-based bill-collection follow-up with a vague 'later this afternoon' timeframe and no confirmed day/time for a specialist call.",
+  "trajectory_summary": "The call opens hostile with an identity mix-up and an immediate budget objection, but the rep's bill-swap pitch genuinely warms the customer, who volunteers a real question about permits. Momentum stalls at the finish line: the bill/kWh data lives with an unreachable mom, and the call ends on a vague 'text later' promise with no locked appointment.",
   "shape": "energy_built",
-  "outcome_dispute": "The call did not produce a booked or tentative appointment with a day/time — it produced a promise to text a bill photo 'later this afternoon' with scheduling deferred until after that. This should be tagged callback/no_appointment rather than booked, since no specialist appointment time was ever proposed or confirmed.",
+  "outcome_dispute": "No specific day/time was ever offered or agreed — this is not a booked or tentative appointment, it's an open-ended callback contingent on the customer texting a bill photo later; v1 should not be read as a set.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
-    "co_owner_confirmed": null,
+    "co_owner_confirmed": false,
     "ts": "04:38",
     "quote": "Alright. That works. It'll it'll probably be later this afternoon.",
-    "reasoning": "No day or time for a specialist appointment was ever proposed or agreed; the only concrete plan is a text exchange for the bill photo 'later this afternoon,' with actual scheduling explicitly deferred until after that ('and then we can get you on the schedule'). This is a callback/pending-info state, not a booked or tentative appointment."
+    "reasoning": "No specific day/time for the closer appointment was ever agreed — only a plan for the customer to text a bill photo 'later this afternoon.' This is a callback/data-collection step, not a booked or tentative appointment; mom (the co-owner) was never confirmed for any future call.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "03:13",
-    "bill_quote": "It's 100 to $200, give or take.",
+    "bill_quote": "100 to $200,",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep captures the bill range but simply echoes it back ('100 to 200') and moves straight to the roof question without tying it to savings, pain, or urgency — the capture is filed, not flipped into a reason to act."
+    "reasoning": "Bill amount ($100-200) was captured at 03:13 but never spoken to again — no flip into emotional alignment-against-the-utility. The flip should have landed right after capture, e.g. tying that $100-200 to the bill-swap savings pitch already given."
   },
   "bill_document_audit": {
     "asked": true,
@@ -30,7 +38,7 @@
     "method": "text",
     "result_ts": "04:38",
     "result_quote": "Alright. That works. It'll it'll probably be later this afternoon.",
-    "reasoning": "Rep asks for the bill/usage data and, after learning the mother (the account holder) is asleep, sets up a text-photo exchange for later in the day rather than getting it live on the call."
+    "reasoning": "The rep asked for the bill and then offered to text instructions; the customer agreed to send the usage later this afternoon."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +49,20 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar,' but the customer volunteered budget as the reason a prior look at solar stalled. The rep's bill-swap pitch at 01:13 implicitly addresses affordability but never explicitly ties back to the customer's own stated budget concern from 00:44."
+    "reasoning": "Customer's stated reason ('not in the budget right now') was never explicitly revisited or tied back into the pitch or the close — the rep pivoted around it with the bill-swap program but never reinforced it as the reason to act."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
-      "ts": "00:04",
-      "end_ts": "01:01",
+      "ts": "00:16",
+      "end_ts": "00:19",
       "quote": "She filled out a solar form online.",
-      "customer_response": "resistant",
-      "customer_quote": "Are you trying to buy her house?",
-      "resistance_reason": "trust",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh,",
+      "resistance_reason": "",
       "rep_followup": "persisted",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -72,10 +80,10 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "02:07",
-      "end_ts": "02:26",
-      "quote": "so the home, is it 9 is it 3954 Jerome Court?",
+      "end_ts": "02:17",
+      "quote": "so the home, is it 9 is it 3954",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah.",
+      "customer_quote": "Yes.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -83,23 +91,23 @@
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "02:49",
-      "end_ts": "02:58",
+      "ts": "02:55",
+      "end_ts": "02:59",
       "quote": "Is there anybody else in the title but you?",
       "customer_response": "cooperative",
       "customer_quote": "It's my mom right now. It's a it's a transferred upon desk setup.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "03:21",
+      "ts": "03:19",
       "end_ts": "03:45",
       "quote": "is your roof like a shingle?",
       "customer_response": "cooperative",
-      "customer_quote": "I think it's like a six twelve pitch.",
+      "customer_quote": "It's shingled roof.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -109,7 +117,7 @@
       "status": "asked",
       "ts": "03:01",
       "end_ts": "03:08",
-      "quote": "do you know what utility company you guys are with?",
+      "quote": "And then do you know what utility company you guys are with?",
       "customer_response": "cooperative",
       "customer_quote": "AEP Ohio.",
       "resistance_reason": "",
@@ -121,9 +129,9 @@
       "status": "asked",
       "ts": "03:08",
       "end_ts": "03:17",
-      "quote": "do you know the monthly average, like, the cost?",
+      "quote": "And then do you know the monthly average, like, the cost?",
       "customer_response": "cooperative",
-      "customer_quote": "It's 100 to $200, give or take.",
+      "customer_quote": "100 to $200,",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -132,8 +140,8 @@
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "03:48",
-      "end_ts": "03:54",
-      "quote": "do you or your mom have a credit score over 670?",
+      "end_ts": "03:56",
+      "quote": "But oh, do you or your mom have a credit score over 670?",
       "customer_response": "cooperative",
       "customer_quote": "She does.",
       "resistance_reason": "",
@@ -168,17 +176,17 @@
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:58",
-      "end_ts": "04:38",
+      "end_ts": "04:31",
       "quote": "Are you able to access, like, a power bill for that home?",
-      "customer_response": "cooperative",
-      "customer_quote": "Alright. That works. It'll it'll probably be later this afternoon.",
+      "customer_response": "deflected",
+      "customer_quote": "I can't right away. I would have to get a hold of her, and that's Oh. She's probably asleep. She sleeps quite often.",
       "resistance_reason": "dont_have_it",
       "rep_followup": "alternative_offered",
       "result": "deferred"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -186,11 +194,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -198,22 +206,12 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
-    {
-      "ts": "00:11",
-      "quote": "Are you trying to buy her house?",
-      "type": "trust_or_scam",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "No."
-      ],
-      "resolved": true,
-      "resolution_ts": "00:16",
-      "reasoning": "Customer's scam assumption is resolved simply when the rep clarifies it's about a solar form, and the customer moves on without further pushback."
-    },
     {
       "ts": "00:44",
       "quote": "quickly realized it's just not in the budget right now.",
@@ -224,67 +222,87 @@
       ],
       "resolved": true,
       "resolution_ts": "01:38",
-      "reasoning": "Rep pivots the budget objection into the bill-swap no-upfront-cost pitch, and the customer responds positively ('That sounds pretty good'), resolving the cost concern for purposes of continuing the call."
+      "reasoning": "Rep pivoted to the bill-swap savings pitch instead of directly addressing/flipping the budget line; customer responded positively ('That sounds pretty good'), so the objection softened, but via reframe-by-pitch rather than a named inversion.",
+      "blocked_section": "interest_question",
+      "attempt_moves": [
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "address_homeowner@02:07",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "04:05",
+      "quote": "I can't right away. I would have to get a hold of her, and that's Oh. She's probably asleep. She sleeps quite often.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. If I text you, could you, talk to her and then get that usage, and then we can get you on the schedule?"
+      ],
+      "resolved": true,
+      "resolution_ts": "04:38",
+      "reasoning": "Customer agreed to text the bill photo later, so the immediate friction was resolved, but no specific time was locked — leaving the resolution soft.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": false
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "Co-owner/decision-maker never explicitly folded into the appointment plan",
+    "ts": "02:55",
+    "quote": "It's my mom right now. It's a it's a transferred upon desk setup.",
+    "why": "Mom holds title and the qualifying credit score, yet the rep never states she must be on the eventual call — this is the exact protocol Ion flags as critical (protocols.spouse_decision logic extends to co-owners) and it was walked past."
+  },
+  "key_moments": [
+    {
+      "ts": "00:44",
+      "quote": "quickly realized it's just not in the budget right now.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Customer opens with a direct cost objection but the rep never explicitly flips it (e.g., 'what's not affordable is the current bill') — instead pivots to program explanation, which happens to work but leaves the flip on the table."
     },
     {
       "ts": "01:53",
       "quote": "Would that require, like, permits permits for city stuff?",
-      "type": "other",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Not that I'm aware of."
-      ],
-      "resolved": true,
-      "resolution_ts": "02:04",
-      "reasoning": "Customer accepts the rep's uncertain answer and moves on without further questioning, though the rep answered from guesswork rather than deferring to the specialist."
-    }
-  ],
-  "primary_coaching_focus": {
-    "topic": "no locked next step / unanchored soft exit",
-    "ts": "04:24",
-    "quote": "Okay. If I text you, could you, talk to her and then get that usage, and then we can get you on the schedule?",
-    "why": "The call ends with real customer interest and a cooperative tone but zero rep-owned commitment — no callback time, no appointment day/time, no button-up handshake. This is the single biggest value leak on an otherwise well-recovered call; without a rep-initiated follow-up time, this lead is likely to go cold waiting on the customer to text first."
-  },
-  "key_moments": [
-    {
-      "ts": "00:11",
-      "quote": "Are you trying to buy her house?",
-      "classification": "empathy_miss",
-      "stewart_read": "The customer assumes this is a predatory call targeting his elderly mother's home, a scam-adjacent anxiety distinct from the standard 'how did you get my number' trust probe — it's specifically about protecting a vulnerable parent from house-buying schemes. The rep answers 'No.' flatly without acknowledging why that assumption exists."
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Unsolicited forward-looking logistics question is a strong buying signal — customer is mentally placing panels on the roof already."
     },
     {
-      "ts": "00:52",
-      "quote": "No. No. We usually, whenever I get calls regarding Rita, which is she's my mom, It's somebody trying to buy her house.",
-      "classification": "empathy_miss",
-      "stewart_read": "This is the customer explicitly disclosing a recurring harassment pattern targeting his mother — a trust gift similar to the scam-encounter disclosures flagged elsewhere in the corpus (protocols.scam_encounter_reference). The rep's next line pivots straight into the pitch ('Okay. Well, we actually...') without acknowledging the disclosure at all."
-    },
-    {
-      "ts": "01:53",
-      "quote": "Is it like, I live in the middle of the city. Would that require, like, permits permits for city stuff?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Customer asks a legitimate permit/logistics question. Rep answers directly with a guess ('Not that I'm aware of') instead of using the universal escape hatch to defer to the specialist, which is the schema-correct move for closer-tier technical content."
-    },
-    {
-      "ts": "02:49",
+      "ts": "02:55",
       "quote": "It's my mom right now. It's a it's a transferred upon desk setup.",
-      "classification": "spouse_handling",
-      "stewart_read": "The customer reveals his mother is the actual titleholder (transfer-on-death setup), making her the legal decision-maker, not him. The rep never asks whether the mother needs to be on the appointment or the eventual closer call — treating the son as the sole point of contact throughout the rest of the call."
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Mom is identified as the actual titleholder — this should trigger the co-owner inclusion protocol, but the rep never states she must join the appointment."
+    },
+    {
+      "ts": "04:04",
+      "quote": "I can't right away. I would have to get a hold of her, and that's Oh. She's probably asleep. She sleeps quite often.",
+      "classification": "conditional_booking",
+      "stewart_read": "The bill and the actual decision-maker are both gated behind a person who is unreachable — this is a fragile handoff even before any appointment exists."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 48,
-    "verified": 46,
-    "fuzzy": 2,
-    "wrong_ts": 0,
+    "checked": 46,
+    "verified": 45,
+    "fuzzy": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

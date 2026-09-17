@@ -1,79 +1,88 @@
 {
   "call_id": "SESSION12_28397d77",
   "rep_name": "Brandon",
-  "trajectory_summary": "The call opens rough -- three rounds of 'what's this call about' and a Tesla-roof-tile mix-up -- but the customer stays engaged, volunteers detailed usage and competitor data, and ends the call proactively negotiating his own appointment time. The rep secures a booked, dated appointment but leaves the customer's central skepticism (competitor could only offset 20,000 of his 26,000 kWh) unresolved and never fully explains the Tesla/Ion relationship the customer raised at the outset.",
+  "trajectory_summary": "The call opens hostile/confused, gets pulled back by a clean correction of the Tesla-tile misunderstanding, then drifts through unsolicited program explanation before the customer volunteers strong buying signals (usage data, competitor shortfall, negotiates a better appointment time). It ends booked, but the bill photo was only promised, not delivered, leaving it tentative per Ion's own rule.",
   "shape": "mixed",
-  "outcome_dispute": null,
+  "outcome_dispute": "Verified events mark button_up as 'partial' and bill_collection as 'partial' — the transcript confirms only a verbal bill figure (380) and a promise to send a photo later while driving; no bill in hand means this should read as tentative, not a clean booked-and-secured appointment.",
   "observed_outcome": {
-    "outcome": "booked",
-    "appointment_channel": "phone",
+    "outcome": "tentative",
+    "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "06:28",
-    "quote": "Yeah. That works. Thursday the twenty third, around, like, 01:00 or 12:00, I think. Yeah. One o one 01:00 would be better.",
-    "reasoning": "A specific day (Thursday the 23rd) and time (1:00) are confirmed by both parties, with the customer proactively negotiating the slot -- this is a locked booking, not merely tentative. No spouse or co-owner was mentioned anywhere in the call."
+    "quote": "Yeah. That works. Thursday the twenty third, around, like, 01:00 or 12:00,",
+    "reasoning": "A specific day and time (Thursday the 23rd, 1:00) were agreed by both sides, but the bill photo — required for this to be a secured sit — was only promised, not delivered, and no co-owner was probed at all (co_owner step skipped).",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "03:48",
-    "bill_quote": "my average over the last year is somewhere around 380 a month.",
+    "bill_quote": "the last year is somewhere around 380",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep acknowledges the $380/month figure with 'Okay. Great.' at 03:55 and pivots straight into explaining how the design process works, without ever turning the number into an emotional reason to act (e.g., tying it back to the 6,000 kWh shortfall or framing it as money lost to the utility)."
+    "reasoning": "Bill figure ($380/month) was captured at 03:48 but never turned into emotional leverage against the utility or tied to the customer's Sunrun shortfall complaint; the flip should have landed at 05:29 when the customer directly asked about offsetting the entire bill."
   },
   "bill_document_audit": {
     "asked": true,
     "ask_ts": "03:21",
-    "ask_quote": "Can you send me a photo of one of your electric bills that has how much you're being charged per kilowatt and and what your usage is for the every month?",
+    "ask_quote": "Can you send me a photo of one of your electric bills",
     "result": "promised_later",
-    "method": "text",
+    "method": "photo",
     "result_ts": "04:24",
-    "result_quote": "Okay. Got it. I'll I'll reply back. Yeah. I'm I'm in the car right now driving, but I can as soon as I pull over, I can send it to you.",
-    "reasoning": "Rep asked clearly and sent a text link/number at 04:16 ('I sent you a text message. It says Brandon with ion.'), and the customer committed to sending the bill once he's off the road, but it was not sent during the call itself."
+    "result_quote": "I can as soon as I pull over, I can send it to you.",
+    "reasoning": "Rep asked for a bill photo and the customer promised to send it after pulling over; no bill was received on the call."
   },
   "interest_reason_audit": {
-    "asked": false,
-    "ask_ts": "",
+    "asked": true,
+    "ask_ts": "04:50",
     "reason_given": true,
     "reason_ts": "04:57",
     "reason_quote": "Yeah. No. It's it's basically save money. I mean, we don't really have outages here, so it's primarily to offset mileage to be billed.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' as a standalone question, but the customer volunteered his motivation (pure bill savings, not backup power) when the rep asked about batteries. The rep didn't reinforce this stated motive later when booking or in the button-up close."
+    "reasoning": "Customer's stated reason (offset billed usage / save money, no outage need) was captured cleanly at 04:57 but never referenced again at button-up or in the closing recap — a generic guarantee was given instead."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
-      "ts": "01:06",
-      "end_ts": "01:24",
-      "quote": "We're called Ion Solar. So we're here with the the state programs in Illinois, and we're helping homeowners take a look at solar panels to help reduce their energy bills.",
-      "customer_response": "deflected",
-      "customer_quote": "You you know, the I still got a bunch of bonds, so I'm not sure which one this is.",
-      "resistance_reason": "trust",
-      "rep_followup": "alternative_offered",
-      "result": "partial"
+      "ts": "00:01",
+      "end_ts": "00:08",
+      "quote": "Hello. This is Brandon.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. Hello?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "04:50",
       "end_ts": "04:57",
-      "quote": "were you looking to, like, to save money with solar, or were you looking for, like, backup batteries in case of power outages?",
+      "quote": "And were you looking to, like, to save money with solar, or were you looking for, like, backup batteries",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. No. It's it's basically save money.",
+      "customer_quote": "Yeah. No. It's it's basically save money. I mean, we don't really have outages here, so it's primarily to offset mileage to be billed.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "04:30",
+      "ts": "04:24",
       "end_ts": "04:38",
-      "quote": "And then I have your address as 13132 Blue Heron Cove?",
+      "quote": "I have your address as 13132",
       "customer_response": "cooperative",
       "customer_quote": "Correct. Yep.",
       "resistance_reason": "",
@@ -97,7 +106,7 @@
       "status": "asked",
       "ts": "04:41",
       "end_ts": "04:50",
-      "quote": "I see the home here. Nice home. Looks like that roof. Is that just regular asphalt shingles?",
+      "quote": "Well, I see the home here. Nice home. Looks like that roof. Is that just regular asphalt shingles?",
       "customer_response": "cooperative",
       "customer_quote": "Yes. It is.",
       "resistance_reason": "",
@@ -119,13 +128,13 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "03:40",
+      "ts": "02:41",
       "end_ts": "03:52",
-      "quote": "Do you mostly get the bills online or in the mail?",
+      "quote": "No. It'll be different.",
       "customer_response": "cooperative",
-      "customer_quote": "my average over the last year is somewhere around 380 a month.",
+      "customer_quote": "the last year is somewhere around 380",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -155,13 +164,13 @@
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "02:44",
+      "ts": "02:49",
       "end_ts": "03:07",
-      "quote": "Did they tell you why they can only do 20,000? Was it big because of the utility company?",
+      "quote": "Do you remember who it was you had met with?",
       "customer_response": "cooperative",
-      "customer_quote": "No. They didn't tell me anything.",
+      "customer_quote": "It's Sunrun.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -169,110 +178,135 @@
       "status": "asked",
       "ts": "03:21",
       "end_ts": "04:24",
-      "quote": "Can you send me a photo of one of your electric bills that has how much you're being charged per kilowatt and and what your usage is for the every month?",
+      "quote": "Can you send me a photo of one of your electric bills",
       "customer_response": "cooperative",
-      "customer_quote": "I'm I'm in the car right now driving, but I can as soon as I pull over, I can send it to you.",
+      "customer_quote": "I can as soon as I pull over, I can send it to you.",
       "resistance_reason": "timing",
       "rep_followup": "alternative_offered",
-      "result": "deferred"
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "05:44",
-      "end_ts": "06:34",
+      "end_ts": "06:37",
       "quote": "If you're available, I can have a meet with you as soon as tomorrow. What do you prefer sometime in the morning?",
       "customer_response": "cooperative",
-      "customer_quote": "let's try, Thursday afternoon, actually. You got you guys does that work?",
+      "customer_quote": "Tomorrow afternoon might be the better option or or or late morning. So maybe around 11:00 might work.",
       "resistance_reason": "",
-      "rep_followup": "alternative_offered",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "06:37",
+      "ts": "06:28",
       "end_ts": "07:03",
-      "quote": "when you get a chance, just send you a text. Just send me an energy bill. We'll have a design ready before we meet with you",
+      "quote": "Yeah. That works. Thursday the twenty third, around, like, 01:00 or 12:00,",
       "customer_response": "cooperative",
-      "customer_quote": "Sounds good.",
+      "customer_quote": "Sounds good. Okay. So I'll, I'll send you this thing, and I'll look forward to seeing you at 01:00 on or seeing the technician at 01:00 on,",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
-      "ts": "02:00",
-      "quote": "the first estimate I got was that they can only generate 20,000 kilowatt hours, even though we have no, you know, obstructions on the roof. So I still end up trying to... pay bills for the, 6,000 kilowatt hours.",
-      "type": "already_have_quote_or_system",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Did they tell you why they can only do 20,000? Was it big because of the utility company?"
-      ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "The rep probed for context on the prior quote but never actually addressed or resolved the 6,000 kWh shortfall -- it was deferred to the future design rather than answered, so the customer's underlying concern remains open going into the appointment."
-    },
-    {
-      "ts": "05:21",
-      "quote": "I'm curious to see if if you can offset it. Do you see, your customers able to offset their entire bill, or how does it work typically?",
+      "ts": "00:50",
+      "quote": "a way to get this the Tesla roof tiles. Is that is that the one that you're calling about?",
       "type": "other",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Yeah. Typically, we want to offset your entire bill. Because if we can't... then it doesn't make sense for you to go solar."
+        "No. This would be the you have a form for solar panels. You're looking to save money on your energy bills?"
       ],
       "resolved": true,
-      "resolution_ts": "05:35",
-      "reasoning": "This is a value-skepticism question (whether Ion can outperform Sunrun) rather than a price objection; the rep's direct answer satisfied the customer enough that he moved straight into booking, so it counts as resolved even though the rep didn't use an objection-inversion flip."
+      "resolution_ts": "01:04",
+      "reasoning": "Customer's confusion about product identity stalled any progress into the script until Brandon clarified the actual offer; customer then asked a cooperative follow-up question.",
+      "blocked_section": "intro_legitimacy",
+      "attempt_moves": [
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "bill_amount@02:41",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "02:00",
+      "quote": "I still have to pay bills for the, 6,000 kilowatt hours.",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "No. It'll be different. Do you remember who it was you had met with?"
+      ],
+      "resolved": true,
+      "resolution_ts": "03:07",
+      "reasoning": "Customer raised a prior Sunrun quote that underdelivered as a reason to be skeptical of another sales call; rep asked a probing question and customer kept cooperating, but the specific shortfall number was never revisited (probe miss, not full resolution of the underlying doubt).",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "question_back"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "bill_amount@02:41",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unresolved competitive gap (6,000 kWh) never flipped or closed",
-    "ts": "02:00",
-    "quote": "So I I can tell you right now that, you know, I talked to at least one that so we use up about 26,000 kilowatt hours for a year.",
-    "why": "This is the customer's single biggest stated skepticism trigger -- a prior provider couldn't fully offset his usage -- and it recurs in two forms (02:00 and 05:21) without the rep ever naming it directly or using it as leverage (objection_inversion). This is the thread the closer most needs resolved, and leaving it open risks the appointment stalling on the same math question."
+    "topic": "Curiosity creation failure on the Sunrun shortfall number",
+    "ts": "05:08",
+    "quote": "they weren't able to save me much. Like, it was yeah. It'll reduce my bill by a little bit, but that's it.",
+    "why": "Customer surfaced a specific, quantified competitor failure twice; Brandon answered with a generic promise instead of reflecting the number back, missing the strongest curiosity hook on the call."
   },
   "key_moments": [
     {
       "ts": "00:50",
       "quote": "a way to get this the Tesla roof tiles. Is that is that the one that you're calling about?",
       "classification": "tesla_expectation_gap",
-      "stewart_read": "Customer explicitly names Tesla roof tiles as his expectation. Rep's reply at 00:57 ('No. This would be the you have a form for solar panels') redirects to the correct product but never explains that Ion is Tesla's installer partner, sells its own panels plus the Tesla Powerwall, and does not carry Tesla roof tiles -- the reframe called for in the schema never happens."
+      "stewart_read": "Customer expected Tesla roof tiles specifically; Brandon corrects it but never explains what Ion actually offers (own panels), leaving the reframe half-done."
     },
     {
-      "ts": "01:24",
-      "quote": "So so yeah. So fill me in on what's what's available and how much is this you're gonna cost. And is it subscription? Do I buy the panel?",
+      "ts": "01:37",
+      "quote": "Yeah. So we just take a look at how much electricity you're using to show you what what system size you recommend for your needs.",
       "classification": "setter_scope_creep",
-      "stewart_read": "Customer asks a direct pricing/ownership-model question early in the call. Rep's answer at 01:37 stays general ('we just take a look at how much electricity you're using...') which avoids overcommitting on numbers, but he never uses the escape-hatch framing ('that's exactly what the specialist will walk you through') to explicitly set expectations that pricing is a closer-stage conversation."
+      "stewart_read": "Unprompted mechanism explanation before qualifying; closer-tier content given away for free."
     },
     {
       "ts": "02:00",
-      "quote": "Yeah. So I I can tell you right now that, you know, I talked to at least one that so we use up about 26,000 kilowatt hours for a year.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a prior competitor quote (later identified as Sunrun) with specific numbers -- 26,000 kWh usage vs. only 20,000 kWh offset, leaving a 6,000 kWh gap he's still paying for. This is exactly the kind of competitive intel the schema flags as valuable for the closer. The rep does ask who it was (02:44, 'Do you remember who it was you had met with?') but never circles back to resolve or even acknowledge the 6,000 kWh gap itself."
+      "quote": "So I I can tell you right now that, you know, I talked to at least one that so we use up about 26,000 kilowatt hours for a year.",
+      "classification": "cross_sell_miss",
+      "stewart_read": "Customer hands over a precise usage anchor (26,000 kWh, 6,000 kWh shortfall from Sunrun) unprompted — a gift-wrapped curiosity hook."
     },
     {
-      "ts": "04:50",
-      "quote": "Yeah. No. It's it's basically save money. I mean, we don't really have outages here, so it's primarily to offset mileage to be billed.",
-      "classification": "cross_sell_miss",
-      "stewart_read": "Rep directly asked about backup batteries at 04:47 ('were you looking for, like, backup batteries in case of power outages?'), and the customer closed that door by saying outages aren't an issue. This is a clean, correctly-asked qualifying question -- the miss is that the rep doesn't log or flag it as a closed Powerwall angle for the closer, but the question itself was asked appropriately."
+      "ts": "05:08",
+      "quote": "they weren't able to save me much. Like, it was yeah. It'll reduce my bill by a little bit, but that's it.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Second touch of the same competitor-shortfall complaint; rep answers generically instead of referencing the specific 6,000 kWh gap already on record."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 51,
+    "checked": 52,
     "verified": 51,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

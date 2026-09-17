@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { AudioClip, tsToSeconds } from "../(public)/_components/AudioClip.client";
 import { CallDetailDrawer } from "../(public)/calls/CallDetailDrawer.client";
-import type { ExemplarClip, ExemplarSection, TriageComponents, TriageIndex, TriageRow } from "./types";
+import type { ExemplarClip, ExemplarSection, ObjectionRow, TriageComponents, TriageIndex, TriageRow } from "./types";
 import { FUNNEL_SECTIONS, ScriptFunnel, type FunnelInput } from "../present/_components/ScriptFunnel.client";
 
 // The manager surface, for real. Three views:
@@ -36,6 +36,76 @@ const FLIP_LABEL: Record<TriageRow["bill_flip"], string> = {
   no_bill: "No bill captured",
   unclear: "Bill — unclear",
 };
+
+// ── Objections ──────────────────────────────────────────────────────────
+// A no in any clothing: whatever stopped the setter continuing the script
+// until it was handled. Each one carries where it landed, the moves the rep
+// tried, whether the tape shows the script continuing, and whether the call
+// set. Floor and per-rep views are arithmetic over the reads — no model here.
+
+const OBJ_TYPE_LABEL: Record<string, string> = {
+  cost: "Cost",
+  timing_or_callback: "Not now / call back",
+  trust_or_scam: "Trust / is this a scam",
+  spouse_or_co_decider: "Spouse / co-decider",
+  already_have_quote_or_system: "Already have a quote or system",
+  not_interested: "Not interested",
+  roof_or_home: "Roof / home",
+  proposal_by_email: "Just email me something",
+  other: "Other",
+};
+const MOVE_LABEL: Record<string, string> = {
+  reason: "Gave a reason",
+  reframe: "Reframed it",
+  question_back: "Asked a question back",
+  alternative_offered: "Offered an alternative",
+  reassure: "Reassured",
+  social_proof: "Social proof",
+  redirect_to_specialist: "Sent it to the specialist",
+  concede: "Conceded",
+  restate: "Said it again",
+  other: "Other",
+};
+
+type ObjTypeStat = { type: string; n: number; continued: number; resolved: number; set: number; attempts: number };
+type MoveStat = { move: string; used: number; continued: number; set: number };
+
+function objectionStats(rows: TriageRow[]): { total: number; calls: number; byType: ObjTypeStat[]; byMove: MoveStat[] } {
+  const t = new Map<string, ObjTypeStat>();
+  const m = new Map<string, MoveStat>();
+  let total = 0;
+  let calls = 0;
+  for (const r of rows) {
+    const obs = r.objections ?? [];
+    if (obs.length) calls += 1;
+    for (const o of obs) {
+      total += 1;
+      const ts = t.get(o.type) ?? { type: o.type, n: 0, continued: 0, resolved: 0, set: 0, attempts: 0 };
+      ts.n += 1;
+      ts.continued += o.continued ? 1 : 0;
+      ts.resolved += o.resolved ? 1 : 0;
+      ts.set += r.booked ? 1 : 0;
+      ts.attempts += o.attempts;
+      t.set(o.type, ts);
+      for (const mv of new Set(o.moves)) {
+        const ms = m.get(mv) ?? { move: mv, used: 0, continued: 0, set: 0 };
+        ms.used += 1;
+        ms.continued += o.continued ? 1 : 0;
+        ms.set += r.booked ? 1 : 0;
+        m.set(mv, ms);
+      }
+    }
+  }
+  return {
+    total,
+    calls,
+    byType: [...t.values()].sort((a, b) => b.n - a.n),
+    byMove: [...m.values()].sort((a, b) => b.used - a.used),
+  };
+}
+function pctOf(a: number, b: number): string {
+  return b ? `${Math.round((a / b) * 100)}%` : "—";
+}
 
 function scoreOf(r: TriageRow, w: TriageComponents): number {
   return WEIGHT_KEYS.reduce((s, k) => s + w[k] * r.components[k], 0);
@@ -478,6 +548,7 @@ function Reps({
   coached: Set<string>;
 }) {
   const [expanded, setExpanded] = useState<string | null>(null);
+  const floorObjections = useMemo(() => objectionStats(reps.flatMap((r) => r.rows)), [reps]);
   return (
     <div>
       <div className="mb-5">
@@ -505,7 +576,7 @@ function Reps({
           </thead>
           <tbody>
             {reps.map((x) => (
-              <RepLine key={x.rep} x={x} max={max} labels={labels} exemplars={exemplars} byId={byId} expanded={expanded === x.rep} onExpand={() => setExpanded(expanded === x.rep ? null : x.rep)} onPick={onPick} onOpen={onOpen} coached={coached} />
+              <RepLine key={x.rep} x={x} max={max} labels={labels} exemplars={exemplars} byId={byId} expanded={expanded === x.rep} onExpand={() => setExpanded(expanded === x.rep ? null : x.rep)} onPick={onPick} onOpen={onOpen} coached={coached} floorObjections={floorObjections} />
             ))}
           </tbody>
         </table>
@@ -525,6 +596,7 @@ function RepLine({
   onPick,
   onOpen,
   coached,
+  floorObjections,
 }: {
   x: RepRow;
   max: number;
@@ -536,6 +608,7 @@ function RepLine({
   onPick: (rep: string) => void;
   onOpen: (r: TriageRow) => void;
   coached: Set<string>;
+  floorObjections: ReturnType<typeof objectionStats>;
 }) {
   const total = x.rows.length;
   const order = ["energy_leaked", "stagnant", "mixed", "energy_built"];
@@ -595,6 +668,7 @@ function RepLine({
                 ))}
               </div>
             ) : null}
+            <RepObjections rep={x.rep} rows={x.rows} floor={floorObjections} byId={byId} onOpen={onOpen} />
             <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-1">All calls, ranked</p>
             <ul className="divide-y divide-stewart-border/60">
               {x.rows.map((r) => (
@@ -612,6 +686,204 @@ function RepLine({
         </tr>
       ) : null}
     </>
+  );
+}
+
+// ── Objections, per rep ─────────────────────────────────────────────────
+// What this rep hears, how often they get past it against the floor, the
+// moves they reach for against the moves that set — and every moment on tape.
+
+function RepObjections({
+  rep,
+  rows,
+  floor,
+  byId,
+  onOpen,
+}: {
+  rep: string;
+  rows: TriageRow[];
+  floor: ReturnType<typeof objectionStats>;
+  byId: Map<string, TriageRow>;
+  onOpen: (r: TriageRow) => void;
+}) {
+  const mine = useMemo(() => objectionStats(rows), [rows]);
+  const [showAll, setShowAll] = useState(false);
+  if (!mine.total) return null;
+  const floorType = new Map(floor.byType.map((t) => [t.type, t]));
+  const floorMove = new Map(floor.byMove.map((m) => [m.move, m]));
+  const moments = rows
+    .flatMap((r) => (r.objections ?? []).map((o) => ({ o, r })))
+    .sort((a, b) => Number(a.r.booked) - Number(b.r.booked) || (b.o.attempts - a.o.attempts));
+  const shown = showAll ? moments : moments.slice(0, 4);
+  return (
+    <div className="mb-4 rounded-lg border border-stewart-border bg-stewart-card/70 p-3">
+      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+        <span className="text-[11px] uppercase tracking-wider text-stewart-muted">Objections</span>
+        <span className="text-sm">
+          <span className="font-semibold">{mine.total}</span>
+          <span className="text-stewart-muted"> on {mine.calls} of {rows.length} calls · gets past {pctOf(mine.byType.reduce((s, t) => s + t.continued, 0), mine.total)} (floor {pctOf(floor.byType.reduce((s, t) => s + t.continued, 0), floor.total)})</span>
+        </span>
+      </div>
+      <div className="mt-2 grid gap-3 sm:grid-cols-2">
+        <div>
+          <p className="text-[10px] uppercase tracking-wider text-stewart-muted mb-1">What {rep} hears · gets past · floor</p>
+          <ul className="text-xs space-y-0.5">
+            {mine.byType.map((t) => (
+              <li key={t.type} className="flex items-baseline gap-2">
+                <span className="flex-1 truncate">{OBJ_TYPE_LABEL[t.type] ?? t.type}</span>
+                <span className="font-mono text-stewart-muted w-6 text-right">{t.n}</span>
+                <span className="font-mono w-10 text-right">{pctOf(t.continued, t.n)}</span>
+                <span className="font-mono text-stewart-muted w-10 text-right">{pctOf(floorType.get(t.type)?.continued ?? 0, floorType.get(t.type)?.n ?? 0)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p className="text-[10px] uppercase tracking-wider text-stewart-muted mb-1">Moves {rep} makes · sets when used · floor</p>
+          <ul className="text-xs space-y-0.5">
+            {mine.byMove.map((m) => (
+              <li key={m.move} className="flex items-baseline gap-2">
+                <span className="flex-1 truncate">{MOVE_LABEL[m.move] ?? m.move}</span>
+                <span className="font-mono text-stewart-muted w-6 text-right">{m.used}</span>
+                <span className="font-mono w-10 text-right">{pctOf(m.set, m.used)}</span>
+                <span className="font-mono text-stewart-muted w-10 text-right">{pctOf(floorMove.get(m.move)?.set ?? 0, floorMove.get(m.move)?.used ?? 0)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <ul className="mt-3 space-y-2">
+        {shown.map(({ o, r }) => (
+          <li key={r.call_id + (o.ts ?? "")} className="rounded border border-stewart-border/60 bg-stewart-bg/60 p-2.5">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-stewart-muted">
+              <span className="font-semibold text-stewart-text">{OBJ_TYPE_LABEL[o.type] ?? o.type}</span>
+              <span className="font-mono">{o.ts}</span>
+              {o.blocked_section ? <span>at {SECTIONS.find((s) => s.key === o.blocked_section)?.label ?? o.blocked_section}</span> : null}
+              <span>· {o.attempts} {o.attempts === 1 ? "angle" : "angles"}{o.moves.length ? `: ${o.moves.map((m) => (MOVE_LABEL[m] ?? m).toLowerCase()).join(", ")}` : ""}</span>
+              <span className={r.booked ? "text-stewart-success" : o.continued ? "text-stewart-warning" : "text-stewart-danger"}>
+                {r.booked ? "· set" : o.continued ? "· script went on, no set" : "· stopped the call"}
+              </span>
+            </div>
+            <p className="mt-1 text-sm leading-snug">&ldquo;{o.quote}&rdquo;</p>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              {o.start_sec !== null && o.end_sec !== null ? (
+                <AudioClip callId={r.call_id} startSec={o.start_sec} endSec={o.end_sec} label="Play the moment" />
+              ) : null}
+              <button
+                type="button"
+                onClick={() => onOpen(r)}
+                className="px-2.5 py-1 rounded border border-stewart-border text-xs text-stewart-muted hover:text-stewart-text hover:border-stewart-accent/40 transition-colors"
+              >
+                Open the read
+              </button>
+              {o.start_sec !== null && o.end_sec !== null ? (
+                <Link
+                  href={`/ion/listen?call=${encodeURIComponent(r.call_id)}&m=${o.start_sec}-${o.end_sec}:${encodeURIComponent(OBJ_TYPE_LABEL[o.type] ?? o.type)}`}
+                  className="text-xs text-stewart-muted hover:text-stewart-accent"
+                >
+                  share clip ↗
+                </Link>
+              ) : null}
+            </div>
+          </li>
+        ))}
+      </ul>
+      {moments.length > 4 ? (
+        <button type="button" onClick={() => setShowAll(!showAll)} className="mt-2 text-xs text-stewart-accent hover:underline">
+          {showAll ? "fewer" : `all ${moments.length} moments`}
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
+// ── Objections, floor-wide ──────────────────────────────────────────────
+
+function ObjectionsFloor({ rows, reps, minCalls }: { rows: TriageRow[]; reps: { rep: string; calls: number }[]; minCalls: number }) {
+  const floor = useMemo(() => objectionStats(rows), [rows]);
+  const byRep = useMemo(
+    () =>
+      reps
+        .filter((r) => r.calls >= minCalls && r.rep !== "Unknown")
+        .map((r) => ({ rep: r.rep, calls: r.calls, s: objectionStats(rows.filter((x) => (x.rep_id || "Unknown") === r.rep)) }))
+        .filter((r) => r.s.total > 0)
+        .sort((a, b) => b.s.total / b.calls - a.s.total / a.calls),
+    [rows, reps, minCalls],
+  );
+  if (!floor.total) return null;
+  const continued = floor.byType.reduce((s, t) => s + t.continued, 0);
+  const set = floor.byType.reduce((s, t) => s + t.set, 0);
+  return (
+    <div className="mb-8">
+      <p className="text-xs uppercase tracking-wider text-stewart-muted">A no in any clothing</p>
+      <h1 className="text-xl sm:text-2xl font-bold mt-1">Objections — what stops the script, and what gets it moving again.</h1>
+      <p className="text-sm text-stewart-muted mt-1 leading-relaxed">
+        {floor.total} objections on {floor.calls} of {rows.length} calls. The script went on after {pctOf(continued, floor.total)} of them; {pctOf(set, floor.total)} of those calls set. The gap between the two is reps pushing past a no the customer never dropped.
+      </p>
+      <div className="mt-3 grid gap-4 lg:grid-cols-2">
+        <div className="rounded-lg border border-stewart-border bg-stewart-card p-4">
+          <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-2">By objection · n · angles · script went on · set</p>
+          <ul className="text-sm space-y-1">
+            {floor.byType.map((t) => (
+              <li key={t.type} className="flex items-baseline gap-2">
+                <span className="flex-1 truncate">{OBJ_TYPE_LABEL[t.type] ?? t.type}</span>
+                <span className="font-mono text-stewart-muted w-8 text-right">{t.n}</span>
+                <span className="font-mono text-stewart-muted w-8 text-right">{(t.attempts / t.n).toFixed(1)}</span>
+                <span className="font-mono w-12 text-right">{pctOf(t.continued, t.n)}</span>
+                <span className="font-mono w-12 text-right text-stewart-success">{pctOf(t.set, t.n)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-lg border border-stewart-border bg-stewart-card p-4">
+          <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-2">By move the rep made · used · script went on · set</p>
+          <ul className="text-sm space-y-1">
+            {floor.byMove.map((m) => (
+              <li key={m.move} className="flex items-baseline gap-2">
+                <span className="flex-1 truncate">{MOVE_LABEL[m.move] ?? m.move}</span>
+                <span className="font-mono text-stewart-muted w-8 text-right">{m.used}</span>
+                <span className="font-mono w-12 text-right">{pctOf(m.continued, m.used)}</span>
+                <span className="font-mono w-12 text-right text-stewart-success">{pctOf(m.set, m.used)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      {byRep.length ? (
+        <div className="mt-4 rounded-lg border border-stewart-border overflow-hidden">
+          <table className="w-full text-sm">
+            <thead className="bg-stewart-card text-[11px] uppercase tracking-wider text-stewart-muted">
+              <tr>
+                <th className="text-left px-3 py-2">Rep</th>
+                <th className="text-right px-3 py-2">Objections / call</th>
+                <th className="text-right px-3 py-2">Angles</th>
+                <th className="text-right px-3 py-2">Script went on</th>
+                <th className="text-right px-3 py-2">Set</th>
+                <th className="text-left px-3 py-2 hidden sm:table-cell">Move they reach for</th>
+              </tr>
+            </thead>
+            <tbody>
+              {byRep.map(({ rep, calls, s }) => {
+                const cont = s.byType.reduce((a, t) => a + t.continued, 0);
+                const st = s.byType.reduce((a, t) => a + t.set, 0);
+                const att = s.byType.reduce((a, t) => a + t.attempts, 0);
+                const top = s.byMove[0];
+                return (
+                  <tr key={rep} className="border-t border-stewart-border">
+                    <td className="px-3 py-2 font-semibold">{rep}</td>
+                    <td className="px-3 py-2 text-right font-mono text-stewart-muted">{(s.total / calls).toFixed(2)}</td>
+                    <td className="px-3 py-2 text-right font-mono text-stewart-muted">{(att / s.total).toFixed(1)}</td>
+                    <td className="px-3 py-2 text-right font-mono">{pctOf(cont, s.total)}</td>
+                    <td className="px-3 py-2 text-right font-mono text-stewart-success">{pctOf(st, s.total)}</td>
+                    <td className="px-3 py-2 text-stewart-muted hidden sm:table-cell">{top ? `${MOVE_LABEL[top.move] ?? top.move} (${top.used})` : "—"}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
+    </div>
   );
 }
 
@@ -904,6 +1176,8 @@ function Floor({ rows, onPick }: { rows: TriageRow[]; onPick: (rep: string) => v
           <ScriptFunnel floor={funnel.floor} reps={funnel.byRep} compact />
         </div>
       </div>
+
+      <ObjectionsFloor rows={rows} reps={reps} minCalls={minCalls} />
 
       <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
         <div>

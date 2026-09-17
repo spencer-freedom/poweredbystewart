@@ -1,55 +1,63 @@
 {
   "call_id": "SESSION8_210b9f8d",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens with avoidable friction (rep can't locate the home, asks a broad geography question) and a shaky answer on grid-connection that briefly contradicts the customer's stated preference before self-correcting. From there the rep captures the bill figure, handles a scam-anxiety disclosure adequately, and ends with a bill-collection ask that adapts sensibly to the customer's driving/dead-zone constraint. The outcome is a deferred, unlocked next step rather than a clean booked appointment — but given the paid-lead bill-gating rule and the customer's hard time cutoff (driving into a dead zone), sequencing the appointment behind bill receipt is defensible procedure, not pure rep failure.",
+  "trajectory_summary": "The call opens with a clumsy, prolonged address-verification struggle that burns over two minutes, then drifts into rep-driven program explanation that nearly creates an objection out of nothing. The bill is captured but never emotionally flipped, and the call ends without a locked appointment — just a promised bill photo and a vague 'schedule an appointment after that.'",
   "shape": "mixed",
-  "outcome_dispute": "v1 tag is unknown/unclear; observed outcome is best read as a callback/no_appointment hybrid — no day or time was set, and the rep explicitly deferred scheduling until the bill arrives. This may be correct sequencing under Ion's paid-lead rule (bill required before booking) rather than a dropped close, especially since the customer was seconds from losing signal.",
+  "outcome_dispute": "v1 tag is unknown; based on the transcript this is not a booked or tentative appointment — no day/time was ever discussed, only a bill-collection follow-up promise, so it should be read as no_appointment/callback-adjacent rather than any booked outcome.",
   "observed_outcome": {
-    "outcome": "callback",
+    "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "09:09",
-    "quote": "I'll just send you that text. I'll look forward to that usage from you, and then we can, schedule an appointment after that.",
-    "reasoning": "No day or time was set on the call; the rep explicitly deferred scheduling until after receiving the bill screenshot via text, consistent with the paid-lead rule requiring the bill before booking, but leaving no locked next step from this call alone."
+    "quote": "schedule an appointment after that. Okay?",
+    "reasoning": "No day or time was ever agreed; the call ends with a promise to text bill-collection instructions and schedule 'after that' — no next step is locked or owned with a specific time.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "03:11",
-    "bill_quote": "It's about 300. Oh, okay. 100 a month.",
-    "flip_executed": "yes",
-    "flip_ts": "04:04",
-    "flip_quote": "I I am glad that you're looking into an alternative, especially with the bill that high. I mean, I feel like we should be able to get that down quite a bit for you.",
-    "reasoning": "Rep captured the $300-400 monthly figure and immediately used the bill's size as the reason to act, tying it to the program pitch that follows."
+    "bill_ts": "03:14",
+    "bill_quote": "300.",
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "Rep acknowledged the $300-400 bill ('Oh, wow. 300 to 400... I feel like we should be able to get that down quite a bit for you') but never returned to it as the customer's reason to act; the flip should have anchored the close at 08:01 or 09:09 when wrapping the call."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "08:23",
-    "ask_quote": "Do you get those Southside electric bills in the mail or online?",
+    "ask_ts": "08:01",
+    "ask_quote": "the only thing that I would need from you, Casey, is just a copy of your kilowatt usage.",
     "result": "promised_later",
-    "method": "text",
-    "result_ts": "08:44",
-    "result_quote": "What I can do is I can just send you a text. And then whenever you get a second when you're not driving, if you just send me a screenshot of that, would that be alright?",
-    "reasoning": "Customer was driving and about to lose signal, so the rep pivoted to sending a text link for her to screenshot the bill later rather than getting it live on the call."
+    "method": "photo",
+    "result_ts": "08:50",
+    "result_quote": "Yes. That'd be perfect.",
+    "reasoning": "The rep asked for a screenshot of the Southside usage and the customer agreed to send it later while driving."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "06:59",
     "reason_given": true,
     "reason_ts": "07:08",
-    "reason_quote": "I just saw an ad on Facebook, and I was just trying to look more into it. Because with the electric bill being so high.",
+    "reason_quote": "I just saw an ad on Facebook, and I was just trying to look more into it.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Customer gave a clear reason (high bill, saw an ad) but the rep moved to scam-reassurance and the free-look framing rather than explicitly tying the appointment back to her bill pain."
+    "reasoning": "Customer's stated reason ('Facebook ad... electric bill being so high') at 07:08 was never tied back into the close or used to anchor urgency for the appointment."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:17",
-      "quote": "Hey. This is Holland with Ion. I got a request. We're looking into solar for your home.",
+      "end_ts": "00:12",
+      "quote": "This is Holland with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Good. How are you?",
       "resistance_reason": "",
@@ -60,8 +68,8 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "06:59",
-      "end_ts": "07:18",
-      "quote": "I guess what my main question is is what kind of got you interested in solar in the first place?",
+      "end_ts": "07:08",
+      "quote": "what kind of got you interested in solar in the first place?",
       "customer_response": "cooperative",
       "customer_quote": "I just saw an ad on Facebook, and I was just trying to look more into it.",
       "resistance_reason": "",
@@ -72,12 +80,12 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:24",
-      "end_ts": "02:05",
-      "quote": "So first off, I've got your address as 344 Dabsbridge Road in Charlotte Court House, Virginia. Is that correct?",
+      "end_ts": "00:33",
+      "quote": "Dabsbridge Road in Charlotte Court House, Virginia. Is that correct?",
       "customer_response": "cooperative",
-      "customer_quote": "Let's see. We live in a barn.",
+      "customer_quote": "Yes.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
@@ -94,21 +102,21 @@
     },
     {
       "section": "roof",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "02:28",
+      "end_ts": "02:36",
+      "quote": "did you get, like, a lot of trees removed and stuff?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "02:59",
-      "end_ts": "03:04",
+      "ts": "03:00",
+      "end_ts": "03:05",
       "quote": "are you just with Southside Electric?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
@@ -119,11 +127,11 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "03:05",
-      "end_ts": "03:36",
-      "quote": "And how much would you say you're spending on average a month with Southside?",
+      "ts": "03:04",
+      "end_ts": "03:16",
+      "quote": "how much would you say you're spending on average a month with Southside?",
       "customer_response": "cooperative",
-      "customer_quote": "It's about 300. Oh, okay. 100 a month.",
+      "customer_quote": "300.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -132,13 +140,13 @@
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "04:22",
-      "end_ts": "04:28",
-      "quote": "As long as you have a credit score above 6 70, then you'll qualify. Is that the case for you?",
-      "customer_response": "cooperative",
-      "customer_quote": "That's it.",
+      "end_ts": "04:30",
+      "quote": "As long as you have a credit score above 6 70, then you'll qualify.",
+      "customer_response": "no_answer",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "military",
@@ -156,22 +164,22 @@
       "section": "prior_design",
       "status": "asked",
       "ts": "04:30",
-      "end_ts": "04:49",
-      "quote": "have you ever really looked into solar, or is this your first time?",
+      "end_ts": "04:44",
+      "quote": "Have you ever really looked into solar, or is this your first time?",
       "customer_response": "cooperative",
       "customer_quote": "My parents have, they have a contract due with Solar Farm on their property.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "08:04",
+      "ts": "08:01",
       "end_ts": "08:50",
       "quote": "the only thing that I would need from you, Casey, is just a copy of your kilowatt usage.",
-      "customer_response": "resistant",
-      "customer_quote": "I'm driving.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. That'd be perfect.",
       "resistance_reason": "timing",
       "rep_followup": "alternative_offered",
       "result": "deferred"
@@ -184,96 +192,102 @@
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
-      "resistance_reason": "timing",
+      "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "08:44",
+      "end_ts": "09:11",
+      "quote": "K. I'll send that right now",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. That'd be perfect.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "reconfirm"
+      ],
+      "parts_score": "1/4"
     }
   ],
   "objections": [
     {
-      "ts": "05:44",
-      "quote": "So, what you're saying is I would be paying the same for well, about the same for the solar panels, but would I still be hooked to Southside Electric?",
+      "ts": "06:11",
+      "quote": "Not really something I would be interested in.",
       "type": "other",
       "rep_attempts": 2,
       "attempt_quotes": [
-        "I I think it depends on, like, how, like, you're offset. Like, how much we can get you offset from Southside Electric.",
+        "Like staying connected to them at all?",
         "Have you heard of the net metering program at all?"
       ],
       "resolved": true,
-      "resolution_ts": "06:42",
-      "reasoning": "Customer's underlying concern was staying grid-connected for backup power; rep's first answer missed this, but the pivot to net metering and backup framing resolved it, evidenced by her continuing to elaborate on the generator-power benefit."
-    },
-    {
-      "ts": "07:20",
-      "quote": "But, like, I'm like I mean, you feel like a young person too, and you know all the scams and stuff out there.",
-      "type": "trust_or_scam",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Yeah. Don't worry. I have to be nervous. I know. I've had my fair share with scams."
+      "resolution_ts": "06:38",
+      "reasoning": "Customer objected to being cut off from the utility; rep clarified the misunderstanding and introduced net metering, which resolved it.",
+      "blocked_section": "none",
+      "attempt_moves": [
+        "question_back",
+        "reframe"
       ],
-      "resolved": true,
-      "resolution_ts": "07:52",
-      "reasoning": "Customer did not push back further after the rep's reassurance and free-look framing, suggesting the concern was sufficiently addressed for the call to proceed."
+      "resolved_by_tape": true,
+      "next_event": "interest_question@06:59",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "grid-connection answer contradicted stated customer preference",
-    "ts": "05:56",
-    "quote": "yeah, like I said, our goal is to actually just get you completely away from them.",
-    "why": "The customer asked a direct, decision-relevant question about staying connected to her utility, and the rep's first-pass answer pointed the opposite direction before net metering resolved it two exchanges later — this is the kind of moment that could stall a nervous, scam-wary customer if not corrected quickly."
+    "topic": "No appointment time was ever locked",
+    "ts": "09:09",
+    "quote": "schedule an appointment after that. Okay?",
+    "why": "The entire call ends with zero date/time commitment — this is the single most consequential gap since nothing else the rep did (bill capture, rapport, program pitch) converts to a paycheck-eligible sit without a scheduled appointment."
   },
   "key_moments": [
     {
-      "ts": "01:20",
-      "quote": "For some reason, I cannot find your home anywhere.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "Spending over a minute unable to locate the customer's home on a map undercuts the 'I already have your design ready' framing used at 00:17 — it signals the prep wasn't actually done."
+      "ts": "04:58",
+      "quote": "our program, so it's a no up front, no out of pocket cost, which I know that kinda sounds too good to be true, but it's true.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep explains financing mechanism (bill swap) unprompted before the customer asked for it in that depth, giving away closer-tier content."
     },
     {
-      "ts": "05:56",
-      "quote": "yeah, like I said, our goal is to actually just get you completely away from them.",
+      "ts": "06:11",
+      "quote": "Not really something I would be interested in.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "The customer directly asked whether she'd stay connected to Southside, and the rep's answer moved toward disconnection — the opposite of her implied preference — before self-correcting two exchanges later via net metering."
+      "stewart_read": "This objection was self-inflicted by the rep's own over-explanation, and rather than flipping it, the rep asked a clarifying question and then conceded to keep her connected."
     },
     {
-      "ts": "07:08",
-      "quote": "But, like, I'm like I mean, you feel like a young person too, and you know all the scams and stuff out there.",
+      "ts": "07:20",
+      "quote": "you feel like a young person too, and you know all the scams and stuff out there",
       "classification": "empathy_miss",
-      "stewart_read": "Customer surfaces scam anxiety unprompted — a trust gift. The rep's response is relatable but not a clean, structured reassurance (no specific reframe of the appointment as low-risk beyond 'it's free to look')."
+      "stewart_read": "Customer discloses scam anxiety as a trust gift; rep's response is generic reassurance without a concrete legitimacy anchor."
     },
     {
-      "ts": "07:52",
-      "quote": "to see what it could do for you is completely free. So Okay. I mean, it doesn't it definitely doesn't hurt to look. Right?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "This is a partial recovery on the interest question from 07:08 — rather than probing deeper into her bill-pain motivation, the rep leans on a generic 'free to look' framing, which is safe but doesn't build curiosity about her specific numbers."
+      "ts": "04:44",
+      "quote": "My parents have, they have a contract due with Solar Farm on their property.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a prior family solar experience; rep says 'Mhmm' and moves straight to her own cost question without probing what that contract entailed."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 50,
-    "verified": 48,
-    "fuzzy": 1,
-    "wrong_ts": 1,
+    "checked": 52,
+    "verified": 52,
+    "fuzzy": 0,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

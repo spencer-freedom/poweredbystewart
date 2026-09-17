@@ -1,26 +1,34 @@
 {
   "call_id": "SESSION10_0f86f9a0",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens with a cost objection that the rep handles competently, briefly builds toward genuine interest and a vulnerability disclosure, then collapses the moment the customer's stated credit score comes in under 670. The rep takes the self-reported, from-memory-turned-live-pulled numbers at face value and ends the call with no alternative financing conversation or specialist handoff, closing a lead that had shown real engagement.",
+  "trajectory_summary": "The call opens with an immediate cost objection that the rep answers with premature product/financial explanation instead of a clean legitimacy anchor, and from there the rep runs the verify script mechanically while ignoring three separate bill-pain and vulnerability disclosures. The credit qualifier surfaces a hard DQ (650/633 vs required 670) that ends the call with no next step locked — an outcome that matches the DQ gate but the rep's passive exit forfeits any chance to hold the lead for a future re-engagement.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 outcome is unstated but the call functionally ends in a credit-based DQ; per qualifiers.credit_qualifier this is schema-correct IF setters are meant to DQ on stated credit. Two distinct issues complicate that read for this specific call: first, the customer read live scores off her own credit-monitoring app during the call (TransUnion 650, Equifax 633) rather than reciting a stale/remembered number, which is materially more reliable than the guess-based scenario Spencer's operator note describes — but it is still not the bureau pull Ion's own closer/lender would run, and three-bureau spread plus scoring-model differences (FICO vs the app's model) mean the actual pulled score could land above or below 670. Second, and separately, the customer herself flagged a specific accuracy problem on that same report — an incorrect delinquency mark ('I've got on here that I've been delinquent on two payments, and I haven't been delinquent on any payments for over two years') and an unexplained score drop from 705 to 633 with no reported change in her file. That disputed-accuracy claim is an independent reason the stated number may not reflect her true creditworthiness, on top of the general self-report-vs-bureau-pull gap. Per qualifiers.credit_qualifier's own policy_question_for_kenny, whether the setter should hard-DQ on a stated (even app-sourced) number or pass every lead to the closer's actual pull is unresolved — this call is a concrete example of that ambiguity costing a lead who was otherwise engaged and disclosed real financial pressure.",
+  "outcome_dispute": "v1 tag is unknown; this should be read as dq (credit qualifier hard gate failed and rep ends pursuit) rather than no_appointment or callback, since the customer's own proposed callback was never confirmed or scheduled by the rep.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "04:30",
-    "quote": "Well, I don't qualify. My 650 and 633. So I guess I can",
-    "reasoning": "The call ends with the customer self-disqualifying against the stated 670 credit threshold and the rep confirming rather than challenging it, with no appointment set and no alternative path offered."
+    "quote": "Because you have to have a credit score over 670 to qualify for the program.",
+    "reasoning": "Customer's stated credit scores (650 TransUnion, 633 Equifax) fall below the 670 threshold per qualifiers.credit_qualifier, and the rep ends the pursuit on this gate with no appointment set and no locked callback — a hard DQ, not a soft no-appointment.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "00:27",
-    "bill_quote": "Yeah. I just saved a $219 power bill this month and $3,331 power bill last month.",
+    "bill_ts": "02:42",
+    "bill_quote": "I just paid $219",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer volunteers bill figures twice (00:27 and again around 02:44-02:52 with different, unreconciled numbers), but the rep never restates or reflects either number back as the reason to act — he moves to program mechanics and then to verify questions. The flip should have landed right after 00:38 ('we replace it with a lower and cheaper solar bill') by tying that sentence directly to her stated figure."
+    "reasoning": "Bill was captured clearly ($219, ~$1000 over three months) but the rep never turned it into a reason-to-act; the flip should have landed at 02:53 ('Okay. Let's help you out with that.') by reflecting the dollar figure back as money lost to the utility."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep asked for a verbal monthly-average figure ('how much are you spending on a monthly average?') but the call ends on the credit DQ before he ever raises getting the actual utility bill document (photo, text, email, or login)."
+    "reasoning": "The rep referenced looking at the customer's bill as part of the program but never asked the customer to send or show the bill."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +49,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar' — the call jumps from the cost objection directly into the bill-swap pitch and then verify questions. The customer's bill-pain and fixed-income disclosures functionally serve as an interest reason, but there is no formal ask-and-answer exchange to point to."
+    "reasoning": "The rep did not ask why the customer was interested; the customer volunteered cost concerns but no rep 'interest' question was asked."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "end_ts": "00:12",
-      "quote": "This is Bucky with Ion. I'm reaching out about the solar form you filled online. How you doing?",
-      "customer_response": "deflected",
+      "end_ts": "00:13",
+      "quote": "This is Bucky with Ion.",
+      "customer_response": "cooperative",
       "customer_quote": "Yeah. I need to sign out for it upfront. What is this gonna cost me?",
-      "resistance_reason": "cost",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -71,11 +79,11 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "01:41",
-      "end_ts": "01:53",
-      "quote": "So you're at 427 Marlborough Avenue? And then this is a single family home?",
+      "ts": "01:47",
+      "end_ts": "01:55",
+      "quote": "427 Marlborough Avenue.",
       "customer_response": "cooperative",
-      "customer_quote": "Yes.",
+      "customer_quote": "Marlborough Avenue. 427 Marlborough Avenue. Yeah. Oh, okay. And then this is a single family home? Yes.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -84,7 +92,7 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "01:55",
-      "end_ts": "02:01",
+      "end_ts": "02:02",
       "quote": "Is there anybody else on the title but you?",
       "customer_response": "cooperative",
       "customer_quote": "I'm the only one on the deed. I'm the only one whose name is on the deed.",
@@ -96,11 +104,11 @@
       "section": "roof",
       "status": "asked",
       "ts": "02:58",
-      "end_ts": "03:06",
-      "quote": "what kind of roof do you have? Is it a shingle?",
-      "customer_response": "deflected",
+      "end_ts": "03:07",
+      "quote": "what, what kind of roof do you have? Is it a shingle?",
+      "customer_response": "cooperative",
       "customer_quote": "I don't know what it is, really. I mean, I don't know what it is. It's like every other roof.",
-      "resistance_reason": "dont_have_it",
+      "resistance_reason": "",
       "rep_followup": "moved_on",
       "result": "partial"
     },
@@ -108,7 +116,7 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "02:02",
-      "end_ts": "02:07",
+      "end_ts": "02:09",
       "quote": "what utility company are you with?",
       "customer_response": "cooperative",
       "customer_quote": "Duke Energy.",
@@ -120,10 +128,10 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:13",
-      "end_ts": "02:52",
+      "end_ts": "02:50",
       "quote": "So how much are you spending on a monthly average?",
       "customer_response": "cooperative",
-      "customer_quote": "let's see, $3.04, $5.06, 7, about a thousand dollars in three months.",
+      "customer_quote": "I just paid $219",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -132,17 +140,17 @@
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "03:09",
-      "end_ts": "04:51",
+      "end_ts": "04:14",
       "quote": "are you do you have a credit score over 670?",
-      "customer_response": "resistant",
-      "customer_quote": "Well, I don't qualify. My 650 and 633.",
-      "resistance_reason": "other",
-      "rep_followup": "moved_on",
+      "customer_response": "cooperative",
+      "customer_quote": "my score says 650 and 633.",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "military",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,11 +158,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -162,7 +170,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
@@ -198,7 +206,9 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
@@ -206,72 +216,93 @@
       "ts": "00:13",
       "quote": "Yeah. I need to sign out for it upfront. What is this gonna cost me?",
       "type": "cost",
-      "rep_attempts": 2,
+      "rep_attempts": 1,
       "attempt_quotes": [
-        "Upfront, there's gonna be no cost.",
-        "we have to lower your bill and save you money in the first year or we can't offer it"
+        "Upfront, there's gonna be no cost. It's all gonna be so we have a bill swap program."
+      ],
+      "attempt_moves": [
+        "reassure"
       ],
       "resolved": true,
       "resolution_ts": "01:30",
-      "reasoning": "Rep addresses the no-upfront-cost point twice with slightly different framing (cost structure, then the savings guarantee), and the customer explicitly says she's interested afterward."
+      "reasoning": "Single reassurance of no upfront cost was enough — customer says 'Okay. I'm interested. Go ahead.' shortly after.",
+      "blocked_section": "intro_legitimacy",
+      "resolved_by_tape": true,
+      "next_event": "address_homeowner@01:47",
+      "resolution_agrees": true
     },
     {
       "ts": "04:17",
-      "quote": "Well, I don't qualify. My 650 and 633. So I guess I can",
-      "type": "other",
-      "rep_attempts": 0,
-      "attempt_quotes": [],
+      "quote": "if there's no charge for it, why you why you wanna know what my, credit score is?",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Because you have to have a credit score over 670 to qualify for the program."
+      ],
+      "attempt_moves": [
+        "reason"
+      ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "This functions as a credit-qualification barrier rather than a persuasion objection; the rep makes zero attempts to challenge, clarify, or offer an alternative before the call ends — he simply confirms the DQ and closes out."
+      "reasoning": "Rep gave a literal factual answer but did not reassure or reframe why the check matters; the underlying suspicion about why credit is relevant to a 'no-cost' program was never addressed, though the conversation moved on because the DQ made it moot.",
+      "blocked_section": "tax_credit_qualifier",
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "credit-score DQ handling on a disputed/self-checked number",
-    "ts": "04:24",
-    "quote": "Because you have to have a credit score over 670 to qualify for the program.",
-    "why": "The customer explicitly told the rep her credit report has an inaccuracy (a delinquency mark she disputes) and an unexplained score drop, live on the call, immediately before the rep applied a hard cutoff to that same number and let her walk. Per the schema's own open policy_question_for_kenny, it's unresolved whether setters should DQ on stated credit at all — but even under a strict-DQ policy, the rep never acknowledged her dispute or offered a concrete re-check timeline, which is a coachable gap independent of that policy question."
+    "topic": "Bill pain captured three times, never flipped or reflected back",
+    "ts": "02:49",
+    "quote": "about a thousand dollars in three months.",
+    "why": "This is the single highest-leverage recurring miss — the customer did the emotional work for the rep three separate times and the rep never used it, leaving the call to run purely on mechanical verify questions until the DQ ended it."
   },
   "key_moments": [
     {
-      "ts": "00:27",
-      "quote": "Yeah. I just saved a $219 power bill this month and $3,331 power bill last month.",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer volunteers a bill figure unprompted in the opening seconds. Note the numbers here ($219 / $3,331) don't reconcile cleanly with the figures she gives later at 02:44 ($304, $506, roughly $1,000 across three-to-four months) — this is likely transcription/diarization noise on fast speech rather than two separate real bills, so the rep should not anchor hard on either specific figure without a bill-in-hand confirmation."
-    },
-    {
-      "ts": "00:38",
-      "quote": "So we have a program. It's called the bill swap. We look at your power bill, and we replace it with a lower and cheaper solar bill.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Rather than flipping the bill she just gave him into an emotional hook (their-bill-vs-ours framing), the rep explains the mechanism of the program generically. This is a missed flip opportunity right after she supplied a bill number."
-    },
-    {
-      "ts": "00:46",
-      "quote": "And then that's we have to lower your bill and save you money in the first year or we can't offer it. And then Say that again because I'm already hearing.",
-      "classification": "knowledge_gap",
-      "stewart_read": "This line is garbled — likely audio crosstalk or the rep losing his own train of thought mid-pitch ('say that again because I'm already hearing' reads as the rep talking to himself about audio feedback). Whatever the cause, the delivery is unclear and undermines the legitimacy/confidence the program_pitch beat needs."
+      "ts": "00:18",
+      "quote": "Upfront, there's gonna be no cost. It's all gonna be so we have a bill swap program. We actually look at your power bill, and we replace it with a",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep explains the financial mechanism of the program in the first 20 seconds instead of using the legitimacy escape hatch and moving to verify."
     },
     {
       "ts": "01:30",
-      "quote": "Just to remind you, I'm on Social Security. I don't get that much money, and my house payment's over $1,000 a month.",
+      "quote": "I'm on Social Security. I don't get that much money, and my house payment's over $1,000",
       "classification": "empathy_miss",
-      "stewart_read": "This is a fixed-income vulnerability disclosure, a trust gift per the schema. The rep's response is a flat administrative pivot straight into the address/homeowner verify question with no acknowledgment of what she just shared."
+      "stewart_read": "Fixed-income/Social Security disclosure is a trust gift per schema; rep's response ('Yeah. Okay.') is a bare acknowledgment with no empathy or bridge to value."
+    },
+    {
+      "ts": "00:27",
+      "quote": "Yeah. I just saved a $219 power bill this month and $3,331",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "First bill anchor handed over almost immediately; rep never reflects it back later to build curiosity or urgency."
+    },
+    {
+      "ts": "02:49",
+      "quote": "about a thousand dollars in three months.",
+      "classification": "bill_anchor",
+      "stewart_read": "Second and clearest bill anchor point — customer does the math for the rep unprompted. Rep responds with a generic filler line."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 39,
-    "verified": 37,
+    "checked": 42,
+    "verified": 42,
     "fuzzy": 0,
-    "wrong_ts": 1,
-    "not_found": 1
+    "wrong_ts": 0,
+    "not_found": 0
   }
 }

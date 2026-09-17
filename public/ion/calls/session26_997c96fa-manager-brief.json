@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION26_997c96fa",
   "rep_name": "Parker",
-  "trajectory_summary": "The call opens cold with a legitimacy question and an immediate not-interested statement, and the rep recovers procedurally — citing the specific lead address, reframing the cost objection, and successfully collecting the bill via text. However the customer's engagement throughout stays logistics-driven and flat rather than clearly re-engaged; the booked appointment is fourteen days out with a ten-day vacation gap in between, which is a cooling-off risk the call does not address.",
+  "trajectory_summary": "The call opens cold with an explicit disinterest objection, but the rep talks through it with a features/no-upfront-cost pitch rather than a scripted flip, and the customer cooperates enough to hand over a bill and pick a time. The appointment lands, but scope creep and a rushed, incomplete button-up leave it structurally fragile.",
   "shape": "mixed",
-  "outcome_dispute": "v1 tag is unknown/unstated in metadata so there is no dispute to raise, but the observed outcome should be read as booked-with-elevated-fragility rather than a clean win: the customer's verbal engagement never rises above flat 'Yeah' and logistic answers, and the appointment sits two weeks out.",
+  "outcome_dispute": "V1 tag is unknown; observed trajectory supports a tentative/booked call with a stated day and time, but button_up is only partial (2/4 elements) so the pipeline should treat it as fragile despite the specific time.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "05:52",
-    "quote": "Alright. I'll get you down for, 02:00 on the twenty first, and we'll just plan to have our specialist give you a call and kinda run through that design.",
-    "reasoning": "A specific day (the 21st) and time (2PM) were confirmed for a phone call with the specialist, meeting the booked threshold, though no co-owner was ever mentioned or identified."
+    "ts": "05:51",
+    "quote": "02:00 on the twenty first,",
+    "reasoning": "A specific day and time were agreed, but button_up is only partial (missing handshake and instructions) per verified events, and bill_amount was not actually captured despite a photo being sent, making the set fragile per Ion's rule that a set without the bill in hand is tentative.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,64 +29,64 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "No dollar bill amount or kWh usage figure was ever spoken by the customer on this call — the rep collected the physical bill document via text photo but never had the customer state a number, so there is nothing to flip."
+    "reasoning": "No dollar amount or kWh usage was captured; the rep asked for the bill but the customer only sent the bill document/photo rather than reading a bill amount aloud."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "01:50",
-    "ask_quote": "The only thing we need to finalize your design is to look at your electric bill.",
+    "ask_ts": "01:54",
+    "ask_quote": "Do you normally get your bill in the mail, or do you get that online?",
     "result": "received_on_call",
     "method": "photo",
-    "result_ts": "04:02",
-    "result_quote": "I understand it.",
-    "reasoning": "Rep asked for the bill, offered text or email, sent a text link, and the customer confirmed receipt of the request and eventually sent something ('I got it' at 02:44 after the rep's text, with the rep confirming the file came through around 05:02: 'Okay. Perfect. That's exactly what we're looking for.')."
+    "result_ts": "02:44",
+    "result_quote": "Yeah. I got it.",
+    "reasoning": "The rep requested the bill and the customer sent it and confirmed receipt on the call ('Yeah. I got it.')."
   },
   "interest_reason_audit": {
-    "asked": false,
-    "ask_ts": "",
-    "reason_given": false,
-    "reason_ts": "",
-    "reason_quote": null,
-    "reason_used": "no_reason_given",
+    "asked": true,
+    "ask_ts": "00:50",
+    "reason_given": true,
+    "reason_ts": "00:55",
+    "reason_quote": "The fee installation",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' — the call instead opened directly into confirming the lead request and then handling the not-interested objection; no independent interest reason was ever solicited or given."
+    "reasoning": "Customer's stated reason for disengaging was the installation fee; rep addressed it once with the no-upfront-cost pitch at 00:58 but never referenced it again when booking the appointment or in the button-up."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:10",
-      "end_ts": "00:43",
-      "quote": "Yes. Hey, Vincent. Yeah. I'm Parker. I'm with Ion.",
-      "customer_response": "resistant",
-      "customer_quote": "I don't remember I request a information.",
-      "resistance_reason": "trust",
-      "rep_followup": "persisted",
-      "result": "partial"
+      "end_ts": "00:14",
+      "quote": "I'm Parker. I'm with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "Hey.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "status": "asked",
+      "ts": "00:50",
+      "end_ts": "00:58",
+      "quote": "Okay. What what kind of change your mind or turned you away?",
+      "customer_response": "cooperative",
+      "customer_quote": "The fee installation",
+      "resistance_reason": "cost",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:37",
       "end_ts": "00:43",
-      "quote": "a request from you for the $1.03 2 in Mammoth Street in Portsmouth.",
-      "customer_response": "cooperative",
-      "customer_quote": "Oh, no. I I, yeah.",
+      "quote": "Mammoth Street in Portsmouth.",
+      "customer_response": "resistant",
+      "customer_quote": "Oh, no. I I,",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -142,7 +151,7 @@
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,7 +159,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
@@ -168,7 +177,7 @@
       "section": "bill_collection",
       "status": "asked",
       "ts": "01:50",
-      "end_ts": "04:52",
+      "end_ts": "02:44",
       "quote": "The only thing we need to finalize your design is to look at your electric bill.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. I got it.",
@@ -180,7 +189,7 @@
       "section": "appointment_set",
       "status": "asked",
       "ts": "05:12",
-      "end_ts": "05:52",
+      "end_ts": "06:06",
       "quote": "Is there a day that'd be best for you, Vincent?",
       "customer_response": "cooperative",
       "customer_quote": "Two two sounded.",
@@ -191,14 +200,19 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "05:52",
-      "end_ts": "06:12",
-      "quote": "we'll plan on the twenty first at two 2PM.",
+      "ts": "05:50",
+      "end_ts": "06:06",
+      "quote": "02:00 on the twenty first,",
       "customer_response": "cooperative",
-      "customer_quote": "Alright. Thank you.",
+      "customer_quote": "Two two sounded.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
@@ -208,11 +222,19 @@
       "type": "not_interested",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "What what kind of change your mind or turned you away?"
+        "Okay. What what kind of change your mind or turned you away?"
+      ],
+      "attempt_moves": [
+        "question_back"
       ],
       "resolved": true,
       "resolution_ts": "01:29",
-      "reasoning": "Rep asked a single clarifying question that surfaced the underlying cost concern, then pitched the no-upfront-cost program; the customer's 'Yeah' and subsequent cooperation with bill collection indicate he moved past the flat refusal, though his engagement stayed muted."
+      "reasoning": "Rep asked what changed the customer's mind, surfaced the cost objection, pitched no-upfront-cost, and the customer softened with 'Yeah.'",
+      "blocked_section": "interest_question",
+      "attempt_moves_note": null,
+      "resolved_by_tape": true,
+      "next_event": "interest_question@00:50",
+      "resolution_agrees": true
     },
     {
       "ts": "00:55",
@@ -220,70 +242,92 @@
       "type": "cost",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "with ION, the cool thing is with our new program, we don't actually have anything upfront."
+        "with our new program, we don't actually have anything upfront."
+      ],
+      "attempt_moves": [
+        "reframe"
       ],
       "resolved": true,
       "resolution_ts": "01:29",
-      "reasoning": "One angle (no-upfront-cost framing) was tried and the customer did not push back further on cost, moving to ask about a quote instead — objection inversion was available but not used."
+      "reasoning": "Rep reframed the cost concern as a no-upfront-cost, bill-swap program; customer said 'Yeah' and continued.",
+      "blocked_section": "interest_question",
+      "attempt_moves_note": null,
+      "resolved_by_tape": true,
+      "next_event": "bill_collection@01:50",
+      "resolution_agrees": true
     },
     {
       "ts": "01:34",
-      "quote": "by any chance, can you send me a quote or a contract or something like that?",
+      "quote": "can you send me a quote or a contract or something like that?",
       "type": "proposal_by_email",
       "rep_attempts": 1,
       "attempt_quotes": [
         "Yeah. We I mean, we could show you the design over, like, the phone and email if that'd be better for you."
       ],
+      "attempt_moves": [
+        "concede"
+      ],
       "resolved": true,
-      "resolution_ts": "02:00",
-      "reasoning": "The customer accepted the pivot to bill collection without repeating the request for a standalone quote, so the conversation moved past it — but the rep's response was an ambiguous soft variant rather than a clean policy hold, a tension worth flagging: the objection is marked resolved because the customer dropped the ask, not because the hard rule was clearly enforced."
+      "resolution_ts": "01:50",
+      "reasoning": "Rep did not hold the hard-rule line against emailing proposals and instead offered a phone/email design option, then pivoted to bill collection; customer moved on without pushing further.",
+      "blocked_section": "bill_collection",
+      "attempt_moves_note": null,
+      "resolved_by_tape": true,
+      "next_event": "bill_collection@01:50",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "proposal-by-email hard rule clarity",
+    "topic": "Proposal-before-meeting hard rule not held",
     "ts": "01:34",
-    "quote": "by any chance, can you send me a quote or a contract or something like that?",
-    "why": "This is the clearest hard-rule trigger in the call and the rep's response is ambiguous rather than a clean hold-the-line per rebuttals.send_proposal_before_meeting — the manager should clarify with the rep exactly what was promised so it doesn't surface as a broken promise at the closer stage."
+    "quote": "can you send me a quote or a contract or something like that?",
+    "why": "This is a scripted hard rule (no emailed proposals) and the rep softened instead of holding the line, risking the appointment value at the closer stage."
   },
   "key_moments": [
     {
-      "ts": "00:27",
-      "quote": "Oh, let's see. We we had it from it's been about two weeks. I think it's, March 18, but we tried a a request from you for the $1.03 2 in Mammoth Street in Portsmouth.",
-      "classification": "other",
-      "stewart_read": "This is the schema's honest_specificity protocol in action — customer questions why he's being called, and the rep responds with a specific date and address rather than a vague deflection. The delivery is halting and the address is garbled ('$1.03 2'), which undercuts the credibility the specificity is meant to build."
+      "ts": "00:58",
+      "quote": "with our new program, we don't actually have anything upfront.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep explains the financing mechanism (no upfront cost, bill swap) instead of a brief curiosity-based redirect, giving away closer-tier content and material at the setter stage."
+    },
+    {
+      "ts": "01:34",
+      "quote": "can you send me a quote or a contract or something like that?",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is the proposal-before-meeting objection; rep didn't hold the hard-rule line (no emailed proposals) and instead offered to 'show you the design over the phone and email.'"
     },
     {
       "ts": "00:55",
       "quote": "The fee installation fee.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "The customer's stated reason for losing interest (installation fee) is a textbook objection_inversion trigger — the schema's flip pattern is to reframe the current bill itself as the real expense. The rep instead pitches the no-upfront-cost program feature, which addresses the fee concern but never turns the customer's own bill into the villain."
+      "stewart_read": "Customer's cost objection was answered with a feature pitch (no money out of pocket) rather than the schema's bill-flip strategy (what's expensive is staying with the current bill)."
     },
     {
-      "ts": "01:34",
-      "quote": "by any chance, can you send me a quote or a contract or something like that?",
+      "ts": "04:24",
+      "quote": "on my personal phone. It should work better.",
       "classification": "protocol_violation",
-      "stewart_read": "This is the schema's hard-rule trigger (proposal/quote requested before a meeting). The correct canonical response is a firm 'we don't email out proposals, our specialist explains the design live.' The rep's actual reply — offering to 'show you the design over the phone and email' — is ambiguous and does not clearly hold the hard-rule line; it reads as a soft, undefined middle ground rather than either caving or holding firm with script."
-    },
-    {
-      "ts": "04:21",
-      "quote": "Let me try let me text you real quick one more time on my personal phone. It should work better.",
-      "classification": "other",
-      "stewart_read": "Rep gives out and texts from a personal phone number for bill collection, matching the schema's flagged anti-pattern exactly."
+      "stewart_read": "Rep texts the customer from a personal phone number after the work-phone text failed, matching the flagged anti-pattern for personal-number exposure."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 42,
-    "verified": 41,
-    "fuzzy": 1,
+    "checked": 44,
+    "verified": 44,
+    "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0
   }

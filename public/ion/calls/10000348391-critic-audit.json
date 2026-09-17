@@ -1,8 +1,0 @@
-{
-  "verdict": "revisions_required",
-  "fabricated_quotes": 1,
-  "weak_reasoning": 2,
-  "revision_summary": "One quote timestamp needs correction: in script_coverage (bill_collection section), the customer quote 'Okay. Well, I'm not home right now.' is tagged ts=03:55, but 03:55 is actually the rep's line ('So do you usually get those online or through the mail?'). The customer's line occurs at 04:20 — move the customer_quote timestamp to 04:20 (or restructure the entry to show ask_ts=03:55 / response_ts=04:20 distinctly, matching the pattern already used correctly in bill_document_audit). Additionally, on rerun: (1) surface the 650-vs-670 credit threshold statement (02:10) as a schema_drift_detection flag referencing the existing SESSION18_fcbf33c1 drift note — this is a named analysis directive and a second confirmed instance of the same drift, a manager-relevant pattern that was omitted entirely; (2) address the garbled/incomplete co-owner response at 01:19 ('It's been a while' does not answer 'is anyone else on the title') combined with the rep's later reference to 'you and your wife' at 02:14 — flag this as an unresolved title_co_owners verify item with spousal-inclusion risk per protocols.spouse_decision, rather than passing it through as a routine 'partial' with no coaching_focus follow-up; (3) add a light caveat in script_coverage.customer_quote / state_changes where the bill figure is ASR-garbled ('3¢') so the inferred '$300' reading is clearly marked as inference rather than presented as a clean captured customer quote in structured fields.",
-  "flags_count": 0,
-  "missed_moments": 3
-}

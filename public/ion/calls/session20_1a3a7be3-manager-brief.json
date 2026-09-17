@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION20_1a3a7be3",
   "rep_name": "Tyke",
-  "trajectory_summary": "The call runs a clean, fast verify sequence with a personable tone, but ends in a hard credit DQ once the customer discloses a post-divorce score drop from 760 to 625. The rep followed procedure correctly and closed with warmth, but several forward-looking threads — the second property, the granddaughter/thermostat bill detail, a note to re-contact in six months — were surfaced by the customer and then left uncaptured.",
-  "shape": "mixed",
-  "outcome_dispute": null,
+  "trajectory_summary": "The call builds real engagement — the customer opens up about a second property, a divorce, and a future re-engagement timeline — but the rep treats all of it as background noise to the qualifying checklist. The credit-score answer triggers an immediate, unrebutted disqualification that discards a customer who explicitly said he'd be back in six months.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag is unknown/unclear; this should be scored dq (credit qualifier failed) but the disqualification is questionable given the customer stated intent to return and gave clear context (divorce debt) for the score, per qualifiers.credit_qualifier drift/policy note.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "03:43",
-    "quote": "But, yeah, I'll take you off the list for now. I appreciate your time, James.",
-    "reasoning": "The customer's stated credit score of 625 falls below the 670 threshold in qualifiers.credit_qualifier (hard_dq: true), and the rep explicitly closes the call by removing the customer from the list rather than booking any appointment."
+    "quote": "I'll I'll take you off the list for now. I appreciate your time, James.",
+    "reasoning": "Rep ends pursuit explicitly on the credit qualifier gate (625 vs required 670), a hard DQ per qualifiers.credit_qualifier, with no appointment set.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +28,7 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the $350/month average and asked one follow-up about whether it's a recent trend, but never flipped it into emotional alignment-against-the-utility per coaching_philosophy.bill_anchoring — the call moved directly to the credit qualifier instead."
+    "reasoning": "Bill of $3.50 (likely $350/month) was captured at 02:38 but never flipped into an emotional against-utility reframe; rep moved straight to the follow-up question about whether it's always been that high, then to the credit qualifier — the flip should have landed at 02:42 right after capture."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,26 +38,26 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call ended in a hard credit DQ before the rep reached the bill_collection stage of the script; no request for the physical utility bill (mail/online/photo) was made."
+    "reasoning": "The rep never requested the actual utility bill or a photo/link during the call."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:34",
     "reason_given": true,
     "reason_ts": "00:42",
-    "reason_quote": "yeah. The biggest thing would be a cost savings, but I gotta get by the cost of the solar panels first.",
+    "reason_quote": "The biggest thing would be a cost savings",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer named cost savings as the interest driver and flagged upfront cost as a concern, but the rep never circled back to that framing before the call ended in a credit DQ."
+    "reasoning": "Customer stated cost savings as his interest at 00:42, but the rep never tied the appointment or the bill discussion back to that stated motivator before the call ended in disqualification."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:16",
-      "quote": "Hey, James. This is, Tyke with Ion. I received your request you're looking at solar for the home. How are you doing today?",
+      "end_ts": "00:05",
+      "quote": "This is, Tyke with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "You know what? I guess it's it's okay.",
       "resistance_reason": "",
@@ -60,10 +68,10 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "00:34",
-      "end_ts": "00:50",
+      "end_ts": "00:42",
       "quote": "And what was your main interest in looking at solar?",
       "customer_response": "cooperative",
-      "customer_quote": "yeah. The biggest thing would be a cost savings, but I gotta get by the cost of the solar panels first.",
+      "customer_quote": "The biggest thing would be a cost savings",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -73,7 +81,7 @@
       "status": "asked",
       "ts": "00:17",
       "end_ts": "00:33",
-      "quote": "The first thing I wanted to clarify was the address. Have yet 5401 Kirk Street in Denver?",
+      "quote": "The first thing I wanted to clarify was the address.",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
@@ -84,7 +92,7 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "01:54",
-      "end_ts": "02:21",
+      "end_ts": "02:02",
       "quote": "And then I have you down as the property owner. Is there anybody else with the title with you, or is it just you?",
       "customer_response": "cooperative",
       "customer_quote": "Nope. It should just be me.",
@@ -96,8 +104,8 @@
       "section": "roof",
       "status": "asked",
       "ts": "01:48",
-      "end_ts": "01:53",
-      "quote": "Is that an asphalt shingle roof? It looks like it is. Yes. It is.",
+      "end_ts": "01:54",
+      "quote": "Is that an asphalt shingle roof? It looks like it is.",
       "customer_response": "cooperative",
       "customer_quote": "Yes. It is.",
       "resistance_reason": "",
@@ -109,9 +117,9 @@
       "status": "asked",
       "ts": "02:21",
       "end_ts": "02:31",
-      "quote": "is Accel the current utility company for you, or is it somebody different?",
+      "quote": "And then, is Accel the current utility company for you, or is it somebody different?",
       "customer_response": "cooperative",
-      "customer_quote": "It is?",
+      "customer_quote": "It is? K.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -120,7 +128,7 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:33",
-      "end_ts": "02:57",
+      "end_ts": "02:42",
       "quote": "And do you know how much you're kinda paying on average per month?",
       "customer_response": "cooperative",
       "customer_quote": "If I average it through the year, probably $3.50.",
@@ -131,18 +139,18 @@
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:59",
-      "end_ts": "03:26",
-      "quote": "in order to qualify for the current programs, all we ask of the homeowner is you just have a credit score of at least 670. Is that gonna be an issue for you at all?",
+      "ts": "03:08",
+      "end_ts": "03:43",
+      "quote": "in order to qualify for the current programs, all we ask of the homeowner is you just have a credit score of at least 670.",
       "customer_response": "resistant",
-      "customer_quote": "You know what? It will be, sir, because, before this divorce I had a a A 760 credit score. And right now, it's set in just about, 625.",
-      "resistance_reason": "other",
+      "customer_quote": "625.",
+      "resistance_reason": "dont_have_it",
       "rep_followup": "moved_on",
-      "result": "completed"
+      "result": "deferred"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,16 +158,16 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "00:51",
-      "end_ts": "00:57",
+      "end_ts": "01:02",
       "quote": "Is this kind of your first time looking into it, or have you looked into it before?",
       "customer_response": "cooperative",
-      "customer_quote": "No. But I think the the if this works out",
+      "customer_quote": "No. But I think the",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "partial"
@@ -198,67 +206,80 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
       "ts": "03:10",
-      "quote": "You know what? It will be, sir, because, before this divorce I had a a A 760 credit score. And right now, it's set in just about, 625.",
-      "type": "cost",
+      "quote": "It will be, sir, because, before this divorce I had a a A 760 credit score. And right now, it's set in just about, 625.",
+      "type": "other",
       "rep_attempts": 0,
       "attempt_quotes": [],
       "resolved": false,
-      "resolution_ts": "03:43",
-      "reasoning": "This is a hard qualifier gate (credit below 670) rather than a persuadable objection, and the rep correctly did not attempt to argue or work around it — the schema's current hard_dq rule makes this a DQ, not an objection to overcome. The open question of whether setters should DQ on stated credit at all versus deferring to the closer's bureau pull is a policy item for Kenny, not a rep performance gap."
+      "resolution_ts": "",
+      "reasoning": "This is a genuine qualifier failure (stated credit below 670 threshold) rather than a resistance-based objection; per schema this maps to dq_rules.credit_below_670_no_alternative, so it is not scored as a stalled-script objection but the rep made zero attempts to explore alternative financing or capture a future date.",
+      "blocked_section": "tax_credit_qualifier",
+      "attempt_moves": [],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "converting a hard DQ into a tracked future touch",
-    "ts": "03:40",
+    "topic": "Lost re-engagement window on a DQ",
+    "ts": "03:36",
     "quote": "I'll be looking for you in about six months after I get all this crap she that I inherited from her.",
-    "why": "The customer explicitly self-identified a six-month re-engagement window, and the rep's close ('I'll take you off the list for now') let a warm future lead go untracked — the single most consequential miss on a call that otherwise ran cleanly to a correct DQ."
+    "why": "The customer explicitly stated when he'd be ready again; failing to capture that as a scheduled callback turns a temporary DQ into a permanently lost lead."
   },
   "key_moments": [
     {
-      "ts": "00:04",
-      "quote": "Yes.",
-      "classification": "other",
-      "stewart_read": "This 'rep: Yes.' at 00:04 immediately following 'Is this James?' is almost certainly a diarization error — the customer would be the one confirming their own identity, not the rep answering their own question."
-    },
-    {
-      "ts": "01:04",
-      "quote": "You're gonna go put them up on my house on the Eastern Plains. I have a home out there that I've built, like, seven years ago and never lived in it. But I raised, dairy cows out there, and it it would definitely be something I'd be interested out there as well.",
+      "ts": "01:11",
+      "quote": "that I've built, like, seven years ago and never lived in it.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Customer unprompted describes a second property (a working dairy farm) where he'd also be interested in solar — a concrete real-world example of the schema's still-TBD secondary-structure cross-sell category."
+      "stewart_read": "A second property with 'lots and lots of sunlight' per rep's own later comment is a real second-lead opportunity the rep triaged past without logging for a future call."
     },
     {
-      "ts": "02:47",
-      "quote": "Well, my granddaughter lives with me. Okay. And she might get a little cold and try to turn it up.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer just gave the rep a live reason the bill runs high (extra household member adjusting the thermostat) right after stating the $350/month figure — a natural bridge to flip the bill into urgency ('so that number's likely to keep climbing') was available and not taken."
+      "ts": "02:11",
+      "quote": "my I even hate to say it. My ex wife, she was still she was still coming up",
+      "classification": "empathy_miss",
+      "stewart_read": "Customer discloses a divorce mid-qualifier; rep replies only with 'Okay. No. That's perfect' and moves straight to utility company — a trust gift acknowledged procedurally, not emotionally."
     },
     {
       "ts": "03:10",
-      "quote": "You know what? It will be, sir, because, before this divorce I had a a A 760 credit score. And right now, it's set in just about, 625.",
-      "classification": "other",
-      "stewart_read": "The rep is DQ'ing purely on the customer's stated credit number, which is exactly what the current schema's hard_dq: true rule requires — this is correct procedure under today's policy, not a rep error."
+      "quote": "You know what? It will be, sir, because, before this divorce I had a a A 760 credit score.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a credit qualifier failure with clear surrounding context (divorce-driven, temporary), not a hard refusal — the rep treats it as an immediate hard stop instead of probing the timeline or offering any alternative path."
+    },
+    {
+      "ts": "03:36",
+      "quote": "I'll be looking for you in about six months after I get all this crap she that I inherited from her.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer hands the rep a specific future-contact window and the rep files it silently, closing with a generic 'I appreciate your time' instead of confirming a callback."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 44,
-    "verified": 38,
-    "fuzzy": 4,
-    "wrong_ts": 2,
+    "checked": 41,
+    "verified": 36,
+    "fuzzy": 5,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION6_b4ba7e2f",
   "rep_name": "Meg",
-  "trajectory_summary": "This call never gets off the ground: the intro is garbled (two different names used for the customer), no verify items are captured before the moving-timeline objection surfaces, and the rep disqualifies the lead within about 40 seconds of the objection instead of probing it. The customer's closing question about neighborhood activity is a re-engagement signal that goes unaddressed as the call closes out.",
+  "trajectory_summary": "The call opens with confusion over the lead and a slightly rocky identity check, but the customer stays polite throughout. Once a moving/selling timeline surfaces, the rep asks one clarifying question then quickly concedes and removes the customer from the list, ending the call amicably but with no appointment and no attempt to reframe solar as relevant to a potential sale.",
   "shape": "energy_leaked",
-  "outcome_dispute": "V1 tag unknown, but the observed outcome is a clean no_appointment/self-disqualification — the rep explicitly removes the customer from the list ('I'll take you off our list') rather than booking, deferring, or even offering a no-obligation design comparison.",
+  "outcome_dispute": "v1 tag is unknown; based on transcript this is clearly a no_appointment/soft-DQ ending where the rep self-disqualified the lead rather than the customer hard-blocking further contact.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "01:24",
     "quote": "I'll go ahead and, I'll take you off our list.",
-    "reasoning": "The rep explicitly disqualifies/removes the customer from the calling list due to his stated plan to move and sell the home this summer, with no appointment set and no locked future callback time."
+    "reasoning": "Rep self-terminates the pursuit based on the customer's plan to move/sell soon, a soft home-status gate, and explicitly removes them from the list rather than booking any next step.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches the bill-amount question — it disqualifies on the moving timeline before any verify items, including utility bill, are addressed."
+    "reasoning": "No dollar amount or kWh was requested or provided in the call, so no bill capture or flip could occur."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,55 +38,55 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call ends in disqualification before bill collection is ever raised."
+    "reasoning": "The rep never asked for a copy of the utility bill or a method to receive it."
   },
   "interest_reason_audit": {
     "asked": true,
-    "ask_ts": "00:36",
-    "reason_given": false,
-    "reason_ts": "",
-    "reason_quote": null,
-    "reason_used": "no_reason_given",
+    "ask_ts": "00:33",
+    "reason_given": true,
+    "reason_ts": "00:47",
+    "reason_quote": "I'm thinking about, you know, selling soon.",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asks whether the customer has looked at solar or knows about the program ('Have you ever looked at solar, or do you know much about the program?') but the customer answers with the moving plan instead of a solar-interest reason, and the rep never circles back to ask directly what interested him in the form."
+    "reasoning": "Customer's stated interest reason was ambiguous/negative ('thinking about selling soon') rather than a positive motivator, and the rep never tied it back into a reason to still engage (e.g., value-add for resale) before disqualifying the lead."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:13",
-      "quote": "Hey. This is Meg. I'm with ION reaching out here about the solar form you filled out online.",
+      "end_ts": "00:08",
+      "quote": "This is Meg. I'm with ION",
       "customer_response": "cooperative",
-      "customer_quote": "I'm happy.",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:33",
-      "end_ts": "00:50",
+      "end_ts": "00:47",
       "quote": "Have you ever looked at solar, or do you know much about the program?",
-      "customer_response": "deflected",
-      "customer_quote": "So I'm pretty moving soon. So I'm thinking about, you know, selling soon.",
-      "resistance_reason": "timing",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm thinking about, you know, selling soon.",
+      "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "00:33",
+      "end_ts": "00:33",
+      "quote": "it looks like we got some information two days ago, for the 2 Graham Road home.",
+      "customer_response": "cooperative",
+      "customer_quote": "There's nobody in that home but me.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "co_owner",
@@ -89,7 +97,7 @@
       "customer_response": "cooperative",
       "customer_quote": "There's nobody in that home but me.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
@@ -190,21 +198,23 @@
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "01:53",
-      "end_ts": "02:04",
-      "quote": "Right. Thank you. No. I guess it. Yep. You have a good one, Robert. Good luck with the move.",
-      "customer_response": "cooperative",
-      "customer_quote": "Alright. Bye bye.",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "skipped"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:43",
-      "quote": "So I'm pretty moving soon. So I'm thinking about, you know, selling soon.",
+      "ts": "00:47",
+      "quote": "I'm thinking about, you know, selling soon.",
       "type": "timing_or_callback",
       "rep_attempts": 1,
       "attempt_quotes": [
@@ -212,53 +222,66 @@
       ],
       "resolved": true,
       "resolution_ts": "01:24",
-      "reasoning": "The rep asks one clarifying question about the timeline, gets 'maybe this summer,' and immediately disqualifies without exploring alternative angles (resale value, flexible timeline, revisit later with a locked date)."
+      "reasoning": "Rep asked one clarifying timing question then conceded and disqualified the lead rather than continuing to press or reframe; customer never explicitly refused, but the rep ended the pursuit.",
+      "blocked_section": "interest_question",
+      "attempt_moves": [
+        "question_back"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "premature disqualification on a single timing objection",
+    "topic": "Premature disqualification on a soft timing objection",
     "ts": "01:24",
-    "quote": "Yeah. No. It totally gets you there. Well, what I could do, I'll go ahead and, I'll take you off our list.",
-    "why": "The rep hears one moving-timeline comment and immediately removes the lead from the pipeline with no attempt to probe flexibility, mention resale value, or lock a specific future callback — a fully avoidable dead end on a lead that was still cooperative."
+    "quote": "I'll go ahead and, I'll take you off our list.",
+    "why": "Customer gave a vague, non-committal moving timeline ('maybe this summer if I get the right price') and residual curiosity about neighbors, but rep fully released the lead with no attempt to reframe solar as home-sale value or offer a specific future callback."
   },
   "key_moments": [
     {
-      "ts": "00:15",
-      "quote": "You filled out a solar form online looking at solar panels for your home. Hello, Sean? No. I did.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The rep stumbles through the customer's name (Robert vs Sean) while trying to reference the lead form, which weakens the legitimacy anchor the intro is supposed to establish in the first 30 seconds."
-    },
-    {
-      "ts": "01:01",
-      "quote": "Oh, that's awesome.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer shares he's from Georgia and considering North Carolina, Georgia, or Florida — small personal color the rep could use for rapport but doesn't tie back to anything solar-relevant; more notably the rep never asks what's driving the move or the timeline flexibility."
-    },
-    {
-      "ts": "01:17",
-      "quote": "is it a couple years out? Oh, no. Maybe this summer if I get the right price on my end.",
+      "ts": "00:47",
+      "quote": "I'm thinking about, you know, selling soon.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "The customer ties his sale timeline to 'the right price' — an opening to note that a completed or in-progress solar system can be a selling point/value-add on the home, which the rep does not raise."
+      "stewart_read": "This is a timing objection, not a hard no — schema calls for probing before conceding, but rep only partially probes then folds."
+    },
+    {
+      "ts": "01:03",
+      "quote": "Yeah. Well, do you have plans to move, like, in the next year or so, or is this more pushed out?",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Good instinct to clarify the timeline before deciding to disqualify, but rep doesn't use the answer ('maybe this summer') to attempt a reframe."
     },
     {
       "ts": "01:24",
-      "quote": "Yeah. No. It totally gets you there. Well, what I could do, I'll go ahead and, I'll take you off our list.",
+      "quote": "I'll go ahead and, I'll take you off our list.",
       "classification": "unanchored_soft_exit",
-      "stewart_read": "Rather than a scheduled follow-up or callback with a date, the rep unilaterally removes the customer from the calling list with no owned next step, and the phrasing itself ('It totally gets you there') is unclear/garbled."
+      "stewart_read": "Rep exits without attempting even a second angle (e.g., no-obligation quote, or explicit callback timeframe), and the call ends with no next step owned by the rep."
+    },
+    {
+      "ts": "01:36",
+      "quote": "Okay. You did any houses near me in the area?",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer asks an unsolicited question about neighborhood solar installs — a sign of residual interest even after being told they'd be dropped from the list."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
     "revision_applied": false
   },
   "quote_verification": {
-    "checked": 26,
-    "verified": 26,
+    "checked": 29,
+    "verified": 29,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

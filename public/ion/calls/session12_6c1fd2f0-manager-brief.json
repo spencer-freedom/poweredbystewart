@@ -1,47 +1,56 @@
 {
   "call_id": "SESSION12_6c1fd2f0",
   "rep_name": "Parker",
-  "trajectory_summary": "This is a steady, cooperative call that moved from a confusing internal transfer into a workmanlike verify-and-book sequence. The rep captured the address, roof, utility, and a bill range, handled an unusual multi-building/multi-meter property with reasonable transparency, and locked a specific day, time, and location for an in-person appointment. The main soft spots are an under-explored Tesla expectation gap and a bill amount that was captured but never flipped into urgency.",
-  "shape": "energy_built",
+  "trajectory_summary": "The call moves from a confusing opening (wrong-context 'Elle' intro) into a workable, cooperative qualification conversation, and ends with a specific day/time booked. Energy is mostly steady-to-positive but the rep leaks scope by fully answering ownership/financing questions instead of redirecting, and the bill was not captured live — only promised for the next day.",
+  "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "09:23",
-    "quote": "No need's good. I can meet you there at the garages.",
-    "reasoning": "A specific day (tomorrow), time (noon), and location (the garages on the property) were locked, and the customer confirmed logistics around a conflicting 1:30 appointment, indicating a real, specific commitment rather than a vague callback."
+    "quote": "Yep. No need's good. I can meet you there at the garages.",
+    "reasoning": "A specific day (tomorrow) and time (noon) were agreed and the customer confirmed the in-person meeting spot, but the required bill was not captured live and only promised for the next day, making the set fragile per Ion's bill-in-hand rule.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "05:27",
-    "bill_quote": "it's, like, between, like, a 100 or $250.",
+    "bill_quote": "like, a 100 or $250.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep acknowledges the figure with 'Okay. Gotcha. That makes sense.' at 05:33 and moves straight into the mechanics of bill collection without ever turning the number into a reason to act now — the flip line should have landed around 05:35 before pivoting to the Dominion-bill ask."
+    "reasoning": "Rep captured the bill range ('a 100 or $250') but responded with 'Okay. Gotcha. That makes sense' and moved straight to bill-document logistics — the flip should have landed right there, reflecting the bill pain back as the reason to act before pivoting to the document ask."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "07:01",
-    "ask_quote": "So just to look at those, like, the kilowatt usage, we just need a photo of that bar graph. Would it be easier if I send you a text message or email if you could just send me a photo back?",
+    "ask_ts": "07:04",
+    "ask_quote": "we just need a photo of that bar graph.",
     "result": "promised_later",
     "method": "email",
-    "result_ts": "09:47",
-    "result_quote": "I'm not gonna be able to send it until probably tomorrow unless I can pull it up online somewhere because I'm in my client office at the builders in Middleburg.",
-    "reasoning": "Rep set up email delivery and tested the address live, but Peter was away from the physical bill and could only promise to send it the next day, possibly via online lookup."
+    "result_ts": "09:45",
+    "result_quote": "I'm not gonna be able to send it until probably tomorrow",
+    "reasoning": "Rep asked for a photo of the bill at 07:04 and the customer said they would not be able to send it until probably tomorrow, so the document was promised later via email."
   },
   "interest_reason_audit": {
     "asked": true,
-    "ask_ts": "01:44",
+    "ask_ts": "01:55",
     "reason_given": true,
     "reason_ts": "02:03",
     "reason_quote": "No. I just thought I'd been driving a Tesla as well, and I think you're doing this Tesla boost. Right?",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep answered the Tesla question directly but never circled back to tie the appointment or the design conversation to Peter's stated Tesla-ownership motivation; the reason was addressed once and not reinforced at booking."
+    "reasoning": "Peter's stated interest reason (Tesla-driver curiosity about the 'Tesla boost') was acknowledged with a product explanation but never reinforced later when booking the appointment or button-up — no tieback to his Tesla motivation was made when confirming the noon meeting."
   },
   "script_coverage": [
     {
@@ -49,7 +58,7 @@
       "status": "asked",
       "ts": "00:57",
       "end_ts": "01:03",
-      "quote": "Hey. This is Parker with Ion. How are you doing?",
+      "quote": "Hey. This is Parker with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Good. This is Peter. How are you?",
       "resistance_reason": "",
@@ -59,11 +68,11 @@
     {
       "section": "interest_question",
       "status": "asked",
-      "ts": "01:44",
-      "end_ts": "02:23",
-      "quote": "what kinda got you, you know, looking at solar for the for the the property?",
+      "ts": "01:55",
+      "end_ts": "02:03",
+      "quote": "what kinda got you interested in solar?",
       "customer_response": "cooperative",
-      "customer_quote": "I think you're doing this Tesla boost. Right?",
+      "customer_quote": "No. I just thought I'd been driving a Tesla as well, and I think you're doing this Tesla boost. Right?",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -71,11 +80,11 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "04:12",
-      "end_ts": "04:17",
-      "quote": "And then just to make sure, I had here that you were the homeowner. Is that right?",
+      "ts": "01:21",
+      "end_ts": "01:33",
+      "quote": "Okay. And what was the address for that?",
       "customer_response": "cooperative",
-      "customer_quote": "That's right.",
+      "customer_quote": "Lake Farm Road, Marshall, Virginia 20115.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -96,8 +105,8 @@
       "section": "roof",
       "status": "asked",
       "ts": "04:46",
-      "end_ts": "04:54",
-      "quote": "it looks like the garage is a a single or, like, an asphalt shingle roof. Is that right?",
+      "end_ts": "04:56",
+      "quote": "the garage is a a single or, like, an asphalt shingle roof. Is that right?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. It's an asphalt shingle roof.",
       "resistance_reason": "",
@@ -107,7 +116,7 @@
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "04:56",
+      "ts": "05:02",
       "end_ts": "05:03",
       "quote": "what electric company were you currently working with?",
       "customer_response": "cooperative",
@@ -119,13 +128,13 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "05:06",
-      "end_ts": "05:31",
-      "quote": "how much would you say you're normally paying with Dominion?",
+      "ts": "05:12",
+      "end_ts": "05:33",
+      "quote": "and how much would you say you're normally paying with Dominion?",
       "customer_response": "cooperative",
-      "customer_quote": "it's, like, between, like, a 100 or $250.",
+      "customer_quote": "like, a 100 or $250.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
@@ -167,87 +176,99 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "07:01",
-      "end_ts": "09:47",
-      "quote": "Would it be easier if I send you a text message or email if you could just send me a photo back?",
+      "ts": "06:53",
+      "end_ts": "08:10",
+      "quote": "do you normally get those in the mail, or do you get them online?",
       "customer_response": "cooperative",
-      "customer_quote": "I'm not gonna be able to send it until probably tomorrow unless I can pull it up online somewhere",
-      "resistance_reason": "timing",
+      "customer_quote": "Email is better.",
+      "resistance_reason": "",
       "rep_followup": "alternative_offered",
-      "result": "deferred"
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "08:20",
-      "end_ts": "09:23",
-      "quote": "Our only availability tomorrow is at 09:30 and at noon, at least for the morning. Would either of those work for you?",
+      "end_ts": "09:32",
+      "quote": "we have some availability as early as, like, tomorrow",
       "customer_response": "cooperative",
-      "customer_quote": "No need's good. I can meet you there at the garages.",
+      "customer_quote": "Noon.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "10:22",
-      "end_ts": "10:58",
-      "quote": "I'll, yeah, I'll send you a text as well just with the date and time just so you have it.",
+      "ts": "09:30",
+      "end_ts": "10:51",
+      "quote": "and then we'll plan to drop by tomorrow at noon, run through that with you.",
       "customer_response": "cooperative",
       "customer_quote": "You have my phone number in case anything changes. Right?",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "completed"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "hour_block",
+        "reconfirm"
+      ],
+      "parts_score": "3/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "Tesla expectation-gap clarity",
-    "ts": "02:09",
-    "quote": "Yeah. So what we do we have a different panel, but we have Tesla batteries, and then we have, we have a different Tesla panel. I guess you could say, like, it's not a Tesla brand, but we do partner up with them with the batteries.",
-    "why": "Peter directly named the Tesla-boost assumption and the rep's answer contradicts itself mid-sentence ('a different Tesla panel... not a Tesla brand'). This is a scripted scenario in the schema with a clean answer available — the rep needs the crisp version drilled so it doesn't confuse future Tesla-referred leads."
+    "topic": "Setter scope creep on financing structure",
+    "ts": "03:12",
+    "quote": "Yeah. So we have both those options. So if you wanted you could do a loan to own or a lease lease to own",
+    "why": "Rep fully answers ownership/lease/purchase mechanics unprompted-beyond-curiosity, giving away specialist-tier value and risking the customer feeling 'already informed' before the design call."
   },
   "key_moments": [
     {
       "ts": "00:24",
-      "quote": "No. This is Elle with the iInforter's customer support team. I have here on the other line a potential customer.",
-      "classification": "other",
-      "stewart_read": "This 00:17-00:53 segment reads as a crossed dispatch/transfer line rather than something Peter experienced as his own call intro — the customer's aside 'They're from Los Angeles' at 00:38 suggests a third party is present on this leg, not Peter reacting to Parker. Caveat heavily: this may not be diagnostic of Parker's actual intro behavior with Peter."
+      "quote": "No. This is Elle with the iInforter's customer support team.",
+      "classification": "protocol_violation",
+      "stewart_read": "The call opens with a garbled, apparently misattributed or crossed-wire intro referencing a different name/company before Parker's real intro at 00:57 — this predates legitimacy establishment and could confuse the customer about who is calling."
     },
     {
       "ts": "02:09",
-      "quote": "Yeah. So what we do we have a different panel, but we have Tesla batteries, and then we have, we have a different Tesla panel. I guess you could say, like, it's not a Tesla brand, but we do partner up with them with the batteries.",
-      "classification": "tesla_expectation_gap",
-      "stewart_read": "Customer directly named the Tesla-boost expectation and the rep's answer is muddled — 'a different Tesla panel... it's not a Tesla brand' contradicts itself in the same breath. This is exactly the expectation-gap scenario the schema flags, and the rep's own phrasing is confusing rather than clean."
+      "quote": "Yeah. So what we do we have a different panel, but we have Tesla batteries, and then we have, we have a different Tesla panel.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Customer asked a casual Tesla-boost question; rep gives a detailed product/brand explanation instead of a short legitimacy answer and redirect."
     },
     {
-      "ts": "06:14",
-      "quote": "It just kinda depends. I don't know, like, what the process will look like.",
-      "classification": "knowledge_gap",
-      "stewart_read": "On the multi-meter/multi-building power-run question, the rep admits the limit of his knowledge and immediately defers to the specialist rather than guessing or fabricating a technical answer. This is the correct admit-and-recover pattern."
+      "ts": "03:12",
+      "quote": "is a permanent lease agreement that I have with you, or how does it work? Or do I, at one point, own it?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep answers a financing-structure question in full detail (loan-to-own, lease-to-own, purchase) rather than using the escape hatch to the specialist."
     },
     {
-      "ts": "07:01",
-      "quote": "So just to look at those, like, the kilowatt usage, we just need a photo of that bar graph. Would it be easier if I send you a text message or email if you could just send me a photo back?",
-      "classification": "bill_anchor",
-      "stewart_read": "Rep asks for the bill document promptly and offers channel choice, but the dollar figure Peter gave two minutes earlier ('between, like, a 100 or $250') is never referenced again — captured and filed, not flipped into urgency."
+      "ts": "05:27",
+      "quote": "like, a 100 or $250.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Bill number is captured but rep responds with 'Okay. Gotcha. That makes sense' and pivots straight to needing the bill document — no emotional flip against the utility."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 46,
+    "checked": 44,
     "verified": 43,
-    "fuzzy": 0,
-    "wrong_ts": 3,
+    "fuzzy": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

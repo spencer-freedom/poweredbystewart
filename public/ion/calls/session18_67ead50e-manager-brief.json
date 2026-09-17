@@ -1,26 +1,34 @@
 {
   "call_id": "SESSION18_67ead50e",
   "rep_name": "Bucky",
-  "trajectory_summary": "This call never becomes a standard qualifying conversation — the customer is mid-crisis with an existing $32,000 solar loan from a bankrupt installer and is using the call to gauge market pricing for a potential lawsuit, not to buy. The rep engages with legitimacy-building and pricing questions but gives away ballpark numbers he isn't authorized to give, and the call ends with no appointment, just a vague 'keep me on your list' holding pattern.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is unknown/unclear from metadata, but based on the transcript this is clearly a no_appointment outcome — no date, time, or commitment was secured; the customer explicitly deferred any action for 'about a month' pending a lawyer.",
+  "trajectory_summary": "This call never becomes a standard setter call — the customer is mid-crisis with an existing $32k Freedom Forever contract and panels already on his roof, and the rep never formally runs orphaned_flow to diagnose it. Energy stayed high throughout from the customer's side but the rep never converted that energy into a concrete next step; it ends on a vague 'call me in a month.'",
+  "shape": "stagnant",
+  "outcome_dispute": "v1 tag unknown/unclear; this should not be scored as a normal booked/no_appointment setter call — it's closer to a disqualified-pending-contract-release scenario the rep half-recognized but never formally processed via orphaned_flow.",
   "observed_outcome": {
-    "outcome": "no_appointment",
+    "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "05:26",
+    "ts": "05:24",
     "quote": "give me about a month or so, I guess. I gotta try and get out of this contract.",
-    "reasoning": "No date, time, or specific commitment was locked. The customer deferred any next step for roughly a month pending legal action against his current contract, and the rep's closing response was a vague note-keeping promise rather than a scheduled callback."
+    "reasoning": "No day/time was set; customer deferred with a vague month-out timeline and rep agreed to just keep notes, which is a soft callback with no locked date.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "04:28",
-    "bill_quote": "Between okay. Eight months out of the year is between 200 no. Say $1.50 and $2.50.",
+    "bill_ts": "02:31",
+    "bill_quote": "between 2 and 300 a month.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured seasonal bill figures ($150-$250 for eight months, $300-$400 for four months) but responded with a generic 'we would lower that' promise (04:47) rather than flipping the number into an emotional reason to act now, especially given the customer's active frustration with his current $32,000 contract — a natural entry point for an objection-inversion flip that was not used."
+    "reasoning": "Bill amount was captured (\"between 2 and 300 a month\" and later $150-250/$300-400) but never flipped into alignment-against-the-utility; rep instead got confused about whether customer even had a bill to flip, and the flip line should have gone at 04:47 ('we would actually lower that') but that stayed transactional, not emotional."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,31 +38,31 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never asked for a copy of the utility bill itself (photo, text, email, or online login) — the call stayed at verbal ballpark bill figures and never progressed to document collection, consistent with the call not reaching a bookable stage."
+    "reasoning": "The rep asked for the monthly bill amount but did not request the actual utility bill or a photo/email of it."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": true,
-    "reason_ts": "01:56",
-    "reason_quote": "Okay. And I was just trying to gauge how much it usually costs.",
-    "reason_used": "no",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar,' but the customer volunteered his reason unprompted — he's gauging market pricing to support a legal dispute against his current installer, not to buy a new system. The rep never explicitly acknowledges or uses this stated motive (legal leverage, not purchase intent) to shape the conversation, instead treating it like a standard price inquiry."
+    "reasoning": "The rep did not ask why the customer was interested in solar; the customer volunteered cost-related concerns but that was not prompted by an interest question."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:24",
-      "end_ts": "00:38",
-      "quote": "Hey. This is Bucky with Ion. I'm reaching out about the solar for me so that way.",
-      "customer_response": "deflected",
-      "customer_quote": "I just filled it out. I ain't even finished filling it out.",
-      "resistance_reason": "timing",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "end_ts": "00:29",
+      "quote": "Hey. This is Bucky with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "I just filled it out. I ain't even finished filling it out. Oh, that's my bad. I'm just the fastest tourist.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -70,30 +78,6 @@
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "co_owner",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "roof",
       "status": "skipped",
       "ts": "",
       "end_ts": "",
@@ -105,10 +89,34 @@
       "result": "skipped"
     },
     {
+      "section": "co_owner",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "roof",
+      "status": "asked",
+      "ts": "03:15",
+      "end_ts": "03:17",
+      "quote": "Are the panels on your roof right now?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes, sir.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
+    },
+    {
       "section": "utility_company",
       "status": "asked",
-      "ts": "02:21",
-      "end_ts": "02:28",
+      "ts": "02:28",
+      "end_ts": "02:31",
       "quote": "Like, who's your energy provider?",
       "customer_response": "cooperative",
       "customer_quote": "BG and E.",
@@ -119,18 +127,18 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "04:25",
-      "end_ts": "04:47",
+      "ts": "04:28",
+      "end_ts": "04:39",
       "quote": "Say, how much are you paying on your monthly bill right now?",
       "customer_response": "cooperative",
-      "customer_quote": "Eight months out of the year is between... Say $1.50 and $2.50.",
+      "customer_quote": "between 2 and 300 a month.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +146,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,23 +158,23 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "01:04",
-      "end_ts": "01:39",
-      "quote": "Are the panels on your roof right now?",
+      "ts": "03:20",
+      "end_ts": "03:33",
+      "quote": "And you're in contract?",
       "customer_response": "cooperative",
-      "customer_quote": "I already got the panels up there. They already put the panels up there.",
-      "resistance_reason": "already_have_quote",
-      "rep_followup": "alternative_offered",
-      "result": "partial"
+      "customer_quote": "Yeah. I got you. I mean, they ain't gonna be around.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -174,11 +182,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -186,19 +194,21 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "asked",
-      "ts": "05:32",
-      "end_ts": "06:33",
-      "quote": "I'll keep you down. Notes in, and I'll keep you in.",
-      "customer_response": "cooperative",
-      "customer_quote": "Keep me on please keep me on your list or whatever.",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
@@ -208,83 +218,85 @@
       "type": "trust_or_scam",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "We're the only well, let me tell you one thing before anything else. We have been a business since 2013."
-      ],
-      "resolved": true,
-      "resolution_ts": "01:27",
-      "reasoning": "The customer's underlying concern was about company legitimacy given the bankrupt competitor; the rep's stability pitch was enough to move the conversation forward without further pushback on this specific point."
-    },
-    {
-      "ts": "01:39",
-      "quote": "I know that don't cost no $32,000.",
-      "type": "already_have_quote_or_system",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "So we can help you. You just have to get out of that contract first."
-      ],
-      "resolved": true,
-      "resolution_ts": "03:33",
-      "reasoning": "The customer acknowledged he's working on exiting the existing contract; the rep's single response (help available once out of contract) was accepted without further debate, though no concrete next step was tied to it."
-    },
-    {
-      "ts": "01:56",
-      "quote": "Okay. And I was just trying to gauge how much it usually costs.",
-      "type": "cost",
-      "rep_attempts": 3,
-      "attempt_quotes": [
-        "Well, for us, it there is no upfront cost. All you have to pay is a cheap monthly bill.",
-        "Do you wanna pay in cash and own it, or do you wanna, like, pretty much rent it like a like, lease it?",
-        "I know it would cost more than 10,000."
+        "We have been a business since 2013. We're debt free, and we have been the whole time."
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The customer asked for a ballpark price three times using different phrasings and was never fully satisfied — the rep gave partial, escalating answers each time rather than resolving with a clean redirect to the specialist, and the customer's final question ('it ain't gonna cost no 30?') was left with an uncertain, hedged answer."
+      "reasoning": "Customer's underlying trust issue (bad prior deal, scam anxiety) is never fully resolved; rep gives one reassurance and the conversation moves on without confirming it landed.",
+      "blocked_section": "intro_legitimacy",
+      "attempt_moves": [
+        "reassure"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "utility_company@02:28",
+      "resolution_agrees": false
+    },
+    {
+      "ts": "05:24",
+      "quote": "give me about a month or so, I guess. I gotta try and get out of this contract.",
+      "type": "timing_or_callback",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep accepted the vague timeline immediately without proposing a specific follow-up date or attempting to lock any concrete callback window.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "setter giving pricing numbers he isn't authorized to give",
-    "ts": "05:12",
-    "quote": "I know it would cost more than 10,000.",
-    "why": "This is the most consequential and repeated failure on the call — the rep answered pricing questions three separate times (02:02, 04:04, 05:12) before finally disclaiming scope, and on the last occasion gave a specific dollar floor to a customer who is actively building a legal case against a solar company over cost. This is a liability-adjacent habit that needs to be corrected before repetition on a live, bookable prospect."
+    "topic": "Orphaned flow never run on a clear existing-system customer",
+    "ts": "01:39",
+    "quote": "I already got the panels up there. They already put the panels up there.",
+    "why": "The customer handed the rep a textbook existing-solar scenario three times; running orphaned_flow (own/lease, company, working status) would have produced a real qualification instead of a confused freeform conversation."
   },
   "key_moments": [
     {
       "ts": "01:39",
       "quote": "I already got the panels up there. They already put the panels up there. They did that in one day. I know that don't cost no $32,000.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "The customer discloses a live competitive/legal situation with a named competitor (Freedom Forever) and a specific loan amount ($32,000) from a Texas lender. This is competitive intelligence a closer would want, but the rep never asks who the loan company is, what the contract terms are, or what specifically the panels' capacity is."
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "This is the clearest orphaned_flow trigger in the call — existing system, existing loan, customer already suspicious of the deal — and the rep does not run the orphaned_flow question set."
     },
     {
-      "ts": "02:02",
-      "quote": "Well, for us, it there is no upfront cost. All you have to pay is a cheap monthly bill.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "Instead of using the price_estimate_before_design rebuttal or redirecting to the specialist, the rep engages directly with cost mechanics for a customer who explicitly said he's gauging price for a legal dispute, not to buy."
+      "ts": "02:34",
+      "quote": "See, that's not the way because you already have solar. You shouldn't be paying a monthly bill. I'm not I don't",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep visibly gets confused mid-sentence trying to reconcile the customer's situation with Ion's normal pitch, and doesn't recover with a clean diagnostic question."
+    },
+    {
+      "ts": "03:59",
+      "quote": "Put the solar panel in a on a row house?",
+      "classification": "cross_sell_miss",
+      "stewart_read": "Customer flags a non-standard home type (row house) which could affect install feasibility/cross-sell (shared roof, HOA, structural) and the rep never probes it."
     },
     {
       "ts": "05:12",
       "quote": "I know it would cost more than 10,000.",
       "classification": "setter_scope_creep",
-      "stewart_read": "The rep gives a specific dollar floor for system cost — this is closer-tier financial content a setter should not be originating, especially to a customer actively building a legal case against another solar company over cost."
-    },
-    {
-      "ts": "05:19",
-      "quote": "No. I don't think so. But I don't know. I'm the scheduler, the specialist I got too much.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The rep admits uncertainty and self-identifies scope after already answering — a partial recovery. He discloses the gap honestly rather than fabricating further, which is the better of three knowledge-gap outcomes, but it comes too late to undo the prior number he gave."
+      "stewart_read": "Rep quotes a rough price floor to a customer already burned by a $32k loan — exactly the kind of pricing content the setter schema says to redirect to the specialist."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 43,
-    "verified": 42,
+    "checked": 35,
+    "verified": 34,
     "fuzzy": 0,
     "wrong_ts": 1,
     "not_found": 0

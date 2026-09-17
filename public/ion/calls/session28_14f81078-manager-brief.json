@@ -1,47 +1,55 @@
 {
   "call_id": "SESSION28_14f81078",
   "rep_name": "Holland",
-  "trajectory_summary": "This is a short, procedurally clean verify-and-gather call: the rep moves through address, roof, title, utility, and bill amount without friction, and the customer cooperates throughout. But the call never becomes a setter call in the full sense — there is no appointment ask, no day/time offered, and no button-up; it ends with the rep promising to text a link for the bill photo once the customer gets home.",
+  "trajectory_summary": "The call opens cold with a dropped-call stumble, but the customer stays cooperative throughout and even self-schedules the bill follow-up. The rep completes most verify items and captures a real bill number and a co-owner, but never flips the bill into urgency, never asks the interest question, and the call ends without an appointment time — just a bill-collection deferral.",
   "shape": "stagnant",
-  "outcome_dispute": "The v1 tag is unknown/unclear from metadata, but based on the transcript alone this is NOT a booked or tentative appointment — no date or time was proposed or agreed at any point. It should be tagged callback/no_appointment, with the actual next step being the customer texting a bill photo later, not a scheduled consultant call.",
+  "outcome_dispute": "V1 tag is unknown; the transcript shows no appointment day/time agreed at all, only a promise to text for the bill later — this is a no_appointment/callback hybrid, not a booked or tentative outcome.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "04:40",
-    "quote": "Yeah. That would be amazing. I'll just send you a text then, and then you can just send that whenever you get home.",
-    "reasoning": "No day or time for a consultant appointment was ever proposed or agreed; the only forward commitment is the rep texting the customer for a bill photo once he's home around 3pm EST, which is a callback/follow-up rather than a booked or tentative appointment."
+    "quote": "I'll just send you a text then, and then you can just send that whenever you get home.",
+    "reasoning": "No appointment day/time was ever proposed or agreed; the only forward commitment is the rep texting for the bill once the customer is home, which is a callback/logistics arrangement, not a booked or tentative appointment. Co-owner Zoe was identified but never addressed for appointment inclusion since no appointment was set.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "02:55",
     "bill_quote": "I would say, 2 to $400.",
-    "flip_executed": "yes",
-    "flip_ts": "03:07",
-    "flip_quote": "Yeah. No kidding. 400 is quite expensive. But we do have a pretty good program right now. It will guarantee savings within the first year you guys have solar.",
-    "reasoning": "The rep acknowledges the bill size as expensive and immediately pivots to the program's savings guarantee, which counts as a flip by strategy match even though it's brief and generic rather than deeply personalized."
+    "flip_executed": "no",
+    "flip_ts": "",
+    "flip_quote": null,
+    "reasoning": "At 03:10 the rep says '400 is quite expensive' but immediately moves into the credit qualifier instead of flipping the bill into the customer's reason to book; the flip should have gone right there."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "04:14",
+    "ask_ts": "04:11",
     "ask_quote": "Oh, actually, the last thing I need from you is just a copy of your kilowatt usage on your AEP bill.",
     "result": "promised_later",
     "method": "text",
     "result_ts": "04:40",
     "result_quote": "Yeah. That would be amazing. I'll just send you a text then, and then you can just send that whenever you get home.",
-    "reasoning": "The rep raises the bill ask and the customer, driving home from Tennessee, agrees to send it once home; the rep commits to texting a link/reminder rather than collecting it live on the call."
+    "reasoning": "Rep asked for the utility bill at 04:11 and the customer said they'd send it when home; rep confirmed they'd text and the customer agreed, so the bill was promised for later via text."
   },
   "interest_reason_audit": {
-    "asked": true,
-    "ask_ts": "03:32",
-    "reason_given": true,
-    "reason_ts": "03:36",
-    "reason_quote": "It's our first time. Christian just said you guys are pretty easy working with, and he said you guys have the ability to move it as well, which I thought was pretty unique and worth at least a conversation.",
-    "reason_used": "no",
+    "asked": false,
+    "ask_ts": "",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked whether they'd looked into solar before and got a specific referral-based reason (ease of working with Ion, panel-lift-for-reroof capability), but the rep's response ('Yeah. Definitely.') and subsequent in-house/reroof comment reinforced the company's capability generally rather than explicitly tying back to Jacob's stated reason for engaging."
+    "reasoning": "The rep did not ask why the customer was interested in solar (no explicit 'what got you interested' question)."
   },
   "script_coverage": [
     {
@@ -49,33 +57,33 @@
       "status": "asked",
       "ts": "00:06",
       "end_ts": "00:19",
-      "quote": "Awesome. So this is Holland with Ion Solar. I was just calling because one of our current customers, Christian Gavidia, had suggested that you might be interested in solar for your home.",
+      "quote": "this is Holland with Ion Solar.",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah.",
+      "customer_quote": "Yes.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "asked",
-      "ts": "03:32",
-      "end_ts": "03:50",
-      "quote": "And have you guys ever really looked into solar before, or is this your first time?",
-      "customer_response": "cooperative",
-      "customer_quote": "It's our first time. Christian just said you guys are pretty easy working with...",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "completed"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:28",
-      "end_ts": "00:43",
+      "end_ts": "00:36",
       "quote": "So first off, can I start by grabbing your street address? I don't have that on file here.",
       "customer_response": "cooperative",
-      "customer_quote": "542 Miller Avenue, Columbus, Ohio 43205.",
+      "customer_quote": "542 Miller Avenue,",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -85,9 +93,9 @@
       "status": "asked",
       "ts": "02:05",
       "end_ts": "02:29",
-      "quote": "And then, yeah, I have you down, Jacob, as the property owner. Is there anybody else on the title of the home with you?",
+      "quote": "I have you down, Jacob, as the property owner. Is there anybody else on the title of the home with you?",
       "customer_response": "cooperative",
-      "customer_quote": "So Zoe Zoe Pitts is the one who owns the house. That's my fiance, but we bought it together.",
+      "customer_quote": "So Zoe Zoe Pitts is the one who owns the house.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -96,10 +104,10 @@
       "section": "roof",
       "status": "asked",
       "ts": "01:46",
-      "end_ts": "02:00",
-      "quote": "K. Perfect. And then your roof, it just looks like a regular asphalt shingle roof. Do you know how old that roof is currently?",
+      "end_ts": "02:01",
+      "quote": "Do you know how old that roof is currently?",
       "customer_response": "cooperative",
-      "customer_quote": "Within within the last ten years.",
+      "customer_quote": "Within the last ten years.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -108,8 +116,8 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "02:31",
-      "end_ts": "02:39",
-      "quote": "And then who is your guys' electric company?",
+      "end_ts": "02:37",
+      "quote": "And then who is your guys' electric company? Is it,",
       "customer_response": "cooperative",
       "customer_quote": "AUP.",
       "resistance_reason": "",
@@ -119,7 +127,7 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "02:39",
+      "ts": "02:41",
       "end_ts": "02:58",
       "quote": "how how much would you say you guys are spending on average a month on that bill?",
       "customer_response": "cooperative",
@@ -133,7 +141,7 @@
       "status": "asked",
       "ts": "03:13",
       "end_ts": "03:29",
-      "quote": "As long as Zoe has a credit score above 670, then you guys will qualify. Is that the case for you guys?",
+      "quote": "a credit score above 670, then you guys will qualify.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
@@ -157,28 +165,28 @@
       "status": "asked",
       "ts": "03:32",
       "end_ts": "03:50",
-      "quote": "have you guys ever really looked into solar before, or is this your first time?",
+      "quote": "K. And have you guys ever really looked into solar before, or is this your first time?",
       "customer_response": "cooperative",
-      "customer_quote": "It's our first time.",
+      "customer_quote": "It's our first time. Christian just said you guys are pretty easy working with, and",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "04:14",
+      "ts": "04:11",
       "end_ts": "04:46",
-      "quote": "Oh, actually, the last thing I need from you is just a copy of your kilowatt usage on your AEP bill. So do you get those in the mail or online?",
+      "quote": "Oh, actually, the last thing I need from you is just a copy of your kilowatt usage on your AEP bill.",
       "customer_response": "cooperative",
-      "customer_quote": "I'm driving home from Tennessee right now, so I'll be home around 03:00 EST. I could get that sent over to you.",
-      "resistance_reason": "timing",
+      "customer_quote": "It's in the mail. And I'm driving home from Tennessee right now, so I'll be home around 03:00 EST.",
+      "resistance_reason": "",
       "rep_followup": "alternative_offered",
       "result": "deferred"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -186,11 +194,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -198,56 +206,64 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "unanchored close / no locked follow-up",
-    "ts": "04:46",
-    "quote": "Perfect. Thank you so much. K. Yeah. You're welcome. You have a good one, Jacob, and we'll keep in touch.",
-    "why": "The customer handed the rep a specific window ('I'll be home around 3:00 EST') and the rep let it go with a vague 'we'll keep in touch' instead of locking a callback time or appointment slot — this is the single biggest lost structure on the call, since everything else (verify, bill amount, roof, title) was gathered cleanly."
+    "topic": "Call ends with no appointment day/time locked",
+    "ts": "04:40",
+    "quote": "I'll just send you a text then, and then you can just send that whenever you get home.",
+    "why": "The call closes on bill-collection logistics only — no button_up beats were run at all, leaving the lead with no scheduled next step owned by the rep."
   },
   "key_moments": [
     {
+      "ts": "00:00",
+      "quote": "Hello?",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "Rep opens with a bare greeting before establishing company identity; legitimacy anchor (Ion Solar, referral name) doesn't land until 00:06-00:13, slightly late but still within first 30 seconds."
+    },
+    {
       "ts": "02:55",
       "quote": "I would say, 2 to $400.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Bill captured but rep's response ('Oh, wow. Okay. I'm assuming it's just depending on season changes') normalizes the pain instead of using it as leverage."
+    },
+    {
+      "ts": "03:10",
+      "quote": "400 is quite expensive.",
       "classification": "bill_anchor",
-      "stewart_read": "The customer discloses a wide, high bill range unprompted with hesitation in delivery, a strong emotional anchor point. The rep captures the number but the very next line pivots to a neutral observation about seasonality rather than using the bill as leverage."
+      "stewart_read": "Second touch on the bill — rep names it as expensive but immediately pivots to the credit qualifier instead of using the number to build urgency for booking."
     },
     {
-      "ts": "03:07",
-      "quote": "Yeah. No kidding. 400 is quite expensive. But we do have a pretty good program right now. It will guarantee savings within the first year you guys have solar.",
-      "classification": "bill_anchor",
-      "stewart_read": "This is the closest the rep gets to a flip — acknowledging the bill is expensive and pivoting to the program's savings promise — but it's framed as a program pitch, not as an emotional alignment-against-the-utility reframe. It's a partial flip, not a full one."
-    },
-    {
-      "ts": "03:13",
-      "quote": "It will guarantee savings within the first year you guys have solar.",
-      "classification": "other",
-      "stewart_read": "The rep states a guarantee of savings without any grounding in a specific number or condition disclosed on this call — this is the kind of claim numeric_discipline flags for review, since 'guaranteed savings' is a strong claim made informally on a first qualification call."
-    },
-    {
-      "ts": "03:51",
-      "quote": "Yeah. We're we're also a fully in house company, which makes it nice because we don't go through any third parties or anything. But, yeah, if you guys ever did need, like, a reroof down the road as well, we can lift those panels up, replace the roof, and then put them back as well.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "The rep volunteers operational/company-structure detail (in-house, no third parties, panel-lift capability) unprompted, moving slightly into differentiation territory a closer would normally cover. It is brief and doesn't derail the call, but it is proactive company-positioning content beyond the verify checklist."
+      "ts": "03:36",
+      "quote": "Christian just said you guys are pretty easy working with, and",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer volunteers a positive referral-driven motivation and mentions panel-moving capability as 'worth at least a conversation' — genuine curiosity signal."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 44,
+    "checked": 40,
     "verified": 40,
-    "fuzzy": 3,
+    "fuzzy": 0,
     "wrong_ts": 0,
-    "not_found": 1
+    "not_found": 0
   }
 }

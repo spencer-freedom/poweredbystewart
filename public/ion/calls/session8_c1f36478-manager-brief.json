@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION8_c1f36478",
   "rep_name": "Parker",
-  "trajectory_summary": "The call opens warmly with a genuinely interested customer who volunteers rich detail, but the rep hits an authentic hard capability gap (no ground mounts) early and only makes one soft attempt to redirect to a roof mount before the customer declines. From there the conversation drifts through buyback/credit clarification and a battery-backup interest that goes unaddressed as a potential Powerwall cross-sell, ending in a customer-initiated deferral to a future renovation timeline with no concrete callback date captured.",
+  "trajectory_summary": "The call opens warm and cooperative but stalls almost immediately on a hard product mismatch (ground mount) that Ion doesn't offer, and the rep spends the remainder of the call explaining mechanics rather than re-qualifying or capturing any bill/utility data. It ends with a soft, undated future-callback with no information captured for follow-up.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 outcome is unknown/unclear; observed outcome is best read as a soft callback (customer proposes revisiting in ~5+ months) with no specific date or contact commitment locked, which is weaker than a typical 'callback' outcome and should not be miscoded as tentative or booked.",
+  "outcome_dispute": "v1 tag is unknown; observed outcome is a callback/DQ hybrid — the rep explicitly parks the lead for a future call rather than booking or disqualifying on a hard gate, so 'callback' is the closest fit though no date/time was set.",
   "observed_outcome": {
-    "outcome": "callback",
+    "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "04:16",
-    "quote": "Cool. Well, yeah, I'll make a note and take you out for now. But then, yeah, when we can look out to calling you in a few months or looking out for your call and kinda work with you from there.",
-    "reasoning": "The rep commits to future contact ('calling you in a few months') but no specific date, time, or clear ownership of who initiates is locked, making this a loose callback rather than a booked or tentative appointment."
+    "quote": "I'll make a note and take you out for now. But then, yeah, when we can look out to calling you in a few months or looking out for your call and kinda work with you from there.",
+    "reasoning": "No date, time, or firm callback commitment was made — 'a few months' is not a stated time, so this does not meet the callback bar; the rep ends the pursuit without an owned next step.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reached a bill-amount question; it was derailed by the ground-mount disqualification and subsequent property discussion before verify items like average bill were raised."
+    "reasoning": "No monthly bill or kWh usage was asked for or provided on the call, so no bill anchor was captured."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never reached bill collection; the call ended in a soft deferral before qualification progressed that far."
+    "reasoning": "The rep did not ask the customer to send or read a utility bill during the call."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -41,7 +49,7 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked what interested the customer in solar and got a clear savings-motivated answer, but never referenced 'saving money' again when handling the roof-mount refusal or the eventual deferral, missing a chance to re-anchor the conversation on that stated motive."
+    "reasoning": "Customer stated 'just looking to save money' at 00:43, but the rep never tied the roof-mount alternative or the future-callback framing back to that savings motive; the rest of the call focused on mount-type mechanics instead."
   },
   "script_coverage": [
     {
@@ -49,7 +57,7 @@
       "status": "asked",
       "ts": "00:06",
       "end_ts": "00:09",
-      "quote": "Hey, Benjamin. This is Parker. I'm with Ion.",
+      "quote": "This is Parker. I'm with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
@@ -60,7 +68,7 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "00:35",
-      "end_ts": "01:16",
+      "end_ts": "00:43",
       "quote": "what kinda got you, you know, interested in solar?",
       "customer_response": "cooperative",
       "customer_quote": "just looking to save money.",
@@ -72,7 +80,7 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:27",
-      "end_ts": "00:34",
+      "end_ts": "00:35",
       "quote": "Just to make sure I had the right address, though, was it the 8400",
       "customer_response": "cooperative",
       "customer_quote": "Yep.",
@@ -94,19 +102,19 @@
     },
     {
       "section": "roof",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "status": "asked",
+      "ts": "01:43",
+      "end_ts": "01:52",
+      "quote": "But, I mean, we'd still love to show you a a roof mount if it's if it's something you're curious in.",
+      "customer_response": "resistant",
+      "customer_quote": "I really don't wanna put it on the roof.",
+      "resistance_reason": "other",
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "utility_company",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,11 +122,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "bill_amount",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,11 +134,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,7 +146,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "military",
@@ -178,7 +186,7 @@
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -186,79 +194,94 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "asked",
-      "ts": "04:16",
-      "end_ts": "04:26",
-      "quote": "I'll make a note and take you out for now. But then, yeah, when we can look out to calling you in a few months",
-      "customer_response": "cooperative",
-      "customer_quote": "Alrighty. Cool.",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
       "ts": "01:11",
-      "quote": "on and put folder on the ground instead of on the roof.",
-      "type": "other",
+      "quote": "put folder on the ground instead of on the roof.",
+      "type": "roof_or_home",
       "rep_attempts": 1,
       "attempt_quotes": [
         "But, I mean, we'd still love to show you a a roof mount if it's if it's something you're curious in."
       ],
       "resolved": false,
-      "resolution_ts": "01:48",
-      "reasoning": "The rep offered a single roof-mount alternative after explaining Ion doesn't do ground mounts; the customer declined once ('I really don't wanna put it on the roof') and the rep did not try a second angle, so the objection ended unresolved with the rep conceding."
+      "resolution_ts": "",
+      "reasoning": "Customer's ground-mount preference blocks the roof section entirely; rep offers the roof-mount alternative once, customer rejects it, and rep does not attempt a second angle.",
+      "blocked_section": "roof",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "roof@01:43",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Missed Powerwall cross-sell on live battery-interest signal",
-    "ts": "03:18",
-    "quote": "I was thinking batteries, you know, run run just so I have power at night or something or if some power goes out, I have power.",
-    "why": "The customer explicitly asked about backup power and the rep pointed him toward outside companies instead of naming Ion's own Tesla Powerwall offering -- this is a live, in-call cross-sell miss on a customer already engaged, more consequential than the eventual soft exit."
+    "topic": "No probing on roof objection before conceding the lead",
+    "ts": "01:48",
+    "quote": "I I I really don't wanna put it on the roof.",
+    "why": "This is the pivot point where the call turns from a warm, engaged lead into a walk-away; asking why would have kept the conversation open and possibly surfaced the future outbuilding as a near-term roof-mount opportunity."
   },
   "key_moments": [
     {
+      "ts": "01:03",
+      "quote": "it's also got a little over an acre of land. So I was thinking about using, like, a corner of the property",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer is enthusiastic and proactive about solar placement — this is a highly engaged lead, just misaligned on mount type, not a low-interest customer."
+    },
+    {
       "ts": "01:18",
-      "quote": "Unfortunately, we we actually don't anymore. We've kinda moved away from ground mounts just because of how expensive it it tends to be.",
-      "classification": "knowledge_gap",
-      "stewart_read": "This is transparent and honest handling of a genuine hard capability constraint, not a knowledge gap in the negative sense -- the rep knows the policy and states it clearly rather than fabricating a workaround."
+      "quote": "Unfortunately, we we actually don't anymore. We've kinda moved away from ground mounts",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep gives a detailed cost/trenching rationale for why Ion doesn't do ground mounts — closer-tier justification a setter shouldn't need to build out in this much technical detail."
     },
     {
       "ts": "01:48",
-      "quote": "Yeah. I I I really don't wanna put it on the roof.",
+      "quote": "I I I really don't wanna put it on the roof.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "Customer's roof aversion is a preference-based objection the rep could have flipped by anchoring on the customer's own bill-savings motive stated at 00:43 ('just looking to save money') rather than accepting the refusal after one attempt."
+      "stewart_read": "This is a home/roof-type objection blocking the roof-mount alternative; rep concedes immediately without asking why (new roof, aesthetics, shading) or probing whether the objection is solvable."
     },
     {
-      "ts": "03:18",
-      "quote": "Oh, okay. But Okay. I was thinking batteries, you know, run run just so I have power at night or something or if some power goes out, I have power.",
-      "classification": "cross_sell_miss",
-      "stewart_read": "Customer directly raises battery backup interest -- this maps to Ion's Tesla Powerwall offering, but the rep never names Powerwall and instead tells the customer to look elsewhere ('you can totally look into it. If you can find someone, that's awesome')."
-    },
-    {
-      "ts": "03:54",
-      "quote": "I'm gonna refinance and put up another building on the property that's gonna have a wood shop and three parking spots and, you know, power and a bathroom out there.",
-      "classification": "cross_sell_miss",
-      "stewart_read": "Customer describes a planned new outbuilding with its own roof and power needs -- an uncataloged variant of the schema's roofing/solar-timing cross-sell logic (solar_for_secondary_structure, not yet a named schema entry) that the rep doesn't probe at all."
+      "ts": "02:09",
+      "quote": "It seems like, you know, I could get so much more I could get way more panels on a quarter of an acre than on the top of a little house.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Second touch on the ground-mount preference — customer is actively challenging Ion's policy, a live objection, and rep responds with mechanics (bill-offset sizing) instead of reframing toward what Ion CAN offer for his situation."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 35,
-    "verified": 35,
+    "checked": 31,
+    "verified": 31,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

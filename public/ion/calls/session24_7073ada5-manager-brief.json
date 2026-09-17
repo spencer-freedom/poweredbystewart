@@ -1,26 +1,34 @@
 {
   "call_id": "SESSION24_7073ada5",
   "rep_name": "Kyk",
-  "trajectory_summary": "The call opens with a routine address-verification stumble, briefly builds real engagement when the customer discloses an existing-but-apparently-underperforming solar system and a run of high electric bills, then deflates once the rep discovers Ion can't service equipment it didn't install. The rep leans on a single repeated disclaimer line rather than fully working the orphaned-system diagnostic or treating the bill figures as leverage for a potential new-system conversation, and the call ends on a soft, unlocked callback.",
-  "shape": "mixed",
-  "outcome_dispute": "v1 tag is unknown/unclear; observed outcome is best read as callback, not booked or dq — the customer has an existing (possibly third-party) solar system, which is a scenario the orphaned_flow section addresses, but the rep never runs the full orphaned_flow steps (ownership type, company name, panel size, working status) before ending the call, so there's no clean DQ basis captured on this call, only a customer-initiated callback promise.",
+  "trajectory_summary": "The call opens with an address-verification stumble, then the customer hands the rep a strong bill-pain anchor and an orphaned-solar-system disclosure — real engagement and curiosity. The rep never runs the orphaned_flow protocol to determine ownership/company/working-status, so the call fizzles into generic advice and an unlocked self-initiated callback.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag is 'unknown'; this should be scored as no_appointment/soft dq — the rep effectively self-disqualified without confirming any of the orphaned_flow hard-DQ questions (lease/PPA, company name, broken system), so it isn't a clean dq either.",
   "observed_outcome": {
-    "outcome": "callback",
+    "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "04:53",
-    "quote": "Okay. I'm a call I'm a save the number, and I'll call you back when I have my husband answer.",
-    "reasoning": "No appointment day/time was set; the call ends with the customer self-initiating an unscheduled future callback pending her husband's input, and the rep offers to remove her from the outbound call list in the meantime."
+    "quote": "I'm a call I'm a save the number, and I'll call you back when I have my husband answer.",
+    "reasoning": "No day/time was set; the customer self-initiated a vague future callback and the rep did not book, tentatively schedule, or lock a specific callback time — this is an open-ended non-appointment ending.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "01:41",
-    "bill_quote": "I got the bill the electricity bill of men for $700.",
+    "bill_quote": "for $700.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer volunteers a striking bill figure ($700, then $580, $520, $480 across recent months) and calls it 'ridiculous,' but the rep never reflects the number back or ties it to a reason to pursue a new/fixed system — the flip should have landed right after 02:08 ('So it's ridiculous. That's too much money for electricity') but the rep instead pivoted straight to asking who installed the existing system."
+    "reasoning": "Bill of $700 (plus $580, $520, $480) was captured but never flipped into an alignment-against-utility reframe; the rep's response 'I don't blame you. I don't blame you.' at 01:56 acknowledges but does not turn it into a reason to act — the flip should have landed there or right after the escalating bill list at 02:08."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,18 +38,18 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call never reached bill-collection because it pivoted to the orphaned-system determination; the rep never asked for a physical bill, photo, or online login."
+    "reasoning": "The rep never asked the customer to send or read a utility bill or requested a photo or email of the bill."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "01:11",
     "reason_given": true,
-    "reason_ts": "01:21",
-    "reason_quote": "I I have a solar panel right now. We bought the house last year, and it was already there.",
+    "reason_ts": "01:41",
+    "reason_quote": "for $700.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asks what got her interested in solar and she explains she already has a system that seems non-functional given her high bills, but the rep uses this only to pivot into an ownership-verification question, not to reinforce her stated motivation (fixing/replacing an underperforming system) at any later point."
+    "reasoning": "Customer's interest reason (existing solar not working, high bills) was acknowledged but the rep pivoted immediately to ownership/company questions and never tied it back to a reason to book or take next steps."
   },
   "script_coverage": [
     {
@@ -49,7 +57,7 @@
       "status": "asked",
       "ts": "00:04",
       "end_ts": "00:14",
-      "quote": "Hey, Guadalupe. This is, Kyk with Ion. I received your request. You're looking at solar for the home.",
+      "quote": "This is, Kyk with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Good.",
       "resistance_reason": "",
@@ -60,24 +68,24 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "01:11",
-      "end_ts": "01:41",
-      "quote": "Awesome. Well, while I pull that up, what got you interested in looking at solar?",
+      "end_ts": "01:21",
+      "quote": "what got you interested in looking at solar?",
       "customer_response": "cooperative",
-      "customer_quote": "I got the bill the electricity bill of men for $700.",
+      "customer_quote": "I I have a solar panel right now.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:23",
-      "end_ts": "00:44",
-      "quote": "The first thing I wanted to clarify was the address. I did 2451 Avista Place In Waldorf.",
-      "customer_response": "resistant",
-      "customer_quote": "No. That's not my address.",
-      "resistance_reason": "other",
-      "rep_followup": "persisted",
+      "ts": "00:15",
+      "end_ts": "01:08",
+      "quote": "The first thing I wanted to clarify was the address.",
+      "customer_response": "cooperative",
+      "customer_quote": "Vera Davis",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -118,42 +126,6 @@
     },
     {
       "section": "bill_amount",
-      "status": "asked",
-      "ts": "01:41",
-      "end_ts": "02:08",
-      "quote": "",
-      "customer_response": "cooperative",
-      "customer_quote": "So it's ridiculous. That's too much money for electricity.",
-      "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
-    },
-    {
-      "section": "tax_credit_qualifier",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "military",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "prior_design",
       "status": "skipped",
       "ts": "",
       "end_ts": "",
@@ -163,6 +135,42 @@
       "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "skipped"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "military",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "02:19",
+      "end_ts": "02:38",
+      "quote": "do you know who you are, like, who the solar is with at all?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
@@ -190,7 +198,7 @@
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -198,69 +206,84 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
-      "ts": "02:19",
-      "quote": "No.",
+      "ts": "02:38",
+      "quote": "he said he still had to pay some money for the solar panel when he bought the house",
       "type": "already_have_quote_or_system",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "do you, do you know who you are, like, who the solar is with at all? Like, when you when you bought the house?"
+        "I would definitely just check with him."
       ],
       "resolved": false,
-      "resolution_ts": "04:53",
-      "reasoning": "The existing-solar-system complication is never fully resolved on the call — the rep asks one ownership question, gets an unclear answer (customer doesn't know who installed it, husband handled it), delivers the same disclaimer twice, and the call ends with the customer promising to call back after consulting her husband rather than a resolved determination."
+      "resolution_ts": "",
+      "reasoning": "Rep gave one generic redirect and did not attempt to determine ownership status, company name, or working status before disengaging — the orphaned_flow gate was never actually run to a resolution.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "orphaned_flow diagnostic depth",
-    "ts": "02:58",
-    "quote": "The issue is is we won't be able to do anything on equipment that might not be our own.",
-    "why": "The rep landed the correct disclaimer but stopped after one ownership question instead of running the full orphaned_flow checklist (working status, panel size, lease vs. own, company name) — a fuller diagnostic here would have either produced a real DQ determination or kept the bill-pain lead active instead of ending in a vague self-initiated callback."
+    "topic": "Orphaned-system qualification skipped",
+    "ts": "02:55",
+    "quote": "I would definitely just check with him.",
+    "why": "Customer disclosed a live bill-pain signal ($700+) plus a possibly-financed existing system, but rep never ran the orphaned_flow ownership/company/working-status questions before ending pursuit — a real lead may have been dropped on an unverified assumption."
   },
   "key_moments": [
     {
       "ts": "01:41",
-      "quote": "I got the bill the electricity bill of men for $700.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer hands over a striking, specific bill figure ($700, later $580, $520, $480) unprompted. The rep never reflects this back, never asks what she'd want the bill to look like, and never uses it to build curiosity about a new/fixed system — it's simply filed as color while the call pivots to ownership questions."
+      "quote": "for $700.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer volunteers a high bill figure and multiple months of high bills unprompted — a strong emotional anchor."
     },
     {
-      "ts": "02:19",
-      "quote": "do you, do you know who you are, like, who the solar is with at all? Like, when you when you bought the house?",
+      "ts": "02:38",
+      "quote": "he said he still had to pay some money for the solar panel when he bought the house",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer reveals the system may still be financed (not fully owned), a detail directly relevant to whether Ion can help or must DQ — rep does not probe."
+    },
+    {
+      "ts": "02:55",
+      "quote": "I would definitely just check with him.",
       "classification": "non_standard_scenario_hold",
-      "stewart_read": "This is the correct first move for an orphaned-system scenario, but the rep stops at one question instead of running the fuller orphaned_flow checklist (own vs. lease, company name, panel size, working status) that would let a closer or the rep make a real determination."
+      "stewart_read": "Rather than running the orphaned_flow question set live, rep punts the qualification entirely back to the customer to research on her own."
     },
     {
-      "ts": "02:58",
-      "quote": "The issue is is we won't be able to do anything on equipment that might not be our own.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Correct substantive answer (Ion can't service someone else's install), but delivered as a full stop rather than a bridge — no attempt to ask if she'd be interested in an additional/expanded system, or to flag the account for a callback with a specific time."
-    },
-    {
-      "ts": "02:53",
-      "quote": "Give me can can I I'm sorry. I'm sorry. Can I have ten seconds? I just need to see who's calling me.",
-      "classification": "other",
-      "stewart_read": "Customer steps away for what becomes roughly a 40-second gap (02:53 to 03:55) to check another incoming call; the rep holds the line silently. This isn't a rep-caused issue but is worth noting as dead air that the rep did nothing to fill or use (e.g., no follow-up question queued for when she returned)."
+      "ts": "04:08",
+      "quote": "so what you recommend me to do?",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Second explicit ask from the customer for direction — repeat instance of the same missed probe."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 33,
+    "checked": 32,
     "verified": 32,
     "fuzzy": 0,
-    "wrong_ts": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

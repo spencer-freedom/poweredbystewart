@@ -1,26 +1,34 @@
 {
   "call_id": "SESSION4_3cbbfe29",
   "rep_name": "Tyke",
-  "trajectory_summary": "The call opens with a legitimate, address-verified intro and runs cleanly through the verify checklist, but the customer's unprompted prior-objection disclosure (price/terms, told to wait for 'reviews') is acknowledged with filler and never probed. The call ends abruptly on a stated-credit DQ with no alternative financing conversation, roofing cross-sell, or follow-up specificity beyond a vague 'couple months' promise.",
+  "trajectory_summary": "The call moved efficiently through verify items with a cooperative but low-energy customer, but leaked value by skipping the address/utility confirmations and never anchoring the bill amount. It ended in a clean hard DQ on credit score for both homeowner and spouse, which the rep handled correctly by not arguing but also without exploring alternative financing framing.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unclear; observed outcome here is a clean DQ on stated credit score below 670 for both homeowner and spouse — this is procedurally a dq under qualifiers.credit_qualifier, not a booked or tentative appointment.",
+  "outcome_dispute": "No dispute — the transcript shows a clear credit gate failure and the rep explicitly ends pursuit, which matches dq classification.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "02:32",
-    "quote": "Okay. Yeah. Well, unfortunately, then it wouldn't really make sense as of right now.",
-    "reasoning": "Both the homeowner and spouse are reported to have credit below the 670 threshold, triggering the hard DQ rule under qualifiers.credit_qualifier / dq_rules.credit_below_670_no_alternative; no appointment date or time was ever discussed."
+    "quote": "Well, unfortunately, then it wouldn't really make sense as of right now.",
+    "reasoning": "Both homeowner and spouse disclosed sub-670 credit scores, and the rep explicitly ends pursuit of the appointment on this hard gate, matching qualifiers.credit_qualifier's hard_dq policy.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
-    "bill_captured": true,
-    "bill_ts": "01:51",
-    "bill_quote": "And it looks like did you put, about a 100 to a 150 to how much you're currently paying?",
-    "flip_executed": "no",
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep pulled a pre-filled bill estimate ($100-$150) from a form and got a soft confirmation ('Yeah') but never used the number as leverage — no flip into 'that's money going to the utility instead of your own system' framing before moving straight to the credit qualifier."
+    "reasoning": "No explicit monthly dollar amount or kWh was captured from the customer; the rep referenced an estimated range but the customer did not state a numeric bill on the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,18 +38,18 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep referenced a pre-filled bill range from the lead form and got a one-word confirmation but never asked the customer to produce, photograph, text, or read the actual utility bill — the call DQ'd on credit before reaching that step."
+    "reasoning": "The rep never asked the customer to send or read their utility bill during the call."
   },
   "interest_reason_audit": {
     "asked": true,
-    "ask_ts": "00:27",
+    "ask_ts": "00:33",
     "reason_given": true,
-    "reason_ts": "00:33",
-    "reason_quote": "Illinois.",
+    "reason_ts": "00:41",
+    "reason_quote": "I looked into the whole thing before, but I didn't like it because of the prices, because of the terms, and a lot of stuff.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked what got the customer interested in solar; the transcribed answer ('Illinois') appears to be a diarization/transcription artifact rather than a coherent reason, and the more substantive interest context that followed (00:41, prior research/price concerns) was never tied back into the pitch or the exit."
+    "reasoning": "Customer's stated reason for hesitation (past experience with prices and terms) was acknowledged at 00:54 ('That makes sense') but never reinforced or tied back into positioning before the call ended on the credit DQ."
   },
   "script_coverage": [
     {
@@ -49,7 +57,7 @@
       "status": "asked",
       "ts": "00:04",
       "end_ts": "00:11",
-      "quote": "This is Tyke with Ion. I've received a request you're looking at solar for the home.",
+      "quote": "This is Tyke with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "That's good.",
       "resistance_reason": "",
@@ -59,33 +67,33 @@
     {
       "section": "interest_question",
       "status": "asked",
-      "ts": "00:27",
+      "ts": "00:33",
       "end_ts": "00:41",
-      "quote": "And, what got you interested in looking at solar?",
-      "customer_response": "deflected",
-      "customer_quote": "I looked into the whole thing before, but I didn't like it because of the prices, because of the terms, and a lot of stuff.",
-      "resistance_reason": "cost",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "quote": "what got you interested in looking at solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "Illinois.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:12",
       "end_ts": "00:27",
-      "quote": "The first thing I wanted to clarify was the address. I've yet 9231 Thornwood Drive in Tinley Park?",
-      "customer_response": "cooperative",
-      "customer_quote": "Yes. Perfect.",
+      "quote": "The first thing I wanted to clarify was the address.",
+      "customer_response": "no_answer",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "01:36",
-      "end_ts": "01:44",
-      "quote": "And then I have you down as the, property owner. Is there anybody else on the title with you, or is it just you?",
+      "ts": "01:37",
+      "end_ts": "01:45",
+      "quote": "Is there anybody else on the title with you, or is it just you?",
       "customer_response": "cooperative",
       "customer_quote": "Only me and my wife.",
       "resistance_reason": "",
@@ -96,10 +104,10 @@
       "section": "roof",
       "status": "asked",
       "ts": "01:24",
-      "end_ts": "01:35",
-      "quote": "But is that an asphalt shingle roof? It looks like it is.",
+      "end_ts": "01:36",
+      "quote": "is that an asphalt shingle roof?",
       "customer_response": "cooperative",
-      "customer_quote": "",
+      "customer_quote": "Right.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -108,41 +116,41 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "01:45",
-      "end_ts": "01:50",
+      "end_ts": "01:51",
       "quote": "And is that ComEd the current utility company, or is it somebody else there?",
-      "customer_response": "cooperative",
+      "customer_response": "no_answer",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:51",
-      "end_ts": "01:57",
-      "quote": "And it looks like did you put, about a 100 to a 150 to how much you're currently paying?",
+      "end_ts": "01:56",
+      "quote": "how much you're currently paying?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "completed"
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:00",
-      "end_ts": "02:32",
-      "quote": "In order to qualify for the current programs going on right now, all we ask of the homeowner is you just have a credit score of at least 670. Is that gonna be an issue for you guys?",
+      "end_ts": "02:37",
+      "quote": "credit score of at least 670.",
       "customer_response": "resistant",
       "customer_quote": "No. It's not that much. No. It's bad.",
-      "resistance_reason": "cost",
+      "resistance_reason": "dont_have_it",
       "rep_followup": "moved_on",
       "result": "declined"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,18 +158,18 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "00:29",
-      "end_ts": "00:41",
-      "quote": "And is this your first time looking into it, or have you looked into it before?",
+      "ts": "00:35",
+      "end_ts": "00:54",
+      "quote": "is this your first time looking into it, or have you looked into it before?",
       "customer_response": "cooperative",
       "customer_quote": "I looked into the whole thing before, but I didn't like it because of the prices, because of the terms, and a lot of stuff.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -190,85 +198,70 @@
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "02:37",
-      "end_ts": "02:44",
-      "quote": "I'll make a note here to follow-up with you in a couple of months just to see where everything's kind of at, but I'll take you off our list for now.",
-      "customer_response": "cooperative",
-      "customer_quote": "Alright. Thanks.",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "00:41",
-      "quote": "I looked into the whole thing before, but I didn't like it because of the prices, because of the terms, and a lot of stuff.",
-      "type": "cost",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Yeah. Yeah. Kinda get a little bit more research through. Yeah."
-      ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "The rep offered one soft acknowledgment/validation of the customer's price/terms concern and moved on without probing details or attempting to reframe; the objection was never actually resolved, just left behind as the call proceeded to other verify items."
-    },
-    {
-      "ts": "02:24",
-      "quote": "No. It's not that much. No. It's bad.",
-      "type": "cost",
-      "rep_attempts": 0,
-      "attempt_quotes": [],
-      "resolved": false,
-      "resolution_ts": "02:32",
-      "reasoning": "This is the hard credit qualifier; the rep made zero attempts to explore alternative financing or purchase paths per qualifiers.credit_qualifier.notes.tax_credit_disclosure and moved straight to disqualification."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "objection_inversion on cost/terms disclosure",
-    "ts": "01:08",
-    "quote": "Yeah. Yeah. Kinda get a little bit more research through. Yeah.",
-    "why": "The customer handed the rep a textbook cost objection (price and terms too high, waiting for the market to settle) early in the call, before the credit DQ was known. This was the highest-leverage moment on the call to flip the objection, and the rep validated the wait-and-see logic instead."
+    "topic": "Prior solar experience never probed",
+    "ts": "00:41",
+    "quote": "I didn't like it because of the prices, because of the terms, and a lot of stuff.",
+    "why": "Customer volunteered specific past objections (price, terms) twice and the rep never asked which company or what happened — this is exactly the intel that helps position Ion and build rapport, and it was walked past both times."
   },
   "key_moments": [
     {
       "ts": "00:41",
-      "quote": "I looked into the whole thing before, but I didn't like it because of the prices, because of the terms, and a lot of stuff.",
+      "quote": "I didn't like it because of the prices, because of the terms, and a lot of stuff.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a full prior solar shopping experience with a specific complaint (price, terms) and a decision to wait for market maturity/reviews. This is exactly the kind of competitive intelligence a closer would want, and it also directly maps to the objection_inversion trigger for cost."
+      "stewart_read": "Customer names two specific objection categories from a past solar interaction (price, terms) and the rep does not ask which company or what the terms were."
     },
     {
-      "ts": "01:08",
-      "quote": "Yeah. Yeah. Kinda get a little bit more research through. Yeah.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "The customer's stated reason for holding off (price/terms too high) is the textbook objection_inversion trigger — the same bill pain that justifies solar is being used as the reason to wait. The rep validates the wait-and-see logic instead of flipping it."
+      "ts": "01:51",
+      "quote": "did you put, about a 100 to a 150 to how much you're currently paying?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Rep offers a range instead of asking an open bill question, and the customer's vague 'Yeah' response leaves no real number captured — the bill anchor never lands."
     },
     {
-      "ts": "01:24",
-      "quote": "I do wanna just make sure that I was taking a look at the the address there. You have a very beautiful home, gets lots and lots of sunlight, so that's great to see.",
-      "classification": "rapport_repair",
-      "stewart_read": "A small, genuine rapport touch tied to the actual property — a good example of calm, neighbor-like energy rather than a scripted compliment."
+      "ts": "02:10",
+      "quote": "What is that?",
+      "classification": "knowledge_gap",
+      "stewart_read": "Customer doesn't understand what a credit score requirement means in context, showing confusion rather than resistance."
     },
     {
-      "ts": "02:02",
-      "quote": "And then in order to qualify for the current programs going on right now, all we ask of the homeowner is you just have a credit score of at least 670. Is that gonna be an issue for you guys?",
+      "ts": "02:19",
+      "quote": "No. It's not that much. No. It's bad.",
       "classification": "other",
-      "stewart_read": "Rep runs the credit qualifier as scripted and DQs on the customer's stated answer for both homeowner and spouse. Per the schema's unresolved Kenny policy question, this may be correct procedure (setter DQs on stated) or a lost deal if the intended policy is closer-pull-decides."
+      "stewart_read": "Customer discloses sub-670 credit for themselves and immediately for the spouse when asked, confirming a hard DQ per Ion's stated policy."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
     "revision_applied": false
   },
   "quote_verification": {
-    "checked": 39,
-    "verified": 39,
+    "checked": 36,
+    "verified": 36,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

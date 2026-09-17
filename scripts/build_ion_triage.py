@@ -208,6 +208,27 @@ def build_exemplars(rows: list[dict], events_by_call: dict[str, list[dict]]) -> 
     return out
 
 
+OBJ_CLIP_LEAD, OBJ_CLIP_LEN = 5, 25
+
+
+def objection_row(o: dict) -> dict:
+    t = ts_sec(o.get("ts"))
+    return {
+        "ts": o.get("ts"),
+        "start_sec": max(0, t - OBJ_CLIP_LEAD) if t is not None else None,
+        "end_sec": t + OBJ_CLIP_LEN if t is not None else None,
+        "quote": o.get("quote") or "",
+        "type": o.get("type") or "other",
+        "blocked_section": norm_section(o.get("blocked_section")) if o.get("blocked_section") not in (None, "", "none") else None,
+        "attempts": int(o.get("rep_attempts") or 0),
+        "moves": [m for m in (o.get("attempt_moves") or []) if isinstance(m, str)],
+        "attempt_quotes": [q for q in (o.get("attempt_quotes") or []) if isinstance(q, str)][:4],
+        "resolved": bool(o.get("resolved")),
+        "continued": o.get("resolved_by_tape"),
+        "next_event": o.get("next_event"),
+    }
+
+
 def build_row(summary: dict) -> dict:
     cid = summary["call_id"]
     slug = cid.lower() if cid.upper().startswith("SESSION") else cid
@@ -260,6 +281,9 @@ def build_row(summary: dict) -> dict:
         "reason_asked": (brief.get("interest_reason_audit") or {}).get("asked"),
         "reason_used": (brief.get("interest_reason_audit") or {}).get("reason_used"),
         "coverage": {norm_section(c["section"]): c["status"] for c in (brief.get("script_coverage") or []) if isinstance(c, dict) and c.get("section")},
+        # objections (layered pipeline): a no in any clothing, where it landed, what the rep tried,
+        # whether the tape shows the script continuing. Older reads carry type/attempts only.
+        "objections": [objection_row(o) for o in (brief.get("objections") or []) if isinstance(o, dict)],
         "_events": [dict(c, _section=norm_section(c.get("section")), _brief=brief)
                     for c in (brief.get("script_coverage") or []) if isinstance(c, dict) and c.get("section")],
         "counts": {

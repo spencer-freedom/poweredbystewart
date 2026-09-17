@@ -1,17 +1,26 @@
 {
   "call_id": "10000138466",
   "rep_name": "Joel",
-  "trajectory_summary": "This is a short reschedule call on an already-interested, previously-booked lead — the customer reaffirms interest multiple times unprompted and the rep successfully re-locks a specific day and time with a text-confirmation safety net for a customer who has disclosed phone-navigation difficulty. The call's shape is mixed: the scheduling mechanics land well, but the rep lets a long stretch of customer-volunteered technical and enthusiasm content (outbuilding solar, batteries, transformer routing, budget flexibility) pass without capturing or reflecting any of it for the closer.",
-  "shape": "mixed",
-  "outcome_dispute": null,
+  "trajectory_summary": "This call is structurally a reschedule, and Gary arrives already warm and talkative, but Joel never runs any verify items — no address/homeowner, co-owner, roof, utility, bill, or interest depth — before booking. Energy is mostly flat-to-warm because Gary supplies it himself; the risk is that literally nothing about qualification, the bill, or a spouse/co-owner was confirmed, leaving the appointment structurally unverified going into the closer call.",
+  "shape": "stagnant",
+  "outcome_dispute": "v1 tag is unknown; observed outcome should be tentative, not booked — 9AM is stated repeatedly but no day-of-week/date beyond 'tomorrow' is anchored, and no button-up elements (one-hour block, no-driving, 'is that fair') were run.",
   "observed_outcome": {
-    "outcome": "booked",
-    "appointment_channel": "unclear",
+    "outcome": "tentative",
+    "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "06:02",
-    "quote": "Yeah. So I'll go ahead and get you on our calendar here for tomorrow at 9AM then.",
-    "reasoning": "A specific day (tomorrow) and time (9AM) are confirmed, with the rep also committing to a text confirmation; no co-owner or spouse is mentioned anywhere in the call, and the appointment channel (phone vs in-person site visit) is not explicitly stated, though earlier language ('we had you on our calendar here to share that solar information' and 'someone in your area tomorrow') suggests an in-person visit."
+    "ts": "07:52",
+    "quote": "Thanks for your time today. We'll see you here tomorrow at 9AM.",
+    "reasoning": "A specific time (9AM) and day (tomorrow) are stated and accepted, but no full button-up handshake ('is that fair') was run and Gary's own comments about not knowing how to check his phone calendar leave the booking fragile; no co-owner was ever identified since verify was skipped entirely.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "This call is a reschedule of a previously-set appointment; no bill amount or usage figure is discussed at any point in this transcript, consistent with qualification having occurred on a prior touch."
+    "reasoning": "The rep did not capture any monthly bill or kWh usage on the call, so no flip could be executed."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,30 +39,30 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "No mention of the utility bill or bill collection occurs in this call; the call's purpose is solely to reschedule and confirm a previously-missed appointment."
+    "reasoning": "The rep never raised collecting a utility bill or asked the customer to send it."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "04:07",
-    "reason_quote": "the the aspect of this, solar stuff, you know, I I I think it's probably a good idea. You know? Yeah. Especially if you're just trying to save money.",
+    "reason_ts": "04:09",
+    "reason_quote": "solar stuff, you know, I I I think it's probably a good idea.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never directly asked the interest question (this is a reschedule call, likely asked on the prior touch), but the customer volunteered a reason — saving money, plus later outbuilding/battery interest — that the rep acknowledged briefly at 04:18 ('that's kinda why most people are looking into it is money') but did not revisit when booking or in the close."
+    "reasoning": "Gary gave a reason (saving money, plus outbuilding/battery scope) at 04:09 and 04:39, but Joel never referenced it again when confirming or closing the appointment — the close at 07:52 is purely logistical."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:18",
+      "end_ts": "00:08",
       "quote": "Hey, Gary. This is Joel with ION Solar.",
       "customer_response": "cooperative",
-      "customer_quote": "I'm working on that. Not very hard.",
+      "customer_quote": "That's me.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -70,7 +79,7 @@
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -78,11 +87,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,11 +99,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,11 +111,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,7 +123,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
@@ -130,7 +139,7 @@
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +147,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,7 +159,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
@@ -180,73 +189,84 @@
       "section": "appointment_set",
       "status": "asked",
       "ts": "01:22",
-      "end_ts": "06:12",
-      "quote": "It looks like we do have someone in your area tomorrow. Would tomorrow around nine or ten work good for you?",
+      "end_ts": "06:02",
+      "quote": "Would tomorrow around nine or ten work good for you?",
       "customer_response": "cooperative",
       "customer_quote": "I think so. I let's say yes.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
       "ts": "01:52",
-      "end_ts": "07:58",
-      "quote": "I'll just send you a text. I'll send you a text saying Okay. Hey. It's Joel with Ion. We'll see you tomorrow, 9AM.",
+      "end_ts": "07:52",
+      "quote": "I'll just send you a text.",
       "customer_response": "cooperative",
-      "customer_quote": "Hey. That's a that's a super good idea.",
+      "customer_quote": "Hey. That's a that's a super good idea. Awesome.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "capturing volunteered technical detail for the closer",
-    "ts": "05:43",
-    "quote": "Sweet. So, yeah, I'm interested. I'm interested.",
-    "why": "The customer spent nearly two minutes (04:39-05:55) describing outbuilding solar, battery storage, and a prior conversation about running the system off a separate feed near the transformer — none of this was reflected back, confirmed, or flagged for the closer, leaving real design-relevant intel uncaptured despite an unmistakably engaged, buying-signal-rich customer."
+    "topic": "No verify section run at all — bill, interest depth, co-owner, roof, utility all skipped",
+    "ts": "04:09",
+    "quote": "solar stuff, you know, I I I think it's probably a good idea. You know? Yeah. Especially if you're just trying to save money.",
+    "why": "This call books an appointment with zero qualification data captured; Gary volunteers his reason and even a battery/outbuilding scope detail and none of it gets logged or used, leaving the closer with almost nothing beyond a name and a time."
   },
   "key_moments": [
     {
-      "ts": "01:42",
-      "quote": "I I don't know how to if I have a thing on my phone that where appointments is and everything, but I don't know how to talk on the phone and look look at what I got.",
-      "classification": "micro_trade",
-      "stewart_read": "Customer discloses a real tech-navigation limitation (likely age-related, he later states he's 82). Rep's text-confirmation offer at 01:52 is a well-matched, low-cost accommodation rather than a scripted formality."
-    },
-    {
-      "ts": "04:20",
-      "quote": "the the problem with saving money, I'm 82, and what am I gonna save it for?",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This reads more as a philosophical aside than a hard cost objection — the customer answers his own musing within the same breath ('it's just the principle of it all too... not wasting your money') and reaffirms interest unprompted seconds later at 04:36 ('I'm definitely I'm interested'). The rep's silence here is low-stakes since the customer self-resolved, but a brief acknowledgment ('that's exactly it — no reason to keep overpaying the utility either way') would have reinforced rather than left the line hanging."
-    },
-    {
-      "ts": "04:57",
-      "quote": "that solar thing, whoever was the one he end up have talked to me about before they they thought they could, what would you call it? Run the system not off of that stuff, but",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer references a prior solar conversation about running the system independent of the transformer/pole setup, but the rep never asks who that was or what was proposed. This is competitive/technical context that would help the closer walk in prepared, but it is an ungrounded inference beyond that — the transcript doesn't clarify if this was another company or a prior Ion touch."
-    },
-    {
-      "ts": "05:43",
-      "quote": "Sweet. So, yeah, I'm interested. I'm interested.",
+      "ts": "00:30",
+      "quote": "Yeah. Yeah. I'm still interested. That kind of thing.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Customer repeats his interest twice unprompted immediately after describing wanting solar on outbuildings plus battery storage — this is a strong buy signal the rep could have anchored on when booking rather than moving straight to calendar logistics."
+      "stewart_read": "Gary self-identifies as still interested unprompted at the very start of the call — a gift Joel doesn't need to work for."
+    },
+    {
+      "ts": "03:21",
+      "quote": "I want a security system put in.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "This isn't scope creep by Joel, but it is an unmanaged tangent — Gary derails into an unrelated topic and Joel doesn't redirect back to solar qualification."
+    },
+    {
+      "ts": "04:09",
+      "quote": "solar stuff, you know, I I I think it's probably a good idea. You know? Yeah. Especially if you're just trying to save money.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "This is the customer volunteering the exact hook (saving money) that verify.interest_in_solar is built to capture, and Joel gives a one-line generic reply instead of expanding it."
+    },
+    {
+      "ts": "04:39",
+      "quote": "I want it on the on my outbuildings, you know, and, that type of thing.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Gary describes a specific, non-standard system scope (outbuildings, separate transformer, battery interest) — a strong qualification and cross-sell signal."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 26,
-    "verified": 25,
-    "fuzzy": 1,
+    "checked": 28,
+    "verified": 26,
+    "fuzzy": 2,
     "wrong_ts": 0,
     "not_found": 0
   }

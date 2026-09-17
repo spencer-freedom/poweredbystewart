@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION26_ec83168b",
   "rep_name": "Bucky",
-  "trajectory_summary": "This call surfaces as an orphaned-solar-system scenario almost immediately, compounded by a hard credit disqualifier the customer self-identifies. The rep runs the standard verify script without adapting to the existing-solar disclosure (schema's orphaned_flow was never invoked) and the call ends in a clean, mutual, low-friction DQ. There's no real energy built or lost — the call was structurally short-circuited by a genuine gate.",
-  "shape": "stagnant",
-  "outcome_dispute": "v1 tag unknown, but observed_outcome should be dq: the customer states her credit is 'way below' 670 and confirms she lacks cash to pay outright, which is a hard schema DQ (qualifiers.credit_qualifier, dq_rules.credit_below_670_no_alternative) with no appointment set.",
+  "trajectory_summary": "The call never really opens: Rachel volunteers a disqualifying and emotionally loaded fact (broken orphaned solar system, defunct installer) in the first minute, but the rep runs past it into rote qualifiers. The call ends on a credit disqualification the rep surfaced himself, with no cross-sell recovery attempted despite Rachel naming a new-roof interest.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 outcome is unknown; based on transcript this is a dq — the credit qualifier failed and the customer self-disqualified on financing, and the rep did not pursue any alternative or roofing angle.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "02:58",
-    "quote": "Okay. Yeah. Unfortunately, I don't have that kind of money. But thank you, Buffy. I appreciate you calling.",
-    "reasoning": "Customer confirms credit well below the 670 threshold and no cash-purchase capacity, triggering dq_rules.credit_below_670_no_alternative with no appointment offered or set; the call ends with a polite mutual close."
+    "ts": "02:56",
+    "quote": "Unfortunately, I don't have that kind of money. But thank you, Buffy. I appreciate you calling.",
+    "reasoning": "Customer failed the credit qualifier (well below 670) and stated she cannot pay cash either; the rep did not push forward with an appointment or alternative and the call ended on this hard gate.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +28,7 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures a bill figure (likely a transcription artifact for $224, given the customer's description of a leveled monthly billing plan — flagging this uncertainty rather than asserting the exact number) but immediately moves to the roof-type question at 02:23 without acknowledging or flipping it into emotional leverage; the call's rapid progression to a hard credit DQ makes the miss moot in practice, but the flip line never appears."
+    "reasoning": "Bill of $2.24 (likely $224) was captured at 02:08 but never referenced again or used to build urgency; the flip should have landed right after capture, e.g. tying the bill pain to the broken existing system's failure to deliver savings."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call ends in a credit-based disqualification before the rep reaches bill-collection; the utility bill document itself (photo/text/email) is never raised."
+    "reasoning": "The rep asked for the monthly amount but never raised collecting the actual utility bill or a photo/link."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,17 +49,17 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar' — he opens with a claim that the customer requested a quote ('I got a request you're looking at solar for your home') and moves straight into address verification. The customer's own unprompted answer about a 'new roof program' is ambiguous crosstalk, not a direct response to an interest question, so no clean reason was captured or used."
+    "reasoning": "The rep did not ask what motivated the customer to look into solar, so no formal reason was captured for use."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:24",
-      "end_ts": "00:31",
-      "quote": "Hey, Rachel. This is Bucky with Ion. I got a request you're looking at solar for your home.",
+      "end_ts": "00:24",
+      "quote": "This is Bucky with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "Good. How are you?",
+      "customer_quote": "It is.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -71,9 +79,9 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:42",
-      "end_ts": "00:53",
-      "quote": "Are you at 1828, Hemingway Drive?",
+      "ts": "00:45",
+      "end_ts": "00:49",
+      "quote": "Hemingway Drive?",
       "customer_response": "cooperative",
       "customer_quote": "Yes, sir.",
       "resistance_reason": "",
@@ -84,8 +92,8 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "01:49",
-      "end_ts": "01:53",
-      "quote": "Is there anybody else I'm sorry. Is there anybody else on the title but you?",
+      "end_ts": "01:55",
+      "quote": "Is there anybody else on the title but you?",
       "customer_response": "cooperative",
       "customer_quote": "Nope. That's me.",
       "resistance_reason": "",
@@ -97,18 +105,18 @@
       "status": "asked",
       "ts": "02:25",
       "end_ts": "02:29",
-      "quote": "Do you know what type of roof you have? Shingle.",
-      "customer_response": "no_answer",
-      "customer_quote": "",
+      "quote": "do you know what type of roof you have?",
+      "customer_response": "cooperative",
+      "customer_quote": "Shingle.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:38",
-      "end_ts": "02:03",
+      "end_ts": "01:42",
       "quote": "what electric company are you with?",
       "customer_response": "cooperative",
       "customer_quote": "Dominion Energy.",
@@ -129,31 +137,19 @@
       "result": "completed"
     },
     {
-      "section": "credit_qualifier",
+      "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:31",
-      "end_ts": "02:53",
-      "quote": "if you have a credit score over 670?",
-      "customer_response": "resistant",
+      "ts": "02:30",
+      "end_ts": "02:40",
+      "quote": "Do you know, if you have a credit score over 670?",
+      "customer_response": "cooperative",
       "customer_quote": "Way below that.",
-      "resistance_reason": "cost",
-      "rep_followup": "alternative_offered",
-      "result": "declined"
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "prior_design",
       "status": "skipped",
       "ts": "",
       "end_ts": "",
@@ -163,6 +159,18 @@
       "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "skipped"
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "00:55",
+      "end_ts": "01:03",
+      "quote": "Do you already have solar on your home?",
+      "customer_response": "cooperative",
+      "customer_quote": "I do. I was interested in I think y'all were offering, like, a new roof",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
@@ -198,54 +206,82 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [],
+  "objections": [
+    {
+      "ts": "02:47",
+      "quote": "Okay. So this isn't like a this this would be a financing thing?",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "It yes. Or you could pay it all cash."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer's question exposed the affordability barrier; rep gave a single flat answer (financing or cash) with no reframe or alternative, and the customer self-disqualified immediately after.",
+      "blocked_section": "tax_credit_qualifier",
+      "attempt_moves": [
+        "reason"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "orphaned-system recognition and flow",
-    "ts": "01:19",
-    "quote": "Oh, so you're like a you're on your own. You're like independent?",
-    "why": "The customer clearly describes a defunct-installer, orphaned solar situation that maps directly to the schema's orphaned_flow, but the rep improvises rather than running the defined qualifying questions (owned/leased, original company, working status). This is a recognizable, recurring lead type at Ion and worth drilling so reps default to the script branch instead of freelancing."
+    "topic": "Missed roofing cross-sell on an existing-solar DQ",
+    "ts": "00:58",
+    "quote": "I was interested in I think y'all were offering, like, a new roof",
+    "why": "Customer named a specific Ion roof program interest at the very start of the call; solar DQ'd on credit at the end, but the roofing angle — which doesn't require the credit qualifier — was never pursued, per cross_sell_signals.roof_replacement_planned."
   },
   "key_moments": [
     {
       "ts": "00:58",
       "quote": "I do. I was interested in I think y'all were offering, like, a new roof",
+      "classification": "cross_sell_miss",
+      "stewart_read": "Customer directly names a new-roof program interest — a strong roofing cross-sell trigger — and the rep does not bridge to it at all."
+    },
+    {
+      "ts": "01:12",
+      "quote": "I don't know even know who it is, and the company that installed them is out of business.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "The transcript here is garbled/crosstalk — the customer's line is cut off mid-sentence and overlaps with the rep's 'program. Okay,' making it unclear whether she's referencing a distinct roofing offer, a solar offer, or conflating the two. Given that ambiguity, this should be read as a probe miss (rep never asks 'what roof program is that?') rather than a confirmed missed roofing cross-sell — the underlying content isn't clean enough to call it a clear cross-sell signal."
+      "stewart_read": "This is a hard orphaned-system disclosure that should trigger the orphaned_flow questions (own vs lease, is it working) — the rep skips the structured probe entirely."
     },
     {
       "ts": "01:17",
       "quote": "It these have been a nightmare.",
       "classification": "empathy_miss",
-      "stewart_read": "Customer explicitly frames her existing solar experience as a 'nightmare' — a strong negative-emotion disclosure — and the rep's next line pivots immediately to a procedural question about ownership structure without acknowledging the frustration."
+      "stewart_read": "Customer signals real frustration/distress about her existing system; rep offers no acknowledgment and pivots immediately to the utility-company qualifier."
     },
     {
-      "ts": "01:19",
-      "quote": "Oh, so you're like a you're on your own. You're like independent?",
-      "classification": "non_standard_scenario_hold",
-      "stewart_read": "The customer has an existing, orphaned solar system from a defunct installer — this is exactly the schema's orphaned_flow trigger condition, but the rep improvises his own characterization ('independent') instead of running the defined orphaned_flow questions (own vs. lease, original company, panel size, system working)."
-    },
-    {
-      "ts": "02:08",
-      "quote": "Right now, it's $2.24.",
-      "classification": "bill_anchor",
-      "stewart_read": "The number as transcribed ('$2.24') is almost certainly a transcription artifact for '$224' given the customer's context about a leveled monthly billing plan — Stewart is not asserting the number as $224 with confidence, only flagging the likely transcription error so the manager doesn't read this as a two-dollar bill. Regardless of exact figure, the rep captures it and immediately moves to the next verify item without acknowledging or flipping it."
+      "ts": "02:03",
+      "quote": "Oh, yeah. You're I already asked that. I'm sorry. How much are you spending on a monthly average?",
+      "classification": "protocol_violation",
+      "stewart_read": "Rep re-asks the utility company question and has to self-correct mid-call, signaling the verify section was run mechanically rather than conversationally."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 34,
-    "verified": 34,
+    "checked": 38,
+    "verified": 38,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

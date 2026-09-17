@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION2_3c9962b0",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens with a live, cooperative customer who works through most of the verify section fairly smoothly, but it never converts that cooperation into a locked appointment. A mid-call interruption creates over a minute of dead air, and the call ends with the rep unable to reach the customer again after sending a bill-collection text.",
-  "shape": "mixed",
-  "outcome_dispute": "v1 tag is listed as unknown; the transcript clearly ends with no appointment day/time set and the customer unreachable after 08:12 — this should be recorded as no_appointment, not booked or tentative.",
+  "trajectory_summary": "The call opens with real, self-initiated interest but the rep never addresses the customer's repeated and escalating grievance about a prior solar company ghosting him after paperwork was submitted — the exact risk this call is at)risk of repeating. The rep executes the verify checklist mechanically and lands a bill-swap reframe when pressed on cost, but the call ends mid-air with the customer going silent and no appointment, button-up, or confirmed bill capture.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "V1 tag is unknown; observed transcript shows no appointment time was ever set and the call ends with the customer going unresponsive after 07:08 — this is a no_appointment/dropped-call outcome, not a booked or tentative one.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "08:55",
     "quote": "I'll call you right back.",
-    "reasoning": "The call ends with the rep unable to reach the customer after sending a text for the bill/kWh usage; no day or time was ever agreed, and the transcript closes on an unfulfilled callback promise rather than a locked next step."
+    "reasoning": "The call ends with the customer going silent after the rep says he'll text him; no day/time was ever proposed or agreed, and the rep is left calling into dead air.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,17 +28,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep asked about monthly average spend at 04:58 but the customer deferred to his wife ('My wife knows all that stuff. She takes care of the bills.') and no dollar figure or usage number was ever captured on the call."
+    "reasoning": "No monthly dollar amount or kWh was captured from the customer; the rep requested the usage graph instead of obtaining a numeric bill on the call."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "05:54",
-    "ask_quote": "Okay. So the last thing we need is just your yearly kilowatt usage history.\nIt's a graph on your power bill.\nIf I text you,\ncould you because you wanna do all three homes?",
+    "ask_ts": "06:00",
+    "ask_quote": "It's a graph on your power bill.",
     "result": "promised_later",
     "method": "text",
-    "result_ts": "07:08",
-    "result_quote": "Let me know if you got that text.",
-    "reasoning": "The rep asks to text the customer for the kWh usage graph off the bill, but the call drops before confirmation the text was received or the bill was sent back."
+    "result_ts": "06:11",
+    "result_quote": "Well, that's what we were gonna try and do the last time.",
+    "reasoning": "The rep asked for the yearly usage/graph and offered to text; the customer indicated willingness to pursue sending bills but did not provide them on the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +49,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' — the call moved from intro directly into address/state verification, and the customer's mentions of a prior company and a Maryland program were volunteered, not solicited by a dedicated interest question."
+    "reasoning": "The rep did not ask the customer why they were interested in solar; the customer mentioned prior contact but no motivation was solicited."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:30",
-      "quote": "Hey. It's Bucky with Ion. I'm reaching out about the solar form you filled out online. How are you doing?",
-      "customer_response": "resistant",
-      "customer_quote": "Good. But I just got what's up? When your number comes up, it comes up as a\na spam.",
-      "resistance_reason": "trust",
-      "rep_followup": "persisted",
-      "result": "partial"
+      "end_ts": "00:10",
+      "quote": "It's Bucky with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, yeah. I was just looking at that.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -65,15 +73,15 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:49",
-      "end_ts": "02:20",
-      "quote": "So this one, it's a is this an apartment, single family home?",
+      "end_ts": "01:56",
+      "quote": "is this an apartment, single family home?",
       "customer_response": "cooperative",
       "customer_quote": "It's a townhouse.",
       "resistance_reason": "",
@@ -89,17 +97,17 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "04:29",
-      "end_ts": "04:41",
-      "quote": "And you on the roof? That's a weird question. I know, but sometimes it's not this case.",
+      "ts": "05:12",
+      "end_ts": "05:16",
+      "quote": "and your roof, is it a shingle?",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. It's a You own the roof? I mean, the the houses are connected, but they're individual.",
+      "customer_quote": "Yes.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -108,10 +116,10 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "04:46",
-      "end_ts": "04:58",
+      "end_ts": "04:51",
       "quote": "What what utility company are you with?",
       "customer_response": "cooperative",
-      "customer_quote": "Uh-huh.",
+      "customer_quote": "I believe it's BG and E.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -119,20 +127,20 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "04:58",
+      "ts": "04:56",
       "end_ts": "05:08",
       "quote": "And then do you know how much you spend on a monthly average?",
       "customer_response": "deflected",
       "customer_quote": "My wife knows all that stuff. She takes care of the bills.",
       "resistance_reason": "spouse",
       "rep_followup": "moved_on",
-      "result": "declined"
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "05:17",
-      "end_ts": "05:22",
+      "end_ts": "05:23",
       "quote": "And then do you have a credit score over 6 70?",
       "customer_response": "cooperative",
       "customer_quote": "I believe so.",
@@ -149,44 +157,44 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "01:12",
+      "ts": "01:31",
       "end_ts": "01:31",
-      "quote": "Okay.",
+      "quote": "Okay. I can help you get a estimate going.",
       "customer_response": "cooperative",
       "customer_quote": "Anyway, you know, we had spoke to somebody a long time ago about it.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "partial"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "05:54",
-      "end_ts": "07:08",
-      "quote": "So the last thing we need is just your yearly kilowatt usage history.\nIt's a graph on your power bill.\nIf I text you,",
+      "ts": "06:02",
+      "end_ts": "06:11",
+      "quote": "If I text you,",
       "customer_response": "cooperative",
       "customer_quote": "Well, that's what we were gonna try and do the last time.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "alternative_offered",
       "result": "deferred"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "skipped"
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
@@ -197,22 +205,46 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "not_reached"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
       "ts": "00:22",
-      "quote": "Good. But I just got what's up? When your number comes up, it comes up as a\na spam.",
+      "quote": "Good. But I just got what's up? When your number comes up, it comes up as a spam.",
       "type": "trust_or_scam",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "do you have, like\nlike, random numbers, like, protected Are you in Mount Airy?"
+        "Oh, do you have, like, random numbers, like, protected Are you in Mount Airy?"
       ],
       "resolved": true,
-      "resolution_ts": "00:46",
-      "reasoning": "The customer accepts the rep's explanation about multiple teams/possible different company and moves on to describing his three houses without further pressing the spam concern."
+      "resolution_ts": "00:58",
+      "reasoning": "Rep offers a specific explanation (different solar company, different number) which the customer accepts and moves past.",
+      "blocked_section": "intro_legitimacy",
+      "attempt_moves": [
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "prior_design@01:31",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "01:12",
+      "quote": "Anyway, you know, we had spoke to somebody a long time ago about it.",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer raises a prior unfulfilled solar contact three times across the call; rep never probes or directly resolves it, only acknowledges and moves the script forward.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [],
+      "resolved_by_tape": true,
+      "next_event": "prior_design@01:31",
+      "resolution_agrees": false
     },
     {
       "ts": "06:46",
@@ -224,54 +256,67 @@
       ],
       "resolved": true,
       "resolution_ts": "06:55",
-      "reasoning": "Customer responds with a simple 'Oh, okay' after the rep's no-upfront-cost framing, indicating the immediate question was satisfied even though no real numbers were given."
+      "reasoning": "Customer accepts the no-upfront-cost explanation with 'Oh, okay,' moving past the cost concern.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "reason"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "prior-contact probing",
-    "ts": "01:12",
-    "quote": "Anyway, you know, we had spoke to somebody a long time ago about it.",
-    "why": "The customer hands the rep the same competitive/recycled-lead signal twice (01:12 and 04:05) and both times the rep answers 'Okay' and moves on. A 10-second probe on either occurrence would have surfaced which company, what was promised, and whether Ion already has data on file — directly useful to the closer and to correctly reading this as a possible recycled lead."
+    "topic": "Unaddressed trust wound from prior vendor ghosting",
+    "ts": "04:05",
+    "quote": "She said we never received an appointment from the other outfit after we sent all our electric... paperwork",
+    "why": "This is the single biggest live risk to this specific appointment holding — the customer names his exact fear three times and the rep never reassures or commits to preventing a repeat."
   },
   "key_moments": [
-    {
-      "ts": "00:22",
-      "quote": "Good. But I just got what's up? When your number comes up, it comes up as a\na spam.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The customer raises a trust flag about caller-ID spam labeling almost immediately after the rep's generic form-fill intro. The rep's intro at 00:05 didn't pre-empt this by naming a specific legitimacy anchor beyond 'the solar form you filled out online.'"
-    },
     {
       "ts": "01:12",
       "quote": "Anyway, you know, we had spoke to somebody a long time ago about it.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a prior solar conversation and, moments later, a no-show from that company. This is a recycled-lead signal (prior touchpoint, possibly bill/design already on file) as well as competitive intel, and the rep does not probe either angle."
+      "stewart_read": "Customer discloses a prior solar conversation; rep never asks which company or what happened."
+    },
+    {
+      "ts": "01:28",
+      "quote": "they never did wind up never showing up.",
+      "classification": "empathy_miss",
+      "stewart_read": "Customer names being stood up by a competitor; rep responds with a flat 'Okay' and changes subject to state/address."
     },
     {
       "ts": "04:05",
-      "quote": "So I asked that was my wife called. And then I asked her. She said we never received an appointment from the other\noutfit after we sent all our electric",
+      "quote": "She said we never received an appointment from the other outfit after we sent all our electric... paperwork",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "The customer repeats and sharpens the same complaint — paperwork was sent to a prior company and no appointment ever came. The rep again answers 'Okay' and moves to the meter question rather than asking what was actually submitted."
+      "stewart_read": "Third mention of the same ghosting grievance, now with more detail (paperwork sent, no appointment came); rep pivots immediately to a meter-location qualifier."
     },
     {
-      "ts": "02:55",
-      "quote": "Should I call you back?",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "When the customer says he has to take another call, the rep offers an open-ended 'should I call you back' instead of stating a concrete wait time or callback window, and the resulting gap runs from 02:55 to 03:59 — over a minute of dead air on the recording."
+      "ts": "04:58",
+      "quote": "And then do you know how much you spend on a monthly average?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Bill amount deflected to spouse; rep never attempts to get even a ballpark or loop the wife in, and never returns to it after moving to the kWh-graph text ask."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 45,
-    "verified": 45,
-    "fuzzy": 0,
+    "checked": 47,
+    "verified": 44,
+    "fuzzy": 3,
     "wrong_ts": 0,
     "not_found": 0
   }

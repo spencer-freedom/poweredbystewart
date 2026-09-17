@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION18_fd078269",
   "rep_name": "Randy",
-  "trajectory_summary": "The call opens cold and confused — the customer barely remembers requesting an estimate and initially claims disinterest — but the rep steadily rebuilds the thread by pointing back to the existing design and letting the customer talk himself into the appointment. The rep handles the spousal-hesitation disclosure correctly as a protocol rather than an objection, and the call ends with a locked day and time, though the wife's presence at the appointment was never explicitly confirmed.",
+  "trajectory_summary": "Call opens hostile with an immediate 'not interested' but the rep pivots off prior-contact legitimacy instead of arguing, and the customer's own enthusiasm for the product resurfaces within a minute. The rep skips nearly the entire verify/bill flow but still locks a specific day and time in under four minutes by staying calm and reframing the spouse gap as the appointment's purpose.",
   "shape": "energy_built",
-  "outcome_dispute": null,
+  "outcome_dispute": "V1 tag is unknown; the transcript shows a locked day+time with explicit customer confirmation ('That's great... 10:10 is perfect'), so this should be recorded as booked, not tentative or callback.",
   "observed_outcome": {
-    "outcome": "booked",
-    "appointment_channel": "phone",
+    "outcome": "tentative",
+    "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": false,
-    "ts": "03:04",
-    "quote": "Okay. Never mind. We're all good. So, yeah, we can do, like, a nine or 10AM.",
-    "reasoning": "A specific day (tomorrow, the 10th) and time (10AM) are locked by 03:12-03:16, but the wife/co-decider is discussed as needing to be brought along without an explicit confirmation that she will attend."
+    "ts": "03:12",
+    "quote": "And that'll be tomorrow, the tenth.",
+    "reasoning": "A specific day (tomorrow, the 10th) and time (10AM) were confirmed by both parties, but the wife/co-owner, though discussed three times, was never explicitly confirmed as attending.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "identified_unconfirmed",
+      "credit": "not_asked"
+    },
+    "set_rule": "booked by time, tentative by rule: bill not_asked",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "No bill amount or usage figure is discussed anywhere in this call; the conversation revolves around a pre-existing estimate/design rather than fresh qualification data."
+    "reasoning": "No customer bill amount or kWh was captured on the call; therefore no flip could be executed."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +39,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never raises collecting a utility bill on this call; the customer references a prior estimate loosely ('some type of estimate last week') but it is not confirmed what data that estimate was built from, and the rep does not probe or request bill documentation here."
+    "reasoning": "The rep never requested the customer's utility bill or asked for a photo/link during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +50,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar' — instead relying on the existing design/estimate as the hook. The customer volunteers site-quality reasons (sun exposure, no shade) unprompted, but no direct interest-question was asked to elicit a motivational reason like bill pain or environmental concern."
+    "reasoning": "The rep did not ask why the customer was interested; the customer volunteered hesitation about convincing his wife but that was not solicited by the rep."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
-      "ts": "00:14",
-      "end_ts": "00:18",
-      "quote": "With, ION. We're a solar company.",
+      "ts": "00:03",
+      "end_ts": "00:14",
+      "quote": "This is Randy.",
       "customer_response": "cooperative",
       "customer_quote": "Who who I'm a return the call.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -70,7 +79,7 @@
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -78,23 +87,23 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "co_owner",
-      "status": "asked",
-      "ts": "01:39",
-      "end_ts": "03:25",
-      "quote": "hopefully, we can be able to, get your wife on board too once she's able to, you know, understand it a little more.",
-      "customer_response": "cooperative",
-      "customer_quote": "That's a goal, man. If they can convince her, then I'm sure it's a goal.",
-      "resistance_reason": "spouse",
-      "rep_followup": "alternative_offered",
-      "result": "partial"
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,11 +111,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,11 +123,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,11 +135,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +147,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,18 +159,18 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "00:57",
-      "end_ts": "01:32",
-      "quote": "Have you ever seen a design for your home? Seen how much money you could save?",
+      "end_ts": "01:02",
+      "quote": "Have you ever seen a design for your home?",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. I had a few guys come by with Iron Solar before, and and they told me how my house is positioned directly in sunlight.",
+      "customer_quote": "Yeah. I had a few guys come by with Iron Solar before,",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -172,7 +181,7 @@
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
-      "resistance_reason": "dont_have_it",
+      "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "skipped"
     },
@@ -180,100 +189,124 @@
       "section": "appointment_set",
       "status": "asked",
       "ts": "01:57",
-      "end_ts": "03:10",
-      "quote": "the soonest we can, have a specialist out there would be tomorrow or Saturday.",
+      "end_ts": "03:11",
+      "quote": "the soonest we can, have a specialist out there would be tomorrow",
       "customer_response": "cooperative",
-      "customer_quote": "Nine or ten? Oh, yeah. That that's great. 10:10 is perfect.",
+      "customer_quote": "Tomorrow will be better than Saturday.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "03:46",
-      "end_ts": "04:01",
-      "quote": "I got you down for tomorrow at 10AM. So I'll send you a confirmation text with the, anytime of the meeting, and then we'll see you guys then.",
+      "ts": "03:45",
+      "end_ts": "03:51",
+      "quote": "I got you down for tomorrow at 10AM.",
       "customer_response": "cooperative",
       "customer_quote": "Alright. Bye.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:52",
-      "quote": "No. No. I'm not really interested, man.",
+      "ts": "00:18",
+      "quote": "Oh, I'm not interested, man.",
       "type": "not_interested",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Okay. Have you ever seen a design for your home? Seen how much money you could save?"
+        "it looks like we had a meeting set up with you to show you a solar design for the home."
       ],
       "resolved": true,
-      "resolution_ts": "01:01",
-      "reasoning": "The rep redirected to the existing design/savings angle rather than arguing the refusal directly, and the customer immediately re-engaged with detailed site information, moving past the objection."
+      "resolution_ts": "00:35",
+      "reasoning": "Rep didn't argue the objection directly; instead reasserted the legitimacy of a prior scheduled estimate, which the customer then engaged with and dropped the refusal.",
+      "blocked_section": "intro_legitimacy",
+      "attempt_moves": [
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "prior_design@00:57",
+      "resolution_agrees": true
     },
     {
       "ts": "01:22",
       "quote": "I'm kinda sold on it, but I ain't convinced her yet.",
       "type": "spouse_or_co_decider",
-      "rep_attempts": 2,
+      "rep_attempts": 1,
       "attempt_quotes": [
-        "Okay. I mean, once I get her in advance, there'll be no problem.",
-        "Yeah. Well, that's what this meeting is for is to kinda explain to you guys both how it works and, you know, what the benefits are."
+        "well, that's what this meeting is for is to kinda explain to you guys both how it works"
       ],
       "resolved": true,
-      "resolution_ts": "01:49",
-      "reasoning": "Rep treated this as a protocol rather than an objection to overcome, framing the appointment itself as the way to bring the wife on board, and the customer accepted the framing and proceeded to schedule."
+      "resolution_ts": "02:07",
+      "reasoning": "Rep followed protocol by framing the appointment as the joint-persuasion venue rather than arguing the customer into deciding alone, and the customer moved forward to scheduling.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@01:57",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "button-up handshake missing",
-    "ts": "03:46",
-    "quote": "I got you down for tomorrow at 10AM. So I'll send you a confirmation text with the, anytime of the meeting, and then we'll see you guys then.",
-    "why": "The call books a real day/time but skips the 'is that fair?' handshake and the no-driving/computer expectation-setting — both predictive of show rate per button_up, and cheap to add given how short this exchange already is."
+    "topic": "prior_contact_probe_miss + unused enthusiasm signal",
+    "ts": "01:02",
+    "quote": "I had a few guys come by with Iron Solar before, and and they told me how my house is positioned directly in sunlight",
+    "why": "Customer handed over competitive intel and a strong home-fit signal that went unprobed and unreflected — cheap wins the rep left on the table."
   },
   "key_moments": [
     {
-      "ts": "00:35",
-      "quote": "That was odd. That was for solar. I did do some type of estimate last week, but I didn't know that was for solar panels.",
+      "ts": "00:18",
+      "quote": "Oh, I'm not interested, man.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Textbook 'hello objection' in the first 30 seconds; rep doesn't run the small-ask template verbatim but achieves the same function by pivoting to the existing scheduled estimate."
+    },
+    {
+      "ts": "01:02",
+      "quote": "I had a few guys come by with Iron Solar before, and and they told me how my house is positioned directly in sunlight",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "The customer reveals genuine confusion about what he previously signed up for — he doesn't recall it was specifically for solar panels. The rep never probes what he thought the estimate was for, which leaves a legitimacy gap unresolved and creates booking fragility going into the closer call."
+      "stewart_read": "Customer discloses a prior competitor visit and specific technical detail (sun exposure, lot type) — rep never asks which company or what the prior estimate showed."
+    },
+    {
+      "ts": "01:13",
+      "quote": "So it is kinda perfect for solar panels, but I ain't really liked about it yet.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer is describing his own home as ideal for solar (no shade, good lot) unprompted — this is a strong buying signal the rep should reflect back."
     },
     {
       "ts": "01:22",
       "quote": "I'm kinda sold on it, but I ain't convinced her yet.",
       "classification": "spouse_handling",
-      "stewart_read": "Customer discloses the real decision-blocker is his wife's buy-in. Rep does not argue this or try to overcome it as an objection, which is the correct protocol response."
-    },
-    {
-      "ts": "01:39",
-      "quote": "Okay. I mean, once I get her in advance, there'll be no problem.",
-      "classification": "spouse_handling",
-      "stewart_read": "Rep frames the meeting as the mechanism to bring the wife on board rather than trying to close the customer alone on the call, matching the correct protocol strategy."
-    },
-    {
-      "ts": "01:44",
-      "quote": "Yeah. Well, that's what this meeting is for is to kinda explain to you guys both how it works and, you know, what the benefits are.",
-      "classification": "spouse_handling",
-      "stewart_read": "Rep explicitly says 'you guys both,' implying the wife should be on the call, but never directly asks the customer to confirm she will actually be present at 9 or 10 AM tomorrow."
+      "stewart_read": "Correct protocol trigger; rep does not argue the objection and instead frames the appointment as the joint-education venue."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 38,
+    "checked": 36,
     "verified": 36,
     "fuzzy": 0,
-    "wrong_ts": 2,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

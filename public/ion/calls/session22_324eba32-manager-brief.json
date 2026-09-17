@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION22_324eba32",
   "rep_name": "Meg",
-  "trajectory_summary": "The call opens cold with the customer stating outright that she isn't ready and has multiple open variables (pending home inspection, planned addition, unknown roof age) — a legitimate not-yet-qualified scenario, not a hard objection. The rep correctly avoids pushing a booking, but then does almost nothing structured with the call: no bill or usage question, no locked callback date, and a bundle/roofing mention that goes nowhere before the call drifts into unrelated small talk about Utah and South Carolina.",
+  "trajectory_summary": "The call opens cold and stalls almost immediately on a legitimate future-closing timeline, but the rep treats that as a reason to disengage from the entire script rather than gather what's still gatherable. Energy actually improves once the rep stops selling and the conversation drifts into personal rapport, which the rep never redirects back into qualification.",
   "shape": "energy_leaked",
-  "outcome_dispute": "This is not a true disqualification — the customer has real interest and gave the rep a usable timeline (May closing) — but it also isn't a booked or tentative appointment. The right tag is callback, and even that is weak because no specific date or time was fixed, only 'in a couple weeks.'",
+  "outcome_dispute": "v1 tag is unknown; this should be scored no_appointment or callback at best — no specific day/time was locked, only a vague 'towards May' recheck with no confirmed date.",
   "observed_outcome": {
     "outcome": "callback",
-    "appointment_channel": null,
+    "appointment_channel": "unclear",
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "02:23",
-    "quote": "if that's something we need to do, you know, we could always explore that when I call you back in a couple weeks.",
-    "reasoning": "The rep commits to calling the customer back, but no specific date or time is ever stated — 'towards the May' and 'in a couple weeks' are both vague windows, not locked appointments, so this is a soft callback rather than a booked or tentative appointment."
+    "ts": "01:33",
+    "quote": "What I can do is, I can just check that maybe towards, like, the May.",
+    "reasoning": "Rep commits to checking back around May but no specific date or time is agreed, and the customer never gives a verbal confirmation handshake — this is a soft callback intention, not a booked or even tentative appointment.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer mentions her current home's bills are 'really low' due to a heat pump (00:45), but no dollar figure or usage number is ever captured for either the current or the new home, and the rep never asks for one."
+    "reasoning": "The customer said their bills are low and mentioned a heat pump, but no numeric bill amount or kWh figure was captured on the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,31 +38,31 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never raises collecting a utility bill in any form — the conversation stays entirely on home-purchase timing and roof condition, and the call ends before any bill-collection attempt is made."
+    "reasoning": "The rep never asked for the utility bill or a photo/link during the call."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "00:28",
-    "reason_quote": "Well, I'm not really ready to do this. That's why I just wanted the estimate.",
+    "reason_ts": "00:32",
+    "reason_quote": "I'm just buying this house, and we have to go through inspection, and then I'll know more about what the roof is like.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar,' but the customer volunteers her own framing unprompted — she wants an estimate for a not-yet-purchased home. The rep acknowledges the situation and asks about closing timing but never ties the appointment or callback back to this stated interest ('just wanted the estimate') as a hook for the future touch."
+    "reasoning": "The customer gave a clear reason (pending home purchase/inspection, planned addition) at 00:32, but the rep never referenced it again when setting the tentative future check-in, missing the chance to tie the callback to her specific situation."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:18",
-      "quote": "Hey. This is Meg. I'm with ION reaching out about the solar form you filled out online.",
-      "customer_response": "resistant",
-      "customer_quote": "I'm okay. I'm like, who's calling me from South Carolina?",
-      "resistance_reason": "trust",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "end_ts": "00:08",
+      "quote": "Hey. This is Meg. I'm with ION",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, hi.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -70,15 +78,15 @@
     },
     {
       "section": "address_homeowner",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "01:20",
+      "end_ts": "01:29",
+      "quote": "Well, do you have an idea of, like, when you're closing on the home?",
+      "customer_response": "cooperative",
+      "customer_quote": "If everything goes alright and I get good news,\nit'll be probably May.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "co_owner",
@@ -95,14 +103,14 @@
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:47",
-      "end_ts": "02:17",
+      "ts": "01:57",
+      "end_ts": "02:08",
       "quote": "It depends on how old the roof is.",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. I I'm sure it's pretty old because it that house hasn't been lived in in a long time, and it's, you know, from the forties.",
+      "customer_quote": "Yeah. I I'm sure it's pretty old because it that house hasn't been lived in in a long time, and it's, you know, from the forties. So",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "utility_company",
@@ -180,13 +188,13 @@
       "section": "appointment_set",
       "status": "asked",
       "ts": "01:33",
-      "end_ts": "02:23",
-      "quote": "Perfect. What I can do is, I can just check that maybe towards, like, the May.",
+      "end_ts": "01:39",
+      "quote": "I can just check that maybe towards, like, the May.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
-      "resistance_reason": "timing",
+      "resistance_reason": "",
       "rep_followup": "alternative_offered",
-      "result": "partial"
+      "result": "deferred"
     },
     {
       "section": "button_up",
@@ -198,7 +206,9 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "skipped",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
@@ -210,55 +220,68 @@
       "attempt_quotes": [
         "Well, do you have an idea of, like, when you're closing on the home?"
       ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "The rep asks one clarifying question about closing timing and then defers the entire conversation to a future callback rather than resolving the timing concern with a concrete next step — the objection is acknowledged but not actually moved past with a locked plan."
+      "resolved": true,
+      "resolution_ts": "01:29",
+      "reasoning": "Customer states she's not ready; rep pivots to asking about closing timeline rather than pushing forward, and the customer cooperatively answers, effectively resolving the immediate friction by shifting to a future-based plan.",
+      "blocked_section": "interest_question",
+      "attempt_moves": [
+        "question_back"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "address_homeowner@01:20",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "cross-sell bridge on a live signal",
-    "ts": "01:47",
-    "quote": "So is it better to go ahead and have a roof, replaced, or is it better to wait and do that at the same time you're gonna install panels?",
-    "why": "The customer handed the rep a direct, unprompted roofing question — the schema's highest-value cross-sell trigger — and the rep gave a generic answer instead of naming Ion's in-house bundle option and capturing roof detail on the spot. This is the single highest-leverage moment in the call and it was walked past."
+    "topic": "Unlocked callback with no captured qualification",
+    "ts": "01:33",
+    "quote": "What I can do is, I can just check that maybe towards, like, the May.",
+    "why": "The rep let a real lead (interested enough to ask about roof bundling) walk away with zero interest reason, bill, or utility captured and no firm callback date — the entire verify section was skipped rather than partially run."
   },
   "key_moments": [
     {
-      "ts": "00:45",
-      "quote": "but I have currently, in my house now, I have, a heat pump, and so my bills are really low.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer volunteers a specific, usable data point — low bills due to a heat pump at her CURRENT home — that could inform whether she's a bill-pain lead at all, or whether the NEW home (with different systems, an addition planned) is the better target for the pitch. The rep never acknowledges or reflects this back."
+      "ts": "00:18",
+      "quote": "Yep. That's me. So sorry about that.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "Rep apologizes for the caller ID friction instead of using the moment to firmly establish company legitimacy (e.g., naming the form source with specifics)."
     },
     {
-      "ts": "01:20",
-      "quote": "Well, do you have an idea of, like, when you're closing on the home?",
-      "classification": "other",
-      "stewart_read": "This is the one genuinely useful qualifying question in the call — it correctly identifies that the home isn't yet owned and sets up a realistic timeline. Good instinct, but it's a single question with no follow-up structure (no bill ask, no interest-reason probe, no utility company ask)."
+      "ts": "00:32",
+      "quote": "I'm just buying this house, and we have to go through inspection, and then I'll know more about what the roof is like.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer gives a clear, detailed reason for the current uncertainty (inspection pending, planned addition) but the rep never asks the interest question or expands on it."
     },
     {
-      "ts": "01:47",
-      "quote": "So is it better to go ahead and have a roof, replaced, or is it better to wait and do that at the same time you're gonna install panels?",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "The customer asks the rep directly and unprompted about roof/solar sequencing — an explicit cross-sell signal and a sign she is actively thinking about timing the two projects together. This is exactly the kind of unsolicited question the schema flags as high-value."
+      "ts": "01:33",
+      "quote": "What I can do is, I can just check that maybe towards, like, the May.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "No specific date or time is set; 'towards the May' is not a locked appointment and there's no handshake confirming the plan."
     },
     {
       "ts": "02:08",
-      "quote": "Right. Yeah. Typically, if the roof is older than, like, fifteen, twenty years, then we would suggest a roof replacement beforehand.",
+      "quote": "Typically, if the roof is older than, like, fifteen, twenty years, then we would suggest a roof replacement beforehand.",
       "classification": "cross_sell_miss",
-      "stewart_read": "Following directly from the customer's own roof-timing question, the rep answers only the general rule but never pivots to Ion's in-house roofing/bundle offering or captures roof material/age details for a future routing. This is part of the same exchange as 01:47, but the specific miss is the rep's failure to bridge once she had the opening."
+      "stewart_read": "Customer directly asks whether to replace the roof now or bundle with panels — a live roofing cross-sell signal — and the rep gives a generic age answer instead of bridging to Ion's in-house roofing/bundle option."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 30,
-    "verified": 30,
+    "checked": 31,
+    "verified": 31,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

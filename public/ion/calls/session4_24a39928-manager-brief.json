@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION4_24a39928",
   "rep_name": "Meg",
-  "trajectory_summary": "This is a short, procedurally clean disqualification call: the rep runs the address/homeowner verify, asks the interest question, and correctly applies the 670 credit-score hard gate once the customer discloses a low FICO. The call's energy leaks steadily as the customer volunteers two financial vulnerabilities in a row that the rep treats as data points rather than moments to acknowledge, and the call closes with a passive 'you call us back' instead of a rep-owned follow-up.",
-  "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown; the correct read is dq — the customer discloses a credit score below 670 on both bureaus checked ('Everything is lower') and the rep applies qualifiers.credit_qualifier's hard_dq, ending the call without an appointment.",
+  "trajectory_summary": "Call opens flat, gets one genuine engagement beat (the affordability answer), then hits a hard credit DQ that ends the call within two minutes. The rep handled the DQ procedurally correctly but never explored the interest reason or gave the customer any real value before closing it out.",
+  "shape": "stagnant",
+  "outcome_dispute": "v1 tag is unknown; this is clearly a dq call — credit score gate failed and rep ended pursuit on it, not a booked/no_appointment miscall.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "01:47",
-    "quote": "Everything is lower.",
-    "reasoning": "Customer confirms all known credit scores fall below the 670 threshold stated by the rep, triggering qualifiers.credit_qualifier's hard_dq and ending the call without an appointment or scheduled next step."
+    "ts": "01:35",
+    "quote": "we we do require that a credit score is 670 or above",
+    "reasoning": "Customer confirms his credit score is below 670 on all bureaus he knows of ('Everything is lower'), and rep ends the pursuit on that hard gate per qualifiers.credit_qualifier, telling him to call back once qualified.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call reaches the credit-qualifier hard gate before the bill-amount verify item is ever raised — no dollar figure or usage number is captured at any point in the transcript."
+    "reasoning": "No customer monthly bill or kWh usage was captured in the transcript; therefore no flip could be executed."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,26 +38,26 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call is disqualified on credit score before reaching the bill-collection stage of the script; the rep never raises getting the utility bill itself."
+    "reasoning": "The rep did not request the utility bill or a photo/link during the call."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:41",
-    "reason_given": true,
-    "reason_ts": "00:57",
-    "reason_quote": "Well, I've been looking into it for years, but I can't never afford it.",
-    "reason_used": "no",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer's stated reason (long-standing interest blocked by affordability) is never reflected back or tied into the rest of the conversation; the rep pivots directly into cost/loan history and then the credit qualifier without reinforcing the customer's own framing."
+    "reasoning": "The rep asked what got the customer interested, but no literal customer line stating the reason is present in the transcript."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "end_ts": "00:15",
-      "quote": "Hi, Theodore. This is Meg. I'm with Ion. Just reaching out here about the solar form you filled out online.",
+      "end_ts": "00:10",
+      "quote": "This is Meg. I'm with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Not bad.",
       "resistance_reason": "",
@@ -63,17 +71,17 @@
       "end_ts": "01:07",
       "quote": "what's got you looking at solar options for your home?",
       "customer_response": "cooperative",
-      "customer_quote": "Well, I've been looking into it for years, but I can't never afford it.",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "completed"
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:18",
-      "end_ts": "00:39",
-      "quote": "We can start with the address... 1731 Idlewood Avenue, Richmond, Virginia. Is that right?",
+      "end_ts": "00:35",
+      "quote": "We can start with the address.",
       "customer_response": "cooperative",
       "customer_quote": "Correct.",
       "resistance_reason": "",
@@ -94,7 +102,7 @@
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,11 +110,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,11 +122,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,23 +134,23 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "01:27",
+      "end_ts": "01:54",
+      "quote": "What's it at?",
+      "customer_response": "cooperative",
+      "customer_quote": "Low. That's all I can remember. K. Lower than 670?",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,11 +158,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -162,11 +170,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -174,23 +182,23 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
+      "status": "asked",
+      "ts": "00:51",
+      "end_ts": "00:54",
+      "quote": "Just early next week or sometime later.",
+      "customer_response": "deflected",
+      "customer_quote": "Like, maybe Yeah. Can you repeat that?",
+      "resistance_reason": "timing",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "button_up",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -198,67 +206,62 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "01:20",
-      "quote": "my FICO score is very low.",
-      "type": "cost",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "So we we do require that a credit score is 670 or above. Do you know if your other if your other ones are around that mark, or are they both lower?"
-      ],
-      "resolved": true,
-      "resolution_ts": "01:47",
-      "reasoning": "This is a hard qualifier gate rather than a negotiable objection; the rep confirms the threshold once, the customer confirms all scores are below it, and the call resolves to a DQ with a suggested path (raise credit, call back) rather than further persuasion attempts."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "acknowledging financial vulnerability disclosures",
-    "ts": "01:20",
-    "quote": "my FICO score is very low.",
-    "why": "The customer volunteers a sensitive financial admission and the rep's flat 'Okay. What's it at?' treats it as pure data collection; per coaching_philosophy.empathy_on_vulnerability_disclosure this is a trust gift that costs nothing to acknowledge and should be modeled directly with this rep."
+    "topic": "Interest reason captured but never explored or flipped",
+    "ts": "00:57",
+    "quote": "Well, I've been looking into it for years, but I can't never afford it.",
+    "why": "This is the customer's one real emotional disclosure on the call and the rep moves past it into a cost-history assumption instead of asking what he currently pays or reflecting the pain back — a missed anchor even on a call that ends in DQ."
   },
   "key_moments": [
     {
       "ts": "00:57",
       "quote": "Well, I've been looking into it for years, but I can't never afford it.",
-      "classification": "empathy_miss",
-      "stewart_read": "Customer discloses years of wanting solar but feeling financially locked out — a vulnerability disclosure per the schema's trigger category (fixed income/financial). The rep's reply immediately pivots to explaining upfront-cost history rather than acknowledging the years-long frustration."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer hands the rep a real affordability pain point but rep pivots straight to cost-history assumption instead of digging into what he's paying now or reflecting it back."
     },
     {
       "ts": "01:09",
-      "quote": "I know in in the past, it had, like, big upfront cost and big loans associated. Right? Is that what you're talking about?",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is a marginal application of the inversion framework — the schema's flip triggers are built for cost/bill objections, not credit-qualification barriers, so this should be read as borderline rather than a clean missed flip. The rep validates the affordability narrative rather than reframing it, but there was no bill or dollar figure yet to invert against."
+      "quote": "I know in in the past, it had, like, big upfront cost and big loans associated.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep volunteers unprompted commentary on financing structure and cost history instead of redirecting to qualification or the specialist."
     },
     {
-      "ts": "01:20",
-      "quote": "my FICO score is very low.",
-      "classification": "empathy_miss",
-      "stewart_read": "Customer proactively discloses a specific financial vulnerability (low credit score) unprompted. The rep's immediate response, 'Okay. What's it at?', is purely transactional data-gathering with zero acknowledgment of what is, for many people, an uncomfortable admission."
+      "ts": "01:24",
+      "quote": "Okay. What's it at?",
+      "classification": "protocol_violation",
+      "stewart_read": "This is the correct qualifier question and it's asked directly and clearly after the customer raises credit unprompted — solid procedure, not a violation; flagged only to confirm no schema drift on the 670 threshold."
     },
     {
-      "ts": "01:35",
-      "quote": "So we we do require that a credit score is 670 or above.",
-      "classification": "other",
-      "stewart_read": "Rep states the correct 670 threshold and follows the hard_dq procedure exactly as scripted — this is a positive execution, not a gap."
+      "ts": "01:48",
+      "quote": "what we'll wanna do, Theodore, is is work on that credit score, get that up to 670.",
+      "classification": "protocol_violation",
+      "stewart_read": "Rep gives correct DQ guidance (raise credit, call back) rather than arguing or fabricating a workaround."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 29,
-    "verified": 29,
+    "checked": 24,
+    "verified": 24,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

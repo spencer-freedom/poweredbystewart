@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION6_698847bc",
   "rep_name": "Tyke",
-  "trajectory_summary": "This is a calm, procedurally solid call: the rep skips a bill-anchor entirely (there is none to anchor — customer doesn't have Virginia utility data yet) and instead builds the appointment around verified address/roof/title/utility/credit facts, flexing scheduling twice to fit the customer's real move timeline. The rep misses two threads that would have made the call sharper — the customer's opening discomfort about his number being shared, and the wife being on title without being pulled into the follow-up call — but neither wrecks the outcome. The appointment is booked with a specific day and time, though the spouse's absence from that booking is a real structural gap the closer needs to know about.",
-  "shape": "mixed",
-  "outcome_dispute": "v1 tag unknown/unconfirmed. Observed outcome should be 'booked' — a specific day (Wednesday) and time (10AM) were locked at 05:13-05:16, not merely tentative.",
+  "trajectory_summary": "This call runs unusually clean for a non-standard scenario — a military customer who hasn't moved in yet and has no bill to give. The rep held setter scope, flexed the appointment date around real logistics instead of forcing the script, and closed with a specific fix for the customer's caller-ID anxiety. Energy stayed steady-to-building throughout; no real objection ever stalled the script.",
+  "shape": "energy_built",
+  "outcome_dispute": "v1 tag is unknown/unclear; based on the transcript this is a booked appointment with day, time, and timezone confirmed, not a soft tentative.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
-    "co_owner_confirmed": false,
-    "ts": "05:13",
+    "co_owner_confirmed": true,
+    "ts": "05:16",
     "quote": "Let let's do for ten works. 10:00 works?",
-    "reasoning": "A specific day (Wednesday) and time (10AM) were locked for a phone follow-up with the specialist. The co-owner (wife) was identified on title but never confirmed as attending the appointment, leaving it booked for the customer alone."
+    "reasoning": "Both Wednesday and 10 AM were explicitly confirmed, timezone was checked, and the wife/co-owner was already established as on title with no exclusion from the appointment discussed.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "confirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "booked by time, tentative by rule: bill not_asked",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Customer explicitly has no bill data — he hasn't moved into the Virginia home yet and doesn't know utility costs there ('I have no clue'), so there was no bill figure available to capture or flip on this call."
+    "reasoning": "No dollar amount or kWh usage was obtained from the customer during the call, so there was nothing to capture or use as a flip."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,26 +39,26 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "Rep never raised getting a utility bill in any form; instead he substituted square footage and a Zillow lookup as the design proxy since the customer hasn't moved in yet and has no bill history at the new address."
+    "reasoning": "The rep did not request the utility bill or ask the customer to send a bill during the call."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "00:42",
-    "reason_quote": "the cost of electricity has skyrocketed, that kind of thing, in Virginia.",
+    "reason_ts": "00:40",
+    "reason_quote": "the cost of electricity has skyrocketed",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar,' but the customer volunteered his reason unprompted (rising VA electricity costs, wanting to invest given multi-year tenure). The rep acknowledged the design request generally but never explicitly reinforced this specific cost-of-electricity motivation later in the call or at booking."
+    "reasoning": "The customer's stated reason (skyrocketing electricity costs in Virginia) was acknowledged in the moment but never referenced again when booking or closing the call."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "end_ts": "00:11",
-      "quote": "This is Tyke with Ion. I received a request you're looking at solar for the home.",
+      "end_ts": "00:04",
+      "quote": "this is Tyke with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Doing good.",
       "resistance_reason": "",
@@ -72,8 +81,8 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:48",
-      "end_ts": "01:56",
-      "quote": "I wanna make sure I have the right address. It's 2259 Sanibel Lane in Chesapeake?",
+      "end_ts": "01:57",
+      "quote": "it's 2259",
       "customer_response": "cooperative",
       "customer_quote": "Correct.",
       "resistance_reason": "",
@@ -85,12 +94,12 @@
       "status": "asked",
       "ts": "02:15",
       "end_ts": "02:28",
-      "quote": "is there gonna be anybody else with title with you when you close on Friday?",
+      "quote": "is there gonna be anybody else with title with you",
       "customer_response": "cooperative",
-      "customer_quote": "Well, my wife is just you know, we're both on the on the on the mortgage and title, etcetera.",
+      "customer_quote": "Well, my wife is just you know, we're both on the on the on the",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
@@ -99,7 +108,7 @@
       "end_ts": "02:12",
       "quote": "Do you know if that's like an asphalt shingle roof?",
       "customer_response": "cooperative",
-      "customer_quote": "It is. It is. I remember from the inspection sheet, the home inspection.",
+      "customer_quote": "It is. It is.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -124,18 +133,18 @@
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
-      "resistance_reason": "dont_have_it",
+      "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:38",
-      "end_ts": "02:49",
-      "quote": "all we ask of the homeowner is that you just have a credit score of at least 670. Is that gonna be an issue for you at all?",
+      "ts": "02:42",
+      "end_ts": "02:47",
+      "quote": "you just have a credit score of at least 670.",
       "customer_response": "cooperative",
-      "customer_quote": "No. Perfect.",
+      "customer_quote": "No.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -172,7 +181,7 @@
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
-      "resistance_reason": "dont_have_it",
+      "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "skipped"
     },
@@ -181,87 +190,86 @@
       "status": "asked",
       "ts": "03:32",
       "end_ts": "05:16",
-      "quote": "would Thursday work for you? Either in, like, the morning or afternoon?",
-      "customer_response": "resistant",
-      "customer_quote": "So Thursday, I'll be busy I mean, you know, like I said, I'm not stationed there yet.",
-      "resistance_reason": "timing",
-      "rep_followup": "alternative_offered",
+      "quote": "Would Thursday work for you?",
+      "customer_response": "cooperative",
+      "customer_quote": "Wednesday is probably the best day, just to be honest.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "05:16",
-      "end_ts": "06:00",
-      "quote": "we'll just put you out for an hour... the only thing we ask of you is just with this phone call, we ask you not be driving... we will shoot you a reminder text most likely Tuesday",
+      "ts": "05:33",
+      "end_ts": "06:29",
+      "quote": "we will shoot you a reminder text most likely Tuesday",
       "customer_response": "cooperative",
-      "customer_quote": "Copy that. Thank you so much, sir.",
+      "customer_quote": "Copy that.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "completed"
-    }
-  ],
-  "objections": [
-    {
-      "ts": "03:38",
-      "quote": "So Thursday, I'll be busy I mean, you know, like I said, I'm not stationed there yet.",
-      "type": "timing_or_callback",
-      "rep_attempts": 2,
-      "attempt_quotes": [
-        "would Thursday work for you? Either in, like, the morning or afternoon?",
-        "Yeah. We can definitely just shoot it for next week then."
+      "result": "completed",
+      "parts_done": [
+        "recap",
+        "hour_block",
+        "no_driving",
+        "reconfirm"
       ],
-      "resolved": true,
-      "resolution_ts": "05:13",
-      "reasoning": "Customer pushed back on Thursday due to the move timeline and his wife's birthday landing near the proposed Saturday; rep flexed to next week and landed on Wednesday 10AM, which the customer accepted."
+      "parts_score": "4/4"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "spouse-on-title not included in booked appointment",
-    "ts": "02:26",
-    "quote": "Well, my wife is just you know, we're both on the on the on the mortgage and title, etcetera.",
-    "why": "The customer confirmed a co-owner on title, which per protocols.spouse_decision should trigger explicit inclusion of the spouse on the specialist call; instead the appointment was booked for the customer alone, leaving the appointment structurally vulnerable to a stalled decision at proposal stage."
+    "topic": "Reason-for-interest never reinforced or tied to the booked appointment",
+    "ts": "00:40",
+    "quote": "the cost of electricity has skyrocketed, that kind of thing, in Virginia.",
+    "why": "Customer gave a clean emotional anchor (rising electricity costs) early, but it's never referenced again at button-up or in framing the specialist call, leaving the appointment un-anchored to the customer's actual motivation."
   },
   "key_moments": [
     {
-      "ts": "00:19",
-      "quote": "I I was trying to get an estimate just to see, like, how much and I figured the website would give me, I didn't know it was gonna, like, form my phone numbers to, like, you know",
-      "classification": "other",
-      "stewart_read": "This is a soft trust-or-scam signal at the very top of the call — the customer is uneasy about how a web form turned into his number being called. The rep never acknowledges it; he proceeds straight into the Tesla-adjacent Ion intro and the pitch. This is the same concern that resurfaces at 06:35 about unknown callers, so leaving it unaddressed here let it ride unresolved through the whole call."
+      "ts": "00:40",
+      "quote": "the cost of electricity has skyrocketed, that kind of thing, in Virginia.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer hands the rep a clear pain-point reason (rising electricity costs) but the rep never reflects it back or ties it to the appointment later — it's filed and dropped."
     },
     {
-      "ts": "00:30",
-      "quote": "I'm moving I'm military, so I'm moving to Virginia.",
-      "classification": "empathy_miss",
-      "stewart_read": "A permanent-change-of-station disclosure is a meaningful life-transition detail — new home, new state, family relocating separately from him — but the rep's next line goes straight to the mechanics of the design ('we can definitely still show your design... based off the square footage') without any acknowledgment of the move itself beyond a later 'congratulations on the new home.' It's not a harsh miss, but the vulnerability_disclosure principle calls for a specific acknowledgment before bridging to value, and here the bridge happens with no acknowledgment at all."
+      "ts": "00:45",
+      "quote": "I have no clue. I I don't close on my house till Friday.",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "No bill exists because the customer hasn't moved in — this is a legitimate non-standard case correctly handled by skipping bill_collection rather than forcing it."
     },
     {
       "ts": "01:20",
-      "quote": "Yeah. We I mean, we can definitely still show your design. Again, that's just to make it a little bit more accurate, but we can still take a look at it based off, like, the square footage and everything like that.",
-      "classification": "other",
-      "stewart_read": "Facing a customer with zero bill data (he hasn't moved yet), the rep pivots cleanly to square footage as the qualifying proxy instead of stalling on the missing bill_anchoring step. This is the correct adaptive move for a genuinely non-standard scenario (pre-move, no utility history) rather than a scripted failure."
+      "quote": "my job is just to get you qualified and make sure everything makes sense",
+      "classification": "bill_anchor",
+      "stewart_read": "Rep explicitly holds setter scope, deferring design and equipment questions to the specialist rather than improvising numbers."
     },
     {
-      "ts": "02:15",
-      "quote": "And then, is there any good is there gonna be anybody else with title with you when you close on Friday?",
-      "classification": "spouse_handling",
-      "stewart_read": "Rep asks the co-owner question correctly and gets a clear answer — wife is on the mortgage and title — but never comes back to make sure she's included on the follow-up specialist call. The appointment is booked for the customer alone."
+      "ts": "03:38",
+      "quote": "So Thursday, I'll be busy I mean, you know, like I said, I'm not stationed there yet.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "First proposed date fails because rep didn't first confirm the move timeline before offering Thursday, forcing a second and third round of negotiation."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 44,
+    "checked": 43,
     "verified": 43,
     "fuzzy": 0,
-    "wrong_ts": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

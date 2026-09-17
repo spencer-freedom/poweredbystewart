@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION18_386ecd3d",
   "rep_name": "Holland",
-  "trajectory_summary": "This is a short, thin call that opens on a legitimate roof/shading qualification issue and never gets past it. The rep never captures a bill, never asks why the customer is interested in solar beyond the Tesla form, and closes with no appointment and no clear next step beyond an informal 'give me a callback' if the customer decides to remove a tree.",
+  "trajectory_summary": "This call never leaves the roof/trees qualifier — the rep skips the interest question, utility, bill, and every other verify item and lets the customer's shading concern become the entire conversation. Energy leaks steadily from neutral to resigned as the rep validates the customer's own pessimism instead of redirecting toward an appointment or specialist. It ends with no next step, no callback time, and no bill captured.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unstated, but the observed outcome is clearly no_appointment — the call ends with a vague self-directed callback contingent on the customer removing a tree, with no date, time, or rep-owned next step.",
+  "outcome_dispute": "v1 tag is unknown/unclear; this should be read as no_appointment — the call ends on 'you have a wonderful day' with only a vague 'give me a callback' offer, no owned next step.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "02:07",
     "quote": "K. Awesome. Well, you have a wonderful day.",
-    "reasoning": "The call ends with no appointment booked, tentative, or callback time locked — only an informal, customer-initiated 'call me back if you decide to remove the tree' with no date or time attached."
+    "reasoning": "Call ends with no day, time, or callback commitment owned by the rep — only a vague invitation for the customer to call back if he decides to remove a tree.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches a bill-amount question — it stalls entirely on the tree/shading qualifier and ends before utility company, bill amount, or any other verify items are addressed."
+    "reasoning": "No monthly bill amount or kWh usage was requested or provided in the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never raises getting the utility bill in any form; the call is entirely consumed by the address confirmation and tree-shading discussion before ending."
+    "reasoning": "The rep never asked for the utility bill or a photo/link during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +49,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks what interested the customer in solar; the only context given is that the customer responded to a Tesla email ('I got an email from Tesla asking me if I'd be interested. I hit yes.' at 00:23), which is about lead origin, not a motivation the rep explored or used."
+    "reasoning": "The rep did not ask why the customer was interested in solar, and the customer did not volunteer a motivating reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:03",
-      "end_ts": "00:14",
-      "quote": "Hi, Steve. This is Holland with Ion.",
+      "end_ts": "00:06",
+      "quote": "This is Holland with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Hello. This is Steve.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -73,7 +81,7 @@
       "status": "asked",
       "ts": "00:37",
       "end_ts": "00:46",
-      "quote": "So first off, I've got your address here as 2325 Ridge Drive in Northbrook, Illinois. Is that correct?",
+      "quote": "I've got your address here as 2325",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
@@ -96,13 +104,13 @@
       "section": "roof",
       "status": "asked",
       "ts": "00:51",
-      "end_ts": "01:35",
+      "end_ts": "00:59",
       "quote": "So I see here that you have quite a few trees around you. Are all of those trees still there?",
-      "customer_response": "resistant",
-      "customer_quote": "Let me think about it. How's that?",
-      "resistance_reason": "other",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
@@ -154,19 +162,19 @@
     },
     {
       "section": "prior_design",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "00:17",
+      "end_ts": "00:27",
+      "quote": "I see here that you were interested in, like, in Tesla. Right?",
+      "customer_response": "cooperative",
+      "customer_quote": "I mean, that's I got an email from Tesla asking me if I'd be interested. I hit yes.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -174,11 +182,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -186,11 +194,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -198,7 +206,9 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
@@ -211,54 +221,67 @@
         "Would you be open to, like, removing any of those trees or not really?"
       ],
       "resolved": false,
-      "resolution_ts": "01:35",
-      "reasoning": "The rep confirmed the customer's suspicion rather than reframing it, then offered tree removal as the only path forward; the customer deferred without committing, so the shading concern remains open at call's end."
+      "resolution_ts": "",
+      "reasoning": "Rep validated the customer's pessimism rather than reframing, then offered a single alternative (tree removal) which the customer deferred on without a firm answer.",
+      "blocked_section": "roof",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored next step / no button-up",
-    "ts": "01:42",
-    "quote": "just give me a callback, and then we can build a design as if that tree was gone",
-    "why": "The call ends with zero rep-owned next step — no date, no time, no text-follow-up promise, and no bill or interest-reason discussion at all. This is the single biggest gap: even a home with a real shading qualifier should exit with a concrete rep-driven follow-up plan, not an open-ended 'call me if you decide.'"
+    "topic": "Setter conceding a DQ decision that belongs to the design team",
+    "ts": "01:07",
+    "quote": "Yeah. That's what I would probably say.",
+    "why": "The rep validated the customer's self-disqualification on trees/shading instead of redirecting to the specialist, killing the lead's momentum in real time — this is the single moment the call died."
   },
   "key_moments": [
     {
-      "ts": "00:14",
-      "quote": "I see here that you were interested in, like, in Tesla. Right?",
+      "ts": "00:06",
+      "quote": "So I was just calling because I got a request here that you were looking into,",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "This is the moment where the certified-installer legitimacy framing should land — the script calls for 'we're the certified solar installer for Tesla in {state}' to answer the scam question up front. Instead the rep asks a soft, hedged confirmation question ('like, in Tesla') that does none of that legitimacy work."
+      "stewart_read": "Rep introduces self and company but never establishes a credibility anchor beyond referencing a vague 'request' — no form/Tesla-referral framing until later, and even then it's thin."
     },
     {
-      "ts": "00:51",
-      "quote": "So I see here that you have quite a few trees around you. Are all of those trees still there?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The rep leads with a potential disqualifier before any rapport, bill anchor, or interest question is established — there's no curiosity built, no bill pain surfaced, just an immediate pivot to a possible dead end."
+      "ts": "01:02",
+      "quote": "I'm assuming you're gonna say that probably doesn't make this a worthwhile venture.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a cost/viability objection in disguise — customer is trying to talk himself out of the appointment. Rep agrees with him instead of inverting toward 'let's see what the design team can still do.'"
     },
     {
-      "ts": "01:35",
-      "quote": "Let me think about it. How's that?",
-      "classification": "conditional_booking",
-      "stewart_read": "This is a real unresolved barrier (customer isn't ready to commit to removing a tree), not a procedural fragility issue — the rep correctly doesn't push, but also doesn't convert this into any tracked next step."
+      "ts": "01:07",
+      "quote": "Yeah. That's what I would probably say.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep makes a technical viability judgment about solar-under-trees that belongs to the design/closer team, not the setter."
     },
     {
-      "ts": "01:42",
-      "quote": "just give me a callback, and then we can build a design as if that tree was gone",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "There is no date, time, or rep-owned follow-up commitment here — the entire next step is 'customer calls back if/when he decides.' This is a textbook unanchored soft exit with no handshake and no rep-initiated follow-through."
+      "ts": "01:52",
+      "quote": "I would say probably",
+      "classification": "softener_overuse",
+      "stewart_read": "Rep hedges repeatedly ('I would say', 'probably', 'I think') while improvising an answer about tree removal, signaling both uncertainty and scope creep in the same breath."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 29,
-    "verified": 29,
+    "checked": 27,
+    "verified": 27,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

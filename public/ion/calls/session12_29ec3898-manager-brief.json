@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION12_29ec3898",
   "rep_name": "Tyke",
-  "trajectory_summary": "The call opens cooperatively with a clean intro and quick interest capture, but the entire remaining runtime is consumed by the rep trying to visually locate the customer's home on an outdated mapping tool. The rep never returns to qualification (bill, utility, roof age, co-owner, tax credit) and ends the call by promising a callback, leaving no appointment, no bill capture, and no verify-section progress.",
+  "trajectory_summary": "The call opened with strong customer cooperation and an early, clean bill-pain reason capture, but it stalled hard when the rep's mapping tool failed to pin the address. Instead of parking the address issue and continuing qualification (utility, bill, roof age, prior design), the rep spent the back half of the call guessing house colors and features, ending in an unresolved callback with zero appointment progress.",
   "shape": "energy_leaked",
-  "outcome_dispute": "V1 tag is unknown/unclear from metadata; based on the transcript, this call should be classified as a callback with no locked time — the rep says 'give you a callback here a little bit later' with no specific day or time, so it is a soft, unanchored callback rather than a booked or tentative appointment.",
+  "outcome_dispute": "v1 tag is unknown/unclear; this call should be read as no_appointment — the rep ended on a vague callback promise with no locked time, after the verify sequence was abandoned mid-stream.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "02:48",
-    "quote": "I might not have updated imagery. Let me check with my design team. This should have, like, a more updated image, and then I can just use what you described to figure it out. So let me just talk to them, and then I can give you a callback here a little bit later.",
-    "reasoning": "The rep ends the call promising to call back after consulting the design team, but no specific day or time is stated, making this a soft, unanchored callback rather than a booked or tentative appointment."
+    "ts": "02:49",
+    "quote": "So let me just talk to them, and then I can give you a callback here a little bit later.",
+    "reasoning": "Rep explicitly commits to calling the customer back, but no specific day or time is stated, making this a soft, unanchored callback rather than a booked or tentative appointment.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer mentions 'the prices of the electric bill recently' as a motivator but no dollar amount or usage figure is ever captured before the call ends on the address/tooling issue."
+    "reasoning": "The customer mentioned high electric bill qualitatively but did not provide a numeric bill or kWh figure, so no bill was captured."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,18 +38,18 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call never reaches bill collection; it ends during address verification, before the rep gets to utility company, bill amount, or bill-document collection steps."
+    "reasoning": "The rep did not request the customer's utility bill or a photo/link during the call."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:28",
     "reason_given": true,
     "reason_ts": "00:41",
-    "reason_quote": "the mainly just the prices of the electric bill recently\nas well as\nit's just easy to provide for myself and not have to worry about things like that.",
+    "reason_quote": "the mainly just the prices of the electric bill recently",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question and the customer gave a clear bill-pain reason, but the rep never referenced it again — the call pivots immediately into address verification and never returns."
+    "reasoning": "The customer's clean bill-pain reason ('the mainly just the prices of the electric bill recently') was captured at 00:41 but never referenced again — the rep moved into address troubleshooting immediately after and never returned to reinforce it."
   },
   "script_coverage": [
     {
@@ -49,40 +57,40 @@
       "status": "asked",
       "ts": "00:04",
       "end_ts": "00:14",
-      "quote": "This is Tyke with ION. I received your request. You're looking at solar for the home.",
+      "quote": "This is Tyke with ION.",
       "customer_response": "cooperative",
-      "customer_quote": "I'm doing great. Thank you for asking.",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:28",
-      "end_ts": "00:52",
+      "end_ts": "00:41",
       "quote": "And what got you interested in looking at solar?",
       "customer_response": "cooperative",
       "customer_quote": "the mainly just the prices of the electric bill recently",
       "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:21",
-      "end_ts": "02:48",
-      "quote": "Have you at 3708 Livingston Stone Circle in Little River?",
-      "customer_response": "cooperative",
-      "customer_quote": "Yes, sir.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "persisted",
+      "end_ts": "00:28",
+      "quote": "Livingston Stone Circle in Little River?",
+      "customer_response": "no_answer",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
       "result": "partial"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,19 +98,19 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "01:05",
+      "end_ts": "01:14",
+      "quote": "Are you in a single family home or a manufactured home?",
+      "customer_response": "cooperative",
+      "customer_quote": "It's a single family,",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "utility_company",
@@ -178,70 +186,78 @@
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
-      "ts": "02:48",
-      "end_ts": "02:52",
-      "quote": "I can give you a callback here a little bit later.",
-      "customer_response": "cooperative",
-      "customer_quote": "Yes, sir. Thank you.",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "declined"
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "02:48",
-      "end_ts": "02:52",
-      "quote": "K. No problem. You have a good day. Bye bye.",
-      "customer_response": "cooperative",
-      "customer_quote": "Bye bye.",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "skipped"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "Tooling friction ended the call instead of being parked",
-    "ts": "02:48",
-    "quote": "I might not have updated imagery. Let me check with my design team. This should have, like, a more updated image, and then I can just use what you described to figure it out. So let me just talk to them, and then I can give you a callback here a little bit later.",
-    "why": "The rep let a satellite-imagery problem consume the entire call and then used it as the reason to hang up with only a vague callback promise — no bill amount, no utility company, no appointment day/time were captured. The fix is procedural: park unresolvable tooling issues and keep running the verify script in parallel."
+    "topic": "Tool friction derailed the entire qualification sequence",
+    "ts": "01:05",
+    "quote": "It's not automatically pinning the home.",
+    "why": "The rep spent the back half of the call guessing house colors instead of parking the mapping issue and continuing utility/bill/roof-age/prior-design questions, ending the call with almost nothing captured beyond the intro and interest reason."
   },
   "key_moments": [
     {
-      "ts": "00:14",
-      "quote": "I'll keep it short for you. My job here at Ion is just to put together this design to see if it's a good fit for the home. Just have a couple of quick questions for you.",
-      "classification": "other",
-      "stewart_read": "Efficient framing of the call's purpose right after intro, setting expectations for a short qualifying conversation. This is a clean, functional opening that sets up the rest of the script well."
-    },
-    {
       "ts": "00:41",
-      "quote": "the mainly just the prices of the electric bill recently\nas well as\nit's just easy to provide for myself and not have to worry about things like that.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer names bill pain unprompted as the primary motivator. This is exactly the anchor coaching_philosophy.bill_anchoring calls for, but the rep never returns to it — the call derails into the address-lookup problem and the bill amount is never asked."
+      "quote": "the mainly just the prices of the electric bill recently",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Clean bill-pain reason captured in under a minute — exactly the anchor the schema wants, but nothing is built on it later because the call derails."
     },
     {
       "ts": "01:05",
-      "quote": "Let me get a better view of it. It's not automatically pinning the home. Are you in a single family home or a manufactured home?",
-      "classification": "other",
-      "stewart_read": "Rep tries to keep the address-verification flowing by asking a structured qualifying question (home type) even while the mapping tool struggles — a reasonable attempt to make dead time productive."
+      "quote": "It's not automatically pinning the home.",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "This is a tool/technical failure outside the standard script flow — the rep should have parked it (e.g., 'no worries, we'll confirm the exact spot later') and moved on to utility company / bill / roof age, not treated it as a puzzle to solve live."
+    },
+    {
+      "ts": "01:14",
+      "quote": "trailer home. See, the problem is with, like, your site and pulling it up on Google Maps, it takes you all the way down to the bottom of the road.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The customer hands the rep a clear signal (frustration with the tool) but the rep doesn't redirect back to qualification content — this let the technical detour swallow the call."
     },
     {
       "ts": "01:41",
       "quote": "I'm not sure if you can zoom in or whatever, but it should be kind of like a blue with a metal on roof.",
-      "classification": "other",
-      "stewart_read": "By this point the customer is doing most of the navigational work for the rep, describing colors and landmarks unprompted — a sign the visual-matching approach has become the customer's problem to solve, not the rep's."
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "Second touch on the same mapping problem — rep is still trying to visually confirm the house rather than parking the issue and continuing verify items."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
     "checked": 26,

@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION16_b8262e55",
   "rep_name": "Meg",
-  "trajectory_summary": "The call starts as a new-lead script but immediately reveals an existing orphaned solar customer with a slow, technically-limited homeowner; the rep adapts reasonably to pursue a battery-backup angle and secures the bill photo after a long technical struggle. The call ends with a booked callback, but two significant threads — a cancer/cost anxiety disclosure and a revealed non-functioning existing system — surface late and go essentially unaddressed before the appointment is locked.",
+  "trajectory_summary": "The call moves from a mundane requalification (existing solar owner, battery interest) through a slow, technically clumsy bill-photo collection, then into a genuinely vulnerable moment (cancer, doctor's appointments, cost anxiety) that the rep processes procedurally rather than empathetically. An appointment is set, but on a distracted, uncertain customer with unresolved emotional and functional (iced-over panels) concerns.",
   "shape": "mixed",
-  "outcome_dispute": "The v1 tag is unknown, so no dispute is possible, but the observed_outcome should be read as tentative-leaning-fragile: a specific day/time (Wednesday 1:30) was captured, yet the customer's own words ('I don't know,' 'it all depends on the lord') and a serious unaddressed health/cost anxiety plus a disclosed non-working system make this a fragile booking rather than a clean one.",
+  "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "14:24",
-    "quote": "Well, let's do this. Let me have my specialist call you tomorrow. We'll say 01:30.",
-    "reasoning": "A specific day (Wednesday) and time (1:30) are stated and the customer doesn't object, but his own hedging language ('I don't know,' 'it all depends on the lord wants to keep me here for a while') plus the unresolved cost/health anxiety and the late-surfacing non-working system make this a fragile, tentative booking rather than a fully secured one."
+    "quote": "Let me have my specialist call you tomorrow. We'll say 01:30.",
+    "reasoning": "A specific day and time (tomorrow, 1:30) were stated, but the customer never firmly commits — he repeatedly says 'I don't know' and needs to check for doctor's appointments, and his final response is a vague 'Alright, mate' rather than a clear confirmation, making this fragile despite the stated time.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,17 +29,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures the usage figure but never verbally reflects it back as a pain point or emotional lever ('1,730 kWh a month — that's a big number') — she moves straight into the photo-collection logistics without flipping it into alignment-against-the-utility or the existing-system-cost framing."
+    "reasoning": "The bill (1,730 kWh, or possibly a dollar figure at 06:04) was captured but never flipped into emotional alignment against the utility; the rep's reassurance at 13:31 ('doesn't cost a ton') was the natural spot to tie back to his usage/bill pain but instead stayed generic."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "02:44",
-    "ask_quote": "Do you get your Repahannock bill online or through the mail, John?",
+    "ask_ts": "06:27",
+    "ask_quote": "If you could actually take a photo of the bill and text it to me,",
     "result": "received_on_call",
     "method": "photo",
-    "result_ts": "11:58",
+    "result_ts": "11:59",
     "result_quote": "Looks like that actually just came through.",
-    "reasoning": "Rep asked how the customer gets his bill, then walked him through a lengthy live photo-text process that ultimately succeeded on the call, despite significant friction and time cost."
+    "reasoning": "The rep asked for a photo of the bill and the customer texted it; the rep confirmed receipt during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,43 +50,43 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks a standard 'what interested you in solar' question — the call pivots immediately from the scripted opener into orphaned-system handling and battery-backup interest once the customer reveals he already has solar, so the standard interest-reason exchange never occurs."
+    "reasoning": "The rep did not ask an open \"what has you interested in solar\" question and the customer did not volunteer a motivating reason beyond already having solar."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:21",
-      "end_ts": "00:27",
-      "quote": "Hey. This is Meg. I'm with Ion. I'm reaching out about the solar form you filled out online.",
+      "end_ts": "00:24",
+      "quote": "Hey. This is Meg. I'm with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "Hi, John?",
+      "customer_quote": "Thanks. Please stay on the line.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "00:41",
+      "end_ts": "00:48",
+      "quote": "Were you looking at battery backups or expanding your system?",
+      "customer_response": "deflected",
+      "customer_quote": "No.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "02:05",
-      "end_ts": "02:11",
-      "quote": "So the address that I have, I've got the 28661 Morrill Way.",
+      "ts": "01:32",
+      "end_ts": "01:48",
+      "quote": "The system on your roof, I'm assuming you own it or are you leasing it?",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah.",
+      "customer_quote": "No. I'm buying it. I'm making payments on it.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -108,24 +117,24 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "02:25",
-      "end_ts": "02:32",
+      "end_ts": "02:33",
       "quote": "Are you with Dominion Energy?",
       "customer_response": "cooperative",
-      "customer_quote": "Rappahannock.",
+      "customer_quote": "They need Rappahannock.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "02:13",
-      "end_ts": "06:04",
-      "quote": "So what we'll need to do here, John, is get an idea of how much power the home has consumed in the last year.",
+      "ts": "02:21",
+      "end_ts": "06:08",
+      "quote": "We actually like to look at the power bill to get that information.",
       "customer_response": "cooperative",
       "customer_quote": "At 1,730.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "alternative_offered",
       "result": "completed"
     },
     {
@@ -142,7 +151,7 @@
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,16 +159,16 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "01:50",
       "end_ts": "02:04",
-      "quote": "Now do you know what company you got that system from?",
+      "quote": "do you know what company you got that system from?",
       "customer_response": "deflected",
-      "customer_quote": "I can't remember right now what they called it.",
+      "customer_quote": "I can't remember right now what they called it. But k. No worries.",
       "resistance_reason": "dont_have_it",
       "rep_followup": "moved_on",
       "result": "partial"
@@ -167,38 +176,44 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "02:44",
-      "end_ts": "11:58",
-      "quote": "Do you get your Repahannock bill online or through the mail, John?",
+      "ts": "06:27",
+      "end_ts": "12:02",
+      "quote": "If you could actually take a photo of the bill and text it to me,",
       "customer_response": "cooperative",
-      "customer_quote": "Looks like that actually just came through.",
-      "resistance_reason": "other",
+      "customer_quote": "I'm doing it right now. Okay. Awesome.",
+      "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "14:24",
-      "end_ts": "14:44",
-      "quote": "Well, let's do this. Let me have my specialist call you tomorrow. We'll say 01:30.",
+      "ts": "14:31",
+      "end_ts": "15:05",
+      "quote": "Let me have my specialist call you tomorrow. We'll say 01:30.",
       "customer_response": "cooperative",
-      "customer_quote": "Alright, mate.",
-      "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "customer_quote": "I have to check to see if I have any doctor's appointments. I got cancer.",
+      "resistance_reason": "timing",
+      "rep_followup": "alternative_offered",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "14:37",
-      "end_ts": "15:16",
-      "quote": "And we'll call you at this phone number. And I would also suggest having access to your email at that time as well.",
+      "ts": "14:31",
+      "end_ts": "15:05",
+      "quote": "Let me have my specialist call you tomorrow. We'll say 01:30.",
       "customer_response": "cooperative",
       "customer_quote": "Alright, mate.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "no_driving",
+        "reconfirm"
+      ],
+      "parts_score": "3/4"
     }
   ],
   "objections": [
@@ -208,59 +223,93 @@
       "type": "cost",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Yeah. I get you there. That's the nice thing about our program is it it really is super simple and easy to make switch. It doesn't cost a ton."
+        "that's the nice thing about our program is it it really is super simple and easy to make switch. It doesn't cost a ton."
       ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "The rep offers a single generic reassurance and then moves straight to locking the appointment time; the customer's underlying anxiety about money and limited time (tied to his cancer treatment) is never actually addressed or investigated, only glossed over — the appointment proceeds but the concern itself is unresolved, not resolved."
+      "resolved": true,
+      "resolution_ts": "13:47",
+      "reasoning": "Customer raises a cost/time concern tied to his health situation; rep gives one generic reassurance and the customer doesn't push back further, but there's no genuine resolution of the underlying anxiety.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "reassure"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@14:31",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "12:28",
+      "quote": "I don't know.",
+      "type": "timing_or_callback",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "I do have time tomorrow. We could give you a call at 01:30 or 4PM.",
+        "let's let's get an idea of what that schedule looks like."
+      ],
+      "resolved": true,
+      "resolution_ts": "14:24",
+      "reasoning": "Customer is vague and uncertain about availability multiple times; rep persists with concrete time offers until a time is verbally agreed, though commitment stays soft.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "alternative_offered",
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@14:31",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Vulnerability disclosure handled flat, cost objection left unresolved",
+    "topic": "Vulnerability disclosure handled procedurally, not empathetically",
     "ts": "13:00",
     "quote": "I have to check to see if I have any doctor's appointments. I got cancer.",
-    "why": "The customer hands the rep a serious health disclosure directly followed by a cost/time anxiety objection, and both get only a generic pass-through response before the appointment is locked — this is the single moment where a specialist walking in blind could most damage the relationship or lose the sit."
+    "why": "The customer handed the rep a significant trust gift and the rep moved straight back into scheduling logistics with no acknowledgment, missing the schema's core empathy directive at the most consequential moment of the call."
   },
   "key_moments": [
     {
       "ts": "00:36",
-      "quote": "I just had a couple of questions to build your design here for you. I've already got solar.",
+      "quote": "I've already got solar.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer reveals an existing system immediately, which should trigger orphaned_flow (ownership, installer, panel size, system working status). Rep does get ownership and attempts installer name, but never confirms panel size or working status until it surfaces unprompted at the very end."
+      "stewart_read": "This should trigger the full orphaned_flow sequence (own vs lease, company, size, working) but only ownership and company-name are asked, and company is dropped on deflection."
     },
     {
       "ts": "01:57",
       "quote": "I can't remember right now what they called it. But k. No worries.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer can't recall the installer name and the rep immediately drops it with 'No worries' rather than trying a follow-up angle (approximate timeframe, monthly payment amount, or asking if paperwork is nearby) that might surface competitive intel."
+      "stewart_read": "Rep accepts 'no worries' and moves straight to address confirmation instead of trying a follow-up angle (e.g., 'no problem, do you remember roughly when it was installed?')."
     },
     {
-      "ts": "06:19",
-      "quote": "K. If you could actually take a photo of the bill and text it to me, I can just pull the information from the graph and put it directly into my system here.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer had just read the exact usage figure aloud verbally at 06:04 ('At 1,730.'), proving a viable read-back path existed. Instead the rep launched a photo-text process that consumed nearly six more minutes of struggle for an elderly, self-described slow-moving customer, directly missing the schema's 2-minute pivot rule."
+      "ts": "13:00",
+      "quote": "I have to check to see if I have any doctor's appointments. I got cancer.",
+      "classification": "empathy_miss",
+      "stewart_read": "Rep responds with a bare 'Yeah' and continues scheduling logistics; no acknowledgment of the disclosure itself."
     },
     {
-      "ts": "10:45",
-      "quote": "Is it working, or is it giving you some trouble?",
-      "classification": "non_standard_scenario_hold",
-      "stewart_read": "By this point roughly 4.5 minutes had elapsed since the photo request; the rep checks in but stays the course on the photo-text path rather than pivoting to the verbal number already captured, extending the friction past the schema's stated time budget."
+      "ts": "13:26",
+      "quote": "if it involves a lot of money, I don't have no time.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a cost objection wrapped in a health/time constraint; rep reassures with generic 'doesn't cost a ton' instead of flipping toward his current bill pain or tying value to his situation."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 50,
-    "verified": 48,
-    "fuzzy": 0,
-    "wrong_ts": 2,
+    "checked": 51,
+    "verified": 47,
+    "fuzzy": 1,
+    "wrong_ts": 3,
     "not_found": 0
   }
 }

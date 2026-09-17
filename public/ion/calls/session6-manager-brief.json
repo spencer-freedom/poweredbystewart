@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION6",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens cold on a prior-call disqualifier, and the rep works it into a live estimate through a reasonable two-angle reframe, then successfully captures utility, bill, roof, and credit info. The back half stalls on a 5+ minute photo-send struggle that the rep never pivots away from, and the close lands on a real day/time (Monday 3PM) that is undercut by a garbled, unclear final exchange rather than a clean handshake.",
+  "trajectory_summary": "The call opens on a previously-stalled lead and the rep does real work reviving it by reframing tree removal as a trim and lowering the ask to 'just get an estimate.' Energy holds through verify and a long bill-text struggle, ending in a booked callback, but the core tree/shading disqualifier is never actually resolved — just deferred to the specialist.",
   "shape": "mixed",
-  "outcome_dispute": "V1 tag is unknown/unclear from metadata; observed outcome is best read as tentative rather than cleanly booked. Monday 3PM is stated and the customer confirms it at 08:29-08:33, but the button-up disintegrates immediately after — 08:39 ('I'll get working on your design. Could call you tomorrow or Monday at 3PM. Okay?') reintroduces ambiguity about which day, and there is no 'is that fair' handshake or clear recap. The day+time was genuinely locked once; the fragility is in the confirmation mechanics, not in whether a time was ever set.",
+  "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "tentative",
+    "outcome": "booked",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "08:29",
+    "ts": "08:28",
     "quote": "Call you at 3PM. Is that cool?",
-    "reasoning": "A specific day (Monday) and time (3PM) are both stated and confirmed by the customer, which would normally support 'booked.' It is downgraded to 'tentative' because the very next rep line (08:39) reintroduces 'tomorrow' as an alternative and the call closes without a clean recap or 'is that fair' handshake, leaving the confirmation mechanically fragile even though the day/time itself was genuinely locked once."
+    "reasoning": "Rep locks Monday afternoon at 3PM specifically and customer confirms 'Yeah. That's fine.' — a specific day and time both agreed, meeting the booked bar. No co-owner was identified (customer confirmed no one else on title), so co_owner_confirmed is null.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,17 +29,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep acknowledges the number ('Oh, yeah. We can definitely help with that.') but never returns to it as a forward-pulling reason to act; the $500 figure is filed and the call moves straight into roof and credit questions."
+    "reasoning": "Rep captured the $500/month bill at 02:10 but responded only with 'Oh, yeah. We can definitely help with that.' — a generic acknowledgment, not a flip into emotional alignment against the utility. The flip should have landed right there, reflecting the $500 back as ongoing loss."
   },
   "bill_document_audit": {
     "asked": true,
     "ask_ts": "02:37",
     "ask_quote": "You're able to access the power bill real quick?",
     "result": "received_on_call",
-    "method": "photo",
-    "result_ts": "07:18",
-    "result_quote": "Yes. It went through.",
-    "reasoning": "Rep asks the customer to pull up the bill and photograph the usage graph to text over; after multiple failed sends the customer confirms at 07:18 that it finally went through, and the rep verifies receipt shortly after at 08:10."
+    "method": "text",
+    "result_ts": "08:10",
+    "result_quote": "Yes. Wait. Yes. There we go. Okay.",
+    "reasoning": "Rep asked for the bill and instructed texting; customer sent the bill and rep confirmed receipt during the call at 08:10."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +50,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar' — the conversation is driven entirely by the prior-call tree objection and the standard verify sequence, so no independent interest reason is surfaced or available to use."
+    "reasoning": "The rep did not ask why the customer was interested in solar; the customer did not volunteer a motivating reason beyond discussion of the tree and bill."
   },
   "script_coverage": [
     {
@@ -49,11 +58,11 @@
       "status": "asked",
       "ts": "00:08",
       "end_ts": "00:18",
-      "quote": "Hey. This is Bucky with Ion. I'm reaching out about the solar form you filled out online.",
+      "quote": "This is Bucky with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "I think I spoke to somebody yesterday.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
@@ -71,11 +80,11 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "01:33",
-      "end_ts": "01:40",
-      "quote": "So you're at 253 Carlton Road. It's a single family home.",
+      "ts": "01:31",
+      "end_ts": "01:41",
+      "quote": "So you're at 253 Carlton Road.",
       "customer_response": "cooperative",
-      "customer_quote": "",
+      "customer_quote": "Nope.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -83,11 +92,11 @@
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "01:33",
-      "end_ts": "01:40",
+      "ts": "01:31",
+      "end_ts": "01:41",
       "quote": "Is there anybody else in the town but you?",
       "customer_response": "cooperative",
-      "customer_quote": "",
+      "customer_quote": "Nope.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -95,9 +104,9 @@
     {
       "section": "roof",
       "status": "asked",
-      "ts": "02:17",
-      "end_ts": "02:23",
-      "quote": "What kind of roof do you guys? Is it shingles or metal?",
+      "ts": "02:23",
+      "end_ts": "02:25",
+      "quote": "Is it shingles or metal?",
       "customer_response": "cooperative",
       "customer_quote": "It's a metal roof.",
       "resistance_reason": "",
@@ -108,20 +117,20 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "01:43",
-      "end_ts": "01:58",
+      "end_ts": "01:48",
       "quote": "What utility company are you with?",
       "customer_response": "cooperative",
-      "customer_quote": "Northern Neck Electric.",
+      "customer_quote": "The Northern Neck Electric.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:04",
-      "end_ts": "02:10",
-      "quote": "How much are you spending on a monthly average?",
+      "end_ts": "02:12",
+      "quote": "how much are you spending on a monthly average?",
       "customer_response": "cooperative",
       "customer_quote": "The last couple of months have been, like, $500.",
       "resistance_reason": "",
@@ -132,8 +141,8 @@
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:25",
-      "end_ts": "02:30",
-      "quote": "Do you have a credit score over 6 70?",
+      "end_ts": "02:31",
+      "quote": "do you have a credit score over 6 70?",
       "customer_response": "cooperative",
       "customer_quote": "Mhmm.",
       "resistance_reason": "",
@@ -155,23 +164,23 @@
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "00:18",
-      "end_ts": "00:43",
+      "ts": "00:21",
+      "end_ts": "00:30",
       "quote": "You did? How'd it go?",
       "customer_response": "cooperative",
       "customer_quote": "I know they told me I had to have a tree removed.",
       "resistance_reason": "other",
-      "rep_followup": "alternative_offered",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "02:37",
-      "end_ts": "07:18",
+      "ts": "02:36",
+      "end_ts": "08:10",
       "quote": "You're able to access the power bill real quick?",
       "customer_response": "cooperative",
-      "customer_quote": "Yes. It went through.",
+      "customer_quote": "Hold on. Okay.",
       "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
@@ -183,7 +192,7 @@
       "end_ts": "08:33",
       "quote": "And then can you do a phone call on Monday?",
       "customer_response": "cooperative",
-      "customer_quote": "Afternoon.",
+      "customer_quote": "Yeah.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -191,14 +200,19 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "08:33",
-      "end_ts": "08:44",
-      "quote": "I'll text you after this to remind you, and then I'll get working on your design.",
+      "ts": "08:28",
+      "end_ts": "08:33",
+      "quote": "Call you at 3PM. Is that cool?",
       "customer_response": "cooperative",
-      "customer_quote": "Okay.",
+      "customer_quote": "Yeah. That's fine.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
@@ -206,62 +220,78 @@
       "ts": "00:27",
       "quote": "I know they told me I had to have a tree removed.",
       "type": "roof_or_home",
-      "rep_attempts": 2,
+      "rep_attempts": 3,
       "attempt_quotes": [
+        "I mean, you would see a ton of savings.",
         "Would you be willing to trim the tree? Like, trim that a little bit?",
         "how about we get you an estimate just to show what we can do? That way you can decide if it's worth it to even trim the tree."
       ],
       "resolved": true,
       "resolution_ts": "01:24",
-      "reasoning": "Customer agrees to proceed with an estimate ('Yeah. You can. Alright.') after the rep's second reframe decoupled the tree decision from moving forward."
+      "reasoning": "Customer had been fully disqualified previously over the tree; rep reframes with savings, offers a compromise (trim not remove), then lowers the ask to just an estimate, and customer agrees to proceed.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "reason",
+        "alternative_offered",
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "address_homeowner@01:31",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "button-up recap discipline",
-    "ts": "08:39",
-    "quote": "I'll text you after this to remind you, and then I'll get working on your design. Could call you tomorrow or Monday at 3PM. Okay?",
-    "why": "The rep did the hard part — locked Monday 3PM with a clean confirmation at 08:29-08:33 — then undid its clarity by reintroducing 'tomorrow' and skipping the hour-block/no-driving/handshake elements. This is a fixable procedural habit, not a persuasion problem, and it's the highest-leverage fix on this call."
+    "topic": "Unresolved tree/shading DQ carried into a booked appointment",
+    "ts": "00:30",
+    "quote": "I told them I wasn't interested in having that tree removed, and they they couldn't set up anything else.",
+    "why": "The specialist is walking into an appointment where the core disqualifier from the prior call was never actually cleared — just papered over with 'let's get an estimate' — risking a wasted sit."
   },
   "key_moments": [
     {
-      "ts": "00:51",
-      "quote": "I mean, you do have a good position for solar. I mean, you would see a ton of savings.",
+      "ts": "00:27",
+      "quote": "I know they told me I had to have a tree removed.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a prior Ion contact and its exact DQ reason; rep doesn't probe what else was discussed or who he spoke with, moving straight to selling savings."
+    },
+    {
+      "ts": "01:01",
+      "quote": "Would you be willing to trim the tree? Like, trim that a little bit?",
       "classification": "objection_inversion_miss",
-      "stewart_read": "Rep asserts 'a ton of savings' before any bill or usage data has been captured — an unearned quantitative claim rather than the numbers-free intent/emotion leverage the schema calls for."
+      "stewart_read": "Instead of flipping the shading/tree objection into urgency ('the tree is costing you $500/month, not the trim'), rep negotiates the physical fix directly, which is reasonable but leaves the emotional lever on the table."
     },
     {
       "ts": "01:14",
-      "quote": "how about we get you an estimate just to show what we can do? That way you can decide if it's worth it to even trim the tree. You wanna do that?",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is actually the rep executing a strategy-matched inversion — reframing the DQ-sounding tree issue into a reason to move forward, and it works, the customer agrees. Flagged here to show the successful multi-angle move captured also in multi_touch_patterns."
+      "quote": "how about we get you an estimate just to show what we can do? That way you can decide if it's worth it to even trim the tree.",
+      "classification": "bill_anchor",
+      "stewart_read": "Rep lowers commitment threshold to revive a DQ'd lead by offering an estimate as a low-risk next step, a legitimate save move."
     },
     {
-      "ts": "03:31",
-      "quote": "I don't even I don't need to even know the the usage. I just need to get a picture of it on that graph so the specialist can see it so he can know what he can do for you. Is that cool?",
-      "classification": "scope_discipline_positive",
-      "stewart_read": "Rep explicitly declines to interpret bill data himself and hands analysis to the specialist — correct scope discipline, not creep. He names the escape hatch almost verbatim to the schema's universal_escape_hatch pattern."
-    },
-    {
-      "ts": "04:14",
-      "quote": "Okay. Yeah. If you could just send it there real quick, and then I'll schedule you up to talk to a specialist.",
+      "ts": "02:10",
+      "quote": "The last couple of months have been, like, $500.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer just disclosed a $500/month bill at 02:10 — a strong anchor — but the rep never reflects it back or ties it forward ('that's a big number, let's see what we can do about it') before moving to the photo-send logistics."
+      "stewart_read": "A $500/month bill is a strong anchor; rep's response ('Oh, yeah. We can definitely help with that.') is generic and doesn't reflect the number back as leverage."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 49,
-    "verified": 48,
+    "checked": 53,
+    "verified": 53,
     "fuzzy": 0,
-    "wrong_ts": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

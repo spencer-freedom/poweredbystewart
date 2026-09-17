@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION12_9746e9d8",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens cold with a stale lead, briefly warms when the rep offers a free estimate and the customer asks clarifying questions about cost, then collapses when the rep self-disqualifies the home based on tree shading without verifying details (roof orientation, tree removal plans, or even completing a real assessment). The rep ends the call politely but leaves no path forward beyond a vague 'reach out if you cut the trees down.'",
+  "trajectory_summary": "The call opens flat with a stale-lead admission, briefly flickers with a legitimacy question, then is shut down by the rep's own shade disqualification before any real qualification (bill, interest reason, co-owner) happens. Energy never builds because the rep skips the interest and bill sections entirely and moves straight to a DQ rationale off a single roof question.",
   "shape": "energy_leaked",
-  "outcome_dispute": "This should be tagged dq (roof/shading), not booked or callback — the rep explicitly told the customer solar wouldn't work for their home and ended the call with no appointment and no firm follow-up mechanism.",
+  "outcome_dispute": "v1 tag is unknown/unclear; this should be recorded as dq (roof/shade), not no_appointment, since the rep explicitly ends pursuit citing shade blocking solar efficiency.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "01:53",
-    "quote": "Yeah. I do think that you have too much shade for solar to be beneficial.",
-    "reasoning": "The rep explicitly told the customer their home is not viable for solar due to shading and ended the call with no appointment, no bill collected, and only a vague invitation to call back if trees are removed — a hard disqualification, not a booking or callback."
+    "ts": "01:52",
+    "quote": "I do think that you have too much shade for solar to be beneficial.",
+    "reasoning": "Rep explicitly ends pursuit on the roof/shade gate, per dq_rules.roof_too_old_no_replacement logic applied to shading rather than age, and no appointment or next step was set.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep never asked about the customer's utility bill or usage at any point in the call — the conversation was cut short by the shading disqualification before reaching that qualifier."
+    "reasoning": "No bill amount or kWh was asked for or provided in the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "Bill collection was never reached; the call ended at the roof/shading disqualification step before the script progressed that far."
+    "reasoning": "The rep did not request the utility bill or ask for a photo/email of it."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +49,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar; the closest proxy was asking about the prior estimate visit, which surfaced context but not a stated motivation (bill pain, environment, etc.)."
+    "reasoning": "The rep never asked why the customer was interested in solar and the customer did not offer a reason."
   },
   "script_coverage": [
     {
@@ -49,7 +57,7 @@
       "status": "asked",
       "ts": "00:04",
       "end_ts": "00:11",
-      "quote": "So this is Holland with Ion. I got a request you were looking into solar for your home.",
+      "quote": "this is Holland with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Good.",
       "resistance_reason": "",
@@ -73,7 +81,7 @@
       "status": "asked",
       "ts": "01:20",
       "end_ts": "01:28",
-      "quote": "I've got your address as 9244 Northeast Sacramento, Portland, Oregon. Is that correct?",
+      "quote": "I've got your address as 9244",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
@@ -96,12 +104,12 @@
       "section": "roof",
       "status": "asked",
       "ts": "01:36",
-      "end_ts": "01:57",
-      "quote": "yeah, I see that you have a couple of pretty large trees next to you. Are those trees still there?",
+      "end_ts": "01:42",
+      "quote": "are those trees still there?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -130,7 +138,7 @@
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +146,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,7 +158,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
@@ -159,10 +167,10 @@
       "end_ts": "00:38",
       "quote": "Were you able to see, like, an estimate and everything for your home?",
       "customer_response": "cooperative",
-      "customer_quote": "We had some guys come out and, they looked at things, but... they never got back to us.",
+      "customer_quote": "they looked at things, but,",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
@@ -198,7 +206,9 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
@@ -208,52 +218,65 @@
       "type": "trust_or_scam",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "No. I I don't think Yeah. We could we could take a look at that."
+        "Well, let's"
       ],
-      "resolved": true,
-      "resolution_ts": "01:06",
-      "reasoning": "Customer asks about cost/commitment for the free estimate; rep's garbled but affirming response (no charge, no commitment) satisfies the customer enough to proceed to verification questions."
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer's cost/commitment question is a mild trust-or-scam objection; rep's response is halting and unclear, and the point is not cleanly resolved before moving on to verify questions.",
+      "blocked_section": "intro_legitimacy",
+      "attempt_moves": [
+        "reassure"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "address_homeowner@01:20",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "premature self-disqualification on shading",
+    "topic": "Premature shade DQ without verification",
     "ts": "01:44",
-    "quote": "I think it's gonna be hard for those solar panels to to work efficiently. Does that make sense?",
-    "why": "The rep just re-engaged a cold lead with a free-estimate offer and got a positive response, then killed the opportunity with a verbal guess about tree shading instead of using the estimate process (or at least asking about roof orientation / removal plans) to make that call. This is the single moment that flips the call's trajectory from warm to dead."
+    "quote": "I think it's gonna be hard for those solar panels to to work efficiently.",
+    "why": "Rep closes the entire call and the lead off one yes/no answer about tree presence, without probing severity, orientation, or trim plans — likely killing a lead that could have been qualified further or nurtured."
   },
   "key_moments": [
     {
-      "ts": "00:12",
-      "quote": "That was quite a while ago. We haven't haven't talked about it for about six months.",
+      "ts": "00:18",
+      "quote": "Were you able to see, like, an estimate and everything for your home?",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a prior visit from another team (\"guys come out\") who took measurements and never followed up. This is competitive/internal intel the rep should probe — which team, what happened, why no follow-up — but the rep only asks if the customer saw an estimate, not who came out or why they dropped the ball."
+      "stewart_read": "Customer discloses a prior visit where reps took measurements/photos and never followed up — a competitive and trust signal the rep never digs into (which company, what happened, why no follow-up)."
     },
     {
-      "ts": "00:40",
-      "quote": "Well, yeah. Right now, we're doing, like, free estimates and everything. So if you wanted to take advantage of that, we can kinda show you some accurate numbers and what it would look like for you.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "This line briefly re-opens the customer (see state_changes at 00:40), but the rep never asks about the customer's bill or usage before pivoting to disqualification — the curiosity-building step (bill anchor) was skipped entirely."
+      "ts": "00:50",
+      "quote": "What are your company Well, there's no no charge for that. Right?",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer asking about cost/commitment after a long lapse is a live engagement signal — he's testing the offer, not rejecting it."
     },
     {
-      "ts": "01:36",
-      "quote": "yeah, I see that you have a couple of pretty large trees next to you. Are those trees still there?",
-      "classification": "other",
-      "stewart_read": "Legitimate roof/shading qualifier question, asked appropriately and directly."
+      "ts": "00:56",
+      "quote": "Well, let's",
+      "classification": "softener_overuse",
+      "stewart_read": "Rep's response to the cost question is halting and unclear ('Well, let's... No... I I don't think... Yeah'), undermining the legitimacy reassurance right when the customer showed openness."
     },
     {
       "ts": "01:44",
-      "quote": "I think it's gonna be hard for those solar panels to to work efficiently. Does that make sense?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Rep self-disqualifies based on a visual/assumed shading read rather than offering the actual free estimate process (satellite imaging, design team assessment) that was just pitched as accurate. This reverses the rep's own prior pitch that estimates would show 'accurate numbers.'"
+      "quote": "I think it's gonna be hard for those solar panels to to work efficiently.",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep disqualifies solely off a yes/no tree-presence answer with no follow-up on tree height, direction, roof orientation, or whether the customer would consider trimming before ending pursuit."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
     "revision_applied": false
   },
   "quote_verification": {

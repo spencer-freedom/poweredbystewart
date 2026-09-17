@@ -1,17 +1,25 @@
 {
   "call_id": "10000793851",
   "rep_name": "Carter",
-  "trajectory_summary": "The call opens with Doug immediately signaling he isn't the bill-payer and has memory problems, yet the rep runs the full verify/qualifier sequence on him anyway before finally agreeing to call the wife directly. Energy leaked steadily as Doug's answers grew less useful and the rep never adapted the questioning strategy to route around him earlier, ending in a soft callback commitment with no locked time.",
+  "trajectory_summary": "The call opens warm but stalls immediately because Doug, the person on the phone, cannot answer nearly any qualifying question — bill amount, credit score, scheduling — and the real contact is his wife. The rep never firmly redirects to book a specific time with the wife; the call ends in a vague 'I'll call later today' with no bill, no appointment, and no locked time. Energy leaked steadily from intro to close with no recovery.",
   "shape": "energy_leaked",
-  "outcome_dispute": "This is a callback, not a booked or tentative appointment — no day or time was ever set. The rep says 'I'll give her a call and set something up' and 'I'll call later in the day,' both open-ended commitments with no anchor. If v1 tagged this as booked/tentative, that is miscalled.",
+  "outcome_dispute": "v1 tag is unknown; observed outcome is a callback at best (rep will call the wife later), not a booked or tentative appointment — no day/time was agreed with the actual decision-maker.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
-    "co_owner_confirmed": false,
+    "co_owner_confirmed": null,
     "ts": "05:03",
     "quote": "Yeah. I'll call later in the day. Alright. Thank you so much.",
-    "reasoning": "No specific day or time is ever set for an appointment; the rep commits to calling the wife back 'later in the day,' which is a callback commitment, not a booked or tentative appointment. The wife (likely co-owner) was never reached or confirmed during this call."
+    "reasoning": "No appointment day/time was set with the actual decision-maker (the wife); the rep only committed to calling back later in the day, with no specific time locked.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,36 +28,36 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Doug states his wife pays the bills and he doesn't know the amount ('Perfect. And then you said your wife paid it. She's not sure how much.' at 01:29 is the rep summarizing, not a captured figure); no dollar amount or usage figure was ever obtained on this call."
+    "reasoning": "No dollar amount or kWh was captured; the customer discussed usage patterns but did not state a bill figure."
   },
   "bill_document_audit": {
     "asked": true,
     "ask_ts": "02:09",
-    "ask_quote": "Yeah. I mean, the the last thing we need to see is just a utility bill for your house.",
+    "ask_quote": "the last thing we need to see is just a utility bill",
     "result": "promised_later",
     "method": "email",
-    "result_ts": "02:34",
-    "result_quote": "You could, email her at simplygottarelax@gmail.com.",
-    "reasoning": "Rep asks for the bill and Doug offers his wife's email as the channel; nothing is sent or read on the call itself, so it's deferred to a later exchange with the wife."
+    "result_ts": "02:37",
+    "result_quote": "at simplygottarelax@gmail.com.",
+    "reasoning": "Rep asked for the utility bill and the customer provided an email address and said she'd tell her wife to look for the message, indicating the bill would be sent later."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:20",
     "reason_given": true,
-    "reason_ts": "00:58",
-    "reason_quote": "We are both home now being retired, so we are using more energy than we did when we worked.",
+    "reason_ts": "00:26",
+    "reason_quote": "I'm 74. I'm retired,",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asks the interest question and Doug gives a strong usage-increase reason (retired, both home, running a shop/garage), but the rep only offers a generic acknowledgment ('that's a good reason to look into it') at 01:04 and never reinforces or ties the appointment back to it later in the call."
+    "reasoning": "Rep acknowledged the retirement/fixed-income reason at 01:04 ('that's a good reason to look into it') but never revisited it when setting up the callback or trying to anchor the appointment."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "end_ts": "00:19",
-      "quote": "Hey, Doug. This is Carter calling from ION.",
+      "end_ts": "00:12",
+      "quote": "This is Carter calling from ION.",
       "customer_response": "cooperative",
       "customer_quote": "Good. Thank you.",
       "resistance_reason": "",
@@ -61,9 +69,9 @@
       "status": "asked",
       "ts": "00:20",
       "end_ts": "01:03",
-      "quote": "Awesome. Why is you interested in looking into it?",
+      "quote": "Why is you interested in looking into it?",
       "customer_response": "cooperative",
-      "customer_quote": "We are both home now being retired, so we are using more energy than we did when we worked.",
+      "customer_quote": "I'm 74. I'm retired,",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -106,39 +114,39 @@
     },
     {
       "section": "utility_company",
-      "status": "asked",
-      "ts": "01:16",
-      "end_ts": "01:19",
-      "quote": "what utility company are you working with?",
-      "customer_response": "cooperative",
-      "customer_quote": "Service.",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "01:29",
-      "end_ts": "01:34",
-      "quote": "Perfect. And then you said your wife paid it. She's not sure how much.",
-      "customer_response": "resistant",
-      "customer_quote": "Probably she pays all the bills.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "moved_on",
-      "result": "declined"
+      "ts": "00:33",
+      "end_ts": "01:03",
+      "quote": "Are your bills pretty high, your electric bills?",
+      "customer_response": "cooperative",
+      "customer_quote": "we are using more energy than we did when we worked.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:36",
-      "end_ts": "01:45",
-      "quote": "I guess one of the main requirements for getting solar is having a credit score above 650.",
-      "customer_response": "resistant",
-      "customer_quote": "Probably she pays all the bills. I have memory problems, so I don't pay a lot of bills.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "moved_on",
-      "result": "declined"
+      "end_ts": "01:54",
+      "quote": "one of the main requirements for getting solar is having a credit score above 650.",
+      "customer_response": "cooperative",
+      "customer_quote": "I have memory problems, so",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "military",
@@ -167,53 +175,45 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "02:09",
-      "end_ts": "02:37",
-      "quote": "Yeah. I mean, the the last thing we need to see is just a utility bill for your house.",
+      "ts": "02:16",
+      "end_ts": "02:43",
+      "quote": "What would be the easiest way to get that?",
       "customer_response": "cooperative",
-      "customer_quote": "You could, email her at simplygottarelax@gmail.com.",
+      "customer_quote": "email her at simplygottarelax@gmail.com.",
       "resistance_reason": "",
-      "rep_followup": "alternative_offered",
+      "rep_followup": "none",
       "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "02:59",
-      "end_ts": "05:03",
+      "end_ts": "04:57",
       "quote": "are mornings or afternoons or evenings typically best to meet with you?",
       "customer_response": "deflected",
-      "customer_quote": "So I'm not sure what works for her if you wanna call her later, and I'll tell her that you'll call. Is that possible?",
+      "customer_quote": "call her later, and I'll tell her that you'll call.",
       "resistance_reason": "spouse",
-      "rep_followup": "alternative_offered",
-      "result": "partial"
+      "rep_followup": "persisted",
+      "result": "deferred"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "04:50",
+      "end_ts": "05:03",
+      "quote": "I'll give her a call and set something up for you guys.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "reconfirm"
+      ],
+      "parts_score": "1/4"
     }
   ],
   "objections": [
-    {
-      "ts": "01:29",
-      "quote": "Perfect. And then you said your wife paid it. She's not sure how much.",
-      "type": "spouse_or_co_decider",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "You're good. Yeah. No worries."
-      ],
-      "resolved": false,
-      "resolution_ts": "04:52",
-      "reasoning": "Rather than re-attempting to get the bill from Doug, the rep only fully resolves the wrong-contact issue at 04:52 by agreeing to call the wife directly — a single, late pivot rather than multiple in-call attempts."
-    },
     {
       "ts": "03:11",
       "quote": "Well, it kinda depends on what day.",
@@ -224,54 +224,68 @@
         "I guess when she would she be around today? Do you know?"
       ],
       "resolved": false,
-      "resolution_ts": "05:03",
-      "reasoning": "The rep tries twice to pin a specific time via Doug (tomorrow, today) but Doug can't confirm either, and the call ends with only a vague 'later in the day' commitment, not a locked time."
+      "resolution_ts": "",
+      "reasoning": "Rep tried two different angles (tomorrow, today) to pin a time through Doug, but never got a specific commitment — the call ends with an open 'later in the day.'",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "question_back",
+        "question_back"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@04:50",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Re-routing qualification when the answering party discloses they aren't the right contact",
-    "ts": "01:45",
-    "quote": "I have memory problems, so I don't pay a lot of bills.",
-    "why": "Doug signals from 00:37 onward that his wife handles the bills, and explicitly discloses memory problems at 01:45, yet the rep keeps running qualifiers on Doug for another two-plus minutes before finally agreeing to call the wife directly at 04:47. Earlier recognition would have saved call time and produced cleaner data."
+    "topic": "Failure to redirect to actual decision-maker early",
+    "ts": "00:37",
+    "quote": "Well, my wife's it's all the bills.",
+    "why": "The moment Doug revealed his wife handles everything, the rep should have restructured the call around reaching her directly instead of continuing to qualify someone who couldn't answer — this single miss cascades into every later failure (no bill, no credit info, no locked appointment)."
   },
   "key_moments": [
     {
-      "ts": "00:25",
-      "quote": "I'm 74. I'm retired, and I'm on a limited income.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Retired with both spouses now home full-time and running a 1,500 sq ft shop/garage in addition to the house is a strong usage-increase signal — exactly the kind of anchor the interest_question section is designed to surface."
-    },
-    {
       "ts": "01:45",
-      "quote": "Probably she pays all the bills. I have memory problems, so I don't pay a lot of bills.",
+      "quote": "I have memory problems, so I don't pay a lot of bills.",
       "classification": "empathy_miss",
-      "stewart_read": "This is a trust-gift disclosure per the schema's vulnerability framing — Doug is telling the rep, unprompted, that he is not a reliable respondent. The rep's reply ('You're good. Yeah. No worries.') is a generic reassurance, not an acknowledgment-plus-bridge."
+      "stewart_read": "Doug discloses a real vulnerability (memory problems) and the rep responds with a flat procedural reassurance instead of acknowledging it."
     },
     {
-      "ts": "01:36",
-      "quote": "I guess one of the main requirements for getting solar is having a credit score above 650.",
-      "classification": "softener_overuse",
-      "stewart_read": "The rep states a core qualifying threshold with 'I guess,' undercutting the requirement's authority, and asks a memory-impaired, non-bill-paying customer to self-report a number he plainly cannot know. The schema's own spencer_operator_note raises the open policy question of whether setters should be DQing on stated credit at all — this call is a clean example of why that policy matters, since Doug's answer ('Probably she pays all the bills... I don't pay a lot of bills') is not a usable data point for a DQ decision either way."
+      "ts": "00:37",
+      "quote": "Well, my wife's it's all the bills.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "First signal that the wife is the actual qualifying contact; rep doesn't pause to redirect the call structure toward her at this point."
     },
     {
-      "ts": "03:23",
-      "quote": "he goes to old folks' homes and massages these elderly people.",
-      "classification": "other",
-      "stewart_read": "Doug refers to his wife with 'he' while describing her massage business, another small marker of the disclosed memory problems affecting the call's reliability as a data source."
+      "ts": "03:11",
+      "quote": "Well, it kinda depends on what day.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "Scheduling attempt with the wrong person produces an unusable answer; the rep doesn't anchor a firm day/time and instead lets the conversation drift into a vague later-today callback."
+    },
+    {
+      "ts": "01:29",
+      "quote": "Perfect. And then you said your wife paid it. She's not sure how much.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "No bill number was ever captured; rep files the non-answer and moves straight to the credit qualifier instead of anchoring on the retirement/fixed-income pain already surfaced."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 45,
-    "verified": 45,
+    "checked": 42,
+    "verified": 42,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

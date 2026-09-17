@@ -290,9 +290,17 @@ export default async function IonStatsPage() {
         {/* Critic */}
         <section>
           <h2 className="text-lg font-bold">Stewart checks Stewart</h2>
-          <p className="text-sm text-stewart-muted mt-1 mb-4">Critic verdict on the first draft, then a deterministic quote check on the draft that shipped.</p>
+          <p className="text-sm text-stewart-muted mt-1 mb-4">
+            {Object.keys(s.critic_verdicts ?? {}).length
+              ? "Critic verdict on the first draft, then a deterministic quote check on the draft that shipped."
+              : "Two models, neither trusted alone: one locates the script events, one judges the call — and the judge only sees events that matched the transcript word-for-word. Then a deterministic quote check on everything that shipped."}
+          </p>
           <div className="grid sm:grid-cols-3 gap-3">
-            <Tile label="Critic approved first draft" big={`${s.critic_verdicts.approved ?? 0}`} sub={`${s.critic_verdicts.revisions_required ?? 0} sent back for a revision`} />
+            {Object.keys(s.critic_verdicts ?? {}).length ? (
+              <Tile label="Critic approved first draft" big={`${s.critic_verdicts.approved ?? 0}`} sub={`${s.critic_verdicts.revisions_required ?? 0} sent back for a revision`} />
+            ) : (
+              <Tile label="Labels set by rule, not by a model" big="3" sub="skipped vs never reached · booked vs tentative (the bill) · did the objection stall the call" />
+            )}
             <Tile label="Calls with every quote grounded" big={`${q.calls_fully_grounded} of ${s.calls}`} sub="verified or near-verbatim, right timestamp" good />
             <Tile label="Quotes checked" big={q.checked.toLocaleString()} sub={`${q.verified.toLocaleString()} exact · ${q.fuzzy} near · ${q.wrong_ts} wrong ts · ${q.not_found} not found`} />
           </div>

@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION26_ab319cc6",
   "rep_name": "Bucky",
-  "trajectory_summary": "This call never had appointment-setting potential in the standard sense -- the customer is an existing solar owner with a 10kW system asking about battery backup, already contacted by Ion once before. The rep spent the call reactively discovering the shape of the request (existing system, prior quote, system-size constraint) rather than surfacing it early, and the call ended in a disqualification after a long, unexplained hold.",
+  "trajectory_summary": "The call opens warm but the rep never runs a structured qualification — verify items are skipped wholesale and the rep discovers mid-call, reactively, that this is an existing 10kW solar customer looking for battery backup. It ends in a DQ delivered awkwardly after a hold, with the customer's earlier signal (duplicate quote, too-high price) never resolved.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is unknown, but the observed outcome is a disqualification (dq) driven by a stated system-size-too-large-for-battery constraint discovered mid-call, not a booked or tentative appointment -- this should not be scored as a successful set.",
+  "outcome_dispute": "v1 tag unknown; observed transcript shows a DQ (system size disqualifies for battery/backup) delivered at 05:31, not an appointment outcome.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "05:31",
-    "quote": "they they said your your kilowatt size is too big, and it's too big for a battery or a backup",
-    "reasoning": "The call ends with an explicit disqualification based on system size being incompatible with the battery/backup program; no appointment, day, or time was ever set."
+    "quote": "they they said your your kilowatt size is too big, and it's too big for a battery or a backup.",
+    "reasoning": "The transcript ends with the rep relaying a disqualification (existing system too large for battery/backup) and the customer disengaging with a flat goodbye, with no appointment set.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "This call concerns an existing solar owner asking about battery backup, not a new-install bill-pain sale, so the standard utility-bill-amount anchor was never raised or relevant; the customer's only cost signal was a reaction to a prior backup quote ('on the high side'), which the rep did not follow up on."
+    "reasoning": "No monthly bill or kWh usage was captured; the customer mentioned system size (ten kilowatt) which is not a bill/usage figure."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,18 +38,18 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "No utility bill was raised at any point; the conversation stayed on system size and a prior verbal quote for backup/battery, and the call ended in disqualification before bill collection would have been relevant."
+    "reasoning": "The rep did not ask for the utility bill or request it by text/email/photo."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "01:34",
-    "reason_quote": "Yeah. Some kind of a, of a a thing that would kick in because our power goes off quite often.",
+    "reason_ts": "01:41",
+    "reason_quote": "our power goes off",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar/this program,' but the customer volunteered his reason (frequent rural power outages) unprompted; the rep never returned to this motivation later in the call, instead pursuing contract-status and quote-satisfaction questions before escalating to a supervisor hold."
+    "reasoning": "Customer gave a clear reason ('our power goes off quite often') at 01:41 but the rep never reflected it back or tied it to the specialist handoff before the call ended in a DQ."
   },
   "script_coverage": [
     {
@@ -49,11 +57,11 @@
       "status": "asked",
       "ts": "00:14",
       "end_ts": "00:20",
-      "quote": "This is Bucky with ION reaching out about the solar form you guys filled out online.",
+      "quote": "This is Bucky with ION reaching out",
       "customer_response": "cooperative",
       "customer_quote": "Oh, I'm I'm hanging in there.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -62,15 +70,15 @@
       "ts": "",
       "end_ts": "",
       "quote": "",
-      "customer_response": "no_answer",
+      "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -78,11 +86,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,11 +98,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,11 +110,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,11 +122,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,11 +134,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +146,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,19 +158,19 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "02:03",
-      "end_ts": "03:31",
-      "quote": "And did you like that quote or not really?",
+      "ts": "00:49",
+      "end_ts": "01:21",
+      "quote": "do you already have solar?",
       "customer_response": "cooperative",
-      "customer_quote": "It was on the high side, I thought.",
-      "resistance_reason": "already_have_quote",
-      "rep_followup": "alternative_offered",
-      "result": "partial"
+      "customer_quote": "We do.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
@@ -178,102 +186,123 @@
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "skipped"
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "05:53",
-      "end_ts": "05:53",
-      "quote": "I tried, though. I tried it. But, man, let's just do it. Here we go.",
-      "customer_response": "deflected",
-      "customer_quote": "Alright. Okay. Thanks. Bye.",
-      "resistance_reason": "other",
-      "rep_followup": "none",
-      "result": "declined"
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
-      "ts": "02:03",
-      "quote": "No. No. I think I talked to someone about about, and I don't know that I ever got a bid. I think I got a quote kinda over the phone.",
+      "ts": "03:10",
+      "quote": "I already talked to somebody about and they gave me a quote. So I I don't know. This is kinda duplicative.",
       "type": "already_have_quote_or_system",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Okay. Perfect. So you're just looking for, pretty much a backup?"
+        "Somebody from ION has already contacted me. Okay. And did you like that quote or not really?"
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The rep acknowledges the prior contact but never resolves the underlying question of whether this call is redundant; he simply moves forward with his own qualifying questions."
-    },
-    {
-      "ts": "03:10",
-      "quote": "I already talked to somebody about and they gave me a quote. So I I don't know. This is kinda duplicative.",
-      "type": "already_have_quote_or_system",
-      "rep_attempts": 2,
-      "attempt_quotes": [
-        "Somebody from ION has already contacted me. Okay. And did you like that quote or not really?",
-        "I can go see right now, if you wanna I can see if someone can give you a call. And if you wanna just try it one more time, give it a go."
+      "reasoning": "Rep asked a single clarifying question about the prior quote but never addressed the duplication complaint itself or reframed it; the call moved to a hold and eventual DQ instead.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "question_back"
       ],
-      "resolved": false,
-      "resolution_ts": "05:53",
-      "reasoning": "The customer's 'Okay' at 03:48 is a passive response to being placed on hold, not agreement that the duplicative-contact concern was addressed; the call ultimately ends in a disqualification rather than a resolution of the redundancy complaint, so this should not be read as resolved."
-    }
-  ],
-  "primary_coaching_focus": {
-    "topic": "Know the DQ criteria before the hold, not after it",
-    "ts": "05:31",
-    "quote": "I was trying to get a specialist to come talk to you, but I was really fighting for you. But they they said your your kilowatt size is too big, and it's too big for a battery or a backup.",
-    "why": "The customer stated his system size (10kW) at 01:16, four minutes before the rep discovered via a supervisor hold that it disqualified him for the backup program. A rep who knows the battery/backup size ceiling could have told the customer the outcome immediately instead of running him through a near-minute hold for a question the rep already had the data to answer."
-  },
-  "key_moments": [
-    {
-      "ts": "00:02",
-      "quote": "Hey. Is this Deborah?",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The rep opens with a name check but never states the company or reason for calling until 00:14, after the customer has already had to clarify he's not Deborah. The legitimacy anchor comes a beat too late relative to the confusion at pickup."
-    },
-    {
-      "ts": "02:03",
-      "quote": "No. No. I think I talked to someone about about, and I don't know that I ever got a bid. I think I got a quote kinda over the phone.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a prior Ion (or Ion-adjacent) contact and a phone quote. The rep says only 'Okay' and pivots to a scripted contract-status question instead of asking who he spoke with or what was quoted."
-    },
-    {
-      "ts": "03:10",
-      "quote": "I already talked to somebody about and they gave me a quote. So I I don't know. This is kinda duplicative.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "This is the second, more explicit statement of the same redundancy concern. The rep's response ('Oh, you you oh, and then... Somebody from ION has already contacted me. Okay.') restates the fact back but still doesn't ask which rep, when, or what the quote covered -- a second missed opportunity to close the information gap before escalating."
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     },
     {
       "ts": "03:31",
       "quote": "It was on the high side, I thought.",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I can go see right now, if you wanna I can see if someone can give you a call. And if you wanna just try it one more time, give it a go."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep offered a vague alternative (another specialist call) without flipping the cost objection or addressing why the second look would be worth it; call was ultimately DQ'd before this was resolved.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "Skipped verify sequence / no qualification scaffolding",
+    "ts": "00:49",
+    "quote": "do you already have solar?",
+    "why": "Every standard verify item (interest, address, roof, utility, bill) was skipped before jumping to orphaned-flow, leaving the call with no structured qualification and forcing reactive fumbling later (e.g., 01:56 'are you with Ion Solar or no?')."
+  },
+  "key_moments": [
+    {
+      "ts": "00:49",
+      "quote": "do you already have solar?",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer just handed over a pricing reaction to a prior quote. The rep doesn't ask what number he was quoted or what 'high' meant to him -- he moves straight to offering another callback attempt. This is a live anchor the rep let go by without reflecting it back."
+      "stewart_read": "Rep skips the entire standard verify flow and jumps to the orphaned-system question with no bridge, meaning bill, roof, utility, and interest were never captured."
+    },
+    {
+      "ts": "01:41",
+      "quote": "our power goes off quite often.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "This is the customer's stated reason for interest (reliability/backup pain) and it is never reflected back or used to build urgency for the specialist call."
+    },
+    {
+      "ts": "02:03",
+      "quote": "I think I talked to someone about and I don't know that I ever got a bid. I think I got a quote kinda over the phone.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "First disclosure of a prior ION quote; rep does not ask which rep, when, or what was shown, and instead moves to a contract-status question."
+    },
+    {
+      "ts": "03:10",
+      "quote": "I already talked to somebody about and they gave me a quote. So I I don't know. This is kinda duplicative.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer repeats and sharpens the duplicate-contact complaint; rep's response is a stumbling non-sequitur before finally asking about the quote."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 33,
-    "verified": 31,
-    "fuzzy": 0,
-    "wrong_ts": 2,
+    "checked": 30,
+    "verified": 27,
+    "fuzzy": 2,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

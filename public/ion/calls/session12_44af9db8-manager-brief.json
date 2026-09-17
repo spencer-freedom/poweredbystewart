@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION12_44af9db8",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens cold, gets colder as the customer stacks a low bill, a prior quote, and a financial conclusion against solar working for her, and the rep never finds a foothold — no bill flip, no probe into the prior contact, one weak counter on cost that gets immediately punctured. It ends in a clean opt-out with a genuine affinity signal (green building background) left completely unused.",
+  "trajectory_summary": "The call opens cold and stays on defense: the customer front-loads a low-bill-plus-prior-quote objection before verify even starts, and the rep never regains initiative, mirroring her objection back and letting her self-disqualify off her own low bill. Energy leaks steadily from 00:21 to the polite opt-out at 01:39 with no flip, no probe follow-through, and no appointment attempt.",
   "shape": "energy_leaked",
-  "outcome_dispute": null,
+  "outcome_dispute": "v1 tag is unknown; this should be read as no_appointment — the rep never asked for a time or offered next steps, and the call ends with the customer requesting removal from the call list.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
@@ -11,16 +11,24 @@
     "co_owner_confirmed": null,
     "ts": "01:57",
     "quote": "Okay. I can take you off the list. You have a great day.",
-    "reasoning": "Call ends with the rep honoring a do-not-call request and no appointment, callback time, or next step is set."
+    "reasoning": "Rep never attempts to set a time or offer a next step; call ends with rep agreeing to remove her from the call list.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "01:16",
-    "bill_quote": "it doesn't get any higher than $60 in the that's the winter.",
+    "bill_quote": "it doesn't get any higher than $60",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the $60 winter bill figure but immediately pivoted to a generic no-upfront-cost line rather than using her own number as leverage; the flip should have landed at 01:21 where the rep instead asked a scripted financing-awareness question."
+    "reasoning": "Bill was captured at 01:16 ('it doesn't get any higher than $60') but the rep never flipped it into a reason to act; the flip should have landed at 01:04 or 01:21 instead of restating her objection or a generic no-upfront-cost line."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,31 +38,31 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call never progressed to a bill-collection request — the customer's low bill figure was volunteered verbally and the rep never asked to see the actual utility bill (text, photo, or online)."
+    "reasoning": "The rep did not request the utility bill or ask the customer to send a bill during the call."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "01:44",
-    "reason_quote": "I appreciate that I I very much appreciate solar energy. I I worked in green building for many, many, many years, and I think solar is just a wonderful thing.",
+    "reason_ts": "00:31",
+    "reason_quote": "my energy bills are really, really low",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested her in solar, but the customer volunteered a strong affinity reason unprompted near the end of the call; the rep did not reinforce or use it before ending the call at 01:57."
+    "reasoning": "Customer stated her interest reason ('my energy bills are really, really low' as evidence against solar, and separately her values-based affinity for solar at 01:46) but the rep never reinforced either — the low-bill line was used as a counter, not leveraged, and the green-building affinity was left completely unaddressed."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:14",
-      "quote": "Hey. This is Bucky with ION. I'm reaching out about the solar form you filled out online.",
-      "customer_response": "resistant",
-      "customer_quote": "Who's calling?",
-      "resistance_reason": "trust",
+      "end_ts": "00:12",
+      "quote": "This is Bucky with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm sorry. I didn't quite hear what you said.",
+      "resistance_reason": "",
       "rep_followup": "persisted",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -65,7 +73,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -77,7 +85,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -89,7 +97,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -101,7 +109,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -113,24 +121,24 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "00:57",
-      "end_ts": "01:20",
-      "quote": "Well, does the bill swap bill?",
+      "ts": "01:04",
+      "end_ts": "01:18",
+      "quote": "so you you don't think it'll make sense?",
       "customer_response": "cooperative",
-      "customer_quote": "it doesn't get any higher than $60 in the that's the winter.",
-      "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "customer_quote": "it doesn't get any higher than $60",
+      "resistance_reason": "cost",
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +146,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,17 +158,17 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "00:50",
-      "end_ts": "00:56",
-      "quote": "Pardon me? Did you look from somebody with Ion?",
-      "customer_response": "deflected",
+      "ts": "00:54",
+      "end_ts": "00:57",
+      "quote": "Did you look from somebody with Ion?",
+      "customer_response": "cooperative",
       "customer_quote": "Maybe. I can't I can't remember.",
-      "resistance_reason": "other",
+      "resistance_reason": "",
       "rep_followup": "moved_on",
       "result": "partial"
     },
@@ -190,88 +198,110 @@
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "01:57",
-      "end_ts": "02:00",
-      "quote": "Okay. I can take you off the list. You have a great day.",
-      "customer_response": "cooperative",
-      "customer_quote": "You too. Thanks.",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "declined"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
       "ts": "00:21",
-      "quote": "Yeah. And I've I've had somebody look at it already and tell me what it would cost and looked at my energy bill, and my energy bills are really, really low.",
+      "quote": "I've I've had somebody look at it already and tell me what it would cost",
       "type": "already_have_quote_or_system",
       "rep_attempts": 1,
       "attempt_quotes": [
         "Pardon me? Did you look from somebody with Ion?"
       ],
+      "attempt_moves": [
+        "question_back"
+      ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "Rep tried once to identify the source of the prior look, got a vague non-answer, and dropped the thread without using the schema's already_saw_design comparison-framing rebuttal."
+      "reasoning": "Rep asks one clarifying question about the prior contact but never follows up when the customer says she can't remember, leaving the objection unresolved and unprobed.",
+      "blocked_section": "prior_design",
+      "resolved_by_tape": true,
+      "next_event": "prior_design@00:54",
+      "resolution_agrees": false
     },
     {
-      "ts": "01:08",
-      "quote": "No. No. Not not financially.",
+      "ts": "00:26",
+      "quote": "my energy bills are really, really low.",
       "type": "cost",
       "rep_attempts": 1,
       "attempt_quotes": [
         "And you're aware there's no upfront cost with the panels or the installation?"
       ],
+      "attempt_moves": [
+        "reason"
+      ],
       "resolved": false,
-      "resolution_ts": "01:28",
-      "reasoning": "The rep's single no-upfront-cost angle was immediately countered by the customer noting the monthly payment reality, and no second angle was attempted before the customer asked to be removed from the call list at 01:39."
+      "resolution_ts": "",
+      "reasoning": "Rep offers only the no-upfront-cost line once, after mirroring the objection back rather than inverting it; customer's monthly-payment counter is accepted and the call ends with removal request.",
+      "blocked_section": "bill_amount",
+      "resolved_by_tape": true,
+      "next_event": "prior_design@00:54",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "single-attempt objection handling / no bill flip",
-    "ts": "01:21",
-    "quote": "And you're aware there's no upfront cost with the panels or the installation?",
-    "why": "The customer handed the rep a specific, low bill figure as her core objection, and the rep answered with a generic script line that was immediately punctured — no second angle was tried, and coaching_philosophy.multi_angle_resilience calls for 3+ angles before conceding."
+    "topic": "Objection inversion missed on 'won't make sense' + low bill",
+    "ts": "01:04",
+    "quote": "so you you don't think it'll make sense?",
+    "why": "This is the single moment the call could have turned — customer handed the rep her bill number and her reasoning in the same breath, and the rep mirrored instead of flipped it."
   },
   "key_moments": [
+    {
+      "ts": "00:26",
+      "quote": "looked at my energy bill, and my energy bills are really, really low.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a prior look at her home/bill by someone, but rep doesn't press on who, what was shown, or what the outcome was."
+    },
     {
       "ts": "00:50",
       "quote": "Pardon me? Did you look from somebody with Ion?",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Rep senses a prior-contact signal worth checking but the question is garbled and abandoned after one vague reply — no follow-up to identify company or content of that prior look."
-    },
-    {
-      "ts": "00:54",
-      "quote": "Maybe. I can't I can't remember.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Second touch on the same prior-contact thread — customer's non-answer should have prompted a rephrase or a different angle, not immediate abandonment."
+      "stewart_read": "Second touch on the same prior-contact thread; customer says she can't remember and rep drops it entirely rather than asking what company or when."
     },
     {
       "ts": "01:16",
-      "quote": "it doesn't get any higher than $60 in the that's the winter.",
-      "classification": "bill_anchor",
-      "stewart_read": "This is a real number and a real anchor point — a $60 winter high bill is unusually low, which is itself the customer's central argument against solar. The rep captured it but never flipped it."
+      "quote": "it doesn't get any higher than $60",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "A genuinely low bill is captured but the rep does nothing with it — no flip, no curiosity hook about how a low bill customer could still benefit or offset future increases."
     },
     {
-      "ts": "01:21",
-      "quote": "And you're aware there's no upfront cost with the panels or the installation?",
+      "ts": "01:04",
+      "quote": "so you you don't think it'll make sense?",
       "classification": "objection_inversion_miss",
-      "stewart_read": "Customer just stated the numbers don't work financially with a specific low bill figure — the textbook flip is to use her own number against the utility/status quo, not deploy a generic no-upfront-cost line that doesn't address her actual math."
+      "stewart_read": "Textbook trigger for a flip ('it's too expensive' analog: 'it won't make sense') but rep restates it as a question instead of inverting it."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 37,
-    "verified": 36,
-    "fuzzy": 1,
+    "checked": 32,
+    "verified": 32,
+    "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0
   }

@@ -2,61 +2,21 @@
   {
     "ts": "00:28",
     "quote": "So it's a single family home. Is there anybody oh, do you already have solar?",
-    "classification": "non_standard_scenario_hold",
-    "schema_reference": "orphaned_flow",
-    "stewart_read": "The moment the customer reveals existing solar, this call should branch into the orphaned_flow script (ownership status, panel size, system working status). The rep continues with a hybrid of standard verify questions instead of running the defined orphaned-flow checklist.",
-    "alternative_hypothesis": "The rep may have judged the standard verify questions (utility, bill, roof, credit) as still relevant regardless of orphaned status, which is partially true, but the schema-specific orphaned questions were never asked.",
-    "coaching_implication": "Train reps to recognize the 'already have solar' trigger explicitly and switch scripts, not blend them ad hoc.",
-    "derived_category": "non_standard_scenario_hold",
-    "schema_reference_valid": true,
-    "duration_seconds": 20
-  },
-  {
-    "ts": "00:52",
-    "quote": "if you've got some good ones, replacing some. I've got 10 that are twenty year over twenty five years old.",
-    "classification": "cross_sell_miss",
-    "schema_reference": "orphaned_flow",
-    "stewart_read": "The rep captured that Gary owns his panels outright ('They're all mine') but never asked the two remaining hard-gate orphaned_flow questions: panel size/wattage and whether the current system is working. This is an incomplete qualification, not just a missed cross-sell — a broken/non-working existing system is a hard DQ per schema, and panel size affects design scope.",
-    "alternative_hypothesis": "The rep may have felt the aging-panel detail was sufficient context to proceed, judging replacement intent as self-evidently qualifying.",
-    "coaching_implication": "Coach the rep to always close out the orphaned_flow question set (owned/leased, company, panel size, working status) before moving to standard verify items — a broken existing system is a DQ the rep never checked for here.",
-    "derived_category": "cross_sell_miss",
-    "schema_reference_valid": true,
-    "duration_seconds": 20
-  },
-  {
-    "ts": "01:46",
-    "quote": "Do you have a credit score over 6 70?",
-    "classification": "other",
-    "schema_reference": "qualifiers.credit_qualifier",
-    "stewart_read": "Rep correctly states the 670 threshold matching the schema (unlike SESSION18_fcbf33c1's 650 drift), and gets a quick yes. Clean, compliant execution of this qualifier.",
-    "alternative_hypothesis": null,
-    "coaching_implication": "No coaching needed here — this is the correct number and phrasing; can be used as a positive reference clip for reps who drift on the threshold.",
-    "derived_category": "qualifiers.credit_qualifier",
-    "schema_reference_valid": true,
-    "duration_seconds": 20
-  },
-  {
-    "ts": "01:56",
-    "quote": "Are you able to access the power bill, like, online?",
-    "classification": "bill_anchor",
-    "schema_reference": "bill_collection",
-    "stewart_read": "Rep asks for bill access after already having the $200 average bill figure, but does not flip that number into any emotional or urgency framing — it's asked and then immediately overtaken by the discovery that the bill was already sent elsewhere.",
-    "alternative_hypothesis": "Given the call ends in duplicate-lead discovery seconds later, the rep may not have had a natural window to flip the bill before the call collapsed.",
-    "coaching_implication": "Even in a short call, once the $200 figure was captured at 01:24 the rep had an opening to acknowledge bill pain before moving to document collection; that beat was skipped.",
-    "derived_category": "bill_anchor",
-    "schema_reference_valid": true,
-    "duration_seconds": 20
-  },
-  {
-    "ts": "02:00",
-    "quote": "I just sent",
     "classification": "prior_contact_probe_miss",
-    "schema_reference": "prior_contact_probe_miss",
-    "stewart_read": "Gary reveals mid-call that he already sent a copy of his bill to another Ion contact ('Ella'), indicating a prior touchpoint the rep did not know about. The rep reacts with mild surprise ('Oh, to who?') but does not probe further — no attempt to confirm which rep, what was discussed, or reconcile records before ending the call.",
-    "alternative_hypothesis": "The rep may have judged that once duplication was confirmed, no further probing added value and ending the call quickly avoided wasting the customer's time.",
-    "coaching_implication": "Even in a duplicate-lead scenario, a quick confirmation of appointment date/time back to the customer would close the loop professionally instead of ending on 'sorry to bother you.'",
-    "derived_category": "prior_contact_probe_miss",
-    "schema_reference_valid": false,
+    "schema_reference": "orphaned_flow",
+    "stewart_read": "Rep discovers existing solar mid-sentence but doesn't slow down to run the orphaned flow properly before moving to ownership question.",
+    "alternative_hypothesis": null,
+    "coaching_implication": "Should have paused to run orphaned_flow questions (own vs lease, company, working condition) before continuing verify.",
+    "duration_seconds": 20
+  },
+  {
+    "ts": "00:55",
+    "quote": "I've got 10 that are twenty year over twenty five years old.",
+    "classification": "prior_contact_probe_miss",
+    "schema_reference": "orphaned_flow",
+    "stewart_read": "A 25-year-old system needing replacement is a strong signal, but rep doesn't ask why now, what's failing, or who installed it originally.",
+    "alternative_hypothesis": null,
+    "coaching_implication": "Probe the replacement motive — this is the interest/pain anchor for an orphaned lead and it's walked past.",
     "duration_seconds": 20
   },
   {
@@ -64,11 +24,39 @@
     "quote": "and then did you get scheduled?",
     "classification": "unanchored_soft_exit",
     "schema_reference": "button_up",
-    "stewart_read": "The call ends with no recap, no confirmed date/time restated to the customer, and no text-follow-up promise — just an apology and goodbye once duplication is discovered.",
-    "alternative_hypothesis": "Since Gary already has an appointment through another channel, a full button-up may be redundant; the strategic move would still be to confirm and restate the existing appointment for the customer's reassurance, which didn't happen.",
-    "coaching_implication": "Coach reps that discovering a duplicate/already-scheduled lead should still end with a courtesy confirmation of the existing appointment details, not just a quick apology and hangup.",
-    "derived_category": "unanchored_soft_exit",
-    "schema_reference_valid": true,
+    "stewart_read": "Rep asks a closed yes/no about a prior appointment instead of confirming date, time, and who it's with — no button-up occurs at all.",
+    "alternative_hypothesis": "Strategic: rep may assume this is a duplicate/recycled lead already handled elsewhere and is closing efficiently.",
+    "coaching_implication": "Even if scheduled elsewhere, rep should confirm date/time and note it for the record instead of taking a bare 'yes' and hanging up.",
+    "duration_seconds": 20
+  },
+  {
+    "ts": "02:15",
+    "quote": "Oh, then you're all good. Sorry to bother you.",
+    "classification": "unanchored_soft_exit",
+    "schema_reference": "button_up.is_that_fair_handshake",
+    "stewart_read": "Call ends with an apology and no verification of any appointment detail, no recap, no next step owned by the rep.",
+    "alternative_hypothesis": null,
+    "coaching_implication": "Any exit should still confirm what's already on the books before ending — 'just to confirm, what day and time do you have?'",
+    "duration_seconds": 20
+  },
+  {
+    "ts": "00:04",
+    "quote": "I'm reaching out about the solar form you filled out online.",
+    "classification": "intro_legitimacy_omission",
+    "schema_reference": "intros.standard",
+    "stewart_read": "Intro references the form for legitimacy per script, adequate but minimal — no state or company anchor beyond name.",
+    "alternative_hypothesis": null,
+    "coaching_implication": "Acceptable per standard intro template; not a major gap given customer's immediate cooperation.",
+    "duration_seconds": 20
+  },
+  {
+    "ts": "01:56",
+    "quote": "Are you able to access the power bill, like, online?",
+    "classification": "curiosity_creation_failure",
+    "schema_reference": "coaching_philosophy.bill_anchoring",
+    "stewart_read": "Bill of $200 captured earlier but never reflected back or used — rep moves straight to bill-document logistics without any acknowledgment of the number.",
+    "alternative_hypothesis": null,
+    "coaching_implication": "Should have flipped the $200 bill into a reason to act before pivoting to document collection.",
     "duration_seconds": 20
   }
 ]

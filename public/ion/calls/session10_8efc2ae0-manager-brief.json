@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION10_8efc2ae0",
   "rep_name": "Ella",
-  "trajectory_summary": "This is a pre-qualified, pre-warmed lead who did most of the selling-herself work before the rep said much of substance — she disclosed a cancelled competitor contract, a specific technical need (battery backup for a boiler), a positive prior impression of Ion, and a recurring autonomy/control concern. The rep executed the mechanical verification (address, credit, bill, scheduling) competently and booked a specific day/time, but never engaged with any of the substantive content the customer handed over, leaving real handoff risk for the closer. The call shape is mixed: forward motion on logistics, but flat-to-leaking on the relationship and technical-question front.",
-  "shape": "mixed",
-  "outcome_dispute": null,
+  "trajectory_summary": "The call opens with the customer doing most of the selling-herself work — she's pre-qualified, roof-cleared, credit-qualified, and even compliments Ion unprompted — and the rep essentially rides that momentum to a booked appointment without much active steering. Energy is mostly stagnant on the rep's side (minimal probing, bare acknowledgments) while the customer repeatedly hands over rich material — battery needs, contract-term anxiety, AI-vetting behavior — that goes unused. It still lands as a booked appointment because the customer was already sold on the category, not because of rep execution.",
+  "shape": "stagnant",
+  "outcome_dispute": "v1 tag unknown; observed outcome is a specific day+time booked (Friday 02:30), which the pipeline should score as tentative given bill_amount not fully captured (photo received but no verbal dollar figure or use confirmed) — see anchor_use for detail.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "09:17",
-    "quote": "We could do 02:30 on Friday. Would that work?",
-    "reasoning": "Rep offers a specific day (Friday) and time (02:30), customer confirms understanding after clarifying AM/PM confusion, and the rep explicitly restates it ('So Friday at 02:30? Sounds good?') with the customer's agreement at 10:47 ('Sounds good.'). Rep also frames it as an 'in person appointment with my specialist' at 08:11, making this a locked, dated, timed booking."
+    "ts": "10:42",
+    "quote": "So Friday at 02:30? Sounds good?",
+    "reasoning": "A specific day and time were agreed and reconfirmed twice, but bill_amount capture is only partial (photo sent, no dollar figure verbally confirmed) per verified events, and no co-owner/title question was asked at all — the appointment rests on an incomplete qualification package.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,38 +29,38 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep never asks for or receives a dollar bill amount — only kWh usage via a bill photo. Customer never states an average monthly bill dollar figure on the call, so there is no number to flip."
+    "reasoning": "No explicit dollar amount or kWh figure was obtained from the customer on the call, so no bill anchor was captured."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "04:38",
-    "ask_quote": "And then looks like we would just be needing an updated electricity bill with the last twelve months of kilowatt usage.",
+    "ask_ts": "06:00",
+    "ask_quote": "and so then you can just upload a photo of that bar graph onto there. Is this a good number to send a text message to?",
     "result": "received_on_call",
     "method": "photo",
-    "result_ts": "07:17",
-    "result_quote": "I'm gonna send back the screenshot off of my app for Dominion.",
-    "reasoning": "Rep asks for the utility bill, sets up text-based photo delivery ('Send you over a text message... upload a photo of that bar graph'), and the customer successfully sends the screenshot which the rep confirms receiving at 08:09-08:11."
+    "result_ts": "08:11",
+    "result_quote": "Okay. Yeah. Just got that.",
+    "reasoning": "The rep asked for the bill at 06:00 and later confirmed receipt on the call with 'Okay. Yeah. Just got that.' at 08:11."
   },
   "interest_reason_audit": {
-    "asked": false,
-    "ask_ts": "",
+    "asked": true,
+    "ask_ts": "00:35",
     "reason_given": true,
-    "reason_ts": "00:14",
-    "reason_quote": "I just had another solar company. I signed a contract with them yesterday, but then I had my AI go over it. And found AI found some things I didn't care for, so I ended up canceling.",
+    "reason_ts": "00:30",
+    "reason_quote": "Ion would have to say for the things that I need and want.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar' — the customer volunteers her reason unprompted at 00:14 (dissatisfaction with a competitor's contract terms). The rep acknowledges generically ('Alright. Sounds good. Yeah. We can do what we can do for you') but never ties the appointment or booking back to resolving that specific contract-terms concern."
+    "reasoning": "Customer's stated reason (net metering, battery backup for generators/boiler, wanting freedom on her property) was never reinforced when booking — rep's scheduling language ('Let me just get you scheduled for an in person appointment with my specialist') is generic and does not tie back to any of her specific stated needs."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
-      "ts": "00:00",
-      "end_ts": "00:11",
-      "quote": "Hi. This is Ella. I'm doing pretty good. This is Ion Solar. Who am I speaking with?",
+      "ts": "00:06",
+      "end_ts": "00:06",
+      "quote": "This is Ion Solar.",
       "customer_response": "cooperative",
-      "customer_quote": "You're speaking with Angeline.",
+      "customer_quote": "Hi, Ella. How are you this afternoon?",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -60,22 +69,22 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "00:35",
-      "end_ts": "03:45",
+      "end_ts": "00:43",
       "quote": "So what type of things were you looking for in the solar?",
       "customer_response": "cooperative",
-      "customer_quote": "I am interested in hearing what Ion would have to say for the things that I need and want.",
+      "customer_quote": "Okay. So what they were gonna do is they were gonna do the net meter on 39 panels for the house,",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "03:59",
-      "end_ts": "04:08",
-      "quote": "Are you still at the address of 712 And Then Mayland Drive in Newport News?",
+      "ts": "04:19",
+      "end_ts": "04:19",
+      "quote": "Let me look on here. Are you still at the address of 712",
       "customer_response": "cooperative",
-      "customer_quote": "I'm exactly here. They're gonna have to throw my whole dead body out of here.",
+      "customer_quote": "I'm exactly here. They're gonna have to throw my whole dead body out of here. The house is almost 34.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -94,30 +103,6 @@
     },
     {
       "section": "roof",
-      "status": "asked",
-      "ts": "01:33",
-      "end_ts": "01:39",
-      "quote": "",
-      "customer_response": "cooperative",
-      "customer_quote": "I needed a new roof at that time. I now have a brand new roof,",
-      "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
-    },
-    {
-      "section": "utility_company",
-      "status": "asked",
-      "ts": "07:21",
-      "end_ts": "07:23",
-      "quote": "",
-      "customer_response": "cooperative",
-      "customer_quote": "for Dominion.",
-      "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
-    },
-    {
-      "section": "bill_amount",
       "status": "skipped",
       "ts": "",
       "end_ts": "",
@@ -129,11 +114,35 @@
       "result": "skipped"
     },
     {
+      "section": "utility_company",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "04:40",
+      "end_ts": "04:55",
+      "quote": "electricity bill with the last twelve months of kilowatt usage.",
+      "customer_response": "cooperative",
+      "customer_quote": "In the mail.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "partial"
+    },
+    {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "04:22",
-      "end_ts": "04:32",
-      "quote": "You just have to make sure that you have a credit score over 670. Is that the case for you?",
+      "end_ts": "04:34",
+      "quote": "you just have to make sure that you have a credit score over 670.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. It's 780.",
       "resistance_reason": "",
@@ -142,7 +151,7 @@
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,16 +159,16 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "03:48",
-      "end_ts": "01:36",
-      "quote": "So it looks like the issue last time I'm just seeing this on here.",
+      "end_ts": "03:59",
+      "quote": "We can definitely just see what we can do for you, and we can totally just get you out an estimate and some more information about it.",
       "customer_response": "cooperative",
-      "customer_quote": "You guys actually came out and looked before, had some information for me, but I needed a new roof at that time.",
+      "customer_quote": "You guys actually came out and looked before,",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -167,87 +176,98 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "04:38",
-      "end_ts": "08:11",
-      "quote": "Send you over a text message, and so then you can just upload a photo of that bar graph onto there.",
+      "ts": "06:00",
+      "end_ts": "07:23",
+      "quote": "and so then you can just upload a photo of that bar graph onto there. Is this a good number to send a text message to?",
       "customer_response": "cooperative",
-      "customer_quote": "I'm gonna send back the screenshot off of my app for Dominion.",
+      "customer_quote": "I'm gonna send back the screenshot",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
+      "rep_followup": "alternative_offered",
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "09:17",
       "end_ts": "10:47",
-      "quote": "We could do 02:30 on Friday. Would that work?",
+      "quote": "02:30 on Friday. Would that work?",
       "customer_response": "cooperative",
       "customer_quote": "Sounds good.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "10:49",
-      "end_ts": "11:55",
-      "quote": "I'll send you a text message as well after this call with the details of this appointment.",
+      "ts": "10:42",
+      "end_ts": "10:55",
+      "quote": "So Friday at 02:30? Sounds good?",
       "customer_response": "cooperative",
-      "customer_quote": "Okay. If anybody calls that number to talk to me, if it doesn't pop up saying I on, I probably didn't answer the phone",
+      "customer_quote": "Sounds good.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "Naming the recurring autonomy/control theme back to the customer",
-    "ts": "01:44",
-    "quote": "I am not trying to be told what I can and cannot do on my property for the next twenty five years.",
-    "why": "This customer raised the same underlying concern four times in different forms (contract restrictions at 01:44, contract clause detail at 05:21, autopay/account control at 07:33, AI-vetting intent at 10:25) and the rep never once reflected it back. A single acknowledgment early would have de-risked the entire appointment and given the closer a clean, named concern to open with instead of discovering it cold."
+    "topic": "Prior-contract probe miss on the exact reason a signed deal fell apart",
+    "ts": "00:14",
+    "quote": "then I had my AI go over it. And found AI found some things I didn't care for, so I ended up canceling.",
+    "why": "The customer names the failure mode of her last deal in the first 30 seconds and it's never mined — this is directly actionable intel (outside-power/generator clause) that should be flagged to the closer before the same clause kills this deal too."
   },
   "key_moments": [
     {
-      "ts": "01:44",
-      "quote": "I am not trying to be told what I can and cannot do on my property for the next twenty five years.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is the customer naming her single biggest deal-risk with the prior company — restrictive contract language. The rep never reflects this back or reassures her about Ion's terms. Strategic read: rep may be intentionally deferring all contract-specifics to the closer (consistent with scope discipline). Reactive read: a brief acknowledgment ('that's a fair concern, our specialist will walk through exactly what you can and can't do') costs nothing and reduces closer-stage risk."
+      "ts": "01:33",
+      "quote": "I now have a brand new roof,",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer clears the prior roof-age DQ herself and volunteers it — a strong qualifying/enthusiasm signal the rep should reflect back to reinforce readiness."
     },
     {
-      "ts": "02:54",
-      "quote": "I need a battery backup system for just my boiler.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer hands the rep a specific, concrete need (small battery backup, not a full Powerwall) — a hook the rep could reflect back as something Ion's specialist can size specifically for her. Rep instead moves to generic estimate language."
-    },
-    {
-      "ts": "03:41",
-      "quote": "Yeah. Just for that.",
-      "classification": "empathy_miss",
-      "stewart_read": "Customer just explained she'd freeze in winter without power for her boiler and can't afford a $10,000 battery. This is a genuine practical/financial vulnerability disclosure, and the rep's response is a flat filler line with no acknowledgment of the freezing-in-winter stakes she raised."
-    },
-    {
-      "ts": "05:21",
-      "quote": "Yeah. What?",
+      "ts": "00:14",
+      "quote": "then I had my AI go over it. And found AI found some things I didn't care for, so I ended up canceling.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer is describing exactly which clause in the competitor's contract her AI flagged (no outside power sources including generators) — this is competitive intelligence a closer would want. The rep's response is a passive filler, not a probing follow-up."
+      "stewart_read": "A rich disclosure about why a signed contract was cancelled goes completely unprobed — rep moves straight to the interest question."
+    },
+    {
+      "ts": "05:15",
+      "quote": "Because I signed it and everything, then have my AI go over it and the AI is screaming.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Second touch on the same AI-vetting behavior; rep's only response is a filler acknowledgment."
+    },
+    {
+      "ts": "10:26",
+      "quote": "I'm running the contract through my AI.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Third and final touch, stated as a closing condition on the appointment itself — customer is telling the rep the deal is contingent on passing this scrutiny."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 46,
-    "verified": 41,
+    "checked": 49,
+    "verified": 47,
     "fuzzy": 0,
-    "wrong_ts": 4,
-    "not_found": 1
+    "wrong_ts": 2,
+    "not_found": 0
   }
 }

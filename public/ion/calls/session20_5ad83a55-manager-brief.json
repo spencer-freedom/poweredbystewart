@@ -1,7 +1,7 @@
 {
   "call_id": "SESSION20_5ad83a55",
-  "rep_name": null,
-  "trajectory_summary": "This is a recycled 2023 lead who re-engaged with a direct, repeated pricing question the rep never resolved, opting instead to redirect to bill collection and the closer appointment. Despite real-world interruptions (a doctor's call, a garbled household moment), the rep successfully re-verified the address, captured the bill via text, and locked a same-day 3pm phone appointment. The call moved forward procedurally but left the customer's core question — monthly cost — unanswered three times.",
+  "rep_name": "Ion",
+  "trajectory_summary": "The call is structurally messy — two real-world interruptions (a doctor's call, a child needing 'Mom') and a repeated pricing question the rep kept answering instead of redirecting — yet the rep held the thread and landed a same-day booked time. Energy leaked repeatedly but the rep's persistence in re-anchoring after each disruption pulled it back to a set appointment.",
   "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
@@ -10,27 +10,36 @@
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "08:25",
-    "quote": "Okay. Perfect. Yep. I got you scheduled then for today at 03:00 just for that phone call appointment with my specialist.",
-    "reasoning": "A specific same-day time (3:00) was confirmed for a phone appointment with the specialist, with no co-owner mentioned anywhere in the call."
+    "quote": "I got you scheduled then for today at 03:00",
+    "reasoning": "A specific day (today) and time (3:00) were agreed, with the customer confirming acceptance right after.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "04:15",
-    "bill_quote": "Yeah. Basically, with electricity right now, I'm paying $2.40, and this month, it's 1 $2.05.",
+    "bill_ts": "04:24",
+    "bill_quote": "$205.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep acknowledges with a bare 'Alright' at 04:26 and moves directly to asking about the utility company, never turning the stated bill figure into a reason to act now or aligning it against the current utility cost."
+    "reasoning": "The rep captured $205 at 04:24 but responded only with 'Alright' at 04:26 and moved to utility company; the flip should have gone right there, tying the $205 to Dominion as the target to beat."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "04:54",
-    "ask_quote": "So are you at home right now to access that electricity bill?",
+    "ask_ts": "05:47",
+    "ask_quote": "And then would you be able to text that over to me?",
     "result": "received_on_call",
-    "method": "photo",
+    "method": "text",
     "result_ts": "06:16",
     "result_quote": "I did. No. Here. I text I sent you the pictures.",
-    "reasoning": "The rep asked the customer to access her bill, she pulled it up online, and after a landline workaround the rep received bill photos via text during the call itself."
+    "reasoning": "The rep asked for the bill to be texted and the customer sent pictures of the bill during the call, which the rep acknowledged."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +50,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar; the customer instead drove the conversation herself by repeatedly asking about monthly cost, which the rep treated as a qualifying question rather than the interest-reason anchor."
+    "reasoning": "The rep did not explicitly ask why the customer was interested in solar; the customer asked about monthly cost but no 'why' question was solicited."
   },
   "script_coverage": [
     {
@@ -49,33 +58,33 @@
       "status": "asked",
       "ts": "00:02",
       "end_ts": "00:09",
-      "quote": "This is Ion Solar. Who am I speaking with?",
+      "quote": "This is Ion Solar.",
       "customer_response": "cooperative",
-      "customer_quote": "You're speaking with Nahida. I have a question.",
+      "customer_quote": "Yes. You're speaking with Nahida. I have a question.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "00:25",
+      "end_ts": "00:25",
+      "quote": "Are you just checking back into solar again?",
+      "customer_response": "cooperative",
+      "customer_quote": "I am checking in.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:38",
-      "end_ts": "03:01",
-      "quote": "I have that as 15344 Wacksmith Terrance Woodbridge, Kent, San Francisco.",
+      "ts": "02:56",
+      "end_ts": "03:03",
+      "quote": "And so what is the current address that you're at?",
       "customer_response": "cooperative",
-      "customer_quote": "3189 Tuluff Tree Place.",
+      "customer_quote": "3189",
       "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
@@ -95,50 +104,50 @@
     {
       "section": "roof",
       "status": "asked",
-      "ts": "03:24",
+      "ts": "03:37",
       "end_ts": "03:42",
-      "quote": "Just gotta make sure that home doesn't have",
+      "quote": "Yeah. It looks like you're still getting quite a bit of that exposure there on the back of the house, so that's perfect.",
       "customer_response": "cooperative",
-      "customer_quote": "I mean, it doesn't have too much shade. But I do have shade behind the house.",
+      "customer_quote": "I mean, it doesn't have too much shade.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "04:36",
+      "ts": "04:38",
       "end_ts": "04:38",
-      "quote": "Mhmm. Okay. Sounds good.",
+      "quote": "Mhmm. Okay.",
       "customer_response": "cooperative",
       "customer_quote": "Dominion. Dominion Energy.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "03:52",
+      "ts": "03:59",
       "end_ts": "04:26",
-      "quote": "Yeah. So it definitely does depend on, like, quite a different variables with the solar.",
+      "quote": "It's just we based it off of the kilowatt usage that's on your electricity bill.",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. Basically, with electricity right now, I'm paying $2.40, and this month, it's 1 $2.05.",
+      "customer_quote": "$205.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "01:57",
+      "end_ts": "02:05",
+      "quote": "The one qualification though for that program is to have a credit score above 670.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "military",
@@ -156,10 +165,10 @@
       "section": "prior_design",
       "status": "asked",
       "ts": "00:18",
-      "end_ts": "00:25",
-      "quote": "It looks like we had an account for you already, though. And let's see. We're speaking to you in 2023.",
+      "end_ts": "00:57",
+      "quote": "it looks like we had an account for you already, though.",
       "customer_response": "cooperative",
-      "customer_quote": "Yes. Yes. Yes. I yes. I am checking in.",
+      "customer_quote": "Mhmm. Can you tell me a little bit about",
       "resistance_reason": "",
       "rep_followup": "moved_on",
       "result": "partial"
@@ -167,23 +176,23 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "04:54",
+      "ts": "05:47",
       "end_ts": "06:21",
-      "quote": "So are you at home right now to access that electricity bill?",
+      "quote": "And then would you be able to text that over to me?",
       "customer_response": "cooperative",
       "customer_quote": "I did. No. Here. I text I sent you the pictures.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "07:58",
-      "end_ts": "08:08",
-      "quote": "So it looks like we actually do have opening in about an hour. We could do a phone call for them in an hour. Would that work for you?",
+      "ts": "08:25",
+      "end_ts": "08:33",
+      "quote": "Okay. Perfect. Yep. I got you scheduled then for today at 03:00",
       "customer_response": "cooperative",
-      "customer_quote": "Okay. That's fine. Yes. Yes.",
+      "customer_quote": "Yes.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -191,63 +200,116 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "08:33",
-      "end_ts": "08:53",
-      "quote": "We do wanna make sure you're gonna not gonna be driving or anything like that. Correct? And then I'll send you a text message as well with the details of this appointment after we get off this call.",
-      "customer_response": "no_answer",
-      "customer_quote": "",
+      "ts": "08:25",
+      "end_ts": "08:48",
+      "quote": "Okay. Perfect. Yep. I got you scheduled then for today at 03:00",
+      "customer_response": "cooperative",
+      "customer_quote": "Oh, yes.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "no_driving",
+        "reconfirm"
+      ],
+      "parts_score": "3/4"
     }
   ],
-  "objections": [],
+  "objections": [
+    {
+      "ts": "01:19",
+      "quote": "how much do I have to pay monthly, for that?",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "we are just getting you a lower electricity bill than what you're currently paying"
+      ],
+      "resolved": true,
+      "resolution_ts": "01:46",
+      "reasoning": "Not a true stall-the-script objection — customer kept cooperating throughout verify — but it recurred three times as a persistent pricing curiosity the rep answered rather than redirected each time.",
+      "blocked_section": "tax_credit_qualifier",
+      "attempt_moves": [
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "tax_credit_qualifier@01:57",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "06:40",
+      "quote": "So let me let me they're gonna do that?",
+      "type": "timing_or_callback",
+      "rep_attempts": 2,
+      "attempt_quotes": [
+        "Are you available at all today?",
+        "So it looks like we actually do have opening in about an hour. We could do a phone call for them in an hour. Would that work for you?"
+      ],
+      "resolved": true,
+      "resolution_ts": "08:22",
+      "reasoning": "Customer hesitated on same-day availability ('Yeah. Yesterday. You can call me.'), rep offered an alternative time an hour out which she accepted, resolving the scheduling stall.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "question_back",
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@08:25",
+      "resolution_agrees": true
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "bill anchor captured but never flipped",
-    "ts": "04:15",
-    "quote": "Yeah. Basically, with electricity right now, I'm paying $2.40, and this month, it's 1 $2.05.",
-    "why": "The customer handed over a specific dollar figure unprompted, and it is the single clearest leverage moment on the call, but the rep responded with 'Alright' and pivoted to utility company instead of tying the number to why she should move forward — this is the highest-value, most fixable gap here."
+    "topic": "Setter scope creep on repeated pricing question",
+    "ts": "01:19",
+    "quote": "how much do I have to pay monthly, for that?",
+    "why": "The customer asked for a monthly cost three separate times and the rep answered program mechanics each time instead of redirecting to the specialist — this sets expectations the closer must now walk back and gives away the appointment's value."
   },
   "key_moments": [
     {
-      "ts": "00:18",
-      "quote": "Yeah. So I'm Solar, it looks like we had an account for you already, though. And let's see. We're speaking to you in 2023.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "The rep identifies this as a recycled lead from 2023 but never asks what happened previously — was a design shown, why didn't it proceed, was there a prior quote. This is free competitive/contextual intelligence the closer could use."
+      "ts": "01:19",
+      "quote": "how much do I have to pay monthly, for that?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep answers pricing directly with program mechanics instead of using the escape hatch to the specialist."
     },
     {
-      "ts": "01:19",
-      "quote": "Yes. A question is, like, how much do I have to pay monthly, for that?",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "The customer's direct cost question is a natural entry point for a bill-anchor flip ('what you're paying now is the real cost'), but the rep answers with a generic no-upfront-cost pitch and moves to the credit qualifier instead."
+      "ts": "03:47",
+      "quote": "like, how much is it monthly? How much would I be paying monthly?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Second instance of the same pricing question, rep again explains the bill-based estimate mechanism rather than deferring."
+    },
+    {
+      "ts": "04:29",
+      "quote": "how much would I be paying how much would I be paying something with you with you guys?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Third repetition of the pricing question; rep still doesn't redirect, instead moving into bill-collection logistics."
     },
     {
       "ts": "04:15",
-      "quote": "Yeah. Basically, with electricity right now, I'm paying $2.40, and this month, it's 1 $2.05.",
-      "classification": "bill_anchor",
-      "stewart_read": "The customer volunteers her actual bill figures unprompted-ish after being asked about usage. The rep acknowledges with 'Alright' and moves straight to asking which utility company, never flipping the number into urgency or alignment-against-the-utility."
-    },
-    {
-      "ts": "05:47",
-      "quote": "I'll send you a text message off of my number real quick. This is just a landline, so just give me one moment.",
-      "classification": "other",
-      "stewart_read": "The customer is on a landline and can't send a photo directly to a company number, so the rep improvises by texting from a personal number to receive the bill photo. This matches the schema's landline_protocol pivot (verbal readback or alternate capture path) rather than the personal-phone-number privacy anti-pattern, since the customer's phone situation is the actual constraint, not the rep's choice."
+      "quote": "Basically, with electricity right now, I'm paying $2.40, and this month, it's 1 $2.05.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer hands over both a comparative bill number and the current $205 anchor; rep just says 'Alright' and moves to utility company instead of flipping it into alignment-against-the-utility."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 45,
-    "verified": 41,
-    "fuzzy": 1,
-    "wrong_ts": 2,
-    "not_found": 1
+    "checked": 55,
+    "verified": 55,
+    "fuzzy": 0,
+    "wrong_ts": 0,
+    "not_found": 0
   }
 }

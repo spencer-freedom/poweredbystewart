@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION2_b15b3a00",
   "rep_name": "Michael",
-  "trajectory_summary": "This is a service/retention call, not a new-appointment setter call — an existing customer with a working system calls in with a recurring technical confusion about production percentages that the rep never fully resolves. The rep recovers by redirecting the unresolved technical question into a battery-backup cross-sell and successfully books a specialist callback for Tuesday at 11am. The call ends on an upswing but the core question that prompted the call is left unanswered.",
+  "trajectory_summary": "This is a post-install check-in, not a cold setter call — the customer led with a genuine technical question and the rep spent nearly six minutes cycling similar explanations before pivoting cleanly into a battery-backup cross-sell that resolved into a booked callback. Energy was largely flat/repetitive in the middle (same explanation restated, customer not fully satisfied) but recovered once the rep offered a concrete next step tied to the customer's actual pain (bill still not fully offset).",
   "shape": "mixed",
-  "outcome_dispute": "The v1 tag is unclear/unknown; observed outcome is a booked callback (Tuesday 11AM with 'Tate/Kate') for a battery-backup consultation, not a new solar appointment. This is a different call type (post-install service/cross-sell) than the standard setter-to-closer solar appointment the schema is built around, so schema sections like intro_legitimacy, roof, utility_company, tax_credit_qualifier, military, and bill_collection do not apply in their normal form.",
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata; this call is best read as a 'callback booked' for a specialist (Tate) on a battery add-on, not a standard new-solar appointment — the schema's appointment_set beat was hit but the call context (existing customer, technical support call morphing into upsell) is atypical and should be flagged as such rather than graded against standard verify/bill-collection completion.",
   "observed_outcome": {
-    "outcome": "callback",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "08:45",
     "quote": "Around eleven? We can do right at 11AM.",
-    "reasoning": "Rep secured a specific day (Tuesday, the 5th) and time (11AM) for the original specialist ('Tate'/'Kate' — name unclear in transcript) to call back and discuss a battery backup system, which is a locked callback, not a full new appointment booking."
+    "reasoning": "A specific day (Tuesday the 5th) and specific time (11AM) were both agreed by the customer ('Oh, that sounds great'), meeting the booked threshold; this is a specialist callback for a battery evaluation, not a new solar appointment, so no co-owner context applies.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "booked by time, tentative by rule: bill not_asked",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "This is a post-install service/retention call about an existing customer's production percentage confusion, not a new-lead qualification call — no bill amount is discussed. The customer references 'keeps my electric bill low' at 04:54 but no dollar figure or usage number is ever captured."
+    "reasoning": "No customer bill amount or kWh figure was given on the call, so nothing was captured or flipped."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +39,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "This call is a post-install check-in about production percentage and battery cross-sell, not a new-design qualification call, so there was no need to collect a utility bill — the system is already designed and installed."
+    "reasoning": "The rep did not request the utility bill or ask the customer to send bill documents during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,24 +50,24 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "This is not a new-lead setter call, so the standard 'what interested you in solar' question doesn't apply — the customer already owns a system and called in with a technical/production question."
+    "reasoning": "The rep did not ask why the customer was interested in solar; the call was a service/follow-up and troubleshooting conversation."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:00",
-      "end_ts": "00:16",
-      "quote": "This is Michael.",
+      "end_ts": "00:03",
+      "quote": "Hello. This is Michael.",
       "customer_response": "cooperative",
       "customer_quote": "Well, Michael, this is Dave Bennett calling.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -66,11 +75,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -78,11 +87,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,11 +99,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,23 +111,23 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "06:10",
       "end_ts": "06:12",
-      "quote": "I know, ComEd doesn't have a 100% buyback rate.",
+      "quote": "ComEd doesn't have a 100%",
       "customer_response": "cooperative",
-      "customer_quote": "Okay.",
+      "customer_quote": "No. I am never really looked into that.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,11 +135,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +147,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,23 +159,23 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "07:36",
+      "end_ts": "07:44",
+      "quote": "Kate is the one that originally helped you out get the solar system.",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright. Yeah. I'd like to talk to him just to see for",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -174,93 +183,88 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "07:36",
-      "end_ts": "08:45",
-      "quote": "He could actually give you a callback as early as Tuesday",
+      "ts": "08:22",
+      "end_ts": "08:49",
+      "quote": "Is there a good time Tuesday that would work for you for him to give you a call or would make it a good day be better?",
       "customer_response": "cooperative",
-      "customer_quote": "Around eleven around eleven.",
+      "customer_quote": "Morning, around eleven.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
+      "status": "asked",
+      "ts": "08:45",
       "end_ts": "08:51",
-      "quote": "Sounds good, mister Bennett. Appreciate your time.",
+      "quote": "We can do right at 11AM.",
       "customer_response": "cooperative",
       "customer_quote": "Oh, that sounds great.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
-    }
-  ],
-  "objections": [
-    {
-      "ts": "00:41",
-      "quote": "But it it don't seem to go below 15%, like, you know, 10 or five or anything on a bike stubby.",
-      "type": "other",
-      "rep_attempts": 3,
-      "attempt_quotes": [
-        "Like, it it goes under 15%? I don't seem to understand what you mean by that.",
-        "So, yeah, that's kind of all just dependent on the consumption of the home, obviously.",
-        "Yeah. That's a great question. So like I said, a lot of it is because, you know, on those days when it is producing, a lot of that gets used up in real time."
+      "result": "partial",
+      "parts_done": [
+        "recap"
       ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "The customer's underlying question — why the production percentage never drops as low as he expects on sunny low-draw days — is never actually answered; the rep gives the same real-time-consumption explanation twice, admits he doesn't know the details, and the conversation moves on via the battery pivot rather than a resolution."
+      "parts_score": "1/4"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "Repeating the same technical explanation instead of adapting",
-    "ts": "01:47",
-    "quote": "So, yeah, that's kind of all just dependent on the consumption of the home, obviously.",
-    "why": "The customer restates his production-percentage question four separate times with new supporting detail each time (bright sunny days, trimmed tree, low-draw appliances), and the rep gives essentially the same 'used up in real time' answer twice before admitting he doesn't know. This is the single most consequential pattern on the call — the customer's actual question is never resolved, and it's masked because the battery pivot happened to land well."
+    "topic": "Redirect to specialist earlier on technical dead-ends",
+    "ts": "03:37",
+    "quote": "I honestly wouldn't know. I'm not really sure what's being used in the home",
+    "why": "Rep spent ~3 more minutes re-explaining a topic he'd already admitted he couldn't fully answer, before finally bridging to Tate/battery — that bridge should happen at the first admission of the knowledge gap, not after two more restatements."
   },
   "key_moments": [
     {
       "ts": "00:58",
-      "quote": "Like, it it goes under 15%? I don't seem to understand what you mean by that.",
+      "quote": "I don't seem to understand what you mean by that.",
       "classification": "knowledge_gap",
-      "stewart_read": "Rep doesn't grasp the customer's question on first pass, requiring the customer to re-explain three more times across the call."
-    },
-    {
-      "ts": "02:37",
-      "quote": "Yeah. That's a great question. So like I said, a lot of it is because, you know, on those days when it is producing, a lot of that gets used up in real time.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Rep repeats the identical explanation given at 01:47 almost word for word instead of adjusting to the customer's follow-up detail about the trimmed tree and low draw appliances."
+      "stewart_read": "Reasonable clarifying question, appropriate opening move on a technical topic outside core script."
     },
     {
       "ts": "03:37",
-      "quote": "So, like I said, I honestly wouldn't know. I'm not really sure what's being used in the home other than what you told me or, like, the production on those days.",
+      "quote": "That's a good question. So, like I said, I honestly wouldn't know.",
       "classification": "knowledge_gap",
-      "stewart_read": "Rep transparently admits the limits of his knowledge rather than fabricating a technical answer — this is the correct move per schema's 'admit and recover with transparency' path."
+      "stewart_read": "Rep admits the limit of his knowledge honestly rather than fabricating, but doesn't bridge to the specialist here — he keeps trying to explain for two more minutes."
     },
     {
-      "ts": "06:06",
-      "quote": "Have you considered looking into a battery backup system to store energy yourself rather than relying on ComEd for that?",
-      "classification": "cross_sell_miss",
-      "stewart_read": "Rep successfully identifies the customer's frustration with production/banking as a battery-backup opportunity and introduces it cleanly — this is a cross-sell catch, not a miss, but it's worth flagging as the pivotal moment that rescued the call."
+      "ts": "02:06",
+      "quote": "Kinda. Sorta.",
+      "classification": "empathy_miss",
+      "stewart_read": "Customer signals the explanation only partly landed; rep restates nearly the same line instead of trying a different angle."
+    },
+    {
+      "ts": "06:10",
+      "quote": "ComEd doesn't have a 100% buyback rate. Have you considered looking into a battery backup system",
+      "classification": "bill_anchor",
+      "stewart_read": "Rep pivots the customer's own production complaint into a battery-backup pitch, using the utility's imperfect buyback as the villain — a genuine inversion move."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
     "revision_applied": false
   },
   "quote_verification": {
-    "checked": 32,
-    "verified": 32,
+    "checked": 34,
+    "verified": 34,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

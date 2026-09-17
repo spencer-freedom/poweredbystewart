@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION14_fe077550",
   "rep_name": "Bucky",
-  "trajectory_summary": "A short, mechanical verify-and-DQ call: the rep moves through address, homeowner, utility, bill, and roof questions in under two minutes, hits the credit qualifier, and disqualifies the customer on a single stated number without probing alternatives beyond one co-signer question. The call neither builds nor loses much energy — it starts guarded, briefly opens, and closes on a flat, accepted DQ.",
+  "trajectory_summary": "A short, mechanical call that moved efficiently through verify items until hitting a hard credit DQ at 450 against a 670 threshold. The rep followed procedure correctly on the DQ but skipped the interest question and any bill-pain exploration, so the call never built emotional traction before it ended.",
   "shape": "stagnant",
-  "outcome_dispute": "v1 tag is unknown/unclear from metadata, but the observed outcome is a clean hard DQ on stated credit score (450 vs 670 threshold) — this should be tagged dq, not left ambiguous.",
+  "outcome_dispute": "V1 tag is unknown; this is clearly a dq outcome — the transcript shows the rep explicitly ending pursuit on the credit gate, which the verified events also mark as 'result partial' at tax_credit_qualifier.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "03:46",
-    "quote": "So the only requirement is you do have a credit score over 670. So there's nothing we could do right now. I'm sorry to bother you.",
-    "reasoning": "The customer's stated credit score of 450 falls under the schema's hard credit_qualifier threshold of 670, and the rep explicitly ends the call on this basis with no appointment set."
+    "ts": "03:42",
+    "quote": "So the only requirement is you do have a credit score over 670. So there's nothing we could do right now.",
+    "reasoning": "Customer's credit score of 450 with no available cosigner fails the hard credit_qualifier gate; rep explicitly ends pursuit citing this requirement, matching the dq definition.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +28,7 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep acknowledges the $600 bill with 'Oh, we can definitely help with that' but never ties it back into a reason to act or an emotional alignment-against-the-utility; the call moves straight into the roof and credit questions and then DQs before any flip could land."
+    "reasoning": "Rep acknowledged the $600 bill with a generic 'we can definitely help with that' at 03:12 but never flipped it into emotional alignment-against-the-utility before the call ended on the credit DQ."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call ended on the credit DQ before the rep reached bill-collection; no request for the physical utility bill was made."
+    "reasoning": "The rep did not request the utility bill or a photo/email of it during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,19 +49,19 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what interested the customer in solar; the call moved directly from homeowner/title verification into utility, bill, roof, and credit questions before DQ'ing."
+    "reasoning": "The rep never asked why the customer was interested in solar and the customer did not volunteer a reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
-      "ts": "01:51",
-      "end_ts": "01:57",
-      "quote": "Oh, okay. This is Bucky with Ion. I'm just reaching out about the solar for me for the online.",
+      "ts": "00:13",
+      "end_ts": "00:19",
+      "quote": "This is Bucky with Ion. I'm reaching out about the solar form.",
       "customer_response": "cooperative",
-      "customer_quote": "I'm good. How are you?",
+      "customer_quote": "Okay. How can I help you?",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -71,20 +79,20 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "02:09",
+      "ts": "02:11",
       "end_ts": "02:26",
-      "quote": "Are you at 3004 Appleton Avenue?",
+      "quote": "at 3004",
       "customer_response": "cooperative",
       "customer_quote": "Yes. Yes. Question. Is it is it stomach free?",
-      "resistance_reason": "trust",
-      "rep_followup": "alternative_offered",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "02:41",
-      "end_ts": "02:46",
+      "end_ts": "02:48",
       "quote": "Is there anybody else on the title but you?",
       "customer_response": "cooperative",
       "customer_quote": "No.",
@@ -96,7 +104,7 @@
       "section": "roof",
       "status": "asked",
       "ts": "03:16",
-      "end_ts": "03:19",
+      "end_ts": "03:21",
       "quote": "What, what kind of roof do you have? A shingle?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
@@ -111,7 +119,7 @@
       "end_ts": "03:03",
       "quote": "What utility company are you with?",
       "customer_response": "cooperative",
-      "customer_quote": "Dominion Energy.",
+      "customer_quote": "Dominion\nEnergy.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -129,16 +137,16 @@
       "result": "completed"
     },
     {
-      "section": "credit_score_qualifier",
+      "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "03:22",
-      "end_ts": "03:49",
+      "end_ts": "03:35",
       "quote": "Do you have a credit score over 670?",
       "customer_response": "cooperative",
-      "customer_quote": "I'm at, like, a 450.",
-      "resistance_reason": "other",
-      "rep_followup": "persisted",
-      "result": "completed"
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "military",
@@ -198,67 +206,62 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "03:26",
-      "quote": "I'm at, like, a 450.",
-      "type": "cost",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Do you do you have anybody that would be willing to help or no?"
-      ],
-      "resolved": false,
-      "resolution_ts": "03:46",
-      "reasoning": "The credit shortfall is a hard qualifier gate rather than a persuadable objection; the rep tried one workaround (co-signer) before conceding and closing the call, falling short of the schema's 3+ angle target for multi-angle resilience."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "stated-credit hard DQ without alternative exploration",
-    "ts": "03:42",
-    "quote": "Okay. So the only requirement is you do have a credit score over 670. So there's nothing we could do right now. I'm sorry to bother you.",
-    "why": "The rep disqualified the lead entirely off a self-reported 450 score with only one workaround attempt (co-signer) and no mention of routing to the closer for an actual credit pull. Given the schema's own flagged ambiguity on stated-vs-pulled credit policy, this is the single highest-leverage moment on the call — either it's correct procedure or it's a needlessly lost lead, and the manager should clarify which before the rep repeats this pattern."
+    "topic": "Interest question skipped entirely",
+    "ts": "02:22",
+    "quote": "it's a single family home?",
+    "why": "Per verified events the interest_in_solar item was never asked; this is the emotional anchor per coaching_philosophy.bill_anchoring and its absence left the call purely transactional before the DQ ended it."
   },
   "key_moments": [
     {
       "ts": "00:13",
-      "quote": "No. Can I ask who's calling?",
+      "quote": "Yeah. This is Bucky with Ion. I'm reaching out about the solar form. It says Briton Duncan.",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The initial screener questions who's calling before the rep gives a full company/reason explanation, suggesting the intro landed weakly on first contact. The rep's line at 00:13 ('This is Bucky with Ion. I'm reaching out about the solar form...') is a reasonable recovery, but the need for it shows the opener didn't preempt the suspicion."
+      "stewart_read": "Rep names the company and references the form, but the opening is choppy due to reaching a gatekeeper first; legitimacy is established late relative to the actual customer's join at 01:51."
     },
     {
-      "ts": "02:26",
-      "quote": "Yes. Yes. Question. Is it is it stomach free?",
-      "classification": "other",
-      "stewart_read": "Customer is asking (garbled transcription, likely 'is it cost free') whether the specialist call itself carries a cost — a scam/legitimacy check even after she's already engaged with several verify questions. This is a lingering trust signal the rep should note."
+      "ts": "01:51",
+      "quote": "This is Bucky with Ion. I'm just reaching out about the solar for me for the online.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "Second intro attempt is garbled ('solar for me for the online') but still references the online form, meeting the minimum legitimacy bar."
     },
     {
-      "ts": "02:31",
-      "quote": "Even though it's when the when we have you talk to a specialist and he provides all the information we have, that's free too.",
-      "classification": "rapport_repair",
-      "stewart_read": "Rep directly answers the cost-free question and reassures the customer the specialist call is also free, addressing the anxiety in the moment."
+      "ts": "02:22",
+      "quote": "it's a single family home?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Rep skips the interest_in_solar question entirely per verified events, moving straight from address to co-owner without ever asking what interested her in solar."
     },
     {
-      "ts": "03:05",
-      "quote": "And then do you know how much you're spending on a monthly average?",
-      "classification": "bill_anchor",
-      "stewart_read": "Rep asks for the bill amount directly and gets a clean answer of 600, but the acknowledgment at 03:12 ('Okay. Oh, we can definitely help with that.') is a soft flip attempt, not a full emotional alignment-against-utility flip — it's closer to a capture-and-acknowledge than a true reframe."
+      "ts": "03:10",
+      "quote": "600.",
+      "classification": "cross_sell_miss",
+      "stewart_read": "A $600/month bill is a strong pain signal but the rep only acknowledges it generically before moving straight to the next qualifier."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 34,
-    "verified": 34,
+    "checked": 29,
+    "verified": 29,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

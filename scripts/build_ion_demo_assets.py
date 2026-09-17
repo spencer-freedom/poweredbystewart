@@ -576,6 +576,11 @@ def main() -> int:
         help="path to SpencerOS checkout (default: %(default)s)",
     )
     ap.add_argument(
+        "--corpus-stats",
+        default=None,
+        help="corpus_stats.json to publish (default: outputs/_batch/corpus_stats.json; use outputs/_layered/corpus_stats.json for the layered run)",
+    )
+    ap.add_argument(
         "--skip-calls",
         action="store_true",
         help="skip the 332-call walk (useful during schema iteration)",
@@ -597,7 +602,8 @@ def main() -> int:
     PUBLIC_ION.mkdir(parents=True, exist_ok=True)
 
     for name, src in (
-        ("corpus-stats.json", spencer_os / "scripts" / "stewart_demo_pipeline" / "outputs" / "_batch" / "corpus_stats.json"),
+        ("corpus-stats.json", Path(args.corpus_stats) if args.corpus_stats
+         else spencer_os / "scripts" / "stewart_demo_pipeline" / "outputs" / "_batch" / "corpus_stats.json"),
         ("brain-v2-payload.json", spencer_os / "data" / "ion_solar" / "_brain_payload" / "brain-v2-payload.json"),
     ):
         if src.exists():

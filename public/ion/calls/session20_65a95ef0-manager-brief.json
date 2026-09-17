@@ -1,59 +1,67 @@
 {
   "call_id": "SESSION20_65a95ef0",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens smoothly with an efficient, cooperative verify section (address, roof, title, utility, bill range, credit) completed in under three minutes. From there the trajectory flattens: the customer's repeated, legitimate questions about how pricing works are met with partial answers, an anecdotal claim, and an admitted knowledge gap, and the call ends without a locked appointment — just a promise to text and a hope the customer reaches Dominion after the weekend.",
-  "shape": "mixed",
-  "outcome_dispute": "The v1 tag is unknown/unclear from metadata, but the observed transcript shows no appointment was booked, tentative, or scheduled with a specific day/time — the call ends with the rep saying he'll text his contact info and wait for the customer to call Dominion 'Monday at their earliest.' This should be tagged callback/no_appointment, not booked.",
+  "trajectory_summary": "The call opens flat, has a mid-call spike of real customer curiosity about pricing mechanics, but the rep answers most of that curiosity herself instead of redirecting to the specialist or flipping it back to the customer's own bill pain. It ends without an appointment, without a locked bill-collection path, and without a button-up — a soft, unanchored close.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata; based on the transcript this is not a booked or tentative appointment — no day/time was ever proposed. This should be read as no_appointment, not a soft callback, because the rep never proposed a specific next call or appointment slot, only a bill-send request.",
   "observed_outcome": {
-    "outcome": "callback",
+    "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "08:03",
-    "quote": "I mean, tomorrow is Saturday, so they're not gonna be I can't get a hold of anybody until Monday at their earliest.",
-    "reasoning": "No specific appointment day/time was set; the call ends with the customer planning to contact Dominion on Monday and the rep promising to text his contact info, with no locked callback time from the rep's side either."
+    "ts": "08:18",
+    "quote": "if you can reach them on Monday, just feel free to send over that bill. Okay?",
+    "reasoning": "No day or time for an appointment or callback was ever stated by either party; the call closes on a vague bill-send request with the rep only promising to text her contact info, not scheduling anything.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "02:13",
-    "bill_quote": "the highest bill I ever got was this past winter. It was $380.",
+    "bill_ts": "02:06",
+    "bill_quote": "now without running the air conditioner and no heat or whatever, it's probably about 130, $140",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured both an average range ($130-190) and a peak bill ($380) but only responded with acknowledgment ('Oh, wow. That's a huge jump') before moving straight into program mechanics — the bill was never turned into a reason to act now."
+    "reasoning": "Bill amounts ($130-140 average, $380 winter peak) were captured at 02:06-02:13 but never flipped into urgency; the rep should have used the $380 winter spike at the program pitch (02:34) or at the exit (08:18) to anchor why acting now matters."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "03:59",
+    "ask_ts": "04:37",
     "ask_quote": "The only thing that I will need from you, Nancy, is just a copy of your kilowatt usage on your Dominion bill.",
     "result": "promised_later",
     "method": "other",
-    "result_ts": "08:03",
-    "result_quote": "I mean, tomorrow is Saturday, so they're not gonna be I can't get a hold of anybody until Monday at their earliest.",
-    "reasoning": "The customer doesn't have a login or mailed bill, so the rep floats a three-way call option and then defers to the customer calling Dominion herself on Monday and sending the bill over — no locked timeline or method was confirmed."
+    "result_ts": "08:18",
+    "result_quote": "And then if you can reach them on Monday, just feel free to send over that bill. Okay?",
+    "reasoning": "The rep asked for the usage copy and the customer said they'd try to get it from Dominion; the rep asked them to send it over after they can reach Dominion, so the bill was promised later."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "01:24",
     "reason_given": true,
-    "reason_ts": "01:30",
-    "reason_quote": "Just the exorbitant electricity bills that we're getting, and rates are just gonna continue to go up.",
+    "reason_ts": "01:32",
+    "reason_quote": "electricity bills that we're getting, and rates are just gonna continue to go up.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer's rate-anxiety reason is acknowledged briefly ('Yeah. No kidding.') but never referenced again later in the call — not when discussing the $380 peak bill, not when explaining the bill-swap program, and not at the close."
+    "reasoning": "The customer's reason ('electricity bills... rates are just gonna continue to go up' at 01:32) was never referenced again — not at the program pitch, not at the close — a missed reinforcement opportunity given the call ended without even an appointment ask."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "end_ts": "00:21",
-      "quote": "So this is Holland with Ion Ion Solar. So I was just following up because one of our current customer, Sheila Wilson, had suggested that you might be interested in solar for your home. Does that sound about",
+      "end_ts": "00:14",
+      "quote": "this is Holland with Ion",
       "customer_response": "cooperative",
       "customer_quote": "right?",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -61,83 +69,83 @@
       "status": "asked",
       "ts": "01:24",
       "end_ts": "01:37",
-      "quote": "I guess my biggest question for you is what kind of got you looking into solar for your home?",
+      "quote": "what kind of got you looking into solar for your home?",
       "customer_response": "cooperative",
-      "customer_quote": "Just the exorbitant electricity bills that we're getting, and rates are just gonna continue to go up.",
+      "customer_quote": "electricity bills that we're getting, and rates are just gonna continue to go up.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:29",
-      "end_ts": "00:56",
-      "quote": "Okay. So for stuff, I actually don't have your address on file. Can I start by grabbing that from you?",
+      "end_ts": "00:50",
+      "quote": "Can I start by grabbing that from you?",
       "customer_response": "cooperative",
-      "customer_quote": "It's 608 Outler, C 0 U N S E L 0 R, Square, Virginia Beach 23452.",
+      "customer_quote": "Correct.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:15",
-      "end_ts": "01:21",
-      "quote": "And then I have you down, Nancy, as the property owner. Is there anybody in the same title of the home with you?",
+      "end_ts": "01:22",
+      "quote": "Is there anybody in the same title of the home with you?",
       "customer_response": "cooperative",
       "customer_quote": "No.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:03",
-      "end_ts": "01:12",
-      "quote": "as far as your roof goes, how old would you say your current roof is?",
-      "customer_response": "cooperative",
-      "customer_quote": "It's no more than six years old because we had it replaced recently.",
+      "end_ts": "01:15",
+      "quote": "how old would you say your current roof is?",
+      "customer_response": "no_answer",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "completed"
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:50",
       "end_ts": "01:56",
-      "quote": "who is your electric company?",
+      "quote": "who is your electric company? Is it Dominion?",
       "customer_response": "cooperative",
-      "customer_quote": "Dominion Power.",
+      "customer_quote": "Dominion Power. Yeah.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:58",
-      "end_ts": "02:32",
-      "quote": "how much would you say you're spending on average a month with Dominion?",
+      "end_ts": "02:12",
+      "quote": "And how much would you say you're spending on average a month with Dominion?",
       "customer_response": "cooperative",
-      "customer_quote": "it's probably about 130, $140 a month... the highest bill I ever got was this past winter. It was $380.",
+      "customer_quote": "now without running the air conditioner and no heat or whatever, it's probably about 130, $140",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:44",
+      "ts": "02:46",
       "end_ts": "02:52",
-      "quote": "it guarantees you savings within the first year you have solar as long as you have a credit score above 670. So would that qualify you?",
+      "quote": "as long as you have a credit score above 670.",
       "customer_response": "cooperative",
       "customer_quote": "It should. Yeah.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -149,62 +157,102 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "02:57",
-      "end_ts": "03:13",
+      "end_ts": "03:04",
       "quote": "have you ever looked into solar before, or is this your first time?",
       "customer_response": "cooperative",
       "customer_quote": "This is my first time.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "03:59",
-      "end_ts": "08:03",
+      "ts": "04:37",
+      "end_ts": "05:16",
       "quote": "The only thing that I will need from you, Nancy, is just a copy of your kilowatt usage on your Dominion bill.",
-      "customer_response": "resistant",
-      "customer_quote": "So there's a problem there because I don't get a mail bill. I get a email bill, and it's just the amount that I owe.",
+      "customer_response": "deflected",
+      "customer_quote": "That's just the So there's a problem there because I don't get a mail bill. I get a email bill, and it's just the amount that I owe.",
       "resistance_reason": "dont_have_it",
       "rep_followup": "alternative_offered",
-      "result": "deferred"
+      "result": "partial"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "skipped"
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "skipped"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
-      "ts": "04:43",
-      "quote": "That's just the So there's a problem there because I don't get a mail bill. I get a email bill, and it's just the amount that I owe.",
+      "ts": "03:04",
+      "quote": "I don't have a garage, so I'm not gonna be able to use, you know, a battery and that type of thing that I've heard. So I really don't know how your program works.",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I can ask my specialist kind of for their opinion, and then I can have them share that with you."
+      ],
+      "resolved": true,
+      "resolution_ts": "03:35",
+      "reasoning": "Customer's confusion about battery/garage constraint stalled the pitch momentarily; rep deferred to specialist and customer moved past it into a broader statement of caution.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "bill_collection@04:37",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "03:35",
+      "quote": "I'm not gonna commit to anything right away.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. Exactly."
+      ],
+      "resolved": true,
+      "resolution_ts": "03:48",
+      "reasoning": "This is a soft pre-emptive no-commitment statement; rep simply agreed and moved into program explanation rather than reframing toward booking, and the customer stayed engaged so it was procedurally dropped rather than defeated.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "concede"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "bill_collection@04:37",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "04:46",
+      "quote": "I don't get a mail bill. I get a email bill, and it's just the amount that I owe.",
       "type": "other",
       "rep_attempts": 2,
       "attempt_quotes": [
@@ -212,56 +260,70 @@
         "we could try doing, like, a three way call with Dominion if you wanted to."
       ],
       "resolved": false,
-      "resolution_ts": "08:03",
-      "reasoning": "The rep tries two angles (online login, then three-way call) but neither resolves the bill-access problem on the call; it ends with the customer agreeing to try calling Dominion herself on Monday, an unresolved deferral rather than a true resolution."
+      "resolution_ts": "",
+      "reasoning": "Customer lacks access to usage data; rep tried two alternative paths (online login check, three-way call offer) but the three-way call was never actually executed and the call ended with the bill still uncollected.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "question_back",
+        "alternative_offered"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored exit / no locked next step",
-    "ts": "08:12",
-    "quote": "Alright. Yeah. That sounds good. I can just I'll just text you.",
-    "why": "The call ends without any specific day or time for a callback or appointment — only a vague plan for the customer to try Dominion 'Monday at their earliest' and a promise to text contact info. This is the single biggest structural gap: strong verify work and real bill pain get no forcing function to convert into a scheduled next touch."
+    "topic": "Unanchored close — no appointment, no locked callback",
+    "ts": "08:18",
+    "quote": "if you can reach them on Monday, just feel free to send over that bill. Okay?",
+    "why": "The call ends with zero owned next step: no day/time for an appointment, no scheduled callback, only a vague customer-owned action. This is the single biggest miss — everything upstream (bill pain, curiosity questions) had value that evaporated with no button-up."
   },
   "key_moments": [
     {
-      "ts": "00:46",
-      "quote": "Okay. So 608 Counselor Square in Virginia Beach?",
-      "classification": "other",
-      "stewart_read": "The verify section (address, roof, title, utility, bill range, credit qualifier) runs cleanly and cooperatively in under three minutes — this is the strongest stretch of the call and worth naming as a positive baseline before the pricing-mechanics confusion sets in."
+      "ts": "01:32",
+      "quote": "electricity bills that we're getting, and rates are just gonna continue to go up.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "This is the emotional anchor for the whole call and it's never referenced again — rep never flips 'rates are going to keep going up' into urgency for booking."
     },
     {
-      "ts": "01:30",
-      "quote": "Just the exorbitant electricity bills that we're getting, and rates are just gonna continue to go up.",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer volunteers strong bill pain and rate-anxiety language unprompted — a textbook anchor opportunity — but the rep never returns to flip this into the customer's reason to act; the conversation moves to utility company and dollar figures without emotional reinforcement."
-    },
-    {
-      "ts": "02:13",
-      "quote": "the highest bill I ever got was this past winter. It was $380.",
-      "classification": "bill_anchor",
-      "stewart_read": "This is the clearest dollar anchor in the call and the rep's only response is 'Oh, wow. That's a huge jump' — acknowledgment without flip into a reason to act now."
-    },
-    {
-      "ts": "03:20",
-      "quote": "I wonder if even if you don't have a garage, I wonder if there's something else we could do with a battery.",
+      "ts": "03:51",
+      "quote": "I'm just a scheduler, so I don't know too much.",
       "classification": "setter_scope_creep",
-      "stewart_read": "Customer raised battery/garage limitations only as a passing aside while explaining her confusion, but the rep engages it as a live technical question rather than redirecting to the specialist immediately, adding an unnecessary tangent before eventually asking if she's even interested in a battery."
+      "stewart_read": "Rep names her own scope limit accurately, then immediately breaks it by explaining the bill-swap mechanism in detail."
+    },
+    {
+      "ts": "05:45",
+      "quote": "what are you talking about as far as an amount that would be due for the solar bill?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Customer's genuine pricing question gets a full mechanical explanation (kWh, bar graph, panel count) instead of a curiosity-preserving redirect to the specialist appointment."
+    },
+    {
+      "ts": "06:44",
+      "quote": "I believe it can. Yeah. I mean, I know some people that I've worked with, they some of them have super cheap bills now where they are they're only paying, like, $15 a month.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep cites a specific unverified dollar figure from anecdote to answer a pricing question — a numeric-discipline risk and further scope creep."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 53,
-    "verified": 51,
+    "checked": 58,
+    "verified": 58,
     "fuzzy": 0,
-    "wrong_ts": 2,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

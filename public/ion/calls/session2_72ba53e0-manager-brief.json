@@ -1,83 +1,92 @@
 {
   "call_id": "SESSION2_72ba53e0",
   "rep_name": "Randy",
-  "trajectory_summary": "This is a calm, procedurally clean call: the rep runs the verify sequence in order, captures the bill amount and a kWh figure, holds scope on a product question, and lands a specific day/time appointment. The one genuine soft spot is the customer's explicit statement that he wants to be present and 'not just my wife' — a co-owner attendance signal the rep never directly locked down.",
+  "trajectory_summary": "The call moves cleanly through verify with a cooperative customer, but energy stays flat — the rep never builds on the bill pain or the customer's own kWh curiosity to create urgency, and the customer's low-commitment framing at 05:09 goes unaddressed. It ends in a soft booking with real conditions (bill not yet sent, spouse not confirmed) that make it fragile rather than locked.",
   "shape": "mixed",
-  "outcome_dispute": null,
+  "outcome_dispute": "v1 tag is unknown; based on the transcript this is a tentative/conditional booking — a time was agreed (4PM tomorrow) but the bill was not captured and the wife's attendance was raised by the customer and never confirmed by the rep.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
-    "co_owner_confirmed": null,
+    "co_owner_confirmed": false,
     "ts": "06:03",
     "quote": "K. Awesome. Sounds good. I'll go ahead and get you down for tomorrow at four.",
-    "reasoning": "A specific day (tomorrow) and time (4PM) were agreed and reconfirmed at close (07:15-07:21), meeting the booked bar. Co-owner confirmation is genuinely ambiguous: the wife is identified as co-title-holder and the customer states he wants to be present 'not just my wife' (04:24), which could be read as the customer including her or simply asserting his own attendance — the rep's 'Sure. 100%.' doesn't resolve which, so this is left null rather than a clear miss."
+    "reasoning": "A specific day and time (tomorrow at 4PM) was agreed, but the bill was not yet in hand (promised for later that evening) and the co-owner wife, identified at 02:17, was never explicitly confirmed to join the call — both conditions the pipeline treats as fragility on a booked slot.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "02:43",
-    "bill_quote": "Our most recent bill, I think, was, like, $2.02 42 or something like that.",
+    "bill_quote": "Our most recent bill, I think, was, like, $2.02",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep acknowledged the bill amount ('Oh, gotcha. Okay. Gotcha.') at 02:54 and moved directly to the next verify question without reframing the bill as the customer's reason to act, despite the customer volunteering that opening the bill is what prompted the call."
+    "reasoning": "The bill ($202.42) was captured at 02:43 but never reflected back or turned into emotional leverage; the flip should have landed right after capture or when the customer raised the kWh question at 03:23."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "03:03",
+    "ask_ts": "03:09",
     "ask_quote": "Do you guys typically get those in the mail or online?",
     "result": "promised_later",
     "method": "text",
     "result_ts": "06:20",
     "result_quote": "I won't be home until sometime later this evening.",
-    "reasoning": "Rep asked how the customer receives bills, offered text or email, and sent a text at 03:53, but the customer confirmed he won't be able to retrieve and send the actual bill until later that evening — bill collection is deferred past the call."
+    "reasoning": "Rep asked how the customer receives bills and offered to receive the bill via text; the customer said they'd send it later this evening, so it was promised rather than received on the call."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:14",
     "reason_given": true,
-    "reason_ts": "00:25",
-    "reason_quote": "My wife just brought it up this morning, and I just got online just to see if I can get a quick quote, you know, to kinda get an idea of, you know, what we would be looking at.",
+    "reason_ts": "00:28",
+    "reason_quote": "got online just to see if I can get a quick quote, you know, to kinda get an idea of, you know, what we would be looking at.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question early and got a reason (wife raised it, wants a quick quote), but never referenced this reason again later in the call — for example, when setting the appointment or in the button-up, there's no tieback to 'so you and your wife can see what this looks like.'"
+    "reasoning": "Customer's stated reason (wife brought it up, wants a quick quote/idea of numbers) was acknowledged but never tied back into the booking pitch or button-up."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:03",
-      "end_ts": "00:13",
-      "quote": "Hey, Dominic. This is, Randy with Ion. Just giving you a quick call here because we got a request.",
+      "end_ts": "00:10",
+      "quote": "Hey, Dominic. This is, Randy with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:14",
-      "end_ts": "00:34",
+      "end_ts": "00:28",
       "quote": "What got you interested in looking at solar?",
       "customer_response": "cooperative",
-      "customer_quote": "My wife just brought it up this morning, and I just got online just to see if I can get a quick quote",
+      "customer_quote": "got online just to see if I can get a quick quote, you know, to kinda get an idea of, you know, what we would be looking at.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:38",
-      "end_ts": "00:49",
-      "quote": "I've got your address here at 7672 West Leman Road in Cleves, Ohio. Does that sound right?",
+      "end_ts": "01:33",
+      "quote": "I've got your address here at 7672",
       "customer_response": "cooperative",
-      "customer_quote": "Yes.",
+      "customer_quote": "7672",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -89,7 +98,7 @@
       "customer_response": "cooperative",
       "customer_quote": "My wife.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -101,43 +110,43 @@
       "customer_response": "cooperative",
       "customer_quote": "When we bought the house, they said probably it'd been maybe twelve years, so it's probably working on sixteen, I guess.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "02:32",
-      "end_ts": "02:36",
+      "ts": "02:30",
+      "end_ts": "02:39",
       "quote": "do you guys know who you're doing your electricity with here, Dominic?",
       "customer_response": "cooperative",
       "customer_quote": "Oh, Sir Duke.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:39",
-      "end_ts": "02:53",
-      "quote": "how much do you guys, currently paying for electricity?",
+      "end_ts": "02:46",
+      "quote": "And how much do you guys, currently paying for electricity?",
       "customer_response": "cooperative",
-      "customer_quote": "Our most recent bill, I think, was, like, $2.02 42 or something like that.",
+      "customer_quote": "Our most recent bill, I think, was, like, $2.02",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:20",
-      "end_ts": "02:29",
-      "quote": "you just need to have a credit score that's above 670. Would that be good for you guys?",
+      "ts": "02:23",
+      "end_ts": "02:26",
+      "quote": "you just need to have a credit score that's above 670.",
       "customer_response": "cooperative",
       "customer_quote": "That's that's that's not a problem.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
@@ -156,32 +165,32 @@
       "section": "prior_design",
       "status": "asked",
       "ts": "02:54",
-      "end_ts": "02:57",
-      "quote": "is this your first time looking at solar for this property here?",
+      "end_ts": "02:59",
+      "quote": "And is this your first time looking at solar for this property here?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "03:03",
-      "end_ts": "06:20",
+      "ts": "03:09",
+      "end_ts": "03:21",
       "quote": "Do you guys typically get those in the mail or online?",
       "customer_response": "cooperative",
-      "customer_quote": "I won't be home until sometime later this evening.",
-      "resistance_reason": "dont_have_it",
+      "customer_quote": "In the mail.",
+      "resistance_reason": "",
       "rep_followup": "alternative_offered",
-      "result": "deferred"
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "04:13",
+      "ts": "05:44",
       "end_ts": "06:03",
-      "quote": "I'll go ahead and get you down for tomorrow at four.",
+      "quote": "Did you wanna shoot for, like, a two or 3PM or",
       "customer_response": "cooperative",
       "customer_quote": "If you guys could do later, maybe, like, four, 04:30, would would that work?",
       "resistance_reason": "",
@@ -191,76 +200,96 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "06:33",
-      "end_ts": "07:21",
-      "quote": "I did block off that spot for an hour just to ensure you don't feel rushed",
+      "ts": "06:31",
+      "end_ts": "07:15",
+      "quote": "once I get that bill from you, I'll just shoot you a confirmation text with the date and time of the meeting.",
       "customer_response": "cooperative",
-      "customer_quote": "no. I I think that's it.",
+      "customer_quote": "I won't be home until sometime later this evening.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "completed",
+      "parts_done": [
+        "recap",
+        "hour_block",
+        "no_driving",
+        "reconfirm"
+      ],
+      "parts_score": "4/4"
     }
   ],
   "objections": [
     {
-      "ts": "05:16",
+      "ts": "05:09",
       "quote": "we're just kind of ex exploring options right now. Like, we're not committed to, like, you know, we're definitely going to solar",
       "type": "timing_or_callback",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "No. Yeah. For sure. 100%. This is just for you to, you know, see the information and, see if it's a good fit for your home."
+        "This is just for you to, you know, see the information and, see if it's a good fit for your home."
       ],
       "resolved": true,
-      "resolution_ts": "05:29",
-      "reasoning": "Customer preemptively lowers commitment expectations; rep validates the exploratory framing without pressure, and the customer proceeds to book, so this is resolved as a protocol-style acknowledgment rather than a persuasion battle."
+      "resolution_ts": "05:38",
+      "reasoning": "Customer softened a commitment-pressure worry; rep reassured once with a low-commitment reframe and customer agreed to book, but no bill-pain reinforcement was used.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "reassure"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@05:44",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "bill flip missed at the moment of maximum leverage",
-    "ts": "02:43",
-    "quote": "Our most recent bill, I think, was, like, $2.02 42 or something like that. I just opened it this morning, which is kinda what prompted the whole conversation.",
-    "why": "The customer handed the rep both the number and the emotional trigger unprompted; the rep only acknowledged it ('gotcha') and moved to the next verify box instead of turning it into the customer's reason to act."
+    "topic": "Unaddressed low-commitment / soft objection",
+    "ts": "05:09",
+    "quote": "we're just kind of ex exploring options right now. Like, we're not committed to, like, you know, we're definitely going to solar",
+    "why": "Customer explicitly signals resistance to pressure twice in the call; rep only reassures, never anchors back to the bill pain already captured — this is the moment that most determines whether the appointment holds."
   },
   "key_moments": [
     {
-      "ts": "02:11",
-      "quote": "Awesome. And I have you done as the property owner here, Dominic. Is there anyone else on the title?",
-      "classification": "spouse_handling",
-      "stewart_read": "Rep correctly runs the title co-owner verify item and captures that the wife is on title. This is not an objection-shaped moment (no protocols.spouse_decision trigger phrase occurred), so it's best read as verify-item execution, not protocol handling."
-    },
-    {
-      "ts": "04:24",
-      "quote": "I would definitely want to be want to be there, you know, obviously, and not just my wife. You know what I mean?",
-      "classification": "spouse_handling",
-      "stewart_read": "Customer explicitly names his wife as someone who should also be involved, going beyond the earlier title disclosure into an attendance statement. Rep responds with 'Sure. 100%.' and moves the conversation to scheduling mechanics rather than confirming she'll be on the call."
-    },
-    {
       "ts": "02:43",
-      "quote": "Our most recent bill, I think, was, like, $2.02 42 or something like that. I just opened it this morning, which is kinda what prompted the whole conversation.",
-      "classification": "bill_anchor",
-      "stewart_read": "Customer hands the rep both the dollar figure and the emotional trigger (opening the bill this morning is literally why he called) in the same breath. Rep responds with only 'Oh, gotcha. Okay. Gotcha.' and moves to the next verify item without reflecting the bill back as leverage."
+      "quote": "Our most recent bill, I think, was, like, $2.02 42 or something like that.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Bill number captured but the rep moves straight to the next verify item without reflecting the pain back to the customer."
     },
     {
-      "ts": "03:21",
+      "ts": "03:23",
       "quote": "does 1,200 kilowatts a month sound, like, normal?",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer volunteers a specific usage number unprompted and asks a comparative question — a natural curiosity hook. Rep answers factually ('a little bit more on the higher side') and pivots to needing the actual bill, which is a reasonable, schema-aligned redirect for accuracy, not a processing failure, but the rep doesn't use the number to build anticipation about what the design might show."
+      "stewart_read": "Customer is actively curious about his own usage — a gift the rep could use to build anticipation for the design review."
+    },
+    {
+      "ts": "05:09",
+      "quote": "we're just kind of ex exploring options right now. Like, we're not committed to, like, you know, we're definitely going to solar",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "This is a soft objection to being pressured; rep validates it fully without any inversion or reframing toward the bill pain already captured."
+    },
+    {
+      "ts": "04:29",
+      "quote": "and not just my wife. You know what I mean? So",
+      "classification": "spouse_handling",
+      "stewart_read": "Customer flags wanting to be present himself (not spouse alone), but wife is co-owner and was never explicitly invited/confirmed for the call."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 49,
-    "verified": 46,
+    "checked": 55,
+    "verified": 55,
     "fuzzy": 0,
-    "wrong_ts": 3,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

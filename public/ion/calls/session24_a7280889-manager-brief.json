@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION24_a7280889",
   "rep_name": "Holland",
-  "trajectory_summary": "After an ambiguous automated-system opening, the rep runs a clean, conversational verify section and captures bill amount, utility, and interest reason cooperatively. The call ends abruptly at the credit qualifier when the customer self-identifies as likely sub-670, and the rep's response trails off without an alternative path or next step, leaving the call as an unresolved disqualification rather than a clean DQ or booked appointment.",
-  "shape": "mixed",
-  "outcome_dispute": "v1 outcome tag is unknown/unclear; based on the transcript this should be recorded as a DQ (credit qualifier) outcome, not a booked or callback outcome — the call has no scheduled next step and ends mid-sentence on the rep's suggestion to 'call us when' the customer's credit improves.",
+  "trajectory_summary": "The call opens neutrally, moves through verify items mechanically, and stalls the moment the customer's known credit sensitivity resurfaces — the rep restates the 670 threshold bluntly and the call ends in an unresolved, unanchored soft exit. There is no bill flip, no reason reinforcement, and no attempt to hold the lead through an alternative path before the transcript cuts off mid-sentence.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "The v1 tag is unknown; based on the transcript the call ends with the rep suggesting the customer call back later with no date/time, no next step owned by the rep — this is a soft DQ/no_appointment, not a booked or tentative outcome.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "03:29",
-    "quote": "Well, yeah. I would just suggest giving us a call when,",
-    "reasoning": "The customer self-identifies as likely below the 670 credit threshold required per qualifiers.credit_qualifier, and the rep's response is to suggest she call back later rather than book any appointment — the call ends without a scheduled next step, consistent with a hard-gate disqualification rather than a booked, tentative, or callback outcome with a locked time."
+    "ts": "03:10",
+    "quote": "is you need to have a credit score above 670.",
+    "reasoning": "The credit qualifier gate is stated and the customer confirms she is likely below it; the rep ends the pursuit with a vague callback suggestion rather than setting any appointment, indicating a hard-gate DQ per qualifiers.credit_qualifier.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +28,7 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures the bill amount ($200) and simply acknowledges it ('Yeah. Okay. Gotcha.') before moving to the next verify item — the number is never turned into a reason to act or flipped into alignment-against-the-utility per coaching_philosophy.bill_anchoring, though the call's early termination on the credit qualifier means there was limited opportunity to use it later."
+    "reasoning": "The bill ($200) was captured at 02:21 but never reflected back as pain to solve; the rep moved straight to utility company and prior-design questions without reinforcing it."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,18 +38,18 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call ends at the credit qualifier stage before the rep reaches bill collection; the rep never raises getting the actual utility bill document."
+    "reasoning": "The rep did not raise collecting the utility bill in any form during the call."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "01:51",
     "reason_given": true,
     "reason_ts": "01:57",
-    "reason_quote": "Well, I got a a text message, and I've just opened it up and started reading it. And I've seen so many people that have it, and it said it helps with the, light bill.",
+    "reason_quote": "Well, I got a a text message, and I've just opened it up and started reading it.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep acknowledges the reason generically ('That's the biggest reason that people love solar is because it is helping cut down their electric bill') but the call ends at the credit qualifier before this reason could be reinforced or tied to a next step."
+    "reasoning": "Customer's stated interest reason (text message mentioning bill help) was acknowledged generically at 02:08 but never reinforced later or tied to the appointment/next step."
   },
   "script_coverage": [
     {
@@ -49,7 +57,7 @@
       "status": "asked",
       "ts": "00:37",
       "end_ts": "00:44",
-      "quote": "So this is Holland with Ion. I got a request. We're looking into solar for your home. How are you doing today?",
+      "quote": "So this is Holland with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "I'm good.",
       "resistance_reason": "",
@@ -60,10 +68,10 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "01:51",
-      "end_ts": "02:14",
-      "quote": "And then, I guess, what was it that got you interested in solar?",
+      "end_ts": "01:57",
+      "quote": "what was it that got you interested in solar?",
       "customer_response": "cooperative",
-      "customer_quote": "Well, I got a a text message... it said it helps with the, light bill.",
+      "customer_quote": "Well, I got a a text message, and I've just opened it up and started reading it.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -71,9 +79,9 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:54",
-      "end_ts": "01:02",
-      "quote": "So first off, I've got your address here as 305 Jackson Lane in Conway, South Carolina. Is that correct?",
+      "ts": "00:58",
+      "end_ts": "01:03",
+      "quote": "Jackson Lane in Conway, South Carolina. Is that correct?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
@@ -83,9 +91,9 @@
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "01:39",
+      "ts": "01:25",
       "end_ts": "01:48",
-      "quote": "And then, I have you down as the property owner. Is there anybody else on the title of the home with you?",
+      "quote": "I have you down as the property owner. Is there anybody else on the title of the home with you?",
       "customer_response": "cooperative",
       "customer_quote": "No.",
       "resistance_reason": "",
@@ -95,21 +103,21 @@
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:16",
-      "end_ts": "01:33",
-      "quote": "You have really good southern exposure on both the house and the garage... And do you know how old your roof is?",
-      "customer_response": "no_answer",
+      "ts": "01:27",
+      "end_ts": "01:31",
+      "quote": "And do you know how old your your roof is?",
+      "customer_response": "cooperative",
       "customer_quote": "No. I don't.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "moved_on",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "02:28",
+      "ts": "02:35",
       "end_ts": "02:39",
-      "quote": "And who is that with? Is that just with, Dominion?",
+      "quote": "Who is your power company?",
       "customer_response": "cooperative",
       "customer_quote": "Santee Cooper.",
       "resistance_reason": "",
@@ -121,7 +129,7 @@
       "status": "asked",
       "ts": "02:14",
       "end_ts": "02:23",
-      "quote": "So if you don't mind me asking, how much are you paying on average on your electric bill?",
+      "quote": "how much are you paying on average on your electric bill?",
       "customer_response": "cooperative",
       "customer_quote": "About 200.",
       "resistance_reason": "",
@@ -131,18 +139,18 @@
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "03:07",
-      "end_ts": "03:29",
-      "quote": "unfortunately, that is the qualification is you need to have a credit score above 670. Do you know what yours is currently sitting at?",
-      "customer_response": "resistant",
-      "customer_quote": "I don't know exactly what it is, but I'm sure that it's low.",
-      "resistance_reason": "credit_score",
-      "rep_followup": "moved_on",
-      "result": "declined"
+      "ts": "03:10",
+      "end_ts": "03:16",
+      "quote": "is you need to have a credit score above 670.",
+      "customer_response": "cooperative",
+      "customer_quote": "No. I don't.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,7 +158,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
@@ -160,9 +168,9 @@
       "quote": "And have you ever really looked into solar before, Janelle? Or is this your first time?",
       "customer_response": "cooperative",
       "customer_quote": "I have before, but they were going by your credit, and my credit is not that great.",
-      "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "resistance_reason": "trust",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
@@ -190,76 +198,110 @@
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "skipped"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
       "ts": "02:48",
-      "quote": "I have before, but they were going by your credit, and my credit is not that great.",
-      "type": "other",
+      "quote": "they were going by your credit, and my credit is not that great",
+      "type": "already_have_quote_or_system",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Do you know what yours is currently sitting at?"
+        "there's a lot of, like, incentives and credits and stuff that you can get when going solar"
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "This is a credit/qualifier disclosure from a prior solar attempt, not a trust, scam, cost, or spouse objection — it maps most closely to the hard qualifier gate (qualifiers.credit_qualifier). The rep makes one attempt to pin down the actual number, gets an uncertain answer, and the conversation ends without resolution or an alternative path."
+      "reasoning": "This is a prior-experience disclosure that also functions as a qualification concern; the rep gave one generic reassurance about incentives but did not probe the prior company or resolve the underlying fear before the credit gate re-surfaced it.",
+      "blocked_section": "tax_credit_qualifier",
+      "attempt_moves": [
+        "reassure"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "tax_credit_qualifier@03:10",
+      "resolution_agrees": false
+    },
+    {
+      "ts": "03:16",
+      "quote": "No. I don't.",
+      "type": "cost",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "No. But you know what's below that?"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer cannot confirm her credit score is above 670; rep makes one follow-up attempt to pin down whether she's below it, then defaults to a soft exit without offering the non-tax-credit purchase alternative noted in the schema.",
+      "blocked_section": "tax_credit_qualifier",
+      "attempt_moves": [
+        "question_back"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "credit qualifier — stated vs. pulled, and no soft-exit close",
-    "ts": "03:13",
-    "quote": "Do you know what yours is currently sitting at?",
-    "why": "This is the most consequential moment on the call: the rep ends the conversation based on the customer's own uncertain self-assessment of her credit score, with no alternative path offered and no concrete callback commitment made — a lead that may have been recoverable is let go on an unverified number."
+    "topic": "Credit objection handling and soft exit",
+    "ts": "03:10",
+    "quote": "I would just suggest giving us a call when,",
+    "why": "The rep let a known qualification anxiety escalate into an unanchored, no-next-step ending instead of reassuring the customer and offering a concrete alternative path (non-tax-credit purchase option or callback time)."
   },
   "key_moments": [
     {
-      "ts": "00:00",
-      "quote": "Hi. If you record your name and reason for calling No. I'll see if this person is available.",
-      "classification": "other",
-      "stewart_read": "This segment reads as an automated call-screening/receptionist system rather than the live customer speaking, given the rep's confused asides immediately after ('I don't know', 'Oh, yeah. Claude would know'). This should not be scored against the rep's intro compliance — the rep's actual intro to the live customer at 00:37 is clean and schema-aligned."
+      "ts": "02:14",
+      "quote": "how much are you paying on average on your electric bill?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Bill amount was captured (About 200) but never flipped into an emotional hook against the utility before the call derailed into the credit gate."
     },
     {
-      "ts": "00:37",
-      "quote": "Awesome. So this is Holland with Ion. I got a request. We're looking into solar for your home. How are you doing today?",
-      "classification": "other",
-      "stewart_read": "Once the rep reaches the live customer, the intro is clean: company name, reason for calling, and a pause-inviting question, matching intros.standard success signals."
-    },
-    {
-      "ts": "02:42",
-      "quote": "And have you ever really looked into solar before, Janelle? Or is this your first time?",
+      "ts": "02:48",
+      "quote": "they were going by your credit, and my credit is not that great",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "The rep asks the right question (prior solar experience) and the customer answers with a specific, actionable detail about a prior credit-based rejection — but the rep does not probe further on which company, when, or what credit score was involved, information a closer could use."
+      "stewart_read": "Customer discloses a prior solar rejection tied to credit; rep does not probe which company or what score was cited, missing context that could shape the qualifier conversation."
     },
     {
-      "ts": "02:53",
-      "quote": "I have before, but they were going by your credit, and my credit is not that great.",
-      "classification": "other",
-      "stewart_read": "This is a credit/qualifier disclosure from a prior solar experience, not a trust or scam objection — the customer is stating a factual barrier from a previous attempt, and the rep treats it correctly as a qualifier issue rather than misreading it as skepticism."
+      "ts": "03:10",
+      "quote": "is you need to have a credit score above 670.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Customer's stated credit anxiety is a cost/qualification objection; rep states the hard gate flatly instead of using bill-pain framing or checking for alternative purchase options mentioned in qualifiers.credit_qualifier notes (tax credit disclosure / non-tax-credit purchase paths)."
+    },
+    {
+      "ts": "03:18",
+      "quote": "No. But you know what's below that?",
+      "classification": "empathy_miss",
+      "stewart_read": "Customer's admission of low credit is a vulnerability disclosure; rep's follow-up presses the point rather than acknowledging it with any softness."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 41,
-    "verified": 40,
-    "fuzzy": 1,
+    "checked": 43,
+    "verified": 43,
+    "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0
   }

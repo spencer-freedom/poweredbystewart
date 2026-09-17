@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION14_bd557729",
   "rep_name": "Brandon",
-  "trajectory_summary": "The call opens with confusion and skepticism from a customer burned by prior solar quotes, and the rep pushes for next-day availability before establishing context, forcing the customer to negotiate scheduling on his own terms. A financing/lien question goes only partially answered twice, yet the customer proposes and locks a tentative Saturday appointment himself. The call ends with logistics set but no real handshake and a wrong name in the sign-off.",
+  "trajectory_summary": "The call opens cold with an orphaned lead who's already skeptical from prior solar quotes, and the rep skips nearly the entire verify/interest/bill sequence to jump straight at booking. Energy is largely reactive — the rep repeats lines, denies a loan concern without probing it, and never anchors a bill or interest reason — but the customer's self-initiated tentative Saturday offer rescues a fragile booking.",
   "shape": "mixed",
-  "outcome_dispute": "This looks like a tentative, customer-driven booking rather than a clean 'booked' outcome — day and a rough time (Saturday the 18th at noon) are stated, but the rep never gets an explicit 'is that fair?' confirmation, and the close ends by thanking 'Joseph' instead of Scott, undermining confidence the appointment is solid.",
+  "outcome_dispute": "V1 tag is unknown; observed outcome is tentative, not booked or no_appointment — a day and rough time were named but confirmation is explicitly deferred to a Friday callback, and the customer's language ('tentative appointment') signals conditional commitment.",
   "observed_outcome": {
     "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "02:53",
-    "quote": "Alright. Saturday the eighteenth at twelve.",
-    "reasoning": "A specific day and time are stated and the rep references a specialist bringing a design 'over,' implying in-person, but the appointment is explicitly conditioned on a confirmation call next week ('ring me next week, make sure everything's good to go') and there is no verbal handshake, making this tentative rather than a firmly locked booking."
+    "ts": "02:51",
+    "quote": "Alright. Sounds good. Alright. Saturday the eighteenth at twelve.",
+    "reasoning": "A day and time were stated, but the customer twice used the word 'tentative' and the rep built in a Friday confirmation call before the appointment, showing the commitment is conditional rather than locked.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer references 'my current electrical bill' only in the context of asking how the loan/payment mechanism works (01:34), but no actual bill amount or usage figure is ever captured on this call."
+    "reasoning": "No bill amount or kWh figure was requested or captured on the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +39,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call never reaches bill collection — it stays in scheduling and a financing-mechanism clarification before ending on booking logistics."
+    "reasoning": "Rep did not raise sending or viewing a utility bill during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +50,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks what interested the customer in solar; the customer's only spontaneous signal is skepticism about past quotes ('none of the numbers ever came back worth shit'), which is a complaint, not a stated positive reason, and the rep does not probe it."
+    "reasoning": "Rep did not ask why the customer was interested; customer expressed skepticism but no explicit interest reason was solicited."
   },
   "script_coverage": [
     {
@@ -49,12 +58,12 @@
       "status": "asked",
       "ts": "00:02",
       "end_ts": "00:06",
-      "quote": "Hello, Scott. This is Brandon with Ion Solar. How you doing?",
+      "quote": "This is Brandon with Ion Solar.",
       "customer_response": "cooperative",
-      "customer_quote": "Good.",
+      "customer_quote": "Scott.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -155,13 +164,13 @@
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "00:28",
-      "end_ts": "00:41",
-      "quote": "We never actually got a chance to meet with you. We missed our appointments, but we can show you what we're offering to see if it'll fit your needs.",
-      "customer_response": "resistant",
-      "customer_quote": "I've done a few of them, and none of the numbers ever came back worth shit.",
-      "resistance_reason": "already_have_quote",
-      "rep_followup": "moved_on",
+      "ts": "00:34",
+      "end_ts": "00:38",
+      "quote": "We never actually got a chance to meet with you.",
+      "customer_response": "deflected",
+      "customer_quote": "You can call me next week, but I've got a full plate right now.",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
       "result": "partial"
     },
     {
@@ -180,10 +189,10 @@
       "section": "appointment_set",
       "status": "asked",
       "ts": "00:16",
-      "end_ts": "02:53",
-      "quote": "I'll set a set appointment for next Saturday in the afternoon, like, around twelve, and we'll call you Friday the day before just to confirm with you.",
-      "customer_response": "cooperative",
-      "customer_quote": "I can set a tentative appointment for next Saturday.",
+      "end_ts": "02:55",
+      "quote": "Are you available as soon as tomorrow?",
+      "customer_response": "resistant",
+      "customer_quote": "No. I'm actually not in my account.",
       "resistance_reason": "timing",
       "rep_followup": "persisted",
       "result": "completed"
@@ -191,90 +200,134 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "02:53",
+      "ts": "02:41",
       "end_ts": "02:55",
-      "quote": "Alright. Saturday the eighteenth at twelve.",
-      "customer_response": "no_answer",
-      "customer_quote": "",
+      "quote": "I'll set a set appointment for next Saturday",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Well, you can do that and and ring me next week, make sure everything's good to go.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:45",
-      "quote": "You can call me next week, but I've got a full plate right now.",
+      "ts": "00:24",
+      "quote": "No. I'm actually not in my account.",
       "type": "timing_or_callback",
-      "rep_attempts": 2,
+      "rep_attempts": 3,
       "attempt_quotes": [
         "Are you available Monday next week?",
-        "What time are you usually off work?"
+        "What time are you usually off work?",
+        "Oh, six 06:30. And the weekends?"
       ],
       "resolved": true,
       "resolution_ts": "01:20",
-      "reasoning": "Rep worked through the customer's time constraints by asking about work hours and weekends until the customer volunteered a tentative Saturday, resolving the scheduling friction."
+      "reasoning": "Rep persisted through multiple timing angles until the customer volunteered a tentative Saturday slot himself.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "alternative_offered",
+        "question_back",
+        "question_back"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "prior_design@00:34",
+      "resolution_agrees": true
     },
     {
-      "ts": "01:20",
+      "ts": "00:28",
+      "quote": "none of the numbers ever came back worth shit",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep did not probe or address this skepticism at all, moving straight back to the meeting pitch.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [],
+      "resolved_by_tape": true,
+      "next_event": "prior_design@00:34",
+      "resolution_agrees": false
+    },
+    {
+      "ts": "01:28",
       "quote": "Is this one of those ones where, you I'm taking out a loan against my house, and the loan payment essentially is what you're balancing off of what my current electrical bill is?",
       "type": "trust_or_scam",
       "rep_attempts": 2,
       "attempt_quotes": [
-        "No loans are announced. No liens.",
+        "No. No.",
         "Well, there's a few options. If you wanna get financed, then, yeah, we can help you finance."
       ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "Customer asked essentially the same loan/lien question twice and the rep's answers were confusing and non-committal, never giving a clear yes/no on the financing mechanism; the customer moved on without the concern actually being resolved."
+      "resolved": true,
+      "resolution_ts": "02:22",
+      "reasoning": "Rep denied the loan framing and then explained program options; customer did not push back further and proceeded to appointment logistics.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "reassure",
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@02:41",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Clear, direct answer on financing/lien mechanism",
-    "ts": "01:39",
-    "quote": "No loans are announced. No liens.",
-    "why": "The customer asks the same trust-critical financing question twice and never gets a clean answer; this ambiguity travels forward to the closer and risks the deal on a foundational trust issue that a setter should be able to resolve in one sentence."
+    "topic": "Prior-contact probe miss on a skeptical orphaned lead",
+    "ts": "00:28",
+    "quote": "none of the numbers ever came back worth shit",
+    "why": "This is the single biggest signal on the call — a customer telling the rep exactly why he distrusts solar quotes — and it's never investigated, leaving the appointment fragile and unaddressed skepticism likely to resurface with the closer."
   },
   "key_moments": [
     {
-      "ts": "00:16",
-      "quote": "But I have a specialist in the area who can bring that over and help you take a look at the solar programs. Are you available as soon as tomorrow?",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "Rep skips the verify_section beat entirely — no re-confirmation of address/homeowner status, no interest question, no bill discussion — and jumps straight to booking tomorrow, treating this like a pure re-book rather than re-qualifying a customer who sounds unfamiliar with why Ion is calling."
-    },
-    {
       "ts": "00:28",
-      "quote": "Is this the one which one is this? I've done a few of them, and none of the numbers ever came back worth shit.",
+      "quote": "none of the numbers ever came back worth shit",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a prior negative solar-quote experience and the rep never asks which company or what the numbers showed."
+    },
+    {
+      "ts": "01:28",
+      "quote": "I'm taking out a loan against my house, and the loan payment essentially is what you're balancing off of what my current electrical bill is?",
       "classification": "objection_inversion_miss",
-      "stewart_read": "Customer hands the rep a direct cost-skepticism objection tied to prior bad quotes — a textbook opening for the objection_inversion move (their bad past numbers are the reason THIS design matters). Rep does not address the skepticism at all and instead repeats the scheduling ask."
+      "stewart_read": "This is a trust/scam-adjacent objection about financing mechanics; rep denies flatly instead of using it to reframe against the current bill."
     },
     {
-      "ts": "01:20",
-      "quote": "Is this one of those ones where, you I'm taking out a loan against my house, and the loan payment essentially is what you're balancing off of what my current electrical bill is?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Customer asks a direct trust question about the financing mechanism. Rep's answer ('No loans are announced. No liens.') is garbled and doesn't clearly confirm or deny a lien/loan structure, leaving the actual mechanism unresolved — the same honest-specificity principle used for 'how did you get my number' should apply here (be specific, not vague) but the rep is vague."
+      "ts": "00:34",
+      "quote": "We never actually got a chance to meet with you. We missed our appointments,",
+      "classification": "protocol_violation",
+      "stewart_read": "Rep skips straight into re-pitching without re-verifying homeowner status, interest reason, bill, or roof — none of the required verify items are asked."
     },
     {
-      "ts": "01:41",
-      "quote": "Nothing upfront. But there's a loan. Correct?",
-      "classification": "knowledge_gap",
-      "stewart_read": "This is the second time the customer asks essentially the same lien/loan question because the first answer didn't land. Rep again says 'No. No.' before pivoting to describe financing options and the no-cost program, still without directly confirming whether a loan or lien is used."
+      "ts": "02:04",
+      "quote": "because you're using electricity from the solar panels and not buying them from the electric company, we're able to get you a cheaper energy bill.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep explains the mechanics of how solar lowers a bill — closer-tier content — instead of redirecting to the specialist visit."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 35,
-    "verified": 33,
+    "checked": 41,
+    "verified": 41,
     "fuzzy": 0,
-    "wrong_ts": 1,
-    "not_found": 1
+    "wrong_ts": 0,
+    "not_found": 0
   }
 }

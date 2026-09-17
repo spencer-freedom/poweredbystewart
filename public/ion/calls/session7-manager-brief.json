@@ -1,26 +1,35 @@
 {
   "call_id": "SESSION7",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens warm and stays cooperative throughout — an inbound, self-initiated lead with strong qualification signals (homeowner, EV, high usage, credit self-reported as qualifying) and an appointment gets booked with a specific day and time. The rep's execution is solid on procedural sequencing but leaves value on the table: competitive intel from the customer's Sunrun quote goes unprobed three times, and a plan-length question at the end exposes a scope gap the rep can't answer.",
+  "trajectory_summary": "The call opens with an unusually warm, self-initiated, already-qualified customer and the rep executes the verify sequence smoothly, capturing a strong bill/usage anchor (EV, 1100-1400 kWh) and closing on a specific date and time. However the rep repeatedly under-leverages competitive intel (Sunrun name and $160/mo price surfaced three times) and drifts into soft scope creep on plan-length and quote-accuracy questions instead of redirecting fully to the specialist.",
   "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "06:21",
-    "quote": "Let's do three.",
-    "reasoning": "A specific day (Friday, May 8) and time (3PM) are locked in, and the rep confirms a specialist will 'stop by' to show the estimate, indicating an in-person appointment. Customer has no co-owner (confirmed sole owner at 01:01), so co_owner_confirmed is null/not-applicable rather than a gap."
+    "ts": "09:14",
+    "quote": "at 3PM, you said. Right?",
+    "reasoning": "A specific date (May 8, Friday) and time (3PM) were mutually confirmed, and the appointment is framed as a specialist stopping by to show the estimate, indicating an in-person visit. No co-owner was identified since customer confirmed she is the sole title holder.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "booked by time, tentative by rule: bill promised_later",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "02:47",
-    "bill_quote": "I would say between so they did the average for me over there, but I'm on the hourly pricing. So their average came out to $2.25 a month.",
+    "bill_ts": "04:07",
+    "bill_quote": "that I've seen is between 1,100 and 1,400",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The '$2.25 a month' figure is almost certainly a transcription artifact for '$225/month' given the customer immediately clarifies 'roughly over 200 sometimes' at 02:59 — the real anchor is a ~$200+/month bill. The rep acknowledges it ('We can definitely help get that cut down for you') but never returns to flip it into urgency or emotional alignment against the utility; the call moves straight to document collection instead."
+    "reasoning": "Rep captured the bill/usage figure ('between 1,100 and 1,400') and only responded 'Okay. You got an EV. That's good to know,' filing it rather than flipping it into urgency against the utility; the flip should have landed right after 04:07 tying high usage to bill pain."
   },
   "bill_document_audit": {
     "asked": true,
@@ -28,30 +37,30 @@
     "ask_quote": "So the only thing I'll need from you is just a copy of that kilowatt usage.",
     "result": "promised_later",
     "method": "text",
-    "result_ts": "03:38",
-    "result_quote": "have the bill already. So Oh, perfect. Yeah. Let me just text you real quick. I'll just say this is Holland with Ion.",
-    "reasoning": "Rep asks for the usage/bill and sets up a text channel for the customer to send it; customer confirms intent to send it ('I'll send it over to you') but does not transmit it live on the call, and at 09:28 confirms 'I will send that over to you in the next couple minutes' — so it is promised for right after the call, not received during it."
+    "result_ts": "09:28",
+    "result_quote": "I will send that over to you in the next couple minutes.",
+    "reasoning": "Rep requested a copy of the kilowatt usage and the customer agreed to send it after the call via text; there was no on-call receipt."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "01:05",
     "reason_given": true,
     "reason_ts": "01:12",
-    "reason_quote": "No. I just I thought about it because I was always thinking about getting solar, but I was always in an apartment. So Yeah. You know, this is the first time I've owned a house.",
+    "reason_quote": "No. I just I thought about it because I was always thinking about getting solar, but I was always in an apartment.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asks the interest question directly and the customer gives a rich answer (long-time solar interest, first-time homeownership, active comparison shopping), but the rep only responds with generic validation ('Congrats on that') and never ties the appointment or pitch language back to this first-time-homeowner curiosity later in the call."
+    "reasoning": "Customer's stated reason (long-standing interest in solar, first home ownership, researching viability in Illinois) was acknowledged with congratulations but never reinforced later when booking or closing the appointment."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:01",
-      "end_ts": "00:20",
+      "end_ts": "00:11",
       "quote": "Hi. This is Holland.",
       "customer_response": "cooperative",
-      "customer_quote": "Someone just called me because I requested a call online for solar.",
+      "customer_quote": "Hi.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -60,20 +69,20 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "01:05",
-      "end_ts": "01:57",
-      "quote": "I guess my my biggest question for you is what got you interested in to learn the first place?",
+      "end_ts": "01:27",
+      "quote": "And then I guess my my biggest question for you is what got you interested in to learn the first place?",
       "customer_response": "cooperative",
       "customer_quote": "No. I just I thought about it because I was always thinking about getting solar, but I was always in an apartment.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:20",
-      "end_ts": "00:30",
-      "quote": "first off, the address that we have for you, it is 1768 Breton Avenue in North Aurora, Illinois. Is that correct?",
+      "ts": "00:26",
+      "end_ts": "00:32",
+      "quote": "Breton Avenue in North Aurora, Illinois. Is that correct?",
       "customer_response": "cooperative",
       "customer_quote": "Yes. That's correct.",
       "resistance_reason": "",
@@ -84,7 +93,7 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "00:55",
-      "end_ts": "01:01",
+      "end_ts": "01:02",
       "quote": "I also have you down as the property owner. Is there anybody else on the title with you?",
       "customer_response": "cooperative",
       "customer_quote": "No. That's me.",
@@ -108,8 +117,8 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "02:31",
-      "end_ts": "02:39",
-      "quote": "And then you're probably with ComEd for electricity as well. Right?",
+      "end_ts": "02:38",
+      "quote": "And then you're probably with ComEd for electricity",
       "customer_response": "cooperative",
       "customer_quote": "ComEd.",
       "resistance_reason": "",
@@ -120,10 +129,10 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:39",
-      "end_ts": "02:59",
-      "quote": "what is an average electric bill looking like for you right now?",
+      "end_ts": "03:04",
+      "quote": "but what is an average electric bill looking like for you right now?",
       "customer_response": "cooperative",
-      "customer_quote": "So their average came out to $2.25 a month.",
+      "customer_quote": "so roughly over 200 sometimes. So",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -131,9 +140,9 @@
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:20",
-      "end_ts": "02:28",
-      "quote": "you just need to have a credit score above 670. I'm assuming that's the case for you?",
+      "ts": "02:17",
+      "end_ts": "02:29",
+      "quote": "you just need to have a credit score above 670.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. Yeah.",
       "resistance_reason": "",
@@ -156,32 +165,32 @@
       "section": "prior_design",
       "status": "asked",
       "ts": "03:18",
-      "end_ts": "08:09",
+      "end_ts": "03:22",
       "quote": "I'm sure Sunrun took a look at it. We just need to look at the same thing.",
       "customer_response": "cooperative",
-      "customer_quote": "I got I got a quote from Sunrun roughly around $1.60 something a month.",
-      "resistance_reason": "already_have_quote",
-      "rep_followup": "moved_on",
+      "customer_quote": "I talked to him as well.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
       "result": "partial"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:10",
-      "end_ts": "03:38",
+      "end_ts": "09:28",
       "quote": "So the only thing I'll need from you is just a copy of that kilowatt usage.",
       "customer_response": "cooperative",
       "customer_quote": "I can send you should I send you a text, email?",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "alternative_offered",
       "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "05:42",
-      "end_ts": "06:21",
-      "quote": "we can do 04:00 as well.",
+      "ts": "06:12",
+      "end_ts": "09:14",
+      "quote": "May 8, that's that Friday. We can do",
       "customer_response": "cooperative",
       "customer_quote": "Let's do three.",
       "resistance_reason": "",
@@ -191,88 +200,74 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "09:09",
-      "end_ts": "09:36",
-      "quote": "I will get you on our schedule for Friday the eighth at 3PM, you said. Right?",
+      "ts": "09:14",
+      "end_ts": "09:22",
+      "quote": "at 3PM, you said. Right?",
       "customer_response": "cooperative",
       "customer_quote": "Okay. Sounds good. And I will send that over to you in the next couple minutes.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "07:21",
-      "quote": "I've gotten some quotes online from different websites, and they're telling me, like, 200 something dollars a month, and I'm like, something's not adding up right now.",
-      "type": "trust_or_scam",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "those ones, if you have done those, those won't be as accurate just because they're not factoring the incentives and programs that you're qualifying for."
-      ],
-      "resolved": true,
-      "resolution_ts": "07:39",
-      "reasoning": "Customer expresses skepticism about inconsistent online quotes; rep offers one explanation (quote generators don't factor incentives) and the customer accepts it, moving on without further pushback."
-    },
-    {
-      "ts": "06:24",
-      "quote": "And do you guys do you guys offer, like, a fifteen year plan or twenty year? What was that? How that usually works?",
-      "type": "other",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "I I'm not exactly sure just because I'm I'm just a scheduler, so I don't really know the specific details."
-      ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "This is a genuine information request rather than a resistance objection, but it remains unresolved on the call — the rep admits not knowing and the customer's request to 'write that down' shows the question is still open going into the appointment."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "Competitive intel probing",
+    "topic": "Prior-contact probe miss on named competitor",
     "ts": "08:04",
     "quote": "I got I got a quote from Sunrun roughly around $1.60 something a month.",
-    "why": "The customer volunteered specific, usable Sunrun pricing and configuration detail three separate times across the call and the rep never asked a single follow-up question — this is free competitive intelligence for the closer that was left on the table repeatedly, not once."
+    "why": "Customer surfaced a specific competitor, price, and battery configuration three separate times and the rep never probed or used the comparison-framing rebuttal, leaving a ready-made differentiation opportunity for the closer unaddressed."
   },
   "key_moments": [
     {
-      "ts": "01:44",
-      "quote": "I got a price there as well. I just wanted to see what is it similar? Is it different? I mean, they had a fifteen year plan.",
+      "ts": "04:07",
+      "quote": "I think the average that I've seen is between 1,100 and 1,400 around that range per month because I do have an EV as well.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "High usage tied to EV ownership is a strong qualification/enthusiasm signal the rep acknowledged only briefly."
+    },
+    {
+      "ts": "01:41",
+      "quote": "I did, you know, go through I someone from reached out, and I talked to him as well. ... I got a price there as well.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses they already spoke with a competitor and got a price with a specific plan structure. The rep acknowledges generically instead of asking which company or what the plan looked like."
+      "stewart_read": "First mention of a competitor quote; rep validates shopping around generically instead of probing company, price, or terms."
     },
     {
       "ts": "03:18",
       "quote": "I'm sure Sunrun took a look at it. We just need to look at the same thing.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "The rep independently names Sunrun before the customer does, meaning the rep already has context flagged in the account — yet still doesn't ask what Sunrun proposed or whether the customer still has that quote."
+      "stewart_read": "Rep names Sunrun herself but uses it only to request the matching bill document, not to explore what Sunrun proposed."
     },
     {
-      "ts": "04:07",
-      "quote": "I think the average that I've seen is between 1,100 and 1,400 around that range per month because I do have an EV as well.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "High usage (1,100–1,400 kWh/month) tied to EV charging is a strong system-sizing and urgency signal — a bigger system, bigger savings pitch, and a customer already primed for the electrification narrative."
-    },
-    {
-      "ts": "04:20",
-      "quote": "Alright. And do you like your EV? I've been thinking of getting one, but I just I don't know.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Instead of using the EV/high-usage disclosure to build curiosity about the solar system size needed to offset that load, the rep pivots into a personal, off-topic EV chat for roughly a minute."
+      "ts": "08:04",
+      "quote": "I got I got a quote from Sunrun roughly around $1.60 something a month.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer hands over a specific competitor price and battery configuration and the rep never engages it directly."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
     "checked": 53,
-    "verified": 51,
+    "verified": 52,
     "fuzzy": 0,
-    "wrong_ts": 2,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

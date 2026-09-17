@@ -1,17 +1,25 @@
 {
   "call_id": "20000550630",
   "rep_name": "Carter",
-  "trajectory_summary": "The call opens with a soft 'not interested' that quickly reveals itself as genuine cost curiosity, giving the rep multiple live openings to book an appointment. Instead of qualifying or anchoring a time, the rep answers partial financial questions himself with increasingly loose numeric claims, and the call ends with an unanchored 'email me in a week' exit plus a personal-number exchange rather than a locked appointment.",
+  "trajectory_summary": "The call opens cold with an explicit non-interest statement, briefly warms when the customer probes for pricing, then leaks out entirely when a real scheduling conflict (plumbing emergency) gives the customer a clean exit into a vague 'I'll email you' non-commitment. The rep never ran verify, never captured the bill, and gave up his personal contact info as a fallback rather than locking a time.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The customer never declined the underlying idea of solar — he asked cost questions three times — but the call ends with no appointment, no date/time, and no qualification data collected (no address, no bill, no utility company). This should be read as no_appointment / lead going cold rather than any soft win, because nothing was locked beyond a vague 'I'll email you in a week.'",
+  "outcome_dispute": "v1 tag is unknown; based on the transcript this is clearly no_appointment — no day or time was ever proposed or agreed, only a vague future email promise.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "03:04",
+    "ts": "03:03",
     "quote": "I just I'll email you, in a week.",
-    "reasoning": "No day or time was agreed, no verify-section data was collected, and the call ends with the customer's own vague, self-directed follow-up plan rather than any commitment the rep locked in."
+    "reasoning": "No day or time was ever proposed or agreed to; the call ends with a vague, customer-controlled future email promise and no rep-owned next step.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches a bill-amount or usage question — the conversation stays on cost/price generally and the customer disengages before any verify-section qualification happens."
+    "reasoning": "No monthly dollar amount or kWh was captured from the customer; the rep spoke generally about utility bills but did not elicit a numeric bill."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,30 +38,30 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never reaches bill collection in this call — the conversation stays at a general cost/interest level before the customer exits for a work emergency."
+    "reasoning": "The rep never requested the customer's utility bill or asked them to send a photo/email of it."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": false,
-    "reason_ts": "",
-    "reason_quote": null,
-    "reason_used": "no_reason_given",
+    "reason_given": true,
+    "reason_ts": "00:18",
+    "reason_quote": "I was just inquiring,",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks what interested the customer in solar. The customer volunteers general cost curiosity ('Give me a ballpark figure on what it cost') but this emerges organically rather than from the scripted interest question, and the rep never reflects it back as a reason to book."
+    "reasoning": "Customer's stated reason ('I was just inquiring, you know, thinking about it') was never expanded on or tied back to when the rep attempted to set the appointment; rep moved straight to program mechanics instead."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:08",
-      "end_ts": "00:16",
-      "quote": "Hey, Bobby. This is Carter calling from ION. I see that you requested some more information on solar for your home.",
+      "end_ts": "00:17",
+      "quote": "This is Carter calling from ION.",
       "customer_response": "cooperative",
       "customer_quote": "Okay.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -70,7 +78,7 @@
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -78,11 +86,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,11 +98,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,11 +110,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,11 +122,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,11 +134,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +146,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,11 +158,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -162,11 +170,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -174,19 +182,19 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "asked",
       "ts": "02:06",
-      "end_ts": "03:04",
-      "quote": "what I would do is I would just gather some info from you, set up a time for the appointment.",
+      "end_ts": "03:06",
+      "quote": "set up a time for the appointment.",
       "customer_response": "deflected",
-      "customer_quote": "Can I reach you back at this number?",
+      "customer_quote": "I just I'll email you,",
       "resistance_reason": "timing",
-      "rep_followup": "moved_on",
-      "result": "declined"
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "button_up",
@@ -198,7 +206,9 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "skipped",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
@@ -212,7 +222,14 @@
       ],
       "resolved": true,
       "resolution_ts": "00:50",
-      "reasoning": "The customer moves past the stated disinterest on his own by asking a direct cost question at 00:50; the rep's single reframe attempt preceded this shift but the customer's own re-engagement, not a scripted small-ask, is what carried it past the objection."
+      "reasoning": "Customer softened and asked for a ballpark cost after rep's no-commitment reassurance, effectively moving past the initial refusal, though rep never used the formal hello_objection small-ask protocol.",
+      "blocked_section": "interest_question",
+      "attempt_moves": [
+        "reassure"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@02:06",
+      "resolution_agrees": true
     },
     {
       "ts": "00:50",
@@ -221,11 +238,19 @@
       "rep_attempts": 2,
       "attempt_quotes": [
         "Yeah. That's something the specialist would go over.",
-        "I could ballpark it right now, but it could be wrong. And I don't wanna give you a wrong number."
+        "In the end. Yeah. I mean, that's that's what we'd go over in the appointment"
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The customer repeats the same cost question in different forms three times across the call and never receives either a hard number or a full clean redirect that stops the questioning; the objection is still live when the call ends."
+      "reasoning": "Customer asks for a price three times across the call; rep redirects to the specialist/appointment each time but the objection is never fully resolved into a booked appointment.",
+      "blocked_section": "bill_amount",
+      "attempt_moves": [
+        "redirect_to_specialist",
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@02:06",
+      "resolution_agrees": false
     },
     {
       "ts": "02:29",
@@ -237,53 +262,66 @@
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The rep asks a single clarifying question and then lets the customer set his own vague follow-up plan ('I'll email you in a week') without anchoring a specific day or time."
+      "reasoning": "Rep asks a clarifying question but never follows up with a specific alternative day/time offer once the customer explains the emergency, letting the call end without a locked next step.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "question_back"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored close / no locked next step",
-    "ts": "03:04",
+    "topic": "Unanchored soft exit — no locked next step",
+    "ts": "03:03",
     "quote": "I just I'll email you, in a week.",
-    "why": "The call ends with zero verify data collected (no address, no roof, no utility, no bill) and no specific day/time for a callback — just a vague customer-driven 'I'll email you in a week.' This is the single highest-leverage fix: even a rushed customer can be anchored to a concrete callback slot, and without one this lead has no owned next step."
+    "why": "The entire call, including a legitimate scheduling interruption, is salvageable if the rep locks a specific callback day/time instead of accepting a vague 'I'll email you.' This is the single biggest gap costing the appointment."
   },
   "key_moments": [
     {
       "ts": "00:23",
       "quote": "Not really interested right now, but",
+      "classification": "protocol_violation",
+      "stewart_read": "This is the textbook hello-objection trigger in the first 30 seconds, but rep never used the 'can I have 30 seconds' small-ask pattern — he jumped straight into pitch content instead."
+    },
+    {
+      "ts": "00:50",
+      "quote": "Give me a ballpark figure on what it cost.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "This is the textbook 'hello objection' — occurring in the first 30 seconds — and the schema's small-ask template is a direct fit. The rep's actual response at 00:31 ('all we would do is build an estimate... it wouldn't necessarily mean you're committing') is a workable soft-commitment reframe, and the customer does move past the objection on his own by asking a cost question 20 seconds later. But the rep never asks for an explicit small commitment ('30 seconds to explain why I'm calling') — he got lucky that the customer re-engaged unprompted rather than having secured it by design."
+      "stewart_read": "This is a scripted trigger phrase with a canonical redirect-to-design response; rep partially uses it but undercuts it by still volunteering tax-incentive mechanics."
     },
     {
-      "ts": "01:10",
-      "quote": "you're paying nothing out of pocket to get started",
+      "ts": "01:01",
+      "quote": "I know you can sell the credits.",
       "classification": "setter_scope_creep",
-      "stewart_read": "This is a specific, unqualified financial claim volunteered before any qualification has happened — no address, no bill, no credit check. It edges toward the kind of premature financial commitment the schema's numeric discipline principle warns against, since 'nothing out of pocket' is a claim about the customer's specific situation that hasn't been assessed."
-    },
-    {
-      "ts": "01:54",
-      "quote": "I could ballpark it right now, but it could be wrong. And I don't wanna give you a wrong number.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "The rep's underlying instinct (don't give a number) is right, but the phrasing tells the customer a ballpark exists and is just being withheld, which invites more probing rather than closing the door. The canonical redirect frames the appointment as where real, accurate numbers happen — this version frames it as the rep protecting himself from being wrong."
+      "stewart_read": "Rep responds to a tax-credit mechanics question with actual financial explanation ('you're paying nothing out of pocket') instead of the universal escape hatch."
     },
     {
       "ts": "02:29",
       "quote": "Can I reach you back at this number?",
       "classification": "unanchored_soft_exit",
-      "stewart_read": "The customer surfaces a real-world time constraint (an emergency plumbing call) and the rep never anchors a specific callback day/time in response — the call drifts into 'I'll email you in a week' with no rep-owned follow-up plan. This is a soft-exit procedural gap: no locked next step, not a resolved customer objection."
+      "stewart_read": "Customer offers a logistics-based deflection; rep never counters with a firm time anchor or alternative slot, letting the call drift toward an open-ended callback."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 30,
-    "verified": 30,
+    "checked": 35,
+    "verified": 35,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION27_3b1d14fa",
   "rep_name": "Carter",
-  "trajectory_summary": "The call runs through the verify sequence quickly and books a next-day phone appointment, but the mechanics are rough throughout — the transcript shows repeated cross-talk/diarization confusion, a hurried button-up that left the customer unsure what the appointment even covers, and a co-owner (the customer's mother) surfaced on the title but never addressed for the appointment. The close on the EV question shows genuine customer engagement that the rep met adequately but with some scope-creep improvisation.",
+  "trajectory_summary": "The call moves fast through verify and lands a booked time, but energy leaks at the close: the customer doesn't know what the appointment is for and has to ask the company name after already agreeing to it. The electric car disclosure at 03:40 is the one real upside the rep captures, but only after being forced to re-explain the appointment.",
   "shape": "mixed",
-  "outcome_dispute": "V1 tag is unknown/unstated, so no dispute is being raised, but the observed_outcome here is tentative-leaning-booked: a day and a time (4PM tomorrow) were both stated, which technically qualifies as booked, though the shakiness of the button-up (customer confusion at 02:58) argues for treating this as a fragile booking rather than a clean one.",
+  "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
-    "co_owner_confirmed": false,
+    "co_owner_confirmed": null,
     "ts": "02:41",
     "quote": "K. Cool. Yeah. We'll plan on 4PM tomorrow.",
-    "reasoning": "A specific day (tomorrow) and time (4PM) were both agreed on the call, meeting the bar for booked; however the co-owner (mother, on title) was never confirmed for the appointment, leaving the booking structurally incomplete on that front."
+    "reasoning": "A specific day (tomorrow) and time (4PM) were mutually agreed and confirmed in the button-up. Co-owner (mom) was identified at 01:06 but never discussed for inclusion on the appointment, so co_owner_confirmed is null-leaning-false; marking null since it wasn't explicitly addressed either way and title co-owner does not necessarily equal decision-maker here (customer's mom, not spouse).",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "booked by time, tentative by rule: bill not_asked",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep never asked for or received an actual dollar bill amount or usage figure; the closest reference is the customer's own comment about being unsure how his bill will look with an EV, which the rep acknowledged but did not convert into a captured number."
+    "reasoning": "No dollar amount or kWh figure was captured on the call; therefore no flip could be executed."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,50 +39,50 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "No point in the transcript shows the rep requesting the utility bill itself (mail, online, photo, text, or email) — the call moves from qualifying questions directly to scheduling the specialist call."
+    "reasoning": "The rep never requested a utility bill, photo, or sending method during the call."
   },
   "interest_reason_audit": {
-    "asked": false,
-    "ask_ts": "",
+    "asked": true,
+    "ask_ts": "03:06",
     "reason_given": true,
-    "reason_ts": "03:38",
-    "reason_quote": "I have an electric car, which I don't know how much is it going to, change my bill because, it has been only one month that I've been in this, in this place.",
+    "reason_ts": "03:40",
+    "reason_quote": "I have an electric car,",
     "reason_used": "yes",
     "use_ts": "04:06",
-    "use_quote": "Yeah. It would. The whole the goal is to offset your utility bill plus the electric car since you have that. I'll make sure to include that in the notes.",
-    "reasoning": "The rep never explicitly asked 'what interested you in solar,' but the customer volunteered a usage-driven reason (EV, uncertain bill impact) later in the call, and the rep did tie the appointment's value to that reason and promised to flag it for the specialist."
+    "use_quote": "Yeah. It would. The whole the goal is to offset your utility bill plus the electric car",
+    "reasoning": "Rep directly ties the customer's stated reason (EV) to the value of the appointment/system and confirms he'll pass it to the specialist."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "00:03",
+      "end_ts": "00:05",
+      "quote": "Hi. This is Carter.",
+      "customer_response": "cooperative",
+      "customer_quote": "Hi, Carter. My name is Varun. I actually got a call from me.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "00:09",
+      "end_ts": "00:13",
+      "quote": "Did you put in a request to get some solar information on your home?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. I did.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:15",
       "end_ts": "00:20",
-      "quote": "Okay. Awesome. And it's for the 403 North White Deer Trail?",
+      "quote": "And it's for the 403 North",
       "customer_response": "cooperative",
       "customer_quote": "Correct.",
       "resistance_reason": "",
@@ -83,20 +92,20 @@
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "00:57",
+      "ts": "01:03",
       "end_ts": "01:08",
       "quote": "Is there anyone else on the title of the home with you?",
       "customer_response": "cooperative",
       "customer_quote": "My mom.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:18",
-      "end_ts": "01:37",
+      "ts": "01:24",
+      "end_ts": "01:38",
       "quote": "And then you know how the roof is?",
       "customer_response": "cooperative",
       "customer_quote": "It must be original.",
@@ -132,8 +141,8 @@
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:39",
-      "end_ts": "01:43",
-      "quote": "And then is your credit score above 670?",
+      "end_ts": "01:44",
+      "quote": "Cool. And then is your credit score above 670?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
@@ -155,14 +164,14 @@
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "00:22",
+      "ts": "00:32",
       "end_ts": "00:44",
-      "quote": "Have you checked into solar for this home yet?",
-      "customer_response": "cooperative",
-      "customer_quote": "were, related to that home, so we cannot proceed with that.",
-      "resistance_reason": "",
+      "quote": "Did you get solar on your previous home or just look into it?",
+      "customer_response": "deflected",
+      "customer_quote": "Some events,",
+      "resistance_reason": "other",
       "rep_followup": "moved_on",
-      "result": "completed"
+      "result": "partial"
     },
     {
       "section": "bill_collection",
@@ -179,73 +188,86 @@
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "02:02",
-      "end_ts": "02:41",
-      "quote": "Would it be best to call you in the morning or afternoon, typically?",
+      "ts": "02:38",
+      "end_ts": "02:46",
+      "quote": "Can we do 04:00?",
       "customer_response": "cooperative",
-      "customer_quote": "After 03:00, I should be able to",
+      "customer_quote": "Yeah.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "02:46",
-      "end_ts": "03:34",
-      "quote": "we just ask that you aren't driving, have access to your email.",
-      "customer_response": "deflected",
-      "customer_quote": "So what I'm looking forward to?",
-      "resistance_reason": "other",
-      "rep_followup": "persisted",
-      "result": "partial"
+      "ts": "02:41",
+      "end_ts": "02:55",
+      "quote": "K. Cool. Yeah. We'll plan on 4PM tomorrow.",
+      "customer_response": "cooperative",
+      "customer_quote": "K. Awesome.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed",
+      "parts_done": [
+        "recap",
+        "hour_block",
+        "no_driving",
+        "reconfirm"
+      ],
+      "parts_score": "4/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "button-up sequencing before close",
-    "ts": "02:55",
-    "quote": "Okay. K. Awesome. We'll talk to you then.",
-    "why": "The rep tried to end the call before explaining what the appointment covers, forcing the customer to ask 'what am I looking forward to?' immediately after. Sequencing the recap (what the specialist call is for, what to expect) BEFORE attempting to close protects against exactly this confusion and reduces no-show risk."
+    "topic": "Missing company name at intro caused mid-call trust gap",
+    "ts": "00:03",
+    "quote": "Hi. This is Carter.",
+    "why": "Customer had to ask 'what's the name of the company' after already agreeing to an appointment -- a legitimacy gap that surfaced live and could have derailed the booking."
   },
   "key_moments": [
     {
-      "ts": "01:06",
-      "quote": "My mom.",
-      "classification": "protocol_violation",
-      "stewart_read": "The customer identifies his mother as a co-owner on the title, but the rep never circles back to ask whether she should be included on tomorrow's appointment call. This is the same structural gap the schema flags under adult-child/co-owner inclusion — the rep captured the fact but didn't act on it."
-    },
-    {
-      "ts": "00:05",
-      "quote": "Hi, Carter. My name is Varun. I actually got a call from me.",
+      "ts": "00:03",
+      "quote": "Hi. This is Carter.",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The transcript shows no clear company-name-and-reason-for-calling opener from the rep before qualifying questions begin — the only company reference comes later, prompted by the customer asking. That said, the customer's own line suggests he already had context this was tied to a request he made, which is a counter-signal against reading this as a full legitimacy void."
+      "stewart_read": "No company name or lead-source reference in the opening line -- legitimacy is never anchored up front."
     },
     {
-      "ts": "03:52",
-      "quote": "Are you what's what's the name of the company, sir?",
-      "classification": "other",
-      "stewart_read": "This question arrives embedded inside the customer's EV/bill question rather than as a standalone trust check — he's asking almost in passing while working through his own question, not expressing suspicion. Still, four minutes into a call is late for the customer to still not know the company name."
+      "ts": "00:40",
+      "quote": "Some events, were, related to that home, so we cannot proceed with that.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer flags a specific prior-home solar issue that blocked proceeding, and the rep doesn't ask what it was."
+    },
+    {
+      "ts": "02:58",
+      "quote": "So what I'm looking forward to?",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "Customer agreed to a time but genuinely didn't understand what the appointment covers, meaning the button-up handshake didn't functionally land even though all 4 parts were logged."
     },
     {
       "ts": "03:38",
-      "quote": "I have an electric car, which I don't know how much is it going to, change my bill because, it has been only one month that I've been in this, in this place.",
+      "quote": "I have an electric car,",
       "classification": "enthusiasm_signal",
-      "stewart_read": "An EV is a higher-electric-load signal that strengthens the case for solar sizing and should be flagged clearly for the closer, not just folded into a passing mention."
+      "stewart_read": "Strong qualifying signal (EV ownership increases usage and appointment value) volunteered unprompted."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 35,
-    "verified": 35,
+    "checked": 46,
+    "verified": 46,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

@@ -1,17 +1,25 @@
 {
   "call_id": "10000811924",
   "rep_name": "Joel",
-  "trajectory_summary": "The call opens flat, briefly warms when the customer shares his long-standing solar interest and an unprompted personal medical story, but stalls hard at the credit qualifier when the customer self-reports low credit. The rep never anchors a bill, never books a time, and closes with a vague 'text me and let me know' handoff — the call ends in drift, partly driven by the customer's own tangents into politics.",
+  "trajectory_summary": "The call opens neutral and drifts through disconnected customer tangents (a near-death story, then political commentary) that the rep never firmly redirects. The credit qualifier stalls the script and the rep ends the call on an unresolved 'I doubt it' with a vague callback promise and no appointment, bill, or utility captured.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The call did not produce any appointment, booked or tentative — it ended on an open-ended 'check your credit and text me' non-commitment. This should be tagged no_appointment (bordering on a soft dq given the customer self-reported below-threshold credit), not a callback with a real commitment, since no date/time or callback window was set.",
+  "outcome_dispute": "v1 tag unknown; this call should be scored no_appointment — no date/time was offered or discussed, and the rep closed with only a vague 'send you a text' and 'let me know' with no owned next step.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "05:03",
-    "quote": "Yeah. So I'll send you a text in, Matthew, and then, yeah, just kinda check on where your credit is sitting at and let me know. We can kinda go from there. Alright.",
-    "reasoning": "No date, time, or locked callback window is established. The call ends on an open-ended promise to text and a request for the customer to check his own credit — there is no next step owned by the rep with a specific time."
+    "quote": "So I'll send you a text in, Matthew, and then, yeah, just kinda check on where your credit is sitting at and let me know. We can kinda go from there.",
+    "reasoning": "The call ends with the rep deferring to a future text and the customer checking their own credit — no day, time, or specialist appointment was proposed or agreed.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep never reaches the bill_amount section of the script — the call gets diverted into the credit qualifier and personal tangents before any utility bill or average cost figure is raised."
+    "reasoning": "No customer monthly bill or kWh usage was asked for or provided in the call, so no bill anchor was captured."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call never reaches bill collection — it stalls at the credit qualifier and ends with a vague follow-up promise before utility bill information is ever raised."
+    "reasoning": "The rep did not ask the customer to send or read a utility bill during the call."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -41,7 +49,7 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked the interest question and the customer gave a strong reason (long-term interest, contacted a senator about solar), but the rep compressed it into a generic 'just looking' frame at 00:55 and never revisited this motivation later in the call, including at the point of the vague close."
+    "reasoning": "Customer said 'Been interested for a while' and referenced a California senator, but the rep never circled back to this reason later in the call to reinforce urgency or tie it to booking."
   },
   "script_coverage": [
     {
@@ -49,7 +57,7 @@
       "status": "asked",
       "ts": "00:05",
       "end_ts": "00:13",
-      "quote": "Hey, Matthew. This is Joel with Ion. I just saw you're looking into some details on solar for your home in Columbus.",
+      "quote": "This is Joel with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Fine.",
       "resistance_reason": "",
@@ -60,20 +68,20 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "00:31",
-      "end_ts": "01:04",
+      "end_ts": "00:38",
       "quote": "But what had you interested in solar?",
       "customer_response": "cooperative",
       "customer_quote": "Been interested for a while.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:23",
       "end_ts": "00:30",
-      "quote": "So first, I have your address here as the 1191 Saint Clair Avenue in Columbus. Is that correct?",
+      "quote": "I have your address here as the 1191",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
@@ -84,25 +92,25 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "02:03",
-      "end_ts": "02:23",
-      "quote": "And then I have you here, Matthew, as the property owner. Is there anyone else on the title of the home with you at all?",
-      "customer_response": "deflected",
-      "customer_quote": "Okay. My wife is here, but she she gets it when I croak, which I've already done that.",
-      "resistance_reason": "other",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "end_ts": "02:10",
+      "quote": "Is there anyone else on the title of the home with you at all?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:53",
-      "end_ts": "02:03",
+      "end_ts": "01:53",
       "quote": "just looking at your roof here, it does look pretty good for solar.",
       "customer_response": "no_answer",
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "completed"
+      "result": "partial"
     },
     {
       "section": "utility_company",
@@ -130,19 +138,19 @@
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "status": "asked",
+      "ts": "03:22",
+      "end_ts": "03:35",
+      "quote": "you have a credit score of six fifty or higher.",
+      "customer_response": "resistant",
+      "customer_quote": "I doubt it.",
+      "resistance_reason": "dont_have_it",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "military",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,11 +158,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -162,11 +170,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -174,11 +182,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -186,11 +194,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -198,7 +206,9 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
@@ -208,58 +218,71 @@
       "type": "other",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Yeah. Well, six fifty is just kind of the requirement for the program. So if you could kinda check on that, find out where you're sitting at, and then just kinda let me know."
+        "Well, six fifty is just kind of the requirement for the program. So if you could kinda check on that, find out where you're sitting at, and then just kinda let me know."
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The customer self-reports likely being below the credit threshold; the rep makes a single attempt to keep the door open (asking him to check and report back) but doesn't offer any alternative path or attempt to keep the appointment moving forward independent of the credit answer."
+      "reasoning": "Customer's stated credit doubt stalled the qualifier; rep made one attempt (restate requirement, ask customer to self-check) and then let the call end without a locked follow-up time.",
+      "blocked_section": "tax_credit_qualifier",
+      "attempt_moves": [
+        "restate"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored close after credit uncertainty",
-    "ts": "05:03",
-    "quote": "Yeah. So I'll send you a text in, Matthew, and then, yeah, just kinda check on where your credit is sitting at and let me know. We can kinda go from there. Alright.",
-    "why": "The call ends with no locked next step, no bill ever captured, and no appointment — this is the single most consequential gap since it means the lead goes cold with zero owned follow-up mechanism."
+    "topic": "Credit objection handled with restatement, not resolution or booking",
+    "ts": "03:29",
+    "quote": "I doubt it.",
+    "why": "This is the moment the entire call died — rep restated the requirement and ended with a vague 'send a text' instead of getting a number, offering an alternative, or locking a callback time."
   },
   "key_moments": [
     {
       "ts": "02:10",
-      "quote": "Okay. My wife is here, but she she gets it when I croak, which I've already done that. I did. I died first of the year.",
+      "quote": "Okay. My wife is here, but she she gets it when I croak, which I've already done that.",
+      "classification": "spouse_handling",
+      "stewart_read": "Customer discloses a spouse who is on the property/beneficiary path but the rep never asks if she should be included on any future appointment — he moves straight past it into the death anecdote."
+    },
+    {
+      "ts": "02:20",
+      "quote": "I did. I died first of the year. They took two and a half minutes to bring me back.",
       "classification": "empathy_miss",
-      "stewart_read": "This is a significant vulnerability disclosure (a documented near-death medical event) delivered unprompted. The rep's response at 02:23 ('Dang.') and subsequent pivot to a story about his own mother is a mild, generic empathy attempt but doesn't bridge back to how this affects the appointment or solar decision."
+      "stewart_read": "This is a major vulnerability disclosure (a genuine medical trauma) and the rep's response is a casual \"Dang\" followed by his own mother's afterlife interest — acknowledgment without any bridge back to how solar/urgency might matter to the customer."
+    },
+    {
+      "ts": "03:22",
+      "quote": "only requirements qualifies that you have a credit score of six fifty or higher. Is that gonna be the case there for you?",
+      "classification": "other",
+      "stewart_read": "Rep states 650 as the threshold, which matches the drift already observed elsewhere in the corpus (schema says 670) — a schema/policy inconsistency worth flagging, not this rep's error alone."
     },
     {
       "ts": "03:29",
       "quote": "I doubt it.",
-      "classification": "other",
-      "stewart_read": "The customer self-reports being below the 650 threshold the rep just quoted. Per the schema's own policy-question note (spencer_operator_note), stated credit is unreliable — three-bureau variance is common, and a customer's self-assessment of 'not that high' isn't a hard data point. The rep treats this as an effective soft-DQ and shifts to a passive 'check and text me' loop rather than keeping the appointment alive."
-    },
-    {
-      "ts": "01:41",
-      "quote": "Yeah. The panels we have, we just have the normal ones. We don't have the water ones.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "This is a light, factual one-line correction responding to the customer's tangent about solar water heaters — not an extended technical debate. It's a minor scope touch, not a serious violation."
-    },
-    {
-      "ts": "04:04",
-      "quote": "Yeah. I mean, I'm sure I'm sure the requirements will change then too,",
-      "classification": "other",
-      "stewart_read": "The customer pulls the rep into a political/speculative tangent about tariffs and the IRS; the rep engages briefly rather than redirecting back to the qualification purpose or the next step."
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a soft credit objection/self-DQ signal and the rep just restates the requirement rather than probing further or offering any alternative path."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 34,
+    "checked": 35,
     "verified": 34,
-    "fuzzy": 0,
+    "fuzzy": 1,
     "wrong_ts": 0,
     "not_found": 0
   }

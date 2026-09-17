@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION16_34e9974a",
   "rep_name": null,
-  "trajectory_summary": "A short, procedurally competent verify pass that stalls almost entirely on a proxy guess about credit score — Lawanda, who is not the lead (Neil is), speculates that his score is below threshold, and the rep accepts that speculation as a functional DQ rather than probing or offering a path forward. The roof age (15 years) also sits right at the DQ boundary and was never revisited once the credit issue ended the call. No appointment was set and the close was passive.",
+  "trajectory_summary": "The call starts cooperative and moves efficiently through a truncated verify section, but stalls hard at the credit qualifier and the rep lets the entire lead go without booking anything or capturing the bill. Energy leaks out at the end — the rep essentially tells the customer to call back later rather than owning any next step.",
   "shape": "energy_leaked",
-  "outcome_dispute": "This looks like a soft/no_appointment ending driven by an unverified proxy guess, not a hard DQ — Neil's actual credit was never checked. Coding this as a clean DQ would overstate the certainty; it's better read as no_appointment with an unresolved qualifier.",
+  "outcome_dispute": "v1 tag is unknown/unclear; this call should be tagged dq (credit) rather than no_appointment, since the rep explicitly ends pursuit on the stated-credit gate, but note the schema flags this as a policy question — a strategic setter could have booked anyway and flagged for the closer.",
   "observed_outcome": {
-    "outcome": "no_appointment",
+    "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "02:01",
-    "quote": "Okay. Thank you so much. Yeah. Of course. You take care.",
-    "reasoning": "Call ends with no appointment set, no scheduled callback time, and an unresolved credit qualifier — the rep's closing language is a passive 'call back when ready' rather than any owned next step."
+    "ts": "01:56",
+    "quote": "And then if it's not 650, once it gets to that point, we'd be more than happy to run a quote for you.",
+    "reasoning": "Rep explicitly ends pursuit of the appointment on the stated-credit gate, telling the customer to come back later rather than booking or scheduling any next step.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reached bill collection — it stalled at the credit qualifier before utility company or bill amount were ever raised."
+    "reasoning": "No monthly bill amount or kWh usage was asked for or provided on the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "Call ended at the credit qualifier stage; bill collection was never reached."
+    "reasoning": "The rep did not raise collecting the utility bill or request a photo/email of it."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,17 +49,17 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Rep never asked what interested the customer in solar; the call stayed entirely in address/homeowner/roof/credit qualifier territory before ending."
+    "reasoning": "The rep did not ask why the customer was interested in solar; the customer volunteered they wanted information but that was not elicited by a why-question."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "end_ts": "00:14",
-      "quote": "I'm just seeing there's a solar request put in with this phone number.",
+      "end_ts": "00:07",
+      "quote": "Hey. I'm calling for Neil.",
       "customer_response": "cooperative",
-      "customer_quote": "Okay. Yep. That's for sure. Okay.",
+      "customer_quote": "Neil. I'm here at the moment. This is Lawanda. What can I do for you?",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -65,17 +73,17 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:23",
-      "end_ts": "01:32",
-      "quote": "Is this for the 496 Mixon's Corner Road?",
+      "ts": "00:25",
+      "end_ts": "00:29",
+      "quote": "Mixon's Corner Road?",
       "customer_response": "cooperative",
-      "customer_quote": "I don't know about the credit score, but I definitely know I own the owner.",
+      "customer_quote": "It would be 252",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -89,56 +97,56 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "00:56",
-      "end_ts": "01:08",
+      "end_ts": "01:06",
       "quote": "Okay. How old is the roof on the home?",
       "customer_response": "cooperative",
-      "customer_quote": "about fifteen years.",
+      "customer_quote": "about fifteen",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "not_reached"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "not_reached"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:20",
-      "end_ts": "01:56",
-      "quote": "The main requirements for solar are just that you own your home and have a credit score above 650. Is that the case for you?",
-      "customer_response": "resistant",
-      "customer_quote": "Not right at the moment. I don't think it's 650, though.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "moved_on",
-      "result": "declined"
+      "end_ts": "01:37",
+      "quote": "have a credit score above 650.",
+      "customer_response": "cooperative",
+      "customer_quote": "I don't know about the credit score, but I definitely know I own the owner.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "military",
@@ -149,7 +157,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "not_reached"
     },
     {
@@ -161,7 +169,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "not_reached"
     },
     {
@@ -173,7 +181,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "not_reached"
     },
     {
@@ -185,80 +193,95 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "01:53",
-      "end_ts": "02:01",
-      "quote": "Feel free to call this number back, though.",
-      "customer_response": "cooperative",
-      "customer_quote": "Okay. Thank you so much.",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "skipped"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
       "ts": "01:28",
       "quote": "I don't know about the credit score, but I definitely know I own the owner.",
-      "type": "cost",
+      "type": "other",
       "rep_attempts": 1,
       "attempt_quotes": [
         "Do you have a way to check your credit score?"
       ],
       "resolved": false,
-      "resolution_ts": "01:53",
-      "reasoning": "Rep asks once if she can check, gets a guess-based negative answer, and does not attempt an alternative path (e.g., having Neil check directly, offering to proceed pending verification) before closing the call."
+      "resolution_ts": "",
+      "reasoning": "This is a qualifier answer (uncertain credit), not resistance to the call itself, but it did stall the script from proceeding to bill/appointment sections — rep made one attempt to get a hard number before conceding.",
+      "blocked_section": "tax_credit_qualifier",
+      "attempt_moves": [
+        "question_back"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "proxy-guess credit DQ — verify before ending the call",
-    "ts": "01:37",
-    "quote": "Not right at the moment. I don't think it's 650, though.",
-    "why": "The rep let a secondhand guess from Lawanda about Neil's (the actual homeowner/lead's) credit score end the qualification path. This isn't even the schema's stated-vs-pulled-credit ambiguity — it's one level further removed, a guess about someone else's number. The rep should have asked Neil directly or had Lawanda confirm with him before treating it as disqualifying."
+    "topic": "Unowned exit on an unverified DQ",
+    "ts": "01:53",
+    "quote": "Feel free to call this number back, though.",
+    "why": "Rep let a self-reported, unverified credit guess end the call with no booked callback and no bill/interest captured — the lead goes cold with zero data collected."
   },
   "key_moments": [
     {
       "ts": "00:36",
       "quote": "Y'all don't do a trailer. You don't do a trailer, do you?",
-      "classification": "other",
-      "stewart_read": "Rep phrases a qualifying question in a confusing double-negative that momentarily muddies the roof/home-type verification; customer answers cooperatively despite the awkward phrasing."
-    },
-    {
-      "ts": "01:00",
-      "quote": "about fifteen years.",
-      "classification": "other",
-      "stewart_read": "Fifteen years sits exactly on the schema's roof-age DQ boundary (roof_age_over_15_no_replacement_planned), yet the rep says 'not too bad' and moves on without probing roof condition or replacement plans."
+      "classification": "protocol_violation",
+      "stewart_read": "Rep's phrasing on the home-type question is garbled and confusing, suggesting either a scripted line delivered poorly or unfamiliarity with the qualifier itself."
     },
     {
       "ts": "01:20",
       "quote": "The main requirements for solar are just that you own your home and have a credit score above 650.",
       "classification": "other",
-      "stewart_read": "Rep states 650 as the threshold, matching the drift already flagged in another call (SESSION18_fcbf33c1) against the schema's documented 670 — indicates this may be a floor-wide script inconsistency rather than one rep's error."
+      "stewart_read": "Rep states the 650 threshold, which matches the schema's drift note (SESSION18_fcbf33c1 also said 650, not the documented 670) — this is a floor-wide stated-number inconsistency worth flagging to Kenny."
     },
     {
       "ts": "01:37",
       "quote": "Not right at the moment. I don't think it's 650, though.",
-      "classification": "knowledge_gap",
-      "stewart_read": "This is not Lawanda's own credit — it's her guess about Neil's, the actual lead. The rep takes a proxy's unverified guess about a third party's credit and treats it as effectively disqualifying, per qualifiers.credit_qualifier's open policy question (stated vs. pulled credit). The uncertainty here is compounded: even 'stated' credit policy assumes the person stating it is the one whose credit it is."
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Customer's stated credit guess is self-reported and unverified; rep treats it as a de facto DQ instead of offering to proceed and let the closer's actual credit pull decide."
+    },
+    {
+      "ts": "01:53",
+      "quote": "Feel free to call this number back, though.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "Call ends with no locked time, no callback owned by the rep, and no 'is that fair?' handshake — pure procedural fragility."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 27,
-    "verified": 27,
+    "checked": 30,
+    "verified": 30,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

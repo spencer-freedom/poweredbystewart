@@ -1,26 +1,35 @@
 {
   "call_id": "SESSION24",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens in genuine confusion — the customer is distracted by an unrelated household exchange for nearly a full minute, and the rep has to fight through noisy overlapping audio to extract basic verify data. Despite that, the rep methodically works through address, homeowner status, co-owner, utility, roof, and credit, and lands a booked phone appointment for Monday at 4:30. The call is efficient but thin: no bill amount was captured, the interest-in-solar reason was never asked, and the son named as co-owner is never folded into the appointment.",
-  "shape": "mixed",
-  "outcome_dispute": null,
+  "trajectory_summary": "The call opens with a chaotic, distracted moment where the customer appears to be reading numbers off some document while the rep tries to run verify questions in parallel. The rep gets through the qualifiers mechanically and books a callback time, but never anchors a bill, never asks the interest question, and leaves the customer's own cost-comparison condition unaddressed. Energy is flat throughout — neither built nor actively lost, but the appointment is set on a thin, unreinforced foundation.",
+  "shape": "stagnant",
+  "outcome_dispute": "v1 tag is unknown; based on the transcript this should be tentative, not booked â€” no bill was captured (a hard requirement per lead type rules) and the customer's closing line makes booking conditional on a cost comparison the rep never resolved.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": false,
     "ts": "04:21",
     "quote": "Okay. 04:30. How's that sound?",
-    "reasoning": "A specific day (Monday) and time (4:30, afternoon) were agreed for a phone call with a specialist, meeting the booked threshold. The son named as co-owner at 02:56 was never confirmed or even raised for inclusion in that appointment, so co_owner_confirmed is false rather than null."
+    "reasoning": "A specific day and time (Monday 4:30) were agreed, but the customer's closing line makes the appointment conditional on an unresolved cost evaluation, and the co-owner (son) was identified but never invited onto the call, making this fragile rather than a clean book.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
-    "bill_ts": "03:12",
-    "bill_quote": "Still we are waiting for our one bill. We have not received anything yet.",
+    "bill_ts": "",
+    "bill_quote": null,
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer just moved into the home this month and has not yet received a utility bill, so no dollar figure was available to capture or flip. The rep did ask the average-bill question at the correct point in the sequence."
+    "reasoning": "The customer said they have not received a bill yet, so no monthly amount or usage was captured."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +39,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "Because the customer has no bill yet, the rep never raised getting a physical or digital copy of it — there was nothing to collect and the rep did not set up a plan (e.g., text/email once the first bill arrives) for later collection."
+    "reasoning": "The rep did not request the utility bill (photo, text, or read-aloud) during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,19 +50,19 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what interested the customer in solar at any point in the call; the customer's closest statement to a reason is his comment about wanting to compare monthly charges against his utility bill at 03:54, which the rep did not solicit or reinforce."
+    "reasoning": "The rep did not ask why the customer was interested in solar and the customer did not volunteer a motivating reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "end_ts": "00:15",
-      "quote": "Hey. It's Bucky with Ion. I'm reaching out about the solar form you filled out online. How are you doing?",
+      "end_ts": "00:06",
+      "quote": "Hey. It's Bucky with Ion. I'm reaching out about the solar form you filled out online.",
       "customer_response": "cooperative",
       "customer_quote": "Mhmm. Doing good.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -71,73 +80,73 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:22",
-      "end_ts": "02:37",
-      "quote": "So it's still empty lot, but I know the home is built. It's a single family. Right?",
+      "ts": "02:11",
+      "end_ts": "02:19",
+      "quote": "Young Street. Okay. Let me add the north in.",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. We just, we moved there in '18 or in '19.",
+      "customer_quote": "Let me tell you address. 1545",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "02:44",
+      "ts": "02:53",
       "end_ts": "02:58",
-      "quote": "Is there anybody on the title but you?",
+      "quote": "What was that? Is there anybody on the title but you?",
       "customer_response": "cooperative",
       "customer_quote": "It's me and my son.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "03:29",
-      "end_ts": "03:32",
+      "end_ts": "03:33",
       "quote": "Is your roof a shingle?",
       "customer_response": "cooperative",
       "customer_quote": "Yep.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "03:00",
-      "end_ts": "03:06",
+      "end_ts": "03:12",
       "quote": "And what utility company are you with?",
       "customer_response": "cooperative",
-      "customer_quote": "Portland Journal.",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "completed"
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "03:06",
+      "ts": "03:12",
       "end_ts": "03:17",
       "quote": "How much do you spend on a monthly average?",
       "customer_response": "deflected",
       "customer_quote": "Still we are waiting for our one bill. We have not received anything yet.",
       "resistance_reason": "dont_have_it",
-      "rep_followup": "moved_on",
+      "rep_followup": "alternative_offered",
       "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "03:32",
-      "end_ts": "03:42",
+      "ts": "03:33",
+      "end_ts": "03:43",
       "quote": "Do you have a credit score over 670 or your son?",
       "customer_response": "cooperative",
-      "customer_quote": "It's about one, you know, 40 or so.",
+      "customer_quote": "Yeah. It's more than that, really.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -172,7 +181,7 @@
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
-      "resistance_reason": "dont_have_it",
+      "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "skipped"
     },
@@ -184,81 +193,100 @@
       "quote": "Can you do a phone call on Monday?",
       "customer_response": "cooperative",
       "customer_quote": "Afternoon. After 04:00 is fine.",
-      "resistance_reason": "",
-      "rep_followup": "persisted",
+      "resistance_reason": "cost",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "partial",
-      "ts": "04:23",
+      "status": "asked",
+      "ts": "04:26",
       "end_ts": "04:28",
-      "quote": "Have a great day. I'll text you to remind you.",
+      "quote": "I'll text you to remind you.",
       "customer_response": "cooperative",
       "customer_quote": "Okay. Alright. Thank you. Thank you so much.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "reconfirm"
+      ],
+      "parts_score": "1/4"
     }
   ],
   "objections": [
     {
       "ts": "03:54",
-      "quote": "We will decide, that how much is there because we'll have to evaluate how much you are going to charge me monthly and how much I'm getting the the bill of, Fortnite.",
+      "quote": "we will decide, that how much is there because we'll have to evaluate how much you are going to charge me monthly and how much I'm getting the the bill of, Fortnite",
       "type": "cost",
-      "rep_attempts": 0,
-      "attempt_quotes": [],
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. Oh, okay. So you can do a phone call on Monday?"
+      ],
       "resolved": true,
-      "resolution_ts": "04:10",
-      "reasoning": "The customer raises a cost-evaluation condition on moving forward, but it is not resisted as a blocking objection — he immediately proceeds to schedule. The rep does not engage with the comparison framing at all, simply confirming the appointment day, so no rep attempt exists to log."
+      "resolution_ts": "04:23",
+      "reasoning": "Customer raises a cost-comparison condition for deciding; rep does not address the condition itself but simply restates the booking question, and the customer moves forward with scheduling anyway.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@04:26",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "skipped interest-reason + bill-anchor before booking",
-    "ts": "03:43",
-    "quote": "we're all good. We just need to find you a good time to talk to a specialist to see what we can offer you.",
-    "why": "The rep never asked what interested the customer in solar and never got or flipped a bill number before moving to scheduling — the appointment is booked on qualifiers alone with no emotional anchor, and the closer walks in with nothing but the verify facts."
+    "topic": "Unresolved cost-comparison condition on the booked appointment",
+    "ts": "03:54",
+    "quote": "we will decide, that how much is there because we'll have to evaluate how much you are going to charge me monthly and how much I'm getting the the bill of, Fortnite",
+    "why": "The customer explicitly states the appointment's value depends on a bill-vs-cost comparison and the rep never acknowledges or addresses it, leaving the booking structurally fragile."
   },
   "key_moments": [
     {
-      "ts": "01:56",
-      "quote": "So it's still empty lot, but I know the home is built. It's a single family. Right?",
-      "classification": "knowledge_gap",
-      "stewart_read": "The rep's mapping system shows an empty lot at the address, but rather than treating this as a blocker or hiding the discrepancy, the rep names it plainly and confirms directly with the customer. This is the admit-and-recover pattern, not a dodge or fabrication."
-    },
-    {
-      "ts": "02:56",
-      "quote": "It's me and my son.",
-      "classification": "spouse_handling",
-      "stewart_read": "The customer names his son as a co-owner on the title, which triggers the same protocol as spouse-on-title: the co-decision-maker should be folded into the appointment. The rep says 'Okay' and moves straight to utility company without ever raising whether the son should be on the Monday call."
+      "ts": "00:32",
+      "quote": "Can can you hold for a moment? Can you I got it. Just give me one moment.",
+      "classification": "protocol_violation",
+      "stewart_read": "Household interruption early in the call; the rep proceeds without re-establishing full attention before continuing the verify sequence."
     },
     {
       "ts": "03:12",
       "quote": "Still we are waiting for our one bill. We have not received anything yet.",
-      "classification": "bill_anchor",
-      "stewart_read": "No bill amount exists because the household just moved in and hasn't received a first bill yet — this is a genuine no_bill_captured scenario, not a rep miss. The rep's only real option here was to ask for the prior residence's bill or Portland General average, which wasn't attempted."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer hands the rep a clean opening to pivot to an alternative bill-capture path (utility website, prior home's bill, estimate) but the rep just moves to the next question."
+    },
+    {
+      "ts": "03:17",
+      "quote": "Oh, how long have you lived in the home since 2019?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Rep abandons the bill question entirely rather than offering the schema's texted/emailed alternative path."
     },
     {
       "ts": "03:54",
-      "quote": "We will decide, that how much is there because we'll have to evaluate how much you are going to charge me monthly and how much I'm getting the the bill of, Fortnite.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer hands the rep his own framing for why he'd move forward — comparing Ion's monthly charge against his utility bill once it arrives. This is a customer-volunteered curiosity hook the rep could reflect back ('exactly what the specialist will lay out side by side for you') but instead the rep just confirms the day."
+      "quote": "we will decide, that how much is there because we'll have to evaluate how much you are going to charge me monthly and how much I'm getting the the bill of, Fortnite",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "This is a live cost-comparison condition on the appointment holding — essentially a soft cost objection — and the rep does not flip or address it, just confirms the day."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 36,
-    "verified": 32,
+    "checked": 38,
+    "verified": 38,
     "fuzzy": 0,
-    "wrong_ts": 4,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

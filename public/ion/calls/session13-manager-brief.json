@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION13",
   "rep_name": "Ella",
-  "trajectory_summary": "This is a short, low-friction continuation call that books a specific in-person appointment with a date and time. The rep handles scheduling efficiently and redirects a program question to the specialist appropriately, but the call closes on a passive note without a firm verbal handshake or full recap, and a real competitive-intelligence opportunity (five other company calls) is acknowledged but not probed.",
+  "trajectory_summary": "This is a short, low-friction continuation call: verify items were already completed in a prior touch, so the rep moves straight to scheduling and gets a date and time locked with minimal resistance. The one wrinkle — the customer's frustration at being called by five companies — is handled adequately but generically, and the button-up is thin (no 'is that fair' handshake, no explicit no-driving/computer instruction, no full recap of what to expect beyond a partial explanation prompted by the customer himself).",
   "shape": "mixed",
-  "outcome_dispute": null,
+  "outcome_dispute": "v1 tag is unknown; the transcript shows a clear day+time agreement (April 25, 10:00AM) confirmed by both sides, which meets the booked bar even though bill and interest-reason were never captured on this call.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "01:52",
+    "ts": "01:45",
     "quote": "I have you on the scheduled then before next Saturday, April 25 at 10:00AM",
-    "reasoning": "A specific day (Saturday, April 25) and time (10:00AM) are both explicitly locked for an in-person specialist appointment, meeting the booked threshold."
+    "reasoning": "Rep states a specific day and time, and the customer confirms it verbally ('Okay. Twenty fifth.') with an in-person specialist appointment explicitly named.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "booked by time, tentative by rule: bill not_asked",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "No bill amount or usage figure appears anywhere in this transcript — the rep states 'everything looks good on my end,' implying qualification data including the bill was already captured on a prior touch, not on this call."
+    "reasoning": "No customer electric bill amount or kWh was captured on the call; no opportunity to flip the bill number."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +39,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never raises getting the utility bill on this call — consistent with this being a scheduling-only continuation call where that data was likely gathered in an earlier touch."
+    "reasoning": "The rep did not request the utility bill or ask the customer to send billing documentation."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +50,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "No interest-reason question is asked on this call; the rep treats the qualification stage as already complete ('everything looks good on my end') and moves straight to scheduling."
+    "reasoning": "The rep did not ask why the customer was interested in solar and the customer did not volunteer a reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "end_ts": "00:13",
-      "quote": "This is Ella Lagany on Fuller. Let me check real quick.",
+      "end_ts": "00:06",
+      "quote": "This is Ella Lagany on Fuller.",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah.",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -154,15 +163,15 @@
     },
     {
       "section": "prior_design",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "03:13",
+      "end_ts": "03:26",
+      "quote": "I'll just put on here that you are getting other quotes and estimates from other companies.",
+      "customer_response": "cooperative",
+      "customer_quote": "Is is a multiple company is doing the same thing you guys doing right now?",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
@@ -181,9 +190,9 @@
       "status": "asked",
       "ts": "01:11",
       "end_ts": "01:56",
-      "quote": "We can look towards next Saturday, April 25. What's your schedule looking like for then?",
+      "quote": "We can look towards next Saturday, April 25.",
       "customer_response": "cooperative",
-      "customer_quote": "I'd be available",
+      "customer_quote": "I'd be available between eleven to twelve ten to twelve.",
       "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
@@ -191,74 +200,92 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "01:59",
-      "end_ts": "02:22",
-      "quote": "I can also be sure to send you the details of this appointment through text message as well",
+      "ts": "01:45",
+      "end_ts": "02:16",
+      "quote": "I have you on the scheduled then before next Saturday, April 25 at 10:00AM",
       "customer_response": "cooperative",
-      "customer_quote": "Okay.",
+      "customer_quote": "Okay. Twenty fifth.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
       "ts": "03:03",
-      "quote": "Let me ask a question. Is is a multiple company is doing the same thing you guys doing right now? Because since I applied, but it's like Yes. I asked for like, I got five phone calls already.",
-      "type": "trust_or_scam",
+      "quote": "Is is a multiple company is doing the same thing you guys doing right now? Because since I applied, but it's like Yes. I asked for like, I got five phone calls already.",
+      "type": "already_have_quote_or_system",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Uh-huh. Yeah. So it's always good, though, to get multiple estimates from different companies. You know, we are a very competitive company, though."
+        "Yeah. So it's always good, though, to get multiple estimates from different companies. You know, we are a very competitive company, though."
       ],
       "resolved": true,
       "resolution_ts": "03:31",
-      "reasoning": "The rep normalizes the multi-company contact as a single response and the customer accepts it ('Okay. Alright. Good enough.'), but no second angle or differentiation was attempted."
+      "reasoning": "Customer voices frustration at competitor contact volume as an implicit challenge to legitimacy/value; rep validates shopping around and frames Ion as competitive, customer accepts with 'Good enough.'",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "prior_design@03:13",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "missing verbal handshake on booking",
-    "ts": "01:56",
-    "quote": "just for that in person appointment with my specialist.",
-    "why": "The appointment is otherwise well-anchored (specific date, time, text-confirmation promise) but skips the explicit 'is that fair?' commitment step the schema flags as predictive of show rate — a simple, repeatable fix."
+    "topic": "Incomplete button-up before attempting to close",
+    "ts": "02:23",
+    "quote": "Alright. Sounds good. Well, thank you so much for your time today.",
+    "why": "No 'is that fair' handshake, no no-driving/computer instruction was delivered before the rep tried to end the call; the customer's own questions rescued the close, not the rep's process."
   },
   "key_moments": [
     {
-      "ts": "00:06",
-      "quote": "Yeah. You got it? Yeah. This is Ella Lagany on Fuller. Let me check real quick.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The rep does self-identify by name here, so this is not a total absence of identification — but there is no company name or Ion branding anywhere in the intro, and given this is a return contact the rep leans on prior familiarity rather than re-anchoring legitimacy verbally."
+      "ts": "00:14",
+      "quote": "Well, everything looks good on my end. Looks like now I just need to get you scheduled for an in person appointment with my specialist",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "Rep treats this as a continuation call and skips intro legitimacy re-establishment, verify, bill collection, and interest question entirely, moving straight to scheduling."
     },
     {
-      "ts": "00:48",
-      "quote": "Only weekends. You guys work weekends?",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer's question implies he's already assuming a next step exists and is working out logistics to make it happen — this is cooperative scheduling behavior, not resistance."
-    },
-    {
-      "ts": "01:56",
-      "quote": "just for that in person appointment with my specialist.",
+      "ts": "02:23",
+      "quote": "Alright. Sounds good. Well, thank you so much for your time today.",
       "classification": "unanchored_soft_exit",
-      "stewart_read": "The rep locks a date, time, and text-confirmation promise, but never runs the verbal handshake ('Is that fair?') that the schema flags as predictive of show rate — the booking is procedurally solid on date/time/text but missing that final commitment-lock."
+      "stewart_read": "Rep attempts to close the call before covering what the specialist visit will involve, and before running the full button-up (no driving/no computer instruction, no 'is that fair' handshake)."
     },
     {
       "ts": "03:03",
-      "quote": "Let me ask a question. Is is a multiple company is doing the same thing you guys doing right now? Because since I applied, but it's like Yes. I asked for like, I got five phone calls already.",
+      "quote": "Is is a multiple company is doing the same thing you guys doing right now? Because since I applied, but it's like Yes. I asked for like, I got five phone calls already.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses he's fielded five calls from other companies since applying — real competitive intelligence the closer would benefit from (which companies, what they pitched, any quotes given) — but the rep doesn't ask a single follow-up question about it."
+      "stewart_read": "Customer discloses volume-of-contact frustration (five calls since applying) — the rep validates competition generally but never probes which companies or what he's been told, missing a chance to differentiate Ion specifically."
+    },
+    {
+      "ts": "03:13",
+      "quote": "Yeah. So it's always good, though, to get multiple estimates from different companies. You know, we are a very competitive company, though.",
+      "classification": "rapport_repair",
+      "stewart_read": "Rep uses a comparison-framing strategy similar to the schema's already_saw_design rebuttal, validating the customer's shopping behavior instead of arguing against it."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 27,
-    "verified": 27,
+    "checked": 30,
+    "verified": 30,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

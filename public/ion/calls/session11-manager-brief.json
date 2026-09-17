@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION11",
   "rep_name": "Carter",
-  "trajectory_summary": "The call is short and largely carried by the customer volunteering his own availability; the rep converts that into a nominal Monday 2PM booking but never resolves the one hard qualifier he himself raised — the 670 credit score. The diarization is unreliable in the back half, which further obscures whether the customer ever actually confirmed the time or the credit answer.",
+  "trajectory_summary": "This is a fragmented, mostly reactive call: no verify section, no bill collection, no interest question — the rep runs almost straight from a thin intro into scheduling. Energy technically built (customer went from 'not right now' to picking a day and time), but the underlying qualification is nearly empty, leaving a booking with an unresolved credit gate.",
   "shape": "mixed",
-  "outcome_dispute": "V1 outcome is presumably 'booked,' and a day/time (Monday 2PM) is stated, so the mechanical booking condition is met. But this is a fragile booking: the credit qualifier that the rep flagged as a past issue ('there were before, there was issues with credit') is left open with 'let me check ... when I get home,' and no follow-up confirmation loop is closed. Stewart flags this as booked-but-conditional rather than a clean booked outcome.",
+  "outcome_dispute": "v1 tag is unknown; observed outcome should be tentative, not booked — the credit qualifier was never confirmed ('Let me check... when I get home') and the rep proceeds to schedule anyway with 'if the credit is good' hedge language.",
   "observed_outcome": {
     "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "01:55",
-    "quote": "02:00. 02:00. K. 2PM.",
-    "reasoning": "A specific day (Monday) and time (2PM) are stated, meeting the mechanical bar for 'booked,' but the appointment is explicitly conditioned on an unverified credit qualifier ('if the credit is good, can we do Monday morning or afternoon'), and the diarization in this segment is unreliable, so Stewart marks this tentative rather than a clean booked outcome given the open condition."
+    "ts": "01:52",
+    "quote": "02:00 work or three?",
+    "reasoning": "A specific day (Monday) and time (2PM) were floated and accepted in the moment, but the entire booking is explicitly conditioned on an unresolved credit qualifier ('if the credit is good'), and no bill was collected — this is a conditional/fragile set, not a clean book.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "No bill amount or usage figure is mentioned anywhere in the transcript; the call never reaches bill_amount or bill_collection topics."
+    "reasoning": "No monthly bill or kWh usage was requested or provided on the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +39,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never raises getting the utility bill in any form; the call stays focused on scheduling and the credit qualifier."
+    "reasoning": "The rep did not request a bill or ask the customer to send bill documents during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +50,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks what interested the customer in solar; the customer's stated hesitation ('not for right now, but I'm interested to do it later... I'm doing a lot of stuff') is about timing, not a solar motivation, and the rep does not probe further."
+    "reasoning": "The rep did not ask why the customer was interested; the customer volunteered timing but not an interest reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
-      "ts": "00:04",
+      "ts": "00:18",
       "end_ts": "00:23",
-      "quote": "Hey, Carter. This is Francisco.",
+      "quote": "we met with you a while back about solar.",
       "customer_response": "cooperative",
-      "customer_quote": "Good. Good.",
+      "customer_quote": "I have a phone call, missed phone call from you.",
       "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -70,126 +79,6 @@
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "co_owner",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "roof",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "utility_company",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "bill_amount",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "credit_qualifier",
-      "status": "asked",
-      "ts": "01:18",
-      "end_ts": "01:25",
-      "quote": "Is your credit score above 670 now?",
-      "customer_response": "no_answer",
-      "customer_quote": "Let me check. I would say when I get home get home. Okay.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "moved_on",
-      "result": "partial"
-    },
-    {
-      "section": "military",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "prior_design",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "bill_collection",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "appointment_set",
-      "status": "asked",
-      "ts": "01:04",
-      "end_ts": "01:55",
-      "quote": "Okay. Can we come talk to you on Monday?",
-      "customer_response": "cooperative",
-      "customer_quote": "K. Awesome.",
-      "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
-    },
-    {
-      "section": "button_up",
       "status": "skipped",
       "ts": "",
       "end_ts": "",
@@ -199,12 +88,137 @@
       "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "skipped"
+    },
+    {
+      "section": "co_owner",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "roof",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "utility_company",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "bill_amount",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "01:18",
+      "end_ts": "01:28",
+      "quote": "Is your credit score above 670 now?",
+      "customer_response": "deflected",
+      "customer_quote": "Let me check. I would say when I get home get home. Okay.",
+      "resistance_reason": "other",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
+    },
+    {
+      "section": "military",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "00:18",
+      "end_ts": "00:23",
+      "quote": "we met with you a while back about solar.",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. Not for right now,",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
+    },
+    {
+      "section": "bill_collection",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "appointment_set",
+      "status": "asked",
+      "ts": "01:55",
+      "end_ts": "01:57",
+      "quote": "02:00 work or three?",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm I'm gonna be at home Monday, Tuesday, or Wednesday.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
+    },
+    {
+      "section": "button_up",
+      "status": "asked",
+      "ts": "01:57",
+      "end_ts": "01:57",
+      "quote": "the text is gonna say, hey. This is Carter with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "K. Awesome. Alright. Well, you have a good one.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
       "ts": "00:28",
-      "quote": "Yeah. Not for right now, but I'm interested to do it later. Right now, I'm doing a lot of stuff.",
+      "quote": "Yeah. Not for right now,",
       "type": "timing_or_callback",
       "rep_attempts": 1,
       "attempt_quotes": [
@@ -212,53 +226,85 @@
       ],
       "resolved": true,
       "resolution_ts": "00:56",
-      "reasoning": "The rep's single time-anchor line resolved the hesitation — the customer immediately volunteered Monday as an open day right after."
+      "reasoning": "Rep reframed the ask as low-commitment (short, quick visit) rather than directly addressing the deferral, and the customer moved past it by offering availability.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "tax_credit_qualifier@01:18",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "01:25",
+      "quote": "Let me check. I would say when I get home get home. Okay.",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Let me text you so you have my phone number. As far as scheduling, though, if the credit is good, can we do Monday morning or afternoon?"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer could not confirm credit score in the moment; rep offered a workaround (text number, book conditionally) rather than resolving the qualifier itself, so it remains open at call end.",
+      "blocked_section": "tax_credit_qualifier",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@01:55",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unresolved hard qualifier on a booked appointment",
-    "ts": "01:18",
-    "quote": "Is your credit score above 670 now?",
-    "why": "This appointment is booked (Monday 2PM) but gated on a credit qualifier the customer could not confirm on the call ('let me check... when I get home'). Per the setter comp model, reps are paid on sits that make it through the closer's full proposal — an appointment that DQs at proposal because credit was never actually verified doesn't pay the rep and burns a closer's slot. The rep needed a firm follow-up mechanism (text confirmation, callback before Monday) to close this loop, not just leave it open."
+    "topic": "Booking on an unresolved hard qualifier",
+    "ts": "01:32",
+    "quote": "if the credit is good, can we do Monday morning or afternoon?",
+    "why": "Credit was a known prior disqualifier and the rep books a specific day/time anyway without a real answer, creating a fragile appointment the closer may lose on arrival."
   },
   "key_moments": [
     {
+      "ts": "00:18",
+      "quote": "Yeah. We're just calling we saw we met with you a while back about solar.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "Rep references a prior meeting as the only legitimacy anchor but never states company identity clearly or confirms lead source beyond 'Ion' mentioned much later at 01:57."
+    },
+    {
+      "ts": "00:28",
+      "quote": "Yeah. Not for right now,",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "This is a soft deferral objection the rep never directly names or resolves; it gets bypassed via a time-commitment reframe rather than addressed."
+    },
+    {
       "ts": "01:18",
       "quote": "And then I think there were before, there was issues with credit. Is your credit score above 670 now?",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "The rep correctly recalls a past disqualifying issue but doesn't probe what changed, what the customer's current situation is, or set a clear plan to verify before appointment day — he asks the question and moves past the answer without resolution."
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep surfaces a real prior disqualifier but gets an inconclusive answer and does not resolve it before locking a date/time."
     },
     {
       "ts": "01:32",
-      "quote": "Let me text you so you have my phone number.",
-      "classification": "micro_trade",
-      "stewart_read": "The rep offers his personal number as a workaround for confirming the credit/appointment details, the exact anti-pattern the schema flags as a privacy and scale exposure risk on the setter floor."
-    },
-    {
-      "ts": "01:09",
-      "quote": "I'm I'm gonna be at home Monday, Tuesday, or Wednesday.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer hands the rep a wide-open, fully cooperative three-day window — an ideal moment to run remaining Verify items (address/homeowner confirm, co-owner, roof, utility, bill) while the customer is engaged. The rep instead jumps straight to scheduling logistics and the credit question, skipping the qualification conversation entirely."
-    },
-    {
-      "ts": "01:32",
-      "quote": "let me text you so you have my phone number. As far as scheduling, though, if the credit is good, can we do Monday morning or afternoon? What would be best?",
-      "classification": "other",
-      "stewart_read": "This stretch (roughly 01:32-01:55) contains lines tagged 'rep' that are clearly customer responses given the diarizer's known failure mode ('I prefer' and 'afternoon' both tagged rep immediately after the rep asks an open question) — the time-negotiation and possibly the credit-check exchange may be customer lines misattributed to the rep track."
+      "quote": "if the credit is good, can we do Monday morning or afternoon?",
+      "classification": "conditional_booking",
+      "stewart_read": "Appointment is explicitly conditioned on an unverified credit qualifier, making this a fragile, conditional set rather than a clean book."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 26,
-    "verified": 26,
+    "checked": 35,
+    "verified": 35,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

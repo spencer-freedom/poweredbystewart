@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION10_5f41be3e",
   "rep_name": "Bucky",
-  "trajectory_summary": "The customer arrives already knowledgeable, impatient, and unwilling to sit through a discovery call — he wants a price and panel count via email and says so almost immediately. The rep never secures the bill, never books an appointment, and spends the whole call trying to preserve the standard funnel format instead of adapting to what the customer actually asked for, ending in a polite but final decline.",
+  "trajectory_summary": "The call opens with the customer handing the rep an easy, cooperative frame ('doing alright, brother') and a clear, repeated ask; the rep never answers the direct question and instead cycles through workarounds, so energy leaks steadily until the customer exits on his own terms. No verify, bill, or interest content was ever captured because the rep never got control of the flow.",
   "shape": "energy_leaked",
-  "outcome_dispute": null,
+  "outcome_dispute": "v1 outcome is unknown/unclear; based on the transcript this is a no_appointment — the call ends with the customer declining and the rep having secured no next step, not a booked or tentative appointment.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "04:05",
     "quote": "No worries, brother. I appreciate your time. You have a good rest of your day.",
-    "reasoning": "The call ends with the customer declining to continue under the rep's terms and no appointment, callback time, or confirmed email exchange locked in."
+    "reasoning": "The call ends with the customer declining to continue on the rep's terms and no appointment, callback time, or bill was secured — the customer's offer to 'send info' via email later is not a scheduled next step owned by the rep.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,28 +28,28 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer references his 'PNM bill' repeatedly as something he's willing to send, but no dollar amount or usage figure is ever stated on the call, so there is nothing numeric to flip."
+    "reasoning": "No numeric monthly bill or kWh usage was captured; the rep referenced getting the bill but no usage or dollar amount was read by the customer."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "00:38",
-    "ask_quote": "so you could determine how many panels I need based upon the, energy that I, need to be producing",
+    "ask_ts": "03:12",
+    "ask_quote": "we can get this done in, like, two seconds, get that bill real quick.",
     "result": "promised_later",
     "method": "email",
     "result_ts": "03:47",
-    "result_quote": "I'll give you my email, and, you can email me, and I'll send you all the info that you need.",
-    "reasoning": "The customer himself raises sending the PNM bill via email multiple times; the rep never accepts this offer or sets up the email exchange, so the bill is promised by the customer but the exchange is never actually completed or confirmed by the rep before the call ends."
+    "result_quote": "if if you can, great. I'll give you my email, and, you can email me, and I'll send you all the info that you need.",
+    "reasoning": "Rep asked for the bill and the customer agreed to send it via email later; the bill did not arrive on the call."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": true,
-    "reason_ts": "00:51",
-    "reason_quote": "I know plenty about solar, so I'm not worried about any of that. I just wanna know what price you guys can get me at",
-    "reason_used": "no",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar,' but the customer volunteers his motivation (wants price/panel-count numbers, already knowledgeable) unprompted; the rep never reflects this back or uses it to frame the call ('since you already know the numbers matter most, let's get you that fast') — he instead keeps re-arguing the format."
+    "reasoning": "The rep did not explicitly ask why the customer was interested in solar; the customer volunteered reasons, but no rep question tied to the script's 'interest' move occurred."
   },
   "script_coverage": [
     {
@@ -49,7 +57,7 @@
       "status": "asked",
       "ts": "00:05",
       "end_ts": "00:13",
-      "quote": "Yeah. Who's this? Hey. It's Bucky with Ion. I'm reaching out to oh, I'm reaching out about the solar form you filled online. How you doing?",
+      "quote": "Hey. It's Bucky with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "I'm doing alright, brother.",
       "resistance_reason": "",
@@ -70,7 +78,7 @@
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -78,11 +86,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,11 +98,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,19 +110,19 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "asked",
-      "ts": "00:38",
-      "end_ts": "00:45",
-      "quote": "so you could determine how many panels I need based upon the, energy that I, need to be producing",
-      "customer_response": "cooperative",
-      "customer_quote": "I just wanna eliminate all that other fluff.",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
@@ -130,54 +138,6 @@
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "military",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "prior_design",
-      "status": "asked",
-      "ts": "00:31",
-      "end_ts": "02:28",
-      "quote": "you're not looking to, like, sit down and have an appointment?",
-      "customer_response": "cooperative",
-      "customer_quote": "I already kind of, talked to a couple of solar companies.",
-      "resistance_reason": "already_have_quote",
-      "rep_followup": "none",
-      "result": "partial"
-    },
-    {
-      "section": "bill_collection",
-      "status": "asked",
-      "ts": "01:29",
-      "end_ts": "03:47",
-      "quote": "I literally am not allowed to just email because I don't have anything needed.",
-      "customer_response": "resistant",
-      "customer_quote": "I want that just in an email.",
-      "resistance_reason": "timing",
-      "rep_followup": "persisted",
-      "result": "declined"
-    },
-    {
-      "section": "appointment_set",
       "status": "skipped",
       "ts": "",
       "end_ts": "",
@@ -189,7 +149,43 @@
       "result": "skipped"
     },
     {
-      "section": "button_up",
+      "section": "military",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "prior_design",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "03:12",
+      "end_ts": "03:47",
+      "quote": "we can get this done in, like, two seconds, get that bill real quick.",
+      "customer_response": "cooperative",
+      "customer_quote": "if if you can, great. I'll give you my email, and, you can email me, and I'll send you all the info that you need.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "deferred"
+    },
+    {
+      "section": "appointment_set",
       "status": "not_reached",
       "ts": "",
       "end_ts": "",
@@ -199,6 +195,20 @@
       "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "not_reached"
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
@@ -210,71 +220,74 @@
       "attempt_quotes": [
         "you're not looking to, like, sit down and have an appointment?",
         "what if I cut the in person appointment and I all that sit down stuff? If I remove that and I set you up with just a phone call",
-        "I literally am not allowed to just email because I don't have anything needed."
-      ],
-      "resolved": false,
-      "resolution_ts": "04:05",
-      "reasoning": "The rep tried reframing to an appointment, then a phone-only compromise, then a policy citation, but the customer held his email-only position throughout and ended the call without conceding."
-    },
-    {
-      "ts": "00:51",
-      "quote": "I just wanna know what price you guys can get me at",
-      "type": "already_have_quote_or_system",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "We're not gonna waste your time because I know we're one of the best."
+        "I because you already know the drill. Like, I we can get this done in, like, two seconds, get that bill real quick."
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The customer's framing that he's already solar-knowledgeable and comparison-shopping is addressed with a single generic credibility claim rather than a probe into what he's already seen or a tailored response."
+      "reasoning": "Customer repeated the same email-only request three times across the call; rep never used the canonical proposal-before-meeting rebuttal until the very end, and by then the customer had already disengaged.",
+      "blocked_section": "interest_question",
+      "attempt_moves": [
+        "question_back",
+        "alternative_offered",
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "bill_collection@03:12",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "repeating the same channel argument instead of using the customer's own words",
-    "ts": "01:55",
-    "quote": "To be real, brother, I don't wanna waste anybody's time. That's why I said via email.",
-    "why": "The rep hears the customer state his reason for wanting email twice (impatience, already solar-literate, wants numbers) and responds both times with variations of 'we're the best' or policy citations rather than mirroring the customer's stated motivation back into a reason to stay on the phone. This is the single biggest lever this call needed and never got pulled."
+    "topic": "Answer the direct question before improvising",
+    "ts": "00:21",
+    "quote": "can this be done via email?",
+    "why": "The customer asked the same yes/no channel question four times and never got a straight answer until the call was already ending; naming the real constraint ('we don't email proposals, here's why') on the first ask would have given the customer something concrete to react to instead of three rounds of vague deflection."
   },
   "key_moments": [
     {
-      "ts": "00:00",
-      "quote": "I can tell people. You gotta be stupid to take from me.",
-      "classification": "other",
-      "stewart_read": "This pre-intro fragment (likely mid-conversation with someone else before the call connects, or a defensive aside) suggests the customer has a guarded, transaction-skeptical posture before the rep even speaks. It sets up his fast pivot to 'can this be done via email' as consistent with someone who doesn't want to be worked."
+      "ts": "00:21",
+      "quote": "can this be done via email?",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "Rep answered the intro but never got a real interest/verify start before the customer took control of the call's direction with a channel demand."
     },
     {
-      "ts": "01:16",
-      "quote": "I don't need all the other stuff. I'll look at it. If it looks good and everything is good to go, then, obviously, I'll choose you guys to get services with.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "The customer is essentially pre-committing to buy if the numbers work — this is close to a self-generated 'what's expensive is not switching' opening, and the rep never uses the customer's own conditional commitment as leverage to get him on a call instead of email."
-    },
-    {
-      "ts": "02:20",
-      "quote": "Yeah. No. I mean and that's what everybody says. You know what I mean? Like, I I I've been in sales, and I and I used to sell for solar too.",
+      "ts": "00:31",
+      "quote": "I know plenty about solar, so I'm not worried about any of that. I just wanna know what price you guys can get me at",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "The customer discloses direct competitive/industry background (worked in solar sales himself) and that he's already talked to multiple solar companies — this is exactly the kind of prior-contact disclosure the verify section's prior_designs item is built to capture, and the rep does not probe which companies or what he was shown."
+      "stewart_read": "Customer discloses prior solar company conversations unprompted; rep never asks which companies or what he saw."
     },
     {
-      "ts": "02:36",
-      "quote": "So that's why I said I I just if I can just email you the p and m Mhmm. So you can go ahead and review it.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer hands the rep his own PNM bill and satellite-imagery point as an anchor — a direct hook the rep could reflect back ('once we pull that, our specialist can show you the actual number live') to make phone conversation more attractive than email. Instead the rep files it and continues repeating the appointment-format ask."
+      "ts": "01:07",
+      "quote": "what is your warranty on the panels and, that stuff",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Customer is pulling the rep into closer-tier product/pricing content; the rep never redirects with the escape hatch line."
+    },
+    {
+      "ts": "01:55",
+      "quote": "what if I cut the in person appointment and I all that sit down stuff? If I remove that and I set you up with just a phone call",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Customer's real objection is 'I don't want to waste time / send me proposal by email' — a scripted rebuttal exists (rebuttals.send_proposal_before_meeting) but rep improvises a workaround instead of the canonical hold-the-line reframe."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 40,
-    "verified": 38,
+    "checked": 33,
+    "verified": 33,
     "fuzzy": 0,
-    "wrong_ts": 2,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

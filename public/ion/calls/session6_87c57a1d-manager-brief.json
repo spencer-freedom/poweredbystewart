@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION6_87c57a1d",
   "rep_name": "Emily",
-  "trajectory_summary": "This is a short, cooperative call that hit an unavoidable hard gate: the customer is not yet the legal homeowner (closing March 23) and Ion's design team cannot build an estimate before then. The rep handled the qualification questions smoothly but never directly answered the customer's military/discount question, instead redirecting into a generic incentive pitch. The call ends on good terms but with no locked follow-up date/time mechanism beyond a verbal promise to call back.",
-  "shape": "mixed",
-  "outcome_dispute": null,
+  "trajectory_summary": "The call opens smoothly and cooperatively, but the rep skips the interest question and bill capture entirely, running a truncated verify before the customer discloses he isn't yet a homeowner. From there the call has nowhere to go but a vague future callback, and the rep's deferral is procedurally correct but leaves the appointment unanchored and the customer's genuine curiosity (incentives, cost) unused as leverage for that later touch.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag is unknown/unclear; this should be scored as a callback (not a booked or tentative appointment) since only a vague future date was given with no time, no confirmed channel, and no handshake.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
     "datetime_captured": false,
-    "co_owner_confirmed": false,
-    "ts": "03:03",
-    "quote": "And so I will reach back out on March 23 just to get that estimate to you. Okay?",
-    "reasoning": "The rep commits to calling the customer back on a specific date (March 23) once he closes on the home, but no specific time is locked and no appointment with a closer is set — this is a callback, not a booked or tentative appointment."
+    "co_owner_confirmed": null,
+    "ts": "03:01",
+    "quote": "I will reach back out on March 23",
+    "reasoning": "A specific date is stated but no time, so this is a callback rather than a booked appointment; the DQ (not yet homeowner) is the reason the standard appointment flow could not proceed.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches bill/usage discussion because the ownership-timing gate (customer closes on the home March 23) halts the qualification process before the bill_amount verify item is reached."
+    "reasoning": "No dollar amount or kWh was captured on the call, so there was nothing for the rep to flip into action."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,18 +38,18 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never raises collecting a utility bill; the call is cut short by the ownership gate before bill collection is reached in the verify sequence."
+    "reasoning": "The rep did not request the customer's utility bill or ask for a photo/email/text of it."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": false,
-    "reason_ts": "",
-    "reason_quote": null,
-    "reason_used": "no_reason_given",
+    "reason_given": true,
+    "reason_ts": "02:17",
+    "reason_quote": "I don't own, like, as of right now, but on March 23, I should own it.",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks 'what interested you in solar' — the call moves directly from address/roof/title verification into the discount question and then the ownership disclosure, skipping the interest-question verify item entirely."
+    "reasoning": "Customer's stated reason ('I'm trying to just find estimate first' ahead of closing on the home) was acknowledged but not reinforced when setting the March 23 callback — the rep simply named a date without tying it back to the customer's stated urgency to have an estimate ready at closing."
   },
   "script_coverage": [
     {
@@ -49,11 +57,11 @@
       "status": "asked",
       "ts": "00:04",
       "end_ts": "00:11",
-      "quote": "Hey, Andy. This is Emily with ION. I just got a request here that you're looking at solar for your home in Texas.",
+      "quote": "This is Emily with ION.",
       "customer_response": "cooperative",
       "customer_quote": "Is that right? Yeah. Yeah. That's correct.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -65,127 +73,127 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:25",
-      "end_ts": "00:37",
-      "quote": "Alright. So first, let me make sure I have the right address down. Have that as 121 Kenny Cott Drive in Kyle, Texas.",
+      "end_ts": "00:33",
+      "quote": "Alright. So first, let me make sure I have the right address down.",
       "customer_response": "cooperative",
-      "customer_quote": "Is that correct? Yes. Okay. Perfect.",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:13",
-      "end_ts": "01:20",
-      "quote": "I have you down as a property owner. Is anyone else on the title with you, sir?",
+      "end_ts": "01:21",
+      "quote": "Is anyone else on the title with you, sir?",
       "customer_response": "cooperative",
       "customer_quote": "No. Just me.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "00:37",
-      "end_ts": "01:04",
-      "quote": "Okay. And then looking at the home here, is that just an asphalt shingle roof on the home?",
+      "end_ts": "00:48",
+      "quote": "is that just an asphalt shingle roof on the home?",
       "customer_response": "cooperative",
-      "customer_quote": "2021, I believe. But let me double check. Yeah.",
+      "customer_quote": "Yeah.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "not_reached"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "not_reached"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "not_reached"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "asked",
-      "ts": "01:23",
-      "end_ts": "01:57",
-      "quote": "Oh, okay. Yeah. Totally understand. Well, so, actually, our company, we do have this one incentive going on.",
-      "customer_response": "deflected",
-      "customer_quote": "Do you guys have, like is there a, double money credit or anything like that, a military credit or anything that, the double money, you?",
-      "resistance_reason": "other",
-      "rep_followup": "alternative_offered",
-      "result": "partial"
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "not_reached"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "not_reached"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
-      "ts": "02:31",
-      "end_ts": "03:10",
-      "quote": "So we, unfortunately, would have to just wait until you close on the March 23.",
+      "status": "asked",
+      "ts": "03:01",
+      "end_ts": "03:07",
+      "quote": "I will reach back out on March 23",
       "customer_response": "cooperative",
-      "customer_quote": "Okay. Sure. Well, thank you for helping me out. Sounds good.",
-      "resistance_reason": "timing",
-      "rep_followup": "moved_on",
+      "customer_quote": "Okay? Okay. Sure. Well, thank you for helping me out.",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "deferred"
     },
     {
@@ -197,68 +205,83 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "skipped"
+      "rep_followup": "n_a",
+      "result": "skipped",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
-      "ts": "02:05",
-      "quote": "I just wanted to give you a head up. So what I'm doing right now is I'm actually buying a home there that home. I'm just closing out on March 23.",
-      "type": "timing_or_callback",
+      "ts": "02:42",
+      "quote": "is there a way to, like, estimate Rampart? Like, how much does it usually cost, stuff like that?",
+      "type": "other",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "So we, unfortunately, would have to just wait until you close on the March 23. So I can just give you a call then, and then we can get that estimate out to you."
+        "So each home definitely does differ, and so that's why we first have to accurately design an estimate."
       ],
       "resolved": true,
-      "resolution_ts": "03:10",
-      "reasoning": "This isn't a true objection to overcome but a hard timing gate (not yet homeowner); the rep correctly applies a single deferral response and the customer accepts it without pushback."
+      "resolution_ts": "03:07",
+      "reasoning": "Customer pushes for a ballpark price after being told he must wait until closing; rep holds the line with a single reframe (estimates require accurate per-home design) and the customer accepts and thanks her.",
+      "blocked_section": "none",
+      "attempt_moves": [
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@03:01",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "answer the direct question before redirecting",
-    "ts": "01:23",
-    "quote": "Do you guys have, like is there a, double money credit or anything like that, a military credit or anything that, the double money, you?",
-    "why": "The customer asked a specific, answerable question and the rep never confirmed or denied it before pivoting to a different incentive — leaving the actual question hanging is a small trust gap that's easy to fix with a direct one-line answer first."
+    "topic": "Unanchored callback close",
+    "ts": "03:01",
+    "quote": "I will reach back out on March 23",
+    "why": "The entire call funnels into a single future touchpoint, but that touchpoint has no time, no channel, no handshake — the single most fragile point in an otherwise well-handled DQ."
   },
   "key_moments": [
     {
       "ts": "01:23",
-      "quote": "Do you guys have, like is there a, double money credit or anything like that, a military credit or anything that, the double money, you?",
-      "classification": "knowledge_gap",
-      "stewart_read": "The customer asks a direct, specific question about a military/double-money discount. The rep never answers it — instead of admitting uncertainty or confirming/denying the specific program, she redirects to a different, generic incentive (bill swap, no down payment). This is a dodge-and-redirect, not a transparent admission of not knowing."
+      "quote": "Do you guys have, like is there a, double money credit or anything like that, a military credit or anything that, the double money,",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer hands the rep a direct incentive question and instead of answering it or using it as a hook, the rep pitches a generic bill-swap program."
     },
     {
-      "ts": "01:33",
-      "quote": "Well, so, actually, our company, we do have this one incentive going on. We're doing what's called a bill swap program.",
-      "classification": "other",
-      "stewart_read": "In response to a discount question, the rep volunteers program mechanics (bill swap, fixed rate, no down payment, no upfront cost) before any qualification or bill data has been gathered — explaining the offer rather than creating curiosity about the customer's own numbers."
+      "ts": "02:42",
+      "quote": "is there a way to, like, estimate Rampart? Like, how much does it usually cost, stuff like that?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Second time the customer asks for a number and gets deferred; no bill was ever captured to anchor a future conversation, and no attempt was made to collect utility/bill info despite the customer being highly engaged."
     },
     {
-      "ts": "02:11",
-      "quote": "I'm just closing out on March 23. So I'm just gonna kind of stop in that. I I don't own, like, as of right now, but on March 23, I should own it.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "The customer is proactively planning ahead for solar before he even owns the home — asking for an estimate in advance so he can install immediately upon closing. This is a highly motivated, forward-planning lead, not a soft or reluctant one."
+      "ts": "02:17",
+      "quote": "I don't own, like, as of right now, but on March 23, I should own it.",
+      "classification": "conditional_booking",
+      "stewart_read": "This is a legitimate timing-based gate, not resistance — the rep correctly identifies it cannot be forced through and defers."
     },
     {
-      "ts": "02:31",
-      "quote": "So we, unfortunately, would have to just wait until you close on the March 23.",
-      "classification": "non_standard_scenario_hold",
-      "stewart_read": "This is a non-standard scenario — a soon-to-be homeowner rather than a current one — that the rep handles by deferring the entire estimate/design process to the closing date rather than attempting any workaround."
+      "ts": "03:01",
+      "quote": "I will reach back out on March 23",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "The close names a date with no time, no channel confirmation, and no 'is that fair?' handshake — a procedurally fragile ending even though the DQ reasoning is sound."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 29,
-    "verified": 29,
+    "checked": 32,
+    "verified": 32,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

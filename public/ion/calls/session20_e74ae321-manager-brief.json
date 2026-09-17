@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION20_e74ae321",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens cold, and every rep move from 00:40 onward adds friction instead of resolving it — culminating in the customer stating a clear channel preference twice, being ignored both times, and ending the call herself. There is no point where energy builds; it is a steady, well-documented escalation from mild annoyance to a flat refusal to continue.",
+  "trajectory_summary": "The call opens neutral and cooperative but leaks energy steadily from the redundant-question friction at 01:00 onward, with the rep never adjusting his approach across three escalating asks for written info. It ends in an unresolved objection and a conceded goodbye — a clean example of energy_leaked with no recovery attempt.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown/unset, but the observed outcome is unambiguous: no appointment, no bill captured, no alternative contact method honored — the call ends on the customer's terms with 'You too' after the rep says goodbye.",
+  "outcome_dispute": "v1 tag unknown; this is a no_appointment call — the rep explicitly disengages ('I'll goodbye') without booking or securing a callback.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "02:28",
     "quote": "I never said you were. I'm just saying if you want help with that, I'll goodbye.",
-    "reasoning": "The call ends with the rep saying goodbye and the customer replying 'You too' — no appointment, no alternative contact method confirmed, and no next step owned by the rep."
+    "reasoning": "Call ends with the rep disengaging and no next step, appointment, or callback owned by the rep — the customer's request for written info was left unaddressed.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches the bill_amount section of the script — the rep is still on utility company verification (00:56) when the customer shuts down the phone-based questioning, so no bill figure was ever obtained."
+    "reasoning": "No dollar or kWh amount was captured on the call, so there was nothing for the rep to flip or use."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,18 +38,18 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never reaches or raises bill collection at all; the call ends during utility-company verification, well before the bill_collection section of the script would normally occur."
+    "reasoning": "The rep did not request a bill or ask for a photo/email of the bill during the call."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": false,
-    "reason_ts": "",
-    "reason_quote": null,
-    "reason_used": "no_reason_given",
+    "reason_given": true,
+    "reason_ts": "01:40",
+    "reason_quote": "List all of the ways that your company can help me lower my electricity bill",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks what interested the customer in solar; the call stays confined to address/utility verification before the customer ends the productive part of the conversation."
+    "reasoning": "The customer's stated reason ('list all of the ways that your company can help me lower my electricity bill') was captured at 01:40 but the rep never reflected it back or used it to reframe the call — he moved to a generic scope excuse instead."
   },
   "script_coverage": [
     {
@@ -49,11 +57,11 @@
       "status": "asked",
       "ts": "00:08",
       "end_ts": "00:14",
-      "quote": "This is Bucky with Ion Solar. I'm reaching out about the solar form you filled out online. How are you doing?",
+      "quote": "This is Bucky with Ion Solar.",
       "customer_response": "cooperative",
       "customer_quote": "I'm doing fine. How can I help you?",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -72,22 +80,22 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:40",
-      "end_ts": "00:47",
-      "quote": "the one that I do confirm, you live at 2225",
-      "customer_response": "resistant",
-      "customer_quote": "I fill out your form. So you should have enough enough information on the form that says that I am the owner of the house",
-      "resistance_reason": "other",
+      "end_ts": "00:48",
+      "quote": "Just, well, the one that I do confirm, you live at 2225",
+      "customer_response": "cooperative",
+      "customer_quote": "North That's my address. That's where I live.",
+      "resistance_reason": "",
       "rep_followup": "persisted",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:48",
-      "end_ts": "00:48",
-      "quote": "Is there anybody else? And then the title is in your name.",
-      "customer_response": "no_answer",
-      "customer_quote": "",
+      "end_ts": "00:56",
+      "quote": "Is there anybody else?",
+      "customer_response": "deflected",
+      "customer_quote": "Pacific.",
       "resistance_reason": "",
       "rep_followup": "moved_on",
       "result": "partial"
@@ -108,13 +116,13 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "00:48",
-      "end_ts": "01:03",
+      "end_ts": "01:00",
       "quote": "What utility company are you with?",
-      "customer_response": "resistant",
-      "customer_quote": "Yeah. Didn't I put that on the phone?",
-      "resistance_reason": "other",
-      "rep_followup": "none",
-      "result": "partial"
+      "customer_response": "cooperative",
+      "customer_quote": "Pacific.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "bill_amount",
@@ -154,15 +162,15 @@
     },
     {
       "section": "prior_design",
-      "status": "skipped",
-      "ts": "02:12",
-      "end_ts": "02:18",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
       "quote": "",
-      "customer_response": "cooperative",
-      "customer_quote": "I already have quotes from two other companies.",
-      "resistance_reason": "already_have_quote",
-      "rep_followup": "none",
-      "result": "skipped"
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
@@ -198,81 +206,104 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
-      "ts": "01:10",
-      "quote": "here's what I want you to do. Don't bother me anymore on the phone. Send me an email or send a hard copy of how your company can help me with my, electric bill.",
+      "ts": "01:16",
+      "quote": "Send me an email or send a hard copy",
       "type": "proposal_by_email",
       "rep_attempts": 2,
       "attempt_quotes": [
-        "electric bill. Yeah. I can help you right now.",
-        "Yeah. I can help you literally right now. I only have, like, three more questions, and then you're good."
+        "Yeah. I can help you literally right now. I only have, like, three more questions, and then you're good.",
+        "Okay. Well, we don't so everything we do is specific to homes. So we would just have to ask a couple questions, and then we can see what we can do for you."
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The customer's request to be contacted via email/mail instead of phone is restated at 01:39-01:54 in nearly identical terms and never acknowledged by the rep at any point; the call ends with the request still unaddressed, so it is not resolved."
+      "reasoning": "Customer never moved past this request; she repeated it a second time even more explicitly and ultimately ended the call still asking for it unaddressed.",
+      "blocked_section": "co_owner",
+      "attempt_moves": [
+        "restate",
+        "reason"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     },
     {
-      "ts": "02:12",
-      "quote": "I want to send you a quote because I already have quotes from two other companies.",
-      "type": "already_have_quote_or_system",
+      "ts": "01:12",
+      "quote": "Don't bother me anymore on the phone.",
+      "type": "not_interested",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Okay. That's fine. Yeah. I literally just have, like, three other questions, and then it's that's it."
+        "I can help you literally right now."
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The customer raises having competing quotes as part of her argument that the rep already has enough information; the rep does not engage with the competitive detail at all and simply repeats his question-count line, and the call ends shortly after without resolution."
+      "reasoning": "Rep did not acknowledge the channel preference at all, simply reasserted phone-based help; call ended without resolution.",
+      "blocked_section": "co_owner",
+      "attempt_moves": [
+        "reason"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Never honored the customer's explicit channel request",
-    "ts": "01:12",
-    "quote": "Don't bother me anymore on the phone. Send me an email or send a hard copy",
-    "why": "The customer stated a clear, specific, repeatable preference twice (01:12-01:22 and 01:39-01:54) and even confirmed Ion already has her mailing address (01:49) — removing any logistical barrier — yet the rep never once offered to send an email or hard copy, even as the closing line of the call. This is the single most consequential and most avoidable miss on the call."
+    "topic": "send_proposal_before_meeting rebuttal never run",
+    "ts": "01:16",
+    "quote": "Send me an email or send a hard copy",
+    "why": "This objection recurred three times and escalated to call termination; the rep never delivered any version of the schema's hard-rule response, which is the single most consequential gap on this call."
   },
   "key_moments": [
     {
       "ts": "01:16",
-      "quote": "Send me an email or send a hard copy of how your company can help me with my,",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "This is a customer-stated alternative channel request, structurally similar to a protocol the rep should follow rather than argue — she is not objecting to solar, she is specifying HOW she wants to continue. The rep never routes to this alternative at any point in the call."
+      "quote": "Send me an email or send a hard copy",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is squarely the send_proposal_before_meeting trigger; the canonical response is to hold the no-email-proposals line while explaining why. Rep instead pushed to continue the phone Q&A without acknowledging her request."
     },
     {
-      "ts": "01:27",
-      "quote": "electric bill. Yeah. I can help you right now.",
-      "classification": "empathy_miss",
-      "stewart_read": "Rather than acknowledging what the customer just asked for, the rep asserts his own preferred channel ('right now') over hers. This is the first of three moments where the same unaddressed request recurs."
+      "ts": "01:54",
+      "quote": "Okay. Well, we don't so everything we do is specific to homes. So we would just have to ask a couple questions",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Second touch on the same request; rep gives a vague scope justification instead of the hard-rule script or any reframe, and doesn't acknowledge her stated frustration."
     },
     {
-      "ts": "01:49",
-      "quote": "or send me a hard copy in the mail. You have my address. That's my mailing address.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "The customer explicitly confirms Ion already has her mailing address on file, removing any logistical reason the rep might have had for not honoring the mail request. The rep does not engage with this at all — he pivots immediately to defending the need for phone questions ('everything we do is specific to homes')."
+      "ts": "02:25",
+      "quote": "I'm not required to answer your questions on the phone.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Third and final touch; rep concedes immediately and ends the call, the critical_failure grade per the schema's deviation_grades for this rebuttal."
     },
     {
       "ts": "02:05",
       "quote": "Oh, so you haven't gotten enough information about me to to get to send you a quote?",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "The customer hands the rep a sharp, logical challenge — she filled out a form, so why does he need more from her before sending anything? This is a moment where a flip ('exactly — that's why these three questions get you a real number instead of a generic one') could reframe the ask as being in her interest. The rep instead just repeats 'three other questions' again."
+      "classification": "cross_sell_miss",
+      "stewart_read": "She reveals she already has two competing quotes, which per the schema is a comparison_framing opportunity (already_saw_design rebuttal) — rep never engages this at all."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 37,
-    "verified": 36,
-    "fuzzy": 1,
+    "checked": 34,
+    "verified": 34,
+    "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0
   }

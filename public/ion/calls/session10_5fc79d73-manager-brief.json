@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION10_5fc79d73",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens on a cooperative, low-effort verification track and ends abruptly on a snap disqualification the rep couldn't fully defend when questioned. The customer's pushback ('why can't you guys' and the trailer/manufactured-home distinction) exposed that the rep's DQ reasoning was thin, and the call closed without the rep resolving the customer's confusion or committing to any concrete next step.",
+  "trajectory_summary": "Call opens neutrally and moves through basic verify items smoothly, but collapses the moment 'manufactured home' surfaces — the rep DQs instantly and tries to end the call within seconds, without probing what home structure actually means to the customer. The customer's own confusion ('a trailer is considered a manufactured home, right?') suggests the DQ may have been reflexive rather than confirmed, and the rep never investigates.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 tag is unknown, but this should be recorded as a DQ outcome — the rep explicitly disqualified the home at 01:24-01:29 and the call ended without an appointment. There is no appointment or callback with a stated time; the 'I could totally give you a callback' line at 01:58 is a vague, undated promise, not a scheduled callback.",
+  "outcome_dispute": "v1 tag unknown/unclear; based on transcript this is a dq outcome — the rep explicitly disqualified on manufactured home status and ended pursuit, though the DQ itself is questionable given no probing of foundation/land ownership.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "01:24",
     "quote": "So we we actually can't work with manufactured homes, unfortunately.",
-    "reasoning": "The rep explicitly told the customer Ion cannot work with manufactured homes and closed the call with a vague, undated future-callback mention rather than any scheduled appointment or firm next step."
+    "reasoning": "Rep explicitly disqualified the lead on manufactured-home status and ended pursuit of the appointment, matching the dq_rules hard gate for roof/structure type.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call was disqualified on home type before reaching the bill/utility portion of the verify section; no bill amount or usage figure was ever discussed."
+    "reasoning": "No dollar amount or kWh usage was requested or provided on the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call was disqualified on manufactured-home status before the rep reached bill collection; the topic never came up."
+    "reasoning": "The rep did not request the utility bill or propose a method to collect it."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,15 +49,15 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never reached the 'what interested you in solar' verify item; the call was cut short by the manufactured-home DQ before this point in the script."
+    "reasoning": "The rep did not ask the customer why they were interested in solar; no reason was provided."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:09",
-      "end_ts": "00:19",
-      "quote": "Hey, Joe. This is Holland with Ion. I just heard that you're looking to your home.",
+      "end_ts": "00:17",
+      "quote": "This is Holland with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "I'm doing okay.",
       "resistance_reason": "",
@@ -58,7 +66,7 @@
     },
     {
       "section": "interest_question",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -66,23 +74,23 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:24",
-      "end_ts": "00:58",
-      "quote": "I've got your address here, as 1511 Jones Road in Kershaw, South Carolina. Is that correct?",
+      "ts": "00:31",
+      "end_ts": "00:41",
+      "quote": "Is that correct?",
       "customer_response": "cooperative",
-      "customer_quote": "I've owned the property for roughly a year now.",
+      "customer_quote": "Yes.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,18 +98,18 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "01:13",
-      "end_ts": "01:23",
-      "quote": "I can't really tell, from the top view, but is this a manufactured home or a single family home?",
+      "end_ts": "01:24",
+      "quote": "is this a manufactured home or a single family home?",
       "customer_response": "cooperative",
-      "customer_quote": "It is manufactured home.",
+      "customer_quote": "It is\nmanufactured home.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -190,7 +198,7 @@
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -198,67 +206,62 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "01:35",
-      "quote": "Why can't you guys work with the manufacturer home?",
-      "type": "roof_or_home",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "So the weight of the panels, they actually tend to work in the walls of manufactured homes over time."
-      ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "The rep gave one explanation and then immediately pivoted to a vague callback offer rather than fully addressing the customer's continued follow-up question about trailer terminology at 02:02, so the objection/question was never fully resolved before the customer ended the call."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "Snap DQ without probing the actual home type",
+    "topic": "Instant DQ without probing structure specifics",
     "ts": "01:24",
     "quote": "So we we actually can't work with manufactured homes, unfortunately.",
-    "why": "The rep disqualified on a single word without asking clarifying questions (foundation, single/double-wide, age), and when the customer pushed back twice — 'why can't you guys' and the trailer distinction — the rep had no confident, complete answer ready. This cost the call outright and left the customer with an unresolved, possibly incorrect DQ."
+    "why": "Rep disqualified within seconds of hearing 'manufactured home' with zero follow-up questions about foundation or permanence, and the customer's own confusion about the trailer/manufactured-home distinction suggests the DQ may have been premature — costing a lead that could have been salvageable or at minimum handled with a confirmed, accurate reason."
   },
   "key_moments": [
     {
       "ts": "01:24",
       "quote": "So we we actually can't work with manufactured homes, unfortunately.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The rep disqualifies on the single word 'manufactured' with no follow-up question about foundation type, single-vs-double-wide, or whether the home is permanently affixed — details that could change the answer. This is not a defined dq_rule in the schema (the only DQ list is not_homeowner, ppa_existing_system, sunrun_existing, pink_solar_existing, roof_too_old_no_replacement, credit_below_670_no_alternative, existing_system_broken); manufactured-home construction type is an undocumented DQ trigger, so this is as much a schema gap for Kenny to formalize as it is a rep execution issue."
+      "classification": "protocol_violation",
+      "stewart_read": "Rep DQ'd instantly on hearing 'manufactured home' without any probing into foundation type, permanent attachment, or land ownership — factors that materially affect whether a home is truly a hard-DQ manufactured home versus a modular/permanently affixed structure that might still qualify."
     },
     {
       "ts": "01:35",
       "quote": "Why can't you guys work with the manufacturer home?",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "Customer directly asks the rep to justify the DQ. The rep answers with a plausible-sounding technical reason (panel weight against walls) but this reads as a possible on-the-spot rationalization rather than a rehearsed, confident answer, given the hedging language that follows."
-    },
-    {
-      "ts": "02:02",
-      "quote": "A trailer is considered a manufactured home. Right?",
       "classification": "knowledge_gap",
-      "stewart_read": "This is the second touch on the same underlying challenge — the customer is now probing the precise terminology boundary of the DQ. The rep's response ('What was that? Sorry.' then 'Yeah. Yep.') does not actually engage with what the customer is asking; it's unclear if the rep even understood the question was about whether their home specifically counts. This also surfaces a genuine content gap: the schema and script give the rep no clear terminology distinction between 'trailer' and 'manufactured home' to work from."
+      "stewart_read": "Customer directly challenges the DQ rationale; rep responds with a plausible but unverified technical explanation about panel weight and wall damage."
     },
     {
       "ts": "01:50",
-      "quote": "I will say, currently, we are trying to work on another panel that we can use for manufactured homes. So I can keep your number, and then if we figure that out, then I could totally give you a callback.",
+      "quote": "But I will say, currently, we are trying to work on another panel that we can use for manufactured homes. So I can keep your number, and then if we figure that out, then I could totally give you a callback.",
       "classification": "unanchored_soft_exit",
-      "stewart_read": "This is the only next-step offered on the call, and it has no timeframe, no owned action, and no confirmation handshake. It functions as a soft, indefinite placeholder rather than a real commitment."
+      "stewart_read": "Rep offers a vague future callback with no specific timeframe, no confirmation the customer wants to be recontacted, and no owned next step."
+    },
+    {
+      "ts": "02:01",
+      "quote": "Okay. A trailer is considered a manufactured home. Right?",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer directly raises ambiguity about what counts as a manufactured home — a live opportunity to re-open the qualification conversation — and the rep does not engage with the substance of the question."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 27,
-    "verified": 27,
+    "checked": 22,
+    "verified": 22,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

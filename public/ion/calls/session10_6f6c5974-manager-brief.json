@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION10_6f6c5974",
   "rep_name": "Bucky",
-  "trajectory_summary": "This is a short, low-friction call: the customer was cooperative from the start, gave a clear qualifying reason (pool heater on solar), and the rep completed verify, bill collection, and scheduling with a booked day and time. The one drag point was slow, repetitive guidance during the bill-history retrieval rather than a faster verbal-readback pivot, and the rep never used the customer's stated interest (pool heater) or her spoken bill/usage figure as anchors going into the close.",
-  "shape": "mixed",
+  "trajectory_summary": "The call opens with an unusually cooperative, even enthusiastic customer who hands the rep a strong reason (pool heater on solar) and a real bill number, but the rep runs the script beats mechanically and never converts either into leverage. Energy stays flat to slightly positive throughout because the customer supplies most of the momentum herself; the rep neither builds nor damages it, and closes on a booked time without any callback to what she cares about.",
+  "shape": "stagnant",
   "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": false,
-    "ts": "06:40",
-    "quote": "So I got you down for 09:30, on the twenty third, Monday.",
-    "reasoning": "A specific day (Monday the 23rd) and time (09:30) were confirmed on the call, but the co-owner husband identified at 00:44 was never invited or confirmed for the appointment."
+    "ts": "06:37",
+    "quote": "Okay. So I got you down for 09:30,\non the twenty third, Monday.",
+    "reasoning": "A specific day and time were agreed by both sides, but the husband identified as co-owner at 00:44 was never invited onto or confirmed for the appointment.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,17 +29,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer states an annual kWh figure, but the rep responds by redirecting to the need for a photo rather than acknowledging the number or using it to build any emotional or usage-based case; the flip should have gone right at 03:54 ('Okay. But sorry. We just we need a picture...') where the rep could have first affirmed the number before redirecting."
+    "reasoning": "Bill amount ($2,360, likely annual/period figure) was captured at 03:50 but the rep responded only with 'Okay. But sorry. We just we need a picture of the this last year's kilowatt history usage' — pure logistics, no emotional flip. The flip should have landed right there or at 04:53 before pivoting to scheduling."
   },
   "bill_document_audit": {
     "asked": true,
     "ask_ts": "02:01",
     "ask_quote": "If I text you, could you log in and just text a picture of your kilowatt usage history from this last year?",
     "result": "received_on_call",
-    "method": "photo",
-    "result_ts": "04:53",
-    "result_quote": "Yeah. I guess it's the last two shows the year. Yeah. Okay. Yeah.",
-    "reasoning": "The rep asked for a photo of the online kWh usage history and, after some navigation friction, the customer sent the pictures during the call, which the rep confirmed as sufficient."
+    "method": "text",
+    "result_ts": "04:40",
+    "result_quote": "Yeah. That's perfect.",
+    "reasoning": "The rep asked for a photo of the usage history at 02:01 and the customer sent pictures during the call; the rep confirmed receipt at 04:40."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -41,17 +50,17 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer gives a specific, usage-driving reason (running a pool heater on solar) but the rep never references it again — not when discussing sizing, not when booking the appointment, and not in the button-up."
+    "reasoning": "The pool-heater-on-solar reason was captured at 00:58 but never referenced again, including at the close where it should have anchored the scheduling pitch or the closing line."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "end_ts": "00:16",
-      "quote": "Hey, Kim. This is Bucky with Ion Solar. I got a request you're looking at solar for your home.",
+      "end_ts": "00:12",
+      "quote": "This is Bucky with Ion Solar.",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. I'm good. How are you?",
+      "customer_quote": "Yeah.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -60,20 +69,20 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "00:54",
-      "end_ts": "01:08",
-      "quote": "What interested you in solar? Saving some money?",
+      "end_ts": "00:58",
+      "quote": "What interested you in solar?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. We wanna get a pool heater, but we wanted to to, run it off solar.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:19",
-      "end_ts": "00:36",
-      "quote": "Are you still at 8325 Reg Reginald PO? ... is it a single family home?",
+      "end_ts": "00:26",
+      "quote": "Are you still at 8325",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. I'm there.",
       "resistance_reason": "",
@@ -89,8 +98,8 @@
       "customer_response": "cooperative",
       "customer_quote": "Sorry. Just one other person, my husband.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
@@ -111,7 +120,7 @@
       "end_ts": "01:41",
       "quote": "Sorry. What utility company are you with?",
       "customer_response": "cooperative",
-      "customer_quote": "Dominion Power.",
+      "customer_quote": "Dominion Power. Oh, Dominion. Okay.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -119,21 +128,21 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "02:01",
-      "end_ts": "03:50",
-      "quote": "If I text you, could you log in and just text a picture of your kilowatt usage history from this last year?",
+      "ts": "03:32",
+      "end_ts": "03:54",
+      "quote": "So you just found one month?",
       "customer_response": "cooperative",
       "customer_quote": "It says it's two thousand three sixty.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "persisted",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:47",
-      "end_ts": "01:50",
-      "quote": "Oh, yeah. Sorry. Do you have a credit score over 6 70?",
+      "end_ts": "01:51",
+      "quote": "Do you have a credit score over 6 70?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
@@ -167,23 +176,23 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "01:56",
-      "end_ts": "04:53",
-      "quote": "Do you get your power bill in the mail or online?",
+      "ts": "02:01",
+      "end_ts": "04:40",
+      "quote": "If I text you, could you log in and just text a picture of your kilowatt usage history from this last year?",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. I guess it's the last two shows the year. Yeah. Okay. Yeah.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "persisted",
+      "customer_quote": "Yeah. Let me log in.",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "05:59",
-      "end_ts": "06:44",
-      "quote": "We can do how's Monday? ... 09:30, twelve, 02:30, five, and 07:30.",
+      "end_ts": "06:37",
+      "quote": "We can do how's Monday?",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. That'd be good.",
+      "customer_quote": "Yeah.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -193,61 +202,71 @@
       "status": "asked",
       "ts": "06:37",
       "end_ts": "06:48",
-      "quote": "K. I'll get working on your design, and then we'll see you on Monday.",
+      "quote": "Okay. So I got you down for 09:30,",
       "customer_response": "cooperative",
       "customer_quote": "Okay. Sounds good.",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "moved_on",
+      "result": "partial",
+      "parts_done": [
+        "recap"
+      ],
+      "parts_score": "1/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "co-owner identified but excluded from appointment",
-    "ts": "00:44",
-    "quote": "Sorry. Just one other person, my husband.",
-    "why": "The husband is confirmed as co-owner in the first minute but is never invited to the Monday appointment — this is the exact structural-vulnerability pattern the schema flags under protocols.spouse_decision, and it's the single highest-leverage fix since it directly affects whether this booked sit survives to a close."
+    "topic": "Reason capture without reuse",
+    "ts": "00:58",
+    "quote": "Yeah. We wanna get a pool heater, but we wanted to to, run it off solar.",
+    "why": "This is the single clearest, most usable lever on the call — a specific unprompted 'why' — and it's never spoken again, including at the close. Reinforcing it would have made the appointment feel purpose-built instead of generic."
   },
   "key_moments": [
     {
-      "ts": "00:44",
-      "quote": "Sorry. Just one other person, my husband.",
-      "classification": "spouse_handling",
-      "stewart_read": "The husband is identified as a co-owner on the title within the first minute, but he is never mentioned again — not at scheduling, not in the button-up. The appointment is booked with only Kim confirmed."
+      "ts": "00:58",
+      "quote": "Yeah. We wanna get a pool heater, but we wanted to to, run it off solar.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Pool heater plus wanting it solar-powered is a strong buying signal and load driver; rep did not flag it for the design or reference it again."
     },
     {
       "ts": "01:08",
       "quote": "off solar. And do you guys have, like, like, generators for the solar panels?",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer's stated reason for solar (running a pool heater) plus an unprompted question about battery backup are two distinct signals of higher usage and specific product interest that the rep could have anchored on when setting up the appointment's value."
-    },
-    {
-      "ts": "01:14",
-      "quote": "We have batteries that we might have generators. You can talk to the so I'm basically, I'm just building design, so you talk to the specialist.",
       "classification": "setter_scope_creep",
-      "stewart_read": "The rep starts to answer the battery/generator question directly before catching himself and redirecting to the specialist — a partial scope-creep moment that self-corrects mid-sentence."
+      "stewart_read": "Rep partially answered a battery/generator product question before redirecting to the specialist, blending scope creep with a correct redirect."
     },
     {
-      "ts": "03:26",
-      "quote": "Not really sure how to find the yearly, but I found, like, just month.",
+      "ts": "03:50",
+      "quote": "It says it's two thousand three sixty.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "This is portal-navigation friction on an at-home customer, not the mobile/away-from-home shopping_customer_protocol scenario. The rep repeats generic navigational guidance ('filter system') rather than pivoting to a verbal read-back of the monthly usage number the customer already found, which would have unblocked the call faster."
+      "stewart_read": "Bill number was captured but the rep moved straight into needing the photo without acknowledging the size of that number or reacting to it."
+    },
+    {
+      "ts": "04:53",
+      "quote": "we got everything we need. Now we just need to get you on the schedule so we can get,",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "This is the natural spot to reinforce the pool-heater reason and bill pain before pivoting to scheduling logistics; rep skips straight to logistics."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 46,
-    "verified": 43,
-    "fuzzy": 1,
-    "wrong_ts": 2,
+    "checked": 47,
+    "verified": 47,
+    "fuzzy": 0,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

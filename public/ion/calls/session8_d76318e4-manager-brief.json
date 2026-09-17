@@ -1,7 +1,7 @@
 {
   "call_id": "SESSION8_d76318e4",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens cold with a legitimacy challenge, resolves quickly, and then builds into a long, genuinely warm rapport stretch driven mostly by the customer (ministry background, health disclosure, scripture talk). The rep capitalizes on the warmth to lock a date and time but leaves the bill-flip, cross-sell, and vulnerability-acknowledgment opportunities unused, and drifts into scope creep on the own-vs-lease question at the end.",
+  "trajectory_summary": "The call opens with a legitimacy check that the rep resolves cleanly, moves through verify smoothly with a cooperative, high-credit, high-bill customer, then stalls for roughly ten minutes on bill-photo logistics before landing the appointment. Energy is warm and personal by the end — the customer shares vulnerability and volunteers helpful appointment logistics — but the rep lets a scope-creep moment (lease vs. own) creep in right before close and never runs a full button-up.",
   "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
@@ -9,18 +9,27 @@
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": false,
-    "ts": "17:53",
-    "quote": "So Monday the twenty third at 2PM.",
-    "reasoning": "The rep confirms a specific day and time near the end of the call, and the customer affirms it with 'Yep.' The wife (co-owner on title, per 01:06 'My wife and I') is referenced throughout the call as present/helping but is never explicitly confirmed to attend the actual appointment."
+    "ts": "15:30",
+    "quote": "Alright. So we got you for March 23 at 2PM.",
+    "reasoning": "A specific day and time were agreed and confirmed by the customer ('Yeah.'); however the wife, identified as co-owner at 01:06, was never explicitly confirmed to join the appointment call.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "01:51",
-    "bill_quote": "Well, like, last month, it was $1.65. This month, it was $1.67.",
+    "bill_quote": "Well, like, last month, it was $1.65.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the bill figure but moved directly to the roof question without acknowledging or reflecting the number back, let alone using it to build urgency or emotional alignment against the utility."
+    "reasoning": "The bill ($1.65/$1.67 shorthand for a high monthly amount) is captured at 01:51 but never referenced again; the flip should have landed right after capture or at button-up (e.g., near 16:19) to tie the appointment to the bill pain."
   },
   "bill_document_audit": {
     "asked": true,
@@ -28,9 +37,9 @@
     "ask_quote": "If I text you, could you text a picture of that so we can know how many panels you'll need?",
     "result": "received_on_call",
     "method": "photo",
-    "result_ts": "14:01",
-    "result_quote": "You should have received it now.",
-    "reasoning": "Rep asked for a text photo of the bill's usage graph, and after some friction with a PDF/link not working, the customer's wife eventually sent a usable screenshot which the rep confirmed receiving at 14:04 ('Okay. Yeah. This is perfect.')."
+    "result_ts": "14:04",
+    "result_quote": "Okay. Yeah. This is perfect.",
+    "reasoning": "The rep asked for a photo of the bill at 03:25; the customer later sent it and the rep confirmed receipt on the call at 14:04."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -41,18 +50,18 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer clearly tied his interest to utility bill pain, but the rep never circled back to reinforce this reason later in the call, including at the appointment-set stage."
+    "reasoning": "Customer's stated reason ('Yes. With the utility bills as they are.' at 01:29) is captured but never reinforced when setting or confirming the appointment."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "end_ts": "00:52",
+      "end_ts": "00:13",
       "quote": "Hey, Terry. This is Bucky with ION reaching out about the solar for me filled out online.",
-      "customer_response": "resistant",
-      "customer_quote": "curious how you got my number and stuff.",
-      "resistance_reason": "trust",
+      "customer_response": "cooperative",
+      "customer_quote": "I'm good. I'm good.",
+      "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
     },
@@ -60,22 +69,22 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "01:25",
-      "end_ts": "01:29",
+      "end_ts": "01:33",
       "quote": "What's your interest in solar? Saving some money?",
       "customer_response": "cooperative",
       "customer_quote": "Yes. With the utility bills as they are.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:22",
-      "end_ts": "01:01",
-      "quote": "Is it a single family home?",
+      "end_ts": "00:27",
+      "quote": "Okay. You at 14667",
       "customer_response": "cooperative",
-      "customer_quote": "It is.",
+      "customer_quote": "Yeah. And who who is this? Bucky with Ion Solar.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -83,11 +92,11 @@
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "01:02",
-      "end_ts": "01:06",
+      "ts": "01:06",
+      "end_ts": "01:10",
       "quote": "Is there anybody else on the title but you?",
       "customer_response": "cooperative",
-      "customer_quote": "My wife and I.",
+      "customer_quote": "My wife and I. Okay.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -96,7 +105,7 @@
       "section": "roof",
       "status": "asked",
       "ts": "02:03",
-      "end_ts": "02:07",
+      "end_ts": "02:10",
       "quote": "And then you know what kind of roof you got?",
       "customer_response": "cooperative",
       "customer_quote": "A shingle roof.",
@@ -108,7 +117,7 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "01:33",
-      "end_ts": "01:39",
+      "end_ts": "01:41",
       "quote": "What utility company are you with?",
       "customer_response": "cooperative",
       "customer_quote": "AEP.",
@@ -123,9 +132,9 @@
       "end_ts": "01:58",
       "quote": "You know, depending on a monthly average?",
       "customer_response": "cooperative",
-      "customer_quote": "Well, like, last month, it was $1.65. This month, it was $1.67.",
+      "customer_quote": "Well, like, last month, it was $1.65.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -133,7 +142,7 @@
       "status": "asked",
       "ts": "02:55",
       "end_ts": "03:06",
-      "quote": "do you have a credit score over 670?",
+      "quote": "it's, do you have a credit score over 670?",
       "customer_response": "cooperative",
       "customer_quote": "Like, 780.",
       "resistance_reason": "",
@@ -156,12 +165,12 @@
       "section": "prior_design",
       "status": "asked",
       "ts": "02:14",
-      "end_ts": "02:43",
+      "end_ts": "02:26",
       "quote": "Have you seen a solar for your home or",
       "customer_response": "cooperative",
-      "customer_quote": "I am talking to another guy that, somebody in my church had already used their company.",
-      "resistance_reason": "already_have_quote",
-      "rep_followup": "moved_on",
+      "customer_quote": "no? No. I've I've not seen one yet. I",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -171,19 +180,19 @@
       "end_ts": "14:04",
       "quote": "If I text you, could you text a picture of that so we can know how many panels you'll need?",
       "customer_response": "cooperative",
-      "customer_quote": "You should have received it now.",
-      "resistance_reason": "dont_have_it",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "15:30",
-      "end_ts": "17:57",
-      "quote": "Alright. So we got you for March 23 at 2PM.",
+      "ts": "15:12",
+      "end_ts": "15:30",
+      "quote": "Okay. So we got Monday. You wanna do early morning or afternoon?",
       "customer_response": "cooperative",
-      "customer_quote": "Yep.",
+      "customer_quote": "That'd be perfect.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -191,19 +200,23 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "17:53",
-      "end_ts": "18:31",
-      "quote": "So Monday the twenty third at 2PM.",
+      "ts": "15:30",
+      "end_ts": "16:19",
+      "quote": "Alright. So we got you for March 23 at 2PM.",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah.",
+      "customer_quote": "Yep. Looking forward to it. Me too.",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "moved_on",
+      "result": "partial",
+      "parts_done": [
+        "recap"
+      ],
+      "parts_score": "1/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:43",
+      "ts": "00:40",
       "quote": "curious how you got my number and stuff.",
       "type": "trust_or_scam",
       "rep_attempts": 1,
@@ -212,67 +225,68 @@
       ],
       "resolved": true,
       "resolution_ts": "00:52",
-      "reasoning": "Single simple explanation was enough — customer immediately says 'Okay. Yeah. Go ahead.' and proceeds cooperatively."
-    },
-    {
-      "ts": "02:14",
-      "quote": "I am talking to another guy that, somebody in my church had already used their company.",
-      "type": "already_have_quote_or_system",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "about it. Just see what you can get, what options you have?"
+      "reasoning": "Single honest, specific answer resolved the suspicion immediately; customer waved the rep forward.",
+      "blocked_section": "intro_legitimacy",
+      "attempt_moves": [
+        "reassure"
       ],
-      "resolved": true,
-      "resolution_ts": "02:53",
-      "reasoning": "Rep validates the comparison-shopping behavior once and the customer agrees ('That's smart... the best deal gets the cookies'), no further pushback."
+      "resolved_by_tape": true,
+      "next_event": "co_owner@01:06",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "scope creep into unverified product/liability claims",
-    "ts": "16:52",
-    "quote": "if you own it, you have any problems, it's on you. But if you lease it and there's problems, we can take care of it.",
-    "why": "This is the most consequential moment on the call: the rep makes a specific, unverified representation about ownership liability vs. lease coverage in response to a direct customer question, risking a factual correction later and reinforcing a habit of answering closer-tier questions instead of redirecting."
+    "topic": "Scope creep on own-vs-lease financial question",
+    "ts": "16:54",
+    "quote": "personally, like, if Yeah. Where I'm at, I would do the the bill swap program because you're already paying a bill anyway.",
+    "why": "Rep gave a personal financial recommendation on a closer-tier topic instead of redirecting; this is exactly the setter_scope_discipline failure mode the schema flags as highest priority."
   },
   "key_moments": [
     {
-      "ts": "00:43",
+      "ts": "00:40",
       "quote": "curious how you got my number and stuff.",
-      "classification": "trust_or_scam",
-      "stewart_read": "Rep's answer ('it says you filled out a form online') is thin but sufficient — customer moves on immediately. Strategic read: brevity worked here because the customer wasn't deeply hostile, just curious."
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "Customer's suspicion surfaces almost immediately after the intro; the intro itself (00:07) never referenced the form or state/Tesla framing before this came up, leaving a legitimacy gap the customer had to force closed himself."
     },
     {
       "ts": "01:51",
-      "quote": "Well, like, last month, it was $1.65. This month, it was $1.67.",
+      "quote": "Well, like, last month, it was $1.65.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer hands over a specific bill figure (likely $165/$167, transcribed oddly) unprompted with detail across two months, but the rep does not reflect it back or use it to build urgency — moves straight to the roof question."
+      "stewart_read": "A high bill (~$165+/month, customer says $1.65/$1.67 shorthand) is captured but the rep moves straight to the next verify question with no acknowledgment or flip."
     },
     {
-      "ts": "08:19",
-      "quote": "and I I had some health issues. So I I retired.",
-      "classification": "empathy_miss",
-      "stewart_read": "Customer discloses a health-driven retirement, a clear vulnerability trust gift per schema. Rep gives no acknowledgment and the conversation drifts to cremation theology instead."
+      "ts": "10:35",
+      "quote": "I need I just need a picture because I don't have an account. I can't see it.",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "Ten minutes elapse (03:25 to 14:04) chasing a working photo/link path; the schema's own time budget calls for pivoting to verbal readback within 2 minutes of friction, which never happens here."
     },
     {
-      "ts": "15:18",
-      "quote": "I have ulcerative colitis, so I'd be a little better in in the after lunch than I do early.",
+      "ts": "07:56",
+      "quote": "We've been in the ministry for almost forty years.",
       "classification": "empathy_miss",
-      "stewart_read": "Second vulnerability disclosure in the same call, again used only to lock scheduling logistics ('Yeah. You wanna do 2PM?') with no acknowledgment of the health condition itself."
+      "stewart_read": "Customer discloses forty years of ministry work and, moments later, a health-driven retirement — a trust gift the rep engages with personally (shared faith) but never bridges back to solar value."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 55,
-    "verified": 48,
-    "fuzzy": 2,
-    "wrong_ts": 5,
+    "checked": 53,
+    "verified": 52,
+    "fuzzy": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

@@ -1,9 +1,9 @@
 {
   "call_id": "20000200569",
   "rep_name": "Parker",
-  "trajectory_summary": "The call moves through the verify sequence (utility, tax credit, bill amount, roof, homeowner) in a fairly mechanical but complete fashion despite a customer who is difficult to follow throughout. It ends abruptly when the customer has to leave before the bill can be collected, and the rep secures only a vague callback rather than a locked day/time.",
-  "shape": "mixed",
-  "outcome_dispute": "v1 outcome is unknown; based on the transcript this is clearly a callback, not a booked or tentative appointment — no day or time was specified, only 'I can call you tomorrow.'",
+  "trajectory_summary": "The call drifts through a loosely-run verify section with a confused but cooperative customer, hits a real bill-pain anchor ($600) and a genuine battery-interest signal, but neither is built on before the call dissolves into a vague 'I'll call you tomorrow' close. Energy leaks at the end when the customer disengages to run an errand and the rep doesn't lock a specific callback time.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "V1 tag is unknown; this should be scored callback, not booked/tentative — no day or time was set for the follow-up call.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "05:14",
     "quote": "Okay. I can call you tomorrow.",
-    "reasoning": "No specific day-and-time appointment was locked; the rep only commits to calling back 'tomorrow' with no time specified, which per the schema definitions is a callback, not a booked or tentative appointment."
+    "reasoning": "Rep commits to calling back but no specific time is stated and no button-up elements (time block, no-driving instruction, is-that-fair handshake, text promise) are present — this is a bare callback, not a booked or tentative appointment.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,53 +28,53 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep reacts with 'Wow. That's a lot.' at 03:08 but pivots immediately to a fact-check question about home type rather than using the $600 figure as leverage or a reason to act; the flip should have landed right after the reaction, e.g., tying the bill directly into why the appointment matters."
+    "reasoning": "Rep captured the $600 bill at 03:04 but responded only with 'Wow. That's a lot.' at 03:08 — the flip should have gone here, tying the $600 to what solar replaces rather than just acknowledging the number."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "04:04",
-    "ask_quote": "the last thing we need from you, Bernard, is what we do to make sure your design is accurate is we take a look at your PG and E bill so we can make sure it's specific to your home.",
+    "ask_ts": "04:02",
+    "ask_quote": "we take a look at your PG and E bill so we can make sure it's specific to your home.",
     "result": "promised_later",
     "method": "other",
-    "result_ts": "05:14",
-    "result_quote": "Okay. I can call you tomorrow.",
-    "reasoning": "Rep asked Bernard to grab his bill copy at 04:54 ('Would would you grab that for me real quick?'), which precedes Bernard's exit signal at 05:01 about needing to leave for his license appointment; the bill was not retrieved on the call, and the rep deferred collection to a follow-up call the next day."
+    "result_ts": "05:01",
+    "result_quote": "Okay.",
+    "reasoning": "The rep asked for the utility bill and the customer agreed to grab it but did not send it during the call; the call was rescheduled for the next day."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": true,
-    "reason_ts": "00:34",
-    "reason_quote": "shop broke. It's all steel. You know? So",
-    "reason_used": "no",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' — Bernard volunteers a fragmentary reason about his shop unprompted. The statement itself is genuinely ambiguous and left unclarified in the transcript (unclear if it refers to power needs, structural issues, or something else), and the rep never circles back to use or clarify it later in the call."
+    "reasoning": "The rep confirmed prior interest but did not ask why the customer was interested in solar, so no reason was elicited for use."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "end_ts": "00:15",
-      "quote": "Hey. This is Parker. I'm with Ion. I was just reaching out because we had a request here that you were looking at solar for the home.",
+      "end_ts": "00:06",
+      "quote": "This is Parker. I'm with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Okay.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "asked",
-      "ts": "00:17",
-      "end_ts": "00:38",
-      "quote": "Do you remember looking at solar?",
-      "customer_response": "cooperative",
-      "customer_quote": "shop broke. It's all steel. You know? So",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
@@ -96,12 +104,12 @@
       "section": "roof",
       "status": "asked",
       "ts": "03:35",
-      "end_ts": "03:53",
-      "quote": "Do you know how old the roof is by chance?",
+      "end_ts": "03:57",
+      "quote": "It looks like an asphalt shingle roof.",
       "customer_response": "cooperative",
       "customer_quote": "No. No. I've had.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "moved_on",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "partial"
     },
     {
@@ -111,7 +119,7 @@
       "end_ts": "00:52",
       "quote": "what electric company you're working with?",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. PGNE.",
+      "customer_quote": "PGNE.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -121,7 +129,7 @@
       "status": "asked",
       "ts": "02:11",
       "end_ts": "03:07",
-      "quote": "how much are you normally paying with p PG and E?",
+      "quote": "And then how much are you normally paying with p PG and E?",
       "customer_response": "cooperative",
       "customer_quote": "It's almost $600.",
       "resistance_reason": "",
@@ -131,9 +139,9 @@
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "00:53",
-      "end_ts": "01:19",
-      "quote": "You just need to be paying income tax and have a credit score above 650.",
+      "ts": "01:03",
+      "end_ts": "01:20",
+      "quote": "have a credit score above 650.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
@@ -154,111 +162,128 @@
     },
     {
       "section": "prior_design",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "00:17",
+      "end_ts": "00:22",
+      "quote": "Do you remember looking at solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "04:04",
+      "ts": "04:02",
       "end_ts": "05:01",
       "quote": "we take a look at your PG and E bill so we can make sure it's specific to your home.",
-      "customer_response": "deflected",
-      "customer_quote": "Yeah. I gotta save them all.",
-      "resistance_reason": "timing",
+      "customer_response": "cooperative",
+      "customer_quote": "I gotta save them all.",
+      "resistance_reason": "dont_have_it",
       "rep_followup": "alternative_offered",
       "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "05:09",
+      "ts": "05:12",
       "end_ts": "05:17",
-      "quote": "I could call you another day.",
+      "quote": "I can call you tomorrow.",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. I, that would be better.",
-      "resistance_reason": "timing",
+      "customer_quote": "Okay.",
+      "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "05:12",
+      "end_ts": "05:25",
+      "quote": "I can call you tomorrow.",
+      "customer_response": "cooperative",
+      "customer_quote": "Okay.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "reconfirm"
+      ],
+      "parts_score": "1/4"
     }
   ],
   "objections": [
     {
-      "ts": "05:01",
-      "quote": "I'm, I'm getting ready to go and get my new license.",
-      "type": "timing_or_callback",
+      "ts": "04:54",
+      "quote": "Yeah. I gotta save them all.",
+      "type": "other",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Okay. I could call you another day."
+        "Would would you grab that for me real quick?"
       ],
-      "resolved": true,
-      "resolution_ts": "05:14",
-      "reasoning": "Customer needs to leave for an errand; rep accepts and offers a next-day callback without pushing for a specific time, and Bernard agrees that's better."
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer signals the bill isn't readily on hand; rep makes one direct ask and then concedes to a vague callback when the customer says he's leaving, without offering the text/email alternative path.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "restate"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@05:12",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored callback / no locked time",
+    "topic": "Unanchored callback close",
     "ts": "05:14",
     "quote": "Okay. I can call you tomorrow.",
-    "why": "The call ends without a specific day and time, which the schema flags as predictive of no-show/no-follow-through risk (button_up.is_that_fair_handshake). This is the single biggest structural gap on this call — everything else (bill capture, qualifiers) was in motion but the exit left no committed next step."
+    "why": "No specific time was locked, no button-up handshake or text-follow-up promise — this is the single biggest procedural risk to actually reconnecting with this lead."
   },
   "key_moments": [
     {
-      "ts": "00:34",
-      "quote": "shop broke. It's all steel. You know? So",
-      "classification": "knowledge_gap",
-      "stewart_read": "Bernard's stated reason for interest is genuinely ambiguous — 'shop broke, it's all steel' is left unclarified. It's unclear whether he means the shop's electrical system failed, he wants solar to power the steel shop, or something else. The rep does not probe to clarify."
-    },
-    {
-      "ts": "01:03",
-      "quote": "You just need to be paying income tax and have a credit score above 650.",
-      "classification": "other",
-      "stewart_read": "Rep states 650 as the credit threshold, which matches a schema drift also seen in another call (schema states 670). Additionally, Bernard's low-confidence, hard-to-parse answers throughout the call raise the general risk flagged in the schema's operator note: a customer's self-reported ability to meet a threshold may not match what a credit pull would show."
-    },
-    {
-      "ts": "01:50",
-      "quote": "Yeah. We have battery options that can go with solar.",
+      "ts": "01:35",
+      "quote": "Will there, store the electricity in the shop,",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Bernard directly asks about storing electricity for his shop, an unsolicited question about system capability that signals genuine engagement. The rep answers correctly and briefly but does not expand or anchor this as a value driver later in the call."
+      "stewart_read": "Customer proactively asks about battery storage for his shop — an unprompted cross-sell/enthusiasm signal."
+    },
+    {
+      "ts": "00:34",
+      "quote": "shop broke. It's all steel. You know?",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer has a separate steel shop building with its own electric usage — an unusual property detail relevant to system sizing and battery interest."
     },
     {
       "ts": "03:07",
       "quote": "$600?",
-      "classification": "bill_anchor",
-      "stewart_read": "Rep captures the $600 bill and reacts ('Wow. That's a lot.') but does not flip it into a reason to act or align it against the utility — the acknowledgment is followed by a fact-check question about the home type, not an emotional reframe."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Rep captured the $600 bill but responded with a flat acknowledgment instead of flipping it into emotional leverage against the utility."
+    },
+    {
+      "ts": "04:51",
+      "quote": "Okay. Do you have that copy available?",
+      "classification": "protocol_violation",
+      "stewart_read": "When customer signaled the bill wasn't immediately accessible, rep should have pivoted to a text/email path per the branching rules instead of just asking again."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 41,
-    "verified": 41,
+    "checked": 47,
+    "verified": 47,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

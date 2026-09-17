@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION18_71955680",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens cooperatively and reaches a tentative Monday 3PM phone appointment by 04:22, but the rep then reopens the unresolved roof objection at 05:00 by asking if the customer still wants the call, which walks the customer back from agreeing to talk it through with a specialist to declining altogether. The call ends ambiguously with the rep asking 'Are we canceling?' rather than a clean booked outcome.",
+  "trajectory_summary": "The call never recovers from the roof-mount objection raised at 00:57 — every subsequent beat (credit qualifier, panel pitch, appointment set) is built on a foundation the rep never actually secured. The 'booked' appointment at 04:17 unravels by 05:47 when the rep himself tests the constraint and the customer declines, ending the call on a probable cancellation.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The call reaches a specific day/time appointment at 04:17-04:22 ('if we call you on Monday at... three? ... Okay.') which would normally count as booked, but the rep's own line at 05:00 ('you still wanna get called on Monday, though?') reopens and effectively dissolves that booking, ending on 'Are we canceling?' with no clear resumption. This should be read as no_appointment, not booked — the rep talked the customer out of the appointment they had already secured.",
+  "outcome_dispute": "V1 may have tagged this booked/tentative off the 04:17 time exchange, but the call ends with the rep asking 'Are we canceling?' after the customer flatly rejects the roof-mount premise — this is functionally a lost appointment, not a held one.",
   "observed_outcome": {
     "outcome": "no_appointment",
-    "appointment_channel": "phone",
+    "appointment_channel": null,
     "datetime_captured": true,
-    "co_owner_confirmed": false,
-    "ts": "05:54",
-    "quote": "Okay. Well, you have a good day. Yes, sir. You have a great day. Are we canceling?",
-    "reasoning": "A day/time (Monday, 3PM) was locked at 04:17-04:22, but the rep's own line at 05:00 reopened the appointment around the unresolved roof objection, the customer firmly declined to be called if roof panels were the plan ('No. I would not.' at 05:47), and the call ends with the rep unsure whether the appointment stands ('Are we canceling?'). This is best read as no_appointment despite an earlier tentative lock, since the rep dissolved it before the call ended."
+    "co_owner_confirmed": null,
+    "ts": "05:49",
+    "quote": "Okay. Then I don't because I just I know that he won't do anything but roof.",
+    "reasoning": "A Monday 3PM time was verbally agreed at 04:17, but the rep's own closing exchange shows the premise collapsed — customer confirms he won't accept roof-mount and the rep ends with 'Are we canceling?', leaving no real next step standing.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Customer explicitly states he just moved in and doesn't know his bill ('I I don't know. We just moved in to the house.' at 00:42-00:44), and the rep correctly does not press further since there is no bill history to capture yet."
+    "reasoning": "No numeric monthly bill or kWh figure was captured; the rep acknowledged the customer had just moved rather than capturing an amount."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "Because the customer just moved in and has no utility bill history, the rep explicitly waives the requirement: 'because you don't have a utility bill or anything like that. I can schedule you to talk to a specialist' (02:11), so bill collection is never raised as a live ask on this call."
+    "reasoning": "The rep referenced lack of a utility bill but never asked the customer to send or read a bill."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +49,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asks what interested the customer in solar; the call moves straight from intro into address/title/utility verify questions without the interest_question beat."
+    "reasoning": "The rep never asked what motivated the customer; although the customer later volunteered interest in non-roof options, it was not in response to an interest question."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:10",
-      "quote": "Hey. This is Bucky with ION. I'm reaching out about the solar form that goes online. How are you doing?",
+      "end_ts": "00:05",
+      "quote": "This is Bucky with ION.",
       "customer_response": "cooperative",
       "customer_quote": "Doing fine.",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -65,80 +73,80 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:16",
-      "end_ts": "00:20",
-      "quote": "Sure. Alright. You at 2122 Twinbridge Drive?",
+      "ts": "00:18",
+      "end_ts": "00:21",
+      "quote": "Twinbridge Drive?",
       "customer_response": "cooperative",
       "customer_quote": "Correct.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:21",
-      "end_ts": "00:27",
-      "quote": "Okay. And then this is a single family home. Is there anybody else on the title but you?",
+      "end_ts": "00:28",
+      "quote": "Is there anybody else on the title but you?",
       "customer_response": "cooperative",
       "customer_quote": "No.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "00:53",
-      "end_ts": "01:59",
+      "end_ts": "00:57",
       "quote": "Is your roof type a shingle?",
-      "customer_response": "resistant",
-      "customer_quote": "but I I don't want it on the roof.",
-      "resistance_reason": "other",
-      "rep_followup": "persisted",
-      "result": "partial"
+      "customer_response": "cooperative",
+      "customer_quote": "It is,",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "00:32",
-      "end_ts": "00:37",
+      "end_ts": "00:38",
       "quote": "What you what utility company are you with?",
       "customer_response": "cooperative",
       "customer_quote": "Duke.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "00:38",
+      "ts": "00:37",
       "end_ts": "00:44",
       "quote": "Duke, how much are you spending on a monthly average?",
-      "customer_response": "resistant",
+      "customer_response": "deflected",
       "customer_quote": "I I don't know. We just moved in to the house.",
       "resistance_reason": "dont_have_it",
       "rep_followup": "moved_on",
-      "result": "declined"
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "02:02",
-      "end_ts": "02:31",
-      "quote": "I just need to know if you have a credit score over 670.",
-      "customer_response": "resistant",
-      "customer_quote": "We do. But what does that have to do with what we're talking about?",
-      "resistance_reason": "other",
+      "end_ts": "02:27",
+      "quote": "all I need to know is if you have a credit score over 670,",
+      "customer_response": "cooperative",
+      "customer_quote": "We do.",
+      "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "military",
@@ -149,7 +157,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -161,7 +169,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -173,32 +181,37 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "04:13",
-      "end_ts": "04:22",
-      "quote": "if we call you on Monday at 12PM, is that okay? Oh, three? Let me look. Yeah. We can do three.",
+      "ts": "04:17",
+      "end_ts": "04:23",
+      "quote": "12PM, is that okay? Oh, three? Let me look. Yeah. We can do three.",
       "customer_response": "cooperative",
       "customer_quote": "Okay.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "05:00",
-      "end_ts": "05:54",
-      "quote": "you still wanna get called on Monday, though?",
-      "customer_response": "resistant",
-      "customer_quote": "Not if not if we're talking about putting them on the roof. No, sir.",
-      "resistance_reason": "other",
-      "rep_followup": "persisted",
-      "result": "declined"
+      "ts": "03:54",
+      "end_ts": "04:23",
+      "quote": "If we do a call, he just asks that you're not driving and you can access your email.",
+      "customer_response": "deflected",
+      "customer_quote": "Well, I'm driving right now. Oh oh, it doesn't have to be right now. It could be Monday.",
+      "resistance_reason": "timing",
+      "rep_followup": "alternative_offered",
+      "result": "partial",
+      "parts_done": [
+        "no_driving",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
@@ -208,71 +221,74 @@
       "type": "roof_or_home",
       "rep_attempts": 3,
       "attempt_quotes": [
-        "We only we only do solar on roofs.",
-        "But we have great panels, and they're fantastic, and they won't damage your roof.",
-        "We have, we have in house roofing, and we also have, warranties."
+        "they won't damage your roof.",
+        "We have, we have in house roofing, and we also have, warranties.",
+        "if we can come up with a good design, that makes sense, and it saves you the majority on your power bills, and it it's a great plan, would you consider roof or no?"
       ],
       "resolved": false,
       "resolution_ts": "05:47",
-      "reasoning": "The rep tried policy statement, product reassurance, and in-house roofing/warranty framing, but the customer never accepted panels-on-roof and ultimately said 'No. I would not.' at 05:47, ending the call unresolved."
-    },
-    {
-      "ts": "03:33",
-      "quote": "are you not the specialist?",
-      "type": "trust_or_scam",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "No. I'm the I'm the appointment scheduler, and I help with the design."
+      "reasoning": "Customer never accepts roof-mount despite three rep attempts across the call; the objection is finally tested directly at the end and confirmed unresolved, collapsing the appointment.",
+      "blocked_section": "roof",
+      "attempt_moves": [
+        "reassure",
+        "alternative_offered",
+        "question_back"
       ],
-      "resolved": true,
-      "resolution_ts": "03:40",
-      "reasoning": "Customer accepted the role clarification with 'Okay. Alright.' and proceeded, so this specific confusion was resolved even though it damaged confidence."
+      "resolved_by_tape": true,
+      "next_event": "tax_credit_qualifier@02:02",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "self-inflicted appointment collapse",
-    "ts": "05:00",
-    "quote": "you still wanna get called on Monday, though?",
-    "why": "The rep had already secured a specific day/time appointment at 04:17-04:22, then voluntarily reopened it by tying it to the unresolved roof objection instead of bridging to the specialist — directly causing the customer to withdraw and the call to end on 'Are we canceling?' This is the single most consequential and avoidable moment in the call."
+    "topic": "Objection never actually resolved before booking",
+    "ts": "00:57",
+    "quote": "but I I don't want it on the roof.",
+    "why": "The rep set an appointment on a premise (roof-mount panels) the customer explicitly rejected in minute one, and the call ends with the rep asking if they're canceling — the whole call's energy was spent building on sand."
   },
   "key_moments": [
     {
-      "ts": "01:02",
-      "quote": "We only we only do solar on roofs.",
+      "ts": "00:57",
+      "quote": "but I I don't want it on the roof.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "Customer's roof-aversion is a structural obstacle framed as a preference; rather than probing the source of the concern or reframing toward the value of solar first, the rep states a flat policy fact that hardens the customer's position immediately."
+      "stewart_read": "This is a roof_or_home objection about mounting, not durability, and the rep answers a different question ('they won't damage your roof') instead of flipping it or probing what alternative the customer wants."
     },
     {
-      "ts": "01:37",
-      "quote": "but I'm I know we have options. I'm just not sure what what we got. But but would that be an expense on my behalf to have to remove the panels and and reinstall them?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Rep visibly does not know the answer and, worse, appears to be asking the question back to himself or thinking aloud rather than using the universal escape hatch cleanly and confidently."
+      "ts": "01:41",
+      "quote": "would that be an expense on my behalf to have to remove the panels and and reinstall them?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep answers a removal/reinstall cost question with a guess instead of using the escape hatch to the specialist immediately."
     },
     {
       "ts": "02:27",
       "quote": "We do. But what does that have to do with what we're talking about?",
-      "classification": "setter_scope_creep",
-      "stewart_read": "The credit qualifier question landed as a non-sequitur to the customer because the rep never connected it back to scheduling logic; the customer had to ask why it was relevant."
+      "classification": "knowledge_gap",
+      "stewart_read": "The credit ask lands as a non-sequitur because the rep never framed why it matters, confusing an already-skeptical customer."
     },
     {
-      "ts": "03:33",
-      "quote": "are you not the specialist?",
+      "ts": "02:44",
+      "quote": "So we have, like they're all black. They're a Tesla.",
       "classification": "setter_scope_creep",
-      "stewart_read": "The customer had been detailing specific roof/product questions assuming he was talking to the person who could answer them; only at 03:35 does the rep clarify the role split, which is late and causes visible customer recalibration."
+      "stewart_read": "Unprompted panel-spec pitch (color, brand, durability) is closer-tier content the setter volunteers instead of redirecting."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 52,
-    "verified": 52,
+    "checked": 48,
+    "verified": 48,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

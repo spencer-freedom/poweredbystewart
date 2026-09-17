@@ -1,17 +1,26 @@
 {
   "call_id": "30000716243",
   "rep_name": "Parker",
-  "trajectory_summary": "The call moves from a distracted, mid-task customer to a booked appointment, carried mostly by the rep's persistence through a mid-call handoff to a second decision-maker. But the credit-qualifier exchange is muddled and never resolved, the bill amount was never captured because the customer just moved in, and Sam — one of two people on title — disappears from the call without any confirmation he'll be present Saturday.",
+  "trajectory_summary": "The call opens reactively — Sam derails the intro with a direct cost question the rep answers in full closer-tier detail — then stabilizes once the rep is handed to Fannie and runs a compressed but real verify sequence. It ends in a booked Saturday 10AM appointment, but two qualifiers (bill amount, credit score) were left genuinely unresolved rather than just skipped, weakening the set.",
   "shape": "mixed",
-  "outcome_dispute": "The appointment is booked with a day and time (Saturday at 10AM), so 'booked' is directionally right, but it is fragile: only Fannie is confirmed to attend, the credit qualifier was never resolved, and no bill or usage figure was captured because the household just moved in. This should be flagged as a conditional/fragile booking, not a clean win.",
+  "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
-    "co_owner_confirmed": null,
+    "co_owner_confirmed": false,
     "ts": "05:06",
-    "quote": "Okay. Perfect. Let me get you down for Saturday next Saturday at at 10AM,",
-    "reasoning": "A specific day and time (Saturday at 10AM) is locked in, and the rep frames it as the specialist dropping by ('we'll just plan to drop by'), indicating in-person. However, co-owner confirmation is uncertain: Sam was identified as a co-title-holder but disengaged from the call after 01:05 and was never re-confirmed for the appointment, so co_owner_confirmed is left null/unresolved rather than affirmed."
+    "quote": "Let me get you down for Saturday next Saturday at at 10AM,",
+    "reasoning": "A specific day (Saturday) and time (10AM) were agreed with Fannie, and the rep describes a specialist dropping by, indicating an in-person visit. Sam, the original co-owner, was never re-confirmed for the appointment after being handed off.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "identified_unconfirmed",
+      "credit": "asked"
+    },
+    "set_rule": "booked by time, tentative by rule: bill not_asked",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,17 +29,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer explicitly states they just moved into the home and have no bill history yet ('No. We just got here.'), so there was no bill figure available to capture or flip in this call."
+    "reasoning": "No dollar amount or kWh was captured on the call, so there was nothing for the rep to flip into an appointment justification."
   },
   "bill_document_audit": {
-    "asked": true,
-    "ask_ts": "02:13",
-    "ask_quote": "Do you know how much you're normally paying at the moment?",
-    "result": "declined",
+    "asked": false,
+    "ask_ts": "",
+    "ask_quote": null,
+    "result": "not_asked",
     "method": "none",
-    "result_ts": "02:16",
-    "result_quote": "No. We just got here.",
-    "reasoning": "The rep asked for the bill amount but the customer had no bill to provide since they just moved in; the rep did not follow up with a plan to collect it later (e.g., once utility service is established)."
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The rep never requested the customer's bill or asked them to send it during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,17 +50,17 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar; the closest moment was the customer's own unprompted question about cost/process at 00:37, which the rep answered functionally but did not treat as an interest-reason probe."
+    "reasoning": "The rep did not ask what specifically motivated the customer to look into solar; the customer asked procedural questions but did not volunteer a motivating reason in response to a why-question."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:08",
-      "end_ts": "00:16",
-      "quote": "Hey. This is Parker. I'm with Ion.",
+      "end_ts": "00:10",
+      "quote": "This is Parker. I'm with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "Yes. It is.",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -73,9 +82,9 @@
       "status": "asked",
       "ts": "01:26",
       "end_ts": "01:41",
-      "quote": "just to make sure I had the right address. Was it for the 1155 South In Harding Avenue?",
+      "quote": "just to make sure I had the right address.",
       "customer_response": "cooperative",
-      "customer_quote": "Yes. Okay. Perfect.",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -84,10 +93,10 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "01:41",
-      "end_ts": "01:47",
-      "quote": "And then I had here that it was Sam on the title of the home. Was it was it you and Sam?",
+      "end_ts": "01:51",
+      "quote": "And then I had here that it was Sam on the title of the home. Was it was it you and Sam? Or",
       "customer_response": "cooperative",
-      "customer_quote": "Both of us. Okay. Perfect.",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -97,9 +106,9 @@
       "status": "asked",
       "ts": "01:59",
       "end_ts": "02:06",
-      "quote": "it looks like your roof is just an asphalt single roof. Is that right?",
+      "quote": "looks like your roof is just an asphalt single roof. Is that right?",
       "customer_response": "cooperative",
-      "customer_quote": "Yes.",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -109,9 +118,9 @@
       "status": "asked",
       "ts": "02:08",
       "end_ts": "02:13",
-      "quote": "are you guys working with ComEd for your electric bill?",
+      "quote": "And then are you guys working with ComEd for your electric bill?",
       "customer_response": "cooperative",
-      "customer_quote": "Yes.",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -122,22 +131,22 @@
       "ts": "02:13",
       "end_ts": "02:19",
       "quote": "Do you know how much you're normally paying at the moment?",
-      "customer_response": "deflected",
+      "customer_response": "cooperative",
       "customer_quote": "No. We just got here.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "moved_on",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "03:03",
-      "end_ts": "04:07",
-      "quote": "you need to have a credit score above 650.",
-      "customer_response": "resistant",
-      "customer_quote": "They went on this out of his age.",
-      "resistance_reason": "other",
-      "rep_followup": "persisted",
+      "end_ts": "03:13",
+      "quote": "just to qualify for some of the programs, you need to have a credit score above 650.",
+      "customer_response": "cooperative",
+      "customer_quote": "I don't know.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
       "result": "partial"
     },
     {
@@ -179,86 +188,83 @@
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "04:19",
-      "end_ts": "05:06",
-      "quote": "Is there a day you think would be best for you guys?",
+      "ts": "05:06",
+      "end_ts": "05:11",
+      "quote": "Okay. Perfect. Let me get you down for Saturday next Saturday at at 10AM,",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. Yeah. Next week. Saturday would be better?",
+      "customer_quote": "That's fine.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
       "ts": "05:06",
-      "end_ts": "05:41",
-      "quote": "Let me get you down for Saturday next Saturday at at 10AM",
+      "end_ts": "05:11",
+      "quote": "Okay. Perfect. Let me get you down for Saturday next Saturday at at 10AM,",
       "customer_response": "cooperative",
-      "customer_quote": "Thank you.",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
-    }
-  ],
-  "objections": [
-    {
-      "ts": "03:47",
-      "quote": "Because I ain't think so. Because I know my dad got it. He didn't, he didn't have no credit score. They went on this out of his age.",
-      "type": "other",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Oh, I gotcha."
+      "result": "partial",
+      "parts_done": [
+        "recap"
       ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "Customer challenges the stated credit qualifier with a counter-example; rep acknowledges but never clarifies or corrects, and the topic is dropped without resolution."
+      "parts_score": "1/4"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "credit qualifier confusion left unresolved",
-    "ts": "03:47",
-    "quote": "Because I ain't think so. Because I know my dad got it. He didn't, he didn't have no credit score. They went on this out of his age.",
-    "why": "This is a direct customer challenge to a hard qualifying gate, and across four separate touches (03:03, 03:16, 03:47, 04:05) the rep never lands a clear, confident answer — leaving both the actual threshold and this specific counter-example unaddressed for the closer to untangle."
+    "topic": "Unresolved credit qualifier waved through",
+    "ts": "04:05",
+    "quote": "Yeah. As long as it's around $6.50, you should be good there.",
+    "why": "The rep never got a real answer on credit and then verbally green-lit the appointment anyway, passing an unverified qualifier straight to the closer with no flag."
   },
   "key_moments": [
     {
-      "ts": "00:37",
-      "quote": "Is this something that you have to pay upfront for, or how does this work?",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer volunteers an unsolicited question about mechanics/cost, indicating real curiosity despite being mid-task. This is a positive engagement signal the rep could have leaned into more (e.g., using it to probe interest reason) rather than only answering the literal question."
+      "ts": "00:47",
+      "quote": "So we we take care of everything up front for you. So there's nothing out of pocket for you.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep answers a financing-mechanism question in full before any qualification has happened, giving away closer-tier content unprompted."
     },
     {
-      "ts": "01:05",
-      "quote": "I gotta do some you could talk to my wife. Her name is Fannie Washington.",
-      "classification": "spouse_handling",
-      "stewart_read": "Sam hands off to Fannie mid-verify and never returns to the call. The rep continues the verify sequence with Fannie without ever re-engaging Sam or confirming he will attend Saturday's appointment."
+      "ts": "02:13",
+      "quote": "Awesome. Do you know how much you're normally paying at the moment?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Bill ask lands a legitimate 'we just moved in' non-answer, but rep never probes an alternative anchor (previous home's bill, expected usage)."
     },
     {
-      "ts": "03:47",
-      "quote": "Because I ain't think so. Because I know my dad got it. He didn't, he didn't have no credit score. They went on this out of his age.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The customer directly challenges the credit-score gate with a counter-example, and the rep's only response is 'Oh, I gotcha' — no clarification, no correction, no acknowledgment of how Ion's qualifier actually works versus the anecdote."
+      "ts": "03:13",
+      "quote": "I don't know about the the score of minus 6 something. He said, what's your score? Is it 650?",
+      "classification": "knowledge_gap_handling",
+      "stewart_read": "Rep garbles the follow-up on an unanswered credit qualifier instead of cleanly re-asking or logging it as unresolved."
     },
     {
-      "ts": "03:03",
-      "quote": "Okay. And and then with solar, just to qualify for some of the programs, you need to have a credit score above 650.",
-      "classification": "other",
-      "stewart_read": "Rep states 650 as the threshold, matching a prior schema-drift case (SESSION18_fcbf33c1) rather than the schema's documented 670 — this is a recurring drift, not a one-off error."
+      "ts": "04:05",
+      "quote": "Yeah. As long as it's around $6.50, you should be good there.",
+      "classification": "protocol_violation",
+      "stewart_read": "Rep converts an unresolved 'I don't know' into a soft pass, effectively waiving the hard qualifier without actually confirming it."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 45,
-    "verified": 45,
+    "checked": 36,
+    "verified": 36,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

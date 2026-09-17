@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION14_f476beca",
   "rep_name": "Becky",
-  "trajectory_summary": "The call is a slow-build, mixed-shape trajectory: routine verify questions go smoothly, then a long technical detour over sending the bill photo eats most of the call's runtime without the rep pivoting to a faster alternative path. The rep recovers and books a specific day/time appointment, but leaves the co-owner question unresolved and lets the customer's stated preference (a ground-mounted solar field due to tree shading) go unaddressed rather than clarified or bridged to the closer explicitly enough.",
+  "trajectory_summary": "The call opens warm and cooperative, sags into a long technical struggle over sending a bill photo, and recovers to a booked appointment with the customer's energy intact. The rep's persistence eventually paid off, but the 12-minute detour was avoidable friction on an already-willing customer.",
   "shape": "mixed",
-  "outcome_dispute": "The v1 tag is unknown/unclear, but the observed outcome should be read as tentative rather than a clean booked appointment: a day and time were eventually locked (Friday at 4PM) but only after multiple false starts on timing (today at 3, tomorrow at 10AM), and the co-owner (wife) was never confirmed for the call.",
+  "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "tentative",
+    "outcome": "booked",
     "appointment_channel": "phone",
     "datetime_captured": true,
-    "co_owner_confirmed": false,
-    "ts": "19:35",
-    "quote": "Friday. Friday. Okay. They'll call you Friday at you wanna do, 4PM?",
-    "reasoning": "A specific day and time (Friday at 4PM) is eventually agreed after several shifting proposals, so a datetime was captured, but the appointment is fragile: the co-owner/wife was never confirmed, the customer couldn't commit to not driving, and the scheduling process itself wobbled through three different time slots before settling."
+    "co_owner_confirmed": null,
+    "ts": "19:59",
+    "quote": "Alright. So they're gonna call you on Friday at 4PM your time.",
+    "reasoning": "A specific day (Friday the 20th) and time (4PM) were mutually confirmed by both rep and customer; co-owner (wife, ambiguously mentioned) was never followed up on so cannot be confirmed either way.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,17 +29,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures the $150 average bill and simply acknowledges it ('Okay. 150.') before moving straight to the roof question — no emotional flip tying the number to alignment-against-the-utility ever occurs. The flip should have landed right after the number was given, e.g. reframing $150/month as money going to the utility instead of into an owned asset."
+    "reasoning": "The $150 bill was captured cleanly at 01:52 but never referenced again — no line ties the appointment or urgency back to the bill amount; the flip should have landed around 16:55 ('Yeah. I just gotta get you on the schedule') by tying the schedule to eliminating that $150 monthly cost."
   },
   "bill_document_audit": {
     "asked": true,
     "ask_ts": "04:05",
-    "ask_quote": "The last thing we need is just a picture of the graph on your power bill. It lets us know how many panels you'll need and your kilowatt usage.",
+    "ask_quote": "The last thing we need is just a picture of the graph on your power bill.",
     "result": "received_on_call",
-    "method": "photo",
-    "result_ts": "16:44",
+    "method": "text",
+    "result_ts": "16:49",
     "result_quote": "I just got it.",
-    "reasoning": "The rep explicitly asks for a photo of the bill's usage graph, and after an extended technical struggle the customer successfully texts the photo through during the call."
+    "reasoning": "The rep requested a photo of the bill and the customer sent it via text during the call; the rep confirmed receipt."
   },
   "interest_reason_audit": {
     "asked": true,
@@ -41,7 +50,7 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer names saving money, ecological motives, and independence, but none of these are referenced again later in the call — not in the button-up, not in framing the appointment purpose to the customer."
+    "reasoning": "Customer's stated reasons (ecological, independence) were acknowledged with a single word ('Independent. Awesome.') at 01:20-01:21 but never reinforced later when booking the appointment or in the button-up."
   },
   "script_coverage": [
     {
@@ -49,7 +58,7 @@
       "status": "asked",
       "ts": "00:06",
       "end_ts": "00:12",
-      "quote": "This is Becky with this is Becky with Ion. I'm reaching out about the solar form you filled out online.",
+      "quote": "Hello. This is Becky with this is Becky with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "I'm doing good.",
       "resistance_reason": "",
@@ -60,20 +69,20 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "01:09",
-      "end_ts": "01:20",
+      "end_ts": "01:22",
       "quote": "What interest did you in solar, saving some money?",
       "customer_response": "cooperative",
       "customer_quote": "And and, you know, ecological and also being independent.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:22",
-      "end_ts": "00:35",
-      "quote": "Alright. You still at 249 Albert Farm Road?",
+      "ts": "00:24",
+      "end_ts": "00:26",
+      "quote": "Albert Farm Road?",
       "customer_response": "cooperative",
       "customer_quote": "Correct.",
       "resistance_reason": "",
@@ -84,19 +93,19 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "00:42",
-      "end_ts": "00:52",
+      "end_ts": "00:48",
       "quote": "Is there anybody else on the title but you?",
-      "customer_response": "deflected",
-      "customer_quote": "No. My wife, maybe. I don't know. But",
-      "resistance_reason": "other",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "02:00",
-      "end_ts": "02:08",
+      "ts": "01:58",
+      "end_ts": "02:10",
       "quote": "you know what type of roof you have?",
       "customer_response": "cooperative",
       "customer_quote": "Oh, yeah. I got a new, three cab asphalt asphalt metal shingle.",
@@ -111,7 +120,7 @@
       "end_ts": "01:39",
       "quote": "What utility company are you with?",
       "customer_response": "cooperative",
-      "customer_quote": "APCO a American Electric Power.",
+      "customer_quote": "APCO a American\nElectric Power.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -131,8 +140,8 @@
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "03:43",
-      "end_ts": "03:50",
+      "ts": "03:44",
+      "end_ts": "03:54",
       "quote": "Do you do you have a credit score over six seventy?",
       "customer_response": "cooperative",
       "customer_quote": "I probably do.",
@@ -157,97 +166,109 @@
       "status": "asked",
       "ts": "02:14",
       "end_ts": "02:46",
-      "quote": "have you seen a solar design for for your home?",
+      "quote": "And then have you seen a solar design for for your home?",
       "customer_response": "cooperative",
-      "customer_quote": "Not really. I've I've I've imagined what it would take.",
+      "customer_quote": "Not really. I've\nI've I've imagined what it would take.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "04:05",
-      "end_ts": "16:52",
+      "end_ts": "16:49",
       "quote": "The last thing we need is just a picture of the graph on your power bill.",
       "customer_response": "cooperative",
-      "customer_quote": "I do have that on this phone.",
-      "resistance_reason": "dont_have_it",
+      "customer_quote": "Oh, I've got that on this phone.",
+      "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "17:04",
-      "end_ts": "19:38",
-      "quote": "What's what day would work best for you?",
+      "ts": "17:39",
+      "end_ts": "19:48",
+      "quote": "do you wanna do this Friday, the twentieth?",
       "customer_response": "cooperative",
-      "customer_quote": "I'm retired. I'm doing a bunch of things, but I'm kind of I'm very flexible.",
-      "resistance_reason": "timing",
-      "rep_followup": "persisted",
+      "customer_quote": "That'd be fine.",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "18:36",
+      "ts": "19:38",
       "end_ts": "20:11",
-      "quote": "They just, when they call you, they need you to be not driving and able to access your email. Okay?",
-      "customer_response": "resistant",
-      "customer_quote": "I can't guarantee I'm not driving, but I don't spend much time behind the wheel anyway.",
-      "resistance_reason": "other",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "quote": "Friday at 4PM, they're gonna call you.",
+      "customer_response": "cooperative",
+      "customer_quote": "That'd be fine. Sure.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "no_driving",
+        "reconfirm"
+      ],
+      "parts_score": "3/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "Tech-friction pivot timing",
-    "ts": "05:35",
-    "quote": "Can I do that now without losing you? Yeah. No. Yeah. You could do that right now.",
-    "why": "This single decision point burned roughly 10+ minutes of call time doing live phone tutoring instead of pivoting to a verbal bill read-back per the schema's elderly_low_tech_protocol. That's the single highest-leverage fix — faster calls, same result, less risk of losing the customer's patience."
+    "topic": "No fallback path for low-tech customer on bill photo",
+    "ts": "05:52",
+    "quote": "Okay. So you just need to go to your camera roll and then just find the picture.",
+    "why": "12 minutes were burned on live phone tech support; a verbal kWh read-back per the elderly_low_tech_protocol would have captured the same data in a fraction of the time and protected an already-willing customer's patience."
   },
   "key_moments": [
     {
-      "ts": "00:48",
-      "quote": "No. My wife, maybe. I don't know. But",
-      "classification": "spouse_handling",
-      "stewart_read": "The customer gives an uncertain, unresolved answer about whether his wife is on the title — not a clean 'no.' The rep accepts 'Okay' and moves on without a clarifying follow-up, so the co-owner status is never actually established."
+      "ts": "05:52",
+      "quote": "Okay. So you just need to go to your camera roll and then just find the picture.",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "Customer is struggling with basic phone navigation; the schema calls for a pivot to verbal read-back within 2 minutes, but the rep continues screen-by-screen guidance."
+    },
+    {
+      "ts": "11:16",
+      "quote": "Okay. Let me see something. How to send photos.",
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "Rep is now searching live for how-to-send-photo instructions, confirming she had no ready alternate path prepared."
     },
     {
       "ts": "02:46",
-      "quote": "I might be am I looking at the wrong house?",
-      "classification": "knowledge_gap",
-      "stewart_read": "The rep gets visibly lost trying to locate the customer's house on a satellite map mid-call, admitting confusion aloud rather than handling it smoothly offline."
+      "quote": "Okay. I mean, your house, there's not a lot of trees covering your roof. I think that's fine. I see on the maps right here.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep personally evaluates roof shading/tree placement via satellite imagery instead of deferring the technical siting discussion to the specialist."
     },
     {
-      "ts": "05:35",
-      "quote": "Can I do that now without losing you? Yeah. No. Yeah. You could do that right now.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "This is the entry point into a 10+ minute tech-support detour. The schema calls for pivoting to verbal read-back within 2 minutes of friction; instead the rep commits to walking the customer through phone navigation live."
-    },
-    {
-      "ts": "12:19",
-      "quote": "And your phone's in your camera roll?",
-      "classification": "softener_overuse",
-      "stewart_read": "The rep's instructions throughout this stretch are hesitant and repetitive ('Pardon me? Your phone's in your camera roll.'), reflecting uncertainty about the customer's phone rather than confident, simple direction."
+      "ts": "18:09",
+      "quote": "Okay. They'll they'll talk to you about it. The specialist will talk to you about everything.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "By the close, rep correctly redirects the same ground-mount siting question to the specialist instead of engaging further — a course correction from the earlier scope creep."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 54,
-    "verified": 51,
+    "checked": 57,
+    "verified": 56,
     "fuzzy": 1,
-    "wrong_ts": 1,
-    "not_found": 1
+    "wrong_ts": 0,
+    "not_found": 0
   }
 }

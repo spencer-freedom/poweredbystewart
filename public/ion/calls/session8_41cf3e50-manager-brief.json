@@ -1,26 +1,34 @@
 {
   "call_id": "SESSION8_41cf3e50",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens as a standard verify flow but pivots at 00:50 when the customer reveals the lead premise is wrong — he's shopping for a future home purchase, not the property on file. The rep spends the middle of the call re-pitching the current address and the bill-swap program despite the customer repeating three times that neither applies, and the call ends with the customer politely disengaging without any future-contact mechanism captured.",
+  "trajectory_summary": "The call starts cooperative but the rep runs the standard pitch on an address the customer explicitly disqualifies twice, and never adapts to the customer's actual ask (info for a future home, curiosity about solar shingles). Energy leaks steadily from clarification to firm decline with no recovery move.",
   "shape": "energy_leaked",
-  "outcome_dispute": null,
+  "outcome_dispute": "v1 tag is unknown; this should be recorded as no_appointment/dq-adjacent since the customer explicitly disqualified the current address and declined to proceed, and the rep secured no next step.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "03:20",
-    "quote": "I probably don't wanna go any follow then.",
-    "reasoning": "The customer explicitly declines to proceed further, and the call ends with pleasantries but no appointment, callback time, or follow-up mechanism established."
+    "quote": "at this point in time, I'd probably say I probably don't wanna go any further then",
+    "reasoning": "Customer explicitly declines to continue and no appointment, callback, or next step is secured by the rep before the call ends.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "01:57",
-    "bill_quote": "I mean, I don't know what's high. I mean, probably Oh, over 200?",
+    "bill_ts": "02:03",
+    "bill_quote": "Probably slightly on under that on average.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured a bill figure but immediately pivoted to re-pitching the bill swap program on the wrong (current) property rather than using the number to build a case for the customer's actual stated interest — the future home purchase."
+    "reasoning": "Rep captured the bill figure at 02:03 but never flipped it into emotional alignment against the utility; the flip should have landed right after 02:08 when introducing the bill swap, tying the actual dollar figure to the pitch instead of a generic program description."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,25 +38,25 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call never reached a bill-collection stage since the customer clarified early that his interest wasn't tied to the current property, and the rep never pivoted to collecting bill documentation for a future scenario."
+    "reasoning": "The rep referenced reviewing the power bill as part of a program but never asked the customer to send or read the bill."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "01:06",
-    "reason_quote": "is what I was looking for. So one of the things that is appealing to me is solar shingles.",
+    "reason_ts": "01:14",
+    "reason_quote": "solar shingles.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what has you interested in solar' but the customer volunteered his reason (solar shingles, for a future home) unprompted; the rep answered the shingle question factually but never circled back to use this stated interest to build toward a future-contact plan or alternative product positioning."
+    "reasoning": "Customer's stated interest reason was solar shingles (01:12), but after telling the customer Ion doesn't have them yet, the rep never reconnected the appointment pitch to that specific interest — he just pivoted to bill-swap on the wrong house."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "end_ts": "00:13",
+      "end_ts": "00:17",
       "quote": "Hey. It's Bucky with ION. Just reaching out about the solar for me sold online.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. Yeah.",
@@ -72,8 +80,8 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:21",
-      "end_ts": "00:40",
-      "quote": "You at 748 Tempton River or yeah. Tempton Driver?",
+      "end_ts": "00:38",
+      "quote": "You at 748",
       "customer_response": "cooperative",
       "customer_quote": "Tempton Drive. Yes.",
       "resistance_reason": "",
@@ -84,8 +92,8 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "00:43",
-      "end_ts": "00:49",
-      "quote": "So it's a single family home. Is there anybody else on the title about you?",
+      "end_ts": "00:50",
+      "quote": "is there anybody else on the title about you?",
       "customer_response": "cooperative",
       "customer_quote": "Just my wife.",
       "resistance_reason": "",
@@ -94,66 +102,6 @@
     },
     {
       "section": "roof",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "utility_company",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "bill_amount",
-      "status": "asked",
-      "ts": "01:50",
-      "end_ts": "02:08",
-      "quote": "May I ask you something? Are you paying a high power bill?",
-      "customer_response": "cooperative",
-      "customer_quote": "I mean, I don't know what's high. I mean, probably Oh, over 200?",
-      "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
-    },
-    {
-      "section": "tax_credit_qualifier",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "military",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "prior_design",
       "status": "skipped",
       "ts": "",
       "end_ts": "",
@@ -163,6 +111,66 @@
       "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "skipped"
+    },
+    {
+      "section": "utility_company",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "bill_amount",
+      "status": "asked",
+      "ts": "01:50",
+      "end_ts": "02:08",
+      "quote": "May I ask you something? Are you paying a high power bill?",
+      "customer_response": "cooperative",
+      "customer_quote": "Probably slightly on under that on average.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "military",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "02:08",
+      "end_ts": "02:49",
+      "quote": "A year. Well, we and this this even works if you're selling the home. We have a program. It's called the bill swap.",
+      "customer_response": "resistant",
+      "customer_quote": "But talked with my realtor, and he advised me not to do that if I'm looking to sell in the near future",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "bill_collection",
@@ -178,19 +186,7 @@
     },
     {
       "section": "appointment_set",
-      "status": "asked",
-      "ts": "03:15",
-      "end_ts": "03:35",
-      "quote": "I could even hook up, like, just a phone call appointment.",
-      "customer_response": "resistant",
-      "customer_quote": "I'd probably say I probably don't wanna go any further then.",
-      "resistance_reason": "already_have_quote",
-      "rep_followup": "moved_on",
-      "result": "declined"
-    },
-    {
-      "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -198,82 +194,130 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
+    },
+    {
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:50",
-      "quote": "So my question around solar is gonna be not with that house.",
-      "type": "other",
-      "rep_attempts": 2,
-      "attempt_quotes": [
-        "May I ask you something? Are you paying a high power bill?",
-        "I wanna see what we could do for you because, like, your home is literally perfect for solar"
-      ],
-      "resolved": false,
-      "resolution_ts": "03:20",
-      "reasoning": "The rep tried a bill-pain angle and then a direct re-pitch of the current home, but the customer never budged from his position that his interest is tied to a future home purchase, and eventually declined to go further."
-    },
-    {
       "ts": "01:37",
-      "quote": "I'm probably looking to move probably in about three years, so I don't necessarily wanna do that investment on that right at this point in time.",
+      "quote": "I'm not planning on staying in that house for I'm probably looking to move probably in about three years, so I don't necessarily wanna do that investment on that right at this point in time.",
       "type": "timing_or_callback",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Well, we and this this even works if you're selling the home. We have a program. It's called the bill swap."
+        "May I ask you something? Are you paying a high power bill?"
       ],
       "resolved": false,
-      "resolution_ts": "02:35",
-      "reasoning": "The rep offered the bill swap as a solution to the timing/selling concern, but the customer countered that his realtor already advised against it, and the rep did not attempt a second angle on this specific concern."
+      "resolution_ts": "",
+      "reasoning": "Rep pivoted to a bill-pain question rather than directly addressing the three-year timing concern; customer never softened on this point and it recurred later.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "bill_amount@01:50",
+      "resolution_agrees": false
+    },
+    {
+      "ts": "02:20",
+      "quote": "talked with my realtor, and he advised me not to do that if I'm looking to sell in the near future",
+      "type": "trust_or_scam",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. Yeah. And you know about the installation and all that? No cost?"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep offered a no-cost reassurance rather than engaging the realtor's specific transfer-of-terms concern; customer politely acknowledged but did not move past the underlying objection.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "reassure"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
+    },
+    {
+      "ts": "03:20",
+      "quote": "at this point in time, I'd probably say I probably don't wanna go any further then",
+      "type": "not_interested",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep did not attempt any further move after this final decline — call ended with a pleasantry and no next step.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Adjusting the pitch when the lead premise changes mid-call",
+    "topic": "Failure to requalify after customer disclosed wrong target property",
     "ts": "00:50",
-    "quote": "So my question around solar is gonna be not with that house.",
-    "why": "The customer redefined the entire purpose of the call in one line, and the rep spent the next three minutes re-pitching the wrong property and a program the customer had already researched and declined — this is the single biggest driver of the call's stagnation."
+    "quote": "my question around solar is gonna be not with that house",
+    "why": "This single line invalidates the entire pitch that follows; the rep needed to stop and reframe the call around the customer's actual need instead of running the standard script on a disqualified address."
   },
   "key_moments": [
     {
       "ts": "00:50",
-      "quote": "Okay. But but, actually, before, we go much further. So my question around solar is gonna be not with that house.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "This is the pivotal moment of the call — the customer explicitly redefines what he's calling about. The rep's job from here should have been to build curiosity around the future home scenario (timeline, location, what solar shingles cost vs standard panels) rather than continuing to sell the current address."
+      "quote": "my question around solar is gonna be not with that house",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "This is the pivotal disclosure of the call — the lead isn't for the address on file — and the rep doesn't probe what house, when, or why before continuing the standard pitch."
     },
     {
-      "ts": "01:19",
-      "quote": "So those they're we're, like, we have those on order, but they don't come out for, like, another couple years.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The rep gives a specific, unhedged factual claim about Ion's solar-shingle product roadmap (\"on order,\" \"couple years\") with no indication this is verified company information. This is a setter making an unverified specificity claim about product timeline rather than admitting uncertainty or deferring to a specialist."
+      "ts": "01:12",
+      "quote": "solar shingles.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer volunteers a specific product interest (solar shingles) — a genuine buying signal the rep could use to keep the conversation open even though Ion doesn't offer it yet."
     },
     {
-      "ts": "01:29",
-      "quote": "this seven this 748 house, I mean, it's beautiful, and it's perfect for solar. Like, it really is.",
-      "classification": "other",
-      "stewart_read": "Immediately after the customer clarified his interest is about a different (future) house, the rep re-asserts the sales pitch on the wrong property. This is a scope-mismatch persistence failure — the rep did not update the target of the pitch to match what the customer just said."
+      "ts": "01:37",
+      "quote": "I'm not planning on staying in that house for I'm probably looking to move probably in about three years",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a timing/interest objection tied to the current house; instead of flipping it (e.g., anchoring on the bill they're paying now for three more years), rep pivots to a bill-amount question without addressing the objection."
     },
     {
-      "ts": "02:08",
-      "quote": "We have a program. It's called the bill swap. We actually look at your power bill, and we replace it and remove it with a cheaper solar bill.",
-      "classification": "other",
-      "stewart_read": "Rep re-pitches the bill swap program on the current home without first checking whether the customer already knew about it — which he immediately reveals he does, in detail, including having discussed it with his realtor. This is scope-mismatch persistence (re-pitching a program to a house the customer already said isn't in play) rather than a missed objection-inversion, since no cost/time/interest objection framing was present to flip."
+      "ts": "02:20",
+      "quote": "talked with my realtor, and he advised me not to do that if I'm looking to sell in the near future",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "A real estate authority objection (transferability concerns for a near-term sale) went unaddressed; rep pivoted to a no-cost installation reassurance instead of engaging the actual concern."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 41,
-    "verified": 40,
-    "fuzzy": 0,
+    "checked": 40,
+    "verified": 39,
+    "fuzzy": 1,
     "wrong_ts": 0,
-    "not_found": 1
+    "not_found": 0
   }
 }

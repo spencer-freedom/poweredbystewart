@@ -1,26 +1,34 @@
 {
   "call_id": "30000166799",
   "rep_name": "Parker",
-  "trajectory_summary": "The call opens with unusually high customer enthusiasm and volunteered information (tree removal, a $2,300 bill, willingness to host a visit), but the rep never converts any of these into anchors — the bill is dropped without acknowledgment, the tree-clearing initiative is logged but not reinforced, and the call ends with a vague 'figure out a time over text' rather than a locked appointment. Energy that the customer brought in was not built on; it was absorbed and left flat.",
+  "trajectory_summary": "A customer who opened already wanting install and volunteered a big bill number got no anchor, no verify section, and no appointment — the call dissolved into an unstructured chat about trees and ended on 'I'm tired' with only a vague promise to text later. Energy leaked steadily: what started engaged ended with no owned next step.",
   "shape": "energy_leaked",
-  "outcome_dispute": "This should not be tagged as a booked or tentative appointment. No day or time was ever discussed — the rep only secured an agreement to text a roof photo 'later today' and stated they would 'figure out a good time to drop by' afterward. This is a callback/pending-next-step outcome, not an appointment.",
+  "outcome_dispute": "v1 tag is unknown/unclear from metadata; based on transcript this should be tagged no_appointment — no day/time was ever proposed or agreed, only 'we can figure out a good time to drop by' left open.",
   "observed_outcome": {
-    "outcome": "callback",
+    "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "05:35",
-    "quote": "just send me a photo when you can. We'll start on our end, and then we can kinda figure out a time over text. Would that work for you?",
-    "reasoning": "No specific day or time was ever agreed on the call. The plan is for the customer to text a roof photo later and for the rep to follow up via text to arrange a time — this is a callback/pending-contact outcome, not a booked or even tentative appointment."
+    "ts": "03:49",
+    "quote": "we can figure out a good time to drop by. Would that work for you?",
+    "reasoning": "No specific day or time was ever proposed or agreed; the call ends with only a promise to text and figure out timing later, which is not a booked or tentative appointment by the schema's definition.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "02:29",
-    "bill_quote": "the electric company went crazy. They sent me a $2,300.",
+    "bill_ts": "02:36",
+    "bill_quote": "They sent me a $2,300.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer volunteered a specific, high bill figure with clear frustration, but the rep's next line ('Okay. So you said there are there some trees already cut down, or you would need to still cut all of the ones around the house down?') ignored it entirely and returned to tree logistics — no acknowledgment, no flip into a reason to move forward."
+    "reasoning": "The $2,300 bill was captured at 02:29-02:36 but Parker's next line at 02:39 ('So you said there are there some trees already cut down...') ignores it completely — the flip should have gone right there, reflecting the number back as the reason to move fast."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,31 +38,31 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never raised getting the actual utility bill document (mail, online, photo, text, email) at any point in the call — the only document-collection request made was for a photo of the roof, not the bill itself."
+    "reasoning": "The rep asked for photos of the roof but never asked for the utility bill or a bill photo/email, and no bill was collected."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "00:18",
-    "reason_quote": "hoping y'all come and put it in.",
+    "reason_ts": "00:23",
+    "reason_quote": "I'm hoping y'all come and put solar in.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what has you interested in solar,' but the customer volunteered eagerness/interest unprompted immediately at the top of the call; the rep never circled back to reinforce or leverage this stated enthusiasm."
+    "reasoning": "Customer's stated reason ('hoping y'all come and put solar in') was never referenced again to reinforce urgency or tie to next steps; Parker's closing lines are generic ('we can kinda figure out a time') with no tieback."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "end_ts": "00:16",
-      "quote": "Hey, Johnny. This is Parker with Ion. I was just reaching out because I got a request you're looking at solar for the home.",
+      "end_ts": "00:18",
+      "quote": "This is Parker with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "hoping y'all come and put it in.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -73,7 +81,7 @@
       "status": "asked",
       "ts": "00:31",
       "end_ts": "00:39",
-      "quote": "Just to make sure I'm looking at the right address for you, are you still at the 449 Hawkins Farm Road?",
+      "quote": "Just to make sure I'm looking at the right address for you, are you still at the 449",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
@@ -95,14 +103,14 @@
     {
       "section": "roof",
       "status": "asked",
-      "ts": "01:58",
-      "end_ts": "02:23",
-      "quote": "I just know it is hard to to build a design, because I can't quite see the roof here.",
+      "ts": "00:54",
+      "end_ts": "01:06",
+      "quote": "Gotcha. Is it a bit more are there some trees that have been cut down and stuff?",
       "customer_response": "cooperative",
-      "customer_quote": "yeah. I can. And, like I said, I have no problem on cutting them down either",
+      "customer_quote": "Yeah.",
       "resistance_reason": "",
-      "rep_followup": "alternative_offered",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "utility_company",
@@ -119,18 +127,18 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "02:29",
-      "end_ts": "02:39",
-      "quote": "So you said there are there some trees already cut down, or you would need to still cut all of the ones around the house down?",
+      "ts": "02:39",
+      "end_ts": "02:36",
+      "quote": "Okay. So you said there are there some trees already cut down, or you would need to still cut all of the ones around the house down?",
       "customer_response": "cooperative",
-      "customer_quote": "the electric company went crazy. They sent me a $2,300.",
+      "customer_quote": "They sent me a $2,300.",
       "resistance_reason": "",
       "rep_followup": "moved_on",
       "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +146,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "military",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,47 +158,35 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
-      "customer_quote": "I've seen a picture that they had a while back",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
-      "resistance_reason": "dont_have_it",
+      "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
-      "ts": "05:35",
-      "end_ts": "05:46",
-      "quote": "just send me a photo when you can. We'll start on our end, and then we can kinda figure out a time over text.",
-      "customer_response": "cooperative",
-      "customer_quote": "Yeah. That's fine.",
-      "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
-    },
-    {
-      "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -198,68 +194,74 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
-    }
-  ],
-  "objections": [
+      "result": "not_reached"
+    },
     {
-      "ts": "00:39",
-      "quote": "Then if you're looking through that satellite thing, it doesn't, show well that way. It's showing too many trees.",
-      "type": "roof_or_home",
-      "rep_attempts": 2,
-      "attempt_quotes": [
-        "Gotcha. Is it a bit more are there some trees that have been cut down and stuff?",
-        "Do you have any, or could you send us any photos maybe from outside of your house, with, like, no with the no trees?"
-      ],
-      "resolved": true,
-      "resolution_ts": "02:18",
-      "reasoning": "The customer's concern about outdated satellite imagery is addressed by the rep pivoting to a photo-collection workaround, which the customer agrees to."
+      "section": "button_up",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "bill anchor dropped entirely",
-    "ts": "02:29",
-    "quote": "the electric company went crazy. They sent me a $2,300.",
-    "why": "The customer handed over a specific, emotionally-charged bill figure unprompted, and the rep's next line pivoted straight to tree logistics with no acknowledgment — the single biggest leverage point on the call was left completely unused."
+    "topic": "No locked next step — call ends without any day/time",
+    "ts": "03:49",
+    "quote": "we can figure out a good time to drop by. Would that work for you?",
+    "why": "This is the single most consequential miss: a warm, cooperative customer leaves the call with nothing but a vague text-later plan, no button-up, no scheduled callback time."
   },
   "key_moments": [
     {
+      "ts": "00:18",
+      "quote": "hoping y'all come and put it in.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer opens the call already sold on wanting the install — a rare high-openness start that Parker should have moved fast to lock down while momentum was hot."
+    },
+    {
       "ts": "02:29",
       "quote": "the electric company went crazy. They sent me a $2,300.",
-      "classification": "bill_anchor",
-      "stewart_read": "This is the single richest anchor the customer handed the rep on the whole call — a specific dollar figure delivered with visible frustration ('went crazy'). The rep's very next line is a logistics question about which trees are cut down, meaning the bill was never even acknowledged, let alone flipped into 'that's exactly the amount solar would eliminate.'"
-    },
-    {
-      "ts": "01:16",
-      "quote": "if it was looking at it now, you guys see the head topping trailer.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer is trying to describe how open his roof currently is compared to outdated satellite imagery — an opportunity to build curiosity about what the actual design would show once updated. The rep just says 'Gotcha' and asks a narrow follow-up rather than building anticipation ('once we get a current photo, you'll probably see a design that looks a lot better than what's on file')."
+      "stewart_read": "Customer hands Parker the exact bill-pain anchor unprompted; Parker's next line ignores it entirely and returns to the tree-cutting question."
     },
     {
-      "ts": "04:08",
-      "quote": "I've got two trees that can handle the, hail. And I'm not trying to I'll take these both of them down.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "The customer is volunteering ongoing, self-motivated site prep (tree removal) specifically to make his roof more solar-viable — a strong signal of intent and initiative that most leads never offer unprompted. The rep's response is a flat 'Okay. Gotcha.'"
+      "ts": "00:51",
+      "quote": "It's showing too many trees.",
+      "classification": "cross_sell_miss",
+      "stewart_read": "Not a roofing signal, but a structural obstacle (trees) that Parker treats as a data-collection problem rather than converting into forward momentum with a firm next step."
     },
     {
-      "ts": "03:15",
-      "quote": "Okay. What I could do is I could get started on things on our end. I'll send you a quick text to if you wouldn't wouldn't mind if you have time later today to send me a photo just of kind of the back of your roof.",
+      "ts": "02:02",
+      "quote": "because I can't quite see the roof here.",
       "classification": "unanchored_soft_exit",
-      "stewart_read": "This is a reasonable ad hoc workaround for the outdated satellite imagery problem — asking for a current roof photo makes sense given the design blocker the customer raised. But it is not a substitute for locking an appointment; the rep treats sending the photo as the entire next step rather than pairing it with a specific date/time for the design review call."
+      "stewart_read": "This is the moment the appointment should have still been locked with a fallback day/time, contingent or not, but Parker treats the photo as a full substitute for scheduling."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 35,
-    "verified": 35,
+    "checked": 29,
+    "verified": 29,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

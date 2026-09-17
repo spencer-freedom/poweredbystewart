@@ -1,7 +1,7 @@
 {
   "call_id": "SESSION18_2428dffe",
   "rep_name": "Holland",
-  "trajectory_summary": "This call moved smoothly and efficiently — legitimacy was established, the bill and usage data were captured and emailed on the call, and a phone appointment was locked for a specific day and time. The main structural gap is that the wife's co-owner status was never confirmed, and the rep used that unresolved ambiguity to justify booking the appointment with the husband alone, leaving a spouse-inclusion protocol miss baked into the outcome.",
+  "trajectory_summary": "Call opens with mild name confusion but quickly stabilizes into a smooth, cooperative verify-and-bill flow, capped by the customer emailing his bill unprompted mid-call. Energy builds steadily through the bill capture and closes on a booked Thursday 10am appointment, though the unresolved co-owner question leaves the set slightly fragile.",
   "shape": "energy_built",
   "outcome_dispute": null,
   "observed_outcome": {
@@ -11,47 +11,56 @@
     "co_owner_confirmed": false,
     "ts": "06:49",
     "quote": "Let's do ten.",
-    "reasoning": "A specific day (Thursday the 23rd) and time (10AM) were agreed and confirmed by the customer, but the wife's co-owner status was never resolved and the rep proceeded to book with the husband alone."
+    "reasoning": "Customer explicitly selects Thursday at 10am for a phone appointment; the wife's co-owner status was raised but never confirmed, so the appointment proceeds with only the customer.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "03:08",
-    "bill_quote": "it's up to $2.70 in the summer and down to, you know, $1.01 $1.50 in the winter. Okay. So, yeah, $1.50 to $2.70.",
+    "bill_ts": "03:21",
+    "bill_quote": "Okay. So, yeah, $1.50 to $2.70.",
     "flip_executed": "yes",
     "flip_ts": "03:25",
     "flip_quote": "We can definitely help get that cut down. I know that ComEd is they've been raising their rates quite a bit from what I've heard, so I'm glad you guys are looking into an an alternative.",
-    "reasoning": "The rep captured the bill range and immediately connected it to ComEd's rising rates as a reason to pursue an alternative, satisfying the ask+acknowledge+flip pattern, even though the delivery leaned on hearsay rather than the customer's specific number."
+    "reasoning": "Rep takes the captured $1.50-$2.70 bill and immediately reframes ComEd's rate hikes as the problem, aligning the customer against the utility rather than just logging the number."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "03:39",
-    "ask_quote": "the only thing I will need from you is just a copy of that same kilowatt usage that you were looking at, with other company.",
+    "ask_ts": "03:48",
+    "ask_quote": "just a copy of that same kilowatt usage",
     "result": "received_on_call",
     "method": "email",
     "result_ts": "05:15",
     "result_quote": "And so just so you know, I just sent it back to you.",
-    "reasoning": "The rep set up an email exchange live, sent the rep's email address, and the customer confirmed sending the usage data back before the call ended."
+    "reasoning": "Rep asked for the kilowatt usage and provided an email; the customer confirmed they sent it during the call."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "01:37",
     "reason_given": true,
-    "reason_ts": "01:44",
-    "reason_quote": "Well, we we had someone come and visit us, you know, just kinda going door to door talking about solar and said, oh, man. Maybe this is something to look into.",
+    "reason_ts": "02:15",
+    "reason_quote": "just wanting to look at the different options and, yeah, what what incentives there are.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer gave a clear origin story (door-to-door visit plus a prior Ion/PPA-lease comparison), but the rep never referenced this reason again when pitching the program or setting the appointment — it was acknowledged and moved past rather than tied into the close."
+    "reasoning": "Customer's stated reason (wanting to compare lease/PPA options and incentives) was acknowledged but never tied back into the appointment framing or button-up — rep booked the appointment purely on logistics without reconnecting it to 'we'll go over those options and incentives Thursday.'"
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:18",
-      "quote": "So this is Holland with Ion. I got a request. We're looking into solar for your home.",
+      "end_ts": "00:12",
+      "quote": "This is Holland with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "And what did you say your name was?",
+      "customer_quote": "My name is Holland. Holland.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -61,11 +70,11 @@
       "status": "asked",
       "ts": "01:37",
       "end_ts": "02:21",
-      "quote": "I guess my biggest question for you is what kind of got you looking into solar in the first place?",
+      "quote": "what kind of got you looking into solar in the first place?",
       "customer_response": "cooperative",
-      "customer_quote": "So just wanting to look at the different options and, yeah, what what incentives there are.",
+      "customer_quote": "Well, we we had someone come and visit us, you know, just kinda going door to door talking about solar",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -73,7 +82,7 @@
       "status": "asked",
       "ts": "00:29",
       "end_ts": "00:37",
-      "quote": "I've got your address here as 3722 Foxborough Lane in Rockford, Illinois. Is that correct?",
+      "quote": "I've got your address here as 3722",
       "customer_response": "cooperative",
       "customer_quote": "Correct.",
       "resistance_reason": "",
@@ -86,17 +95,17 @@
       "ts": "01:09",
       "end_ts": "01:34",
       "quote": "Is there anybody else on the title of the home with you?",
-      "customer_response": "deflected",
+      "customer_response": "cooperative",
       "customer_quote": "No. I mean, maybe my wife. I'm not I'd have to look at that, but it it the two of us, we live together, still married.",
-      "resistance_reason": "dont_have_it",
+      "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "00:53",
-      "end_ts": "01:07",
+      "end_ts": "01:01",
       "quote": "Do you know how old those current shingles are?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. We just had them put on this last in '25.",
@@ -120,10 +129,10 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "03:02",
-      "end_ts": "03:25",
+      "end_ts": "03:21",
       "quote": "how much would you say you guys are spending on average a month with ComEd?",
       "customer_response": "cooperative",
-      "customer_quote": "it's up to $2.70 in the summer and down to, you know, $1.01 $1.50 in the winter.",
+      "customer_quote": "Okay. So, yeah, $1.50 to $2.70.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -131,9 +140,9 @@
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:38",
-      "end_ts": "02:53",
-      "quote": "As long as you or your wife has a credit score above 670, then you'll qualify. Is that the case for either of you?",
+      "ts": "02:43",
+      "end_ts": "02:46",
+      "quote": "Is that the case for either of you?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. For sure.",
       "resistance_reason": "",
@@ -155,35 +164,35 @@
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "01:55",
-      "end_ts": "02:20",
-      "quote": "",
+      "ts": "02:21",
+      "end_ts": "02:23",
+      "quote": "Mhmm. Yeah.",
       "customer_response": "cooperative",
-      "customer_quote": "we we looked a few years back about the with Ionic about buying, and that just wasn't the right fit for us.",
-      "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
-    },
-    {
-      "section": "bill_collection",
-      "status": "asked",
-      "ts": "03:39",
-      "end_ts": "05:15",
-      "quote": "the only thing I will need from you is just a copy of that same kilowatt usage that you were looking at, with other company.",
-      "customer_response": "cooperative",
-      "customer_quote": "If you send me an email yep. If you send me an email, I have it on my computer. I can send it right back to you.",
+      "customer_quote": "We've been we've looked a few years back about the with Ionic about buying, and that just wasn't the right fit for us.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
     },
     {
+      "section": "bill_collection",
+      "status": "asked",
+      "ts": "03:48",
+      "end_ts": "05:18",
+      "quote": "just a copy of that same kilowatt usage",
+      "customer_response": "cooperative",
+      "customer_quote": "If you send me an email, I have it on my computer. I can send it right back to you.",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "completed"
+    },
+    {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "05:22",
-      "end_ts": "06:49",
-      "quote": "Do you guys prefer mornings or afternoons usually?",
+      "ts": "06:10",
+      "end_ts": "06:50",
+      "quote": "Would you be available Thursday,",
       "customer_response": "cooperative",
-      "customer_quote": "Let's do ten.",
+      "customer_quote": "Yes. Thursday morning would work.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -191,63 +200,76 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "05:04",
-      "end_ts": "07:10",
-      "quote": "With a phone call appointment, all that they ask is that you have a computer available to you, and that you aren't driving.",
+      "ts": "06:54",
+      "end_ts": "06:54",
+      "quote": "for Thursday at ten, and then I'll send you a text just with your appointment details",
       "customer_response": "cooperative",
-      "customer_quote": "Yep. That's fine.",
+      "customer_quote": "Awesome. Thanks, Holland.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "completed",
+      "parts_done": [
+        "recap",
+        "hour_block",
+        "no_driving",
+        "reconfirm"
+      ],
+      "parts_score": "4/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "spouse/co-owner protocol discipline",
+    "topic": "Unresolved co-owner status leads to appointment booked for one person",
     "ts": "05:39",
     "quote": "I guess if your wife isn't on the title, then we could just do it with you.",
-    "why": "The customer never confirmed his wife's title status, and the rep resolved that open question by defaulting to exclude her rather than confirming — directly against protocols.spouse_decision, and it structurally weakens the booked appointment if she turns out to be a co-decider."
+    "why": "Customer never confirmed whether his wife is on the title; rep defaulted to excluding her rather than re-verifying, risking a fragile set per protocols.spouse_decision."
   },
   "key_moments": [
     {
-      "ts": "01:44",
-      "quote": "Well, we we had someone come and visit us, you know, just kinda going door to door talking about solar and said, oh, man. Maybe this is something to look into.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a door-to-door solar encounter that sparked his interest, but the rep never asks which company or what was pitched."
-    },
-    {
-      "ts": "02:01",
-      "quote": "we we looked a few years back about the with Ionic about buying, and that just wasn't the right fit for us.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer reveals a prior Ion (or similarly-named company) purchase quote that didn't fit, and separately mentions comparing lease/PPA options — real competitive and structural context that the rep lets pass without asking why it didn't fit or what changed."
+      "ts": "01:27",
+      "quote": "No. I mean, maybe my wife. I'm not I'd have to look at that, but it it the two of us, we live together, still married.",
+      "classification": "protocol_violation",
+      "stewart_read": "Customer flagged genuine uncertainty about title ownership; rep should have flagged this for follow-up before assuming exclusion later."
     },
     {
       "ts": "05:39",
       "quote": "I guess if your wife isn't on the title, then we could just do it with you.",
-      "classification": "spouse_handling",
-      "stewart_read": "The customer never confirmed whether his wife is on the title — he said 'maybe my wife... I'd have to look at that' — and the rep used that unresolved uncertainty to default to excluding her from the appointment. protocols.spouse_decision is explicit that co-decision-makers should be included in the appointment; the rep should have asked the customer to confirm rather than guessing off an ambiguous answer."
+      "classification": "protocol_violation",
+      "stewart_read": "Rep books the appointment for one person based on an assumption rather than confirming title status, risking a structurally vulnerable set if she is in fact a co-owner."
     },
     {
-      "ts": "02:23",
-      "quote": "No problem. So, yeah, I can try I can give you some information. I don't know, like, as much as a specialist, of course, just because I'm a scheduler. But Yeah. We have a pretty good program right now, I'd say. So what it does is it guarantees you savings within the first year you have solar.",
-      "classification": "setter_scope_creep",
-      "stewart_read": "Rep verbally flags the scope boundary ('just because I'm a scheduler') and then immediately crosses it by describing the savings-guarantee program's mechanics."
+      "ts": "02:07",
+      "quote": "But this just looking at the options of the different lease the PPAs, I think they're called, like, leases.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a prior Ionic quote/design that 'wasn't the right fit' but rep never asks what specifically didn't work."
+    },
+    {
+      "ts": "03:21",
+      "quote": "Okay. So, yeah, $1.50 to $2.70.",
+      "classification": "bill_anchor",
+      "stewart_read": "Bill is captured cleanly with both winter and summer figures."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 50,
-    "verified": 47,
-    "fuzzy": 2,
-    "wrong_ts": 1,
+    "checked": 55,
+    "verified": 54,
+    "fuzzy": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

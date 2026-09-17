@@ -1,36 +1,45 @@
 {
   "call_id": "SESSION24_845c1d04",
   "rep_name": "Parker",
-  "trajectory_summary": "The call opens cold with an immediate cost/timing deflection, moves through a genuinely confusing multi-turn explanation of the bill-swap mechanic, and then recovers into a cooperative, almost self-persuading close where the customer pulls her bill, texts a photo, and locks a callback window. The shape is mixed: real energy was leaked in the middle third through unclear explanation, but the rep's persistence on logistics (bill, text, callback time) rebuilt it into a scheduled outcome.",
+  "trajectory_summary": "The call opens on a cost deferral, drifts through a repetitive and partially setter-scope explanation of the bill-swap mechanism, and only regains footing when the customer's own bill pain surfaces unprompted near the end. The rep never explicitly names or flips either deferral objection, but the appointment still lands because the customer's organic frustration with her bill does the work the rep didn't.",
   "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "05:38",
-    "quote": "let's say 02:00.",
-    "reasoning": "The rep locked a specific day (Saturday) and time (2:00 PM) for a phone callback, and the customer confirmed with enthusiasm at 05:49, satisfying both day-and-time criteria for a booked outcome."
+    "ts": "05:34",
+    "quote": "Okay. I'll I'll put you down for Saturday. Let's say let's say 02:00.",
+    "reasoning": "A specific day (Saturday) and time (2:00) were stated and the customer accepted ('Yeah. That'd be good.'), but the required bill photo was only promised via text and not confirmed sent before the call ended, and no button-up elements like the one-hour block or 'is that fair' handshake were run, leaving the booking procedurally fragile per Ion's rule that a set without the bill in hand is tentative.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
     "bill_ts": "01:28",
-    "bill_quote": "About a 100 and something a month. $150,100 for somewhere along that line. More than what summertime of course.",
+    "bill_quote": "About a 100 and something a month. $150,100",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the number but responded with a generic program pivot ('the cool thing with our new program...') rather than turning the $150+/month figure into an explicit reason to act. The flip should have landed right after 01:31, tying her actual number to the savings-guarantee point the rep made moments later at 01:38."
+    "reasoning": "Bill amount ($100-150/month) was captured cleanly at 01:28 but never referenced again; the flip should have landed at appointment-setting (05:34) or at the bill-pain moment (04:39) tying the $150 figure to the appointment value, but the rep moved straight to scheduling without it."
   },
   "bill_document_audit": {
     "asked": true,
     "ask_ts": "03:43",
     "ask_quote": "The only thing we need to finish up a design for you is we do look at your ComEd bill.",
-    "result": "received_on_call",
-    "method": "photo",
-    "result_ts": "04:51",
-    "result_quote": "Leanne. I just sent you a text. Did that come through for you to the 773 number?",
-    "reasoning": "The rep asked for the ComEd bill, walked the customer through texting instead of emailing, and she located and photographed it live on the call, confirming receipt of the text thread at 04:51-04:58."
+    "result": "promised_later",
+    "method": "text",
+    "result_ts": "04:43",
+    "result_quote": "Alright. So text me, and then I will text you back this copy this picture of this,",
+    "reasoning": "The rep asked for the ComEd bill and the customer agreed to text a picture of the bill later; the bill was not received on the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +50,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested her in solar; the call opens directly into program explanation after the intro. No standalone interest-reason statement was captured, though her bill pain surfaces implicitly later at 04:43."
+    "reasoning": "The rep did not ask why the customer was interested in solar, so no reason was elicited or used."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "end_ts": "00:14",
-      "quote": "Hey. This is Parker. I'm with Ion. I was just calling because you had a request.",
+      "end_ts": "00:12",
+      "quote": "This is Parker. I'm with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "Hello?",
+      "customer_quote": "Yeah. Alright. But I don't have any money right now, so I'll be back in about six months.",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -70,7 +79,7 @@
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -78,11 +87,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,11 +99,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,16 +111,16 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "03:43",
-      "end_ts": "04:04",
-      "quote": "we do look at your ComEd bill.",
+      "end_ts": "03:55",
+      "quote": "The only thing we need to finish up a design for you is we do look at your ComEd bill.",
       "customer_response": "cooperative",
-      "customer_quote": "Oh, this is Nashville. Let me see where it's at.",
+      "customer_quote": "Oh, here it is.",
       "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
@@ -123,14 +132,14 @@
       "end_ts": "01:31",
       "quote": "How much are you normally paying right now?",
       "customer_response": "cooperative",
-      "customer_quote": "About a 100 and something a month. $150,100 for somewhere along that line.",
+      "customer_quote": "About a 100 and something a month. $150,100",
       "resistance_reason": "",
       "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +147,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,7 +159,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
@@ -168,37 +177,42 @@
       "section": "bill_collection",
       "status": "asked",
       "ts": "03:43",
-      "end_ts": "04:51",
+      "end_ts": "04:43",
       "quote": "Would would it be easier to text it or to email it?",
       "customer_response": "cooperative",
-      "customer_quote": "Because this has been hot all winter. This is ridiculous.",
+      "customer_quote": "Alright. So text me, and then I will text you back this copy this picture of this,",
       "resistance_reason": "",
       "rep_followup": "persisted",
-      "result": "completed"
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "05:03",
-      "end_ts": "05:38",
-      "quote": "would would a one or a two or 02:00 work for you?",
+      "ts": "05:25",
+      "end_ts": "05:40",
+      "quote": "would a one or a two or 02:00 work for you?",
       "customer_response": "cooperative",
-      "customer_quote": "Afternoons. Don't call me too early.",
+      "customer_quote": "Yeah. That'd be good.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "05:38",
-      "end_ts": "06:26",
-      "quote": "I'll put you down for Saturday. Let's say 02:00.",
+      "ts": "05:34",
+      "end_ts": "05:40",
+      "quote": "Okay. I'll I'll put you down for Saturday. Let's say",
       "customer_response": "cooperative",
       "customer_quote": "Oh, that's perfect. Thank you. I appreciate it.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
@@ -208,85 +222,108 @@
       "type": "cost",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "we take care of everything up front for you, so there's nothing out of your pocket."
+        "Okay. I mean, we take care of everything up front for you, so there's nothing out of your pocket."
       ],
       "resolved": true,
-      "resolution_ts": "00:26",
-      "reasoning": "The rep addressed the upfront-cost framing once and the customer moved on to a mechanism question rather than repeating the money objection directly, though she never fully confirmed she was satisfied on cost."
-    },
-    {
-      "ts": "00:54",
-      "quote": "Yeah. I know that. But but what I'm saying is how do I pay for the panels?",
-      "type": "other",
-      "rep_attempts": 3,
-      "attempt_quotes": [
-        "Yeah. So it's more of a monthly thing. So it's kind of all wrapped up into that monthly cost.",
-        "Yeah. But you have a cheaper bill.",
-        "Not yeah. It wouldn't add it wouldn't add to the bill you're already paying, but it would replace it."
+      "resolution_ts": "00:54",
+      "reasoning": "Rep made one attempt (a reassurance about no upfront cost) and the customer moved past the deferral into asking how payment works, but the objection was never explicitly named or flipped.",
+      "blocked_section": "interest_question",
+      "attempt_moves": [
+        "reassure"
       ],
-      "resolved": true,
-      "resolution_ts": "02:16",
-      "reasoning": "It took three distinct attempts before the customer explicitly confirmed understanding at 02:16 ('Right. That's what I was saying. I wouldn't pay ComEd anymore.')."
+      "resolved_by_tape": true,
+      "next_event": "bill_amount@01:23",
+      "resolution_agrees": true
     },
     {
       "ts": "02:52",
       "quote": "I don't have time right now.",
       "type": "timing_or_callback",
-      "rep_attempts": 1,
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": true,
+      "resolution_ts": "03:11",
+      "reasoning": "Rep did not directly address this second deferral; the conversation moved on into scheduling logistics on its own, so it resolved without a rep intervention.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [],
+      "resolved_by_tape": true,
+      "next_event": "bill_collection@03:43",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "01:14",
+      "quote": "Oh, so it's not going to your monthly bill. You wouldn't have an electric bill. You'll have just another bill.",
+      "type": "trust_or_scam",
+      "rep_attempts": 2,
       "attempt_quotes": [
-        "would it would you be more available over text message if I texted you and we could get a few things going"
+        "Not yeah. It wouldn't add it wouldn't add to the bill you're already paying, but it would replace it.",
+        "And the the the way that works is because the panels actually so they make the energy from the sun."
       ],
       "resolved": true,
-      "resolution_ts": "02:57",
-      "reasoning": "Customer set a time boundary but immediately offered a callback window herself, and the rep pivoted to text/logistics rather than pushing further, which resolved the timing concern without conflict."
+      "resolution_ts": "02:16",
+      "reasoning": "Customer misunderstood the bill-swap mechanic twice; rep re-explained (replace not add, then how panels generate power) before she confirmed understanding at 02:16.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "reframe",
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "bill_amount@01:23",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Clarity on the payment mechanism",
-    "ts": "00:54",
-    "quote": "Yeah. I know that. But but what I'm saying is how do I pay for the panels?",
-    "why": "The customer had to ask the same question three separate times across nearly two minutes before getting a direct answer ('it would replace it' at 02:09). A tighter, single clear explanation up front would have shortened the confused middle stretch and avoided the risk of losing her mid-call."
+    "topic": "Objection inversion miss on opening deferral",
+    "ts": "00:15",
+    "quote": "I don't have any money right now, so I'll be back in about six months.",
+    "why": "This is the single highest-leverage moment in the call — a textbook flip trigger appears in the first 15 seconds and the rep answers with a feature pitch instead, forcing three extra minutes of confused back-and-forth that a clean flip would have shortcut."
   },
   "key_moments": [
     {
       "ts": "00:15",
-      "quote": "Yeah. Alright. But I don't have any money right now, so I'll be back in about six months.",
+      "quote": "I don't have any money right now, so I'll be back in about six months.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "This is a near-verbatim match to the schema's 'I can't afford it' trigger, which calls for the flip 'what you can't afford is your current bill.' The rep instead responds with a feature explanation ('we take care of everything up front') rather than the inversion move."
+      "stewart_read": "Classic 'I can't afford it' trigger with a canonical flip available ('what you can't afford is your current bill') and the rep instead explained the no-upfront-cost feature."
     },
     {
-      "ts": "01:23",
-      "quote": "Yeah. But you have a cheaper bill. How much are you normally paying right now?",
-      "classification": "bill_anchor",
-      "stewart_read": "Rep captures the bill ask at a moment of live confusion rather than waiting for a clean verify sequence, which is a reasonable adaptive move but happens before the mechanic itself is resolved."
+      "ts": "02:52",
+      "quote": "I don't have time right now.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Second deferral of the same flavor as 00:15; rep does not acknowledge it at all and the transcript moves straight into scheduling talk."
     },
     {
-      "ts": "02:39",
-      "quote": "That helps eliminate a lot of the delivery charges they've been spiking on everybody and and everything like that.",
+      "ts": "01:00",
+      "quote": "Yeah. So it's more of a monthly thing. So it's kind of all wrapped up into that monthly cost.",
       "classification": "setter_scope_creep",
-      "stewart_read": "Rep moves into utility-delivery-charge mechanics, which is closer-tier financial/technical explanation rather than the setter's qualify-and-schedule job."
+      "stewart_read": "Financing-mechanism explanation is closer-tier content; the rep should redirect to the specialist rather than attempt to explain the payment structure."
     },
     {
-      "ts": "03:29",
-      "quote": "who would my question is to you, who would install the panels?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer asks a specific, closer-tier install-logistics question; rather than redirecting to the specialist to preserve appointment value, the rep answers directly with in-house install and warranty detail."
+      "ts": "04:39",
+      "quote": "Because this has been hot all winter. This is ridiculous.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Unsolicited bill-pain complaint right as she pulls up the actual bill — the single best emotional anchor in the call, and it passes without the rep reflecting it back."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 50,
-    "verified": 47,
-    "fuzzy": 1,
-    "wrong_ts": 2,
+    "checked": 49,
+    "verified": 48,
+    "fuzzy": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

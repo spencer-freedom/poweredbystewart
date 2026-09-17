@@ -1,8 +1,8 @@
 {
   "call_id": "SESSION23_b8173211",
   "rep_name": "Randy",
-  "trajectory_summary": "The call is procedurally complete — verify, bill, and appointment are all captured — but the rep's energy stays flat and checklist-driven throughout, while the customer's own engagement visibly rises: he discloses his credit-lock situation unprompted, discloses his age and tech limitation as a trust gift, and voluntarily reads off twelve months of kWh data by hand. The rep never anchors on any of these upgrades — no bill flip, no acknowledgment of the effort, no interest-reason capture — so the appointment gets booked on mechanics alone rather than on any emotional or curiosity hook the rep built.",
-  "shape": "mixed",
+  "trajectory_summary": "This is a warm inbound callback that stayed warm throughout — customer self-motivated toward cost info, minor frictions (utility mismatch, credit privacy, tech capability) were each resolved in one beat, and the call closed with a booked date and time. Energy built steadily rather than being tested by real resistance; the rep's main job was staying out of the way and adapting quickly, which he did.",
+  "shape": "energy_built",
   "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
@@ -11,50 +11,59 @@
     "co_owner_confirmed": null,
     "ts": "08:32",
     "quote": "I'll get you down for the twenty second at 09:30 in the morning",
-    "reasoning": "A specific day (Wednesday the 22nd) and time (9:30 AM) were locked, with the rep confirming a text follow-up; the appointment is framed as a specialist dropping by ('have a local specialist drop by'), indicating an in-person visit rather than a phone call."
+    "reasoning": "Specific day (22nd) and time (9:30am) were confirmed by both parties; customer had no co-owner (confirmed 'Just me' at 01:13), so co_owner_confirmed is null/not applicable since none was identified. Appointment is a local specialist 'drop by,' indicating in-person channel.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "03:20",
-    "bill_quote": "Yeah. Here's my bill. The last bill was $92.00 8.",
+    "bill_ts": "03:21",
+    "bill_quote": "The last bill was $92.00",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures the $92.08 average bill and acknowledges it numerically ('And 8¢. Okay. Sounds good.') but never turns it into a reason to act or aligns it against the utility — the conversation moves straight to 'is this your first time looking at solar' without any flip. The flip should have gone right after 03:34, e.g., tying the low bill or its trajectory to the value of locking in savings now."
+    "reasoning": "Bill of $92.08 was captured at 03:21 but never used to build emotional contrast against the utility or reinforced later in the call; the flip should have landed right after capture, e.g. tying the $92/month to what solar could offset before moving to prior_design question."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "03:55",
-    "ask_quote": "Do you typically get those bills in the mail or online?",
+    "ask_ts": "04:11",
+    "ask_quote": "if you can just take a picture of that bill and either text or email that over to me, that'd be great.",
     "result": "received_on_call",
     "method": "read_aloud",
-    "result_ts": "05:03",
-    "result_quote": "Alright. Kilowatt hours. Alright. We'll start March 2025.",
-    "reasoning": "Rep asked how the customer accesses his bill, offered text/email, but when the customer disclosed a tech barrier, the rep offered verbal readback and the customer supplied all twelve months of kWh data live on the call."
+    "result_ts": "06:41",
+    "result_quote": "Perfect. Yeah. Thanks for reading those out to me, Tommy. I'll be able to get this sent over to our design team to have that, design put together for you.",
+    "reasoning": "The rep asked for the bill at 04:11; the customer read the kilowatt-hour history aloud and the rep confirmed receipt at 06:41, so the bill information was effectively received on the call via read-aloud."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "00:20",
-    "reason_quote": "I'm I'm looking at seeing how much it's gonna cost me and what I can do with",
+    "reason_ts": "00:11",
+    "reason_quote": "Yes. Yes. I'm I'm looking at seeing how much it's gonna cost me and what I can do with",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar,' but the customer volunteered a reason early (wanting to see cost/savings) in response to the intro. The rep never revisited this cost-curiosity framing later in the call — the closing line 'See what it costs' from the customer at 08:59 echoes the same unaddressed interest."
+    "reasoning": "Customer's stated reason (wanting to see cost/what he can do) at 00:11 was never explicitly echoed back by the rep when booking or button-up; the customer reintroduced it himself at 08:59 ('See what it costs') rather than the rep reinforcing it."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
-      "ts": "00:02",
-      "end_ts": "00:26",
-      "quote": "Yeah. Hey, Tommy. I appreciate you for returning my call here. We were just reaching out because we got a request. You were looking at solar for your home here in Fredericksburg.",
+      "ts": "00:11",
+      "end_ts": "00:11",
+      "quote": "we were just reaching out because we got a request.",
       "customer_response": "cooperative",
-      "customer_quote": "I just got a call from this number on my cell phone. My name is Tony Westbrook.",
-      "resistance_reason": "trust",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "customer_quote": "Oh, okay. Yes. Yes. I'm I'm looking at seeing how much it's gonna cost me and what I can do with",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -72,10 +81,10 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:33",
-      "end_ts": "00:49",
-      "quote": "Just wanted to confirm your address here and a couple other things. I've got you here at 6525 Boxwell Drive in Fredericksburg, Virginia 22407.",
+      "end_ts": "00:44",
+      "quote": "Just wanted to confirm your address here and a couple other things.",
       "customer_response": "cooperative",
-      "customer_quote": "Single family, one story.",
+      "customer_quote": "That is correct.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -96,7 +105,7 @@
       "section": "roof",
       "status": "asked",
       "ts": "01:27",
-      "end_ts": "01:53",
+      "end_ts": "01:43",
       "quote": "Is your roof, is it like a standard?",
       "customer_response": "cooperative",
       "customer_quote": "Standard shingle roof. Kind of a high pitch.",
@@ -105,27 +114,15 @@
       "result": "completed"
     },
     {
-      "section": "tax_credit_qualifier",
-      "status": "asked",
-      "ts": "01:56",
-      "end_ts": "02:19",
-      "quote": "All you need to qualify is just have a credit score that's above 670.",
-      "customer_response": "resistant",
-      "customer_quote": "my credit scores are locked. So in order for you to check it, I'm gonna need two or three days to unlock it.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "moved_on",
-      "result": "partial"
-    },
-    {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:26",
-      "end_ts": "03:08",
-      "quote": "And then, yeah, it says here you're doing your electricity with Rappahannock,",
+      "end_ts": "03:12",
+      "quote": "it says here you're doing your electricity with Rappahannock,",
       "customer_response": "cooperative",
-      "customer_quote": "Dominion Energy is what I have.",
+      "customer_quote": "Dominion Energy",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -135,10 +132,22 @@
       "end_ts": "03:32",
       "quote": "And about how much are you, currently paying for electricity on average?",
       "customer_response": "cooperative",
-      "customer_quote": "The last bill was $92.00 8.",
+      "customer_quote": "The last bill was $92.00",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
+    },
+    {
+      "section": "tax_credit_qualifier",
+      "status": "asked",
+      "ts": "02:04",
+      "end_ts": "02:11",
+      "quote": "All you need to qualify is just have a credit score that's above 670.",
+      "customer_response": "cooperative",
+      "customer_quote": "That will be the case, but my credit scores are locked.",
+      "resistance_reason": "privacy",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "military",
@@ -167,85 +176,96 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "03:55",
-      "end_ts": "06:36",
-      "quote": "Do you typically get those bills in the mail or online?",
-      "customer_response": "resistant",
-      "customer_quote": "I think how to do this. I'm, like, 75 years old, so all this technology is way over my head.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "alternative_offered",
+      "ts": "04:11",
+      "end_ts": "06:41",
+      "quote": "if you can just take a picture of that bill and either text or email that over to me, that'd be great.",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright. Kilowatt hours. Alright. We'll start March",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "06:41",
+      "ts": "08:00",
       "end_ts": "08:34",
-      "quote": "Are you typically free mornings or afternoons?",
+      "quote": "Do you just wanna shoot for, next Wednesday, the twenty second?",
       "customer_response": "cooperative",
-      "customer_quote": "I got a 10:00 tomorrow.",
+      "customer_quote": "I'm writing this down.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "08:34",
-      "end_ts": "09:03",
-      "quote": "I'll get you down for the twenty second at 09:30 in the morning, and, I'll send you a confirmation text with the date and time of the meeting.",
+      "ts": "08:32",
+      "end_ts": "08:56",
+      "quote": "Awesome. I'll get you down for the twenty second at 09:30 in the morning, and, I'll send you a confirmation text with the date and time of the meeting.",
       "customer_response": "cooperative",
-      "customer_quote": "That'll be good.",
+      "customer_quote": "See what it costs. Thank you very much.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "curiosity creation after high-effort bill capture",
-    "ts": "05:03",
-    "quote": "Alright. Kilowatt hours. Alright. We'll start March 2025.",
-    "why": "The customer put in unusual manual effort (reading 12 months of kWh data aloud) and disclosed a real vulnerability (age/tech limitation) — the rep logged the data correctly and pivoted to logistics without ever reflecting that effort back or building anticipation for what the appointment will reveal. This is the single largest gap between what the customer gave and what the rep did with it."
+    "topic": "Reason-for-interest never reflected back",
+    "ts": "00:11",
+    "quote": "I'm I'm looking at seeing how much it's gonna cost me and what I can do with",
+    "why": "Customer gave a clear, specific motivation up front and again at close, but the rep never explicitly tied the appointment or bill capture to it — a missed easy reinforcement that costs nothing and strengthens show-rate."
   },
   "key_moments": [
     {
-      "ts": "02:49",
-      "quote": "Who are you folks based out of?",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "This is the customer's version of a legitimacy check, adjacent to the schema's how_did_you_get_my_number protocol — he wants to know where the company operates from before continuing. The rep answers with honest specificity ('We're actually based out of Utah... but we are nationwide and we're local here in Virginia'), which matches the protocol's correct_response_pattern."
+      "ts": "00:11",
+      "quote": "I'm I'm looking at seeing how much it's gonna cost me and what I can do with",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer hands the rep his core motivation (cost curiosity) in the first line, but the rep never reflects it back or ties the appointment to it explicitly later."
     },
     {
       "ts": "02:04",
       "quote": "All you need to qualify is just have a credit score that's above 670.",
       "classification": "other",
-      "stewart_read": "Rep states the 670 threshold correctly per the current schema (contrast with schema-drift examples elsewhere in the corpus stating 650). When the customer says his credit is locked and he'd need 2-3 days to unlock it for a check, the rep says 'You're good... not a problem at all' and moves on without pursuing a workaround."
+      "stewart_read": "Correct threshold stated matching schema (670), unlike the drift seen in other calls."
+    },
+    {
+      "ts": "02:19",
+      "quote": "You're good. That's that's not a issue. I'm just kinda asking just to see if you, would qualify for the program.",
+      "classification": "micro_trade",
+      "stewart_read": "Rep quickly reassures on the locked-credit disclosure and moves forward without pressing for verification, keeping momentum instead of stalling on a soft qualifier gap."
     },
     {
       "ts": "04:33",
-      "quote": "I think how to do this. I'm, like, 75 years old, so all this technology is way over my head.",
+      "quote": "I'm, like, 75 years old, so all this technology is way over my head.",
       "classification": "empathy_miss",
-      "stewart_read": "Customer volunteers his age and self-described technical limitation unprompted — a trust gift per the schema. Rep's response is minimal ('Oh, you're good. I can love it.') before pivoting straight to a procedural alternative rather than acknowledging the disclosure itself."
-    },
-    {
-      "ts": "05:03",
-      "quote": "Alright. Kilowatt hours. Alright. We'll start March 2025.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "The customer's unprompted, effortful full 12-month manual readout is a strong engagement signal — he is investing real effort into being a good candidate. The rep logs each number mechanically ('Okay,' 'Sorry. 4441. Just just 441. Okay. Go ahead.') without ever reflecting the effort back or building curiosity around what those numbers will produce."
+      "stewart_read": "Customer discloses a real limitation; rep's response ('Oh, you're good. I can love it.') is warm in tone but garbled/unclear as a spoken acknowledgment before pivoting to the read-aloud offer."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 50,
-    "verified": 50,
+    "checked": 52,
+    "verified": 52,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

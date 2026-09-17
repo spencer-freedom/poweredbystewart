@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION4_3d4e75c7",
   "rep_name": "Corey",
-  "trajectory_summary": "The call opens as a routine, cooperative verify sequence — address, roof type, roof age all confirmed without friction. It ends abruptly less than two minutes in when the rep asks about tree removal, gets a single 'no,' and immediately declares the home disqualified for solar rather than probing tree location, size, or shading impact. The customer, caught off guard, declines to remove trees from what she describes as a natural wooded area and ends the call herself.",
+  "trajectory_summary": "A short, mechanical call that never got past the roof/tree qualifier. The rep skipped the interest question and co-owner check, moved straight through address and roof, then hit a shading gate and immediately told the customer solar wouldn't work rather than probing severity or alternatives. Energy leaked from a cooperative-but-flat start to a clean disqualification with no attempt to salvage or redirect.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is unknown/unspecified but this call should be recorded as a DQ initiated by the rep on a single yes/no answer with no follow-up probing — the schema's dq_rules do not define 'trees present' as an automatic hard DQ, and no shading assessment (which trees, how close to the roof, how much of the day they shade) was attempted before pronouncing the home unworkable.",
+  "outcome_dispute": "Not clearly a scam/DQ-only call: the rep's own framing ('solar wouldn't be a good option... unless you remove the trees') invited the exit rather than exploring whether shading was partial, seasonal, or limited to one roof face before disqualifying.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
     "ts": "01:40",
-    "quote": "Okay. Well, realistically speaking, solar wouldn't be a good option for your home unless you remove the trees you have in the way.",
-    "reasoning": "The rep explicitly disqualifies the home due to tree shading and the customer declines the condition to remove them, ending the call with no appointment and no next step."
+    "quote": "realistically speaking, solar wouldn't be a good option for your home unless you remove the trees you have in the way",
+    "reasoning": "Rep explicitly disqualifies the home on the shading/tree gate and the customer confirms she will not remove trees, ending pursuit — matches dq_rules pattern for roof/shading obstruction.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reached the bill_amount verify item — it was cut short at the roof/tree shading question before utility company or bill amount were ever raised."
+    "reasoning": "No bill amount or kWh was requested or provided on the call, so no flip could be executed."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call ended during the roof/shading portion of verify, well before bill collection would have been raised."
+    "reasoning": "The rep did not raise getting the utility bill in any form during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,19 +49,19 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what interested the customer in solar; the call moved directly from address/roof verify items into the tree-shading question and ended before this item was reached."
+    "reasoning": "The rep did not ask why the customer was interested in solar; only confirmed they had submitted a request."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:32",
-      "quote": "Hi. This is Corey with Ion. I'm just reaching out because I got a request that you're looking at solar for your home. Does that ring a bell?",
+      "end_ts": "00:25",
+      "quote": "Hi, Alexis. This is Corey at Ion. Got a request you're looking at solar for your home.",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -65,19 +73,19 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:43",
-      "end_ts": "00:57",
-      "quote": "You gave us 3776 Fallen Tree Lane in Cincinnati, Ohio. Is that correct?",
+      "ts": "00:53",
+      "end_ts": "00:58",
+      "quote": "3776 Fallen Tree Lane in Cincinnati, Ohio. Is that correct?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -89,18 +97,18 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "00:59",
-      "end_ts": "01:33",
-      "quote": "Is the roof asphalt shingle? And do you know how old the roof is?",
-      "customer_response": "cooperative",
-      "customer_quote": "Yeah. I replaced it.",
-      "resistance_reason": "",
+      "end_ts": "01:57",
+      "quote": "And taking a look at the roof there, is that an asphalt shingle roof?",
+      "customer_response": "resistant",
+      "customer_quote": "I wouldn't It's a wooded area.",
+      "resistance_reason": "other",
       "rep_followup": "moved_on",
       "result": "completed"
     },
@@ -198,66 +206,63 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "01:53",
-      "quote": "I the back the backyard trees are no. No. No. Forget it. I wouldn't It's a wooded area. It's natural. I don't intend to do that.",
-      "type": "roof_or_home",
-      "rep_attempts": 0,
-      "attempt_quotes": [],
-      "resolved": false,
-      "resolution_ts": "02:05",
-      "reasoning": "After the rep frames tree removal as a precondition for solar, the customer declines outright and the call ends with the rep making no attempt to reframe, ask a clarifying question, or offer an alternative (e.g., partial removal, panel placement away from shade)."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "premature disqualification without probing",
+    "topic": "Premature self-disqualification on shading",
     "ts": "01:40",
-    "quote": "Okay. Well, realistically speaking, solar wouldn't be a good option for your home unless you remove the trees you have in the way. So I would recommend removing the trees you have in the backyard before doing solar.",
-    "why": "The rep turned a single yes/no answer into a full disqualification with zero follow-up questions about tree size, distance from the roof, or actual shading impact — costing a lead that started cooperative and had a recently replaced roof."
+    "quote": "solar wouldn't be a good option for your home unless you remove the trees you have in the way",
+    "why": "Rep declared the home unqualified without first establishing shading severity or location, closing a lead that may have had partial viability."
   },
   "key_moments": [
     {
+      "ts": "00:35",
+      "quote": "I work with our design team here to create solar estimates for homeowners, so I'd be happy to get you started here.",
+      "classification": "intro_legitimacy_omission",
+      "stewart_read": "Intro establishes Corey's name and Ion but never references the lead source or form the customer filled out, leaving legitimacy thin for a cold-sounding inbound."
+    },
+    {
       "ts": "01:34",
-      "quote": "And then have you had any trees in the backyard removed?",
-      "classification": "other",
-      "stewart_read": "This question is phrased ambiguously as a past-tense verify item ('have you had trees removed') rather than a forward-looking shading assessment. The rep doesn't clarify whether he's asking about existing shade trees or completed removals before drawing a conclusion."
+      "quote": "have you had any trees in the backyard removed?",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep jumps to a binary tree-removal question without first asking about shading extent or roof exposure, skipping a step that could have kept the qualifier open."
     },
     {
       "ts": "01:40",
-      "quote": "Okay. Well, realistically speaking, solar wouldn't be a good option for your home unless you remove the trees you have in the way. So I would recommend removing the trees you have in the backyard before doing solar.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The rep converts one 'no' answer into a categorical disqualification without asking where the trees are relative to the roof, how tall they are, or whether shading is actually significant. This is a premature DQ with zero investigative follow-up."
-    },
-    {
-      "ts": "01:53",
-      "quote": "I the back the backyard trees are no. No. No.",
+      "quote": "realistically speaking, solar wouldn't be a good option for your home unless you remove the trees you have in the way",
       "classification": "objection_inversion_miss",
-      "stewart_read": "The customer's fragmented pushback is effectively an objection to the premise of the DQ, not a settled fact. The rep had a moment to ask a clarifying question (how many trees, how far from the roof) instead of accepting the disqualification as final."
+      "stewart_read": "Rather than probing or reframing, rep hands the customer the disqualifying rationale directly, closing the call himself."
     },
     {
       "ts": "01:57",
-      "quote": "Forget it. I wouldn't It's a wooded area. It's natural. I don't intend to do that. Thank you. Yeah. No problem. Have a good one.",
+      "quote": "Forget it. I wouldn't It's a wooded area. It's natural. I don't intend to do that.",
       "classification": "unanchored_soft_exit",
-      "stewart_read": "The call ends with no next step, no offer to revisit if trees are trimmed rather than removed, and no button-up mechanics — it simply stops. Speaker turn-taking in this segment is garbled in the transcript, so exact attribution of 'Yeah. No problem. Have a good one' is uncertain, but the outcome is unambiguous: the call closes with nothing owned by the rep."
+      "stewart_read": "Call ends with no next step, no bridge offer (e.g., checking back if trees are trimmed later), and no button-up elements attempted."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 23,
+    "checked": 21,
     "verified": 21,
-    "fuzzy": 2,
+    "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0
   }

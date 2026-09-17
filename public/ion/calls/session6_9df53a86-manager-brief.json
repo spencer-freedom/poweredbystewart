@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION6_9df53a86",
   "rep_name": "Meg",
-  "trajectory_summary": "The call opens on a cooperative inbound callback, dips into real friction when the rep runs a legitimate but customer-facing hold protocol, then recovers fully and rides an unusually long personal/political/commercial-real-estate tangent without losing the booking. The rep closed the mechanical needs (bill photo, usage graph, appointment slot) despite the tangents, landing a booked appointment with a specific time.",
+  "trajectory_summary": "The call opened warm (inbound callback), dipped into defensiveness over the tenant-billing hold, recovered cleanly, then spent a long middle stretch on the customer's tangents (investor portfolio, politics, personal stories) that the rep mostly let run before steering back to bill capture and booking. It closed with a booked time and a bill photo captured live, though button-up was thin.",
   "shape": "mixed",
-  "outcome_dispute": "None on the outcome itself — a specific day and time (tomorrow, 02:30) were confirmed at 17:38, so 'booked' via phone channel is the correct tag. Note there is no evidence of a co-owner/spouse on this account; customer stated she is sole owner of the building.",
+  "outcome_dispute": "v1 tag unknown; based on transcript this is a booked appointment with bill in hand, which is a strong outcome, but the button-up sequence lacks the full required elements (no explicit hour-block statement, no driving/computer instruction, no 'is that fair' handshake), so calling it a clean 'booked' understates a procedural gap.",
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "phone",
@@ -11,47 +11,56 @@
     "co_owner_confirmed": null,
     "ts": "17:38",
     "quote": "Alright. 02:30 then. 02:30 then. K.",
-    "reasoning": "A specific day (tomorrow) and time (02:30) were explicitly confirmed by the customer, and the rep restated it at close: \"let's plan on 02:30 tomorrow, Emery.\" No co-owner was identified — customer stated she is sole owner of the building — so co_owner_confirmed is not applicable."
+    "reasoning": "A specific day (tomorrow) and time (2:30) were mutually confirmed; customer is the sole owner so no co-owner applies.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "04:29",
+    "bill_ts": "04:31",
     "bill_quote": "$181.80.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the stated bill amount and logged it but never flipped it into an emotional alignment-against-the-utility line (e.g., framing the $181.80 as money currently going to ComEd that could instead build equity). The conversation moved straight into the incentive/ownership Q&A instead."
+    "reasoning": "Rep captured $181.80 at 04:31 but never flipped it into alignment-against-the-utility; the bill-swap explanation at 05:24 stayed feature-focused ('replacing the ComEd bill with a cheaper solar payment') rather than framing the bill itself as the villain costing him money."
   },
   "bill_document_audit": {
     "asked": true,
     "ask_ts": "04:13",
-    "ask_quote": "So what we'll need to do is gather an electric bill for for your unit, right, just so you can see how much power you're using, make sure the system will fit you correctly.",
+    "ask_quote": "what we'll need to do is gather an electric bill for for your unit,",
     "result": "received_on_call",
     "method": "photo",
     "result_ts": "17:55",
     "result_quote": "Oh, here we go. It came through.",
-    "reasoning": "Rep asked for the bill, guided the customer to log into the ComEd app, and successfully received the bill photo (and a follow-up graph photo) via text during the call itself."
+    "reasoning": "The rep requested a bill at 04:13 and the customer sent a photo during the call; the rep confirms receipt when the photo comes through at 17:55."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "05:10",
-    "reason_quote": "When I signed up or I looked at the ad and all, there was, you know, supposed to be some kind of incentives or stuff, like, saying you can get this for free.",
+    "reason_ts": "07:39",
+    "reason_quote": "Well, you know, that sounds great because I'm interested in the different models.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never directly asked 'what interested you in solar,' but the customer volunteered her reason (ad-driven interest in free/incentive claims) unprompted. The rep answered the incentive question factually but never tied it back later when setting the appointment or in the specialist handoff framing."
+    "reasoning": "Customer stated interest in comparing solar models across his properties at 07:39, but the rep never explicitly tied the appointment or booking language back to that stated reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:00",
-      "end_ts": "00:20",
-      "quote": "I'm with Ion. Just we were reaching out about the form you filled out online and had a couple questions to build your solar design.",
+      "end_ts": "00:11",
+      "quote": "Hi. This is Meg.",
       "customer_response": "cooperative",
-      "customer_quote": "Okay.",
+      "customer_quote": "Oh, I'm just calling you back about the solar.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -72,25 +81,25 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:22",
-      "end_ts": "00:44",
-      "quote": "So let's actually just start here with the address... this is a single family home. Right?",
+      "end_ts": "00:46",
+      "quote": "So let's actually just start here with the address.",
       "customer_response": "cooperative",
-      "customer_quote": "Yes. No. It's a three flat.",
+      "customer_quote": "I own the entire building.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "00:46",
+      "end_ts": "00:51",
+      "quote": "Do you rent out, like, the other two units?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes. I do.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "roof",
@@ -108,10 +117,10 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "04:23",
-      "end_ts": "04:23",
-      "quote": "I've got you here with ComEd.",
+      "end_ts": "04:31",
+      "quote": "I've got you here with ComEd. Do you know how much you're spending on average?",
       "customer_response": "cooperative",
-      "customer_quote": "",
+      "customer_quote": "$181.80.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -120,7 +129,7 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "04:23",
-      "end_ts": "04:29",
+      "end_ts": "04:31",
       "quote": "Do you know how much you're spending on average?",
       "customer_response": "cooperative",
       "customer_quote": "$181.80.",
@@ -167,11 +176,11 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "04:45",
+      "ts": "04:13",
       "end_ts": "17:55",
-      "quote": "Do you get your ComEd bill online or through the mail?",
+      "quote": "what we'll need to do is gather an electric bill for for your unit,",
       "customer_response": "cooperative",
-      "customer_quote": "I get it through the mail, and I got an app too.",
+      "customer_quote": "I did already.",
       "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
@@ -181,7 +190,7 @@
       "status": "asked",
       "ts": "16:57",
       "end_ts": "17:38",
-      "quote": "Looking through my schedule, we've actually got tomorrow afternoon. I have a a 2PM, 3PM, or 04:30.",
+      "quote": "we've actually got tomorrow afternoon. I have a a 2PM,",
       "customer_response": "cooperative",
       "customer_quote": "Alright. 02:30 then. 02:30 then. K.",
       "resistance_reason": "",
@@ -191,92 +200,115 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "21:00",
-      "end_ts": "21:15",
-      "quote": "Well, yeah, let's plan on, tomorrow, 02:30. We'll probably reach out in the morning just to double check that time still works for you.",
+      "ts": "21:04",
+      "end_ts": "21:05",
+      "quote": "02:30.",
       "customer_response": "cooperative",
-      "customer_quote": "Okay. Thank you.",
+      "customer_quote": "Okay. Bye bye. Bye bye.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
-      "ts": "01:31",
+      "ts": "01:34",
       "quote": "I'm not extending this out to the tenants, so I don't know why you'd make that call.",
-      "type": "trust_or_scam",
+      "type": "other",
       "rep_attempts": 2,
       "attempt_quotes": [
-        "It's just sometimes it happens like that.",
-        "So the the reason is because when you're connected to the electric company, right, it your system is still tied to the electrical grid..."
+        "Yeah. So the the reason is because when you're connected to the electric company, right, it your system is still tied to the electrical grid.",
+        "But since you're all in one home, like, technically, it's one building and you own the whole thing, that's what I'm double checking."
       ],
       "resolved": true,
       "resolution_ts": "04:04",
-      "reasoning": "Customer pushed back hard on the tenant-billing hold logic; rep explained the meter-ownership rationale, put her on hold to verify with a manager, and returned with a clean pass, after which the customer cooperated fully."
+      "reasoning": "Customer pushed back hard on being questioned about tenant billing; rep explained the meter logic and then resolved it via the manager-hold, returning with clearance.",
+      "blocked_section": "co_owner",
+      "attempt_moves": [
+        "reason",
+        "restate"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "bill_collection@04:13",
+      "resolution_agrees": true
     },
     {
-      "ts": "05:19",
-      "quote": "there was, you know, supposed to be some kind of incentives or stuff, like, saying you can get this for free.",
-      "type": "cost",
-      "rep_attempts": 4,
+      "ts": "09:35",
+      "quote": "you should send me a seat out because we could just be wasting each other's time because I have no idea what your model is.",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 1,
       "attempt_quotes": [
-        "It's basically taking that ComEd bill and replacing it with a cheaper solar payment.",
-        "We've got a bunch of options. We have an ownership option where you would be the owner or we have leasing options.",
-        "The equipment itself isn't free. That's what that monthly payment is.",
-        "I'm just a a scheduler, so I don't really know a bunch of the specifics."
+        "So yeah. I mean, really, the the first thing we need to do is get that usage."
       ],
-      "resolved": false,
-      "resolution_ts": "07:10",
-      "reasoning": "The customer's ownership/cost/incentive questioning was never actually answered on its merits — it was resolved by scope-deferral to the specialist ('I'll make sure that we build up a couple of options for you'), not by the rep providing a satisfying answer. The customer moved on to other topics rather than being persuaded."
+      "resolved": true,
+      "resolution_ts": "14:39",
+      "reasoning": "Customer floated a soft deferral (send info/specialist without committing further), rep redirected once to bill collection and the customer continued cooperating with the bill request minutes later.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@16:57",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Framing qualification checks to avoid triggering scam suspicion",
-    "ts": "01:14",
-    "quote": "I do want to just double check with my manager and make sure we are able to help.",
-    "why": "This single line produced the sharpest friction of the call — the customer directly challenged the rep's logic and nearly derailed rapport. The underlying check was legitimate, but opening with doubt language on an owner-occupied multi-unit building (an edge case that's usually fine) reads as a stall. Reframe to lead with the likely-positive read before floating disqualification language."
+    "topic": "Setter scope creep on ownership/product/equipment questions",
+    "ts": "05:45",
+    "quote": "So who owns the solar? Who owns the system?",
+    "why": "Rep answered three separate closer-tier questions (ownership model, payment structure, panel/inverter brand) instead of redirecting early, giving away appointment value to a high-value multi-property lead."
   },
   "key_moments": [
     {
-      "ts": "01:14",
-      "quote": "I do want to just double check with my manager and make sure we are able to help.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Rep did not know how to resolve a tenant-paid-meter edge case and admitted it via a manager check rather than guessing or fabricating an answer — the admit-and-recover path, not a fabrication. The customer's hostile reaction was to the WAY it was delivered (framed as a possible disqualifier) more than the check itself."
-    },
-    {
-      "ts": "06:53",
-      "quote": "Yeah. Right. I'm just a a scheduler, so I don't really know a bunch of the specifics. Right?",
+      "ts": "05:45",
+      "quote": "So who owns the solar? Who owns the system?",
       "classification": "setter_scope_creep",
-      "stewart_read": "This is the correct scope-holding line, but it arrived on the FOURTH attempt at the same ownership/cost question, after three earlier answers (bill swap explanation, ownership vs. leasing options, 'equipment isn't free') that each invited another round."
+      "stewart_read": "Rep answered with real detail on ownership vs leasing instead of using the escape hatch immediately."
     },
     {
-      "ts": "09:50",
-      "quote": "I got 600,000 to put solar on the resort right now. So I'm trying to figure out what's gonna be my best plan.",
-      "classification": "other",
-      "stewart_read": "Customer disclosed a large-scale commercial/international solar buying intent (resort in Belize, apartment portfolio, $600K budget) that is entirely outside Ion's residential single-family/multi-unit script. The schema has no defined signal or routing path for B2B/commercial disclosures — this is a genuine schema gap, not a rep execution failure."
+      "ts": "10:24",
+      "quote": "But what Yes. Companies are you guys talking about?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep named the panel manufacturer (Silfab) and microinverter brand (Enphase) unprompted, closer-tier equipment-spec content."
     },
     {
-      "ts": "15:02",
-      "quote": "That should be something you're aware of. This time, but I drive a Tesla, so it gets a little bit",
+      "ts": "09:52",
+      "quote": "I got somebody who's who's looking at I got 600,000 to put solar on the resort right now.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Customer volunteers she drives a Tesla and charges it at home — a classic higher-electric-load signal that materially strengthens the case for a larger system. The rep acknowledged it socially (\"running those bills up, I bet\") but never anchored it as a design/value point for the specialist."
+      "stewart_read": "Customer disclosed a large-scale, multi-property investment appetite — a strong buying signal."
+    },
+    {
+      "ts": "01:34",
+      "quote": "I'm not extending this out to the tenants, so I don't know why you'd make that call.",
+      "classification": "protocol_violation",
+      "stewart_read": "Not the spouse protocol itself, but a related pattern: the ownership-verification hold read as adversarial rather than reassuring to a homeowner defending his sole title."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 52,
-    "verified": 47,
-    "fuzzy": 1,
-    "wrong_ts": 4,
-    "not_found": 0
+    "checked": 56,
+    "verified": 53,
+    "fuzzy": 0,
+    "wrong_ts": 2,
+    "not_found": 1
   }
 }

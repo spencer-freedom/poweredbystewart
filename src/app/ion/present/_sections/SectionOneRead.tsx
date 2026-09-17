@@ -171,7 +171,7 @@ export async function SectionOneRead() {
           </div>
         </div>
 
-        {/* Stewart checks Stewart — the critic on THIS call, then the code check on all of them. */}
+        {/* Stewart checks Stewart — the layered read (extract → verify → judge → rules), then the code check on all of them. */}
         <div className="mt-8 rounded-xl border border-stewart-success/30 bg-stewart-success/5 p-5 sm:p-6">
           <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-success mb-2">
             Then Stewart checks Stewart
@@ -184,7 +184,11 @@ export async function SectionOneRead() {
             </p>
           ) : (
             <p className="text-base text-stewart-text leading-relaxed">
-              A second pass audits the reasoning on every call and sends the draft back when it finds a hole.
+              Two models read every call and neither is trusted alone. The first only locates: which parts of the
+              script ran, where, in what words. The second only judges &mdash; and it is handed the first&apos;s
+              events only after each one has been matched word-for-word against the transcript. What used to be a
+              model&apos;s opinion &mdash; skipped or never reached, booked or tentative, did the objection stall the
+              call &mdash; is now a rule over those verified events.
             </p>
           )}
           <p className="mt-3 text-base text-stewart-text leading-relaxed">

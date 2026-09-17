@@ -1,17 +1,26 @@
 {
   "call_id": "20000760793",
   "rep_name": "Carter",
-  "trajectory_summary": "This is a cooperative, low-friction inbound lead call where the customer was pre-sold on interest and the rep ran the verify sequence competently, but the call ends with a conditional/tentative appointment gated on two items (drone shot or photos, and the utility bill) that were not resolved on the call. The rep never flipped the captured bill number into emotional leverage and gave a slightly-off credit threshold, but the customer's cooperative energy never dipped.",
+  "trajectory_summary": "The call opens warm with a self-motivated, cooperative customer and stays cooperative throughout, but the rep never locks the two required documents (bill and roof shot) live, leaving the appointment structurally conditional. Energy did not leak from resistance — there was none — but the call ends with unresolved capture items pushed entirely onto the customer's follow-through after the call.",
   "shape": "mixed",
-  "outcome_dispute": "The appointment time (9:30am tomorrow) was verbally agreed, but the rep explicitly conditions the booking on receiving the roof documentation and the utility bill first: 'I would need the picture of the roof and then the utility bill before I can put you in the schedule.' Neither was received on the call. This is a tentative appointment, not a firm booked one, since the rep's own stated gate was not cleared during the call.",
+  "outcome_dispute": "This should be tagged tentative, not booked: the rep explicitly states 'I would need the the picture of the roof and then the utility bill before I can put you in the schedule' at 05:23, meaning the 9:30 slot is conditional on documents that were never captured on the call.",
   "observed_outcome": {
     "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "05:54",
-    "quote": "Okay. We could do 09:30 in the morning.",
-    "reasoning": "A specific day and time were verbally agreed, but the rep explicitly conditioned the actual scheduling on receiving the roof documentation and utility bill first ('before I can put you in the schedule'), neither of which was delivered during the call — making this tentative rather than firmly booked."
+    "ts": "05:23",
+    "quote": "I would need the the picture of the roof and then the utility bill before I can put you in the schedule.",
+    "reasoning": "A specific day and time (tomorrow, 9:30am) were agreed, but the rep explicitly conditions the schedule slot on the roof photo and bill being sent, which were not captured live — making this tentative per Ion's rule that a set without the bill in hand is tentative.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,36 +29,36 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep captured the bill and even got a second data point ($100 last month plus five mini-splits) but responded with a generic reassurance ('we can definitely still save you some money') rather than turning the number into urgency or alignment-against-the-utility; the flip should have landed at 03:43 where the rep instead softened the pitch."
+    "reasoning": "Rep captured the $120/$100 bill at 03:18 and 03:32 but only used it to note 'not the highest bill' at 03:43, filing it rather than flipping it into a reason to act; the flip should have gone right there, reframing usage (mini splits, new home) against the modest bill number."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "04:15",
+    "ask_ts": "04:12",
     "ask_quote": "And then your most current Rappahannock bill just so we can know exactly how many panels you would need for your home.",
     "result": "promised_later",
     "method": "text",
     "result_ts": "04:43",
-    "result_quote": "So I'm just gonna shoot you a text.",
-    "reasoning": "Rep asks for the current utility bill and states he'll send a text (with his email) to facilitate sending it, but the customer does not produce or send the bill during the call itself — it's deferred to before the appointment."
+    "result_quote": "I'm just gonna shoot you a text.",
+    "reasoning": "Rep requested the utility bill and clarified needing the kilowatt usage; rep said they'd text and the customer agreed to send pictures/bill later."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:38",
     "reason_given": true,
     "reason_ts": "00:43",
-    "reason_quote": "I have a passive solar house with a clear story window that brings light into my living room, dining room, and I was just wondering what the cost would be to put on solar panels.",
+    "reason_quote": "I have a passive solar house with a clear story window that brings light into my living room, dining room,",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer's stated interest (curiosity about cost for a passive-solar-designed home) was never referenced again by the rep — no tieback in the close or scheduling language connecting the appointment to answering his specific cost question."
+    "reasoning": "Customer's stated interest reason (passive solar house, clerestory window, curiosity about panel cost) at 00:43-00:50 was acknowledged but never referenced again when setting the appointment or in the button-up."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "end_ts": "00:24",
-      "quote": "Hey. This is Carter calling from Ion. How are you?",
+      "end_ts": "00:11",
+      "quote": "This is Carter calling from Ion.",
       "customer_response": "cooperative",
       "customer_quote": "I'm doing well this morning, Carter.",
       "resistance_reason": "",
@@ -60,22 +69,22 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "00:38",
-      "end_ts": "00:55",
-      "quote": "Yeah. Is there anything in particular that sparked your interest in solar?",
+      "end_ts": "00:43",
+      "quote": "Is there anything in particular that sparked your interest in solar?",
       "customer_response": "cooperative",
-      "customer_quote": "I have a passive solar house with a clear story window that brings light into my living room, dining room, and I was just wondering what the cost would be to put on solar panels.",
+      "customer_quote": "I have a passive solar house with a clear story window that brings light into my living room, dining room,",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:30",
       "end_ts": "00:36",
-      "quote": "And you're at 16106 Little Fork Church Road?",
+      "quote": "And you're at 16106",
       "customer_response": "cooperative",
-      "customer_quote": "",
+      "customer_quote": "Right.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -84,7 +93,7 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "02:52",
-      "end_ts": "02:57",
+      "end_ts": "02:58",
       "quote": "Is there anyone else on the title of the home with you?",
       "customer_response": "cooperative",
       "customer_quote": "No. That's I'm the only owner.",
@@ -95,23 +104,23 @@
     {
       "section": "roof",
       "status": "asked",
-      "ts": "02:16",
-      "end_ts": "02:22",
-      "quote": "Okay. And then is there trees around the home at all?",
+      "ts": "01:33",
+      "end_ts": "02:16",
+      "quote": "Do you have any, like, over the head, like, drone shots of your home by chance?",
       "customer_response": "cooperative",
-      "customer_quote": "Okay. And the roof is a rubber roof with which is pitched in the middle.",
+      "customer_quote": "And the roof is a rubber roof with which is pitched in the middle.",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:59",
-      "end_ts": "03:09",
+      "end_ts": "03:03",
       "quote": "And then what electric company are you working with?",
       "customer_response": "cooperative",
-      "customer_quote": "Yes. For RAC.",
+      "customer_quote": "RAP Electric.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -120,7 +129,7 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "03:13",
-      "end_ts": "03:38",
+      "end_ts": "03:22",
       "quote": "Perfect. And then what's your average utility bill?",
       "customer_response": "cooperative",
       "customer_quote": "I'd say about a $120 a month.",
@@ -132,7 +141,7 @@
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "03:51",
-      "end_ts": "04:00",
+      "end_ts": "03:59",
       "quote": "And then in Virginia, the main requirement to get solar right now is having a credit score above 6 50. Is that the case for you?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
@@ -167,9 +176,9 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "04:15",
-      "end_ts": "04:49",
-      "quote": "And then your most current Rappahannock bill just so we can know exactly how many panels you would need for your home.",
+      "ts": "04:06",
+      "end_ts": "04:24",
+      "quote": "I mean, I'll need two things from you.",
       "customer_response": "cooperative",
       "customer_quote": "Okay. It was a $100.",
       "resistance_reason": "",
@@ -179,9 +188,9 @@
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "05:25",
+      "ts": "05:35",
       "end_ts": "05:58",
-      "quote": "How about tomorrow morning? Would that work?",
+      "quote": "would morning, afternoon, or evening time be best",
       "customer_response": "cooperative",
       "customer_quote": "If it's before 11:00, yes.",
       "resistance_reason": "",
@@ -191,61 +200,72 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "06:00",
-      "end_ts": "06:33",
-      "quote": "Cool. Yeah. So just make sure you send me those sometime today. The sooner, the better.",
-      "customer_response": "deflected",
-      "customer_quote": "I'll see and you'll be visiting the house tomorrow?",
-      "resistance_reason": "other",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "ts": "06:08",
+      "end_ts": "06:12",
+      "quote": "I'll be able to send you a confirmation that I got you in the schedule.",
+      "customer_response": "cooperative",
+      "customer_quote": "Carter. Alright, Carter. I'll see and you'll be visiting the house tomorrow?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "Conditional booking closed without a clear collection plan or backup",
+    "topic": "Conditional booking never resolved live",
     "ts": "05:23",
-    "quote": "I mean, I would need the the picture of the roof and then the utility bill before I can put you in the schedule.",
-    "why": "The appointment hinges on two documents (drone shot/photos, utility bill) that were not captured on the call and no specific same-day collection commitment (deadline, method, confirmation step) was locked beyond 'sometime today, the sooner the better' — this is exactly the fragile-booking pattern that doesn't pay out on the sit-based comp model if the customer doesn't follow through."
+    "quote": "I would need the the picture of the roof and then the utility bill before I can put you in the schedule.",
+    "why": "The appointment hinges on two documents the rep never captured on the call, and no verbal fallback (readback, screenshot walk-through) was attempted — this is the single biggest fragility risk for the sit."
   },
   "key_moments": [
     {
-      "ts": "03:51",
-      "quote": "And then in Virginia, the main requirement to get solar right now is having a credit score above 6 50. Is that the case for you?",
-      "classification": "other",
-      "stewart_read": "Rep states 650 as the credit threshold, but the schema's documented figure is 670. This is the same drift already flagged in SESSION18_fcbf33c1 (Meg), making this a second corroborating instance of the same number being misstated on the floor."
-    },
-    {
-      "ts": "03:13",
-      "quote": "Perfect. And then what's your average utility bill?",
-      "classification": "bill_anchor",
-      "stewart_read": "Rep captures the bill amount cleanly and on-script, but the flip into emotional leverage never follows."
-    },
-    {
-      "ts": "03:43",
-      "quote": "Yeah. Still should be a a great fit. Not, like, the highest bill, but I think we can definitely still save you some money.",
+      "ts": "01:33",
+      "quote": "Do you have any, like, over the head, like, drone shots of your home by chance?",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "Rep had the $120/$100 bill numbers in hand and instead of using them to build curiosity about specific savings, gave a generic reassurance ('we can definitely still save you some money') that undersells the moment and slightly downplays the lead ('not the highest bill')."
+      "stewart_read": "Rep spends significant time chasing a drone shot for a brand-new home instead of quickly pivoting to the standard roof-type/age question and moving on."
     },
     {
       "ts": "03:38",
       "quote": "I have five mini splits in the house.",
       "classification": "enthusiasm_signal",
-      "stewart_read": "Customer volunteers a high-electric-load detail (five mini-split heat pumps) unprompted, which is a system-sizing signal that could offset the modest $100-120 bill read and support a bigger system recommendation."
+      "stewart_read": "Customer discloses five mini-split heat pumps, a strong usage signal that supports a larger system design and justifies bill savings even on a modest $100-120 bill."
+    },
+    {
+      "ts": "03:43",
+      "quote": "Not, like, the highest bill, but I think we can definitely still save you some money.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Rep files the $100-120 bill and states a vague savings claim instead of flipping it into an emotional hook (e.g., contrasting it against a brand-new home's expected usage or the mini splits)."
+    },
+    {
+      "ts": "04:06",
+      "quote": "I'll need two things from you. Just the the drone shot, if you could get a hold of that.",
+      "classification": "conditional_booking",
+      "stewart_read": "Rep sets a real barrier (drone shot + bill) as a gate to scheduling, but never resolves either live on the call."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 48,
-    "verified": 48,
+    "checked": 49,
+    "verified": 49,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

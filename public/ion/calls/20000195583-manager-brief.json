@@ -1,17 +1,25 @@
 {
   "call_id": "20000195583",
   "rep_name": "Joel",
-  "trajectory_summary": "This call opens neutral, dips into friction when the rep muddles the credit-score qualifier with the tax credit and a knowledgeable customer calls it out three times, and ends with no bill amount, no bill document, and a vague 'I'll call you back once the design is done' close with no date, time, or handshake. The rep pushed through structural verify items but never resolved the customer's direct challenge or converted the call into a concrete booked appointment.",
+  "trajectory_summary": "The call opens neutral, dips into real friction when the credit/tax qualifier is delivered sloppily and the customer — who says he understands the system — calls it out three times, and closes with the rep conceding the bill topic entirely and defaulting to a vague design-and-callback close. Energy leaked steadily from the qualifier stumble onward with no recovery move.",
   "shape": "energy_leaked",
-  "outcome_dispute": "This should not be read as a booked or tentative appointment — the rep promises a future callback once a design is built, with no day/time given and no commitment mechanism, which is a callback outcome at best and reflects an unanchored close.",
+  "outcome_dispute": "No booked or tentative appointment was made; the call ends with a vague 'I'll give you another call' with no date or time, which should be scored no_appointment, not any booked/tentative variant.",
   "observed_outcome": {
-    "outcome": "callback",
+    "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "06:42",
-    "quote": "I'll give you another call here. We can find a good time for our specialist to give you a good time for our specialist to give you a call and just kinda review that with you.",
-    "reasoning": "No day or time was set on this call; the rep promises to call back once the design is complete, which is a callback outcome, not a booked or tentative appointment."
+    "ts": "06:38",
+    "quote": "I'll give you another call here. We can find a good time for our specialist to give you a call and just kinda review that with you.",
+    "reasoning": "No day or time was agreed; the rep only promised a future call once a design is built, which is a vague next step without a locked time — this is no_appointment, not a booked or tentative outcome.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "declined",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,62 +28,62 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Customer said he wasn't sure of his average bill amount ('I'm not sure... it's just auto paid, so don't worry about it') and no dollar figure or usage history was ever obtained, so there was nothing to flip."
+    "reasoning": "The rep asked for the average monthly bill but the customer said \"I'm not sure\" and no dollar or kWh amount was provided."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "05:08",
-    "ask_quote": "So do you usually get those OG and E bills online or through the mail?",
+    "ask_ts": "05:04",
+    "ask_quote": "do you usually get those OG and E bills online or through the mail?",
     "result": "declined",
     "method": "none",
-    "result_ts": "05:41",
-    "result_quote": "That's not gonna happen.",
-    "reasoning": "Rep asked how the customer receives bills and pursued a twelve-month usage history, but the customer explained the property was recently under construction and flatly said the history 'is not gonna happen,' so no bill or usage data was collected on the call or promised for later."
+    "result_ts": "05:44",
+    "result_quote": "it's not gonna be relevant.",
+    "reasoning": "Rep asked about bills and online/email delivery; later the customer said the usage history wouldn't be relevant due to recent construction, effectively declining to provide bill documents."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:43",
     "reason_given": true,
     "reason_ts": "00:50",
-    "reason_quote": "power shuts off out there periodically.",
+    "reason_quote": "shuts off out there periodically.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Rep acknowledged the reason briefly ('so you're kinda looking into the backup options?') but never revisited the reliability/outage motive later in the call, including at the point where usage data collection failed and the design conversation could have anchored back to it."
+    "reasoning": "Customer's stated reason for interest — power outages / backup — was acknowledged once ('so you're kinda looking into the backup options?' at 00:52) but never referenced again when discussing next steps or the design; it was filed and dropped."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:04",
-      "end_ts": "00:12",
-      "quote": "Hey, Mike. This is Joel with Ion.",
+      "end_ts": "00:07",
+      "quote": "This is Joel with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "I'm doing alright.",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:43",
       "end_ts": "00:56",
-      "quote": "But I'm just curious. What kinda got you interested in solar?",
+      "quote": "What kinda got you interested in solar?",
       "customer_response": "cooperative",
-      "customer_quote": "power shuts off out there periodically.",
+      "customer_quote": "shuts off out there periodically.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:24",
-      "end_ts": "01:34",
-      "quote": "I have your address here as the 3012 Skeeter Blue Road, Sulphur, Oklahoma. Is that correct?",
+      "end_ts": "00:32",
+      "quote": "I have your address here as the 3012",
       "customer_response": "cooperative",
-      "customer_quote": "I have two lots up there. I have the one that has the cabin on it, which is the one in question.",
+      "customer_quote": "Yes. K. Awesome.",
       "resistance_reason": "",
       "rep_followup": "moved_on",
       "result": "completed"
@@ -85,23 +93,23 @@
       "status": "asked",
       "ts": "02:28",
       "end_ts": "02:43",
-      "quote": "Is there anyone else on the title with you at all?",
+      "quote": "Is there anyone else in the title of the home with you at all?",
       "customer_response": "cooperative",
       "customer_quote": "My wife.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "04:02",
-      "end_ts": "04:16",
+      "end_ts": "04:09",
       "quote": "as far as the roof, is it just a asphalt shingle roof, or what kind of roof does it have?",
       "customer_response": "cooperative",
       "customer_quote": "The metal.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
@@ -109,33 +117,33 @@
       "status": "asked",
       "ts": "04:26",
       "end_ts": "04:42",
-      "quote": "what utility company are you going through for the electricity there?",
-      "customer_response": "cooperative",
-      "customer_quote": "OJME.",
+      "quote": "So what utility company are you going through for the electricity there?",
+      "customer_response": "no_answer",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "04:42",
-      "end_ts": "04:54",
-      "quote": "how much would you say kind of an average monthly bill with them is costing you?",
-      "customer_response": "resistant",
-      "customer_quote": "I'm not sure. It's just it's auto paid, so don't worry about it.",
+      "end_ts": "04:49",
+      "quote": "And how much would you say kind of an average monthly bill with them is costing you?",
+      "customer_response": "deflected",
+      "customer_quote": "I'm not sure.",
       "resistance_reason": "dont_have_it",
-      "rep_followup": "moved_on",
-      "result": "declined"
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:46",
-      "end_ts": "03:56",
+      "ts": "02:52",
+      "end_ts": "03:00",
       "quote": "you guys would just need to have a form of taxable income and a credit score of six fifty or higher. Is that the case for you guys?",
       "customer_response": "resistant",
-      "customer_quote": "I'm not aware of you needing to have a certain credit score to qualify for the tax incentives. So be straight with me because I do understand what the system and how it works.",
+      "customer_quote": "Is that for me to qualify with you guys or to qualify with the tax and incentives?",
       "resistance_reason": "trust",
       "rep_followup": "persisted",
       "result": "partial"
@@ -167,18 +175,18 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "05:08",
-      "end_ts": "05:53",
-      "quote": "So do you usually get those OG and E bills online or through the mail?",
-      "customer_response": "resistant",
-      "customer_quote": "That's not gonna happen.",
-      "resistance_reason": "other",
-      "rep_followup": "alternative_offered",
-      "result": "declined"
+      "ts": "05:04",
+      "end_ts": "05:24",
+      "quote": "do you usually get those OG and E bills online or through the mail?",
+      "customer_response": "cooperative",
+      "customer_quote": "they may email them to me. I don't know.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "partial"
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -186,82 +194,117 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "button_up",
-      "status": "asked",
-      "ts": "06:38",
-      "end_ts": "07:01",
-      "quote": "I'll give you another call here. We can find a good time for our specialist to give you a call and just kinda review that with you.",
-      "customer_response": "cooperative",
-      "customer_quote": "Okay.",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
       "ts": "03:00",
-      "quote": "Is that for me to qualify with you guys or to qualify with the tax and incentives? Just for the because I am familiar with that. I'm not aware of you needing to have a certain credit score to qualify for the tax incentives. So be straight with me because I do understand what the system and how it works.",
+      "quote": "Is that for me to qualify with you guys or to qualify with the tax and incentives?",
       "type": "trust_or_scam",
       "rep_attempts": 2,
       "attempt_quotes": [
-        "Yeah. No. That's qualify me. Okay? No. It's just the requirements.",
-        "Yeah. So they just tell us to make sure you qualify for the incentives in the program here."
+        "Yeah. No. That's qualify me. Okay?",
+        "No. It's pretty important as well. Let's move on. Okay."
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The customer restates the same confusion three times ('By you. I understand.' / 'Not for the incentives for you guys.') and the rep never gives a clean, direct clarification before cutting him off and moving to the next topic — the objection is not actually resolved, just abandoned."
+      "reasoning": "Customer never actually got a clear answer; he dropped the thread only because the rep talked over him and moved to the roof question, not because it was resolved.",
+      "blocked_section": "tax_credit_qualifier",
+      "attempt_moves": [
+        "restate",
+        "concede"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "roof@04:02",
+      "resolution_agrees": false
+    },
+    {
+      "ts": "05:44",
+      "quote": "it's not gonna be relevant.",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. How how long has it kind of been livable there or, like, done with construction?"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Customer refused to provide the bill and the rep pivoted to an unrelated construction-timeline question rather than attempting any alternative bill-capture path; the bill was never obtained.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "redirect_to_specialist"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Credit qualifier / tax credit conflation under customer challenge",
+    "topic": "Credit qualifier clarity breaking trust",
     "ts": "03:00",
-    "quote": "Is that for me to qualify with you guys or to qualify with the tax and incentives? Just for the because I am familiar with that.",
-    "why": "A knowledgeable customer directly and repeatedly called out an inaccurate framing of the credit qualifier, and the rep never resolved it cleanly — this is the single moment that most damaged trust and is a repeatable, coachable error (separate Ion's internal requirement from the federal credit clearly, every time)."
+    "quote": "Is that for me to qualify with you guys or to qualify with the tax and incentives?",
+    "why": "This single confusion cost three back-and-forth exchanges with a customer who explicitly said he understands the system — the rep needs one clean scripted line separating Ion's requirement from the tax credit, or every knowledgeable customer will catch this."
   },
   "key_moments": [
     {
       "ts": "02:52",
       "quote": "you guys would just need to have a form of taxable income and a credit score of six fifty or higher. Is that the case for you guys?",
       "classification": "knowledge_gap",
-      "stewart_read": "The rep bundles Ion's internal 650 credit threshold with the federal tax incentive requirement, which is factually incorrect framing and immediately draws a knowledgeable customer's suspicion."
-    },
-    {
-      "ts": "03:03",
-      "quote": "So be straight with me because I do understand what the system and how it works.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This is effectively a trust/scam-adjacent challenge dressed as a factual correction. The rep had an opening to validate the customer's knowledge and pivot cleanly to Ion's specific offer, but instead got defensive and rushed past it."
-    },
-    {
-      "ts": "03:56",
-      "quote": "But anyway No. It's pretty important as well. Let's move on. Okay. K. Anyway yeah. So",
-      "classification": "protocol_violation",
-      "stewart_read": "Rather than admitting uncertainty or clarifying transparently, the rep talks over the customer's third attempt at clarification and steamrolls into the next script section."
+      "stewart_read": "The rep blended Ion's requirement with tax-incentive eligibility in one breath, which is exactly the ambiguity the customer immediately caught."
     },
     {
       "ts": "03:00",
-      "quote": "Is that for me to qualify with you guys or to qualify with the tax and incentives? Just for the because I am familiar with that.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer signals prior familiarity with how solar tax incentives and qualification work, which could indicate previous quotes or research, but the rep never probes what he already knows or has seen."
+      "quote": "Is that for me to qualify with you guys or to qualify with the tax and incentives?",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is a trust/clarity objection stalling the qualifier section; rep should have cleanly restated the distinction rather than a garbled 'that's qualify me.'"
+    },
+    {
+      "ts": "03:49",
+      "quote": "Not for the incentives for you guys. No. That's what you're asking me for.",
+      "classification": "knowledge_gap",
+      "stewart_read": "Second touch on the same unresolved confusion — customer is now doing the rep's clarifying work for him."
+    },
+    {
+      "ts": "04:47",
+      "quote": "I'm not sure.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The bill amount, the single most important anchor in the whole call, was let go with a one-word acceptance and no pivot to a verbal estimate or alternate capture path."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 55,
+    "checked": 51,
     "verified": 51,
-    "fuzzy": 3,
+    "fuzzy": 0,
     "wrong_ts": 0,
-    "not_found": 1
+    "not_found": 0
   }
 }

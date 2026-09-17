@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION18_f6563daa",
   "rep_name": "Parker",
-  "trajectory_summary": "The call opens warm and stays warm throughout — the customer is receptive, talkative, and self-directs back to business after a long personal tangent. The rep completes most verify items efficiently and lands a locked in-person appointment, though the wife's attendance at that appointment is left unconfirmed and the bill is only promised, not captured.",
-  "shape": "energy_built",
-  "outcome_dispute": "This looks like a genuine 'booked' outcome (day, time, and channel all specified: in-person Friday at 10am), not a soft or tentative one — the v1 tag should reflect a real booking with two open items (bill photo, wife's attendance) rather than being downgraded to tentative.",
+  "trajectory_summary": "The call opens warm and cooperative, drifts into a long personal rapport tangent about the customer's businesses, then recovers to lock a specific appointment day and time. Energy never turned hostile, but the rep let 3+ minutes of small talk consume time that could have reinforced the bill-pain anchor or probed the wife's involvement further.",
+  "shape": "mixed",
+  "outcome_dispute": "This should read as tentative, not booked: the customer explicitly frames Friday 10am as conditional on his wife's sleep schedule ('my wife's sleep still ten if she let her') and the bill was never captured, both leaving the appointment structurally soft.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
-    "co_owner_confirmed": null,
-    "ts": "07:33",
-    "quote": "Yeah. I see. Cool, man. Well, I'll send you that paper as soon as I get to it, and I'll, put you down for tennis, Friday.",
-    "reasoning": "A specific day (Friday) and time (10am range, per 07:20-07:22) plus channel (in-person) were all explicitly agreed; the wife's attendance was raised earlier but never explicitly reconfirmed for this specific appointment, so co_owner_confirmed is left null/unresolved rather than false."
+    "co_owner_confirmed": false,
+    "ts": "07:20",
+    "quote": "Let's try in the ten range.",
+    "reasoning": "A specific day (Friday) and time (10am range) were agreed, but the customer immediately qualifies it as dependent on whether his wife will actually be up/available, and the rep never resolves this, so the booking is soft rather than firm.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": false,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,71 +29,71 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Customer explicitly said he has no idea what they pay ('No idea, bro.') and the rep did not obtain a number from him or attempt to get an estimate any other way during the call."
+    "reasoning": "No monthly dollar amount or kWh was stated by the customer on the call, so no bill anchor was captured."
   },
   "bill_document_audit": {
     "asked": true,
     "ask_ts": "02:36",
-    "ask_quote": "If I, if I send you a text message, would you be able to just send me a photo of that, you know, talk with your wife and send, like, a a screenshot of that or something?",
+    "ask_quote": "If I, if I send you a text message, would you be able to just send me a photo of that",
     "result": "promised_later",
     "method": "text",
-    "result_ts": "02:52",
-    "result_quote": "Yeah. It might not be for a little while. She just opened her own, retail business, but she's over there right now.",
-    "reasoning": "Rep asked for a photo of the bill via text; customer agreed but flagged it would take time since his wife is currently occupied at her new business and handles paperless billing lookups."
+    "result_ts": "05:52",
+    "result_quote": "why don't I, send you that text?",
+    "reasoning": "The rep asked for a photo of the bill via text and the customer agreed to text/get back later (customer said they'd send a text to check)."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "01:00",
     "reason_given": true,
-    "reason_ts": "01:05",
-    "reason_quote": "Not really. Just kind of always been curious.",
+    "reason_ts": "01:07",
+    "reason_quote": "always been curious.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Rep asked what got the customer looking at solar; customer gave a thin but real answer ('always been curious'). Rep did not reference this curiosity again later to reinforce the appointment's value."
+    "reasoning": "Customer's stated interest reason ('always been curious') was acknowledged with 'Awesome' at 01:09 but never referenced again when setting the appointment or in the closing, a missed reinforcement opportunity."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "end_ts": "00:14",
-      "quote": "It is. Hey, Quincy. Yeah. I'm Parker. I'm with Ion. I was just reaching out because we had a request here you're looking at solar for the home.",
+      "end_ts": "00:15",
+      "quote": "I'm Parker. I'm with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Oh, I'm doing alright.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "01:00",
-      "end_ts": "01:07",
-      "quote": "While I do, what was there anything else that, you know, got you looking at solar in specific? Or",
+      "end_ts": "01:09",
+      "quote": "what was there anything else that, you know, got you looking at solar in specific?",
       "customer_response": "cooperative",
-      "customer_quote": "Not really. Just kind of always been curious.",
+      "customer_quote": "always been curious.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:49",
-      "end_ts": "01:24",
-      "quote": "I think I had the 770 In Butterfield Road. Was that still the right address for you guys?",
+      "ts": "00:53",
+      "end_ts": "01:00",
+      "quote": "Was that still the right address for you guys?",
       "customer_response": "cooperative",
       "customer_quote": "Yes. Right.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "01:20",
-      "end_ts": "01:24",
+      "end_ts": "01:26",
       "quote": "I had here you were the homeowner. Was it you and your wife?",
       "customer_response": "cooperative",
       "customer_quote": "That's right.",
@@ -97,47 +106,47 @@
       "status": "asked",
       "ts": "01:33",
       "end_ts": "01:39",
-      "quote": "And then is that roof just an an asphalt single there?",
+      "quote": "is that roof just an an asphalt single there?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:40",
-      "end_ts": "01:53",
-      "quote": "And then let's see. What, electric company were you guys working with at the moment?",
+      "end_ts": "01:49",
+      "quote": "What, electric company were you guys working with at the moment?",
       "customer_response": "cooperative",
-      "customer_quote": "I believe I could be wrong. My wife handles all that shit, man.",
-      "resistance_reason": "dont_have_it",
+      "customer_quote": "I believe ComEd.",
+      "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "02:02",
-      "end_ts": "02:09",
-      "quote": "Do you have any idea of, like, an average price you guys are normally paying every month?",
-      "customer_response": "resistant",
+      "end_ts": "02:11",
+      "quote": "do you have any idea of, like, an average price you guys are normally paying every month?",
+      "customer_response": "cooperative",
       "customer_quote": "No idea, bro.",
-      "resistance_reason": "dont_have_it",
+      "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "declined"
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:11",
-      "end_ts": "02:29",
-      "quote": "Just to qualify for each of those, you can have a credit score above 670. Does that sound like the case for you or your wife?",
+      "ts": "02:14",
+      "end_ts": "02:26",
+      "quote": "you can have a credit score above 670.",
       "customer_response": "cooperative",
       "customer_quote": "My wife, for sure. Definitely not me.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
@@ -168,22 +177,22 @@
       "section": "bill_collection",
       "status": "asked",
       "ts": "02:36",
-      "end_ts": "03:12",
-      "quote": "If I, if I send you a text message, would you be able to just send me a photo of that, you know, talk with your wife and send, like, a a screenshot of that or something?",
-      "customer_response": "cooperative",
-      "customer_quote": "Yeah. It might not be for a little while. She just opened her own, retail business, but she's over there right now.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "alternative_offered",
+      "end_ts": "05:59",
+      "quote": "If I, if I send you a text message, would you be able to just send me a photo of that",
+      "customer_response": "deflected",
+      "customer_quote": "Yeah. It might not be for a little while.",
+      "resistance_reason": "timing",
+      "rep_followup": "persisted",
       "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "06:03",
-      "end_ts": "07:33",
-      "quote": "Yeah. I mean, I could look now. I know we have some openings as early as, like, tomorrow, Friday, or Saturday.",
+      "ts": "06:51",
+      "end_ts": "07:22",
+      "quote": "we could do in person Friday morning,",
       "customer_response": "cooperative",
-      "customer_quote": "If you got a Friday morning, that would be pretty ideal.",
+      "customer_quote": "Let's try in the ten range.",
       "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
@@ -191,63 +200,95 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "07:17",
+      "ts": "07:01",
       "end_ts": "07:40",
-      "quote": "Do you prefer, like, eight, nine, ten, or eleven?",
+      "quote": "Perfect. Well, we'll plan on that.",
       "customer_response": "cooperative",
-      "customer_quote": "Well, I'll send you that paper as soon as I get to it, and I'll, put you down for tennis, Friday.",
+      "customer_quote": "Okay. For yeah. I'm I'm off the point of time, but my wife's sleep still ten if she let her.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "hour_block",
+        "reconfirm"
+      ],
+      "parts_score": "3/4"
     }
   ],
-  "objections": [],
+  "objections": [
+    {
+      "ts": "05:59",
+      "quote": "or were you trying to do something now?",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Yeah. I mean, I could look now. I know we have some openings as early as, like, tomorrow, Friday, or Saturday."
+      ],
+      "resolved": true,
+      "resolution_ts": "07:20",
+      "reasoning": "Customer's busy schedule ('our schedule is still packed, honestly') and uncertainty about timing was a soft stall on moving to booking; rep offered concrete openings which resolved it into a set day/time.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@06:51",
+      "resolution_agrees": true
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "button-up completeness on a won call",
-    "ts": "07:33",
-    "quote": "Yeah. I see. Cool, man. Well, I'll send you that paper as soon as I get to it, and I'll, put you down for tennis, Friday.",
-    "why": "The appointment is real and the customer is cooperative, but the rep never runs the full button-up (hour block, is-that-fair handshake, explicit reconfirmation) — on an easy, warm call this is the cheapest place to build a repeatable habit before it costs a harder call."
+    "topic": "Co-owner not locked into the appointment",
+    "ts": "07:22",
+    "quote": "my wife's sleep still ten if she let her",
+    "why": "The wife is the co-owner and likely primary decision-maker on cost, yet her availability for the booked slot was never confirmed — this is the single biggest fragility risk on this set."
   },
   "key_moments": [
     {
+      "ts": "02:02",
+      "quote": "do you have any idea of, like, an average price you guys are normally paying every month? No idea, bro.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Bill amount came back empty and the rep moved on with 'No worries there' instead of using the moment to create curiosity about what the bill might be revealing."
+    },
+    {
       "ts": "01:20",
       "quote": "I had here you were the homeowner. Was it you and your wife?",
-      "classification": "other",
-      "stewart_read": "Rep proactively surfaces co-ownership during verify, which is good practice, but never follows up later to explicitly confirm the wife will be present at the in-person Friday visit. Because this is an in-person appointment rather than a phone appointment, her absence is unconfirmed rather than a confirmed exclusion — a softer gap than a phone-appointment spouse exclusion."
+      "classification": "spouse_handling",
+      "stewart_read": "Rep correctly identifies the wife as co-owner early, which sets up later inclusion, but never explicitly locks her onto the appointment."
     },
     {
-      "ts": "02:02",
-      "quote": "I know you you might not know, but do you have any idea of, like, an average price you guys are normally paying every month? No idea, bro.",
-      "classification": "bill_anchor",
-      "stewart_read": "Bill amount was not captured — customer has no idea what he pays. Rep acknowledges and moves on without attempting any alternative anchor (e.g., asking about kWh usage habits, AC use, home size) that could still create bill-pain framing."
+      "ts": "02:24",
+      "quote": "My wife, for sure. Definitely not me.",
+      "classification": "cross_sell_miss",
+      "stewart_read": "Customer volunteers that his own credit is bad but wife's is good; rep accepts this at face value without probing if the wife's credit alone qualifies the couple, which it does per policy, but doesn't reinforce this reassurance strongly."
     },
     {
-      "ts": "02:52",
-      "quote": "Yeah. It might not be for a little while. She just opened her own, retail business, but she's over there right now.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer hands the rep a scheduling/logistics anchor (wife busy at her new business) that the rep could reflect back to set a soft deadline or check-in point; instead the rep simply accepts the delay and moves to confirming the phone number for texting."
-    },
-    {
-      "ts": "03:43",
-      "quote": "We I have two businesses. She has one, all retail. We have four kids. They're all in sports. I coach football, baseball, basketball. It's like, we just never literally get a free minute in it.",
-      "classification": "other",
-      "stewart_read": "Customer opens up significantly about his life and businesses; the rep engages warmly in the moment (asking about the businesses) but the extended rapport exchange is not bridged back into any qualification value — it stays purely social."
+      "ts": "03:37",
+      "quote": "I don't know what availability is. Our our schedule is still packed, honestly.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "This opens a multi-minute personal conversation about the customer's businesses that, while good rapport, is time the rep let run rather than redirecting back to scheduling."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 44,
-    "verified": 44,
+    "checked": 51,
+    "verified": 50,
     "fuzzy": 0,
-    "wrong_ts": 0,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

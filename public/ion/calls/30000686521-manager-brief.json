@@ -1,26 +1,34 @@
 {
   "call_id": "30000686521",
   "rep_name": "Joel",
-  "trajectory_summary": "The call opens cold with a direct scam/legitimacy challenge, and the rep's quick, concrete answer plus the customer's own solar-industry background (electrician with a coworker in solar) moves the tone from adversarial to cooperative within about a minute. The call closes without a locked bill-document handoff mechanism beyond a generic 'send you a text' promise, and without a confirmed appointment or timeframe — this is a soft, unanchored ending rather than a clean booked or callback outcome.",
-  "shape": "mixed",
-  "outcome_dispute": "There is no locked appointment, no specific callback time, and no confirmed next step beyond 'I'll send you a text' and 'as soon as we get that usage information, we can get you started.' This should be read as no_appointment/callback-without-a-time rather than any booked or tentative outcome — the v1 tag should be checked against this reality.",
+  "trajectory_summary": "The call opens cold with a scam-check customer who sets the tempo, and the rep never regains control — skipping nearly every verify beat to chase the bill number the customer ultimately can't provide. Energy leaks out steadily: legitimacy is only half-answered, the electrician comment is left unprobed, and the call ends on an unlocked 'I'll call back' with no appointment and no owned next step.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag is unknown; based on transcript this is clearly no_appointment — no date/time, no booked call, only a vague promise to text and customer's vague promise to call back.",
   "observed_outcome": {
-    "outcome": "callback",
+    "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "02:24",
-    "quote": "Through the mail. Okay. But I don't have that stuff with me, so I'll have to call back.",
-    "reasoning": "No day, time, or appointment was set on this call. The customer stated he'd need to call back once he has his bill, and the rep's closing line confirms a pending, unscheduled follow-up ('as soon as we get that usage information, we can get you started') rather than a booked or tentative closer appointment."
+    "ts": "02:44",
+    "quote": "K. Sweet, Jake. Well, I'll send you a text. Let me know if you have any questions.",
+    "reasoning": "Call ends with a vague text promise and the customer's own vague promise to call back once he has the bill — no date, no time, no appointment of any kind was set.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "01:52",
-    "bill_quote": "maybe $1.20 a month.",
+    "bill_ts": "02:02",
+    "bill_quote": "maybe $1.20",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "A bill figure was stated, but the transcribed value ('$1.20 a month') is almost certainly a diarization/transcription artifact of a more plausible figure like '$120/month' and should be treated as unconfirmed rather than a reliable number — per numeric_discipline, Stewart is flagging this rather than asserting the true value. Regardless of the exact figure, the rep moved directly from capturing it to explaining bill-document mechanics ('all we would really need to see is just the bar graph') without any acknowledgment or emotional flip of the number itself."
+    "reasoning": "Bill was captured ('maybe $1.20 a month' at 02:02) but the rep moved straight into bill-graph/kilowatt-hour logistics at 02:06 without ever flipping the number into emotional alignment-against-the-utility; the flip should have landed right after 02:04 ('Okay. Gotcha.')."
   },
   "bill_document_audit": {
     "asked": true,
@@ -28,33 +36,33 @@
     "ask_quote": "So do you usually get those bills online or through the mail?",
     "result": "promised_later",
     "method": "text",
-    "result_ts": "02:30",
-    "result_quote": "Okay. Yeah. No problem. I could send you a text as well. And then whenever you have a chance to see see one of those bills, if you could just send that over,",
-    "reasoning": "Customer stated he gets bills through the mail and doesn't have one on hand; rep offered to text him so he can send the bill over later, deferring bill collection to a future, unscheduled point."
+    "result_ts": "02:24",
+    "result_quote": "But I don't have that stuff with me, so I'll have to call back.",
+    "reasoning": "Rep asked how the customer receives bills and offered to text; the customer said they don't have a bill on hand and will need to call back, so they promised to provide it later."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": true,
-    "reason_ts": "00:12",
-    "reason_quote": "I was just honestly asking if it's, if there if Colorado really passed a law that makes it free.",
-    "reason_used": "no",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' — the customer's motivating context (curiosity about a free-solar claim, prompted by marketing he saw) surfaced unprompted as a skepticism check, and the rep addressed the mechanics but never circled back to tie the appointment to resolving that specific curiosity."
+    "reasoning": "The customer asked if Colorado made solar free, but the rep did not explicitly ask the customer's reason for interest nor elicit a motivating reason to use later."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:20",
-      "quote": "Hey, Jake. This is Joel with Ion. Yeah. I just got a request here looking into details on solar for your home in Fair Play, Colorado.",
-      "customer_response": "resistant",
-      "customer_quote": "I was just honestly asking if it's, if there if Colorado really passed a law that makes it free.",
-      "resistance_reason": "trust",
+      "end_ts": "00:12",
+      "quote": "This is Joel with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "How's it going today?",
+      "resistance_reason": "",
       "rep_followup": "persisted",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -65,7 +73,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -77,7 +85,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -89,7 +97,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -101,7 +109,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -113,19 +121,19 @@
       "customer_response": "cooperative",
       "customer_quote": "It's Xcel.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:52",
-      "end_ts": "02:02",
-      "quote": "And how much is kind of an average electric bill time costing you?",
+      "end_ts": "02:04",
+      "quote": "how much is kind of an average electric bill",
       "customer_response": "cooperative",
-      "customer_quote": "maybe $1.20 a month.",
+      "customer_quote": "maybe $1.20",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -137,7 +145,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -149,7 +157,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -161,7 +169,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -170,7 +178,7 @@
       "ts": "02:19",
       "end_ts": "02:37",
       "quote": "So do you usually get those bills online or through the mail?",
-      "customer_response": "resistant",
+      "customer_response": "deflected",
       "customer_quote": "Through the mail. Okay. But I don't have that stuff with me, so I'll have to call back.",
       "resistance_reason": "dont_have_it",
       "rep_followup": "alternative_offered",
@@ -185,80 +193,116 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
+      "status": "asked",
+      "ts": "02:44",
+      "end_ts": "02:44",
+      "quote": "I'll send you a text.",
+      "customer_response": "cooperative",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "skipped"
+      "rep_followup": "moved_on",
+      "result": "partial",
+      "parts_done": [
+        "reconfirm"
+      ],
+      "parts_score": "1/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:12",
-      "quote": "I was just honestly asking if it's, if there if Colorado really passed a law that makes it free.",
+      "ts": "00:16",
+      "quote": "if there if Colorado really passed a law that makes it free.",
       "type": "trust_or_scam",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Yeah. Well, I'll keep this super quick for you. But, yeah, basically, how the program works is, yeah, there was recent changes actually in the last month, so there's no upfront cost required anymore like there used to be."
+        "Yeah. Well, I'll keep this super quick for you. But, yeah, basically, how the program works is"
       ],
       "resolved": true,
       "resolution_ts": "01:25",
-      "reasoning": "The customer's continued engagement and voluntary disclosure of industry familiarity at 01:25 suggests he moved past the scam concern, but this is inferred from behavior (he kept talking, gave utility and bill info) rather than an explicit statement that he was satisfied or reassured — the resolution should be read as inferred, not confirmed."
+      "reasoning": "Rep explained the no-upfront-cost program change; customer softened and moved into cooperative mode ('I'm an electrician... pretty familiar with it'), so the immediate friction resolved even though legitimacy wasn't directly named.",
+      "blocked_section": "intro_legitimacy",
+      "attempt_moves": [
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "utility_company@01:47",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "02:24",
+      "quote": "But I don't have that stuff with me, so I'll have to call back.",
+      "type": "timing_or_callback",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "I could send you a text as well. And then whenever you have a chance to see see one of those bills, if you could just send that over"
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep offered a text as an alternative channel but never locked a specific callback day/time or booked a tentative appointment, so the deferral was never converted into an owned next step.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@02:44",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "unanchored close — no locked next step",
-    "ts": "02:44",
-    "quote": "K. Sweet, Jake. Well, I'll send you a text. Let me know if you have any questions. And then, yeah, as soon as we get that usage information, we can get you started.",
-    "why": "The call ends without a day/time or callback commitment despite the customer being cooperative throughout; a firm follow-up window would meaningfully raise the odds this lead doesn't go cold, and this is a fixable procedural gap, not a customer-driven barrier."
+    "topic": "Unanchored soft exit / no locked next step",
+    "ts": "02:24",
+    "quote": "so I'll have to call back",
+    "why": "The call ends with zero rep-owned next step — no appointment, no confirmed callback time — turning a live, engaged lead into a cold follow-up with no accountability on either side."
   },
   "key_moments": [
     {
-      "ts": "00:12",
-      "quote": "I was just honestly asking if it's, if there if Colorado really passed a law that makes it free.",
+      "ts": "00:36",
+      "quote": "so I wasn't sure if it's a scam.",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The customer leads with a scam-skepticism check before the rep has even finished the intro/legitimacy framing. This isn't a scripted protocol trigger like how_did_you_get_my_number — it's the broader scam_skepticism concern the schema flags as typical for this demographic, and the rep's intro at 00:05 didn't pre-empt it with state/referral framing strong enough to head this off."
-    },
-    {
-      "ts": "00:41",
-      "quote": "Yeah. Well, I'll keep this super quick for you. But, yeah, basically, how the program works is, yeah, there was recent changes actually in the last month, so there's no upfront cost required anymore like there used to be.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The customer's frame was 'is it free' — the rep's answer explains no-upfront-cost and no-loan-required financing mechanics, which is accurate to a financed/PPA-style structure, but never explicitly corrects the word 'free.' The response could be read by the customer as confirming the free framing rather than clarifying that this is a bill-replacement payment structure, not a giveaway."
+      "stewart_read": "Customer directly names the scam concern but the rep's intro at 00:05 never anchored company legitimacy (no mention of licensing, certification, or lead source specificity) before this came up."
     },
     {
       "ts": "01:25",
-      "quote": "Yeah. I'm an electrician, and one of my, coworkers does solar. So Mhmm. I'm pretty familiar with it.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "Customer volunteers direct industry adjacency (electrician, coworker in solar) — a strong qualification and rapport signal. The rep's response ('Okay. Awesome.') at 01:34 is a light acknowledgment before immediately pivoting back to the bill-collection ask, which held setter scope reasonably well and did not veer into a technical debate."
+      "quote": "I'm an electrician, and one of my, coworkers does solar.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses relevant background and implicit prior exposure to solar; rep says 'Okay. Awesome.' and moves straight to bill collection without asking what the coworker's system looks like or what he already knows."
     },
     {
-      "ts": "01:52",
-      "quote": "maybe $1.20 a month.",
-      "classification": "bill_anchor",
-      "stewart_read": "This figure is very likely a diarization/transcription artifact of '$120' (split across two lines as '$1.20' with 'a month' following) rather than a literal $1.20 bill — but per numeric_discipline, Stewart cannot silently correct or invent the true number. This should be flagged explicitly as an unconfirmed transcription artifact, not treated as a settled $1.20 figure feeding downstream analysis."
+      "ts": "02:24",
+      "quote": "But I don't have that stuff with me, so I'll have to call back.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "This is a classic soft deferral objection; rep accepts it with an alternative (text) but never locks a callback time or appointment."
+    },
+    {
+      "ts": "02:30",
+      "quote": "Okay. Yeah. No problem. I could send you a text as well.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "Button-up is reduced to a vague text promise with no date, no time, no verbal handshake ('is that fair?'), and no appointment."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 34,
-    "verified": 34,
+    "checked": 37,
+    "verified": 37,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

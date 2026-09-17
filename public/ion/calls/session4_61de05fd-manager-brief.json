@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION4_61de05fd",
   "rep_name": "Bucky",
-  "trajectory_summary": "This call moves from a normal, cooperative verify flow into a self-inflicted disqualification: the rep, looking at Google Maps, decides the property has too many trees and talks himself (and the customer) out of the appointment without any documented protocol for doing so. The customer never objected to booking — the rep manufactured the exit himself, and the call ends in under two minutes with no appointment and no path forward explored.",
+  "trajectory_summary": "The call opened warm and cooperative, but the rep's own visual read of Google Maps (not the customer's stated roof condition) drove a rapid pivot to disqualification. The rep never reached utility, bill, or interest-reason capture before ending the call. Energy leaked steadily from the moment the rep introduced the trees concern, and the call closed on a soft, resigned note with no appointment and no path attempted around the DQ.",
   "shape": "energy_leaked",
-  "outcome_dispute": "If v1 tagged this as a standard DQ, that undersells what happened: this is a rep self-disqualifying a lead based on his own read of a satellite map and a same-call verbal exchange, not a documented hard-gate answer (e.g., roof age, ownership, credit). The schema's dq_rules do not include 'rep's visual impression of tree density from Google Maps' as a qualifying hard gate — the closer/design team is who actually assesses shading via satellite/roof survey. This looks like a setter making a technical, closer-tier judgment call prematurely and killing a lead that a specialist should have evaluated.",
+  "outcome_dispute": "v1 tag is unknown/unclear; based on the transcript this is clearly a roof/shading DQ ending, not a booked or tentative outcome — should be tagged dq.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "01:51",
     "quote": "they'll just disqualify you, if I'm gonna be honest.",
-    "reasoning": "The rep explicitly tells the customer he will not be scheduled because of perceived tree coverage, ending the call with no appointment and no path forward — a DQ, though one driven by the rep's own inference rather than a documented hard gate."
+    "reasoning": "The rep explicitly ends pursuit citing an expected disqualification due to tree/shading coverage, and the call closes with no appointment set.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches the bill/utility portion of the verify flow — it is cut short by the rep's self-initiated tree/shading disqualification before utility company or average bill questions are ever raised."
+    "reasoning": "No bill amount or usage was asked for or provided on the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call ends during the roof/property verify section, well before bill collection would occur in the script sequence, so the rep never raised getting the utility bill."
+    "reasoning": "The rep did not request the customer's utility bill or a method to receive it."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +49,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks what interested the customer in solar; the call moves straight from address confirmation into roof/tree assessment and then to disqualification, skipping the interest-question entirely."
+    "reasoning": "The rep did not ask why the customer was interested in solar and no reason was volunteered."
   },
   "script_coverage": [
     {
@@ -49,11 +57,11 @@
       "status": "asked",
       "ts": "00:13",
       "end_ts": "00:18",
-      "quote": "This is Bucky with ION. I'm reaching out about the solar form you filled online. How are you doing?",
+      "quote": "This is Bucky with ION. I'm reaching out about the solar form you filled online.",
       "customer_response": "cooperative",
-      "customer_quote": "Good. How are you doing?",
+      "customer_quote": "Good. How are you doing? I'm good. Thank you for asking.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -65,7 +73,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -73,11 +81,11 @@
       "status": "asked",
       "ts": "00:26",
       "end_ts": "00:31",
-      "quote": "Alright. You at 14715 West Old Baltimore Road?",
+      "quote": "You at 14715",
       "customer_response": "cooperative",
-      "customer_quote": "That's right.",
+      "customer_quote": "That's right. Alright.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "alternative_offered",
       "result": "completed"
     },
     {
@@ -89,20 +97,20 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "00:35",
-      "end_ts": "01:23",
-      "quote": "So it says I don't I'm sorry. Is your, like, roof, is that covered in trees?",
-      "customer_response": "resistant",
+      "end_ts": "01:42",
+      "quote": "is your, like, roof, is that covered in trees?",
+      "customer_response": "cooperative",
       "customer_quote": "There's some shade, but no. No. It's it's not covered.",
-      "resistance_reason": "other",
+      "resistance_reason": "",
       "rep_followup": "persisted",
-      "result": "declined"
+      "result": "completed"
     },
     {
       "section": "utility_company",
@@ -113,7 +121,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "not_reached"
     },
     {
@@ -125,7 +133,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "not_reached"
     },
     {
@@ -137,7 +145,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "not_reached"
     },
     {
@@ -149,7 +157,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "not_reached"
     },
     {
@@ -161,7 +169,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "not_reached"
     },
     {
@@ -173,7 +181,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "not_reached"
     },
     {
@@ -185,7 +193,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "not_reached"
     },
     {
@@ -197,70 +205,63 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "not_reached"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "00:41",
-      "quote": "There's some shade, but no. No. It's it's not covered.",
-      "type": "roof_or_home",
-      "rep_attempts": 3,
-      "attempt_quotes": [
-        "Okay. Because on my Google Maps, I can't I can't even see your home.",
-        "So you're all like, there is open area and there's not a lot of trees?",
-        "Are you are you willing to, like, remove and trim some or no?"
-      ],
-      "resolved": false,
-      "resolution_ts": "01:51",
-      "reasoning": "The customer repeatedly asserts the property has adequate sun exposure and disputes the rep's tree-coverage premise, but the rep persists with the DQ narrative across three different framings (map visibility, open-area question, tree removal) before ultimately disqualifying the lead rather than resolving in the customer's favor or deferring to a specialist."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "setter making an unauthorized DQ call on inference, not protocol",
-    "ts": "01:42",
-    "quote": "The land is protected, so I think the answer is no.",
-    "why": "The rep disqualifies a lead based on his own visual impression from Google Maps and an uncertain 'I think' rather than any documented hard gate in dq_rules or an escalation to the design/closer team. This is the single most consequential moment in the call — it ends the lead entirely, and the manager needs to clarify with this rep whether setter-level shading DQ is even authorized, because as executed here it looks like a lost appointment that a specialist should have been the one to disqualify."
+    "topic": "Self-determined DQ based on unverified satellite read instead of following the roof qualifier script or escalating",
+    "ts": "00:46",
+    "quote": "Because on my Google Maps, I can't I can't even see your home.",
+    "why": "The rep disqualified the lead almost entirely off his own Google Maps interpretation rather than trusting the customer's direct answer or checking with a supervisor, ending a warm, cooperative call prematurely."
   },
   "key_moments": [
     {
-      "ts": "00:08",
-      "quote": "Oh, hey. Sorry. Is this Sean? My bad. I thought it was a voice mail.",
-      "classification": "intro_legitimacy_omission",
-      "stewart_read": "The intro stumbles out of the gate — the rep is caught off guard by a live pickup and the opening seconds are spent on confusion rather than establishing company legitimacy. Note: this segment's speaker-role tagging looks garbled/misattributed in the transcript (e.g. '[00:12] rep: Nope. This is Sean.' is almost certainly the customer speaking), so turn attribution in the first 20 seconds should not be over-trusted."
-    },
-    {
       "ts": "00:41",
       "quote": "There's some shade, but no. No. It's it's not covered.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "Customer directly disputes the rep's premise (tree coverage) but the rep does not accept this answer and continues probing toward a DQ narrative instead of taking the customer's own assessment of their sun exposure at face value."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer directly answered the roof/trees qualifier in the negative, but the rep did not accept this answer and instead kept probing based on his own satellite read."
     },
     {
-      "ts": "01:11",
+      "ts": "01:07",
       "quote": "You're on, like, like, a a little bit of a farm?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Rep is fishing for property-type information ('little bit of a farm') in an unstructured, uncertain way rather than running a clean verify question about roof/property type, suggesting he doesn't have a clear qualification protocol for forested or rural properties."
+      "classification": "non_standard_scenario_hold",
+      "stewart_read": "Rep is working off Google Maps imagery rather than the script, effectively going off-script to build a case for disqualification."
+    },
+    {
+      "ts": "01:15",
+      "quote": "So you're all like, there is open area and there's not a lot of trees?",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Third pass at the same qualifier; rep is fishing for an answer that matches the satellite image rather than working with what the customer already said."
     },
     {
       "ts": "01:35",
       "quote": "Are you are you willing to, like, remove and trim some or no?",
-      "classification": "other",
-      "stewart_read": "This is the one moment the rep tries an alternative angle (tree removal) before disqualifying — a reasonable multi-angle attempt — but he abandons it after a single soft pushback from the customer instead of exploring other options like a design-team shading assessment."
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Rep offers tree removal as a single out, gets a soft 'that would be tricky,' and immediately abandons the appointment rather than exploring alternatives."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 29,
-    "verified": 29,
+    "checked": 28,
+    "verified": 28,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

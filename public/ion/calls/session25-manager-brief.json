@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION25",
   "rep_name": "Matt",
-  "trajectory_summary": "This is a short reactivation call where a mildly irritated customer is converted into a booked appointment by reframing the callback as the fix for the aggressive dialer, not by any qualification or bill-anchoring work. The rep skips nearly the entire verify/bill/button-up script and locks a day and time, but the close is thin — no computer/no-driving instruction, no is-that-fair handshake, and the dialer apology comes after the ask instead of before it. Given the customer's resigned tone ('might as well') and the missing commitment mechanics, this reads as a fragile booking that is procedurally underbuilt even though a date and time exist.",
+  "trajectory_summary": "This is a short, transactional recovery call: the customer called back annoyed about repeated contact, and the rep converted that irritation into a booked appointment in under two minutes. Energy moved from complaint to compliant booking, but almost entirely through logistics — no interest question, no bill, no prior-design probe, no button-up completion. It's a fast save, not a strong set.",
   "shape": "mixed",
-  "outcome_dispute": "V1 likely tags this booked given day+time were captured, which is technically correct — but the call quality underneath is fragile. Show-rate risk is elevated because the rep never ran the no-driving/computer instruction or the 'is that fair?' handshake, and the softened reschedule language at 01:49 ('if anything comes up... we could always get that rescheduled') hands the customer a built-in out on a lead who is already lukewarm.",
+  "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "01:40",
-    "quote": "Okay. 10AM? Yeah. Okay. K. Perfect.",
-    "reasoning": "A specific day (Monday) and time (10 AM) are agreed upon and confirmed by the rep, meeting the booked threshold even though the commitment mechanics around it are thin."
+    "ts": "01:37",
+    "quote": "Maybe ten. I should be free.",
+    "reasoning": "A specific day (Monday) and time (10AM) were stated and both sides agreed, but the customer's own phrasing ('Maybe ten. I should be free') signals soft, unconfirmed commitment, and button-up was left incomplete (no is-that-fair handshake, no full recap) — consistent with a fragile/tentative set despite a nominal time being captured.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "This call is a reactivation of an existing design/lead, not a fresh qualification call, and the rep never asks about or references a bill amount or usage figure anywhere in the transcript."
+    "reasoning": "No bill amount or usage was asked for or provided on the call, so no flip was possible."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +39,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call is purely a reschedule/reactivation of a prior design; the rep never raises the utility bill or any document collection at all."
+    "reasoning": "The rep did not request the customer's utility bill or instructions for sending it."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +50,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks what interested the customer in solar; the entire call is framed around resuming a prior design and stopping the repeat dialer calls, with no exploration of motivation."
+    "reasoning": "The rep did not ask why the customer was interested in solar; the customer did not volunteer a motivating reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:00",
-      "end_ts": "00:05",
+      "end_ts": "00:03",
       "quote": "Hi. This is Matt with ION.",
-      "customer_response": "resistant",
-      "customer_quote": "Yeah. I'm just calling back. You've called me six times.",
-      "resistance_reason": "trust",
-      "rep_followup": "alternative_offered",
-      "result": "partial"
+      "customer_response": "cooperative",
+      "customer_quote": "Yeah. I'm just calling back.",
+      "resistance_reason": "other",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -71,9 +80,9 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:32",
-      "end_ts": "00:44",
-      "quote": "So the address that we had was, 676710 Rockinghouse Avenue in Las Vegas.",
+      "ts": "00:36",
+      "end_ts": "00:41",
+      "quote": "So the address that we had was,",
       "customer_response": "cooperative",
       "customer_quote": "Okay. Yeah. That's the current address.",
       "resistance_reason": "",
@@ -157,12 +166,12 @@
       "status": "asked",
       "ts": "00:15",
       "end_ts": "00:20",
-      "quote": "it looks like we were reaching out because we had put together a solar design for your home.",
+      "quote": "we had put together a solar design for your home.",
       "customer_response": "cooperative",
       "customer_quote": "Well, last year. It depends what address, I guess.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
@@ -179,94 +188,102 @@
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "01:05",
-      "end_ts": "01:40",
-      "quote": "Was there was there a good day next week? Or",
+      "ts": "01:33",
+      "end_ts": "01:45",
+      "quote": "And what time on Monday?",
       "customer_response": "cooperative",
-      "customer_quote": "Oh, okay. Well, I might as well do it Monday.",
+      "customer_quote": "Maybe ten. I should be free.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
       "ts": "01:45",
-      "end_ts": "02:07",
+      "end_ts": "01:56",
       "quote": "And and we'll just need a text beforehand just to reconfirm that appointment.",
       "customer_response": "cooperative",
       "customer_quote": "Alright. Thanks.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
       "ts": "00:05",
-      "quote": "Yeah. I'm just calling back. You've called me six times. I'm wondering what if there's something wrong.",
-      "type": "trust_or_scam",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Okay. Yeah. It looks like, it looks like we were reaching out because we had put together a solar design for your home."
-      ],
-      "resolved": true,
-      "resolution_ts": "00:41",
-      "reasoning": "Customer accepts the explanation once the address is confirmed and moves into scheduling; the complaint about call volume itself resurfaces at 00:50 but the initial confusion is settled by the design explanation."
-    },
-    {
-      "ts": "00:50",
-      "quote": "And now I've had five more people call me.",
+      "quote": "You've called me six times. I'm wondering what if there's something wrong.",
       "type": "other",
-      "rep_attempts": 1,
+      "rep_attempts": 2,
       "attempt_quotes": [
+        "Okay. Yeah. It looks like, it looks like we were reaching out because we had put together a solar design for your home.",
         "Oh, okay. I can I can get that all all scheduled out for you? That way the dialer doesn't keep calling you."
       ],
       "resolved": true,
-      "resolution_ts": "01:29",
-      "reasoning": "Rep reframes booking as the fix for repeat calls and the customer agrees to schedule, though the underlying frustration is never directly acknowledged until the sign-off at 01:56."
+      "resolution_ts": "01:56",
+      "reasoning": "Customer's repeated-calls complaint stalled the script until the rep offered a scheduling fix and, finally, a direct apology; customer accepted and booked, so it resolved but late.",
+      "blocked_section": "intro_legitimacy",
+      "attempt_moves": [
+        "reframe",
+        "reassure"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "prior_design@00:15",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "button-up commitment strength on a fragile booking",
-    "ts": "01:49",
-    "quote": "So if anything comes up and you need to get that rescheduled, we could always get that rescheduled for you.",
-    "why": "The rep skips the no-driving/computer instruction and the 'is that fair?' handshake entirely, and instead proactively offers an easy reschedule path to a customer who already sounds resigned ('might as well'). This is the single biggest show-rate risk on the call and it's fixable with a script sequencing change."
+    "topic": "Skipped the interest/bill re-anchor entirely on a warm re-engagement call",
+    "ts": "00:12",
+    "quote": "it looks like we were reaching out because we had put together a solar design for your home.",
+    "why": "This is a customer with an existing design already calling back — a high-value anchor — yet the rep never asks about current interest, bill pain, or what happened with the prior design; the whole call runs on scheduling logistics alone, leaving the appointment thin and easy to no-show."
   },
   "key_moments": [
     {
       "ts": "00:05",
-      "quote": "You've called me six times. I'm wondering what if there's something wrong.",
-      "classification": "friction_resolution_speed",
-      "stewart_read": "This is a non-business complaint (contact frequency) that the rep does not address directly — he explains the design history instead of acknowledging the volume of calls."
+      "quote": "You've called me six times.",
+      "classification": "protocol_violation",
+      "stewart_read": "This is the excessive_contact_complaint protocol — a real operational friction, not a sales objection — and the rep should resolve it early via action, not defense."
     },
     {
       "ts": "00:50",
-      "quote": "he was gonna call back. And now I've had five more people call me.",
+      "quote": "And now I've had five more people call me.",
+      "classification": "protocol_violation",
+      "stewart_read": "Second touch on the same contact-frequency complaint; rep offers a scheduling fix but still doesn't apologize or explain why the promised callback never happened."
+    },
+    {
+      "ts": "01:56",
+      "quote": "sorry for all the phone calls. I know our dialer is kind of aggressive",
+      "classification": "protocol_violation",
+      "stewart_read": "Third touch: the apology finally lands, but only after the appointment is locked — sequencing suggests it was a closing courtesy, not genuine resolution."
+    },
+    {
+      "ts": "00:28",
+      "quote": "Well, last year. It depends what address, I guess.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "The customer discloses a specific prior-call commitment (someone said they'd call back) and a pattern of repeated uncoordinated outreach. The rep says 'Oh, okay' and moves straight to scheduling without probing who she spoke to or what was promised."
-    },
-    {
-      "ts": "00:55",
-      "quote": "Oh, okay. I can I can get that all all scheduled out for you? That way the dialer doesn't keep calling you.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "Rep flips the annoyance-at-calls complaint into a reason to book right now — using her own frustration as the lever to schedule. This is a workable inversion move but it is thin: it never names the specific complaint (five callers, no follow-through) before using it."
-    },
-    {
-      "ts": "01:49",
-      "quote": "So if anything comes up and you need to get that rescheduled, we could always get that rescheduled for you.",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "Immediately after locking Monday at 10, the rep volunteers an easy out before any commitment-strengthening language (no computer/no-driving instruction, no 'is that fair?') has been used. On an already resigned, dialer-fatigued customer, this weakens the hold of the appointment before it's even confirmed."
+      "stewart_read": "Customer signals ambiguity/multiple properties or uncertainty about the prior design; rep confirms the address but never asks what the customer thought of the design or whether they're still interested in it."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
     "checked": 34,

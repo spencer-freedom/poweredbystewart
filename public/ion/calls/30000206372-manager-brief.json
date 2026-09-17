@@ -1,17 +1,25 @@
 {
   "call_id": "30000206372",
   "rep_name": "Parker",
-  "trajectory_summary": "This is a short, low-intent lead: the customer clicked a Facebook ad to check ZIP eligibility, not to buy solar, and turns out not to be on title to his home. The rep handled the DQ mechanics reasonably (checked ownership, offered a future touchpoint) but missed the emotional beat when the customer disclosed his father-in-law is terminally ill, and the customer flatly rejected being recontacted. This ends as a clean, unsalvageable dead end.",
-  "shape": "stagnant",
-  "outcome_dispute": "v1 tag is unknown/see-transcript; the observed outcome is a hard DQ (not_homeowner) with the customer explicitly declining any future follow-up, so this should be coded dq, not left ambiguous or coded as a soft callback.",
+  "trajectory_summary": "The call opens on a hard disqualifier the customer states unprompted, and never recovers real momentum — the rep spends the short call trying to salvage a lead whose ownership timeline is indefinite (tied to a dying relative's estate, no signed papers). The customer firmly shuts down the rep's callback offer at the end, closing the loop with no path forward.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag is unknown; this is a clean DQ (not_homeowner, no reasonable timeline) that should be tagged dq, not left ambiguous.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "00:17",
-    "quote": "to have anything done because I'm not a homeowner.",
-    "reasoning": "Customer is not on title (father-in-law owns the home, papers not transferred) which is a hard DQ per dq_rules.not_homeowner, and the customer explicitly rejected any future follow-up, closing the lead entirely."
+    "ts": "01:12",
+    "quote": "my father-in-law owns the house, and he has not signed the papers over to us yet.",
+    "reasoning": "Customer is not a homeowner and has no controllable, near-term path to ownership (estate/will dependent), and explicitly declines follow-up — this is a hard not_homeowner DQ that the rep's later callback offer does not change.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reached bill discussion — it was disqualified at the homeowner-verification stage before any utility or bill questions were asked."
+    "reasoning": "No dollar or kWh amount was obtained from the customer during the call, so no flip could be executed."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,58 +38,34 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call ended at the homeowner-qualification gate; bill collection was never reached."
+    "reasoning": "The rep did not request the customer's utility bill or a photo/link during the call."
   },
   "interest_reason_audit": {
-    "asked": true,
-    "ask_ts": "00:10",
+    "asked": false,
+    "ask_ts": "",
     "reason_given": true,
-    "reason_ts": "00:15",
-    "reason_quote": "I wasn't actually looking to have anything done because I'm not a homeowner.",
-    "reason_used": "no_reason_given",
+    "reason_ts": "00:27",
+    "reason_quote": "it says to see if your ZIP code qualifies.",
+    "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked 'how are you doing' framed around the solar interest, and the customer's actual reason for engaging was clicking a Facebook ad to check ZIP eligibility, not genuine solar interest — there was no motivational reason (bill pain, environment, etc.) to reinforce since the customer disqualified himself immediately."
+    "reasoning": "Customer gave a reason for interest (checking Facebook ad ZIP eligibility) at 00:27, but the rep never reused this — the ad was dismissed as 'crazy' rather than tied back to a genuine benefit or reason to stay engaged."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:05",
-      "end_ts": "00:14",
-      "quote": "Hey, Mark. This is Parker. I'm with Ion. I was just reaching out to a",
-      "customer_response": "deflected",
-      "customer_quote": "I wasn't actually looking to have anything done because I'm not a homeowner.",
-      "resistance_reason": "other",
-      "rep_followup": "moved_on",
-      "result": "partial"
-    },
-    {
-      "section": "interest_question",
-      "status": "asked",
-      "ts": "00:10",
-      "end_ts": "00:32",
-      "quote": "You were looking at solar. How are you doing?",
-      "customer_response": "resistant",
-      "customer_quote": "That's what I was looking for.",
-      "resistance_reason": "other",
-      "rep_followup": "moved_on",
+      "end_ts": "00:10",
+      "quote": "This is Parker. I'm with Ion.",
+      "customer_response": "cooperative",
+      "customer_quote": "I wasn't actually looking",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
-      "section": "address_homeowner",
-      "status": "asked",
-      "ts": "00:44",
-      "end_ts": "01:14",
-      "quote": "Being a homeowner is if you don't own a home, it's kinda hard to get that approval.",
-      "customer_response": "resistant",
-      "customer_quote": "my father-in-law owns the house, and he has not signed the papers over to us yet.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "persisted",
-      "result": "declined"
-    },
-    {
-      "section": "co_owner",
+      "section": "interest_question",
       "status": "skipped",
       "ts": "",
       "end_ts": "",
@@ -91,6 +75,30 @@
       "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "skipped"
+    },
+    {
+      "section": "address_homeowner",
+      "status": "asked",
+      "ts": "00:49",
+      "end_ts": "01:00",
+      "quote": "It's just yeah. Being a homeowner is if you don't own a home, it's kinda hard to get that approval.",
+      "customer_response": "cooperative",
+      "customer_quote": "Well, I will actually own it soon, but,",
+      "resistance_reason": "",
+      "rep_followup": "alternative_offered",
+      "result": "partial"
+    },
+    {
+      "section": "co_owner",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "roof",
@@ -178,15 +186,15 @@
     },
     {
       "section": "appointment_set",
-      "status": "skipped",
-      "ts": "01:35",
-      "end_ts": "01:50",
-      "quote": "I could make a note here to maybe reach out to you in a a couple weeks and see if you had any luck with that.",
-      "customer_response": "resistant",
-      "customer_quote": "No. No. No. No. No. No. When the time comes, I will contact whoever I will choose to do the solar panels.",
-      "resistance_reason": "already_have_quote",
-      "rep_followup": "moved_on",
-      "result": "declined"
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "button_up",
@@ -198,75 +206,93 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:17",
+      "ts": "00:15",
       "quote": "I wasn't actually looking to have anything done because I'm not a homeowner.",
       "type": "roof_or_home",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "It's just yeah. Being a homeowner is if you don't own a home, it's kinda hard to get that approval."
+        "Well, yeah, you would definitely qualify. What I could do I know sometimes it just with our processes, it's"
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "This is a hard DQ (not_homeowner) rather than a persuadable objection; the rep correctly did not try to argue past it, and the ownership-transfer nuance ultimately didn't change the outcome."
+      "reasoning": "Customer's non-homeowner status is a hard gate; rep's one attempt was to offer a callback note, which the customer explicitly rejected.",
+      "blocked_section": "address_homeowner",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "address_homeowner@00:49",
+      "resolution_agrees": false
     },
     {
-      "ts": "01:41",
-      "quote": "No. No. No. No. No. No. When the time comes, I will contact whoever I will choose to do the solar panels.",
+      "ts": "01:42",
+      "quote": "No. No. No. No. No. No. When the time comes, I will contact whoever I will choose",
       "type": "timing_or_callback",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "I could make a note here to maybe reach out to you in a a couple weeks and see if you had any luck with that."
-      ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "Customer firmly rejected the rep's single attempt to schedule a future follow-up touch; the rep did not push further after the explicit refusal."
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": true,
+      "resolution_ts": "01:50",
+      "reasoning": "Customer firmly declines the rep's callback offer; rep does not push further and the call ends.",
+      "blocked_section": "address_homeowner",
+      "attempt_moves": [],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "acknowledging vulnerability disclosure before returning to process",
-    "ts": "01:16",
-    "quote": "Do you have any idea what pretty much on his deathbed, and it's everything's in will and trust.",
-    "why": "This is a minor, low-stakes miss since the call is a hard DQ with a firmly rejected follow-up and nothing to salvage — but it's a quick, repeatable habit (pause, acknowledge, then proceed) worth naming so it's automatic on future calls where the lead is live."
+    "topic": "Immediate DQ not handled cleanly",
+    "ts": "00:17",
+    "quote": "to have anything done because I'm not a homeowner.",
+    "why": "Customer states the hard gate up front; rep spends the next 30+ seconds on ad-copy rapport before addressing it, and never cleanly closes the DQ or pivots to a concrete future-contact plan."
   },
   "key_moments": [
     {
-      "ts": "00:21",
-      "quote": "I was looking if you read the beginning of that freaking ad on Facebook, it says to see if your ZIP code qualifies.",
+      "ts": "00:15",
+      "quote": "I wasn't actually looking to have anything done because I'm not a homeowner.",
       "classification": "other",
-      "stewart_read": "This is a specific, actionable lead-quality signal: the customer is naming the exact ad copy ('see if your ZIP code qualifies') that drove a low-intent click, distinct from the homeowner DQ itself. It points at upstream ad targeting/messaging, not rep execution."
+      "stewart_read": "This is an immediate hard-gate disclosure (not_homeowner) — a DQ signal, not resistance to overcome."
     },
     {
-      "ts": "00:44",
-      "quote": "yeah. I mean, you'd have your your area would definitely qualify. It's just yeah. Being a homeowner is if you don't own a home, it's kinda hard to get that approval.",
-      "classification": "softener_overuse",
-      "stewart_read": "The rep's delivery is halting and filled with filler ('yeah', 'kinda', trailing restarts) while explaining a hard qualification gate, which undercuts the clarity and confidence of the DQ explanation."
+      "ts": "00:34",
+      "quote": "Oh, I see. Yeah. I know those ads are kinda crazy.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep validates the ad's dishonesty rather than pivoting straight to the actual qualifying question about ownership timeline."
+    },
+    {
+      "ts": "01:12",
+      "quote": "my father-in-law owns the house, and he has not signed the papers over to us yet.",
+      "classification": "other",
+      "stewart_read": "The ownership transfer is indefinite and dependent on an estate/will process, not a near-term closing — this confirms a hard DQ, not a soft timing issue."
     },
     {
       "ts": "01:16",
       "quote": "Do you have any idea what pretty much on his deathbed, and it's everything's in will and trust.",
       "classification": "empathy_miss",
-      "stewart_read": "The customer discloses that the home's owner (his father-in-law) is terminally ill. The rep's next line is a flat procedural comment about needing paperwork 'finalized,' with no acknowledgment of the health situation."
-    },
-    {
-      "ts": "01:26",
-      "quote": "Well, yeah, you would definitely qualify. What I could do I know sometimes it just with our processes, it's it's kinda important to have that, like, finalized.",
-      "classification": "protocol_violation",
-      "stewart_read": "Rep tells the customer he 'would definitely qualify' despite the not_homeowner hard DQ still being unresolved (title not yet transferred), which is an inaccurate reassurance given Ion's dq_rules.not_homeowner gate."
+      "stewart_read": "Customer discloses a father-in-law nearing death; rep's response is a flat acknowledgment with no empathetic pause."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
     "checked": 27,

@@ -8,6 +8,24 @@ export type TriageComponents = {
   signals: number;
 };
 
+// One objection on one call (layered pipeline). `continued` = the tape shows a
+// verified script event after it; `resolved` = Stewart's read that the
+// customer moved past it; the call's `booked` says whether it set.
+export type ObjectionRow = {
+  ts: string | null;
+  start_sec: number | null;
+  end_sec: number | null;
+  quote: string;
+  type: string;
+  blocked_section: string | null;
+  attempts: number;
+  moves: string[];
+  attempt_quotes: string[];
+  resolved: boolean;
+  continued: boolean | null;
+  next_event: string | null;
+};
+
 export type TriageRow = {
   call_id: string;
   slug: string;
@@ -28,6 +46,7 @@ export type TriageRow = {
   reason_asked: boolean | null;
   reason_used: "yes" | "no" | "no_reason_given" | null;
   coverage: Record<string, "asked" | "skipped" | "not_reached">;
+  objections: ObjectionRow[];
   counts: {
     moments: number;
     protocol_violation: number;

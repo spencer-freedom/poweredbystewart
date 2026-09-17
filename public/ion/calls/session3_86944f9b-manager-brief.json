@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION3_86944f9b",
   "rep_name": "Ella",
-  "trajectory_summary": "The call opens with mild confusion, moves through a bumpy roof-age exchange, and then pivots hard when the credit-qualifier question triggers a serious, unprompted disclosure of elder fraud, identity theft, and a home takeover during a hospital stay. The rep never adjusts pace or tone to match the escalating disclosure, repeating the same credit-score-callback line three times and ending the call without resolving anything for the customer.",
+  "trajectory_summary": "The call starts cold and never warms — the customer's confusion about basic questions curdles into a serious vulnerability disclosure that the rep never engages with. Energy leaked steadily as the rep repeated the same credit-score close three times while the customer's disclosures about fraud, hospitalization, and elder abuse escalated in severity and were met with scripted non-responses.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is unknown, but this call should not be read as a normal callback/DQ — it is a vulnerable disclosure the rep did not handle with the schema's empathy_on_vulnerability_disclosure protocol; the outcome is a stalled, unresolved qualifier ask, not a clean callback.",
+  "outcome_dispute": "This should not be read as a soft credit-score deferral; the transcript shows an elderly, distressed customer disclosing fraud victimization and the rep repeatedly bypassing it to restate a scripted line, which is a vulnerability-handling failure, not a routine qualifier hold.",
   "observed_outcome": {
-    "outcome": "callback",
+    "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "05:22",
-    "quote": "And so we just we would just need to make sure that it would be above $6.50 in order to help you out. And so just reach back out to us when it is. Okay? Have a great rest of your day. Bye bye. Have a good day. Bye.",
-    "reasoning": "The rep ends the call asking the customer to check his credit score and call back — no appointment day/time is set, and no closer handoff occurs; this is an open-ended callback contingent on the customer's own follow-through, not a scheduled callback with a locked time."
+    "ts": "05:27",
+    "quote": "And so just reach back out to us when it is. Okay? Have a great rest of your day. Bye bye.",
+    "reasoning": "Call ends on an unresolved credit-score qualifier with no appointment, no callback time, and no next step owned by the rep — customer is told to call back himself.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reached the average_bill verify item; it stalled on the credit qualifier before bill amount was ever raised."
+    "reasoning": "No dollar amount or kWh was captured on the call; there was no opportunity to use a bill number for leverage."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +38,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The call never progressed to bill collection; it was gated at the credit qualifier before utility company or bill amount were addressed."
+    "reasoning": "The rep did not request the customer's utility bill or offer a method to collect it during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +49,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asked what interested the customer in solar; the call moved from intro directly into address/roof verify items and then the credit qualifier, never reaching this section."
+    "reasoning": "The rep did not ask why the customer was interested in solar; no reason was volunteered that the rep captured as the interest reason."
   },
   "script_coverage": [
     {
@@ -49,11 +57,11 @@
       "status": "asked",
       "ts": "00:11",
       "end_ts": "00:20",
-      "quote": "Yeah. This is Ella with ION. I just got a request here that you're looking at solar panels for the home. Looks like it's in Oregon. Is that right?",
+      "quote": "This is Ella with ION.",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -73,11 +81,11 @@
       "status": "asked",
       "ts": "00:42",
       "end_ts": "00:53",
-      "quote": "So let me make sure I have the right address down. How about 4910 Northeast 68th Avenue in Portland, Oregon?",
+      "quote": "So let me make sure I have the right address down.",
       "customer_response": "cooperative",
-      "customer_quote": "",
+      "customer_quote": "Yeah.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -96,11 +104,11 @@
       "section": "roof",
       "status": "asked",
       "ts": "00:54",
-      "end_ts": "01:55",
-      "quote": "And then looking at the home here, is that just an asphalt shingle roof on the home?",
-      "customer_response": "resistant",
-      "customer_quote": "The roof or the shingle?",
-      "resistance_reason": "other",
+      "end_ts": "01:01",
+      "quote": "is that just an asphalt shingle roof on the home?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
     },
@@ -131,18 +139,18 @@
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:09",
+      "ts": "02:29",
       "end_ts": "05:27",
-      "quote": "I know all that's required to qualify is just have a credit score above 650. Is that the case for you?",
-      "customer_response": "deflected",
-      "customer_quote": "I have no clue. Somebody somebody's been using my name to get stuff, in the past.",
-      "resistance_reason": "other",
-      "rep_followup": "persisted",
+      "quote": "I know all that's required to qualify is just have a credit score above 650.",
+      "customer_response": "resistant",
+      "customer_quote": "I have no clue.",
+      "resistance_reason": "trust",
+      "rep_followup": "alternative_offered",
       "result": "deferred"
     },
     {
       "section": "military",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,11 +158,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "prior_design",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -162,7 +170,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached"
     },
     {
       "section": "bill_collection",
@@ -198,13 +206,15 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
       "ts": "02:37",
-      "quote": "I have no clue. Somebody somebody's been using my name to get stuff, in the past.",
+      "quote": "I have no clue.",
       "type": "trust_or_scam",
       "rep_attempts": 2,
       "attempt_quotes": [
@@ -213,55 +223,69 @@
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The customer's uncertainty about his credit score, rooted in identity theft, is never actually resolved — the rep offers a Credit Karma suggestion but the call ends with the customer still unsure and no path forward beyond calling back."
+      "reasoning": "Customer cannot confirm the credit qualifier due to identity theft affecting his credit; rep offers a generic tool suggestion but never resolves the underlying concern, and the call ends without the qualifier being met.",
+      "blocked_section": "tax_credit_qualifier",
+      "attempt_moves": [
+        "restate",
+        "alternative_offered"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "vulnerability disclosure handled flatly",
+    "topic": "Vulnerability disclosure ignored",
     "ts": "04:13",
-    "quote": "I'm 81 years old. These assholes are about 20, 30, 40 years old during the, COVID nineteen epidemic. People were just they took over my house while I was in the VA hospital for three months.",
-    "why": "An 81-year-old customer disclosed serious fraud victimization and a home takeover during hospitalization, and the rep's response ('They did.') and subsequent line at 04:44 ('Alright. Sounds good. Well, once you're able to figure out that credit score, just get back to us, and we can help out with this lower estimate. Okay?') show no adaptation to the severity of what was shared — this is the clearest, most consequential gap on the call per coaching_philosophy.empathy_on_vulnerability_disclosure."
+    "quote": "I'm 81 years old. These assholes are about 20, 30, 40 years old",
+    "why": "An elderly customer disclosed being defrauded, hospitalized, and having property taken during that hospitalization — three escalating touches — and the rep never once departed from the scripted credit line to acknowledge it. This is the single most consequential gap on the call."
   },
   "key_moments": [
     {
-      "ts": "00:34",
-      "quote": "You say you have a design already?",
-      "classification": "other",
-      "stewart_read": "Customer misunderstands the intro as implying a design already exists; this is confusion generated by the rep's phrasing ('created free solar estimates') rather than a scam/trust objection."
+      "ts": "02:37",
+      "quote": "Somebody somebody's been using my name to get stuff, in the past.",
+      "classification": "empathy_miss",
+      "stewart_read": "First disclosure of identity fraud; rep treats it as an administrative footnote ('Alright. That's good.') rather than a trust gift requiring acknowledgment."
     },
     {
-      "ts": "01:19",
-      "quote": "Oh, yes. It has. Like I asked you, you wanna know how old the roof is or the shingles on the roof?",
+      "ts": "03:36",
+      "quote": "has been, run through, a bunch of fraudulent activities.",
       "classification": "empathy_miss",
-      "stewart_read": "The rep conflates house age with roof age and then roof age with shingle age, forcing the customer to repeat and clarify twice; this is a basic verify-question execution miss, not a customer objection."
-    },
-    {
-      "ts": "03:07",
-      "quote": "Alright. That's good. So that is just the last thing that we are gonna need to make sure of because that's the one requirement that we do have here at ION.",
-      "classification": "empathy_miss",
-      "stewart_read": "Customer just disclosed identity theft and the rep's response ('That's good') is a mismatched, likely rote affirmation followed immediately by restating the credit qualifier — a scripted response to a non-scripted disclosure."
+      "stewart_read": "Second disclosure touch; rep pivots straight to a Credit Karma suggestion, treating a fraud victim's concern as a logistics question."
     },
     {
       "ts": "04:13",
-      "quote": "K? Okay. I'm 81 years old. These assholes are about 20, 30, 40 years old during the, COVID nineteen epidemic. People were just they took over my house while I was in the VA hospital for three months.",
+      "quote": "I'm 81 years old. These assholes are about 20, 30, 40 years old",
       "classification": "empathy_miss",
-      "stewart_read": "This is a severe vulnerability disclosure — elder fraud victimization plus a home takeover during a 3-month VA hospital stay — and the rep's only response before pivoting back to the credit ask is 'They did.'"
+      "stewart_read": "Third and most severe disclosure touch — elder fraud victim describing hospitalization and property loss — met with 'They did.' and a return to script."
+    },
+    {
+      "ts": "00:34",
+      "quote": "You say you have a design already?",
+      "classification": "knowledge_gap",
+      "stewart_read": "Customer's confusion suggests the intro didn't clearly land what the call is for; rep clarifies but the interest question is never asked at all per verified events, so there's no emotional anchor for the rest of the call."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
     "checked": 32,
-    "verified": 31,
+    "verified": 32,
     "fuzzy": 0,
-    "wrong_ts": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

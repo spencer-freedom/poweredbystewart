@@ -1,26 +1,35 @@
 {
   "call_id": "SESSION9",
-  "rep_name": "Daniel",
-  "trajectory_summary": "This is a short, low-friction reschedule call for an already-qualified lead, not a fresh qualify-and-book call. The customer carries almost the entire call with an unprompted, emotionally loaded life update; the agent stays passive through the disclosure, then executes the reschedule cleanly and gets a locked day+time. The energy is mixed: it builds on the logistics (a real slot gets found and confirmed) but leaks on empathy and on a silent, unconfirmed switch from the customer's requested in-person visit to a phone appointment.",
-  "shape": "mixed",
-  "outcome_dispute": "v1 tag is unknown/unclear from metadata; the observed outcome here is a clean booked appointment (Tuesday April 21 at 2:30) but with a material unresolved thread — the customer asked for someone to come meet her in person, and the agent silently defaulted to a phone appointment without ever confirming that change with her.",
+  "rep_name": null,
+  "trajectory_summary": "This is a reschedule call for an already-qualified/assigned lead, not a standard setter qualification call — the verified events show nearly every qualification section skipped because none of it was needed. Energy stayed warm and cooperative throughout; the only real work was landing a mutually workable day and time, which was accomplished. The button-up was only partially completed (no explicit 'is that fair' handshake or driving/computer instructions), leaving the confirmation a bit thin given the customer's stated transportation dependency.",
+  "shape": "energy_built",
+  "outcome_dispute": "The verified appointment_set and button_up sections show completion with a locked day (Tuesday, April 21) and time (2:30), so this should read as booked, not tentative or callback, despite button_up being marked 'partial.'",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": null,
-    "ts": "03:53",
-    "quote": "I have you rescheduled in for this upcoming Tuesday, April 21",
-    "reasoning": "A specific day (Tuesday, April 21) and time (2:30) are confirmed and a text follow-up is promised, meeting the booked threshold — though the channel was set as phone despite the customer's earlier in-person request."
+    "ts": "03:47",
+    "quote": "02:30? K. Sounds good. Alright. I have you rescheduled in for this upcoming Tuesday, April 21",
+    "reasoning": "Both a specific day (Tuesday, April 21) and time (2:30) were explicitly agreed by both parties, meeting the booked bar regardless of the partial button-up.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "booked by time, tentative by rule: bill not_asked",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
-    "bill_captured": true,
-    "bill_ts": "01:15",
-    "bill_quote": "because her her electric bill has just been exorbitant",
-    "flip_executed": "no",
+    "bill_captured": false,
+    "bill_ts": "",
+    "bill_quote": null,
+    "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer volunteers that her mother's bill is 'exorbitant,' but this call is a reschedule for an already-assigned specialist, so re-anchoring the bill falls outside this agent's task; the flip should happen at the closer stage, not here."
+    "reasoning": "No numeric monthly bill or kWh amount was captured on the call, so there was nothing for the rep to flip or use."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,35 +39,35 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "This is a reschedule call handling only day/time logistics for an appointment with an already-assigned specialist; no bill-collection activity occurs or is expected at this stage."
+    "reasoning": "The rep/scheduler did not request the utility bill or a photo/login during the call."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": true,
-    "reason_ts": "01:15",
-    "reason_quote": "because her her electric bill has just been exorbitant",
-    "reason_used": "no",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The customer volunteers the bill-pain reason unprompted (the agent never explicitly asks 'what interested you in solar' since qualification already occurred in a prior call), and the agent does not reflect or use it in the scheduling conversation that follows."
+    "reasoning": "The rep did not ask the customer why they were interested in solar; although high bills were mentioned in the conversation, there was no rep question eliciting that reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
+      "status": "asked",
+      "ts": "00:03",
+      "end_ts": "00:11",
+      "quote": "I set up the meeting",
+      "customer_response": "no_answer",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "interest_question",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -66,11 +75,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -78,11 +87,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,11 +99,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,11 +111,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,11 +123,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,11 +135,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +147,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,11 +159,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -162,11 +171,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -174,16 +183,16 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "02:12",
-      "end_ts": "03:53",
-      "quote": "Yeah. So I can just set up a phone call appointment for you.",
+      "end_ts": "04:02",
+      "quote": "set up a phone call appointment for you.",
       "customer_response": "cooperative",
-      "customer_quote": "02:30? K. Sounds good.",
+      "customer_quote": "Afternoons are best for me.",
       "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
@@ -191,63 +200,98 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "04:07",
-      "end_ts": "04:23",
-      "quote": "And then I can send you a text message as well with the details of this appointment, just so you can put that on your schedule and have a better reminder.",
+      "ts": "03:54",
+      "end_ts": "04:07",
+      "quote": "at 02:30.",
       "customer_response": "cooperative",
       "customer_quote": "That sounds so great. Thank you so much.",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "moved_on",
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
-  "objections": [],
+  "objections": [
+    {
+      "ts": "02:56",
+      "quote": "is 2PM or 3PM available?",
+      "type": "timing_or_callback",
+      "rep_attempts": 3,
+      "attempt_quotes": [
+        "We could do 3PM. That would work.",
+        "There's, like, an 11:00AM where it's 12:00 noon.",
+        "Tuesday, we've got a 02:00 and 02:30 available."
+      ],
+      "resolved": true,
+      "resolution_ts": "03:47",
+      "reasoning": "Customer's transportation and family-schedule constraints meant three separate proposed times didn't work; this is a scheduling constraint, not a true objection to the appointment itself, but it did stall the script until a slot was found.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "alternative_offered",
+        "alternative_offered",
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@03:54",
+      "resolution_agrees": true
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Unconfirmed switch from requested in-person visit to phone appointment",
-    "ts": "01:21",
-    "quote": "I'd I'd like to see if I could schedule someone to come and meet me... I don't drive.",
-    "why": "The customer's explicit request and stated reason (no driving, disability) were never addressed before the agent booked a phone appointment — this is the single clearest gap the manager can point to on this call, and it directly affects whether the customer shows up feeling the appointment matches what she asked for."
+    "topic": "Vulnerability disclosure went unacknowledged",
+    "ts": "00:44",
+    "quote": "I would like to get everything kinda tidied up and ready for her to come back home for her last days.",
+    "why": "Customer disclosed a major end-of-life situation with her mother plus her own disability — this is a trust-gift moment per schema and no explicit empathetic acknowledgment appears anywhere in the transcript before the call moves to scheduling logistics."
   },
   "key_moments": [
     {
-      "ts": "01:21",
-      "quote": "I'd I'd like to see if I could schedule someone to come and meet me. It is about an hour a little over an hour away from me, and I don't drive.",
-      "classification": "conditional_booking",
-      "stewart_read": "The customer explicitly asked for an in-person visit and explained why (no driving, disability, dependence on family). The agent never revisited this — the call outcome is a phone appointment. This is a real unresolved mismatch between what was requested and what was booked, not a resolved substitution."
-    },
-    {
-      "ts": "00:03",
-      "quote": "Hi there, Ella. I am, someone who had already I set up the meeting, and I got really sick.",
+      "ts": "00:44",
+      "quote": "to to the hospital for probably about four weeks, and I would like to get everything kinda tidied up and ready for her to come back home for her last days.",
       "classification": "empathy_miss",
-      "stewart_read": "Customer opens with illness, caregiving for a mother with dementia, a recent in-law death, and a home relocation — a dense vulnerability disclosure. The agent's first substantive response comes almost two minutes later and is purely logistical."
+      "stewart_read": "Customer discloses major vulnerability — mother entering hospice — a clear trust-gift moment."
     },
     {
       "ts": "01:15",
-      "quote": "because her her electric bill has just been exorbitant",
+      "quote": "her her electric bill has just been exorbitant.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer volunteers that the mother's electric bill is 'exorbitant' — a strong bill-pain signal — but this is a reschedule call for an already-qualified lead, so the agent's job here is purely logistics, not re-qualification. The agent does not reflect the number back or flip it, but that is consistent with the call's scope."
+      "stewart_read": "Customer volunteers a bill-pain signal unprompted ('exorbitant') but no bill amount is captured and nothing is reflected back."
     },
     {
-      "ts": "02:12",
-      "quote": "Yeah. So I can just set up a phone call appointment for you. It looks like you're already assigned to a specialist.",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "The call closes with logistics confirmed (day, time, rep name, text follow-up promised) but no explicit 'is that fair?' handshake, no one-hour block statement, and no no-driving/computer instruction — button-up mechanics are thin even though a date and time were locked."
+      "ts": "01:44",
+      "quote": "my my husband and my daughter right now. So I because I'm disabled myself.",
+      "classification": "empathy_miss",
+      "stewart_read": "A second vulnerability disclosure (disability, transportation dependency) with no visible empathetic acknowledgment in the transcript."
+    },
+    {
+      "ts": "03:59",
+      "quote": "His name is Daniel.",
+      "classification": "rapport_repair",
+      "stewart_read": "Customer asks for the rep's/specialist's name before confirming — a legitimacy/rapport check that the rep answers directly and specifically."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 26,
-    "verified": 22,
+    "checked": 30,
+    "verified": 29,
     "fuzzy": 0,
-    "wrong_ts": 4,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION24_0f7cfab6",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens combative — a customer setting hard conditions before engaging — and never fully resolves into comfort; instead the customer takes control of pacing, repeatedly steering the rep toward scheduling to shortcut a pitch he doesn't trust. The rep gets the appointment booked and the bill photo request out, but did so by yielding to the customer's terms rather than running the qualification structure, leaving unanswered cost questions and an unaddressed co-owner exclusion sitting under a fragile booking.",
-  "shape": "mixed",
-  "outcome_dispute": null,
+  "trajectory_summary": "The call is customer-led throughout: Robert dictates pace, asks the real qualifying/financial questions, and sets his own conditions while Holland reacts, half-answers, and stitches together a Wednesday time. Energy leaked in the middle third on scope-creep answers and a utility mix-up, and the bill was never captured live, only promised by text.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag unknown; this should read as tentative, not booked, since bill was not obtained live and the appointment's firmness rests on a promised text/photo follow-through rather than confirmed data in hand.",
   "observed_outcome": {
     "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
     "co_owner_confirmed": false,
     "ts": "05:19",
-    "quote": "So on Wednesday, I have you down for 02:30. Is that fine? Yep. Yes.",
-    "reasoning": "A specific day and time (Wednesday 02:30) was agreed, but the identified co-owner (wife) was explicitly confirmed as NOT attending, and the bill document was only promised for later rather than captured live — the booking exists but rests on an unresolved dependency (the bill) and an excluded decision-maker, making it fragile rather than a clean 'booked' outcome."
+    "quote": "Yeah. So on Wednesday, I have you down for 02:30. Is that fine? Yep. Yes.",
+    "reasoning": "A specific day and time were agreed, but the bill was never captured live (only promised by text), and the wife/co-owner was explicitly excluded from the appointment without the rep offering a joint time, leaving the booking fragile per Ion's rule that a set without the bill in hand is tentative.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": false,
+      "co_owner": "identified_unconfirmed",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,17 +29,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "No dollar bill amount or usage figure was ever stated by the customer on this call — the rep asked for the utility bill document itself (kilowatt usage graph) rather than a spoken dollar figure, and the customer never volunteered one."
+    "reasoning": "No numeric monthly amount or kWh was captured on the call; the rep requested a bill photo instead (the flip was not executed because there was no bill figure to use)."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "05:25",
-    "ask_quote": "do you have a copy of your Mecklenburg bill with your kilowatt usage on it?",
+    "ask_ts": "06:19",
+    "ask_quote": "Perfect. So if I just send you a text, could you just send me a photo of that?",
     "result": "promised_later",
     "method": "photo",
-    "result_ts": "06:44",
-    "result_quote": "That's all you needed that? That's fine. I can do that.",
-    "reasoning": "The rep asked for the bill, discovered the customer has a paper copy in hand but can't read all 12 months instantly, and pivoted to a text-photo request; the customer agreed to send it after the call rather than during it."
+    "result_ts": "06:59",
+    "result_quote": "Okay. Awesome. Well, I'll look forward to that bill, and then we will see you on Wednesday.",
+    "reasoning": "Rep asked for a photo of the bill and the customer agreed to send it later; the rep confirmed they'll look for it and sent appointment details by text."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +50,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar' — the call moved from intro directly into the customer's own gatekeeping questions about the bill-swap program, and the rep never circled back to ask the customer's underlying motivation."
+    "reasoning": "The rep never explicitly asked why the customer was interested in solar; the customer expressed cost concerns but no explicit 'why' question was asked."
   },
   "script_coverage": [
     {
@@ -49,9 +58,9 @@
       "status": "asked",
       "ts": "00:07",
       "end_ts": "00:14",
-      "quote": "Hey. This is Holland with Ion. I got a request you were looking into solar for your home.",
+      "quote": "This is Holland with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "I'm fine. But I wanted to",
+      "customer_quote": "I'm fine.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -82,51 +91,51 @@
     },
     {
       "section": "co_owner",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "04:25",
+      "end_ts": "04:32",
+      "quote": "Okay. Your wife goes to work on Wednesdays, you said? Yeah.",
+      "customer_response": "cooperative",
+      "customer_quote": "K. Or it'll just be me.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "02:17",
+      "ts": "02:35",
       "end_ts": "02:42",
-      "quote": "if there is is there a leak protection for the roof with this program?",
-      "customer_response": "resistant",
-      "customer_quote": "I don't have leaks right now. So I don't wanna add something and then it start happening.",
-      "resistance_reason": "trust",
+      "quote": "Oh, you have leaks right now. What?",
+      "customer_response": "cooperative",
+      "customer_quote": "I said I don't have leaks right now.",
+      "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "05:30",
-      "end_ts": "05:41",
-      "quote": "do you have a copy of your Mecklenburg bill with your kilowatt usage on it?",
-      "customer_response": "resistant",
-      "customer_quote": "Mecklenburg. I don't have Mecklenburg. I don't know what that is. Are you with Dominion?",
-      "resistance_reason": "other",
-      "rep_followup": "persisted",
+      "ts": "05:42",
+      "end_ts": "05:51",
+      "quote": "Okay. Sorry. I just got mixed got you mixed up. But do you have do you get those bills in the mail or online?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
       "section": "bill_amount",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "05:30",
+      "end_ts": "05:58",
+      "quote": "do you have a copy of your Mecklenburg bill with your kilowatt usage on it?",
+      "customer_response": "cooperative",
+      "customer_quote": "Mecklenburg. I don't have Mecklenburg. I don't know what that is.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
@@ -167,124 +176,133 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "05:41",
-      "end_ts": "06:44",
-      "quote": "do you get those bills in the mail or online?",
+      "ts": "06:19",
+      "end_ts": "06:59",
+      "quote": "Perfect. So if I just send you a text, could you just send me a photo of that?",
       "customer_response": "cooperative",
       "customer_quote": "That's all you needed that? That's fine. I can do that.",
       "resistance_reason": "",
-      "rep_followup": "alternative_offered",
+      "rep_followup": "persisted",
       "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "02:57",
-      "end_ts": "05:24",
-      "quote": "So on Wednesday, I have you down for 02:30. Is that fine?",
+      "ts": "04:13",
+      "end_ts": "05:19",
+      "quote": "on Wednesday, we could do 02:30.",
       "customer_response": "cooperative",
-      "customer_quote": "Yep. Yes.",
+      "customer_quote": "I'll be just walking in the house and Okay. That's that's fine.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "06:48",
-      "end_ts": "07:08",
-      "quote": "I'll send you that text right now, and then I will also text you your appointment details just so you can add it to your calendar as well.",
+      "ts": "05:19",
+      "end_ts": "06:59",
+      "quote": "Yeah. So on Wednesday, I have you down for 02:30. Is that fine? Yep. Yes.",
       "customer_response": "cooperative",
       "customer_quote": "That's fine.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:31",
-      "quote": "So you're saying reduce? Because you're saying and then you're saying affordable and cheaper. What that?",
-      "type": "trust_or_scam",
+      "ts": "05:58",
+      "quote": "I just answered the phone because I'm kinda busy, but I was just thought we was gonna schedule the appointment.",
+      "type": "timing_or_callback",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Yeah. That just that's I'm saying take away the bill completely."
-      ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "Customer never gets a clean resolution to the eliminate-vs-reduce contradiction; he simply moves on to the next question rather than accepting a clarified answer."
-    },
-    {
-      "ts": "02:17",
-      "quote": "is there is there a leak protection for the roof with this program?",
-      "type": "roof_or_home",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "We have tons of warranties and everything. And so, yeah, if you did happen to get a leak or anything, then we'd cover that."
+        "So if I just send you a text, could you just send me a photo of that?"
       ],
       "resolved": true,
-      "resolution_ts": "02:42",
-      "reasoning": "Customer clarifies he doesn't currently have leaks and doesn't want to introduce the risk, then moves on to scheduling without further pushback."
-    },
-    {
-      "ts": "05:00",
-      "quote": "The bill is not higher than what we already and then just not forever. And is it transferable or because if we move, we we yeah. Stuff like that.",
-      "type": "cost",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Yeah. Those are really good questions."
+      "resolution_ts": "06:44",
+      "reasoning": "Customer pushes back on being asked to pull the bill live, calling it outside what he expected; rep pivots to the text/photo alternative and customer accepts.",
+      "blocked_section": "bill_amount",
+      "attempt_moves": [
+        "alternative_offered"
       ],
-      "resolved": false,
-      "resolution_ts": "",
-      "reasoning": "Rep validates the questions but does not answer them or commit to the closer addressing them specifically; customer moves forward with scheduling regardless, leaving the concerns open for the handoff."
-    }
-  ],
-  "primary_coaching_focus": {
-    "topic": "unresolved pricing questions with no scope-creep escape hatch",
-    "ts": "01:51",
-    "quote": "So on the average, do you happen to know how long it's the average cost of the panels?",
-    "why": "Three separate times the customer asked about cost/duration/mechanics and the rep either gave a partial answer or trailed off without deploying the schema's redirect line — this is the single most repeatable, coachable fix and it's the reason the customer kept pushing to 'just schedule and be done with it.'"
-  },
-  "key_moments": [
-    {
-      "ts": "00:31",
-      "quote": "our goal is to actually completely eliminate that bill and replace it with something more affordable and cheaper",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "The rep's very first pitch line contains an internal contradiction — 'eliminate' the bill but 'replace' it with something 'cheaper' — that the customer catches within seconds. This is the moment that sets the guarded tone for the entire call, not just the customer's own predisposition."
-    },
-    {
-      "ts": "01:08",
-      "quote": "I know we have a couple different options. To be honest, I'm not exactly sure what options they are, just because I'm I'm just like a scheduler.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Rep admits the gap honestly rather than fabricating, which is the correct instinct, but doesn't pair it with the schema's escape hatch language to redirect confidently to the specialist."
-    },
-    {
-      "ts": "01:51",
-      "quote": "So on the average, do you happen to know how long it's the average cost of the panels?",
-      "classification": "knowledge_gap",
-      "stewart_read": "Third instance of the customer probing cost/mechanics; rep's response trails into silence ('I don't I—') before the customer moves on unprompted. No scope-creep escape hatch was deployed here either."
+      "resolved_by_tape": true,
+      "next_event": "bill_collection@06:19",
+      "resolution_agrees": true
     },
     {
       "ts": "04:17",
-      "quote": "it'll just be me. My wife goes to work on Wednesdays.",
-      "classification": "spouse_handling",
-      "stewart_read": "Customer discloses the co-owner will not be on the appointment. Rep's response is a flat factual acknowledgment with no attempt to find a time that works for both or explain why her presence matters for a joint decision."
+      "quote": "Now, it'll just be me. My wife goes to work on Wednesdays.",
+      "type": "spouse_or_co_decider",
+      "rep_attempts": 0,
+      "attempt_quotes": [],
+      "resolved": true,
+      "reasoning": "Customer states the wife won't attend; rep does not attempt to offer a joint time and simply confirms the single-attendee time, so the appointment proceeds but the co-decider is excluded.",
+      "resolution_ts": "04:29",
+      "blocked_section": "co_owner",
+      "attempt_moves": [],
+      "resolved_by_tape": true,
+      "next_event": "co_owner@04:25",
+      "resolution_agrees": true
+    }
+  ],
+  "primary_coaching_focus": {
+    "topic": "Scope creep and missing escape hatch on financing/warranty questions",
+    "ts": "01:08",
+    "quote": "I'm not exactly sure what options they are, just because I'm I'm just like a scheduler.",
+    "why": "Customer stacks three separate closer-tier questions (payoff timeline, panel cost, leak warranty) and rep answers or half-answers each instead of using the universal redirect, giving away appointment value and creating unresolved commitments for the closer to inherit."
+  },
+  "key_moments": [
+    {
+      "ts": "01:08",
+      "quote": "I'm not exactly sure what options they are, just because I'm I'm just like a scheduler.",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep discloses the knowledge gap but doesn't recover with the escape-hatch line; leaves the customer's financing question hanging."
+    },
+    {
+      "ts": "01:51",
+      "quote": "do you happen to know how long it's the average cost of the panels?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Customer is pulling rep into pricing territory; rep should bridge to closer instead of trailing off uncertainly."
+    },
+    {
+      "ts": "02:17",
+      "quote": "is there a leak protection for the roof with this program?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep answers with warranty specifics ('We have tons of warranties and everything') instead of deferring roofing/warranty detail to the specialist."
+    },
+    {
+      "ts": "05:30",
+      "quote": "do you have a copy of your Mecklenburg bill with your kilowatt usage on it?",
+      "classification": "protocol_violation",
+      "stewart_read": "Rep names the wrong utility company, creating confusion and costing trust right at the sensitive bill-ask moment."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
     "checked": 47,
-    "verified": 42,
-    "fuzzy": 3,
-    "wrong_ts": 2,
+    "verified": 47,
+    "fuzzy": 0,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

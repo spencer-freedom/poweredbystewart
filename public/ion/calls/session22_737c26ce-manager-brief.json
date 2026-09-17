@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION22_737c26ce",
   "rep_name": "Brandon",
-  "trajectory_summary": "The call opens hostile with an accusation rooted in a prior contact the rep never fully investigates, but the cost objection gets a direct, confident answer and the conversation pivots cleanly into scheduling. A specific appointment (Thursday at 12:30) gets locked by the end, making this a recovered call despite the rocky open -- though the diarization is unreliable enough that several individual line attributions below should be read as probable, not certain.",
+  "trajectory_summary": "This call skipped nearly the entire verify sequence and jumped from a rocky, accusation-laden intro straight to booking. The rep recovered the customer's cost suspicion with a bare reassurance and then rushed to lock a time, but the appointment was set with zero qualification data — no bill, no interest reason, no homeowner/roof/utility confirmation.",
   "shape": "mixed",
-  "outcome_dispute": "The transcript's speaker labels tag every line 'rep:', which is almost certainly a diarization failure (per the known 20000555055 precedent) -- lines like 'No, sir. I mean, you guys tell me this' at 00:30 and 'Probably 12:30, 01:00' at 02:01-02:05 read as customer speech attributed to the rep track. The observed_outcome of a booked appointment for tomorrow at 12:30 is the most defensible read regardless of attribution, since the day/time exchange is internally consistent as a scheduling negotiation.",
+  "outcome_dispute": "V1 tag is unknown; based on the transcript this should be read as tentative/booked-but-fragile since a day and time were exchanged but button_up was left incomplete (no 'is that fair' handshake, no computer/driving instruction) and zero qualifiers were captured.",
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "02:27",
     "quote": "Yeah. I can do tomorrow at 12:30.",
-    "reasoning": "A specific day (tomorrow) and time (12:30) are agreed for a specialist to meet with the customer, confirmed again at 02:32-02:35 ('we'll meet with you tomorrow at 12:30'). No co-owner or spouse was ever identified or asked about on this call, and the required title/co-owner verify item was skipped entirely, so co_owner_confirmed is null rather than false -- the gap is a missed question, not a resolved answer."
+    "reasoning": "A specific day (tomorrow) and time (12:30) were agreed by both parties, meeting the booked threshold on time alone, though button-up was incomplete and no qualifiers were captured — those are pipeline-level fragility flags, not outcome downgrades.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "booked by time, tentative by rule: bill not_asked",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +29,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "No bill amount or usage figure is mentioned anywhere in the transcript; the call never reaches a bill-amount question before moving to scheduling."
+    "reasoning": "No customer bill amount or kWh figure was stated on the call, so no flip could be executed."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,7 +39,7 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never raises collecting a utility bill or usage data on this call; the appointment is booked for the specialist to bring an evaluation instead."
+    "reasoning": "The rep never asked the customer to send or read their utility bill during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,20 +50,20 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never asks what interested the customer in solar; the closest thing to interest is the ambiguous 'I wouldn't mind taking a look at it' at 01:42, which is not a stated reason and is not built on."
+    "reasoning": "The rep did not ask why the customer was interested in solar, and the customer did not volunteer a reason."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:06",
-      "end_ts": "00:40",
+      "end_ts": "00:09",
       "quote": "Hi, Mike. This is Brandon here with Ion.",
-      "customer_response": "resistant",
-      "customer_quote": "No, sir. I mean, you guys tell me this. You tell me nothing out of pocket.",
-      "resistance_reason": "trust",
-      "rep_followup": "persisted",
-      "result": "partial"
+      "customer_response": "no_answer",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -65,12 +74,12 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -78,7 +87,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "co_owner",
@@ -89,12 +98,12 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,11 +111,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,11 +123,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,11 +135,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +147,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,19 +159,19 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "asked",
-      "ts": "00:40",
-      "end_ts": "00:45",
-      "quote": "Did you speak with someone from ION?",
-      "customer_response": "cooperative",
-      "customer_quote": "No.",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "bill_collection",
@@ -173,7 +182,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -181,30 +190,35 @@
       "status": "asked",
       "ts": "01:51",
       "end_ts": "02:35",
-      "quote": "I can have them meet with you. Are you available Thursday or Friday?",
+      "quote": "I can have them meet with you. Are you available\nThursday or Friday?",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. I can do tomorrow at 12:30.",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
+      "status": "asked",
+      "ts": "02:32",
+      "end_ts": "02:39",
+      "quote": "Great. I'll we'll meet with you tomorrow at 12:30,",
+      "customer_response": "cooperative",
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "skipped"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "hour_block"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
     {
       "ts": "00:30",
-      "quote": "No, sir. I mean, you guys tell me this. You tell me nothing out of pocket.",
+      "quote": "you guys tell me this. You tell me nothing out of pocket.",
       "type": "trust_or_scam",
       "rep_attempts": 2,
       "attempt_quotes": [
@@ -212,56 +226,70 @@
         "Never. You will never have to pay out of your own pocket."
       ],
       "resolved": true,
-      "resolution_ts": "01:15",
-      "reasoning": "The objection about a hidden-cost promise is answered first with a clarifying question about prior contact, then with a direct, confident confirmation of the no-cost structure, and the customer does not raise the cost concern again after 00:58."
+      "resolution_ts": "01:51",
+      "reasoning": "Customer challenges cost transparency; rep first questions the source of the claim then reassures directly with a flat guarantee, after which the customer cooperates with scheduling.",
+      "blocked_section": "interest_question",
+      "attempt_moves": [
+        "question_back",
+        "reassure"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@01:51",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "Recycled-lead history not reconciled",
-    "ts": "00:30",
-    "quote": "No, sir. I mean, you guys tell me this. You tell me nothing out of pocket.",
-    "why": "The rep's own line at 00:13 ('we never got a chance to get that evaluation to you') confirms this is a prior-touch lead, which directly explains the customer's opening hostility -- but the rep denies any prior contact at 00:40-00:45 instead of reconciling the history, leaving the closer to walk into the same unresolved trust gap."
+    "topic": "Verify section entirely skipped before booking",
+    "ts": "00:28",
+    "quote": "Are you available this week?",
+    "why": "Every qualifier (homeowner, roof, utility, bill, interest reason) was skipped per verified events; the appointment was booked on zero qualification data, risking a wasted closer sit."
   },
   "key_moments": [
     {
       "ts": "00:09",
       "quote": "I received a form you sold out.",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The intro reference to a form submission is garbled and immediately corrected mid-sentence at 00:13, which weakens the legitimacy anchor right when it matters most -- the first line of the call."
-    },
-    {
-      "ts": "00:09",
-      "quote": "I received a form you sold out.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "At 00:13 the rep says 'it looks like we never got a chance to get that evaluation to you,' which is a direct signal this is a recycled or previously-touched lead -- the customer's immediate hostility at 00:30 about being told 'nothing out of pocket' is far better explained by an actual prior ION contact than by generic skepticism, but the rep never asks who they spoke to or what was said before moving into the pitch."
+      "stewart_read": "The intro reference to the form is garbled/unclear ('sold out' likely a mis-transcription of 'filled out') and gives minimal legitimacy grounding before pivoting straight to the pitch."
     },
     {
       "ts": "00:30",
-      "quote": "No, sir. I mean, you guys tell me this. You tell me nothing out of pocket.",
+      "quote": "you guys tell me this. You tell me nothing out of pocket.",
       "classification": "objection_inversion_miss",
-      "stewart_read": "This cost/trust objection is a candidate for the objection-inversion flip (redirecting 'nothing out of pocket' skepticism into 'what you're not interested in is paying your current bill forever'), but the rep instead answers procedurally with 'That was never the case' -- a denial-and-explain pattern rather than a flip."
+      "stewart_read": "This is a cost/trust objection early in the call; rather than flipping it against the customer's actual bill pain, the rep gives a flat literal reassurance."
     },
     {
-      "ts": "01:42",
-      "quote": "I can have them with today, but I wouldn't mind taking a look at it.",
+      "ts": "00:58",
+      "quote": "So the way the program works is you would switch over to solar energy",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep starts explaining the mechanics of the solar savings program to answer the cost objection instead of redirecting to the specialist earlier."
+    },
+    {
+      "ts": "01:32",
+      "quote": "If you're available, I can have my specialist bring that evaluation over. It'll take, like, thirty to forty five minutes,",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "The customer signals willingness ('I wouldn't mind taking a look at it') but there's no bill amount, usage figure, or specific pain point behind the interest for the rep to anchor the appointment to -- the call moves straight to day/time without ever asking what got this customer curious."
+      "stewart_read": "Rep books the appointment on program mechanics rather than the customer's specific situation — no bill, no interest reason, no personalized hook was ever captured to create curiosity around."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 33,
-    "verified": 32,
+    "checked": 25,
+    "verified": 25,
     "fuzzy": 0,
     "wrong_ts": 0,
-    "not_found": 1
+    "not_found": 0
   }
 }

@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION2_a51d6c56",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens cold and stays transactional — Helen gives minimal, cooperative but unenthusiastic answers through the verify section. Midway through, the rep's own execution falters: a disclosed lack of sleep, a repeated question the customer has to ask him to clarify, and a garbled bill-collection ask that cuts off mid-sentence. The transcript ends before any appointment is set, with the bill-photo request still unresolved.",
+  "trajectory_summary": "The call opens cooperative and neutral, but the rep's disorganized pacing and self-admitted fatigue creates friction and confusion rather than momentum. No emotional anchor was built around the bill, no interest question was asked, and the call cuts off mid-instruction on the bill-text follow-up with no appointment set.",
   "shape": "energy_leaked",
-  "outcome_dispute": "The v1 tag is unknown/unclear, but the observed transcript ends at 02:32 with no appointment day/time, no button-up, and an unresolved bill-photo request — this should be read as no_appointment (call likely cut off or transcript truncated) rather than any completed booking.",
+  "outcome_dispute": "v1 tag is unknown; based on the transcript the call ends unresolved with no appointment discussed at all, so this should be read as no_appointment / call cut short, not any booked or tentative state.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "02:32",
     "quote": "The letter. Copy letter.",
-    "reasoning": "The transcript ends mid-bill-collection with no day/time offered, no button-up, and an unresolved request for a bill photo — no appointment was captured on the call as transcribed."
+    "reasoning": "The transcript ends mid-bill-collection with an unclear exchange about texting a bill photo; no appointment day/time, tentative agreement, or callback commitment appears anywhere in the call.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,17 +28,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures the bill figure ($160-$170, with $190-$200 mentioned later) but never turns it into a reason to act — the transcript moves straight to roof type and credit score without acknowledging or flipping the number. The flip should have landed right after 01:03 ('customer: 200.'), tying the bill pain to the appointment's purpose."
+    "reasoning": "The bill amount was captured at 00:39 ('Average is $1.60,') but the rep only replied 'Okay' and moved on; the flip should have landed right there or at 02:02 when referencing the kWh graph, reframing the bill as the cost of staying with the utility."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "01:48",
-    "ask_quote": "Okay. Are you are you able to access a power bill real quick?",
+    "ask_ts": "02:09",
+    "ask_quote": "can you text that a picture of that to me",
     "result": "promised_later",
-    "method": "photo",
-    "result_ts": "02:30",
+    "method": "text",
+    "result_ts": "02:32",
     "result_quote": "Okay. One sec.",
-    "reasoning": "The rep asks if she can access a power bill at 01:48 and she agrees ('Probably? Yeah. I could.'), then at 02:09 the rep asks her to text a photo; by 02:30 she says 'Okay. One sec.' and the transcript ends before confirming the photo was actually sent, so the bill is promised but not confirmed received on the call."
+    "reasoning": "The rep asked the customer to text a picture of the bill; the customer agreed but did not send it during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +49,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The transcript shows no line where the rep asks Helen what interested her in solar; the call moves from intro directly into title/utility/bill/roof/credit verify items without ever surfacing her motivation."
+    "reasoning": "The rep did not ask what motivated the customer's interest in solar during the call."
   },
   "script_coverage": [
     {
@@ -49,12 +57,12 @@
       "status": "asked",
       "ts": "00:05",
       "end_ts": "00:11",
-      "quote": "Hey. This is Bucky with ION reaching out about the solar for me filled online. How are you doing?",
-      "customer_response": "no_answer",
-      "customer_quote": "",
+      "quote": "This is Bucky with ION reaching out",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
@@ -71,12 +79,12 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "01:38",
-      "end_ts": "01:47",
-      "quote": "And are you home right? Are you home right? Okay. Are you home right now?",
-      "customer_response": "deflected",
-      "customer_quote": "I don't understand. What do you mean? Oh, like, are you at your house?",
-      "resistance_reason": "other",
+      "ts": "00:19",
+      "end_ts": "00:24",
+      "quote": "So it's single family home.",
+      "customer_response": "cooperative",
+      "customer_quote": "No. My husband and me.",
+      "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
     },
@@ -85,7 +93,7 @@
       "status": "asked",
       "ts": "00:19",
       "end_ts": "00:24",
-      "quote": "So it's single family home. Is there anybody else on the title but you?",
+      "quote": "Is there anybody else on the title but you?",
       "customer_response": "cooperative",
       "customer_quote": "No. My husband and me.",
       "resistance_reason": "",
@@ -96,7 +104,7 @@
       "section": "roof",
       "status": "asked",
       "ts": "01:14",
-      "end_ts": "01:17",
+      "end_ts": "01:18",
       "quote": "do you have a single roof?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
@@ -108,10 +116,10 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "00:31",
-      "end_ts": "00:35",
+      "end_ts": "00:33",
       "quote": "What power company are you with?",
       "customer_response": "cooperative",
-      "customer_quote": "",
+      "customer_quote": "Tesco.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -120,7 +128,7 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "00:36",
-      "end_ts": "01:03",
+      "end_ts": "00:42",
       "quote": "How much are you spending on a monthly average?",
       "customer_response": "cooperative",
       "customer_quote": "Average is $1.60,",
@@ -129,16 +137,16 @@
       "result": "completed"
     },
     {
-      "section": "credit_qualifier",
+      "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "01:18",
-      "end_ts": "01:38",
-      "quote": "And then do you have a credit score over 6 70?",
-      "customer_response": "deflected",
-      "customer_quote": "you say you need for the roof size?",
-      "resistance_reason": "other",
-      "rep_followup": "persisted",
-      "result": "completed"
+      "ts": "01:17",
+      "end_ts": "01:30",
+      "quote": "do you have a credit score over 6 70?",
+      "customer_response": "cooperative",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial"
     },
     {
       "section": "military",
@@ -169,12 +177,12 @@
       "status": "asked",
       "ts": "01:48",
       "end_ts": "02:32",
-      "quote": "Okay. Are you are you able to access a power bill real quick?",
+      "quote": "Are you are you able to access a power bill real quick?",
       "customer_response": "cooperative",
-      "customer_quote": "Probably? Yeah. I could.",
+      "customer_quote": "Yeah. I could.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
-      "result": "deferred"
+      "rep_followup": "alternative_offered",
+      "result": "partial"
     },
     {
       "section": "appointment_set",
@@ -198,54 +206,62 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "bill-document ask execution",
-    "ts": "02:09",
-    "quote": "If I text you real quick, can you text that a picture of that to me, and then I'll put you on the screen? No. No. No. No. I said I yeah. I'm told.",
-    "why": "This is the single most consequential moment on the call: Helen already gave a bill amount and agreed to check for the bill ('Probably? Yeah. I could.'), but the rep's actual ask for the photo comes out garbled and self-contradicting, leaving the document uncollected as the transcript ends."
+    "topic": "Disclosing personal fatigue mid-call undermines legitimacy and calm energy",
+    "ts": "01:05",
+    "quote": "I'm I didn't get a lot of sleep last night, so I'm in a in a weird mode.",
+    "why": "This single admission, paired with the garbled bill number right before it, is the clearest driver of the confusion that follows for the rest of the call — it's the root cause, not just a symptom."
   },
   "key_moments": [
     {
-      "ts": "00:11",
-      "quote": "Okay.",
+      "ts": "00:05",
+      "quote": "This is Bucky with ION reaching out about the solar for me filled online.",
       "classification": "intro_legitimacy_omission",
-      "stewart_read": "The rep asks 'How are you doing?' at 00:05 but the transcript shows no customer answer before the rep says 'Okay' at 00:11 and moves straight into questions — the human pause the schema calls for appears to be skipped or the rep talks over a beat too quickly."
+      "stewart_read": "The intro references the form but is garbled ('for me filled online') and moves immediately into questions without a clean legitimacy anchor or a genuine pause for rapport."
+    },
+    {
+      "ts": "00:39",
+      "quote": "Average is $1.60,",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The bill figure is captured but never reflected back or flipped into emotional leverage against the utility; the rep just says 'Okay' and moves on."
+    },
+    {
+      "ts": "00:57",
+      "quote": "$304,100.",
+      "classification": "knowledge_gap",
+      "stewart_read": "The rep restates a number that doesn't match anything the customer said, then corrects again to '300, 400' — the actual bill amount is left ambiguous in the transcript."
     },
     {
       "ts": "01:05",
-      "quote": "Yeah. Sorry. I just picked up. I'm I didn't get a lot of sleep last night, so I'm in a in a weird mode.",
-      "classification": "other",
-      "stewart_read": "This is a personal-disclosure moment not covered by any current schema section — the rep tells the customer he's tired and 'in a weird mode' mid-verify. No schema entry addresses rep self-disclosure of fatigue; this is an unschema'd coaching observation rather than a scripted protocol violation."
-    },
-    {
-      "ts": "01:38",
-      "quote": "Oh, yes. Yes. Okay. And are you home right? Are you home right? Okay. Are you home right now?",
-      "classification": "other",
-      "stewart_read": "This is a clarity/verify-execution issue — the rep repeats a garbled question three times in the same breath, and immediately before this (01:25-01:30) the customer had already shown confusion over the credit-score question, suggesting a compounding pattern of unclear verify delivery rather than a single slip."
-    },
-    {
-      "ts": "01:27",
-      "quote": "you say you need for the roof size?",
-      "classification": "knowledge_gap",
-      "stewart_read": "The customer misheard the credit-score qualifier as a roof-size question, indicating the phrasing landed unclearly; the rep clarifies at 01:30 ('No. I'm sorry. I was saying you have a credit score over 6 70.') which is a reasonable recovery."
+      "quote": "I'm I didn't get a lot of sleep last night, so I'm in a in a weird mode.",
+      "classification": "protocol_violation",
+      "stewart_read": "Rep discloses personal fatigue to the customer mid-call, which is unprofessional and undermines the calm, competent framing the schema calls for."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 34,
-    "verified": 34,
+    "checked": 38,
+    "verified": 38,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

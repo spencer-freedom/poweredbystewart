@@ -1,3 +1,4 @@
+import { loadCorpusStats } from "../_lib/corpus";
 import { Bridge } from "../_components/Bridge";
 
 // The honest-inputs beat, right before the ask. Everything above was
@@ -36,19 +37,18 @@ const UNLOCKS = [
   },
 ];
 
-export function SectionWithWhatIHad({
-  calls = 300,
+export async function SectionWithWhatIHad({
   moments = 2047,
   sections = 108,
-  flipped = 5,
-  captured = 189,
 }: {
-  calls?: number;
   moments?: number;
   sections?: number;
-  flipped?: number;
-  captured?: number;
 }) {
+  // The counts read from the published corpus, so a re-run moves this beat too.
+  const corpus = await loadCorpusStats();
+  const calls = corpus?.calls ?? 300;
+  const flipped = corpus?.bill.flipped ?? 5;
+  const captured = corpus?.bill.captured ?? 189;
   return (
     <section
       id="inputs"

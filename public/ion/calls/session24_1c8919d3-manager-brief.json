@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION24_1c8919d3",
   "rep_name": "Brandon",
-  "trajectory_summary": "The call opens with a customer trying to quietly defer the callback, and the rep earns real progress by refusing that soft exit and pulling out a concrete next-Wednesday commitment. But the booking mechanics fall apart at the close — three different times are floated (3PM, 12:00, 2PM) without a clean reconciliation, leaving the actual appointment time unverifiable from the transcript alone.",
+  "trajectory_summary": "The call opens with the customer stalling and revealing a concrete prior disappointment, but the rep skips every verify/re-qualify step and goes straight for a date. The appointment gets nailed down through sheer persistence on scheduling, but nothing about the customer's stated skepticism, bill, or renewed interest was captured or addressed.",
   "shape": "mixed",
-  "outcome_dispute": "The v1 tag is unknown/unclear; based on the transcript this should be read as tentative rather than cleanly booked, because a day (next Wednesday) is agreed but the time is never consistently confirmed — 3PM, 12:00, and 2PM all appear in the closing minute.",
+  "outcome_dispute": "v1 tag is unknown; observed outcome is tentative at best — a day was floated but the time was never mutually confirmed cleanly (rep says 3PM, then 2PM, customer never explicitly re-confirms the final time).",
   "observed_outcome": {
     "outcome": "tentative",
     "appointment_channel": "phone",
@@ -11,7 +11,16 @@
     "co_owner_confirmed": null,
     "ts": "02:50",
     "quote": "3PM. Next Wednesday, I'll do 2PM. Right now. Yep.",
-    "reasoning": "A day (next Wednesday) is clearly agreed, but the time is inconsistently stated across the close (3PM, 12:00, 2PM) with no final restatement or handshake to resolve which is correct, so the appointment is tentative rather than cleanly booked."
+    "reasoning": "A day (next Wednesday) was agreed, but the rep contradicts himself on the time in the closing line and the customer never explicitly confirms a single locked time — this is agreement in principle with the time left ambiguous.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_no_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,17 +29,17 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "No dollar figure or usage number is ever stated by the customer in this transcript; the closest reference is the customer offering to send his 'electric bill' ahead of the appointment, but no amount is captured on this call."
+    "reasoning": "No monetary bill amount or kWh usage was stated by the customer; they only volunteered they would send the electric bill later."
   },
   "bill_document_audit": {
     "asked": false,
     "ask_ts": "",
     "ask_quote": null,
-    "result": "promised_later",
-    "method": "text",
-    "result_ts": "02:12",
-    "result_quote": "Yeah. And then I'll I'll I'll set it up, where I send, like, a little reminder that I have the electric bill. So that way I can shoot it over and give it things like that.",
-    "reasoning": "The customer volunteers, unprompted, that he will send his electric bill ahead of the appointment, and the rep confirms with a text reminder ('I sent you a text') rather than actively asking for the bill himself — so the ask originated from the customer, not the rep, but the plan is confirmed for delivery before the appointment."
+    "result": "not_asked",
+    "method": "none",
+    "result_ts": "",
+    "result_quote": null,
+    "reasoning": "The customer offered to send the bill later, but the rep did not explicitly request the bill or specify a method during the call."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,17 +50,17 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "This is a rebooking/callback call referencing a prior evaluation rather than a fresh interest inquiry, and the rep never explicitly asks what has the customer interested in solar; the customer's only reference to motivation is a lukewarm comment about last year's evaluation, not a stated reason for interest."
+    "reasoning": "The rep did not ask why the customer was interested; the customer mentioned delays and past dissatisfaction but did not state a motivating reason for solar."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:03",
-      "end_ts": "00:12",
-      "quote": "This this is Brandon with Ion. We spoke about how you take a look at solar energy again for the home.",
+      "end_ts": "00:03",
+      "quote": "This this is Brandon with Ion.",
       "customer_response": "cooperative",
-      "customer_quote": "Yes. Good. Good.",
+      "customer_quote": "Hello?",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -70,7 +79,7 @@
     },
     {
       "section": "address_homeowner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -78,11 +87,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,11 +99,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,11 +111,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,7 +123,7 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
@@ -130,7 +139,7 @@
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +147,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,55 +159,60 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "00:37",
-      "end_ts": "00:49",
-      "quote": "I did remember the evaluation from last year, and I wasn't all that impressed right now.",
+      "ts": "00:55",
+      "end_ts": "00:59",
+      "quote": "And what we talked about was showing you our new solar program.",
       "customer_response": "resistant",
       "customer_quote": "I wasn't all that impressed right now.",
       "resistance_reason": "already_have_quote",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "bill_collection",
-      "status": "asked",
-      "ts": "02:12",
-      "end_ts": "02:29",
-      "quote": "Yeah. I sent you a text. You get that?",
-      "customer_response": "cooperative",
-      "customer_quote": "I'll set it up, where I send, like, a little reminder that I have the electric bill.",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "deferred"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "01:49",
-      "end_ts": "02:53",
-      "quote": "Yeah. I can set up an appointment for next Wednesday to meet with you. What time or Saturday for you? Let's say 3PM,",
+      "end_ts": "02:05",
+      "quote": "Yeah. I can set up an appointment for next Wednesday to meet with you.",
       "customer_response": "cooperative",
-      "customer_quote": "Alright.",
+      "customer_quote": "Next Wednesday.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
-      "result": "partial"
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
       "ts": "02:55",
       "end_ts": "02:55",
-      "quote": "Thanks. I'll see you next Wednesday. Alright. Thanks, Ray. Bye bye.",
-      "customer_response": "no_answer",
-      "customer_quote": "",
+      "quote": "I'll see you next Wednesday.",
+      "customer_response": "cooperative",
+      "customer_quote": "Alright.",
       "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [
@@ -206,14 +220,39 @@
       "ts": "00:20",
       "quote": "Oh, man. And I know I need to get around to this, but I just I just haven't been able to get it done.",
       "type": "timing_or_callback",
-      "rep_attempts": 2,
+      "rep_attempts": 1,
       "attempt_quotes": [
-        "that's for Brandon.",
-        "And what we talked about was showing you our new solar program."
+        "I just want to to reach back out, see, you know, when you'd be available to take a look at that sole evaluation."
       ],
       "resolved": true,
       "resolution_ts": "01:43",
-      "reasoning": "The rep refuses to accept the vague 'I'll email you' deferral, redirects back into the pitch, and eventually gets the customer to commit to a real day (next Wednesday) rather than an open-ended future promise."
+      "reasoning": "Customer's deferral resolves once a specific future date (next Wednesday) is negotiated, though the rep's single move was simply to keep asking for availability.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "question_back"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "prior_design@00:55",
+      "resolution_agrees": true
+    },
+    {
+      "ts": "00:41",
+      "quote": "and I wasn't all that impressed right now.",
+      "type": "already_have_quote_or_system",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "And what we talked about was showing you our new solar program."
+      ],
+      "resolved": false,
+      "resolution_ts": "",
+      "reasoning": "Rep pivots to describing the new program instead of investigating what specifically underwhelmed the customer last time; customer never actually retracts or resolves the skepticism, just moves on to scheduling.",
+      "blocked_section": "prior_design",
+      "attempt_moves": [
+        "reframe"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "prior_design@00:55",
+      "resolution_agrees": false
     },
     {
       "ts": "01:32",
@@ -221,57 +260,70 @@
       "type": "timing_or_callback",
       "rep_attempts": 1,
       "attempt_quotes": [
-        "Yeah. I can set up an appointment for next Wednesday to meet with you."
+        "I can have a special just meet with you if you're available this Saturday."
       ],
       "resolved": true,
-      "resolution_ts": "01:47",
-      "reasoning": "When the customer rejects the Saturday offer citing work duty, the rep does not push that specific date further but pivots directly to accepting the customer's counter-offer of next Wednesday, resolving the scheduling conflict in one move."
+      "resolution_ts": "01:59",
+      "reasoning": "Customer rejects the Saturday offer due to work, rep offers next Wednesday instead and it lands.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@01:49",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "button-up time confirmation discipline",
-    "ts": "02:50",
-    "quote": "3PM. Next Wednesday, I'll do 2PM. Right now. Yep.",
-    "why": "The appointment time drifts three times in the closing minute (3PM at 01:49, 12:00 at 02:42, 2PM at 02:53) with no single restated confirmation or 'is that fair?' handshake, leaving the actual booked time unverifiable — this is the highest-consequence gap on the call since it directly threatens the show rate."
+    "topic": "Prior contact probe miss on a recycled lead",
+    "ts": "00:41",
+    "quote": "and I wasn't all that impressed right now.",
+    "why": "This is the single most consequential miss — the customer handed Brandon the exact reason for stalling and it was never investigated, verified, or flipped, meaning the closer walks in blind to a customer who was already unimpressed once."
   },
   "key_moments": [
     {
       "ts": "00:41",
-      "quote": "I'll email you and and we'll set up a good time, k, when everything's",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "Customer attempts a classic vague deferral ('I'll email you... set up a good time') with no specific commitment attached — this is the soft-exit pattern the button-up handshake is designed to prevent from happening at all."
+      "quote": "and I wasn't all that impressed right now.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer discloses a prior evaluation left him unimpressed — a direct signal of what killed momentum before — and the rep never asks what specifically fell flat."
     },
     {
       "ts": "00:55",
       "quote": "And what we talked about was showing you our new solar program.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer just said he 'wasn't all that impressed' with last year's evaluation — real competitive/historical intel — and the rep moves straight past it into the standard pitch without asking what specifically underwhelmed him."
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Instead of flipping the 'not impressed' comment into bill-pain leverage, the rep pivots straight to product/program framing."
+    },
+    {
+      "ts": "01:07",
+      "quote": "they help you switch over to solar at no cost to you.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep is explaining program mechanics (no upfront cost, savings) rather than staying in scheduling lane, especially with no qualification done yet."
     },
     {
       "ts": "01:28",
       "quote": "I can have a special just meet with you if you're available this Saturday.",
       "classification": "unanchored_soft_exit",
-      "stewart_read": "The rep offers a specific day (Saturday) which is good practice, but the sentence itself is garbled ('I can have a special just meet with you') — an early sign of the scheduling-language looseness that recurs at the close."
-    },
-    {
-      "ts": "02:42",
-      "quote": "Okay. And you said next Wednesday, that's gonna be the fifteenth at 12:00 worth you?",
-      "classification": "unanchored_soft_exit",
-      "stewart_read": "The rep introduces a '12:00' time that was never discussed anywhere earlier in the call (the only time floated before this was 3PM), muddying the exact appointment slot right as the call is supposed to lock it in."
+      "stewart_read": "Rep floats a date without any 'is that fair' handshake or firm recap structure — the scheduling process is loose from the start."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 40,
-    "verified": 40,
+    "checked": 34,
+    "verified": 34,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

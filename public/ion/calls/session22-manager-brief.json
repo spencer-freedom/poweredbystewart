@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION22",
   "rep_name": "Bucky",
-  "trajectory_summary": "This is an efficient orphaned-flow (existing-solar, battery-add-on) call: legitimacy was established quickly, the rep correctly identified this wasn't a standard new-install lead and adapted the qualifier sequence, and the bill was captured live via text/screenshot before booking a next-day phone appointment. The real gap is informational, not structural — the customer twice named his specific technical requirement (EG4, 48V hybrid, non-Powerwall) and the rep never captured or reflected it, despite correctly deferring the technical conversation to the specialist.",
+  "trajectory_summary": "This is an easy, cooperative call with an already-informed customer who wants batteries, not a warm-up pitch — the rep runs qualifiers efficiently and holds scope well on the technical battery question, letting the specialist take it. The main leak is a co-owner question raised and never resolved, and a bill-flip/reason-use opportunity (bill pain, prior vendor dissatisfaction) that goes completely unused. Energy built steadily due to the customer's own engagement rather than rep-driven momentum.",
   "shape": "energy_built",
-  "outcome_dispute": "v1 tag is unknown/unclear; this call is best read as booked — a specific day (tomorrow) and time (2PM) were both confirmed by the customer at 05:52.",
+  "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "booked",
+    "outcome": "tentative",
     "appointment_channel": "phone",
     "datetime_captured": true,
-    "co_owner_confirmed": false,
+    "co_owner_confirmed": null,
     "ts": "05:52",
-    "quote": "That sounds good. Alright. I'll text you after this to remind you. We'll call you tomorrow at 2PM, and it'll be for the battery.",
-    "reasoning": "A specific day (tomorrow) and time (2PM) are both confirmed verbally by the customer and restated by the rep, making this a clean booked outcome. co_owner_confirmed is set to false because the rep's title/co-owner question at 00:43 was abandoned mid-sentence and never answered or revisited on the call."
+    "quote": "We'll call you tomorrow at 2PM, and it'll be for the battery.",
+    "reasoning": "Specific day (tomorrow) and time (2PM) agreed by both parties via phone; co-owner status was raised but never clearly confirmed one way or the other, so it's marked null/unresolved rather than false.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "booked by time, tentative by rule: bill promised_later",
+    "set_strength": "set_bill_promised"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,36 +29,36 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "Rep captures the $100 monthly average but immediately moves to the roof question ('Okay. And then, your roof is a shingle?') without using the number to build urgency or contrast it against battery/storage value — appropriate for this orphaned/battery-add lead since the pitch is about backup power rather than bill reduction, but no flip was attempted regardless."
+    "reasoning": "Bill amount ($100) was captured at 02:21 but never referenced again or tied to the battery motivation; the flip should have landed around 02:23 ('Okay.') where the rep instead moved straight to the next qualifier."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "02:32",
+    "ask_ts": "02:40",
     "ask_quote": "You able to access the power bill real quick?",
-    "result": "received_on_call",
-    "method": "photo",
-    "result_ts": "05:19",
-    "result_quote": "just let me know if that is what you're looking for.",
-    "reasoning": "Rep asks for bill access, customer initially says it's not handy, proposes texting a screenshot himself, and successfully sends it live on the call, confirmed by the rep at 05:26 ('That is perfect. That was first try too.')."
+    "result": "promised_later",
+    "method": "text",
+    "result_ts": "03:22",
+    "result_quote": "As soon as we're done here, I will I will pull up my Dominion account, and I'll get that screenshot and send it back to you.",
+    "reasoning": "The rep asked for the bill and the customer agreed to pull up their Dominion account and text a screenshot after the call."
   },
   "interest_reason_audit": {
-    "asked": false,
-    "ask_ts": "",
+    "asked": true,
+    "ask_ts": "00:48",
     "reason_given": true,
     "reason_ts": "00:57",
     "reason_quote": "I have a a grid tied solar inverter and was looking for options to add batteries.",
-    "reason_used": "yes",
-    "use_ts": "05:56",
-    "use_quote": "We'll call you tomorrow at 2PM, and it'll be for the battery.",
-    "reasoning": "Rep never asks the generic 'what interested you in solar' question — it's moot since the customer already has solar and volunteers his battery-add reason unprompted. Rep does tie the appointment purpose back to 'the battery' at booking, showing the core reason was retained even though the deeper EG4/48V specificity was not captured."
+    "reason_used": "no",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "Customer's stated reason (wanting non-brand-specific battery flexibility beyond Tesla Powerwall) was acknowledged implicitly but never explicitly reinforced when setting or confirming the appointment — the button-up at 05:52 only says 'it'll be for the battery' without tying back to the flexibility/EG4 motivation."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:03",
-      "end_ts": "00:09",
-      "quote": "Hey. Hey, Chris. This is Bucky with Ion. I'm reaching out about the solar form you filled online.",
+      "end_ts": "00:03",
+      "quote": "This is Bucky with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "I'm doing alright. How about you?",
       "resistance_reason": "",
@@ -58,35 +67,35 @@
     },
     {
       "section": "interest_question",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "00:48",
+      "end_ts": "01:18",
+      "quote": "So were you looking to add on? Or",
+      "customer_response": "cooperative",
+      "customer_quote": "I have a a grid tied solar inverter and was looking for options to add batteries.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:19",
-      "end_ts": "00:40",
-      "quote": "Are you at 234 Wood Mill Drive Or Way?",
+      "ts": "00:21",
+      "end_ts": "00:36",
+      "quote": "234 Wood Mill Drive Or Way?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. 234 Wood Mill Circle.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
       "ts": "00:43",
-      "end_ts": "00:48",
+      "end_ts": "00:49",
       "quote": "Is there anybody else on the title but you?",
-      "customer_response": "no_answer",
+      "customer_response": "deflected",
       "customer_quote": "I do. Yes.",
       "resistance_reason": "other",
       "rep_followup": "moved_on",
@@ -96,7 +105,7 @@
       "section": "roof",
       "status": "asked",
       "ts": "02:25",
-      "end_ts": "02:27",
+      "end_ts": "02:28",
       "quote": "your roof is a shingle?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
@@ -108,8 +117,8 @@
       "section": "utility_company",
       "status": "asked",
       "ts": "02:09",
-      "end_ts": "02:12",
-      "quote": "Yeah. So what utility company are you with?",
+      "end_ts": "02:13",
+      "quote": "So what utility company are you with?",
       "customer_response": "cooperative",
       "customer_quote": "Dominion.",
       "resistance_reason": "",
@@ -119,8 +128,8 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "02:13",
-      "end_ts": "02:21",
+      "ts": "02:16",
+      "end_ts": "02:23",
       "quote": "How much are you spending on a monthly average?",
       "customer_response": "cooperative",
       "customer_quote": "About a $100.",
@@ -159,7 +168,7 @@
       "end_ts": "01:36",
       "quote": "And your panels, are you in contract with somebody, or are you independent?",
       "customer_response": "cooperative",
-      "customer_quote": "I own the panels.",
+      "customer_quote": "Yes. I own the panels. Okay. And it's not with ion?",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -167,23 +176,23 @@
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "02:32",
-      "end_ts": "05:26",
+      "ts": "02:40",
+      "end_ts": "03:22",
       "quote": "You able to access the power bill real quick?",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. If you wanna send me, like, a text message, I can text one back to you.",
+      "customer_quote": "I I don't have one easily accessible.",
       "resistance_reason": "dont_have_it",
       "rep_followup": "alternative_offered",
-      "result": "completed"
+      "result": "deferred"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "05:31",
-      "end_ts": "05:57",
+      "ts": "05:34",
+      "end_ts": "05:52",
       "quote": "Can you do tomorrow?",
       "customer_response": "cooperative",
-      "customer_quote": "Afternoon is usually easier for me.",
+      "customer_quote": "That sounds good.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -192,62 +201,73 @@
       "section": "button_up",
       "status": "asked",
       "ts": "05:52",
-      "end_ts": "06:11",
+      "end_ts": "05:59",
       "quote": "I'll text you after this to remind you. We'll call you tomorrow at 2PM, and it'll be for the battery.",
       "customer_response": "cooperative",
       "customer_quote": "Okay. And do you want me to text you any details on what I'm looking for?",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "capturing customer-volunteered technical specificity for handoff",
-    "ts": "01:51",
-    "quote": "I wanted to do something like a a EG four system Okay. Or a or a solar system with, the 48 volt batteries so that I could, expand it later with, you know, non brand specific batteries.",
-    "why": "The customer names his exact requirement twice (01:51 and again at 03:53) and Bucky never reflects it back or confirms it's noted — this is the single fact the specialist most needs walking in, and it's currently living only in the raw transcript, not in any capture the rep made visible."
+    "topic": "Co-owner question stacked and dropped",
+    "ts": "00:43",
+    "quote": "Is there anybody else on the title but you? Oh, do you already have solar?",
+    "why": "Title co-owner status was never clearly resolved before booking the appointment, leaving the closer without a confirmed answer on whether a spouse needs to be present."
   },
   "key_moments": [
     {
       "ts": "00:43",
-      "quote": "So it's a single family home. Is there anybody else on the title but you? Oh, do you already have solar?",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "The co-owner question is asked but the rep's own sentence trails off into a new question ('Oh, do you already have solar?') before the customer answers it. The customer never confirms or denies a co-owner, and the rep never returns to it."
+      "quote": "Is there anybody else on the title but you? Oh, do you already have solar?",
+      "classification": "protocol_violation",
+      "stewart_read": "Rep asks the co-owner question but immediately stacks a second question on top and never returns to get a clear answer — 'I do. Yes.' at 00:48 is ambiguous as to which question it answers."
     },
     {
-      "ts": "01:51",
-      "quote": "I wanted to do something like a a EG four system Okay. Or a or a solar system with, the 48 volt batteries so that I could, expand it later with, you know, non brand specific batteries.",
-      "classification": "knowledge_gap_handling",
-      "stewart_read": "Customer gives the single most useful piece of information in the whole call — the exact product category and his reason for wanting it (brand flexibility) — and the rep moves straight to the utility-company question with no acknowledgment or note-taking cue."
+      "ts": "01:18",
+      "quote": "And your panels, are you in contract with somebody, or are you independent?",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Customer reveals a prior installer relationship and dissatisfaction context (\"they only do Tesla Powerwalls\") but rep never asks which company or why he's now shopping elsewhere."
+    },
+    {
+      "ts": "01:41",
+      "quote": "they only do Tesla Powerwalls.",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer explicitly wants brand flexibility beyond Tesla Powerwall and describes technical specificity (EG4, 48V hybrid) — a highly qualified, motivated battery buyer."
     },
     {
       "ts": "03:53",
-      "quote": "Do y'all do, do y'all do the, like, the e g four batteries?",
-      "classification": "knowledge_gap_handling",
-      "stewart_read": "Second time the customer raises the exact same brand-specific ask. Rep's answer ('We have tons of batteries. We have, like, multiple.') is vague to the point of sounding uninformed, though the redirect to a specialist immediately after is the correct scope move."
-    },
-    {
-      "ts": "02:32",
-      "quote": "I mean, I can wait. Do you wanna do that real quick? Because",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer says the bill isn't easily accessible and would require going upstairs; rep offers to wait live on the phone rather than proposing the faster text/photo-later path immediately. It works out (customer volunteers the text option himself at 03:01), but the rep didn't initiate the efficient path."
+      "quote": "do y'all do the, like, the e g four batteries?",
+      "classification": "setter_scope_creep",
+      "stewart_read": "This is actually a scope-hold SUCCESS, not creep — flagged here to highlight the positive contrast: rep does not attempt to answer the technical EG4 question and defers to specialist."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 48,
-    "verified": 47,
+    "checked": 51,
+    "verified": 51,
     "fuzzy": 0,
-    "wrong_ts": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

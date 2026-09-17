@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION16_c3b07334",
   "rep_name": "Holland",
-  "trajectory_summary": "The call opens with the customer trying to disqualify himself based on secondhand information, and the rep recovers that ground early with a boundary confirmation and persistence through the verify sequence. But the call never fully converts that recovery into commitment — it ends with the customer citing work and a need to consult his spouse, with no locked time and no document captured.",
+  "trajectory_summary": "The call opens on a withdrawal that Holland successfully reverses with a quick boundary correction, and the verify section runs smoothly through ownership, roof, and bill capture. But once the customer presses for a price floor, the rep repeats the same non-answer instead of flipping the bill or redirecting to the specialist, and the call ends in a vague callback promise with no locked time.",
   "shape": "mixed",
-  "outcome_dispute": "The literal ending is a customer-initiated soft exit ('let me discuss it with my spouse and give me a call'), not a booked or clearly tentative appointment. No date or time was offered or agreed. This should be read as callback/no_appointment territory, not a set appointment.",
+  "outcome_dispute": "No appointment was booked or even tentatively scheduled — the customer deferred to call back after discussing with her spouse, and the rep never proposed a specific day/time, so this should read as callback/no_appointment rather than any booked outcome.",
   "observed_outcome": {
     "outcome": "callback",
     "appointment_channel": null,
@@ -11,7 +11,15 @@
     "co_owner_confirmed": null,
     "ts": "06:19",
     "quote": "Let me discuss it with my spouse and, give me a call on this number. Okay?",
-    "reasoning": "No specific day or time was agreed for a next contact; the customer said he would call back after discussing with his spouse, and the rep accepted this without proposing a concrete time, making this a customer-controlled callback rather than a booked or tentative appointment."
+    "reasoning": "No day or time was agreed; the customer is the one who says she will call back after discussing with her spouse, and the rep accepts this without countering with a proposed time, so it lands as an unowned callback rather than a booked or tentative appointment.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "promised_later",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,74 +28,74 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured a bill figure (transcribed as '$2.50', very likely a mis-transcription of $250 given typical residential bill ranges — treat with caution) but moved directly to the credit-score qualifier without tying that number back to the customer as a reason to act; the flip should have landed around 04:13 or when the customer later asked about minimum cost at 05:29."
+    "reasoning": "Bill of $2.50 (likely $250) was captured at 04:08 but the rep moved straight into the credit qualifier at 04:13 without reflecting the bill back as pain; the flip should have landed right after 'About $2.50? Okay. Yeah.'"
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "04:57",
-    "ask_quote": "So do you get those Dominion bills in the mail or online?",
+    "ask_ts": "04:42",
+    "ask_quote": "the only thing I'll need from you is just a copy of your kilowatt usage.",
     "result": "promised_later",
     "method": "photo",
-    "result_ts": "06:32",
-    "result_quote": "I can get them online. But at the moment, you know, I said, you know, I'm at work and, just took few minutes to answer your call.",
-    "reasoning": "The rep asked for the bill format directly and asked a second time near the end of the call; the customer deferred producing it, citing being at work, and the rep pivoted to a text-and-photo follow-up plan rather than obtaining it live."
+    "result_ts": "06:55",
+    "result_quote": "I'll just send you a text as well.",
+    "reasoning": "The rep asked for the kilowatt usage and later asked the customer to send a photo via text; the customer said they can get bills online and agreed to follow up."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "03:03",
     "reason_given": true,
-    "reason_ts": "03:42",
-    "reason_quote": "you know, wanted to see how best best one could be used. You know?",
+    "reason_ts": "03:10",
+    "reason_quote": "I mean, the solar panel, the installation of solar. We just wanted solar,",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep asked what got them interested and even offered a savings-based guess, which the customer explicitly rejected ('Not really because... we're very tight on how we use electricity consumption'), giving a vague usage-optimization reason instead; the rep never returned to or built on this stated motivation later in the call."
+    "reasoning": "Customer's stated interest ('We just wanted solar, energy') and clarification that bill savings weren't the driver were captured at 03:10-03:42 but never referenced again when the rep pitched the program or tried to close."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:36",
-      "end_ts": "00:45",
-      "quote": "Hey. This is Holland with Ion. I got a request you were looking into solar for your home.",
+      "end_ts": "00:36",
+      "quote": "This is Holland with Ion.",
       "customer_response": "cooperative",
       "customer_quote": "Fine. Thank you. And you?",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "03:03",
-      "end_ts": "03:46",
-      "quote": "I was wondering what kind of got you guys interested in solar?",
+      "end_ts": "03:10",
+      "quote": "what kind of got you guys interested in solar?",
       "customer_response": "cooperative",
-      "customer_quote": "you know, wanted to see how best best one could be used. You know?",
+      "customer_quote": "I mean, the solar panel, the installation of solar. We just wanted solar,",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "02:04",
-      "end_ts": "02:44",
-      "quote": "Do you do you own the roof, or are you in, like, an HOA?",
+      "ts": "02:54",
+      "end_ts": "03:00",
+      "quote": "I have you down as the property owner.",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. It's it's the personal. Yeah. Replacing other not the HOA.",
+      "customer_quote": "Just my spouse. Yeah. Just you? Okay.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "02:48",
-      "end_ts": "02:58",
+      "ts": "02:54",
+      "end_ts": "03:00",
       "quote": "Is there anybody else on the title of the home with you?",
       "customer_response": "cooperative",
-      "customer_quote": "Just my spouse. Yeah.",
+      "customer_quote": "Just my spouse. Yeah. Just you? Okay.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -96,22 +104,22 @@
       "section": "roof",
       "status": "asked",
       "ts": "01:57",
-      "end_ts": "02:44",
-      "quote": "And then your roof, so it looks like a good southern facing roof.",
-      "customer_response": "cooperative",
-      "customer_quote": "Oh, HOA.",
+      "end_ts": "02:04",
+      "quote": "your roof, so it looks like a good southern facing roof.",
+      "customer_response": "no_answer",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "persisted",
-      "result": "completed"
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "03:48",
-      "end_ts": "03:53",
+      "end_ts": "03:52",
       "quote": "And then who is your current electric company?",
       "customer_response": "cooperative",
-      "customer_quote": "Dominion.",
+      "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -120,7 +128,7 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "03:55",
-      "end_ts": "04:09",
+      "end_ts": "04:08",
       "quote": "And how much are you spending on average a month with Dominion?",
       "customer_response": "cooperative",
       "customer_quote": "$2.50.",
@@ -131,9 +139,9 @@
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "04:13",
-      "end_ts": "04:36",
-      "quote": "as long as you have a credit score above 670. Do you or your spouse have a credit score above 670?",
+      "ts": "04:26",
+      "end_ts": "04:32",
+      "quote": "Do you or your spouse have a credit score above 670?",
       "customer_response": "cooperative",
       "customer_quote": "My credit score is the best that anyone can have.",
       "resistance_reason": "",
@@ -149,30 +157,30 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "01:16",
-      "end_ts": "01:43",
-      "quote": "How many other companies have you spoken to? Was it just that one?",
+      "end_ts": "01:20",
+      "quote": "How many other companies have you spoken to?",
       "customer_response": "cooperative",
-      "customer_quote": "It's not a company as such. You know, you are the first company I contacted.",
+      "customer_quote": "Just one. Just one.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "04:57",
-      "end_ts": "06:42",
-      "quote": "So do you get those Dominion bills in the mail or online?",
-      "customer_response": "deflected",
-      "customer_quote": "I can get them online. But at the moment, you know, I said, you know, I'm at work and, just took few minutes to answer your call.",
-      "resistance_reason": "timing",
+      "ts": "04:42",
+      "end_ts": "06:55",
+      "quote": "the only thing I'll need from you is just a copy of your kilowatt usage.",
+      "customer_response": "cooperative",
+      "customer_quote": "I can get them online.",
+      "resistance_reason": "",
       "rep_followup": "alternative_offered",
       "result": "deferred"
     },
@@ -185,35 +193,47 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "06:55",
+      "end_ts": "06:55",
+      "quote": "I'll just send you a text as well.",
+      "customer_response": "cooperative",
+      "customer_quote": "I'll give you a call. Okay?",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "skipped"
+      "result": "partial",
+      "parts_done": [
+        "reconfirm"
+      ],
+      "parts_score": "1/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:48",
-      "quote": "but somebody told me that, they're not providing, solar panels for the place where I live in Downforce. That's why, you know, I thought I'd try to discontinue it.",
-      "type": "roof_or_home",
+      "ts": "05:19",
+      "quote": "What's the minimum I'm expected to pay?",
+      "type": "cost",
       "rep_attempts": 2,
       "attempt_quotes": [
-        "Yeah. Well, we would actually we it looks like you are in our boundaries, so we'd be able to get you a system.",
-        "Well, yeah, I mean, I do I do believe that we can work with townhomes."
+        "Yeah. It's hard to say just because we do the pricing based off of your kilowatt usage in the home.",
+        "No. Because we don't do it based off of how big the home is. We do it based off of how much energy is being used in that home."
       ],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The rep countered the third-party disqualification claim twice (boundary confirmation, then townhome-capability confirmation), and the customer stopped pushing the disqualification point directly — but the underlying doubt resurfaces later as a pricing question ('What is the minimum I'm expected to pay for a townhouse?'), so the concern is softened rather than fully resolved."
+      "reasoning": "Customer pressed for a price floor twice; rep gave the same usage-based explanation both times without redirecting to the design/appointment as the source of a real number, so the concern was never actually resolved, just left hanging as the call ended.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "reason",
+        "reason"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "button_up@06:55",
+      "resolution_agrees": false
     },
     {
       "ts": "06:19",
@@ -223,54 +243,65 @@
       "attempt_quotes": [],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "The rep accepted the customer's proposed callback without attempting to schedule a specific joint time with the spouse, so no protocol-aligned resolution occurred — the call simply ended on the customer's terms."
+      "reasoning": "This is a protocol moment (spouse co-decision) that the rep should have used to propose a joint appointment time; instead the rep simply agreed to wait for her callback with no counter-offer.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [],
+      "resolved_by_tape": true,
+      "next_event": "button_up@06:55",
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "spouse-protocol and unanchored close",
-    "ts": "06:19",
-    "quote": "Let me discuss it with my spouse and, give me a call on this number. Okay?",
-    "why": "The customer directly triggers the spouse_decision protocol at the exact moment he's trying to exit the call, and the rep accepts an open callback with no proposed joint time and no button-up handshake — the single biggest reason this lead is likely to go cold."
+    "topic": "Price-before-design objection handled twice with the same non-redirecting answer",
+    "ts": "05:19",
+    "quote": "What's the minimum I'm expected to pay?",
+    "why": "This is the clearest scripted rebuttal miss on the call — rebuttals.price_estimate_before_design exists precisely for this moment and was never used, costing the chance to pivot to booking."
   },
   "key_moments": [
     {
-      "ts": "01:08",
-      "quote": "Yeah. Well, we would actually we it looks like you are in our boundaries, so we'd be able to get you a system.",
-      "classification": "rapport_repair",
-      "stewart_read": "The customer opened trying to end the call based on a neighbor's rumor that his area/home type wasn't serviceable. The rep's immediate, specific counter (boundary confirmation) is the correct move — investigate/correct rather than argue abstractly."
-    },
-    {
-      "ts": "01:38",
-      "quote": "It's not a company as such. You know, you are the first company I contacted.",
-      "classification": "prior_contact_probe_miss",
-      "stewart_read": "The customer clarifies the disqualifying information came from a fellow townhome owner, not a competing solar company, and that Ion is the first company contacted. The rep acknowledges ('Yeah. Okay. Gotcha.') but doesn't probe further into what exactly the neighbor said or whether that neighbor also has a townhome with solar since installed — information that would directly rebut the rumor."
+      "ts": "01:04",
+      "quote": "That's why, you know, I thought I'd try to discontinue it.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "This is effectively a not_interested/trust objection dressed as a factual correction (thought she didn't qualify); rep handles it well with a boundary correction but never flips it into bill pain."
     },
     {
       "ts": "04:08",
       "quote": "$2.50.",
-      "classification": "bill_anchor",
-      "stewart_read": "The stated figure is almost certainly a mis-transcription of $250 given typical bill ranges, but taken literally it reads as $2.50. Whatever the true number, the rep captured it but never reflected it back to the customer as a reason to act — no flip into bill pain framing occurred anywhere in the remaining three minutes."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Bill captured but immediately moved past into the credit qualifier with no emotional reflection back to the customer."
     },
     {
-      "ts": "05:34",
-      "quote": "It's hard to say just because we do the pricing based off of your kilowatt usage in the home. So it's different for everybody.",
+      "ts": "05:19",
+      "quote": "What's the minimum I'm expected to pay?",
       "classification": "objection_inversion_miss",
-      "stewart_read": "Customer asks for a minimum price twice in close succession — a cost objection dressed as a question. The rep gives an accurate but flat usage-based answer rather than flipping toward the bill pain already captured ($2.50/$250) as the real cost comparison point."
+      "stewart_read": "Textbook price-before-design objection; rep answers factually about kWh-based pricing but never redirects to booking the design appointment as the way to get her real number."
+    },
+    {
+      "ts": "05:57",
+      "quote": "you don't need the minimum, for a three bedroom townhouse.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Second touch on the same pricing objection; rep restates the same usage-based explanation instead of trying a new angle or bridging to appointment value."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 54,
-    "verified": 53,
-    "fuzzy": 0,
+    "checked": 50,
+    "verified": 47,
+    "fuzzy": 2,
     "wrong_ts": 1,
     "not_found": 0
   }

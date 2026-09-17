@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION5_db7d2a44",
   "rep_name": "Matt",
-  "trajectory_summary": "This is a short qualification call that surfaces a hard DQ almost immediately: the customer already has a broken existing solar system from SolarCity, not a new-install prospect. The rep handled the disclosure honestly (correctly telling the customer Ion can't service the existing system) and made one legitimate attempt to redirect to a battery/panel add-on sale before the customer declined and the call ended. Given the caveat below, the overall shape is closer to stagnant-to-honest-DQ than a coaching failure.",
-  "shape": "stagnant",
-  "outcome_dispute": "This should be tagged dq, not booked/tentative/callback — the customer has an existing, non-working SolarCity system (orphaned_flow scenario), which is a hard DQ per dq_rules.sunrun_existing/pink_solar_existing analog (SolarCity not listed explicitly but existing_system_broken is an explicit hard DQ), and the call ends with a clear decline and no next step.",
+  "trajectory_summary": "The call opens with a thin, assertion-style interest question that never captures a real reason, then stumbles into discovering via Google Maps that the home already has a non-functioning solar system. Rep eventually applies the correct orphaned-flow DQ logic and directs the customer to SolarCity, but the meandering path to get there cost clarity and the call ends with a clean but appointment-less exit.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "This is a legitimate DQ (existing broken system, original installer SolarCity) per orphaned_flow rules, not a lost sellable lead — the rep correctly did not try to book a closer appointment once the system's non-functional status and provider were confirmed.",
   "observed_outcome": {
     "outcome": "dq",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "02:37",
-    "quote": "No. Thank you.",
-    "reasoning": "Customer has an existing, broken solar system installed by SolarCity (a named hard-DQ company in dq_rules), Ion cannot service it, and the customer declines the only offered alternative (battery/additional panels) — the call ends with no appointment and no next step."
+    "ts": "02:10",
+    "quote": "you'd have to contact SolarCity,",
+    "reasoning": "The customer has an existing, non-working solar system installed by SolarCity — a hard DQ under orphaned_flow (existing_system_broken) — and the rep correctly ends the pursuit rather than booking an appointment.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": false,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,7 +28,7 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The call never reaches the bill_amount verify step — it is diverted into the orphaned-flow branch as soon as existing panels are spotted on Google Maps, and ends in a DQ/decline before any bill discussion could occur."
+    "reasoning": "No dollar or kWh bill amount or usage was requested or provided on the call."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,18 +38,18 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "No utility bill was ever raised; the call terminated at the orphaned-flow DQ point before reaching bill collection."
+    "reasoning": "The rep did not raise collecting the customer's utility bill in any form."
   },
   "interest_reason_audit": {
     "asked": true,
-    "ask_ts": "01:02",
-    "reason_given": true,
-    "reason_ts": "01:45",
-    "reason_quote": "No. It's just the panel is not working now.",
-    "reason_used": "yes",
-    "use_ts": "02:08",
-    "use_quote": "to get those back going again, you'd have to contact SolarCity, and they they would be able to help you with that.",
-    "reasoning": "Rep asked why the customer was interested (additional panels vs. battery) and, once the customer clarified the real reason (broken existing panels), the rep directly addressed that reason by explaining the correct path (contact SolarCity) rather than ignoring it."
+    "ask_ts": "00:37",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
+    "use_ts": "",
+    "use_quote": null,
+    "reasoning": "The rep asked 'we've got you interested in solar' but the customer did not state a motivating reason on the call."
   },
   "script_coverage": [
     {
@@ -49,40 +57,40 @@
       "status": "asked",
       "ts": "00:05",
       "end_ts": "00:14",
-      "quote": "Hey, Alan. This is Matt with ION, and we got a request that you're looking into solar for your home.",
+      "quote": "This is Matt with ION",
       "customer_response": "cooperative",
-      "customer_quote": "Great.",
-      "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
-    },
-    {
-      "section": "interest_question",
-      "status": "asked",
-      "ts": "01:02",
-      "end_ts": "01:45",
-      "quote": "Were you looking into getting additional panels or a backup battery for your home?",
-      "customer_response": "cooperative",
-      "customer_quote": "No. It's just the panel is not working now.",
+      "customer_quote": "Yes.",
       "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
     },
     {
+      "section": "interest_question",
+      "status": "asked",
+      "ts": "00:37",
+      "end_ts": "00:58",
+      "quote": "we've got you interested in solar.",
+      "customer_response": "deflected",
+      "customer_quote": "",
+      "resistance_reason": "other",
+      "rep_followup": "moved_on",
+      "result": "partial"
+    },
+    {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:26",
-      "end_ts": "00:34",
-      "quote": "So we have your address down as 5372 Cartaro Drive in Las Vegas. Is that correct?",
+      "end_ts": "00:35",
+      "quote": "So we have your address down as 5372",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,23 +98,23 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
       "status": "asked",
       "ts": "00:37",
       "end_ts": "00:58",
-      "quote": "Okay. So I'm looking at your home right now on Google Maps. It looks like you have solar panels.",
+      "quote": "just gonna take a quick look at your roof on Google Maps.",
       "customer_response": "no_answer",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "alternative_offered",
-      "result": "completed"
+      "rep_followup": "moved_on",
+      "result": "partial"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,11 +122,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -126,11 +134,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -138,11 +146,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "military",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -150,18 +158,18 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "prior_design",
       "status": "asked",
       "ts": "01:56",
-      "end_ts": "01:59",
+      "end_ts": "02:01",
       "quote": "who who did you get set up with?",
       "customer_response": "cooperative",
       "customer_quote": "Sun City.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -190,77 +198,72 @@
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "skipped"
+      "rep_followup": "n_a",
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "01:45",
-      "quote": "No. It's just the panel is not working now.",
-      "type": "already_have_quote_or_system",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "to get those back going again, you'd have to contact SolarCity, and they they would be able to help you with that. But I so I I'm not able to help get those working again. But if you were wanting to get, like, a backup battery or additional panels, I can help you with getting that."
-      ],
-      "resolved": true,
-      "resolution_ts": "02:37",
-      "reasoning": "This is not a sales objection to be overcome — it is an orphaned_flow hard-DQ disclosure (existing broken system from a disqualified installer). The rep made one adjacent-offer attempt (battery/panels) rather than trying to rebut or overcome the DQ itself, which is the correct procedural response; the customer's decline at 02:37 closes it out with no next step, not a resolved sale."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "verify existing-solar status before running new-install script",
-    "ts": "00:37",
-    "quote": "And I'm just gonna take a quick look at your roof on Google Maps. And just out of curiosity, we've got you interested in solar.",
-    "why": "The entire call is spent discovering, step by step, that the customer already has a broken existing system — a single early question ('do you currently have solar panels on your home?') would have routed the rep directly into the orphaned_flow script instead of a reactive branch built on the fly during the Google Maps check."
+    "topic": "Run orphaned_flow questions directly instead of guessing",
+    "ts": "01:02",
+    "quote": "Were you looking into getting additional panels or a backup battery for your home?",
+    "why": "Once Maps revealed existing panels, the rep should have immediately asked ownership/working-status questions per orphaned_flow rather than guessing product intent twice, which wasted time and confused the customer."
   },
   "key_moments": [
     {
       "ts": "00:37",
-      "quote": "And I'm just gonna take a quick look at your roof on Google Maps. And just out of curiosity, we've got you interested in solar.",
-      "classification": "other",
-      "stewart_read": "Rep runs the standard roof-check step from the new-install script without first confirming whether the customer already has solar — this is the moment a quick 'do you currently have solar panels installed?' verify question would have surfaced the DQ before the Google Maps step."
+      "quote": "we've got you interested in solar.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "The interest question is phrased as a statement, not a question, so no real motivation is captured — a missed emotional anchor even before the DQ surfaces."
+    },
+    {
+      "ts": "00:58",
+      "quote": "It looks like you have solar panels.",
+      "classification": "knowledge_gap",
+      "stewart_read": "Rep is surprised by the existing system, indicating the qualifying question sequence didn't establish this earlier — should have been caught via the interest question or an early ownership check."
     },
     {
       "ts": "01:02",
       "quote": "Were you looking into getting additional panels or a backup battery for your home?",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Rep correctly identifies existing panels on Google Maps and pivots to the orphaned-flow branch, but does so without first asking the schema's orphaned_flow lead questions (own vs. lease, which company, is it working) in sequence — he improvises the branch reactively."
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Rep guesses at what the customer wants rather than asking the direct orphaned_flow questions (own vs lease, which company, is it working)."
     },
     {
-      "ts": "01:59",
-      "quote": "Sun City.",
-      "classification": "other",
-      "stewart_read": "Customer names the installer as 'Sun City,' which the rep (at 02:01) interprets as 'SolarCity' — a hard-DQ company per dq_rules. This is a diarization-sensitive moment; the correction itself is reasonable rep behavior given likely mispronunciation, but it is the pivotal DQ trigger."
-    },
-    {
-      "ts": "02:08",
-      "quote": "to get those back going again, you'd have to contact SolarCity, and they they would be able to help you with that. But I so I I'm not able to help get those working again.",
-      "classification": "protocol_adherence_positive",
-      "stewart_read": "Rep gives an honest, correct answer instead of overselling a fix Ion cannot provide — this is the right procedural move on a hard-DQ existing-broken-system scenario and should be reinforced as good practice."
+      "ts": "01:36",
+      "quote": "Okay. Okay. So you were looking for, like, a Tesla Powerwall?",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Second guess at intent before the actual problem (broken panels) is surfaced, extending the confusing back-and-forth."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 30,
-    "verified": 29,
+    "checked": 28,
+    "verified": 28,
     "fuzzy": 0,
-    "wrong_ts": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

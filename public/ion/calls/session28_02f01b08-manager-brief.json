@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION28_02f01b08",
   "rep_name": "Bucky",
-  "trajectory_summary": "This call reveals a duplicate/recycled-lead scenario: Gary already has solar, is replacing an aging system, already sent his bill to another Ion rep (Ella), and is already scheduled for an appointment. The rep runs a partial standard verify script for two minutes before discovering this, then ends the call abruptly with no recap or confirmation of the existing appointment details. The call isn't really a setter failure so much as a process/data gap — this lead should not have been redialed as a fresh intake.",
-  "shape": "stagnant",
-  "outcome_dispute": "v1 tag is unknown, but the observed outcome should be recorded as no_appointment (or duplicate/n_a) because the rep did not set anything — the customer reveals he is ALREADY scheduled with another rep. This is not a booked or tentative outcome created on this call.",
+  "trajectory_summary": "The call runs through verify items mechanically and ends the moment the customer reveals a prior scheduled appointment, with the rep apologizing for the call rather than confirming any details. There is no interest question, no bill flip, no probe into the existing 25-year-old panels or the mystery prior scheduling — the rep treats discovery of a scheduled appointment as a reason to exit rather than a reason to verify and hand off cleanly.",
+  "shape": "energy_leaked",
+  "outcome_dispute": "v1 tag is unknown; this should not be scored as a fresh booked appointment. The rep did not book anything — he learned an appointment may already exist and ended the call without confirming when, with whom, or capturing anything to hand off.",
   "observed_outcome": {
     "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": false,
     "ts": "02:14",
-    "quote": "Oh, then you're all good. Sorry to bother you.",
-    "reasoning": "The rep did not set any appointment on this call; the customer reveals he is already scheduled through a prior Ion contact, so this call closes with no new next-step owned by this rep."
+    "quote": "Yes.",
+    "reasoning": "Customer indicates he was already scheduled somewhere, but no date/time is captured on this call and the rep does not confirm or own any next step — this call itself produces no booked appointment.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,17 +28,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured the $200 monthly average but immediately moved to the roof-type question without acknowledging or flipping the bill pain into urgency or alignment-against-the-utility; the flip should have gone right after 01:24."
+    "reasoning": "Bill of $200 was captured at 01:24 but never referenced again; the flip should have landed right after bill_collection logistics at 01:56, tying the $200 spend to the value of moving forward."
   },
   "bill_document_audit": {
     "asked": true,
     "ask_ts": "01:56",
     "ask_quote": "Are you able to access the power bill, like, online?",
-    "result": "declined",
-    "method": "other",
+    "result": "received_on_call",
+    "method": "email",
     "result_ts": "02:00",
-    "result_quote": "I just sent",
-    "reasoning": "Gary indicates he already sent a copy of his bill to another Ion contact ('Ella') rather than providing it live on this call, revealing this call was redundant against a prior touchpoint; the full customer statement is fragmented across 02:00-02:09 ('I just sent I sent a copy. To, Ella at I am.')."
+    "result_quote": "I just sent I sent a copy.",
+    "reasoning": "Customer said they had already sent a copy during the call and identified the recipient."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,7 +49,7 @@
     "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested Gary in solar; the call moved directly from intro into address/homeowner verification and then into the orphaned-solar branch without ever surfacing a motivational reason beyond aging panels needing replacement."
+    "reasoning": "The rep never asked what motivated the customer's interest in solar."
   },
   "script_coverage": [
     {
@@ -49,9 +57,9 @@
       "status": "asked",
       "ts": "00:04",
       "end_ts": "00:12",
-      "quote": "This is Bucky with ION. I'm reaching out about the solar form you filled out online. How are you doing?",
+      "quote": "This is Bucky with ION.",
       "customer_response": "cooperative",
-      "customer_quote": "Good.",
+      "customer_quote": "Hi. This is Gary.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -65,7 +73,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -73,7 +81,7 @@
       "status": "asked",
       "ts": "00:19",
       "end_ts": "00:24",
-      "quote": "You at 1537 Cutron Avenue Southeast?",
+      "quote": "Alright. You at 1537",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
@@ -84,8 +92,8 @@
       "section": "co_owner",
       "status": "asked",
       "ts": "01:09",
-      "end_ts": "01:12",
-      "quote": "is there anybody else from the title but you?",
+      "end_ts": "01:13",
+      "quote": "is there anybody from the title but you?",
       "customer_response": "cooperative",
       "customer_quote": "No.",
       "resistance_reason": "",
@@ -96,7 +104,7 @@
       "section": "roof",
       "status": "asked",
       "ts": "01:31",
-      "end_ts": "01:42",
+      "end_ts": "01:39",
       "quote": "what kind of roof do you have? Is it is it like a flat roof?",
       "customer_response": "cooperative",
       "customer_quote": "TPO.",
@@ -120,8 +128,8 @@
       "section": "bill_amount",
       "status": "asked",
       "ts": "01:19",
-      "end_ts": "01:24",
-      "quote": "Okay. How much are you spending on a monthly average?",
+      "end_ts": "01:26",
+      "quote": "How much are you spending on a monthly average?",
       "customer_response": "cooperative",
       "customer_quote": "Close to $200.",
       "resistance_reason": "",
@@ -132,7 +140,7 @@
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "01:46",
-      "end_ts": "01:49",
+      "end_ts": "01:50",
       "quote": "Do you have a credit score over 6 70?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
@@ -149,118 +157,113 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "prior_design",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "00:40",
+      "end_ts": "00:59",
+      "quote": "I was just saying, do you already have solar?",
+      "customer_response": "cooperative",
+      "customer_quote": "I've got 10 that are twenty year over twenty five years old.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "skipped"
+      "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "01:56",
-      "end_ts": "02:09",
+      "end_ts": "02:02",
       "quote": "Are you able to access the power bill, like, online?",
-      "customer_response": "deflected",
-      "customer_quote": "I just sent I sent a copy. To, Ella at I am.",
-      "resistance_reason": "already_have_quote",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "customer_response": "cooperative",
+      "customer_quote": "I just sent I sent a copy.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "appointment_set",
-      "status": "not_reached",
+      "status": "asked",
+      "ts": "02:11",
+      "end_ts": "02:15",
+      "quote": "and then did you get scheduled?",
+      "customer_response": "cooperative",
+      "customer_quote": "Yes.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
+    },
+    {
+      "section": "button_up",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "not_reached"
-    },
-    {
-      "section": "button_up",
-      "status": "skipped",
-      "ts": "02:15",
-      "end_ts": "02:20",
-      "quote": "Oh, then you're all good. Sorry to bother you.",
-      "customer_response": "cooperative",
-      "customer_quote": "Okay. Okay. You have a great day.",
-      "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "skipped"
+      "rep_followup": "n_a",
+      "result": "skipped",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "02:00",
-      "quote": "I just sent I sent a copy. To, Ella at I am.",
-      "type": "already_have_quote_or_system",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Oh, to who?"
-      ],
-      "resolved": true,
-      "resolution_ts": "02:14",
-      "reasoning": "Not a resistance objection but a disclosure that the customer already engaged with another Ion contact and has a scheduled appointment; the rep asks one clarifying question then ends the call once confirmed."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "orphaned_flow completeness",
-    "ts": "00:28",
-    "quote": "So it's a single family home. Is there anybody oh, do you already have solar?",
-    "why": "Once Gary disclosed existing, aging, self-owned panels, the rep never asked panel size or whether the current system is working — both are schema-required orphaned_flow items and a non-working system is a hard DQ. This is the single most consequential process gap on the call."
+    "topic": "Unconfirmed exit on prior appointment",
+    "ts": "02:15",
+    "quote": "Oh, then you're all good. Sorry to bother you.",
+    "why": "Rep ends the call the instant Gary mentions a prior scheduling without confirming date, time, or which company — nothing is captured for tracking or handoff, risking a lost or duplicate lead."
   },
   "key_moments": [
     {
       "ts": "00:28",
       "quote": "So it's a single family home. Is there anybody oh, do you already have solar?",
-      "classification": "non_standard_scenario_hold",
-      "stewart_read": "The moment the customer reveals existing solar, this call should branch into the orphaned_flow script (ownership status, panel size, system working status). The rep continues with a hybrid of standard verify questions instead of running the defined orphaned-flow checklist."
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "Rep discovers existing solar mid-sentence but doesn't slow down to run the orphaned flow properly before moving to ownership question."
     },
     {
-      "ts": "00:52",
-      "quote": "if you've got some good ones, replacing some. I've got 10 that are twenty year over twenty five years old.",
-      "classification": "cross_sell_miss",
-      "stewart_read": "The rep captured that Gary owns his panels outright ('They're all mine') but never asked the two remaining hard-gate orphaned_flow questions: panel size/wattage and whether the current system is working. This is an incomplete qualification, not just a missed cross-sell — a broken/non-working existing system is a hard DQ per schema, and panel size affects design scope."
+      "ts": "00:55",
+      "quote": "I've got 10 that are twenty year over twenty five years old.",
+      "classification": "prior_contact_probe_miss",
+      "stewart_read": "A 25-year-old system needing replacement is a strong signal, but rep doesn't ask why now, what's failing, or who installed it originally."
     },
     {
-      "ts": "01:46",
-      "quote": "Do you have a credit score over 6 70?",
-      "classification": "other",
-      "stewart_read": "Rep correctly states the 670 threshold matching the schema (unlike SESSION18_fcbf33c1's 650 drift), and gets a quick yes. Clean, compliant execution of this qualifier."
+      "ts": "02:11",
+      "quote": "and then did you get scheduled?",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "Rep asks a closed yes/no about a prior appointment instead of confirming date, time, and who it's with — no button-up occurs at all."
     },
     {
-      "ts": "01:56",
-      "quote": "Are you able to access the power bill, like, online?",
-      "classification": "bill_anchor",
-      "stewart_read": "Rep asks for bill access after already having the $200 average bill figure, but does not flip that number into any emotional or urgency framing — it's asked and then immediately overtaken by the discovery that the bill was already sent elsewhere."
+      "ts": "02:15",
+      "quote": "Oh, then you're all good. Sorry to bother you.",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "Call ends with an apology and no verification of any appointment detail, no recap, no next step owned by the rep."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 38,
-    "verified": 36,
+    "checked": 39,
+    "verified": 38,
     "fuzzy": 1,
-    "wrong_ts": 1,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }

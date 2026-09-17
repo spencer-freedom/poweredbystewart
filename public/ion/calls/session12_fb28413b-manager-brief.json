@@ -1,9 +1,9 @@
 {
   "call_id": "SESSION12_fb28413b",
   "rep_name": "Bucky",
-  "trajectory_summary": "The call opens with a self-disqualifying worry, gets calmly reassured, survives a long and clunky bill-collection detour complicated by the customer's age, hearing, and landline, and closes with a next-day appointment. Energy is mixed rather than clean: rapport built during the small talk and the roof reassurance, but the close is procedurally thin — no co-owner confirmation, no one-hour block, no computer/no-driving instruction, no verbal handshake.",
+  "trajectory_summary": "The call opens neutral, wobbles on a roof concern that's handled well, then spends the bulk of its runtime (roughly minutes 7 through 21) on a slow-motion bill-photo relay through the customer's son, padded with genuine but time-costly rapport (bike racing). It ends with a booked appointment, but the bill amount itself was never actually captured — only the kWh graph was relayed after a long detour.",
   "shape": "mixed",
-  "outcome_dispute": "v1 tag should be read as booked-but-fragile, not a clean booked. A day and time were captured (22:07-22:23) but the button_up beat was almost entirely skipped — no hour-block, no no-driving/computer instruction, no 'is that fair' handshake, and no on-call promise of a confirmation text. The wife (Anne), confirmed as co-owner at 03:02, was never addressed for the appointment. Given the setter is paid on sits that survive to full proposal, this appointment carries real no-show/fragility risk.",
+  "outcome_dispute": "Verified events mark bill_amount as 'partial' and bill amount captured: False — the dollar figure was never obtained (rep guessed '1 to 200' himself), only a kWh usage graph photo came through at 21:11. This materially weakens the design basis despite a booked appointment.",
   "observed_outcome": {
     "outcome": "booked",
     "appointment_channel": "phone",
@@ -11,7 +11,16 @@
     "co_owner_confirmed": false,
     "ts": "22:53",
     "quote": "We got you down. We'll see you tomorrow at at 10AM. Okay? 10AM.",
-    "reasoning": "A specific day (tomorrow, the 20th) and time (10AM) were confirmed verbally, so this is booked, not tentative. However, it is fragile: the wife/co-owner Anne (identified at 03:02) was never brought into the appointment discussion, and button_up elements (hour block, handshake, no-driving instruction, text-confirmation promise) are absent."
+    "reasoning": "A specific day (tomorrow, the 20th) and time (10AM) are both confirmed by both parties, meeting the booked bar; however the wife (co-owner Anne, identified at 03:02) was never invited or confirmed for the appointment.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": false,
+      "co_owner": "identified_unconfirmed",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": false,
@@ -20,28 +29,28 @@
     "flip_executed": "no_bill_captured",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer could not recall the dollar amount ('I don't know offhand because we do it automatically' at 04:51), and the rep filled in a placeholder range ('I could do 1 to 200 for now' at 04:55) rather than obtaining a real figure — there was never an actual customer-stated number to flip."
+    "reasoning": "The customer did not state a monthly dollar amount; the rep used a placeholder range '1 to 200' (05:33) instead of a captured bill."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "06:26",
-    "ask_quote": "the last question is do you get your utility bill on the in the mail or online?",
+    "ask_ts": "06:32",
+    "ask_quote": "If you if I text you, could you log in real quick and then send a picture of your utility history or kilowatt history?",
     "result": "received_on_call",
-    "method": "photo",
-    "result_ts": "21:01",
-    "result_quote": "Okay. You should get it. With Absa electric.",
-    "reasoning": "The rep asked how the customer receives bills, then walked him (and eventually his son) through logging in online and texting/emailing a photo of the kWh usage graph, which the son successfully sent before the call ended."
+    "method": "text",
+    "result_ts": "21:11",
+    "result_quote": "You, he sent oh, yeah. Okay.",
+    "reasoning": "The rep asked for the kilowatt usage at 06:32 and later acknowledged receipt of the customer's/sendor's transmission at 21:11, indicating the bill image arrived on the call."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "03:29",
     "reason_given": true,
     "reason_ts": "03:47",
-    "reason_quote": "Well, my interest is also to do the right thing.",
+    "reason_quote": "my interest is also to do the right thing.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep acknowledged the environmental motivation in the moment ('Oh, yeah. Okay. You care for the environment.') but never returned to it later in the pitch, program explanation, or appointment close."
+    "reasoning": "Customer's stated reason ('my interest is also to do the right thing' / caring for the environment) was acknowledged once at 03:51 but never referenced again at booking or button-up to reinforce the appointment's value."
   },
   "script_coverage": [
     {
@@ -51,7 +60,7 @@
       "end_ts": "00:14",
       "quote": "This is Bucky with ION reaching out about the solar form you filled out online.",
       "customer_response": "cooperative",
-      "customer_quote": "I'm doing fine.",
+      "customer_quote": "Hello?",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -60,8 +69,8 @@
       "section": "interest_question",
       "status": "asked",
       "ts": "03:29",
-      "end_ts": "03:55",
-      "quote": "You just wanna save money on solar or save money on your power bill?",
+      "end_ts": "03:56",
+      "quote": "You just wanna save money on solar or save money on your power bill? That way you're looking for solar?",
       "customer_response": "cooperative",
       "customer_quote": "my interest is also to do the right thing.",
       "resistance_reason": "",
@@ -71,9 +80,9 @@
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "00:24",
-      "end_ts": "02:56",
-      "quote": "You still have 4805 Southeast 33 Avenue?",
+      "ts": "00:27",
+      "end_ts": "00:32",
+      "quote": "Southeast 33 Avenue?",
       "customer_response": "cooperative",
       "customer_quote": "Yes.",
       "resistance_reason": "",
@@ -89,29 +98,29 @@
       "customer_response": "cooperative",
       "customer_quote": "My wife, Anne.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "roof",
       "status": "asked",
-      "ts": "00:39",
-      "end_ts": "01:29",
-      "quote": "Honestly, your roof your roof is fine. And how it is, it's totally fine.",
-      "customer_response": "resistant",
-      "customer_quote": "before you get going here, my the my roof, our house is situated where the roof is facing, east and west rather than north and south.",
-      "resistance_reason": "trust",
-      "rep_followup": "alternative_offered",
+      "ts": "01:08",
+      "end_ts": "01:25",
+      "quote": "Honestly, your roof your roof is fine.",
+      "customer_response": "cooperative",
+      "customer_quote": "east and west rather than north and south.",
+      "resistance_reason": "",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "03:59",
-      "end_ts": "04:18",
-      "quote": "what utility company are you with?",
+      "end_ts": "04:21",
+      "quote": "And then, what utility company are you with?",
       "customer_response": "cooperative",
-      "customer_quote": "Portland General Electric.",
+      "customer_quote": "Portland General Electric. Yeah. Portland General Electric.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -119,25 +128,25 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "04:21",
-      "end_ts": "04:55",
+      "ts": "04:25",
+      "end_ts": "05:33",
       "quote": "Do you know how much you're spending every month?",
-      "customer_response": "resistant",
+      "customer_response": "cooperative",
       "customer_quote": "I don't know offhand because we do it automatically.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "alternative_offered",
+      "resistance_reason": "",
+      "rep_followup": "moved_on",
       "result": "partial"
     },
     {
       "section": "tax_credit_qualifier",
       "status": "asked",
       "ts": "05:43",
-      "end_ts": "06:24",
+      "end_ts": "06:00",
       "quote": "Do you have a credit score over 670?",
       "customer_response": "cooperative",
-      "customer_quote": "so I think we have a pretty good credit score.",
+      "customer_quote": "no. I think it's less than that.",
       "resistance_reason": "",
-      "rep_followup": "persisted",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -149,7 +158,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -161,50 +170,54 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "06:26",
-      "end_ts": "21:08",
-      "quote": "do you get your utility bill on the in the mail or online?",
+      "ts": "06:32",
+      "end_ts": "21:11",
+      "quote": "If you if I text you, could you log in real quick and then send a picture of your utility history or kilowatt history?",
       "customer_response": "cooperative",
-      "customer_quote": "Okay. You should get it. With Absa electric.",
-      "resistance_reason": "dont_have_it",
+      "customer_quote": "You should get it. With Absa electric.",
+      "resistance_reason": "",
       "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "21:13",
+      "ts": "22:07",
       "end_ts": "22:57",
-      "quote": "You wanna do tomorrow at, like, 10AM, 12PM?",
+      "quote": "You wanna do tomorrow? We can do tomorrow.",
       "customer_response": "cooperative",
-      "customer_quote": "10:10 o'clock at my house here.",
+      "customer_quote": "10:10 o'clock",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "button_up",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "22:55",
+      "end_ts": "22:57",
+      "quote": "We got you down. We'll see you tomorrow at at 10AM. Okay? 10AM.",
+      "customer_response": "cooperative",
+      "customer_quote": "We'll see you. Alright. Thank you. Yep. You have a great day. Yeah. Bye bye.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "skipped"
+      "result": "partial",
+      "parts_done": [
+        "recap"
+      ],
+      "parts_score": "1/4"
     }
   ],
   "objections": [
     {
-      "ts": "00:39",
-      "quote": "I I'm wondering how in the heck you could put solar array up there, but go ahead with as long as you know that.",
+      "ts": "00:36",
+      "quote": "my the my roof, our house is situated where the roof is facing, east and west rather than north and south.",
       "type": "roof_or_home",
       "rep_attempts": 1,
       "attempt_quotes": [
@@ -212,67 +225,89 @@
       ],
       "resolved": true,
       "resolution_ts": "01:25",
-      "reasoning": "Customer accepts the reassurance and lets the rep proceed with no further pushback on roof orientation."
+      "reasoning": "Customer raises a genuine concern that could stall the roof qualifier; rep reassures in one pass and customer accepts, moving forward.",
+      "blocked_section": "roof",
+      "attempt_moves": [
+        "reassure"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "roof@01:08",
+      "resolution_agrees": true
     },
     {
       "ts": "14:47",
-      "quote": "which is a landline.",
+      "quote": "You did it on the number we're talking on, which is a landline.",
       "type": "other",
-      "rep_attempts": 1,
+      "rep_attempts": 2,
       "attempt_quotes": [
-        "So who should I text or should I email?"
+        "So who should I text or should I email?",
+        "Tell you could tell Banks he can just text me a picture of it."
       ],
       "resolved": true,
-      "resolution_ts": "15:31",
-      "reasoning": "Rep pivots to email once the landline limitation surfaces, and the customer provides an email address to resolve the channel problem."
+      "resolution_ts": "21:11",
+      "reasoning": "Landline incompatibility stalled the bill_collection section; rep tried email first, then routed through the son's phone to eventually get the photo through.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "alternative_offered",
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@22:07",
+      "resolution_agrees": true
     }
   ],
   "primary_coaching_focus": {
-    "topic": "button_up sequence almost entirely skipped",
-    "ts": "22:53",
-    "quote": "We got you down. We'll see you tomorrow at at 10AM. Okay? 10AM.",
-    "why": "Date and time were captured but none of the required button_up elements followed: no one-hour block, no no-driving/computer instruction, no 'is that fair' handshake, and no stated promise of a confirmation text. This is the highest-leverage, most fixable gap on the call — a scripted 30-second add the rep has full control over, directly tied to no-show risk on a setter-pay-on-sits floor."
+    "topic": "Bill amount never captured — rep filled in a guess instead of pursuing it",
+    "ts": "04:51",
+    "quote": "I don't know offhand because we do it automatically.",
+    "why": "The bill anchor is the core leverage for the entire pitch; here it was never obtained and the rep self-inserted a placeholder range, undermining both the design basis and any bill-flip opportunity."
   },
   "key_moments": [
     {
-      "ts": "00:39",
-      "quote": "I I'm wondering how in the heck you could put solar array up there, but go ahead with as long as you know that.",
-      "classification": "rapport_repair",
-      "stewart_read": "Customer surfaces a self-disqualifying concern unprompted; this is a legitimacy/trust moment the rep must resolve before anything else can proceed."
-    },
-    {
-      "ts": "01:11",
-      "quote": "Honestly, your roof your roof is fine. And how it is, it's totally fine. The the thing they'll probably care about more is the trees.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Rep answers confidently but with no actual technical grounding for why east/west orientation is fine — a plausible-sounding claim without content, which works here but is a coachable risk if a sharper customer pushed back."
-    },
-    {
       "ts": "01:59",
-      "quote": "So Roughly, I know you can't give me a specific.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "Customer is explicitly asking about government help / savings amount tied to his motivation to 'do the right thing' and save money — a natural anchor point. The rep answers with the bill-swap program mechanic but never ties it back to the customer's own stated motivations or bill pain."
+      "quote": "Roughly, I know you can't give me a specific.",
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer is explicitly asking for a ballpark/government-incentive figure — a chance to create curiosity toward the specialist call — but rep answers with mechanism explanation instead."
     },
     {
-      "ts": "03:47",
-      "quote": "my interest is also to do the right thing.",
+      "ts": "02:03",
+      "quote": "Yeah. It's called the bill swap program.",
+      "classification": "setter_scope_creep",
+      "stewart_read": "Rep explains financing mechanism (bill swap, no upfront cost, guaranteed savings) unprompted — closer-tier content given away before qualification is even done."
+    },
+    {
+      "ts": "04:51",
+      "quote": "I don't know offhand because we do it automatically.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer gives a values-based motivation (environmental/ethical) beyond bill savings. The rep acknowledges it in one line and never returns to it later in the pitch, appointment framing, or close — the anchor is captured but never reused."
+      "stewart_read": "Bill amount was never actually captured — rep let it go and inserted his own guess instead of pursuing the real number or pivoting to a bill-based follow-up."
+    },
+    {
+      "ts": "14:47",
+      "quote": "You did it on the number we're talking on, which is a landline.",
+      "classification": "protocol_violation",
+      "stewart_read": "Landline-photo mismatch is a known failure mode with a documented pivot (verbal readback), but rep instead burned several more minutes routing through email and the son's phone."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 54,
-    "verified": 49,
+    "checked": 53,
+    "verified": 52,
     "fuzzy": 0,
-    "wrong_ts": 5,
+    "wrong_ts": 1,
     "not_found": 0
   }
 }

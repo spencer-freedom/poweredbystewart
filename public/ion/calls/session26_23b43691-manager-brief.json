@@ -1,7 +1,7 @@
 {
   "call_id": "SESSION26_23b43691",
   "rep_name": "Meg",
-  "trajectory_summary": "The call moves from a confused, memory-blank opening to a booked appointment, carried mostly by the rep's patience through an extremely long and disorganized bill read-off. The rep held the line on legitimacy and warmth early, but the call has real unresolved data-quality gaps — missing November, inconsistent monthly figures, and an unresolved credit qualifier — that the rep filed past rather than flagged, and the close lacked full button-up mechanics (no explicit hour-block or 'is that fair' handshake).",
+  "trajectory_summary": "The call opens confused (customer doesn't recall the lead) but the rep stabilizes it with patience and lands a booked appointment. The bulk of the call is consumed by an unstructured, disorganized bill read-aloud that the rep let run far past the schema's 2-minute pivot window, and the credit qualifier was asked and dropped with no flip. Despite the friction, the rep closed cleanly on time and day.",
   "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
@@ -10,87 +10,96 @@
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "14:52",
-    "quote": "10:30? K.",
-    "reasoning": "A specific day (tomorrow, Wednesday) and time (10:30 AM) were agreed, and the rep confirms an in-person visit ('We'll come by with the design'), meeting the booked threshold despite thin button-up mechanics."
+    "quote": "I'll get you scheduled for tomorrow morning at 10:30.",
+    "reasoning": "A specific day (tomorrow, Wednesday) and time (10:30) were agreed by both sides, and rep confirms bringing the design 'over to you' indicating an in-person visit. No co-owner was identified (customer confirmed no one else on title at 01:37).",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "confirmed"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
-    "bill_ts": "02:10",
-    "bill_quote": "maybe around a 100.",
+    "bill_ts": "08:25",
+    "bill_quote": "and the usage was $349.",
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captures a rough summer bill figure but never uses it later as a reason-to-act; the appointment set at 14:43 is framed around 'lower your bills and get you some savings' generically rather than tying back to the $100 figure specifically."
+    "reasoning": "The bill amounts were captured extensively (multiple months of data) but the rep never flipped them into emotional alignment-against-the-utility; the closest moment was at 15:07 'show you exactly how the solar can lower your bills' which is generic, not tied to her specific numbers like the $100 summer estimate or the $349 kWh usage."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "03:24",
-    "ask_quote": "I'd like to take a look at your rock energy bill and see how much power you're using. Do you get that bill online or through the mail?",
+    "ask_ts": "05:38",
+    "ask_quote": "Are you able to take a photo of the bill and text it to me?",
     "result": "received_on_call",
     "method": "read_aloud",
-    "result_ts": "06:01",
-    "result_quote": "I can't take any pictures. Okay. This phone can't take photos. Okay.",
-    "reasoning": "After the photo path failed, Charlotte read the bill details aloud over the phone from 06:04 through 13:11, which the rep captured live on the call."
+    "result_ts": "06:13",
+    "result_quote": "in January, it was $69.00",
+    "reasoning": "The rep asked for a photo/text of the bill, but the customer could not take photos and instead read monthly bill amounts and usage aloud during the call."
   },
   "interest_reason_audit": {
     "asked": true,
     "ask_ts": "00:49",
     "reason_given": true,
     "reason_ts": "01:01",
-    "reason_quote": "I saw an advertisement for the solar panels, and my neighbor has one. So I thought, well, maybe I should get one. But I didn't know how much it was gonna cost to me.",
+    "reason_quote": "I saw an advertisement for the solar panels,",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "Charlotte gives a clear reason (neighbor influence + cost curiosity) but the rep never references the neighbor or the cost question again when setting the appointment or in the closing pitch."
+    "reasoning": "Customer's stated reason (advertisement + neighbor's system) at 01:01-01:05 was never referenced again when setting the appointment or in the button-up."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:07",
-      "end_ts": "00:22",
-      "quote": "Hey. This is Meg. I'm with ION reaching out about a solar form you filled out online.",
-      "customer_response": "resistant",
-      "customer_quote": "Oh, and what is I don't remember that. Okay.",
-      "resistance_reason": "trust",
-      "rep_followup": "persisted",
-      "result": "partial"
+      "end_ts": "00:10",
+      "quote": "This is Meg. I'm with ION",
+      "customer_response": "cooperative",
+      "customer_quote": "Hi. Charlotte?",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
     },
     {
       "section": "interest_question",
       "status": "asked",
       "ts": "00:49",
-      "end_ts": "01:16",
+      "end_ts": "01:05",
       "quote": "And what's got you looking at solar options on your home?",
       "customer_response": "cooperative",
-      "customer_quote": "I saw an advertisement for the solar panels, and my neighbor has one.",
+      "customer_quote": "I saw an advertisement for the solar panels,",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
-      "ts": "01:33",
-      "end_ts": "01:37",
-      "quote": "I'm assuming you're the homeowner. Is there anyone else on the title?",
+      "ts": "00:31",
+      "end_ts": "00:41",
+      "quote": "the address that you gave me, Charlotte, is 5603",
       "customer_response": "cooperative",
-      "customer_quote": "No.",
+      "customer_quote": "Yes.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "co_owner",
-      "status": "asked",
-      "ts": "01:33",
-      "end_ts": "01:37",
-      "quote": "Is there anyone else on the title?",
-      "customer_response": "cooperative",
-      "customer_quote": "No.",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "completed"
+      "rep_followup": "n_a",
+      "result": "skipped"
     },
     {
       "section": "roof",
@@ -101,14 +110,14 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "asked",
-      "ts": "01:39",
-      "end_ts": "01:45",
+      "ts": "00:39",
+      "end_ts": "00:46",
       "quote": "And what power company are you with?",
       "customer_response": "cooperative",
       "customer_quote": "Rock Energy.",
@@ -119,9 +128,9 @@
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "01:46",
-      "end_ts": "02:10",
-      "quote": "Rock Energy. Do you know how much you're paying Rock Energy on average?",
+      "ts": "00:46",
+      "end_ts": "02:13",
+      "quote": "Do you know how much you're paying Rock Energy on average?",
       "customer_response": "cooperative",
       "customer_quote": "maybe around a 100.",
       "resistance_reason": "",
@@ -129,16 +138,16 @@
       "result": "completed"
     },
     {
-      "section": "credit_qualifier",
+      "section": "tax_credit_qualifier",
       "status": "asked",
-      "ts": "02:19",
-      "end_ts": "02:45",
-      "quote": "The only requirement is that you have a credit score above 670. Is that the case for you?",
-      "customer_response": "resistant",
-      "customer_quote": "A 670? I have no idea what my credit score is.",
-      "resistance_reason": "dont_have_it",
+      "ts": "02:25",
+      "end_ts": "02:43",
+      "quote": "The only requirement is that you have a credit score above 670.",
+      "customer_response": "cooperative",
+      "customer_quote": "I have no idea",
+      "resistance_reason": "",
       "rep_followup": "moved_on",
-      "result": "declined"
+      "result": "completed"
     },
     {
       "section": "military",
@@ -149,7 +158,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -161,29 +170,29 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "bill_collection",
       "status": "asked",
-      "ts": "03:37",
-      "end_ts": "13:11",
-      "quote": "Do you get that bill online or through the mail?",
+      "ts": "05:38",
+      "end_ts": "06:13",
+      "quote": "Are you able to take a photo of the bill and text it to me?",
       "customer_response": "resistant",
-      "customer_quote": "I can't take any pictures. Okay. This phone can't take photos. Okay.",
+      "customer_quote": "I can't take any pictures.",
       "resistance_reason": "dont_have_it",
       "rep_followup": "alternative_offered",
-      "result": "completed"
+      "result": "partial"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "14:43",
-      "end_ts": "14:52",
+      "end_ts": "14:58",
       "quote": "I have tomorrow morning, I've got a 9AM or a 10:30.",
       "customer_response": "cooperative",
-      "customer_quote": "10:30.",
+      "customer_quote": "I think I will be here in the morning tomorrow.",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
@@ -191,63 +200,94 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "15:22",
-      "end_ts": "17:19",
-      "quote": "Are you able to receive text messages at this number?",
-      "customer_response": "resistant",
-      "customer_quote": "I think it has to be a landline because I don't know what I have.",
-      "resistance_reason": "other",
-      "rep_followup": "alternative_offered",
-      "result": "partial"
+      "ts": "14:52",
+      "end_ts": "15:24",
+      "quote": "I'll get you scheduled for tomorrow morning at 10:30.",
+      "customer_response": "cooperative",
+      "customer_quote": "10:30.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "reconfirm"
+      ],
+      "parts_score": "2/4"
     }
   ],
-  "objections": [],
+  "objections": [
+    {
+      "ts": "06:01",
+      "quote": "I can't take any pictures.",
+      "type": "other",
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "If if it's easier for you, you could just take a picture of the entire bill, and then I can pull the details that I need."
+      ],
+      "resolved": true,
+      "resolution_ts": "06:13",
+      "reasoning": "This is a technical capability barrier, not resistance — customer immediately cooperates by reading the bill aloud instead, so the script continues via an alternative path rather than stalling.",
+      "blocked_section": "bill_collection",
+      "attempt_moves": [
+        "alternative_offered"
+      ],
+      "resolved_by_tape": true,
+      "next_event": "appointment_set@14:43",
+      "resolution_agrees": true
+    }
+  ],
   "primary_coaching_focus": {
-    "topic": "Unresolved credit qualifier left open at booking",
-    "ts": "02:42",
-    "quote": "A 670? I have no idea what my credit score is.",
-    "why": "A hard qualifier (credit_qualifier, schema threshold 670) is never resolved — the rep accepts 'I have no idea' and never sets a plan to confirm it before the closer's visit, risking a wasted in-person sit if Charlotte doesn't qualify."
+    "topic": "Elderly/low-tech bill collection pivot speed",
+    "ts": "06:01",
+    "quote": "I can't take any pictures.",
+    "why": "The rep let a confused, unstructured dollar-amount read-aloud run for 7+ minutes before clarifying the actual data needed (kWh, not dollars), a major time-burn the schema explicitly flags as a 2-minute pivot window."
   },
   "key_moments": [
     {
-      "ts": "01:25",
-      "quote": "Now now I'm looking on Google Maps. Beautiful home, by the way. Lots of sun exposure, which is always good to see.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "The rep flags sun exposure as a positive, which is a good instinct, but doesn't tie it forward into a curiosity hook about system output later in the call."
-    },
-    {
       "ts": "02:10",
       "quote": "maybe around a 100.",
-      "classification": "bill_anchor",
-      "stewart_read": "The rep captures a summer bill figure but never flips it into emotional alignment against the utility later — it's filed and the call moves straight to the credit qualifier."
+      "classification": "curiosity_creation_failure",
+      "stewart_read": "Customer gives a summer bill estimate but rep files it and moves straight to the credit qualifier without reflecting it back as a pain point."
     },
     {
-      "ts": "02:42",
-      "quote": "A 670? I have no idea what my credit score is.",
-      "classification": "knowledge_gap",
-      "stewart_read": "Charlotte cannot self-report a credit score, and the rep says 'Fair enough, no worries' and moves on without any path to resolve this before the appointment — leaving a hard qualifier completely open."
+      "ts": "02:25",
+      "quote": "The only requirement is that you have a credit score above 670.",
+      "classification": "other",
+      "stewart_read": "Rep states the correct 670 threshold (no drift this call) and moves on cleanly when customer doesn't know her score."
     },
     {
-      "ts": "05:46",
-      "quote": "What's the key to know, please?",
+      "ts": "06:01",
+      "quote": "I can't take any pictures.",
       "classification": "knowledge_gap",
-      "stewart_read": "This is the real friction-onset moment — Charlotte doesn't understand what a photo/text ask even means — and it takes until 06:01 for the actual blocker (no camera phone) to surface explicitly."
+      "stewart_read": "Customer hits the hard tech wall (no camera phone) but rep doesn't cleanly pivot to a structured verbal kWh read — instead lets an unstructured dollar-amount list run for over a minute before even clarifying what's needed."
+    },
+    {
+      "ts": "07:13",
+      "quote": "No. Not worth so is that how much you paid, or is that how much power you've used?",
+      "classification": "knowledge_gap",
+      "stewart_read": "This is the second touch on the same bill-format confusion — rep only clarifies dollars-vs-kWh after the customer has already read out a full year of dollar amounts."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
     "checked": 48,
-    "verified": 44,
-    "fuzzy": 2,
-    "wrong_ts": 2,
+    "verified": 45,
+    "fuzzy": 0,
+    "wrong_ts": 3,
     "not_found": 0
   }
 }

@@ -1,17 +1,26 @@
 {
   "call_id": "SESSION8_f320f865",
   "rep_name": "Parker",
-  "trajectory_summary": "The call opens cold with a customer who explicitly says he doesn't know if he wants solar, and the rep never addresses that ambivalence directly — instead pivoting immediately to logistics. The middle of the call is dominated by an improvised, resourceful three-way call to Dominion Energy to retrieve twelve months of usage data, which succeeds practically but consumes most of the call's runtime. The back half books an appointment cleanly and without friction, but the rep never revisits the customer's stated ambivalence or the freshly-read bill numbers to build any emotional case for showing up.",
-  "shape": "mixed",
+  "trajectory_summary": "The call opens cold and transactional, spends the bulk of its runtime (nearly 7 of 11 minutes) inside a Dominion Energy IVR and live agent call to extract usage data, and closes with a booked appointment on logistics alone — no bill pain was ever anchored or flipped, and the customer's stated ambivalence was never addressed. Energy neither builds nor collapses; it stays flat and procedural throughout.",
+  "shape": "stagnant",
   "outcome_dispute": null,
   "observed_outcome": {
     "outcome": "booked",
-    "appointment_channel": "in_person",
+    "appointment_channel": "unclear",
     "datetime_captured": true,
     "co_owner_confirmed": null,
     "ts": "10:47",
     "quote": "I'll make it noon then.",
-    "reasoning": "A specific day (tomorrow) and time (noon) are locked, and the rep frames it as the specialist dropping by, indicating an in-person appointment; no co-owner or spouse was identified anywhere in the call."
+    "reasoning": "Customer explicitly confirms noon tomorrow; day and time are both locked, satisfying the booked bar. Channel (phone vs in-person 'drop by') is ambiguous from rep's phrasing.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,17 +29,17 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured both the $300/month figure and, later, twelve months of kWh usage (peaking at 3,498 kWh) but never reflected either back to the customer as a reason to act — the flip should have landed right after 08:44 when the full usage picture was in hand, before pivoting to scheduling."
+    "reasoning": "The $300/mo bill was captured at 01:12 and full 12-month usage data retrieved by 09:16, but the rep never referenced either when pitching the appointment at 09:35 — the flip should have landed there, e.g. tying the noon appointment to seeing savings against that $300 bill."
   },
   "bill_document_audit": {
     "asked": true,
-    "ask_ts": "00:49",
-    "ask_quote": "I think the only thing we needed from you, mister Simonson, was your your electric bill. Do you normally get those in the mail, or do you get those online?",
+    "ask_ts": "01:36",
+    "ask_quote": "Do if you don't know your login, I could we could add them to the phone line here, and we could have them read it off to you.",
     "result": "received_on_call",
     "method": "read_aloud",
-    "result_ts": "07:38",
-    "result_quote": "Okay. Tell me what usage in April 2025 is 785.",
-    "reasoning": "The customer had no physical bill and no online login, so the rep improvised a three-way call to Dominion Energy, and the utility rep read twelve months of kWh usage aloud live on the call — an unconventional but successful read_aloud capture."
+    "result_ts": "09:28",
+    "result_quote": "I got it down here for us, mister Simon.",
+    "reasoning": "The rep asked to pull the bill via a utility three-way call at 01:36; the customer and utility provided the last twelve months of kWh during the call, and the rep confirmed receipt at 09:28."
   },
   "interest_reason_audit": {
     "asked": false,
@@ -41,19 +50,19 @@
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked what interested the customer in solar (a required verify item); the customer volunteered a cost-curiosity motive unprompted, and the rep neither expanded on it nor tied the later usage data or the appointment back to it."
+    "reasoning": "Customer's stated reason ('I just wanna find out what it cost') was acknowledged with 'no worries' at 00:28 but never reinforced when booking — the appointment pitch at 09:35 talks about 'the design and price' generically rather than tying it back to his specific cost curiosity."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
-      "ts": "00:00",
-      "end_ts": "00:20",
-      "quote": "Oh, hey. Yeah. I'm I'm Parker. I'm with Ion. We're just calling you because we had a we had a request here that you were looking at solar for the home.",
+      "ts": "00:09",
+      "end_ts": "00:09",
+      "quote": "I'm with Ion. We're just calling",
       "customer_response": "cooperative",
-      "customer_quote": "Hi. This is mister Simon. Did you somebody you called me before?",
+      "customer_quote": "Oh, it's fine.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "moved_on",
       "result": "completed"
     },
     {
@@ -63,17 +72,17 @@
       "end_ts": "",
       "quote": "",
       "customer_response": "n_a",
-      "customer_quote": "I don't know if I want it or not. I just wanna find out what it cost.",
+      "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "address_homeowner",
       "status": "asked",
       "ts": "00:38",
-      "end_ts": "00:44",
-      "quote": "Was that for the 1027 In Long Road in in Ridgeland, South Carolina?",
+      "end_ts": "00:45",
+      "quote": "Was that for the 1027",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
@@ -89,7 +98,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -101,31 +110,31 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "01:06",
-      "end_ts": "01:11",
-      "quote": "Do you know your login on on the Dominion website by chance? Or",
+      "end_ts": "01:12",
+      "quote": "Do you know your login on on the Dominion website by chance?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah.",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "00:49",
-      "end_ts": "01:12",
-      "quote": "I think the only thing we needed from you, mister Simonson, was your your electric bill. Do you normally get those in the mail, or do you get those online?",
+      "end_ts": "01:16",
+      "quote": "I think the only thing we needed from you, mister Simonson, was your your electric bill.",
       "customer_response": "cooperative",
       "customer_quote": "The the bills average around that about 300 a month.",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "alternative_offered",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
@@ -137,7 +146,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -149,7 +158,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -161,7 +170,7 @@
       "customer_response": "n_a",
       "customer_quote": "",
       "resistance_reason": "",
-      "rep_followup": "none",
+      "rep_followup": "n_a",
       "result": "skipped"
     },
     {
@@ -169,19 +178,19 @@
       "status": "asked",
       "ts": "01:36",
       "end_ts": "09:16",
-      "quote": "Do if you don't know your login, I could we could add them to the phone line here, and we could have them read it off to you. Would that work for you?",
+      "quote": "Do if you don't know your login, I could we could add them to the phone line here, and we could have them read it off to you.",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. Sure. Alright. Would you you need you need me to hold on here or what?",
-      "resistance_reason": "dont_have_it",
-      "rep_followup": "alternative_offered",
+      "customer_quote": "Yeah. Sure.",
+      "resistance_reason": "",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
       "ts": "09:35",
-      "end_ts": "10:49",
-      "quote": "is this a good day to show you that design and kinda go over the price with you?",
+      "end_ts": "10:58",
+      "quote": "And now the last thing, Andrew or mister Simonson, is this a good day to show you that design and kinda go over the price with you?",
       "customer_response": "cooperative",
       "customer_quote": "To to tomorrow, probably.",
       "resistance_reason": "",
@@ -191,86 +200,71 @@
     {
       "section": "button_up",
       "status": "asked",
-      "ts": "10:50",
-      "end_ts": "11:11",
-      "quote": "We'll plan to just have our specialist drop by tomorrow at noon, and he'll just kinda answer any questions you might have and show you the price and and the savings and see what we can do to help you out there.",
+      "ts": "10:55",
+      "end_ts": "10:58",
+      "quote": "We'll plan to just have our specialist drop by tomorrow at noon,",
       "customer_response": "cooperative",
       "customer_quote": "Alright.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "partial",
+      "parts_done": [
+        "recap"
+      ],
+      "parts_score": "1/4"
     }
   ],
-  "objections": [
-    {
-      "ts": "00:24",
-      "quote": "I don't know if I want it or not. I just wanna find out what it cost.",
-      "type": "not_interested",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Yeah. No worries. No worries. Well, yeah, I'm here to at least get you that design started."
-      ],
-      "resolved": true,
-      "resolution_ts": "00:32",
-      "reasoning": "The customer's soft ambivalence was met with a single reassurance-and-redirect move rather than a curiosity-building flip; the customer didn't push further, so it counts as resolved by default rather than by persuasion."
-    },
-    {
-      "ts": "01:22",
-      "quote": "No.",
-      "type": "other",
-      "rep_attempts": 1,
-      "attempt_quotes": [
-        "Do if you don't know your login, I could we could add them to the phone line here, and we could have them read it off to you. Would that work for you?"
-      ],
-      "resolved": true,
-      "resolution_ts": "02:08",
-      "reasoning": "Customer had no bill and no login; rep offered a single improvised workaround (three-way call to the utility) which the customer accepted, resolving the data-collection barrier."
-    }
-  ],
+  "objections": [],
   "primary_coaching_focus": {
-    "topic": "bill anchor captured but never flipped",
-    "ts": "01:12",
-    "quote": "The the bills average around that about 300 a month.",
-    "why": "The customer handed over a clean dollar figure and, later, a full year of rising usage data (up to 3,498 kWh in February) — both were filed and never turned into the customer's reason to act, which is the single highest-leverage miss on this call."
+    "topic": "Bill anchor never flipped into motivation",
+    "ts": "00:24",
+    "quote": "I don't know if I want it or not. I just wanna find out what it cost.",
+    "why": "A usable $300/mo bill and an explicit ambivalence statement were both captured and left unused — the entire call ran on logistics with no emotional stake built, leaving the booked appointment fragile."
   },
   "key_moments": [
     {
       "ts": "00:24",
       "quote": "I don't know if I want it or not. I just wanna find out what it cost.",
       "classification": "curiosity_creation_failure",
-      "stewart_read": "This is a direct, unprompted disclosure of ambivalence and a price-only motive — exactly the kind of signal that should trigger a curiosity-building response about savings math rather than a straight move to logistics. The rep skips right past it."
+      "stewart_read": "Customer hands the rep an explicit motivation statement (price curiosity, no conviction) and the rep files it without probing or building a bill-pain hook."
     },
     {
-      "ts": "00:24",
-      "quote": "I don't know if I want it or not. I just wanna find out what it cost.",
-      "classification": "objection_inversion_miss",
-      "stewart_read": "This statement functions like a soft not-interested/cost-first objection. The schema's inversion move (flip the framing back onto the customer's current expense) was available and unused; the rep instead validated and moved to logistics."
+      "ts": "01:12",
+      "quote": "The the bills average around that about 300 a month.",
+      "classification": "bill_anchor",
+      "stewart_read": "A usable bill anchor ($300/mo) was captured but never acknowledged emotionally or referenced again in the call."
     },
     {
       "ts": "01:36",
-      "quote": "Do if you don't know your login, I could we could add them to the phone line here, and we could have them read it off to you. Would that work for you?",
+      "quote": "Do if you don't know your login, I could we could add them to the phone line here, and we could have them read it off to you.",
       "classification": "other",
-      "stewart_read": "The customer had no bill in hand, no online login, and no landline-specific block — this doesn't cleanly match the schema's elderly_low_tech_protocol or landline_protocol triggers. It's a novel workaround the rep improvised on the spot: adding the utility company itself to a three-way call to read off usage data directly. It worked, but it isn't a documented path."
+      "stewart_read": "Strong procedural improvisation — rep solved a real technical blocker (no login, no paper bill) with a live three-way call rather than stalling or giving up on usage data."
     },
     {
-      "ts": "02:19",
-      "quote": "Yeah. If you just wanna hang out for a second, I'll add them to the phone so it'll be a three way call.",
-      "classification": "other",
-      "stewart_read": "This confirms the improvised path is being executed live; roughly six minutes of the call (02:19-09:16) are consumed navigating the utility's IVR and verification before any usage numbers are read. It's effective but expensive in call time."
+      "ts": "09:35",
+      "quote": "is this a good day to show you that design and kinda go over the price with you?",
+      "classification": "unanchored_soft_exit",
+      "stewart_read": "The booking pitch never ties back to the customer's bill or the usage data just retrieved — it's a bare logistics ask."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 43,
-    "verified": 43,
+    "checked": 40,
+    "verified": 40,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

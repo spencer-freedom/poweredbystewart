@@ -1,17 +1,25 @@
 {
   "call_id": "SESSION11_8c01faa4",
   "rep_name": "Tanner",
-  "trajectory_summary": "This is a short, low-energy call where the customer arrives pre-decided against solar and the rep never resets the frame. The customer discloses an existing 11-panel system and a clear cost objection, but the rep runs a partial verify question, confirms the tax-credit expiration (removing the customer's own hoped-for lever), and then exits passively without running any orphaned-flow qualifying questions or attempting a reframe.",
+  "trajectory_summary": "This is an orphaned-system call the rep never formally recognized as such — the customer already owns 11 panels and is doing his own ROI math on expansion, but the rep runs the standard new-lead qualifier script instead of the orphaned_flow. The call never regains energy after the customer's opening objection and ends in a full concession with no appointment and no counter-offer.",
   "shape": "energy_leaked",
-  "outcome_dispute": "v1 outcome is unknown/unclear; the transcript supports a likely DQ (existing 11-panel system, customer explicitly states no financial benefit) but the rep never asked the orphaned_flow qualifiers (ownership type, install company, system status, panel size) needed to confirm a hard DQ, so this should be read as a probable/likely DQ rather than a confirmed one.",
+  "outcome_dispute": null,
   "observed_outcome": {
-    "outcome": "dq",
+    "outcome": "no_appointment",
     "appointment_channel": null,
     "datetime_captured": false,
     "co_owner_confirmed": null,
-    "ts": "01:54",
-    "quote": "you know, financially, it doesn't make sense to me.",
-    "reasoning": "The customer explicitly declines based on his own cost analysis and existing 11-panel system, and the call ends with no appointment. This reads as a likely/probable DQ rather than a confirmed hard DQ, however, since the rep never ran the orphaned_flow qualifying questions (ownership type, install company, system working status) that would formally confirm whether this is a hard disqualifier per dq_rules or a viable expansion lead."
+    "ts": "01:57",
+    "quote": "Well, I mean, if anything changes, if you if you're ever open to looking into an estimate, I mean, you know where to call.",
+    "reasoning": "Call ends with the rep leaving the door open passively rather than owning any next step; no time, date, or callback was set.",
+    "set_conditions": {
+      "datetime": false,
+      "bill": "not_asked",
+      "bill_amount_known": true,
+      "co_owner": "none_identified",
+      "credit": "not_asked"
+    },
+    "set_strength": null
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,7 +28,7 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The rep captured a current bill range of $100-150/month but never used it -- he didn't flip it against the twenty-year-payback objection or connect it to the pool/spa load disclosed seconds later; the flip should have gone right after 00:55 when the customer explained the driver of that bill."
+    "reasoning": "Bill amount ($100-150/month) was captured at 00:53 but never flipped into a reason to act — the customer's very next line reframes it as pool/spa-driven and normal, and the rep does not push back or use the number as leverage; the flip should have landed right after 00:55."
   },
   "bill_document_audit": {
     "asked": false,
@@ -30,34 +38,46 @@
     "method": "none",
     "result_ts": "",
     "result_quote": null,
-    "reasoning": "The rep never asked for the actual utility bill document (mail/online, photo, text) at any point in the call -- he only asked for a verbal dollar range, and the call ended before any document request could occur."
+    "reasoning": "The rep did not request the actual utility bill or ask the customer to send a bill during the call."
   },
   "interest_reason_audit": {
-    "asked": false,
-    "ask_ts": "",
+    "asked": true,
+    "ask_ts": "00:07",
     "reason_given": true,
-    "reason_ts": "01:14",
-    "reason_quote": "to see if New Mexico still gave, tax reduction form like we did last year.",
+    "reason_ts": "00:40",
+    "reason_quote": "We already have 11 panels.",
     "reason_used": "no",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar,' but the customer volunteered his reason (checking on a state tax credit) unprompted. The rep confirmed the credit expired but never pivoted to any other value angle (e.g., expansion for the pool load) once that reason was closed off."
+    "reasoning": "Customer's stated reason for the call (checking if the NM tax credit was still available) is acknowledged factually at 01:25 but never reinforced or used to pivot toward an alternative value proposition (e.g., non-tax-credit purchase options per qualifiers.credit_qualifier notes)."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
       "ts": "00:02",
-      "end_ts": "00:22",
-      "quote": "Yeah. This is him. Hey there, Norm. This is Tanner with Ion Solar. How are you doing today?",
+      "end_ts": "00:07",
+      "quote": "This is Tanner with Ion Solar.",
       "customer_response": "cooperative",
-      "customer_quote": "I'm doing fine. Thank you.",
+      "customer_quote": "Hello? Is this Norm?",
       "resistance_reason": "",
       "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "interest_question",
+      "status": "asked",
+      "ts": "00:07",
+      "end_ts": "00:22",
+      "quote": "to see what direction it is you're looking to go in.",
+      "customer_response": "cooperative",
+      "customer_quote": "And I've got other questions for you.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
+    },
+    {
+      "section": "address_homeowner",
       "status": "skipped",
       "ts": "",
       "end_ts": "",
@@ -69,20 +89,8 @@
       "result": "skipped"
     },
     {
-      "section": "address_homeowner",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
       "section": "co_owner",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -90,11 +98,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "roof",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -102,11 +110,11 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "utility_company",
-      "status": "not_reached",
+      "status": "skipped",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -114,58 +122,22 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "not_reached"
+      "result": "skipped"
     },
     {
       "section": "bill_amount",
       "status": "asked",
       "ts": "00:46",
-      "end_ts": "00:53",
-      "quote": "Okay. Yeah. And how much is, like, your how much are you still paying per month to the electric company?",
+      "end_ts": "00:55",
+      "quote": "how much are you still paying per month to the electric company?",
       "customer_response": "cooperative",
       "customer_quote": "A 100 to a 150.",
       "resistance_reason": "",
       "rep_followup": "none",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
-      "status": "asked",
-      "ts": "01:14",
-      "end_ts": "01:32",
-      "quote": "Oh, okay. Yeah. I hear you. Yeah. No. Unfortunately, those have been expired since, like, I believe, the first of the year.",
-      "customer_response": "resistant",
-      "customer_quote": "Right.",
-      "resistance_reason": "cost",
-      "rep_followup": "moved_on",
-      "result": "partial"
-    },
-    {
-      "section": "military",
-      "status": "not_reached",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
-      "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "not_reached"
-    },
-    {
-      "section": "prior_design",
-      "status": "asked",
-      "ts": "01:01",
-      "end_ts": "01:08",
-      "quote": "Okay. I gotcha. Yeah. And did you get panels of ion? Were those ion panels you got previously?",
-      "customer_response": "cooperative",
-      "customer_quote": "No.",
-      "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
-    },
-    {
-      "section": "bill_collection",
       "status": "skipped",
       "ts": "",
       "end_ts": "",
@@ -175,6 +147,42 @@
       "resistance_reason": "",
       "rep_followup": "n_a",
       "result": "skipped"
+    },
+    {
+      "section": "military",
+      "status": "skipped",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "skipped"
+    },
+    {
+      "section": "prior_design",
+      "status": "asked",
+      "ts": "01:00",
+      "end_ts": "01:09",
+      "quote": "Were those ion panels you got previously?",
+      "customer_response": "cooperative",
+      "customer_quote": "No.",
+      "resistance_reason": "",
+      "rep_followup": "none",
+      "result": "completed"
+    },
+    {
+      "section": "bill_collection",
+      "status": "not_reached",
+      "ts": "",
+      "end_ts": "",
+      "quote": "",
+      "customer_response": "n_a",
+      "customer_quote": "",
+      "resistance_reason": "",
+      "rep_followup": "n_a",
+      "result": "not_reached"
     },
     {
       "section": "appointment_set",
@@ -190,7 +198,7 @@
     },
     {
       "section": "button_up",
-      "status": "skipped",
+      "status": "not_reached",
       "ts": "",
       "end_ts": "",
       "quote": "",
@@ -198,75 +206,97 @@
       "customer_quote": "",
       "resistance_reason": "",
       "rep_followup": "n_a",
-      "result": "skipped"
+      "result": "not_reached",
+      "parts_done": [],
+      "parts_score": "0/4"
     }
   ],
   "objections": [
     {
       "ts": "00:36",
-      "quote": "And I don't see there's a financial benefit",
+      "quote": "And I don't see there's a financial benefit to making the investment.",
       "type": "already_have_quote_or_system",
       "rep_attempts": 0,
       "attempt_quotes": [],
       "resolved": false,
       "resolution_ts": "",
-      "reasoning": "Customer states no financial benefit to further investment given his existing 11-panel system; the rep moves straight to a verify question about current bill rather than addressing the objection."
+      "reasoning": "Rep does not address this at all in the moment; instead pivots straight to the bill-amount qualifier, leaving the objection unaddressed for the rest of the call.",
+      "blocked_section": "interest_question",
+      "attempt_moves": [],
+      "resolved_by_tape": true,
+      "next_event": "bill_amount@00:46",
+      "resolution_agrees": false
     },
     {
-      "ts": "01:34",
-      "quote": "So between that and",
+      "ts": "01:42",
+      "quote": "it would take me twenty years to pay for them. So, you know, financially, it doesn't make sense to me.",
       "type": "cost",
-      "rep_attempts": 0,
-      "attempt_quotes": [],
+      "rep_attempts": 1,
+      "attempt_quotes": [
+        "Okay. No. I hear you. Well, I mean, if anything changes, if you if you're ever open to looking into an estimate, I mean, you know where to call."
+      ],
       "resolved": true,
-      "resolution_ts": "01:57",
-      "reasoning": "Customer builds out a full cost/payback objection culminating at 01:54 ('financially, it doesn't make sense to me'); the rep makes zero attempts to reframe or challenge the math, simply agreeing and closing the call at 01:57, so the objection is 'resolved' only in the sense that the customer dropped off the call, not that it was overcome."
+      "resolution_ts": "02:05",
+      "reasoning": "Rep makes a single soft, passive move (leaving the door open) rather than reframing or offering a concrete alternative; customer accepts the end of the call, but only because the rep conceded rather than resolved the concern.",
+      "blocked_section": "appointment_set",
+      "attempt_moves": [
+        "concede"
+      ],
+      "resolved_by_tape": false,
+      "next_event": null,
+      "resolution_agrees": false
     }
   ],
   "primary_coaching_focus": {
-    "topic": "orphaned_flow qualifiers not run on disclosed existing system",
+    "topic": "Missed orphaned_flow trigger on existing-system disclosure",
     "ts": "00:40",
-    "quote": "to making the investment. We already have 11 panels.",
-    "why": "The moment the customer disclosed an existing 11-panel system, this became an orphaned-flow call, but the rep never asked ownership type, install company, or system status -- so Ion has no confirmed data on whether this is a hard DQ (leased/PPA) or a viable expansion lead. This is the single highest-value fix since it determines whether the call was correctly let go or a live lead was dropped."
+    "quote": "We already have 11 panels.",
+    "why": "The entire call should have shifted into orphaned-system qualification (installer, ownership type, system working) at this line; instead the rep ran generic new-lead questions and lost the thread of the actual conversation the customer wanted to have."
   },
   "key_moments": [
     {
       "ts": "00:40",
-      "quote": "to making the investment. We already have 11 panels.",
-      "classification": "non_standard_scenario_hold",
-      "stewart_read": "Customer discloses an existing 11-panel system mid-call, which should trigger Ion's orphaned_flow line of questions (own vs. lease, install company, system size, is it working). The rep never runs any of these; he only asks about the current monthly bill."
-    },
-    {
-      "ts": "00:55",
-      "quote": "Okay. But that's because we got a swimming pool and a spa.",
-      "classification": "enthusiasm_signal",
-      "stewart_read": "The customer volunteers that his higher bill is driven by a pool and spa -- exactly the kind of higher-load enthusiasm signal that could justify an expansion sale (additional panels or battery) rather than a flat DQ. This is a different revenue angle than the orphaned-system DQ question: it's an upsell opening, not a qualification gate."
-    },
-    {
-      "ts": "01:22",
-      "quote": "and that's where I found your phone number.",
+      "quote": "We already have 11 panels.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer explains he was searching for New Mexico's tax credit info and that's how Ion got his number -- this is useful context (motivation was tax-credit driven, not bill-pain driven) that the rep never probes further (e.g., did he get a design/quote from anyone else when he had 11 panels installed)."
+      "stewart_read": "Customer discloses an existing system, which should trigger the orphaned_flow (ownership type, installer, panel size, system working) — rep never asks any of these."
     },
     {
-      "ts": "01:25",
-      "quote": "Oh, okay. Yeah. I hear you. Yeah. No. Unfortunately, those have been expired since, like, I believe, the first of the year.",
-      "classification": "knowledge_gap",
-      "stewart_read": "The rep confirms the tax credit is expired, which is accurate per schema's tax_credit_disclosure note about purchased systems, but he delivers it flatly and removes the customer's own reason for even considering expansion without offering the schema's stated alternative purchase-without-tax-credit option."
+      "ts": "00:36",
+      "quote": "And I don't see there's a financial benefit",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Classic cost/value objection in the first minute; schema calls for a flip (e.g., reframing the current bill as the real expense) rather than accepting and moving to a qualifier question."
+    },
+    {
+      "ts": "01:42",
+      "quote": "it would take me twenty years to pay for them",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Second occurrence of the same ROI objection; rep again does not challenge the math or offer to run a real updated design to verify the 20-year figure."
+    },
+    {
+      "ts": "01:57",
+      "quote": "Okay. No. I hear you.",
+      "classification": "objection_inversion_miss",
+      "stewart_read": "Third and final concession point — the call ends without any pushback on the stated ROI objection."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 29,
-    "verified": 29,
+    "checked": 33,
+    "verified": 33,
     "fuzzy": 0,
     "wrong_ts": 0,
     "not_found": 0

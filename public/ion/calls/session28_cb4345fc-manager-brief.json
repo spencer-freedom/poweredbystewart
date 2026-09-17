@@ -1,7 +1,7 @@
 {
   "call_id": "SESSION28_cb4345fc",
   "rep_name": "Brandon",
-  "trajectory_summary": "The call opens with an unusually warm, self-motivated customer who asks to be walked through the process, and the rep rides that energy into a Saturday appointment in under seven minutes. The unresolved thread is ownership: the customer first says the account is under his parents' name, then later asserts he's the decision-maker because 'technically it is my house' — the rep never reconciles this before booking, leaving the appointment structurally fragile if the actual titleholders aren't present Saturday.",
+  "trajectory_summary": "The call opens with unusually high customer energy — he asks how the process works before being asked anything — and the rep rides that energy to a Saturday booking with minimal resistance. But the rep never resolves who legally owns the home, skips the interest-question entirely, and lets a competitor-bankruptcy disclosure pass without any probe, leaving real gaps under a smooth-sounding close.",
   "shape": "mixed",
   "outcome_dispute": null,
   "observed_outcome": {
@@ -9,9 +9,18 @@
     "appointment_channel": "in_person",
     "datetime_captured": true,
     "co_owner_confirmed": false,
-    "ts": "06:35",
-    "quote": "I can have someone meet with you this Saturday at 02:00.",
-    "reasoning": "A specific day (Saturday) and time (2:00) are agreed for an in-person specialist visit, but the parents/titleholders — identified as the actual homeowners — are never confirmed to be present."
+    "ts": "06:36",
+    "quote": "But, yeah, I can have someone meet with you this Saturday at 02:00.",
+    "reasoning": "A specific day and time (Saturday 2:00) were agreed by the customer ('Perfect'), but the actual homeowners (parents) were never confirmed to attend.",
+    "set_conditions": {
+      "datetime": true,
+      "bill": "received_on_call",
+      "bill_amount_known": true,
+      "co_owner": "identified_unconfirmed",
+      "credit": "not_asked"
+    },
+    "set_rule": "model",
+    "set_strength": "set_with_bill"
   },
   "bill_anchor_audit": {
     "bill_captured": true,
@@ -20,40 +29,40 @@
     "flip_executed": "no",
     "flip_ts": "",
     "flip_quote": null,
-    "reasoning": "The customer gave a number ('1348') but the rep never clarified whether this was kWh usage or a dollar amount, and never flipped it into emotional leverage against the utility — the rep simply moved into logistics about text/email bill retrieval. The capture itself is looser than a clean bill-anchor moment since the unit was never confirmed."
+    "reasoning": "The bill (1348 kWh) was captured at 03:11 but never turned into an emotional or alignment-against-utility hook; the flip should have landed right after 04:10 when the rep sent the text, e.g. tying the usage number to potential savings before moving to logistics."
   },
   "bill_document_audit": {
     "asked": true,
     "ask_ts": "02:53",
     "ask_quote": "I don't know if you get your your bills in the mail or did you get them online?",
-    "result": "promised_later",
+    "result": "received_on_call",
     "method": "text",
-    "result_ts": "05:21",
-    "result_quote": "Alright. And you should be receiving a text from me in about two seconds.",
-    "reasoning": "The rep asked about bill format, sent a text and email for the customer to forward the bill to, and the customer says he'll forward what he sent to the prior company — but no bill photo or document is confirmed received on the call itself."
+    "result_ts": "07:25",
+    "result_quote": "Yes. Yes. I got it. Thank you.",
+    "reasoning": "Rep asked about bill delivery and later requested the bill be texted; the rep confirmed receipt on the call at 07:25."
   },
   "interest_reason_audit": {
     "asked": false,
     "ask_ts": "",
-    "reason_given": true,
-    "reason_ts": "01:12",
-    "reason_quote": "Because I got me and my bunch of my neighbors, that were installed. We were gonna go with, you know, Aurora solar or something like that. But, apparently, they just filed bankruptcy.",
-    "reason_used": "no",
+    "reason_given": false,
+    "reason_ts": "",
+    "reason_quote": null,
+    "reason_used": "no_reason_given",
     "use_ts": "",
     "use_quote": null,
-    "reasoning": "The rep never explicitly asked 'what interested you in solar,' but the customer volunteered his motivation (neighbors doing it, prior installer bankrupt) unprompted; the rep acknowledged sympathetically but didn't tie it back into the pitch or the appointment framing later in the call."
+    "reasoning": "The rep did not ask why the customer was interested in solar; the customer volunteered prior-company context but not a motivating reason like cost or environment."
   },
   "script_coverage": [
     {
       "section": "intro_legitimacy",
       "status": "asked",
-      "ts": "00:13",
-      "end_ts": "00:20",
-      "quote": "We were just calling because you filled out a form online for solar energy.",
+      "ts": "00:01",
+      "end_ts": "00:04",
+      "quote": "Hello. This is Brandon.",
       "customer_response": "cooperative",
-      "customer_quote": "Correct. Correct. Correct.",
+      "customer_quote": "Brandon, how's it going?",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
@@ -72,61 +81,61 @@
       "section": "address_homeowner",
       "status": "asked",
       "ts": "01:53",
-      "end_ts": "02:03",
-      "quote": "the way the programs work is you need to be the homeowner, which I have you here as. Was there anyone else on the side of the home with you?",
+      "end_ts": "02:22",
+      "quote": "you need to be the homeowner, which I have you here as. Was there anyone else on the side of the home with you?",
       "customer_response": "cooperative",
       "customer_quote": "Yeah. So it's gonna be under my my mom and dad's name.",
       "resistance_reason": "",
       "rep_followup": "persisted",
-      "result": "partial"
+      "result": "completed"
     },
     {
       "section": "co_owner",
       "status": "asked",
-      "ts": "02:22",
-      "end_ts": "05:33",
-      "quote": "So your parents are the homeowners. Correct? And do they live there with you or just you?",
+      "ts": "01:53",
+      "end_ts": "02:12",
+      "quote": "Was there anyone else on the side of the home with you?",
       "customer_response": "cooperative",
-      "customer_quote": "Yeah. So it's gonna be me making a decision. I mean, technically, it is my house.",
-      "resistance_reason": "other",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "customer_quote": "Yeah. So it's gonna be under my my mom and dad's name.",
+      "resistance_reason": "spouse",
+      "rep_followup": "persisted",
+      "result": "completed"
     },
     {
       "section": "roof",
-      "status": "skipped",
-      "ts": "",
-      "end_ts": "",
-      "quote": "",
-      "customer_response": "n_a",
-      "customer_quote": "",
+      "status": "asked",
+      "ts": "03:29",
+      "end_ts": "03:47",
+      "quote": "Did you recently move in to this home, or have you guys lived here for a while?",
+      "customer_response": "cooperative",
+      "customer_quote": "We just moved in, like, a year ago.",
       "resistance_reason": "",
-      "rep_followup": "n_a",
-      "result": "skipped"
+      "rep_followup": "moved_on",
+      "result": "completed"
     },
     {
       "section": "utility_company",
       "status": "asked",
       "ts": "02:31",
       "end_ts": "02:36",
-      "quote": "Okay. And you're with ComEd. Correct? The affiliate company?",
+      "quote": "Okay. And you're with ComEd. Correct?",
       "customer_response": "cooperative",
       "customer_quote": "Yes. Correct. Correct.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "rep_followup": "none",
       "result": "completed"
     },
     {
       "section": "bill_amount",
       "status": "asked",
-      "ts": "02:53",
+      "ts": "02:49",
       "end_ts": "03:11",
-      "quote": "I don't know if you get your your bills in the mail or did you get them online?",
+      "quote": "So all we do is look at your kilowatt usage.",
       "customer_response": "cooperative",
       "customer_quote": "My last was 1348.",
       "resistance_reason": "",
-      "rep_followup": "moved_on",
-      "result": "partial"
+      "rep_followup": "alternative_offered",
+      "result": "completed"
     },
     {
       "section": "tax_credit_qualifier",
@@ -155,99 +164,111 @@
     {
       "section": "prior_design",
       "status": "asked",
-      "ts": "01:36",
-      "end_ts": "01:47",
-      "quote": "Okay. Freedom Pros. So I can show you a design.",
+      "ts": "01:30",
+      "end_ts": "01:36",
+      "quote": "You said it was with Freedom Server?",
       "customer_response": "cooperative",
       "customer_quote": "Freedom Pros. Yep.",
-      "resistance_reason": "",
-      "rep_followup": "moved_on",
+      "resistance_reason": "already_have_quote",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "bill_collection",
       "status": "asked",
       "ts": "02:53",
-      "end_ts": "05:21",
-      "quote": "Yeah. I sent you a text message. It says Brandon with Ion, and then it should show, like, twelve months.",
+      "end_ts": "07:25",
+      "quote": "I don't know if you get your your bills in the mail or did you get them online?",
       "customer_response": "cooperative",
-      "customer_quote": "Okay. I'll just forward you the bill that I forwarded to the last company that I worked with.",
+      "customer_quote": "Mail.",
       "resistance_reason": "",
       "rep_followup": "alternative_offered",
-      "result": "deferred"
+      "result": "completed"
     },
     {
       "section": "appointment_set",
       "status": "asked",
-      "ts": "06:14",
+      "ts": "06:35",
       "end_ts": "06:41",
-      "quote": "Yes. What time on Saturday works best for you?",
+      "quote": "I can have someone meet with you this Saturday at 02:00.",
       "customer_response": "cooperative",
       "customer_quote": "Let's do between two and five.",
-      "resistance_reason": "",
-      "rep_followup": "alternative_offered",
+      "resistance_reason": "timing",
+      "rep_followup": "persisted",
       "result": "completed"
     },
     {
       "section": "button_up",
       "status": "asked",
       "ts": "06:47",
-      "end_ts": "07:27",
-      "quote": "I set the appointments for my specialist. We'll we'll go ahead and confirm with you before we meet with you your availability.",
+      "end_ts": "07:20",
+      "quote": "I have you in our calendar for this Saturday.",
       "customer_response": "cooperative",
-      "customer_quote": "Sounds good, boss. Looking forward talking to you soon, man.",
+      "customer_quote": "Can you can you ping me as soon as you're on the way so that I know your ETA,",
       "resistance_reason": "",
-      "rep_followup": "none",
-      "result": "partial"
+      "rep_followup": "persisted",
+      "result": "partial",
+      "parts_done": [
+        "recap",
+        "hour_block",
+        "reconfirm"
+      ],
+      "parts_score": "3/4"
     }
   ],
   "objections": [],
   "primary_coaching_focus": {
-    "topic": "unresolved ownership / decision-maker contradiction",
-    "ts": "05:33",
-    "quote": "Yeah. So it's gonna be me making a decision. I mean, technically, it is my house. So that's why I'm the one that's the decision maker.",
-    "why": "The customer told the rep at 02:03 the home and program would be under his parents' name, then reversed himself here — the rep let the more convenient answer stand without reconciling it, leaving the Saturday appointment structurally exposed to a proposal-stage surprise about who can actually sign."
+    "topic": "Unresolved homeowner/title status going into a booked appointment",
+    "ts": "02:03",
+    "quote": "Yeah. So it's gonna be under my my mom and dad's name.",
+    "why": "The account holder may not be the person on the call; three touches on this topic never produced a clear commitment that the parents will be present Saturday, risking a wasted sit."
   },
   "key_moments": [
     {
-      "ts": "01:12",
-      "quote": "We were gonna go with, you know, Aurora solar or something like that. But, apparently, they just filed bankruptcy. Freedom Pro. Sorry. Freedom Pro.",
+      "ts": "01:16",
+      "quote": "We were gonna go with, you know, Aurora solar or something like that. But, apparently, they just filed bankruptcy.",
       "classification": "prior_contact_probe_miss",
-      "stewart_read": "Customer discloses a prior competitor relationship and its collapse — real competitive intel — but the rep only reacts with sympathy and moves on rather than asking what was shown or promised."
+      "stewart_read": "Customer hands over a rich competitive/emotional data point (a failed solar company) and the rep only offers sympathy before pivoting to a referral pitch."
     },
     {
       "ts": "02:03",
       "quote": "Yeah. So it's gonna be under my my mom and dad's name. I live here with them, so the the entire program will be under their name.",
-      "classification": "spouse_handling",
-      "stewart_read": "This is the adult-child-decision-maker pattern — customer lives with and is acting on behalf of the actual titleholders (parents) — but the rep never secures their presence on the Saturday appointment."
+      "classification": "protocol_violation",
+      "stewart_read": "This is a hard qualifier — program must be in the actual homeowner's name — and the rep never confirms the parents will attend or even be reachable for the appointment."
     },
     {
       "ts": "05:33",
       "quote": "Yeah. So it's gonna be me making a decision. I mean, technically, it is my house. So that's why I'm the one that's the decision maker.",
-      "classification": "spouse_handling",
-      "stewart_read": "This directly contradicts the 02:03 statement that the home and program will be under his parents' name — the rep doesn't reconcile the two statements or clarify who legally needs to be present for the sale to proceed."
+      "classification": "protocol_violation",
+      "stewart_read": "Customer directly contradicts his earlier statement about parents owning the home, and the rep does not reconcile it or insist the actual owners join."
     },
     {
-      "ts": "03:03",
-      "quote": "My last was 1348. Okay. And do you see what you have? I have a Tesla phone. I have a Tesla, so it's gonna be a little bit more.",
-      "classification": "curiosity_creation_failure",
-      "stewart_read": "Customer hands over a usage figure and volunteers he has a Tesla (likely an EV, which increases electric load) — an enthusiasm signal for higher future usage — but the rep only acknowledges with 'Okay. Okay.' and moves to a different qualifying question instead of anchoring on it."
+      "ts": "00:29",
+      "quote": "Yes. So how does the process work and, can you just guide me through it?",
+      "classification": "enthusiasm_signal",
+      "stewart_read": "Customer opens with unsolicited curiosity about the process itself — a strong buying signal the rep should lean into rather than treat as a routine question."
     }
   ],
   "pipeline": {
     "version": "v3.1",
     "prompt_hash": "39bf251eeb6b",
-    "stage3_model": "claude-sonnet-5",
-    "stage4_model": "claude-sonnet-5",
+    "stage3_model": "gpt-5-mini+claude-sonnet-5",
+    "stage4_model": null,
     "batch": true,
-    "run_at": "2026-09-13T19:17:38+00:00",
-    "revision_applied": true
+    "run_at": "2026-09-17T00:06:56+00:00",
+    "layered": {
+      "layer1": "gpt-5-mini",
+      "layer2": "claude-sonnet-5",
+      "status_rule": "derived",
+      "set_rule": "bill_in_hand"
+    },
+    "revision_applied": false
   },
   "quote_verification": {
-    "checked": 48,
-    "verified": 45,
+    "checked": 50,
+    "verified": 50,
     "fuzzy": 0,
-    "wrong_ts": 3,
+    "wrong_ts": 0,
     "not_found": 0
   }
 }
