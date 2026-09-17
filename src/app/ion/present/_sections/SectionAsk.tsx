@@ -8,13 +8,13 @@ import { Bridge } from "../_components/Bridge";
 const PHASES = [
   {
     phase: "Phase 1",
-    title: "Build retainer",
-    price: "$1,500 / week",
+    title: "Build retainer — two tiers",
+    price: "$1,500 / week · calls   ·   $2,000 / week · calls + leads",
     bullets: [
-      "Spencer in the building 1–1.5 days a week, 12–26 weeks",
-      "Your playbook, written with Kenny — the schema is what makes Stewart yours",
-      "Stewart reading your calls in real time",
-      "Daily manager briefs as the reads stabilize",
+      "Calls: every call read — the script, the bill, the objections, the outcome — and the daily briefs",
+      "+ Leads: the money and the result follow the lead, not just the call — what each set rested on, then sit and close per lead once Salesforce is joined",
+      "+ Leads: Stewart sorts leads into buckets by rule — no credit goes to the bucket, not to a rep",
+      "Both: Spencer in the building 1–1.5 days a week, 12–26 weeks; your playbook, written with Kenny",
     ],
     emphasis: true,
   },
