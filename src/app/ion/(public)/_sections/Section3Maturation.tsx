@@ -13,29 +13,29 @@ type Phase = {
 const PHASES: Phase[] = [
   {
     n: 1,
-    title: "Embedded build",
-    pricing: "Weekly build retainer",
-    meta: "weeks 1–12",
+    title: "Setup: integration + calibration",
+    pricing: "One-time setup fee",
+    meta: "weeks 1–6",
     body: [
-      "Spencer is in the building 1–1.5 days per week. Kenny's TBDs get filled. Gray-matter exemplars get tagged. Stewart's reads get sharper week over week.",
-      "Stewart processes your calls in real time. Manager briefs land daily. Quality improves with every schema refinement.",
+      "Five9 and Salesforce connected; lead tracking from the moment a lead comes in to wherever it ends up. Kenny's open schema questions get answered. Five on-site days.",
+      "Stewart processes your calls in real time from the first week. Manager briefs land daily. Go-live is the first Monday every manager opens a brief on the join.",
     ],
     exitTrigger: "the manager-trust threshold (see Phase 2)",
   },
   {
     n: 2,
     title: "Manager-trust threshold crossed",
-    pricing: "Per-team-manager subscription",
+    pricing: "Monthly — $9,000 at six managers",
     body: [
       "Hard cutoff for Phase 1: managers can sit down for a 1-on-1 with any rep, pull up Stewart, and run the coaching with zero prep. Same standard for daily 4-call team trainings.",
       "This is an operator criterion, not a usage metric. You'll feel it when it lands.",
-      "Stewart is no longer in active build. The schema is mature. Spencer steps off the weekly retainer.",
+      "Stewart is no longer in active build. The schema is mature. Three months, then month-to-month.",
     ],
   },
   {
     n: 3,
     title: "Per-rep training, the Ion way",
-    pricing: "Per-rep add-on (stacks on Phase 2 subscription)",
+    pricing: "The upgrade — priced when the managers ask for it",
     body: [
       "Stewart now generates per-rep daily training calibrated to each rep's specific gaps + where they are in their pay-tier stair-step.",
       "Coaching isn't one-size-fits-all — Marcus needs spouse-protocol drills, Holland needs softener discipline, Parker needs scope-creep awareness.",

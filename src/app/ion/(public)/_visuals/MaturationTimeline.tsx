@@ -14,17 +14,17 @@ type Phase = {
 };
 
 const PHASES: Phase[] = [
-  { num: 1, label: "Build retainer", price: "$1,500 / wk", tier: "build" },
+  { num: 1, label: "Setup: integration + calibration", price: "$10,000 one-time", tier: "build" },
   {
     num: 2,
-    label: "Manager-trust crossed",
-    price: "$1,500 / mgr / mo",
+    label: "Managers, running",
+    price: "$9,000 / mo",
     tier: "subscription",
   },
   {
     num: 3,
     label: "Per-rep training",
-    price: "+$125 / rep / mo",
+    price: "priced when managers ask",
     tier: "subscription",
   },
   {

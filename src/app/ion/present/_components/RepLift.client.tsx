@@ -16,8 +16,6 @@ const DEFAULTS = {
   closeRate: 0.25,
   margin: 8000,
 };
-// Phase 3 at full rollout — 35 reps × $125 / month (see /ion/sow).
-const REP_TIER_MONTHLY = 35 * 125;
 
 const money = (n: number) =>
   n.toLocaleString(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
@@ -85,12 +83,9 @@ export function RepLift() {
 
       <div className="px-5 py-5 sm:px-8 border-t border-stewart-border bg-stewart-bg/40">
         <p className="text-base text-stewart-text leading-relaxed">
-          The rep tier at full rollout &mdash; 35 reps &mdash; is{" "}
-          <span className="font-mono font-bold">{money(REP_TIER_MONTHLY)}</span> a month.{" "}
-          <span className="text-stewart-accent font-semibold">
-            {extraMargin > 0 ? `${((REP_TIER_MONTHLY / extraMargin) * 100).toFixed(1)}%` : "—"} of that lift.
-          </span>{" "}
-          And every point of it is on the tape: closes per 1,000, per rep, against their own baseline.
+          The rep tier is the upgrade, priced when the managers ask for it &mdash;{" "}
+          <span className="text-stewart-accent font-semibold">against a lift you&apos;ll already be watching.</span>{" "}
+          Every point of it is on the tape: closes per 1,000, per rep, against their own baseline.
         </p>
       </div>
 

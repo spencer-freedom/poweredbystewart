@@ -59,56 +59,55 @@ function SectionHeading({
 function SectionA() {
   return (
     <section>
-      <SectionHeading letter="A" title="The three-phase pricing ladder" />
+      <SectionHeading letter="A" title="Setup, then monthly" />
 
       <p className="text-stewart-muted leading-relaxed">
-        Stewart&apos;s pricing maps to the value Stewart delivers. You pay
-        weekly while Spencer is embedded and the value is build effort.
-        You pay per-manager once the system is trusted and replacing prep
-        time. You pay per-rep once Stewart is going rep-facing for
-        self-coaching.
+        Two numbers. A one-time setup that connects Stewart to Ion&apos;s
+        systems and calibrates it to Ion&apos;s script with Kenny. Then a
+        monthly that runs it. No weekly retainer &mdash; the script is
+        already instrumented; what&apos;s left is integration and
+        calibration, and those are bounded jobs.
       </p>
 
       <div className="mt-8 space-y-5">
         <PhaseTier
-          phase="Phase 1"
-          title="Build retainer — calls + leads"
-          price="$2,000 / week"
+          phase="Setup"
+          title="Integration + calibration"
+          price="$10,000 one-time"
           bullets={[
-            "Every call read — the script as events, the bill, the objections and what the rep tried, the outcome — and the daily manager briefs as the reads stabilize",
-            "The lead, not just the call: what every set rested on (bill in hand, co-owner, credit), then sit and close per lead once Salesforce is joined, so the money and the result follow the lead",
-            "Leads sorted into buckets by rule — no credit goes to the credit bucket, not to a rep's queue",
-            "Spencer in the building 1–1.5 days per week; schema iteration with Kenny; weekly synthesis call with Kenny + leadership",
-            "Calls only, without lead tracking or sorting: $1,500 / week",
+            "Mechanical integration: Five9 recordings feeding Stewart (two channels, which also fixes speaker separation); Salesforce read access for leads, sets, sits and closes; accounts for six managers and Kenny",
+            "Lead tracking and routing from the moment a lead comes in to wherever it ends up and the path it took — every call on it, every set and what it rested on, sit and close, and the bucket Stewart routed it to",
+            "Calibration: the schema's open questions with Kenny; what-good-looks-like sessions with the managers on the few sections the corpus can't decide; the morning list's weights set by the managers",
+            "Five on-site days, written in",
+            "Go-live is concrete: the first Monday every manager opens a brief with the Salesforce join live",
           ]}
-          cutoff="when managers can sit down with any rep, pull up Stewart, and run a 1-on-1 with zero prep. Same standard for daily 4-call team trainings."
-          duration="12–26 weeks depending on schema velocity."
+          duration="Billed at signing. Typically 3–6 weeks."
         />
 
         <PhaseTier
-          phase="Phase 2"
-          title="Per-team-manager subscription"
-          price="$1,500 / manager / month"
+          phase="Monthly"
+          title="Stewart, running"
+          price="$9,000 / month"
           bullets={[
-            "Stewart access for each team manager, with all their team's reps grouped under their subscription",
-            "Daily 90-second manager briefs continue",
-            "Manager-facing wiki: search any rep, any schema section, any pattern",
-            "Per-rep aggregates and trend reporting",
-            "Ongoing schema refinement (Kenny + Spencer light-touch)",
+            "Every call read: the script as events, the bill, the objections and what the rep tried, the outcome, the coaching beat",
+            "Daily briefs for six managers; the manager surface — today, reps, floor, objections, weights — with the tape one click away",
+            "Lead tracking and routing, live: set strength, sit rate by what the set rested on, buckets by rule (no credit goes to the credit bucket, not to a rep's queue)",
+            "Weekly synthesis call with Kenny; quarterly re-calibration; all model spend included",
+            "A grounding standard in writing: the corpus runs at 98.5% of quoted lines verified against the transcript, and it's checked on every call",
           ]}
-          aside="Ion at full coverage (6 managers): $9,000 / month = $108,000 / year"
+          aside="$1,500 per manager as each is activated; $9,000 at all six. Starts at go-live or day 45 after signing, whichever comes first."
         />
 
         <PhaseTier
-          phase="Phase 3"
-          title="Per-rep tier (stacks on Phase 2)"
-          price="$125 / rep / month"
+          phase="The upgrade"
+          title="Per-rep daily training"
+          price="Priced when the managers ask for it"
           bullets={[
-            "Reps can open Stewart after their own calls for self-coaching",
-            "Per-rep daily training brief calibrated to that rep's gaps + their pay-tier position",
-            "Available once managers have crossed the trust threshold and the rep-facing rollout is scoped",
+            "Reps open Stewart on their own calls: where they went wrong, and what to say instead, from what is actually working on this floor",
+            "\u201cTrain here\u201d is the rep's gap by section; \u201cLearn from\u201d is the teammate who runs it best, with the clip; the objection table is the word track with a number on it",
+            "Closes per 1,000 dials, per rep, against their own baseline — the lift is on the tape before the tier is bought",
+            "Available once managers are believers. If the managers push back, the reps won't buy in; that order is the point",
           ]}
-          aside="Ion at full rollout (35 reps): $9,000 + $4,375 = $13,375 / month = $160,500 / year"
         />
       </div>
     </section>
@@ -190,16 +189,13 @@ function SectionB() {
       />
       <p className="text-stewart-muted leading-relaxed">
         These deepen the value of the engagement after Stewart is
-        established. We&apos;d scope them with you in months 2&ndash;3
-        once you&apos;ve seen Stewart in production.
+        established. As it runs, the managers will ask &ldquo;can it also
+        do this?&rdquo; &mdash; these are the ones we can already see.
+        Scoped and priced when asked.
       </p>
 
       <ul className="mt-6 space-y-3">
         {[
-          {
-            title: "Five9 + Salesforce + lead-source full API integration",
-            body: "Stewart pulls calls and outcomes directly, no manual upload.",
-          },
           {
             title: "Historical 6-month backfill with revenue attribution",
             body: "Stewart processes your full prior corpus and tells you 'you would have recovered $X in the last 6 months if Stewart had been catching these patterns.'",
@@ -231,20 +227,20 @@ function SectionB() {
 function SectionC() {
   const TERMS = [
     {
-      term: "No long-term contract.",
-      body: "Phase 1 is month-to-month. Phases 2–3 are quarterly with 30-day exit.",
+      term: "Three months, then month-to-month.",
+      body: "The monthly runs for an initial three months from go-live, then month-to-month with 30-day exit. A customer who has stopped opening the brief isn't a customer, and a long contract would only make that worse for both of us.",
     },
     {
-      term: "Hard cutoff triggers, not arbitrary contracts.",
-      body: "Spencer steps off the weekly retainer when managers can run zero-prep coaching. Not before. Not later.",
+      term: "The monthly starts when Stewart is live.",
+      body: "Go-live is the first Monday every manager opens a brief with the Salesforce join live, or day 45 after signing, whichever comes first.",
     },
     {
       term: "Data ownership.",
       body: "Your calls, your schema, your wiki — yours. If we part ways, you keep the data structure Stewart built around your floor.",
     },
     {
-      term: "Spencer time discipline.",
-      body: "1–1.5 days per week on-site during build, NO MORE. Spencer's other commitments (UsefulWax + BDC-in-a-Box) are real. Time-bounded engagement protects the work quality.",
+      term: "Five on-site days in setup, then the weekly call.",
+      body: "Spencer's time is written into the setup, not billed by the week. After go-live, the weekly synthesis call with Kenny is where the reads stay Ion's.",
     },
   ];
 
@@ -295,7 +291,7 @@ function SectionE() {
     "Five9 API access (gated on contract signature — we operate on prior export until then)",
     "The four conversion numbers (sets/month, sit%, close%, avg gross per sale) — for honest ROI math",
     "Kenny's red-pen pass on the schema's 22 open TBDs",
-    "1 hour with Kenny per week during build phase",
+    "1 hour with Kenny per week during setup",
   ];
 
   return (
