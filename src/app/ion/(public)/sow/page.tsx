@@ -72,13 +72,14 @@ function SectionA() {
       <div className="mt-8 space-y-5">
         <PhaseTier
           phase="Phase 1"
-          title="Build retainer — two tiers"
-          price="$1,500 / week · calls   —   $2,000 / week · calls + leads"
+          title="Build retainer — calls + leads"
+          price="$2,000 / week"
           bullets={[
-            "Calls: Stewart reads every call — the script as events, the bill, the objections and what the rep tried, the outcome — and the daily manager briefs as the reads stabilize",
-            "Calls + leads: Stewart tracks the lead, not just the call — what every set rested on (bill in hand, co-owner, credit), then sit and close per lead once Salesforce is joined, so the money and the result follow the lead",
-            "Calls + leads: Stewart sorts leads into buckets by rule — no credit goes to the credit bucket, not to a rep's queue",
-            "Both: Spencer in the building 1–1.5 days per week; schema iteration with Kenny; weekly synthesis call with Kenny + leadership",
+            "Every call read — the script as events, the bill, the objections and what the rep tried, the outcome — and the daily manager briefs as the reads stabilize",
+            "The lead, not just the call: what every set rested on (bill in hand, co-owner, credit), then sit and close per lead once Salesforce is joined, so the money and the result follow the lead",
+            "Leads sorted into buckets by rule — no credit goes to the credit bucket, not to a rep's queue",
+            "Spencer in the building 1–1.5 days per week; schema iteration with Kenny; weekly synthesis call with Kenny + leadership",
+            "Calls only, without lead tracking or sorting: $1,500 / week",
           ]}
           cutoff="when managers can sit down with any rep, pull up Stewart, and run a 1-on-1 with zero prep. Same standard for daily 4-call team trainings."
           duration="12–26 weeks depending on schema velocity."
