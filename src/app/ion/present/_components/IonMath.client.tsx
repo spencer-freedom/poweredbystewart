@@ -116,7 +116,7 @@ export function IonMath() {
   );
 }
 
-function Reading({
+export function Reading({
   kicker,
   big,
   small,
@@ -145,7 +145,7 @@ function Reading({
   );
 }
 
-function Field({
+export function Field({
   label,
   value,
   min,

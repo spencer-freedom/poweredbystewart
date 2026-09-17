@@ -14,6 +14,7 @@ import { SectionBillAndObjections } from "./_sections/SectionBillAndObjections";
 import { SectionOneRead } from "./_sections/SectionOneRead";
 import { SectionMorning } from "./_sections/SectionMorning";
 import { SectionMath } from "./_sections/SectionMath";
+import { SectionRepsNext } from "./_sections/SectionRepsNext";
 import { SectionWithWhatIHad } from "./_sections/SectionWithWhatIHad";
 import { SectionAsk } from "./_sections/SectionAsk";
 import { SectionGoDeeper } from "./_sections/SectionGoDeeper";
@@ -48,6 +49,7 @@ const BEATS: Beat[] = [
   { id: "one-read", label: "One read" },
   { id: "morning", label: "The morning" },
   { id: "math", label: "The math" },
+  { id: "reps", label: "The reps" },
   { id: "inputs", label: "What I had" },
   { id: "ask", label: "The ask" },
   { id: "deeper", label: "Go deeper" },
@@ -72,6 +74,7 @@ export default function IonPresentPage() {
       <SectionOneRead />
       <SectionMorning />
       <SectionMath />
+      <SectionRepsNext />
       <SectionWithWhatIHad />
       <SectionAsk />
       <SectionGoDeeper />
