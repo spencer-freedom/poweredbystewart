@@ -759,7 +759,7 @@ function RepObjections({
               <span className="font-semibold text-stewart-text">{OBJ_TYPE_LABEL[o.type] ?? o.type}</span>
               <span className="font-mono">{o.ts}</span>
               {o.blocked_section ? <span>at {SECTIONS.find((s) => s.key === o.blocked_section)?.label ?? o.blocked_section}</span> : null}
-              <span>· {o.attempts} {o.attempts === 1 ? "angle" : "angles"}{o.moves.length ? `: ${o.moves.map((m) => (MOVE_LABEL[m] ?? m).toLowerCase()).join(", ")}` : ""}</span>
+              <span>· {o.attempts} {o.attempts === 1 ? "angle" : "angles"}{o.restates ? ` + said it again ×${o.restates}` : ""}{o.moves.length ? `: ${o.moves.map((m) => (MOVE_LABEL[m] ?? m).toLowerCase()).join(", ")}` : ""}</span>
               <span className={r.booked ? "text-stewart-success" : o.continued ? "text-stewart-warning" : "text-stewart-danger"}>
                 {r.booked ? "· set" : o.continued ? "· script went on, no set" : "· stopped the call"}
               </span>
@@ -857,6 +857,7 @@ function ObjectionsFloor({ rows, reps, minCalls }: { rows: TriageRow[]; reps: { 
                 <th className="text-left px-3 py-2">Rep</th>
                 <th className="text-right px-3 py-2">Objections / call</th>
                 <th className="text-right px-3 py-2">Angles</th>
+                <th className="text-right px-3 py-2 hidden sm:table-cell">Restates</th>
                 <th className="text-right px-3 py-2">Script went on</th>
                 <th className="text-right px-3 py-2">Set</th>
                 <th className="text-left px-3 py-2 hidden sm:table-cell">Move they reach for</th>
@@ -867,12 +868,14 @@ function ObjectionsFloor({ rows, reps, minCalls }: { rows: TriageRow[]; reps: { 
                 const cont = s.byType.reduce((a, t) => a + t.continued, 0);
                 const st = s.byType.reduce((a, t) => a + t.set, 0);
                 const att = s.byType.reduce((a, t) => a + t.attempts, 0);
+                const rst = rows.filter((x) => (x.rep_id || "Unknown") === rep).flatMap((x) => x.objections ?? []).reduce((a, o) => a + (o.restates ?? 0), 0);
                 const top = s.byMove[0];
                 return (
                   <tr key={rep} className="border-t border-stewart-border">
                     <td className="px-3 py-2 font-semibold">{rep}</td>
                     <td className="px-3 py-2 text-right font-mono text-stewart-muted">{(s.total / calls).toFixed(2)}</td>
                     <td className="px-3 py-2 text-right font-mono text-stewart-muted">{(att / s.total).toFixed(1)}</td>
+                    <td className="px-3 py-2 text-right font-mono text-stewart-muted hidden sm:table-cell">{rst}</td>
                     <td className="px-3 py-2 text-right font-mono">{pctOf(cont, s.total)}</td>
                     <td className="px-3 py-2 text-right font-mono text-stewart-success">{pctOf(st, s.total)}</td>
                     <td className="px-3 py-2 text-stewart-muted hidden sm:table-cell">{top ? `${MOVE_LABEL[top.move] ?? top.move} (${top.used})` : "—"}</td>

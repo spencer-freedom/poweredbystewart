@@ -221,6 +221,8 @@ def objection_row(o: dict) -> dict:
         "type": o.get("type") or "other",
         "blocked_section": norm_section(o.get("blocked_section")) if o.get("blocked_section") not in (None, "", "none") else None,
         "attempts": int(o.get("rep_attempts") or 0),
+        "restates": int(o.get("rep_restates") or 0),
+        "kinds": [k for k in (o.get("attempt_kinds") or []) if isinstance(k, str)],
         "moves": [m for m in (o.get("attempt_moves") or []) if isinstance(m, str)],
         "attempt_quotes": [q for q in (o.get("attempt_quotes") or []) if isinstance(q, str)][:4],
         "resolved": bool(o.get("resolved")),

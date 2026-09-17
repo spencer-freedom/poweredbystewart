@@ -18,7 +18,9 @@ export type ObjectionRow = {
   quote: string;
   type: string;
   blocked_section: string | null;
-  attempts: number;
+  attempts: number; // new angles, derived from the moves
+  restates: number; // said it again, decided by the tape
+  kinds: string[]; // angle | restate | concede per attempt
   moves: string[];
   attempt_quotes: string[];
   resolved: boolean;
