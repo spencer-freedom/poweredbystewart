@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { serviceClient } from "@/lib/supabase-server";
+import { requireUser } from "@/lib/require-user";
 import { recomputeKpiForMonth } from "@/lib/kpi";
 import { pushLeadToSheet } from "@/lib/sheets-push";
 
@@ -42,6 +43,8 @@ async function fetchAllRows<T>(
 // ─── GET handler ───────────────────────────────────────────────────────────
 
 export async function GET(req: NextRequest) {
+  const denied = await requireUser();
+  if (denied) return denied;
   const supabase = serviceClient();
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action") || "";
@@ -1746,6 +1749,8 @@ export async function GET(req: NextRequest) {
 // ─── POST handler ──────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
+  const denied = await requireUser();
+  if (denied) return denied;
   const supabase = serviceClient();
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action") || "";
@@ -1847,6 +1852,8 @@ export async function POST(req: NextRequest) {
 // ─── PATCH handler ─────────────────────────────────────────────────────────
 
 export async function PATCH(req: NextRequest) {
+  const denied = await requireUser();
+  if (denied) return denied;
   const supabase = serviceClient();
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action") || "";
@@ -1927,6 +1934,8 @@ export async function PATCH(req: NextRequest) {
 // ─── DELETE handler ────────────────────────────────────────────────────────
 
 export async function DELETE(req: NextRequest) {
+  const denied = await requireUser();
+  if (denied) return denied;
   const supabase = serviceClient();
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action") || "";
