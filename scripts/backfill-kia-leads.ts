@@ -8,7 +8,7 @@
  *
  * Requires env vars (reads from .env.local):
  *   NEXT_PUBLIC_SUPABASE_URL
- *   SUPABASE_SERVICE_KEY (or NEXT_PUBLIC_SUPABASE_ANON_KEY)
+ *   SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SERVICE_KEY)
  */
 
 import { createClient } from "@supabase/supabase-js";
@@ -45,7 +45,7 @@ if (!supabaseUrl && process.env.DATABASE_URL) {
   const match = process.env.DATABASE_URL.match(/db\.([a-z]+)\.supabase\.co/);
   if (match) supabaseUrl = `https://${match[1]}.supabase.co`;
 }
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY || "";
 
 if (!supabaseUrl || !supabaseKey) {
   // Fallback: hardcode the SpencerOS DB (same as usefulwax-v3)

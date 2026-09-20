@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { serviceClient } from "@/lib/supabase-server";
 import { recomputeKpiForMonth } from "@/lib/kpi";
 import { pushLeadToSheet } from "@/lib/sheets-push";
 
 // Server-side Supabase client — uses service key when available
 // Uses placeholder URL at build time to avoid crash; real URL is used at runtime
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
-  process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key"
-);
 
 // Allowed tenants — prevents querying arbitrary data
 const ALLOWED_TENANTS = new Set(["santa_fe_kia", "kia_santa_fe"]);
@@ -46,6 +42,7 @@ async function fetchAllRows<T>(
 // ─── GET handler ───────────────────────────────────────────────────────────
 
 export async function GET(req: NextRequest) {
+  const supabase = serviceClient();
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action") || "";
   const tenantId = searchParams.get("tenant") || "santa_fe_kia";
@@ -1749,6 +1746,7 @@ export async function GET(req: NextRequest) {
 // ─── POST handler ──────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
+  const supabase = serviceClient();
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action") || "";
   const tenantId = searchParams.get("tenant") || "santa_fe_kia";
@@ -1849,6 +1847,7 @@ export async function POST(req: NextRequest) {
 // ─── PATCH handler ─────────────────────────────────────────────────────────
 
 export async function PATCH(req: NextRequest) {
+  const supabase = serviceClient();
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action") || "";
   const tenantId = searchParams.get("tenant") || "santa_fe_kia";
@@ -1928,6 +1927,7 @@ export async function PATCH(req: NextRequest) {
 // ─── DELETE handler ────────────────────────────────────────────────────────
 
 export async function DELETE(req: NextRequest) {
+  const supabase = serviceClient();
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action") || "";
   const tenantId = searchParams.get("tenant") || "santa_fe_kia";

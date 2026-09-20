@@ -1,13 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { serviceClient } from "@/lib/supabase-server";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { generateUnsubToken } from "@/lib/unsub-token";
 
 function getSupabase() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-    process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
-  );
+  return serviceClient();
 }
 
 const ALLOWED_TENANTS = new Set(["sisel"]);

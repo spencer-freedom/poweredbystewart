@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { serviceClient } from "@/lib/supabase-server";
 import { computeKpi, type KpiLeadRow } from "@/lib/kpi";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
-  process.env.SUPABASE_SERVICE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-key"
-);
 
 const ALLOWED_TENANTS = new Set(["santa_fe_kia", "kia_santa_fe"]);
 
@@ -25,6 +21,7 @@ type LeadRow = KpiLeadRow;
 // ─── POST handler ─────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
+  const supabase = serviceClient();
   // Auth check
   if (!checkApiKey(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
