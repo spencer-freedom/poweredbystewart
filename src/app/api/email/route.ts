@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { serviceClient } from "@/lib/supabase-server";
+import { requireUser } from "@/lib/require-user";
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { generateUnsubToken } from "@/lib/unsub-token";
 
@@ -129,6 +130,8 @@ function injectUnsubscribeFooter(html: string, storeAddress: string, email: stri
 // ─── GET ──────────────────────────────────────────────────────────────────────
 
 export async function GET(req: NextRequest) {
+  const denied = await requireUser();
+  if (denied) return denied;
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action") || "";
   const tenantId = searchParams.get("tenant") || "sisel";
@@ -264,6 +267,8 @@ export async function GET(req: NextRequest) {
 // ─── DELETE ──────────────────────────────────────────────────────────────────
 
 export async function DELETE(req: NextRequest) {
+  const denied = await requireUser();
+  if (denied) return denied;
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action") || "";
   const tenantId = searchParams.get("tenant") || "sisel";
@@ -321,6 +326,8 @@ export async function DELETE(req: NextRequest) {
 // ─── POST ─────────────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
+  const denied = await requireUser();
+  if (denied) return denied;
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action") || "";
   const tenantId = searchParams.get("tenant") || "sisel";
@@ -571,6 +578,8 @@ export async function POST(req: NextRequest) {
 // ─── PATCH ────────────────────────────────────────────────────────────────────
 
 export async function PATCH(req: NextRequest) {
+  const denied = await requireUser();
+  if (denied) return denied;
   const { searchParams } = new URL(req.url);
   const action = searchParams.get("action") || "";
   const tenantId = searchParams.get("tenant") || "sisel";
