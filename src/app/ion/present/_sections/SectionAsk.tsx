@@ -35,7 +35,7 @@ const PHASES = [
     price: "When the managers ask for it",
     bullets: [
       "Setters: the daily rep brief, $750 a month per block of five",
-      "Closers: the closer script, priced when the sit channel is known",
+      "Inside closers: their sits are already recorded; priced with the team's headcount",
       "Closes per 1,000 dials, per rep, on the tape before either is bought",
     ],
   },

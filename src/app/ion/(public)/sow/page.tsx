@@ -110,13 +110,13 @@ function SectionA() {
 
         <PhaseTier
           phase="Closers"
-          title="The closer script — after the setters"
-          price="Priced when the sit channel is known"
+          title="The inside closer script — after the setters"
+          price="Priced with the inside team's headcount"
           bullets={[
+            "Inside closers only: their sits are phone or video, so every one is already recorded. The outside teams that visit homes are out of scope",
             "Kenny's closer script is stricter than the setter script — the stricter the script, the more of it becomes events and rules",
-            "Reads every recorded sit the way it reads every setter call: the script as events, the objections and what worked, the outcome",
-            "Depends on how sits are recorded: phone and virtual sits are audio today; in-home sits need a capture path",
-            "Its own calibration, priced with the closer count and the channel mix",
+            "Reads every sit the way it reads every setter call: the script as events, the objections and what worked, the close — and the sit joins back to the set that produced it",
+            "Its own calibration, priced with the inside closer count",
           ]}
         />
       </div>
