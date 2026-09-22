@@ -59,55 +59,64 @@ function SectionHeading({
 function SectionA() {
   return (
     <section>
-      <SectionHeading letter="A" title="Setup, then monthly" />
+      <SectionHeading letter="A" title="Pilot pricing: sign, then monthly" />
 
       <p className="text-stewart-muted leading-relaxed">
-        Two numbers. A one-time setup that connects Stewart to Ion&apos;s
-        systems and calibrates it to Ion&apos;s script with Kenny. Then a
-        monthly that runs it. No weekly retainer &mdash; the script is
-        already instrumented; what&apos;s left is integration and
-        calibration, and those are bounded jobs.
+        Pilot pricing for the first floor. One number to sign, one number a
+        month, and two lines that only turn on when the managers ask for
+        them. Every line is priced so Ion pays less than one purchased lead a
+        day for the whole thing.
       </p>
 
       <div className="mt-8 space-y-5">
         <PhaseTier
-          phase="Setup"
-          title="Integration + calibration"
-          price="$10,000 one-time"
+          phase="Signing"
+          title="Setup + the first month"
+          price="$9,000"
           bullets={[
-            "Mechanical integration: Five9 recordings feeding Stewart (two channels, which also fixes speaker separation); Salesforce read access for leads, sets, sits and closes; accounts for six managers and Kenny",
-            "Lead buckets from day one: the state of every lead after its call — credit DQ, needs the spouse, wants a quote first, roof or trees, hot lead the setter fumbled, set with or without the bill — by rule over the read, on the manager surface. Per call until the Salesforce lead ID ties calls together",
-            "Stewart's existing lead system (built for a dealership floor: source, status, appointment, show, sold) connected to Ion's Salesforce feed",
-            "Calibration: the schema's open questions with Kenny; what-good-looks-like sessions with the managers on the few sections the corpus can't decide; the morning list's weights set by the managers",
-            "Five on-site days, written in",
-            "Go-live is concrete: the first Monday every manager opens a brief with the Salesforce join live",
+            "Setup ($3,000): Five9 recordings and Salesforce connected; lead paths wired and every lead in a bucket; accounts for six team managers, Kenny, and the VP at no charge",
+            "The baseline: every setter's first 35 calls read before your managers' first Monday — so the first one-on-one starts from a number, not a guess",
+            "Calibration with Kenny and the managers: the schema's open questions, what good looks like on the sections the corpus can't decide, the morning list's weights",
+            "The first month of service ($6,000), starting at go-live — the Monday the briefs land, or day 45 after signing, whichever comes first",
           ]}
-          duration="Billed at signing. Typically 3–6 weeks."
+          duration="Pilot pricing for the first floor. Typically live in 3–6 weeks."
         />
 
         <PhaseTier
           phase="Monthly"
-          title="Stewart, running"
-          price="$9,000 / month"
+          title="Managers, running"
+          price="$6,000 / month"
           bullets={[
-            "Every call read: the script as events, the bill, the objections and what the rep tried, the outcome, the coaching beat",
-            "Daily briefs for six managers; the manager surface — today, reps, floor, objections, weights — with the tape one click away",
-            "Lead buckets live on every call, and sit rate by what each set rested on once the join is in — the report Ion has never been able to pull",
-            "Weekly synthesis call with Kenny; quarterly re-calibration; all model spend included",
-            "A grounding standard in writing: the corpus runs at 98.5% of quoted lines verified against the transcript, and it's checked on every call",
+            "Base ($3,000): the platform — the floor and GM view, every lead in a bucket, the objection tables, the funnel; every call read, model spend included",
+            "Per team manager ($500 × 6): the daily brief, the rep view with train-here and learn-from, objections per rep, the tape one click away",
+            "The weekly synthesis call with Kenny; quarterly re-calibration; a grounding standard in writing (98.5% of quoted lines verified against the transcript, checked on every call)",
+            "Three months, then month-to-month with 30-day exit",
           ]}
-          aside="$1,500 per manager as each is activated; $9,000 at all six. Starts at go-live or day 45 after signing, whichever comes first."
+          aside="$3,000 base + $500 per team manager. Managers added or removed as the floor changes."
         />
 
         <PhaseTier
-          phase="The upgrade"
-          title="Per-rep daily training"
-          price="Priced when the managers ask for it"
+          phase="Setters"
+          title="The rep brief — when the managers ask for it"
+          price="$3,000 once + $750 / month per block of 5 setters"
           bullets={[
             "Reps open Stewart on their own calls: where they went wrong, and what to say instead, from what is actually working on this floor",
             "\u201cTrain here\u201d is the rep's gap by section; \u201cLearn from\u201d is the teammate who runs it best, with the clip; the objection table is the word track with a number on it",
-            "Closes per 1,000 dials, per rep, against their own baseline — the lift is on the tape before the tier is bought",
-            "Available once managers are believers. If the managers push back, the reps won't buy in; that order is the point",
+            "Closes per 1,000 dials, per rep, against the baseline from the manager phase — the lift is on the tape before this line is bought",
+            "Blocks of five, so headcount changes don't become invoice disputes. 35 setters = 7 blocks = $5,250 / month",
+          ]}
+          aside="The $3,000 covers the rep portal, rep accounts, and the rollout with the managers. Managers first; once they're believers, the reps follow."
+        />
+
+        <PhaseTier
+          phase="Closers"
+          title="The closer script — after the setters"
+          price="Priced when the sit channel is known"
+          bullets={[
+            "Kenny's closer script is stricter than the setter script — the stricter the script, the more of it becomes events and rules",
+            "Reads every recorded sit the way it reads every setter call: the script as events, the objections and what worked, the outcome",
+            "Depends on how sits are recorded: phone and virtual sits are audio today; in-home sits need a capture path",
+            "Its own calibration, priced with the closer count and the channel mix",
           ]}
         />
       </div>
@@ -236,8 +245,12 @@ function SectionC() {
       body: "The monthly runs for an initial three months from go-live, then month-to-month with 30-day exit. A customer who has stopped opening the brief isn't a customer, and a long contract would only make that worse for both of us.",
     },
     {
-      term: "The monthly starts when Stewart is live.",
-      body: "Go-live is the first Monday every manager opens a brief with the Salesforce join live, or day 45 after signing, whichever comes first.",
+      term: "The meter starts when Stewart is live.",
+      body: "Signing covers setup and the first month of service. The first month starts at go-live — the Monday every manager opens a brief with the Salesforce join live — or day 45 after signing, whichever comes first.",
+    },
+    {
+      term: "Pilot pricing.",
+      body: "The setup fee is priced for the first floor, because most of the build already exists. It is not the setup fee for the second floor.",
     },
     {
       term: "Data ownership.",

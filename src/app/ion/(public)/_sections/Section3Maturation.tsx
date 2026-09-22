@@ -14,7 +14,7 @@ const PHASES: Phase[] = [
   {
     n: 1,
     title: "Setup: integration + calibration",
-    pricing: "One-time setup fee",
+    pricing: "$9,000 at signing: setup + the first month",
     meta: "weeks 1–6",
     body: [
       "Five9 and Salesforce connected; lead tracking from the moment a lead comes in to wherever it ends up. Kenny's open schema questions get answered. Five on-site days.",
@@ -25,7 +25,7 @@ const PHASES: Phase[] = [
   {
     n: 2,
     title: "Manager-trust threshold crossed",
-    pricing: "Monthly — $9,000 at six managers",
+    pricing: "$6,000 / month — $3,000 base + $500 per team manager",
     body: [
       "Hard cutoff for Phase 1: managers can sit down for a 1-on-1 with any rep, pull up Stewart, and run the coaching with zero prep. Same standard for daily 4-call team trainings.",
       "This is an operator criterion, not a usage metric. You'll feel it when it lands.",
@@ -35,7 +35,7 @@ const PHASES: Phase[] = [
   {
     n: 3,
     title: "Per-rep training, the Ion way",
-    pricing: "The upgrade — priced when the managers ask for it",
+    pricing: "$3,000 once + $750 / month per block of 5 setters — when the managers ask",
     body: [
       "Stewart now generates per-rep daily training calibrated to each rep's specific gaps + where they are in their pay-tier stair-step.",
       "Coaching isn't one-size-fits-all — Marcus needs spouse-protocol drills, Holland needs softener discipline, Parker needs scope-creep awareness.",

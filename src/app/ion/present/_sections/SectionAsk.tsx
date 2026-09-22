@@ -7,36 +7,36 @@ import { Bridge } from "../_components/Bridge";
 
 const PHASES = [
   {
-    phase: "Setup",
-    title: "Integration + calibration",
-    price: "$10,000 one-time",
+    phase: "Signing",
+    title: "Setup + the first month",
+    price: "$9,000",
     bullets: [
-      "Five9 and Salesforce connected: every call, every lead, sit and close",
-      "Every lead in a bucket from day one — credit DQ, needs the spouse, quote first, fumbled hot — by rule over the read",
-      "Calibrated to your script with Kenny and the managers; five on-site days",
-      "Live the first Monday every manager opens a brief on the join",
+      "Five9 and Salesforce connected; every lead in a bucket from day one",
+      "Every setter's first 35 calls read before your managers' first Monday",
+      "Six managers, Kenny, and the VP on the platform; calibrated to your script",
+      "The first month of service starts at go-live",
     ],
     emphasis: true,
   },
   {
     phase: "Monthly",
-    title: "Stewart, running",
-    price: "$9,000 / month",
+    title: "Managers, running",
+    price: "$6,000 / month",
     bullets: [
-      "Every call read; daily briefs and the manager surface for six managers",
-      "Lead buckets live, and sit rate by what each set rested on once Salesforce is joined",
-      "Weekly call with Kenny, quarterly re-calibration, model spend included",
+      "$3,000 base: the floor and GM view, leads, objections, every call read",
+      "$500 per team manager: the daily brief, the rep view, the tape",
+      "Weekly call with Kenny; quarterly re-calibration; model spend included",
       "Three months, then month-to-month",
     ],
   },
   {
-    phase: "The upgrade",
-    title: "Per-rep daily training",
+    phase: "Then",
+    title: "Setters, and closers after",
     price: "When the managers ask for it",
     bullets: [
-      "Reps open Stewart on their own calls: the gap, the teammate's clip, the word track that works",
-      "Closes per 1,000 dials, per rep, on the tape before the tier is bought",
-      "Managers first. Once they're believers, the reps follow",
+      "Setters: the daily rep brief, $750 a month per block of five",
+      "Closers: the closer script, priced when the sit channel is known",
+      "Closes per 1,000 dials, per rep, on the tape before either is bought",
     ],
   },
 ];

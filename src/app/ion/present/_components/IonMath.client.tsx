@@ -15,8 +15,8 @@ const DEFAULTS = {
   margin: 8000,
 };
 const WEEKS_PER_MONTH = 4;
-// Phase 2 at full coverage — 6 managers × $1,500 / month (see /ion/sow).
-const STEWART_MONTHLY = 9000;
+// Managers running — $3,000 base + 6 × $500 (see /ion/sow).
+const STEWART_MONTHLY = 6000;
 
 const money = (n: number) =>
   n.toLocaleString(undefined, {
