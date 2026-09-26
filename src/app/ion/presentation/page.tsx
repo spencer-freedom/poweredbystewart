@@ -2,6 +2,7 @@ import { HashHighlight } from "../present/_components/HashHighlight.client";
 import { ProgressRail, type Beat } from "../present/_components/ProgressRail.client";
 import { HeroDirect } from "./_sections/HeroDirect";
 import { SectionYourScript } from "./_sections/SectionYourScript";
+import { SectionMisses } from "./_sections/SectionMisses";
 import { SectionOneRead } from "../present/_sections/SectionOneRead";
 import { SectionAllCalls } from "../present/_sections/SectionAllCalls";
 import { SectionScriptFloor } from "../present/_sections/SectionScriptFloor";
@@ -25,7 +26,8 @@ export const dynamic = "force-dynamic";
 const BEATS: Beat[] = [
   { id: "hero", label: "Stewart" },
   { id: "script", label: "Your script" },
-  { id: "one-read", label: "One call" },
+  { id: "one-read", label: "One call, right" },
+  { id: "misses", label: "Where it goes wrong" },
   { id: "all-calls", label: "All calls" },
   { id: "floor", label: "Where it leaks" },
   { id: "bill", label: "The bill" },
@@ -45,8 +47,14 @@ export default function IonPresentationPage() {
       <ProgressRail beats={BEATS} />
       <HeroDirect />
       <SectionYourScript />
-      <SectionOneRead bridge="Here's one call, read against it. Every number after this is built from reads like this one." />
-      <SectionAllCalls bridge="That was one call. Stewart read all of them the same way — nobody picked." />
+      <SectionOneRead
+        callId="30000547525"
+        rep="Carter"
+        title="One call, done right, read all the way through."
+        bridge="Here's a call where the script ran — twelve of thirteen sections, two objections handled, bill in hand. Read against your script, every claim on the tape."
+      />
+      <SectionMisses />
+      <SectionAllCalls bridge="One call done right, four that weren't. Stewart read all of them the same way — nobody picked." />
       <SectionScriptFloor bridge="So here's your script across the whole floor, and by rep. Counts, not opinions." />
       <SectionBillAndObjections bridge="Two more things nobody at Ion has been able to count. Same calls." />
       <SectionMorning bridge="Your managers don't read 300 of those. They open this." />

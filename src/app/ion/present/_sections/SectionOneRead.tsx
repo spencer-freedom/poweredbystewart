@@ -8,8 +8,8 @@ import { loadCallJson, loadCorpusStats } from "../_lib/corpus";
 // (public/ion/calls/20000555055-*.json), so it always matches what the
 // manager surface and the call drawer show; nothing here is hand-copied.
 
-const CALL_ID = "20000555055";
-const REP = "Carter";
+const DEFAULT_CALL_ID = "20000555055";
+const DEFAULT_REP = "Carter";
 const CLIP_LEAD = 5;
 const CLIP_LEN = 20;
 
@@ -48,7 +48,14 @@ const tsToSeconds = (ts: string) => {
 const humanize = (k: string) =>
   k.replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase());
 
-export async function SectionOneRead({ bridge }: { bridge?: React.ReactNode } = {}) {
+export async function SectionOneRead({
+  bridge,
+  callId = DEFAULT_CALL_ID,
+  rep = DEFAULT_REP,
+  title,
+}: { bridge?: React.ReactNode; callId?: string; rep?: string; title?: string } = {}) {
+  const CALL_ID = callId;
+  const REP = rep;
   const [brief, picks, critic, stats] = await Promise.all([
     loadCallJson<Brief>(CALL_ID, "manager-brief"),
     loadCallJson<Pick[]>(CALL_ID, "cherrypicks"),
@@ -74,9 +81,7 @@ export async function SectionOneRead({ bridge }: { bridge?: React.ReactNode } = 
           You heard three moments from {REP}&apos;s call. Here&apos;s what Stewart
           handed his manager.
         </>)}</Bridge>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
-          One call, read all the way through.
-        </h2>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">{title ?? "One call, read all the way through."}</h2>
 
         <div className="mt-10 rounded-xl border border-stewart-border bg-stewart-card">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-stewart-border px-5 py-4 sm:px-6">
@@ -213,7 +218,8 @@ export async function SectionOneRead({ bridge }: { bridge?: React.ReactNode } = 
 
         {/* The transcript can be wrong too — and this call proved it. Ties to
             /ion/listen so anyone can hear the two moments themselves. */}
-        <div className="mt-6 rounded-xl border border-stewart-border bg-stewart-card p-5 sm:p-6">
+        {CALL_ID === DEFAULT_CALL_ID ? (
+<div className="mt-6 rounded-xl border border-stewart-border bg-stewart-card p-5 sm:p-6">
           <p className="text-xs uppercase tracking-[0.2em] font-semibold text-stewart-muted mb-2">
             And sometimes the transcript is the one that&apos;s wrong
           </p>
@@ -230,6 +236,7 @@ export async function SectionOneRead({ bridge }: { bridge?: React.ReactNode } = 
             <AudioClip callId={CALL_ID} startSec={130} endSec={150} label="02:15 — the credit question" />
           </div>
         </div>
+) : null}
 
         <p className="mt-8 text-sm text-stewart-muted">
           Every one of the {stats?.calls ?? 300} has this.{" "}
