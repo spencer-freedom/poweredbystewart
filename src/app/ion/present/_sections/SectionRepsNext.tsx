@@ -23,17 +23,17 @@ const STEPS = [
   },
 ];
 
-export function SectionRepsNext() {
+export function SectionRepsNext({ bridge }: { bridge?: React.ReactNode } = {}) {
   return (
     <section
       id="reps"
       className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-24 border-b border-white/10 scroll-mt-20"
     >
       <div className="max-w-3xl w-full">
-        <Bridge>
+        <Bridge>{bridge ?? (<>
           That was the manager math. The bigger number is one step further, and
           the order matters.
-        </Bridge>
+        </>)}</Bridge>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
           Managers coach four calls a day. A rep can learn from every one.
         </h2>

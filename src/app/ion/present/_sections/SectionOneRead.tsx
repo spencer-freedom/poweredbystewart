@@ -48,7 +48,7 @@ const tsToSeconds = (ts: string) => {
 const humanize = (k: string) =>
   k.replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase());
 
-export async function SectionOneRead() {
+export async function SectionOneRead({ bridge }: { bridge?: React.ReactNode } = {}) {
   const [brief, picks, critic, stats] = await Promise.all([
     loadCallJson<Brief>(CALL_ID, "manager-brief"),
     loadCallJson<Pick[]>(CALL_ID, "cherrypicks"),
@@ -70,10 +70,10 @@ export async function SectionOneRead() {
       className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-24 border-b border-white/10 scroll-mt-20"
     >
       <div className="max-w-3xl w-full">
-        <Bridge>
+        <Bridge>{bridge ?? (<>
           You heard three moments from {REP}&apos;s call. Here&apos;s what Stewart
           handed his manager.
-        </Bridge>
+        </>)}</Bridge>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
           One call, read all the way through.
         </h2>

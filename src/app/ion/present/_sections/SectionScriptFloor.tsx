@@ -8,7 +8,7 @@ import { ScriptFunnel } from "../_components/ScriptFunnel.client";
 // per section, did the rep run it; and the two anchors the whole pitch is
 // built on — was the bill used, was the reason used.
 
-export async function SectionScriptFloor() {
+export async function SectionScriptFloor({ bridge }: { bridge?: React.ReactNode } = {}) {
   const s = await loadCorpusStats();
   if (!s) return null;
   const rows = SCRIPT_SECTIONS.map((sec) => {
@@ -31,10 +31,10 @@ export async function SectionScriptFloor() {
       className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-24 border-b border-white/10 scroll-mt-20"
     >
       <div className="max-w-4xl w-full">
-        <Bridge>
+        <Bridge>{bridge ?? (<>
           Here&apos;s what all {s.calls} look like against the script your floor
           runs. Nobody told Stewart what to find &mdash; these are counts.
-        </Bridge>
+        </>)}</Bridge>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
           Your script, across the floor.
         </h2>

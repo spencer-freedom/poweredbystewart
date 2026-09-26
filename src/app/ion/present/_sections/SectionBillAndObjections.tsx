@@ -9,7 +9,7 @@ import { loadCorpusStats } from "../_lib/corpus";
 
 const pct = (r: number | null | undefined) => (r === null || r === undefined ? "–" : `${Math.round(r * 100)}%`);
 
-export async function SectionBillAndObjections() {
+export async function SectionBillAndObjections({ bridge }: { bridge?: React.ReactNode } = {}) {
   const s = await loadCorpusStats();
   if (!s?.bill_document || !s.adherence_vs_outcome || !s.objections) return null;
   const A = s.adherence_vs_outcome.anchors;
@@ -24,9 +24,9 @@ export async function SectionBillAndObjections() {
       className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-24 border-b border-white/10 scroll-mt-20"
     >
       <div className="max-w-4xl w-full">
-        <Bridge>
+        <Bridge>{bridge ?? (<>
           Two more things nobody at Ion has ever been able to count. Same {s.calls} calls.
-        </Bridge>
+        </>)}</Bridge>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
           The bill, and the fight for it.
         </h2>

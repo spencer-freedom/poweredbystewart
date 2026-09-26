@@ -40,9 +40,11 @@ const UNLOCKS = [
 export async function SectionWithWhatIHad({
   moments = 2047,
   sections = 108,
+  bridge,
 }: {
   moments?: number;
   sections?: number;
+  bridge?: React.ReactNode;
 }) {
   // The counts read from the published corpus, so a re-run moves this beat too.
   const corpus = await loadCorpusStats();
@@ -55,10 +57,10 @@ export async function SectionWithWhatIHad({
       className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-24 border-b border-white/10 scroll-mt-20"
     >
       <div className="max-w-5xl w-full">
-        <Bridge>
+        <Bridge>{bridge ?? (<>
           Everything you just scrolled through was built from a folder of
           recordings and a script. That&apos;s worth being clear about.
-        </Bridge>
+        </>)}</Bridge>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
           What I had. What the connection unlocks.
         </h2>

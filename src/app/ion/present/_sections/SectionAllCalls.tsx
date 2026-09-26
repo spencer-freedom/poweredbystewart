@@ -8,7 +8,7 @@ import { Bridge } from "../_components/Bridge";
 // uses; if it isn't on disk, degrade to a link rather than break the
 // scroll.
 
-export async function SectionAllCalls() {
+export async function SectionAllCalls({ bridge }: { bridge?: React.ReactNode } = {}) {
   let payload = null;
   try {
     payload = await loadBrainV2();
@@ -22,10 +22,10 @@ export async function SectionAllCalls() {
       className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-24 border-b border-white/10 scroll-mt-20"
     >
       <div className="max-w-5xl w-full">
-        <Bridge>
+        <Bridge>{bridge ?? (<>
           Those were three calls, picked by hand. Stewart doesn&apos;t pick
           by hand.
-        </Bridge>
+        </>)}</Bridge>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
           Stewart read all {payload?.stats.calls_total ?? 300}.
         </h2>

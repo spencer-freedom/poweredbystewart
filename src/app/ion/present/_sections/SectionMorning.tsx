@@ -5,16 +5,16 @@ import { Bridge } from "../_components/Bridge";
 // phone). Four real calls, one line each on why, a 15–35 second clip
 // instead of a 5–21 minute call, mark it coached.
 
-export function SectionMorning() {
+export function SectionMorning({ bridge }: { bridge?: React.ReactNode } = {}) {
   return (
     <section
       id="morning"
       className="relative bg-black min-h-[100svh] flex items-center justify-center px-6 py-24 border-b border-white/10 scroll-mt-20"
     >
       <div className="max-w-5xl w-full">
-        <Bridge>
+        <Bridge>{bridge ?? (<>
           Your managers don&apos;t read 300 of those. They open this.
-        </Bridge>
+        </>)}</Bridge>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stewart-text leading-tight">
           What a manager opens in the morning.
         </h2>
