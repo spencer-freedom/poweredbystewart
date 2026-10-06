@@ -350,7 +350,14 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
                 <h2 className="mt-2 text-xl sm:text-2xl font-bold">&ldquo;{OBJ_LABEL[beyond.type] ?? beyond.type}&rdquo; came up {beyond.total} times on this floor. Here&apos;s who gets past it, and how.</h2>
                 <div className="mt-4 grid md:grid-cols-2 gap-4">
                   <div className="rounded-lg border border-stewart-border bg-stewart-bg/60 p-4">
-                    <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-2">By rep &middot; faced &middot; angles per &middot; script went on &middot; set</p>
+                    <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-1">By rep</p>
+                    <div className="flex items-baseline gap-2 text-[10px] uppercase tracking-wider text-stewart-muted border-b border-stewart-border pb-1 mb-1">
+                      <span className="flex-1">rep</span>
+                      <span className="w-6 text-right">faced</span>
+                      <span className="w-8 text-right">angles</span>
+                      <span className="w-12 text-right">went on</span>
+                      <span className="w-12 text-right">set</span>
+                    </div>
                     <ul className="text-sm space-y-1">
                       {beyond.reps.slice(0, 8).map((r) => (
                         <li key={r.rep} className={"flex items-baseline gap-2 " + (r.rep === read.rep ? "text-stewart-warning" : "")}>
@@ -362,7 +369,12 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
                         </li>
                       ))}
                     </ul>
-                    <p className="mt-3 text-[11px] uppercase tracking-wider text-stewart-muted mb-1">By move &middot; used &middot; set</p>
+                    <p className="mt-4 text-[11px] uppercase tracking-wider text-stewart-muted mb-1">By move</p>
+                    <div className="flex items-baseline gap-2 text-[10px] uppercase tracking-wider text-stewart-muted border-b border-stewart-border pb-1 mb-1">
+                      <span className="flex-1">move the rep made</span>
+                      <span className="w-8 text-right">used</span>
+                      <span className="w-12 text-right">set</span>
+                    </div>
                     <ul className="text-sm space-y-1">
                       {Object.entries(floor.byType[beyond.type] ?? {}).filter(([, v]) => v.used >= 3).sort((a, b) => b[1].set / b[1].used - a[1].set / a[1].used).map(([m, v]) => (
                         <li key={m} className="flex items-baseline gap-2"><span className="flex-1">{MOVE_LABEL[m] ?? m}</span><span className="font-mono text-stewart-muted w-8 text-right">{v.used}</span><span className="font-mono w-12 text-right text-stewart-success">{pct(v.set, v.used)}</span></li>
