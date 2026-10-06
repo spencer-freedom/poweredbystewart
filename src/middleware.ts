@@ -19,7 +19,7 @@ const isIon = createRouteMatcher(["/ion(.*)", "/api/ion(.*)"]);
 //   - the cloned-voice route only for the exact lines on the page, so the
 //     voices can't be made to say anything else.
 const norm = (t: string) => t.replace(/\s+/g, " ").trim();
-const ALT_LINES = new Set(Object.values(SHOWCASE).map((s) => norm(s.miss.text)));
+const ALT_LINES = new Set(Object.values(SHOWCASE).flatMap((s) => s.misses.map((m) => norm(m.text))));
 function isPublicDemo(req: { nextUrl: URL }): boolean {
   const { pathname, searchParams } = req.nextUrl;
   if (pathname === "/ion/call") return true;

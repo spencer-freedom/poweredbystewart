@@ -106,8 +106,9 @@ export default async function IonCallPage({ searchParams }: { searchParams: Prom
   }
   const show = SHOWCASE[callId];
   let beyondData: Beyond | null = null;
-  if (show?.level === 3 && show.miss.kind === "objection") {
-    const o = (brief.objections ?? []).find((x) => x.ts === show.miss.ts);
+  const objPart = show?.level === 3 ? show.misses.find((m) => m.kind === "objection") : null;
+  if (objPart) {
+    const o = (brief.objections ?? []).find((x) => x.ts === objPart.ts);
     if (o) beyondData = beyond(index?.calls ?? [], o.type, callId);
   }
   // Keyed by call so switching calls resets every player and selection — nothing auto-plays on arrival.

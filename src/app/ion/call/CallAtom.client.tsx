@@ -130,10 +130,14 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
   const pick = (n: Node) => { setSelected(n.id); seek(n.ts); };
   const sel = nodes.find((n) => n.id === selected) ?? null;
   const show = SHOWCASE[read.callId] ?? null;
-  const missObj = show?.miss.kind === "objection" ? objections.find((o) => o.ts === show.miss.ts) ?? null : null;
-  const missPick = show ? read.picks.find((pk) => pk.ts === show.miss.ts) ?? null : null;
-  const missSec = show ? sec(show.miss.ts) ?? 0 : 0;
   const winSec = show ? sec(show.win.ts) ?? 0 : 0;
+  const parts = (show?.misses ?? []).map((m) => ({
+    m,
+    obj: m.kind === "objection" ? objections.find((o) => o.ts === m.ts) ?? null : null,
+    pick: read.picks.find((pk) => pk.ts === m.ts) ?? null,
+    at: sec(m.ts) ?? 0,
+  }));
+  const beyondObj = parts.find((pt) => pt.obj)?.obj ?? null;
 
   const pos = (n: Node) => { const a = (n.angle * Math.PI) / 180; return { x: Math.cos(a) * n.r, y: Math.sin(a) * n.r }; };
 
@@ -303,40 +307,44 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
               <div className="mt-3"><AudioClip callId={read.callId} startSec={Math.max(0, winSec - 4)} endSec={winSec + 26} label={`Play ${show.win.ts}`} /></div>
             </div>
 
-            <div className="mt-6 rounded-xl border border-stewart-accent/40 bg-stewart-accent/5 p-5">
-              <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-accent">The moment the one-on-one is about</p>
-              <h2 className="mt-2 text-xl sm:text-2xl font-bold">{show.miss.title}</h2>
-              <p className="mt-2 text-sm text-stewart-muted leading-relaxed">{show.miss.why}</p>
-              <div className={"mt-4 grid gap-4 " + (show.level >= 2 ? "md:grid-cols-2" : "")}>
-                <div className="rounded-lg border border-stewart-border bg-stewart-bg/60 p-4">
-                  <p className="text-[11px] uppercase tracking-wider text-stewart-muted">What {read.rep} said</p>
-                  {missObj ? (
-                    <>
-                      <p className="mt-1 text-sm">customer: &ldquo;{missObj.quote}&rdquo;</p>
-                      {missObj.attempt_quotes?.map((q, i) => <p key={i} className="mt-1 text-sm">{read.rep}: &ldquo;{q}&rdquo; <span className="text-xs text-stewart-muted">({MOVE_LABEL[missObj.attempt_moves?.[i] ?? ""] ?? ""})</span></p>)}
-                    </>
-                  ) : missPick ? (
-                    <>
-                      <p className="mt-1 text-sm">&ldquo;{missPick.quote}&rdquo; <span className="font-mono text-xs text-stewart-muted">{missPick.ts}</span></p>
-                      <p className="mt-1 text-xs text-stewart-muted leading-relaxed">{missPick.stewart_read}</p>
-                    </>
-                  ) : null}
-                  <div className="mt-3"><AudioClip callId={read.callId} startSec={show.miss.clip?.start ?? Math.max(0, missSec - 4)} endSec={show.miss.clip?.end ?? missSec + 26} label="Play what happened" /></div>
-                  {missObj ? <FloorLine type={missObj.type} moves={missObj.attempt_moves ?? []} floor={floor} /> : null}
-                  <p className="mt-3 text-xs text-stewart-muted leading-relaxed"><span className="uppercase tracking-wider text-[10px]">On this floor</span><br />{show.miss.floor}</p>
-                </div>
-                {show.level >= 2 ? (
-                  <div className="rounded-lg border-2 bg-stewart-bg/60 p-4" style={{ borderColor: "#a78bfa", boxShadow: "0 0 0 1px rgba(167,139,250,0.35), 0 0 24px rgba(167,139,250,0.25)" }}>
-                    <p className="text-[11px] uppercase tracking-wider font-semibold" style={{ color: "#a78bfa" }}>What it could have sounded like</p>
-                    <p className="mt-1 text-sm">{read.rep}: &ldquo;{show.miss.text}&rdquo;</p>
-                    <p className="mt-1 text-[11px] text-stewart-warning">Synthetic coaching example. {read.rep} never said this &mdash; it is a suggested line rendered in a cloned voice.</p>
-                    <div className="mt-3"><AltTake rep={read.rep} text={show.miss.text} label={`Hear it in ${read.rep}\u2019s voice`} /></div>
+            {parts.map(({ m, obj, pick, at }, pi) => (
+              <div key={m.ts} className="mt-6 rounded-xl border border-stewart-accent/40 bg-stewart-accent/5 p-5">
+                <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-accent">{parts.length > 1 ? `The one-on-one, part ${pi + 1} of ${parts.length}` : "The moment the one-on-one is about"}</p>
+                <h2 className="mt-2 text-xl sm:text-2xl font-bold">{m.title}</h2>
+                <p className="mt-2 text-sm text-stewart-muted leading-relaxed">{m.why}</p>
+                <div className={"mt-4 grid gap-4 " + (show.level >= 2 ? "md:grid-cols-2" : "")}>
+                  <div className="rounded-lg border border-stewart-border bg-stewart-bg/60 p-4">
+                    <p className="text-[11px] uppercase tracking-wider text-stewart-muted">What {read.rep} said</p>
+                    {m.said ? (
+                      m.said.map((ln, i) => <p key={i} className="mt-1 text-sm">{ln.who === "rep" ? read.rep : "customer"}: &ldquo;{ln.line}&rdquo;</p>)
+                    ) : obj ? (
+                      <>
+                        <p className="mt-1 text-sm">customer: &ldquo;{obj.quote}&rdquo;</p>
+                        {obj.attempt_quotes?.map((q, i) => <p key={i} className="mt-1 text-sm">{read.rep}: &ldquo;{q}&rdquo; <span className="text-xs text-stewart-muted">({MOVE_LABEL[obj.attempt_moves?.[i] ?? ""] ?? ""})</span></p>)}
+                      </>
+                    ) : pick ? (
+                      <>
+                        <p className="mt-1 text-sm">&ldquo;{pick.quote}&rdquo; <span className="font-mono text-xs text-stewart-muted">{pick.ts}</span></p>
+                        <p className="mt-1 text-xs text-stewart-muted leading-relaxed">{pick.stewart_read}</p>
+                      </>
+                    ) : null}
+                    <div className="mt-3"><AudioClip callId={read.callId} startSec={m.clip?.start ?? Math.max(0, at - 4)} endSec={m.clip?.end ?? at + 26} label="Play what happened" /></div>
+                    {obj ? <FloorLine type={obj.type} moves={obj.attempt_moves ?? []} floor={floor} /> : null}
+                    <p className="mt-3 text-xs text-stewart-muted leading-relaxed"><span className="uppercase tracking-wider text-[10px]">On this floor</span><br />{m.floor}</p>
                   </div>
-                ) : null}
+                  {show.level >= 2 ? (
+                    <div className="rounded-lg border-2 bg-stewart-bg/60 p-4" style={{ borderColor: "#a78bfa", boxShadow: "0 0 0 1px rgba(167,139,250,0.35), 0 0 24px rgba(167,139,250,0.25)" }}>
+                      <p className="text-[11px] uppercase tracking-wider font-semibold" style={{ color: "#a78bfa" }}>What it could have sounded like</p>
+                      <p className="mt-1 text-sm">{read.rep}: &ldquo;{m.text}&rdquo;</p>
+                      <p className="mt-1 text-[11px] text-stewart-warning">Synthetic coaching example. {read.rep} never said this &mdash; it is a suggested line rendered in a cloned voice.</p>
+                      <div className="mt-3"><AltTake rep={read.rep ?? ""} text={m.text} label={`Hear it in ${read.rep}\u2019s voice`} /></div>
+                    </div>
+                  ) : null}
+                </div>
               </div>
-            </div>
+            ))}
 
-            {show.level === 3 && beyond && missObj ? (
+            {show.level === 3 && beyond && beyondObj ? (
               <div className="mt-6 rounded-xl border border-stewart-warning/40 bg-stewart-warning/5 p-5">
                 <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-warning">Beyond this call</p>
                 <h2 className="mt-2 text-xl sm:text-2xl font-bold">&ldquo;{OBJ_LABEL[beyond.type] ?? beyond.type}&rdquo; came up {beyond.total} times on this floor. Here&apos;s who gets past it, and how.</h2>
