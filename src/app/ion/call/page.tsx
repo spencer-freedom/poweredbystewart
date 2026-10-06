@@ -1,6 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { CallAtom, type CallRead, type FloorMoves } from "./CallAtom.client";
+import { CallAtom, type CallRead, type FloorMoves, type Tab } from "./CallAtom.client";
+import { SHOWCASE, SHOWCASE_ORDER } from "./showcase";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,7 @@ export const dynamic = "force-dynamic";
 // read is produced. Default call is the best "script ran" call in the
 // corpus; ?id= opens another.
 
-const DEFAULT_CALL = "30000547525";
+const DEFAULT_CALL = SHOWCASE_ORDER[0];
 const ION = () => path.join(process.cwd(), "public", "ion");
 
 async function readJson<T>(p: string): Promise<T | null> {
@@ -73,5 +74,12 @@ export default async function IonCallPage({ searchParams }: { searchParams: Prom
   };
   const floor = floorMoves(index?.calls ?? []);
   floor.byAngles = stats?.objections?.set_rate_by_max_attempts ?? {};
-  return <CallAtom read={read} floor={floor} />;
+  const tabs: Tab[] = [];
+  for (const cid of SHOWCASE_ORDER) {
+    const r = index?.calls.find((x) => x.call_id === cid) ?? null;
+    const bslug = cid.toUpperCase().startsWith("SESSION") ? cid.toLowerCase() : cid;
+    const tb = await readJson<{ rep_name?: string | null; observed_outcome?: { outcome: string } | null }>(path.join(ION(), "calls", `${bslug}-manager-brief.json`));
+    tabs.push({ callId: cid, rep: tb?.rep_name ?? r?.rep_id ?? null, durationMin: r?.duration_min ?? null, outcome: tb?.observed_outcome?.outcome ?? null, hook: SHOWCASE[cid].hook });
+  }
+  return <CallAtom read={read} floor={floor} tabs={tabs} />;
 }

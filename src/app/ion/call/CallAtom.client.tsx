@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import { AltTake } from "../(public)/_components/AltTake.client";
 import { AudioClip } from "../(public)/_components/AudioClip.client";
+import { SHOWCASE } from "./showcase";
 
 // One call, taken apart. The whole call plays at the top; everything Stewart
 // read is a node on the atom below; clicking a node seeks the player to that
@@ -61,21 +62,15 @@ const MOVE_LABEL: Record<string, string> = {
 };
 const OUTCOME_LABEL: Record<string, string> = { booked: "Booked", tentative: "Tentative", callback: "Callback", no_appointment: "No appointment", dq: "Disqualified", no_contact: "No contact" };
 
-// The one moment to re-voice on the default call: the spouse objection Carter
-// conceded after one try. Suggested rephrase — not something he said.
-const ALT_TAKES: Record<string, { ts: string; text: string }> = {
-  "30000547525": {
-    ts: "06:25",
-    text: "Totally. Let's lock it for when she's home — would six or seven Tuesday evening work for both of you? I'll text you both the invite so it's on her calendar too.",
-  },
-};
 
 const sec = (ts?: string | null) => { if (!ts) return null; const [m, s] = ts.split(":").map((x) => parseInt(x, 10) || 0); return (m || 0) * 60 + (s || 0); };
 const pct = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)}%` : "—");
 
 type Node = { id: string; kind: "section" | "objection" | "audit" | "outcome" | "focus"; label: string; ts: string | null; angle: number; r: number; tone: string; data: unknown };
 
-export function CallAtom({ read, floor }: { read: CallRead; floor: FloorMoves }) {
+export type Tab = { callId: string; rep: string | null; durationMin: number | null; outcome: string | null; hook: string };
+
+export function CallAtom({ read, floor, tabs }: { read: CallRead; floor: FloorMoves; tabs: Tab[] }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const b = read.brief;
@@ -128,16 +123,32 @@ export function CallAtom({ read, floor }: { read: CallRead; floor: FloorMoves })
   };
   const pick = (n: Node) => { setSelected(n.id); seek(n.ts); };
   const sel = nodes.find((n) => n.id === selected) ?? null;
-  const alt = ALT_TAKES[read.callId];
-  const altObj = alt ? objections.find((o) => o.ts === alt.ts) ?? null : null;
+  const show = SHOWCASE[read.callId] ?? null;
+  const missObj = show?.miss.kind === "objection" ? objections.find((o) => o.ts === show.miss.ts) ?? null : null;
+  const missPick = show ? read.picks.find((pk) => pk.ts === show.miss.ts) ?? null : null;
+  const missSec = show ? sec(show.miss.ts) ?? 0 : 0;
+  const winSec = show ? sec(show.win.ts) ?? 0 : 0;
 
   const pos = (n: Node) => { const a = (n.angle * Math.PI) / 180; return { x: Math.cos(a) * n.r, y: Math.sin(a) * n.r }; };
 
   return (
     <main className="min-h-screen bg-black text-stewart-text">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
-        <p className="text-xs uppercase tracking-[0.25em] text-stewart-accent font-semibold">Powered by Stewart &middot; one call, taken apart</p>
-        <h1 className="mt-3 text-3xl sm:text-5xl font-bold leading-tight">{read.rep ?? "A rep"} &middot; {read.durationMin ? `${read.durationMin.toFixed(1)} min` : ""} &middot; {outcome ? OUTCOME_LABEL[outcome.outcome] ?? outcome.outcome : ""}{outcome?.set_strength === "set_with_bill" ? ", bill in hand" : ""}</h1>
+        <p className="text-xs uppercase tracking-[0.25em] text-stewart-accent font-semibold">Powered by Stewart &middot; three calls, taken apart</p>
+        {tabs.length > 1 ? (
+          <div className="mt-4 grid sm:grid-cols-3 gap-2">
+            {tabs.map((t) => {
+              const active = t.callId === read.callId;
+              return (
+                <Link key={t.callId} href={`/ion/call?id=${encodeURIComponent(t.callId)}`} className={"rounded-lg border p-3 transition-colors " + (active ? "border-stewart-accent/60 bg-stewart-accent/10" : "border-stewart-border bg-stewart-card hover:border-stewart-accent/40")}>
+                  <p className="text-sm font-semibold">{t.rep ?? "?"} <span className="text-stewart-muted font-normal">&middot; {t.durationMin ? `${t.durationMin.toFixed(1)} min` : ""} &middot; {t.outcome ? OUTCOME_LABEL[t.outcome] ?? t.outcome : ""}</span></p>
+                  <p className="mt-1 text-xs text-stewart-muted leading-snug">{t.hook}</p>
+                </Link>
+              );
+            })}
+          </div>
+        ) : null}
+        <h1 className="mt-6 text-3xl sm:text-5xl font-bold leading-tight">{read.rep ?? "A rep"} &middot; {read.durationMin ? `${read.durationMin.toFixed(1)} min` : ""} &middot; {outcome ? OUTCOME_LABEL[outcome.outcome] ?? outcome.outcome : ""}{outcome?.set_strength === "set_with_bill" ? ", bill in hand" : ""}</h1>
         <p className="mt-3 max-w-2xl text-stewart-muted leading-relaxed">Listen to the whole call. Then click anything on the atom to hear the second Stewart is talking about. Every quote on this page was matched to the transcript by code{read.quotes ? `: ${read.quotes.verified + read.quotes.fuzzy} of ${read.quotes.checked} found` : ""}.</p>
 
         {/* The whole call, with a timeline of what Stewart found */}
@@ -230,27 +241,46 @@ export function CallAtom({ read, floor }: { read: CallRead; floor: FloorMoves })
           </div>
         </div>
 
-        {/* The moment, re-voiced */}
-        {alt && altObj && read.rep ? (
-          <div className="mt-8 rounded-xl border border-stewart-accent/40 bg-stewart-accent/5 p-5">
-            <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-accent">The moment that decided the one-on-one</p>
-            <h2 className="mt-2 text-xl sm:text-2xl font-bold">{OBJ_LABEL[altObj.type] ?? altObj.type} at {altObj.ts}: one angle, then &ldquo;{altObj.attempt_quotes?.[0]?.slice(0, 40) ?? ""}&hellip;&rdquo; and he let it go.</h2>
-            <div className="mt-4 grid md:grid-cols-2 gap-4">
-              <div className="rounded-lg border border-stewart-border bg-stewart-bg/60 p-4">
-                <p className="text-[11px] uppercase tracking-wider text-stewart-muted">What {read.rep} said</p>
-                <p className="mt-1 text-sm">customer: &ldquo;{altObj.quote}&rdquo;</p>
-                {altObj.attempt_quotes?.map((q, i) => <p key={i} className="mt-1 text-sm">{read.rep}: &ldquo;{q}&rdquo; <span className="text-xs text-stewart-muted">({MOVE_LABEL[altObj.attempt_moves?.[i] ?? ""] ?? ""})</span></p>)}
-                <div className="mt-3"><AudioClip callId={read.callId} startSec={Math.max(0, (sec(altObj.ts) ?? 0) - 4)} endSec={(sec(altObj.ts) ?? 0) + 26} label="Play what happened" /></div>
-                <FloorLine type={altObj.type} moves={altObj.attempt_moves ?? []} floor={floor} />
-              </div>
-              <div className="rounded-lg border border-stewart-accent/40 bg-stewart-bg/60 p-4">
-                <p className="text-[11px] uppercase tracking-wider text-stewart-accent">What it sounds like said the way that works</p>
-                <p className="mt-1 text-sm">{read.rep}: &ldquo;{alt.text}&rdquo;</p>
-                <p className="mt-1 text-[11px] text-stewart-muted">A suggested rephrase, in {read.rep}&apos;s voice. He never said this.</p>
-                <div className="mt-3"><AltTake rep={read.rep} text={alt.text} label={`Hear ${read.rep} say it`} /></div>
+        {show && read.rep ? (
+          <>
+            <div className="mt-8 rounded-xl border border-stewart-success/40 bg-stewart-success/5 p-5">
+              <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-success">What he got right</p>
+              <h2 className="mt-2 text-xl sm:text-2xl font-bold">{show.win.title}</h2>
+              <p className="mt-2 text-sm text-stewart-muted leading-relaxed">{show.win.why}</p>
+              <div className="mt-3"><AudioClip callId={read.callId} startSec={Math.max(0, winSec - 4)} endSec={winSec + 26} label={`Play ${show.win.ts}`} /></div>
+            </div>
+
+            <div className="mt-6 rounded-xl border border-stewart-accent/40 bg-stewart-accent/5 p-5">
+              <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-accent">The moment the one-on-one is about</p>
+              <h2 className="mt-2 text-xl sm:text-2xl font-bold">{show.miss.title}</h2>
+              <p className="mt-2 text-sm text-stewart-muted leading-relaxed">{show.miss.why}</p>
+              <div className="mt-4 grid md:grid-cols-2 gap-4">
+                <div className="rounded-lg border border-stewart-border bg-stewart-bg/60 p-4">
+                  <p className="text-[11px] uppercase tracking-wider text-stewart-muted">What {read.rep} said</p>
+                  {missObj ? (
+                    <>
+                      <p className="mt-1 text-sm">customer: &ldquo;{missObj.quote}&rdquo;</p>
+                      {missObj.attempt_quotes?.map((q, i) => <p key={i} className="mt-1 text-sm">{read.rep}: &ldquo;{q}&rdquo; <span className="text-xs text-stewart-muted">({MOVE_LABEL[missObj.attempt_moves?.[i] ?? ""] ?? ""})</span></p>)}
+                    </>
+                  ) : missPick ? (
+                    <>
+                      <p className="mt-1 text-sm">&ldquo;{missPick.quote}&rdquo; <span className="font-mono text-xs text-stewart-muted">{missPick.ts}</span></p>
+                      <p className="mt-1 text-xs text-stewart-muted leading-relaxed">{missPick.stewart_read}</p>
+                    </>
+                  ) : null}
+                  <div className="mt-3"><AudioClip callId={read.callId} startSec={Math.max(0, missSec - 4)} endSec={missSec + 26} label="Play what happened" /></div>
+                  {missObj ? <FloorLine type={missObj.type} moves={missObj.attempt_moves ?? []} floor={floor} /> : null}
+                  <p className="mt-3 text-xs text-stewart-muted leading-relaxed"><span className="uppercase tracking-wider text-[10px]">On this floor</span><br />{show.miss.floor}</p>
+                </div>
+                <div className="rounded-lg border border-stewart-accent/40 bg-stewart-bg/60 p-4">
+                  <p className="text-[11px] uppercase tracking-wider text-stewart-accent">What it sounds like said the way that works</p>
+                  <p className="mt-1 text-sm">{read.rep}: &ldquo;{show.miss.text}&rdquo;</p>
+                  <p className="mt-1 text-[11px] text-stewart-muted">A suggested rephrase, in {read.rep}&apos;s voice. {read.rep} never said this.</p>
+                  <div className="mt-3"><AltTake rep={read.rep} text={show.miss.text} label={`Hear ${read.rep} say it`} /></div>
+                </div>
               </div>
             </div>
-          </div>
+          </>
         ) : null}
 
         <p className="mt-10 text-sm text-stewart-muted">
