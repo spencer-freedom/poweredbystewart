@@ -1,5 +1,6 @@
 import { clerkClient, clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { SHOWCASE, SHOWCASE_ORDER } from "./app/ion/call/showcase";
 
 // Clerk sets session cookies everywhere. Server-side protection is applied
 // to the Ion surfaces only: every /ion page, every /ion/*.json data file,
@@ -10,6 +11,29 @@ import { NextResponse } from "next/server";
 
 const isIon = createRouteMatcher(["/ion(.*)", "/api/ion(.*)"]);
 
+// The one public Ion surface: the three-call demo at /ion/call, outputs only.
+// It needs two API routes, opened just far enough to serve that page:
+//   - whole-call audio only for the three showcase calls; clip windows
+//     (start+end) for any call, since the "beyond this call" tape plays
+//     other reps' moments;
+//   - the cloned-voice route only for the exact lines on the page, so the
+//     voices can't be made to say anything else.
+const norm = (t: string) => t.replace(/\s+/g, " ").trim();
+const ALT_LINES = new Set(Object.values(SHOWCASE).map((s) => norm(s.miss.text)));
+function isPublicDemo(req: { nextUrl: URL }): boolean {
+  const { pathname, searchParams } = req.nextUrl;
+  if (pathname === "/ion/call") return true;
+  if (pathname.startsWith("/api/ion/audio-clip/")) {
+    const id = decodeURIComponent(pathname.slice("/api/ion/audio-clip/".length));
+    const clip = searchParams.has("start") && searchParams.has("end");
+    return clip || SHOWCASE_ORDER.includes(id);
+  }
+  if (pathname === "/api/ion/alt-take") {
+    return ALT_LINES.has(norm(searchParams.get("text") || ""));
+  }
+  return false;
+}
+
 const ALLOWED = new Set(
   (process.env.ION_ALLOWED_EMAILS || "manager@getthriftyprovo.com")
     .split(",")
@@ -19,6 +43,7 @@ const ALLOWED = new Set(
 
 export default clerkMiddleware(async (auth, req) => {
   if (!isIon(req)) return;
+  if (isPublicDemo(req)) return;
   // Local screenshots and layout work only: never honoured in production.
   if (process.env.NODE_ENV !== "production" && process.env.ION_GATE_OFF === "1") return;
   const { userId, sessionClaims, redirectToSignIn } = await auth();
