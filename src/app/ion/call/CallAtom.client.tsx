@@ -276,7 +276,7 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
                       <p className="mt-1 text-xs text-stewart-muted leading-relaxed">{missPick.stewart_read}</p>
                     </>
                   ) : null}
-                  <div className="mt-3"><AudioClip callId={read.callId} startSec={Math.max(0, missSec - 4)} endSec={missSec + 26} label="Play what happened" /></div>
+                  <div className="mt-3"><AudioClip callId={read.callId} startSec={show.miss.clip?.start ?? Math.max(0, missSec - 4)} endSec={show.miss.clip?.end ?? missSec + 26} label="Play what happened" /></div>
                   {missObj ? <FloorLine type={missObj.type} moves={missObj.attempt_moves ?? []} floor={floor} /> : null}
                   <p className="mt-3 text-xs text-stewart-muted leading-relaxed"><span className="uppercase tracking-wider text-[10px]">On this floor</span><br />{show.miss.floor}</p>
                 </div>

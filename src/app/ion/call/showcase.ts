@@ -6,7 +6,8 @@ export type Showcase = {
   levelTitle: string;
   hook: string;
   win: { ts: string; title: string; why: string };
-  miss: { ts: string; title: string; why: string; text: string; floor: string; kind: "objection" | "moment" };
+  // clip: the window to play for the moment, in seconds; default is ts-4 to ts+26.
+  miss: { ts: string; title: string; why: string; text: string; floor: string; kind: "objection" | "moment"; clip?: { start: number; end: number } };
 };
 export const SHOWCASE: Record<string, Showcase> = {
   "10000532255": {
@@ -22,7 +23,7 @@ export const SHOWCASE: Record<string, Showcase> = {
     levelTitle: "Here\u2019s what could have happened",
     hook: "Three objections, all three got past, booked with the bill \u2014 and three minutes in the middle where the setter started closing.",
     win: { ts: "10:33", title: "\u201cI don\u2019t know if I\u2019m comfortable with it\u201d \u2192 a phone appointment instead of a visit.", why: "A trust objection at the close, answered with an alternative rather than an argument. Offering an alternative sets 70% of the time on this floor; giving a reason, 45%." },
-    miss: { ts: "03:03", title: "Three minutes of bill-swap mechanics, until the customer said \u201cNo. I\u2019m not following you.\u201d", why: "Closer-tier content, volunteered unprompted. It confused instead of reassured and it gave away the reason to take the appointment. The playbook\u2019s escape hatch is one sentence.", kind: "moment", floor: "Setter scope creep is the most common cherry-pick classification on the floor after the reason being filed instead of used.",
+    miss: { ts: "03:03", clip: { start: 172, end: 244 }, title: "Three minutes of bill-swap mechanics, until the customer said \u201cNo. I\u2019m not following you.\u201d", why: "Closer-tier content, volunteered unprompted. It confused instead of reassured and it gave away the reason to take the appointment. The playbook\u2019s escape hatch is one sentence.", kind: "moment", floor: "Setter scope creep is the most common cherry-pick classification on the floor after the reason being filed instead of used.",
       text: "Honestly, that\u2019s exactly what the specialist walks you through, with your actual bill in front of you \u2014 it makes way more sense with your numbers than with me describing it. Let me grab the last couple of quick questions so they can build it for you." },
   },
   "30000139035": {
