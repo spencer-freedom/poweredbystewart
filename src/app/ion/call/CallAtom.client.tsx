@@ -332,7 +332,12 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
                     ) : null}
                     <div className="mt-3"><AudioClip callId={read.callId} startSec={m.clip?.start ?? Math.max(0, at - 4)} endSec={m.clip?.end ?? at + 26} label="Play what happened" /></div>
                     {obj ? <FloorLine type={obj.type} moves={obj.attempt_moves ?? []} floor={floor} /> : null}
-                    <p className="mt-3 text-xs text-stewart-muted leading-relaxed"><span className="uppercase tracking-wider text-[10px]">On this floor</span><br />{m.floor}</p>
+                    <div className="mt-3 rounded-md border px-3 py-2" style={{ borderColor: "#f59e0b", background: "rgba(245,158,11,0.08)" }}>
+                      <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: "#f59e0b" }}>On this floor</p>
+                      <p className="mt-1 text-sm text-stewart-text leading-relaxed">
+                        {m.floor.split(/(\d+%)/g).map((piece, i) => /^\d+%$/.test(piece) ? <span key={i} className="font-mono font-bold" style={{ color: "#f59e0b" }}>{piece}</span> : <span key={i}>{piece}</span>)}
+                      </p>
+                    </div>
                   </div>
                   {show.level >= 2 ? (
                     <div className="rounded-lg border-2 bg-stewart-bg/60 p-4" style={{ borderColor: "#a78bfa", boxShadow: "0 0 0 1px rgba(167,139,250,0.35), 0 0 24px rgba(167,139,250,0.25)" }}>
