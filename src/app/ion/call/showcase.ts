@@ -40,14 +40,14 @@ export const SHOWCASE: Record<string, Showcase> = {
     win: { ts: "03:32", title: "The customer sold himself: his son\u2019s panels, his son\u2019s tiny bill, and \u201cwhy not.\u201d", why: "Peer proof and a stated reason, both on the tape by 3:32. He answered every question after that and never once said no to solar. This is a hot lead by any floor\u2019s definition." },
     misses: [
       { ts: "08:49", clip: { start: 522, end: 562 }, kind: "moment",
-        title: "Part 1 \u00b7 The bill. He asked for it, the customer said \u201cI\u2019ll go look at the stupid bill and email it,\u201d and Joel took that \u2014 no when, no how.",
-        why: "The bill is the design. Without it there is no appointment worth sitting. The customer offered; the rep accepted the offer instead of locking it: no time it would arrive, no easier path than digging out an email.",
+        title: "Part 1 \u00b7 The bill. The customer said \u201cI\u2019ll go look at the stupid bill and email it.\u201d That was a no with a smile \u2014 and Joel made no second attempt.",
+        why: "The bill is the design; without it there is no appointment worth sitting. \u201cI\u2019ll look at it later\u201d is an objection, and it won on the first try. One more angle keeps the customer on the task while he\u2019s still on the phone: send the email now, have him confirm it landed, then walk him to where the bill actually is \u2014 the inbox, the online account \u2014 and get the bar graph sent back before the call ends.",
         said: [
           { who: "customer", line: "If you want to send me an email to my address, I could try to get myself to look at the stupid bill, and I could send it back to you." },
           { who: "rep", line: "Okay. Perfect. So I\u2019ll send you that email right now. And if you just send in the photo, all we need to see is just the bar graph with the usage." },
         ],
-        floor: "On this floor, the bill in hand on the call sets 96% of the time. Promised later, 54%. Never asked for, 28%.",
-        text: "Perfect \u2014 and easier than email: I\u2019ll text you my number right now, and when you\u2019re near the bill tonight, snap the bar graph and send it straight back. Does tonight work, or first thing tomorrow?" },
+        floor: "On this floor, the bill in hand on the call sets 96% of the time. Promised later, 54%. Never asked for, 28%. And against any no: one angle sets 46%, two sets 61%.",
+        text: "Perfect \u2014 I\u2019m sending that email right now, so you should see it pop up in a second. Do you know where that bill is? If it\u2019s in your inbox or your online account, pull it up while I\u2019ve got you and we\u2019ll get the bar graph sent back right now \u2014 then the specialist can build it today instead of next week." },
       { ts: "09:29", clip: { start: 560, end: 600 }, kind: "objection",
         title: "Part 2 \u00b7 The time. \u201cNot this week\u201d \u2192 \u201cI completely understand.\u201d Zero angles, no slot held.",
         why: "The customer never said no \u2014 he said not this week \u2014 and the rep tried zero angles. On this floor, zero angles sets 7% of the time. One angle, 46%. Two, 61%. Every attempt he didn\u2019t make was odds left on the table, and the call ended with \u201conce that comes through, I\u2019ll reach out again,\u201d which is nobody\u2019s job.",
