@@ -19,8 +19,19 @@ export type Event = {
 };
 export type Objection = {
   ts: string; quote: string; type: string; blocked_section?: string; rep_attempts: number; rep_restates?: number;
-  attempt_quotes?: string[]; attempt_moves?: string[]; attempt_kinds?: string[]; resolved: boolean; resolved_by_tape?: boolean; next_event?: string | null; reasoning?: string;
+  attempt_quotes?: string[]; attempt_moves?: string[]; attempt_kinds?: string[]; resolved: boolean; resolved_by_tape?: boolean; next_event?: string | null; resolution_ts?: string | null; reasoning?: string;
 };
+
+// The clip for an objection runs until it was overcome: the read's resolution
+// timestamp or the next script event, plus a tail; at least 25 s, at most 2 min.
+function objectionClip(o: Objection): { start: number; end: number } {
+  const t = sec(o.ts) ?? 0;
+  const ends: number[] = [];
+  const r = sec(o.resolution_ts ?? null); if (r !== null && r > t) ends.push(r);
+  const nx = o.next_event && o.next_event.includes("@") ? sec(o.next_event.split("@")[1]) : null; if (nx !== null && nx > t) ends.push(nx);
+  const end = (ends.length ? Math.min(...ends) : t + 19) + 6;
+  return { start: Math.max(0, t - 5), end: Math.min(Math.max(end, t + 25), t + 120) };
+}
 export type CallRead = {
   callId: string;
   rep: string | null;
@@ -352,6 +363,21 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
           </>
         ) : null}
 
+        {objections.length ? (
+          <div className="mt-10">
+            <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-accent">Every objection on this call, the same way</p>
+            <h2 className="mt-2 text-xl sm:text-2xl font-bold">{objections.length} {objections.length === 1 ? "objection" : "objections"}. The objection, the attempts, how many it took, and whether it was overcome.</h2>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              {objections.map((o, i) => (
+                <div key={o.ts + i} className={"rounded-xl border p-4 " + (o.resolved_by_tape ? "border-stewart-border bg-stewart-card" : "border-stewart-danger/40 bg-stewart-danger/5")}>
+                  <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-2">{OBJ_LABEL[o.type] ?? o.type} &middot; {o.ts}</p>
+                  <ObjectionSequence o={o} rep={read.rep} callId={read.callId} floor={floor} clip={objectionClip(o)} />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
         {(() => {
           const i = tabs.findIndex((t) => t.callId === read.callId);
           const next = i >= 0 && i < tabs.length - 1 ? tabs[i + 1] : null;
@@ -478,7 +504,7 @@ export function ObjectionSequence({ o, rep, callId, floor, clip, couldHave }: {
       ) : null}
       <Row k="How many it took" v={tried ? `${o.rep_attempts} new ${o.rep_attempts === 1 ? "angle" : "angles"}${o.rep_restates ? `, said it again \u00d7${o.rep_restates}` : ""}` : "none"} />
       <Row k="Overcome?" v={overcome ? <>Yes &mdash; the script went on{o.next_event ? ` to ${o.next_event.replace("@", " at ")}` : ""}.</> : <>No &mdash; the script did not continue past this.</>} tone={overcome ? "text-stewart-success font-semibold" : "text-stewart-danger font-semibold"} />
-      <div className="mt-2"><AudioClip callId={callId} startSec={clip?.start ?? Math.max(0, s - 4)} endSec={clip?.end ?? s + 26} label="Play the objection" /></div>
+      <div className="mt-2"><AudioClip callId={callId} startSec={clip?.start ?? objectionClip(o).start} endSec={clip?.end ?? objectionClip(o).end} label="Play the objection" /></div>
       {!overcome ? (
         <div className="mt-3 rounded-md border px-3 py-2" style={{ borderColor: "#f59e0b", background: "rgba(245,158,11,0.08)" }}>
           <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: "#f59e0b" }}>What works on this floor against &ldquo;{OBJ_LABEL[o.type] ?? o.type}&rdquo;</p>
