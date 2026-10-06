@@ -140,23 +140,28 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
   return (
     <main className="min-h-screen bg-black text-stewart-text">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
-        <p className="text-xs uppercase tracking-[0.25em] text-stewart-accent font-semibold">Powered by Stewart &middot; three calls, three levels</p>
+        <p className="text-xs uppercase tracking-[0.25em] text-stewart-accent font-semibold">Powered by Stewart</p>
+        <p className="mt-3 text-2xl sm:text-3xl font-bold leading-tight">Three of Ion&apos;s calls, read by Stewart.</p>
+        <p className="mt-1 text-sm text-stewart-muted">Each call goes one level deeper than the last. Start with Call 1.</p>
         {tabs.length > 1 ? (
-          <div className="mt-4 grid sm:grid-cols-3 gap-2">
-            {tabs.map((t) => {
+          <div className="mt-5 grid sm:grid-cols-3 gap-3">
+            {tabs.map((t, i) => {
               const active = t.callId === read.callId;
               const sc = SHOWCASE[t.callId];
               return (
-                <Link key={t.callId} href={`/ion/call?id=${encodeURIComponent(t.callId)}`} className={"rounded-lg border p-3 transition-colors " + (active ? "border-stewart-accent/60 bg-stewart-accent/10" : "border-stewart-border bg-stewart-card hover:border-stewart-accent/40")}>
-                  <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-stewart-accent">{sc ? `${sc.level} \u00b7 ${sc.levelTitle}` : ""}</p>
-                  <p className="mt-1 text-sm font-semibold">{t.rep ?? "?"} <span className="text-stewart-muted font-normal">&middot; {t.durationMin ? `${t.durationMin.toFixed(1)} min` : ""} &middot; {t.outcome ? OUTCOME_LABEL[t.outcome] ?? t.outcome : ""}</span></p>
+                <Link key={t.callId} href={`/ion/call?id=${encodeURIComponent(t.callId)}`} className={"rounded-xl border p-4 transition-colors " + (active ? "border-stewart-accent bg-stewart-accent/15 ring-1 ring-stewart-accent/40" : "border-stewart-border bg-stewart-card hover:border-stewart-accent/50")}>
+                  <p className={"text-2xl font-bold " + (active ? "text-stewart-accent" : "text-stewart-text")}>Call {i + 1}</p>
+                  <p className="mt-0.5 text-sm font-semibold text-stewart-text">{sc ? sc.levelTitle : ""}</p>
+                  <p className="mt-2 text-xs text-stewart-muted">{t.rep ?? "?"} &middot; {t.durationMin ? `${t.durationMin.toFixed(1)} min` : ""} &middot; {t.outcome ? OUTCOME_LABEL[t.outcome] ?? t.outcome : ""}</p>
                   <p className="mt-1 text-xs text-stewart-muted leading-snug">{t.hook}</p>
+                  {active ? <p className="mt-2 text-[11px] uppercase tracking-wider text-stewart-accent">You are here</p> : null}
                 </Link>
               );
             })}
           </div>
         ) : null}
-        <h1 className="mt-6 text-3xl sm:text-5xl font-bold leading-tight">{read.rep ?? "A rep"} &middot; {read.durationMin ? `${read.durationMin.toFixed(1)} min` : ""} &middot; {outcome ? OUTCOME_LABEL[outcome.outcome] ?? outcome.outcome : ""}{outcome?.set_strength === "set_with_bill" ? ", bill in hand" : ""}</h1>
+        <p className="mt-10 text-xs uppercase tracking-[0.25em] text-stewart-accent font-semibold">Call {Math.max(0, tabs.findIndex((t) => t.callId === read.callId)) + 1}{show ? ` \u00b7 ${show.levelTitle}` : ""}</p>
+        <h1 className="mt-2 text-3xl sm:text-5xl font-bold leading-tight">{read.rep ?? "A rep"} &middot; {read.durationMin ? `${read.durationMin.toFixed(1)} min` : ""} &middot; {outcome ? OUTCOME_LABEL[outcome.outcome] ?? outcome.outcome : ""}{outcome?.set_strength === "set_with_bill" ? ", bill in hand" : ""}</h1>
         <p className="mt-3 max-w-2xl text-stewart-muted leading-relaxed">Listen to the whole call. Then click anything on the atom to hear the second Stewart is talking about. Every quote on this page is on the tape{read.quotes ? ` — ${read.quotes.verified + read.quotes.fuzzy} of ${read.quotes.checked} checked` : ""}.</p>
 
         {/* The whole call, with a timeline of what Stewart found */}
@@ -334,6 +339,19 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
             ) : null}
           </>
         ) : null}
+
+        {(() => {
+          const i = tabs.findIndex((t) => t.callId === read.callId);
+          const next = i >= 0 && i < tabs.length - 1 ? tabs[i + 1] : null;
+          const nsc = next ? SHOWCASE[next.callId] : null;
+          return next ? (
+            <Link href={`/ion/call?id=${encodeURIComponent(next.callId)}`} className="mt-10 block rounded-xl border border-stewart-accent/50 bg-stewart-accent/10 p-5 hover:bg-stewart-accent/15 transition-colors">
+              <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-accent">Next</p>
+              <p className="mt-1 text-xl sm:text-2xl font-bold">Call {i + 2}{nsc ? ` \u00b7 ${nsc.levelTitle}` : ""} &rarr;</p>
+              <p className="mt-1 text-sm text-stewart-muted">{next.rep} &middot; {next.hook}</p>
+            </Link>
+          ) : null;
+        })()}
 
         <div className="mt-14 border-t border-white/10 pt-8">
           <p className="text-xl sm:text-2xl font-semibold leading-snug">This is already running on Ion&apos;s data. This is what exists today.</p>
