@@ -29,10 +29,13 @@ export const SHOWCASE: Record<string, Showcase> = {
   "30000139035": {
     level: 3,
     levelTitle: "Here\u2019s what Stewart knows that isn\u2019t in this call",
-    hook: "A cold open he steadied, a reason the customer gave three times, peer proof from his own son \u2014 and one \u201cnot this week\u201d that ended it with zero angles.",
-    win: { ts: "03:32", title: "The customer sold himself: his son\u2019s panels, his son\u2019s tiny bill, and \u201cwhy not.\u201d", why: "Peer proof and a stated reason, both on the tape by 3:32. This is a hot lead by any floor\u2019s definition." },
-    miss: { ts: "09:29", title: "\u201cIt\u2019s not gonna happen this week\u201d \u2192 \u201cCompletely understand.\u201d No appointment.", why: "One timing objection, no angle tried, no callback time, and the call ended. The reason the customer gave at 3:10 was never used to hold the door open.", kind: "objection", floor: "On this floor, an objection answered with no angle at all sets 7% of the time. One angle, 46%. Two, 61%.",
-      text: "Totally understand, and that\u2019s exactly why I don\u2019t want this one to slip \u2014 you told me the bills are hitting while your wife\u2019s not working. It\u2019s a twenty-minute phone call, nothing to drive to. Would a Saturday morning or a weeknight after six be easier?" },
+    hook: "A cold open he steadied, a reason the customer gave three times, peer proof from his own son \u2014 and then two asks that ended with no commitment: the bill, then the time.",
+    win: { ts: "03:32", title: "The customer sold himself: his son\u2019s panels, his son\u2019s tiny bill, and \u201cwhy not.\u201d", why: "Peer proof and a stated reason, both on the tape by 3:32. He answered every question after that and never once said no to solar. This is a hot lead by any floor\u2019s definition." },
+    miss: { ts: "09:29", clip: { start: 522, end: 600 }, kind: "objection",
+      title: "He asked for the bill and took \u201cI\u2019ll look at it.\u201d He asked for a time and took \u201cnot this week.\u201d Two open loops, no commitment on either.",
+      why: "Everything built over nine minutes leaked at the close. The bill left without a when. The appointment left without a when. The customer never said no \u2014 he said not this week \u2014 and the call ended with \u201conce that comes through, I\u2019ll reach out again,\u201d which is nobody\u2019s job.",
+      floor: "On this floor, a set with the bill in hand sets 96% of the time; with the bill promised later, 54%. And an objection answered with no angle at all sets 7%; one angle, 46%; two, 61%.",
+      text: "Perfect \u2014 do me a favor and snap that bar graph tonight so it\u2019s in my inbox by tomorrow; I\u2019ll text you my number right now so it\u2019s easy. And since the specialist\u2019s in your area this week, let\u2019s hold a twenty-minute phone slot \u2014 Saturday morning or a weeknight after six \u2014 and if the usage says it\u2019s not worth your time, we cancel it and you\u2019ve lost nothing." },
   },
 };
 export const SHOWCASE_ORDER = ["10000532255", "SESSION2_e891f024", "30000139035"];
