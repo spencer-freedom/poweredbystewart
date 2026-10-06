@@ -110,5 +110,6 @@ export default async function IonCallPage({ searchParams }: { searchParams: Prom
     const o = (brief.objections ?? []).find((x) => x.ts === show.miss.ts);
     if (o) beyondData = beyond(index?.calls ?? [], o.type, callId);
   }
-  return <CallAtom read={read} floor={floor} tabs={tabs} beyond={beyondData} />;
+  // Keyed by call so switching calls resets every player and selection — nothing auto-plays on arrival.
+  return <CallAtom key={callId} read={read} floor={floor} tabs={tabs} beyond={beyondData} />;
 }
