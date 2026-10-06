@@ -32,22 +32,22 @@ type Row = { call_id: string; slug: string; rep_id: string | null; booked: boole
 // the reps who handle it best. Nothing here is a model: counts over the reads.
 function beyond(rows: Row[], type: string, excludeCall: string): Beyond {
   const reps: Record<string, { n: number; set: number; continued: number; angles: number }> = {};
-  const clips: Beyond["clips"] = [];
+  const clipsByRep: Beyond["clipsByRep"] = {};
   for (const r of rows) {
     for (const o of r.objections ?? []) {
       if (o.type !== type) continue;
       const rep = r.rep_id || "Unknown";
       const cell = (reps[rep] ??= { n: 0, set: 0, continued: 0, angles: 0 });
       cell.n += 1; cell.set += r.booked ? 1 : 0; cell.continued += o.continued ? 1 : 0; cell.angles += o.attempts;
+      // the tape worth hearing: the same no, handled, and the appointment set
       if (r.call_id !== excludeCall && r.booked && o.continued && o.attempts >= 1 && o.start_sec !== null && o.end_sec !== null && r.rep_id) {
-        clips.push({ call_id: r.call_id, rep: r.rep_id, ts: o.ts ?? "", start_sec: o.start_sec, end_sec: o.end_sec, quote: o.quote, moves: o.moves, attempts: o.attempts });
+        (clipsByRep[r.rep_id] ??= []).push({ call_id: r.call_id, rep: r.rep_id, ts: o.ts ?? "", start_sec: o.start_sec, end_sec: o.end_sec, quote: o.quote, moves: o.moves, attempts: o.attempts });
       }
     }
   }
+  for (const rep of Object.keys(clipsByRep)) clipsByRep[rep] = clipsByRep[rep].sort((a, b) => b.attempts - a.attempts).slice(0, 3);
   const ranked = Object.entries(reps).filter(([rep, v]) => rep !== "Unknown" && v.n >= 3).map(([rep, v]) => ({ rep, ...v, set_rate: v.set / v.n })).sort((a, b) => b.set_rate - a.set_rate || b.n - a.n);
-  const bestReps = ranked.slice(0, 3).map((x) => x.rep);
-  const pick = clips.filter((c) => bestReps.includes(c.rep)).sort((a, b) => b.attempts - a.attempts).slice(0, 3);
-  return { type, reps: ranked, clips: pick.length ? pick : clips.sort((a, b) => b.attempts - a.attempts).slice(0, 3), total: Object.values(reps).reduce((n, v) => n + v.n, 0) };
+  return { type, reps: ranked, clipsByRep, total: Object.values(reps).reduce((n, v) => n + v.n, 0) };
 }
 
 function floorMoves(rows: Row[]): FloorMoves {

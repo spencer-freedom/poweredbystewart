@@ -69,11 +69,12 @@ const pct = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)}%` : "â€
 type Node = { id: string; kind: "section" | "objection" | "audit" | "outcome" | "focus"; label: string; ts: string | null; angle: number; r: number; tone: string; data: unknown };
 
 export type Tab = { callId: string; rep: string | null; durationMin: number | null; outcome: string | null; hook: string };
+export type BeyondClip = { call_id: string; rep: string; ts: string; start_sec: number; end_sec: number; quote: string; moves: string[]; attempts: number };
 export type Beyond = {
   type: string;
   total: number;
   reps: { rep: string; n: number; set: number; continued: number; angles: number; set_rate: number }[];
-  clips: { call_id: string; rep: string; ts: string; start_sec: number; end_sec: number; quote: string; moves: string[]; attempts: number }[];
+  clipsByRep: Record<string, BeyondClip[]>;
 };
 
 export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor: FloorMoves; tabs: Tab[]; beyond: Beyond | null }) {
@@ -376,39 +377,53 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
 // floor â€” who gets past this no, the moves that set, and the tape.
 function BeyondCard({ beyond, floor, rep }: { beyond: Beyond; floor: FloorMoves; rep: string | null }) {
   const moves = Object.entries(floor.byType[beyond.type] ?? {}).filter(([, v]) => v.used >= 3).sort((a, b) => b[1].set / b[1].used - a[1].set / a[1].used).slice(0, 4);
+  const withTape = beyond.reps.filter((r) => (beyond.clipsByRep[r.rep] ?? []).length > 0);
+  const [who, setWho] = useState<string | null>(withTape[0]?.rep ?? null);
+  const clips = who ? beyond.clipsByRep[who] ?? [] : [];
   return (
     <div className="rounded-lg border-2 bg-stewart-bg/60 p-4" style={{ borderColor: "#f59e0b", boxShadow: "0 0 0 1px rgba(245,158,11,0.3), 0 0 24px rgba(245,158,11,0.18)" }}>
       <p className="text-[11px] uppercase tracking-wider font-semibold" style={{ color: "#f59e0b" }}>Beyond this call</p>
-      <p className="mt-1 text-sm font-semibold leading-snug">&ldquo;{OBJ_LABEL[beyond.type] ?? beyond.type}&rdquo; came up {beyond.total} times on this floor. Who gets past it, and how.</p>
+      <p className="mt-1 text-sm font-semibold leading-snug">&ldquo;{OBJ_LABEL[beyond.type] ?? beyond.type}&rdquo; came up {beyond.total} times on this floor. Click a rep to hear how they get past it.</p>
       <div className="mt-3 flex items-baseline gap-2 text-[10px] uppercase tracking-wider text-stewart-muted border-b border-stewart-border pb-1 mb-1">
         <span className="flex-1">rep</span><span className="w-10 text-right">faced</span><span className="w-12 text-right">angles</span><span className="w-10 text-right">set</span>
       </div>
       <ul className="text-xs space-y-0.5">
-        {beyond.reps.slice(0, 6).map((r) => (
-          <li key={r.rep} className={"flex items-baseline gap-2 " + (r.rep === rep ? "text-stewart-warning" : "")}>
-            <span className="flex-1 font-semibold truncate">{r.rep}{r.rep === rep ? " (this call)" : ""}</span>
-            <span className="font-mono text-stewart-muted w-10 text-right">{r.n}</span>
-            <span className="font-mono text-stewart-muted w-12 text-right">{(r.angles / r.n).toFixed(1)}</span>
-            <span className="font-mono w-10 text-right text-stewart-success">{pct(r.set, r.n)}</span>
-          </li>
-        ))}
+        {beyond.reps.slice(0, 7).map((r) => {
+          const has = (beyond.clipsByRep[r.rep] ?? []).length > 0;
+          const active = who === r.rep;
+          return (
+            <li key={r.rep}>
+              <button type="button" disabled={!has} onClick={() => setWho(active ? null : r.rep)}
+                className={"w-full flex items-baseline gap-2 rounded px-1 -mx-1 text-left " + (active ? "bg-stewart-warning/15 text-stewart-text" : r.rep === rep ? "text-stewart-warning" : has ? "hover:bg-white/5" : "opacity-60 cursor-default")}>
+                <span className="flex-1 font-semibold truncate">{has ? (active ? "\u25be " : "\u25b8 ") : ""}{r.rep}{r.rep === rep ? " (this call)" : ""}</span>
+                <span className="font-mono text-stewart-muted w-10 text-right">{r.n}</span>
+                <span className="font-mono text-stewart-muted w-12 text-right">{(r.angles / r.n).toFixed(1)}</span>
+                <span className="font-mono w-10 text-right text-stewart-success">{pct(r.set, r.n)}</span>
+              </button>
+            </li>
+          );
+        })}
       </ul>
+      {who && clips.length ? (
+        <div className="mt-3 rounded border border-stewart-warning/40 bg-black/40 p-3">
+          <p className="text-[10px] uppercase tracking-wider text-stewart-warning">How {who} handles it &middot; same no, script went on, appointment set</p>
+          <ul className="mt-2 space-y-2">
+            {clips.map((c) => (
+              <li key={c.call_id + c.ts} className="text-xs">
+                <p className="text-[11px] text-stewart-muted"><span className="font-mono">{c.ts}</span> &middot; {c.attempts} {c.attempts === 1 ? "angle" : "angles"}: {c.moves.map((m) => MOVE_LABEL[m] ?? m).join(", ")}</p>
+                <p className="mt-0.5 leading-snug">customer: &ldquo;{c.quote}&rdquo;</p>
+                <div className="mt-1"><AudioClip callId={c.call_id} startSec={c.start_sec} endSec={c.end_sec} label={`Play ${who}`} /></div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
       <div className="mt-3 flex items-baseline gap-2 text-[10px] uppercase tracking-wider text-stewart-muted border-b border-stewart-border pb-1 mb-1">
-        <span className="flex-1">move</span><span className="w-8 text-right">used</span><span className="w-10 text-right">set</span>
+        <span className="flex-1">move the rep made</span><span className="w-8 text-right">used</span><span className="w-10 text-right">set</span>
       </div>
       <ul className="text-xs space-y-0.5">
         {moves.map(([m, v]) => (
           <li key={m} className="flex items-baseline gap-2"><span className="flex-1 truncate">{MOVE_LABEL[m] ?? m}</span><span className="font-mono text-stewart-muted w-8 text-right">{v.used}</span><span className="font-mono w-10 text-right text-stewart-success">{pct(v.set, v.used)}</span></li>
-        ))}
-      </ul>
-      <p className="mt-3 text-[10px] uppercase tracking-wider text-stewart-muted">The tape: the same no, handled, and the appointment set</p>
-      <ul className="mt-1 space-y-2">
-        {beyond.clips.slice(0, 2).map((c) => (
-          <li key={c.call_id + c.ts} className="text-xs">
-            <p className="text-[11px] text-stewart-muted"><span className="font-semibold text-stewart-text">{c.rep}</span> <span className="font-mono">{c.ts}</span> &middot; {c.attempts} {c.attempts === 1 ? "angle" : "angles"}</p>
-            <p className="mt-0.5 leading-snug">customer: &ldquo;{c.quote}&rdquo;</p>
-            <div className="mt-1"><AudioClip callId={c.call_id} startSec={c.start_sec} endSec={c.end_sec} label="Play" /></div>
-          </li>
         ))}
       </ul>
     </div>
