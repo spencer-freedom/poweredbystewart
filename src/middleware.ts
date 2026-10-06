@@ -1,8 +1,47 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkClient, clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-// Let Clerk set up session cookies but don't block any routes server-side.
-// Auth protection is handled client-side in the dashboard layout.
-export default clerkMiddleware();
+// Clerk sets session cookies everywhere. Server-side protection is applied
+// to the Ion surfaces only: every /ion page, every /ion/*.json data file,
+// and the /api/ion routes (audio clips, narration, saves). A sign-up page
+// exists, so "signed in" is not enough — the signed-in user also has to be
+// on the allowlist. Default is Spencer; ION_ALLOWED_EMAILS (comma-separated)
+// extends it without a deploy of code.
+
+const isIon = createRouteMatcher(["/ion(.*)", "/api/ion(.*)"]);
+
+const ALLOWED = new Set(
+  (process.env.ION_ALLOWED_EMAILS || "manager@getthriftyprovo.com")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean),
+);
+
+export default clerkMiddleware(async (auth, req) => {
+  if (!isIon(req)) return;
+  const { userId, sessionClaims, redirectToSignIn } = await auth();
+  if (!userId) {
+    if (req.nextUrl.pathname.startsWith("/api/")) {
+      return NextResponse.json({ error: "Sign in required" }, { status: 401 });
+    }
+    return redirectToSignIn({ returnBackUrl: req.url });
+  }
+  // Email from the session token when the Clerk dashboard adds it to the
+  // claims; otherwise one user lookup. Ion traffic is a handful of people.
+  let email = (sessionClaims as { email?: string } | null)?.email?.toLowerCase();
+  if (!email) {
+    try {
+      const client = await clerkClient();
+      const user = await client.users.getUser(userId);
+      email = user.primaryEmailAddress?.emailAddress?.toLowerCase();
+    } catch {
+      email = undefined;
+    }
+  }
+  if (!email || !ALLOWED.has(email)) {
+    return new NextResponse("Not available.", { status: 403 });
+  }
+});
 
 export const config = {
   matcher: [
