@@ -317,27 +317,23 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
                 <div className={"mt-4 grid gap-4 " + (withBeyond ? "lg:grid-cols-3 md:grid-cols-2" : show.level >= 2 ? "md:grid-cols-2" : "")}>
                   <div className="rounded-lg border border-stewart-border bg-stewart-bg/60 p-4">
                     <p className="text-[11px] uppercase tracking-wider text-stewart-muted">What {read.rep} said</p>
-                    {m.said ? (
+                    {obj ? (
+                      <div className="mt-2"><ObjectionSequence o={obj} rep={read.rep} callId={read.callId} floor={floor} clip={m.clip} /></div>
+                    ) : m.said ? (
                       m.said.map((ln, i) => <p key={i} className="mt-1 text-sm">{ln.who === "rep" ? read.rep : "customer"}: &ldquo;{ln.line}&rdquo;</p>)
-                    ) : obj ? (
-                      <>
-                        <p className="mt-1 text-sm">customer: &ldquo;{obj.quote}&rdquo;</p>
-                        {obj.attempt_quotes?.map((q, i) => <p key={i} className="mt-1 text-sm">{read.rep}: &ldquo;{q}&rdquo; <span className="text-xs text-stewart-muted">({MOVE_LABEL[obj.attempt_moves?.[i] ?? ""] ?? ""})</span></p>)}
-                      </>
                     ) : pick ? (
                       <>
                         <p className="mt-1 text-sm">&ldquo;{pick.quote}&rdquo; <span className="font-mono text-xs text-stewart-muted">{pick.ts}</span></p>
                         <p className="mt-1 text-xs text-stewart-muted leading-relaxed">{pick.stewart_read}</p>
                       </>
                     ) : null}
-                    <div className="mt-3"><AudioClip callId={read.callId} startSec={m.clip?.start ?? Math.max(0, at - 4)} endSec={m.clip?.end ?? at + 26} label="Play what happened" /></div>
-                    {obj ? <FloorLine type={obj.type} moves={obj.attempt_moves ?? []} floor={floor} /> : null}
-                    <div className="mt-3 rounded-md border px-3 py-2" style={{ borderColor: "#f59e0b", background: "rgba(245,158,11,0.08)" }}>
+                    {!obj ? <div className="mt-3"><AudioClip callId={read.callId} startSec={m.clip?.start ?? Math.max(0, at - 4)} endSec={m.clip?.end ?? at + 26} label="Play what happened" /></div> : null}
+                    {!obj ? <div className="mt-3 rounded-md border px-3 py-2" style={{ borderColor: "#f59e0b", background: "rgba(245,158,11,0.08)" }}>
                       <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: "#f59e0b" }}>On this floor</p>
                       <p className="mt-1 text-sm text-stewart-text leading-relaxed">
                         {m.floor.split(/(\d+%)/g).map((piece, i) => /^\d+%$/.test(piece) ? <span key={i} className="font-mono font-bold" style={{ color: "#f59e0b" }}>{piece}</span> : <span key={i}>{piece}</span>)}
                       </p>
-                    </div>
+                    </div> : null}
                   </div>
                   {show.level >= 2 ? (
                     <div className="rounded-lg border-2 bg-stewart-bg/60 p-4" style={{ borderColor: "#a78bfa", boxShadow: "0 0 0 1px rgba(167,139,250,0.35), 0 0 24px rgba(167,139,250,0.25)" }}>
@@ -435,6 +431,66 @@ function BeyondCard({ beyond, floor, rep }: { beyond: Beyond; floor: FloorMoves;
   );
 }
 
+// The training sequence for an objection, always in this order:
+//   the objection → did the rep try → each attempt and whether it moved the
+//   customer → how many it took → was it overcome → if not, what works on
+//   this floor. One component, used wherever an objection is shown.
+export function ObjectionSequence({ o, rep, callId, floor, clip, couldHave }: {
+  o: Objection; rep: string | null; callId: string; floor: FloorMoves;
+  clip?: { start: number; end: number };
+  couldHave?: React.ReactNode;
+}) {
+  const s = sec(o.ts) ?? 0;
+  const quotes = o.attempt_quotes ?? [];
+  const moves = o.attempt_moves ?? [];
+  const kinds = o.attempt_kinds ?? [];
+  const results = (o as Objection & { attempt_results?: string[] }).attempt_results ?? [];
+  const tried = quotes.filter((_, i) => moves[i] !== "concede").length > 0;
+  const overcome = !!o.resolved_by_tape;
+  const typed = floor.byType[o.type] ?? {};
+  const best = Object.entries(typed).filter(([, v]) => v.used >= 3).sort((a, b) => b[1].set / b[1].used - a[1].set / a[1].used)[0] ?? null;
+  const Row = ({ k, v, tone }: { k: string; v: React.ReactNode; tone?: string }) => (
+    <div className="grid grid-cols-[7.5rem_1fr] gap-3 py-1.5 border-t border-stewart-border/60 first:border-t-0">
+      <span className="text-[10px] uppercase tracking-wider text-stewart-muted pt-0.5">{k}</span>
+      <span className={"text-sm leading-snug " + (tone ?? "")}>{v}</span>
+    </div>
+  );
+  return (
+    <div>
+      <Row k="The objection" v={<>customer: &ldquo;{o.quote}&rdquo; <span className="font-mono text-xs text-stewart-muted">{o.ts}</span>{o.blocked_section ? <span className="text-xs text-stewart-muted"> &middot; stalled {SECTION_LABEL[o.blocked_section] ?? o.blocked_section}</span> : null}</>} />
+      <Row k="Tried to overcome it?" v={tried ? "Yes" : "No"} tone={tried ? "text-stewart-success font-semibold" : "text-stewart-danger font-semibold"} />
+      {quotes.length ? (
+        <Row k="The attempts" v={
+          <ol className="space-y-1">
+            {quotes.map((q, i) => {
+              const last = i === quotes.length - 1;
+              const r = results[i];
+              const verdict = r ? r.replace(/_/g, " ") : last ? (overcome ? "the customer moved" : moves[i] === "concede" ? "the rep let it go" : "the customer held") : "the customer held";
+              return (
+                <li key={i}>
+                  <span className="font-mono text-xs text-stewart-muted mr-1">{i + 1}.</span>&ldquo;{q}&rdquo;
+                  <span className="text-xs text-stewart-muted"> &mdash; {MOVE_LABEL[moves[i] ?? ""] ?? moves[i] ?? ""}{kinds[i] === "restate" ? " (said it again)" : ""} &rarr; {verdict}</span>
+                </li>
+              );
+            })}
+          </ol>
+        } />
+      ) : null}
+      <Row k="How many it took" v={tried ? `${o.rep_attempts} new ${o.rep_attempts === 1 ? "angle" : "angles"}${o.rep_restates ? `, said it again \u00d7${o.rep_restates}` : ""}` : "none"} />
+      <Row k="Overcome?" v={overcome ? <>Yes &mdash; the script went on{o.next_event ? ` to ${o.next_event.replace("@", " at ")}` : ""}.</> : <>No &mdash; the script did not continue past this.</>} tone={overcome ? "text-stewart-success font-semibold" : "text-stewart-danger font-semibold"} />
+      <div className="mt-2"><AudioClip callId={callId} startSec={clip?.start ?? Math.max(0, s - 4)} endSec={clip?.end ?? s + 26} label="Play the objection" /></div>
+      {!overcome ? (
+        <div className="mt-3 rounded-md border px-3 py-2" style={{ borderColor: "#f59e0b", background: "rgba(245,158,11,0.08)" }}>
+          <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: "#f59e0b" }}>What works on this floor against &ldquo;{OBJ_LABEL[o.type] ?? o.type}&rdquo;</p>
+          {best ? <p className="mt-1 text-sm">{MOVE_LABEL[best[0]] ?? best[0]} &mdash; sets <span className="font-mono font-bold" style={{ color: "#f59e0b" }}>{pct(best[1].set, best[1].used)}</span> of the time ({best[1].used} tries).</p> : null}
+          {floor.byAngles["1"] && floor.byAngles["2"] ? <p className="mt-1 text-sm">One angle sets <span className="font-mono font-bold" style={{ color: "#f59e0b" }}>{pct(floor.byAngles["1"].set, floor.byAngles["1"].n)}</span>, two sets <span className="font-mono font-bold" style={{ color: "#f59e0b" }}>{pct(floor.byAngles["2"].set, floor.byAngles["2"].n)}</span>.</p> : null}
+          {couldHave ? <div className="mt-2">{couldHave}</div> : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function SectionCard({ e, callId }: { e: Event; callId: string }) {
   const s = sec(e.ts);
   return (
@@ -477,19 +533,10 @@ function FloorLine({ type, moves, floor }: { type: string; moves: string[]; floo
 }
 
 function ObjectionCard({ o, callId, floor }: { o: Objection; callId: string; floor: FloorMoves; corpusCalls: number }) {
-  const s = sec(o.ts) ?? 0;
   return (
     <>
-      <p className="text-[11px] uppercase tracking-wider text-stewart-muted">Objection &middot; {OBJ_LABEL[o.type] ?? o.type}{o.blocked_section ? ` · stalled ${SECTION_LABEL[o.blocked_section] ?? o.blocked_section}` : ""}</p>
-      <p className="mt-2 text-sm">customer: &ldquo;{o.quote}&rdquo; <span className="font-mono text-xs text-stewart-muted">{o.ts}</span></p>
-      <ol className="mt-2 space-y-1">
-        {(o.attempt_quotes ?? []).map((q, i) => (
-          <li key={i} className="text-sm"><span className="font-mono text-xs text-stewart-muted mr-1">{i + 1}.</span>&ldquo;{q}&rdquo; <span className="text-xs text-stewart-muted">— {MOVE_LABEL[o.attempt_moves?.[i] ?? ""] ?? o.attempt_moves?.[i] ?? ""}{o.attempt_kinds?.[i] === "restate" ? " (restate)" : ""}</span></li>
-        ))}
-      </ol>
-      <p className="mt-2 text-xs"><span className={o.resolved_by_tape ? "text-stewart-success" : "text-stewart-danger"}>{o.resolved_by_tape ? `The script went on${o.next_event ? ` — ${o.next_event.replace("@", " at ")}` : ""}.` : "The script did not continue past this."}</span>{" "}<span className="text-stewart-muted">{o.rep_attempts} new {o.rep_attempts === 1 ? "angle" : "angles"}{o.rep_restates ? `, said it again ×${o.rep_restates}` : ""}.</span></p>
-      <div className="mt-3"><AudioClip callId={callId} startSec={Math.max(0, s - 4)} endSec={s + 26} label="Play the objection" /></div>
-      <FloorLine type={o.type} moves={o.attempt_moves ?? []} floor={floor} />
+      <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-2">Objection &middot; {OBJ_LABEL[o.type] ?? o.type}</p>
+      <ObjectionSequence o={o} rep={null} callId={callId} floor={floor} />
     </>
   );
 }
