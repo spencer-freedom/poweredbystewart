@@ -208,7 +208,25 @@ def build_exemplars(rows: list[dict], events_by_call: dict[str, list[dict]]) -> 
     return out
 
 
-OBJ_CLIP_LEAD, OBJ_CLIP_LEN = 5, 25
+OBJ_CLIP_LEAD, OBJ_CLIP_LEN, OBJ_CLIP_TAIL, OBJ_CLIP_MAX = 5, 25, 6, 120
+
+
+def objection_clip_end(o: dict, t: int) -> int:
+    """The clip runs until the objection is overcome, not a fixed 25 seconds:
+    the read's resolution timestamp when it has one, else the next script
+    event the tape shows, plus a tail so the customer's agreement is heard.
+    Capped so a no that lingered for minutes doesn't become a ten-minute clip."""
+    ends = []
+    r = ts_sec(o.get("resolution_ts"))
+    if r is not None and r > t:
+        ends.append(r)
+    nxt = o.get("next_event")
+    if isinstance(nxt, str) and "@" in nxt:
+        n = ts_sec(nxt.split("@", 1)[1])
+        if n is not None and n > t:
+            ends.append(n)
+    end = (min(ends) if ends else t + OBJ_CLIP_LEN - OBJ_CLIP_TAIL) + OBJ_CLIP_TAIL
+    return min(max(end, t + OBJ_CLIP_LEN), t + OBJ_CLIP_MAX)
 
 
 def objection_row(o: dict) -> dict:
@@ -216,7 +234,7 @@ def objection_row(o: dict) -> dict:
     return {
         "ts": o.get("ts"),
         "start_sec": max(0, t - OBJ_CLIP_LEAD) if t is not None else None,
-        "end_sec": t + OBJ_CLIP_LEN if t is not None else None,
+        "end_sec": objection_clip_end(o, t) if t is not None else None,
         "quote": o.get("quote") or "",
         "type": o.get("type") or "other",
         "blocked_section": norm_section(o.get("blocked_section")) if o.get("blocked_section") not in (None, "", "none") else None,
