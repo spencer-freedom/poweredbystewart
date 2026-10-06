@@ -167,18 +167,55 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
         {/* The whole call, with a timeline of what Stewart found */}
         <div className="mt-8 rounded-xl border border-stewart-border bg-stewart-card p-4">
           <audio ref={audioRef} controls preload="metadata" className="w-full" src={`/api/ion/audio-clip/${encodeURIComponent(read.callId)}`} />
-          <div className="relative mt-3 h-8">
-            <div className="absolute inset-x-0 top-3 h-1 rounded bg-white/10" />
-            {nodes.filter((n) => n.ts).map((n) => {
-              const left = Math.min(100, Math.max(0, ((sec(n.ts) ?? 0) / dur) * 100));
+          {/* The timeline: every node from the atom, named, in call order. Script
+              labels stagger below the line, everything else staggers above. */}
+          <div className="relative mt-3 h-[12rem]">
+            {(() => {
+              const LINE = 6 * 16; // px from the top of the strip to the line
+              const timed = nodes.filter((n) => n.ts).sort((x, y) => (sec(x.ts) ?? 0) - (sec(y.ts) ?? 0));
+              // Collision-aware rows: a label takes the first row whose last label is far
+              // enough left; up to four rows each side. Gap is in percent of the strip.
+              const GAP = 8.5;
+              const lastInRow = { below: [] as number[], above: [] as number[] };
+              const placed = timed.map((n) => {
+                const left = Math.min(100, Math.max(0, ((sec(n.ts) ?? 0) / dur) * 100));
+                const side = n.kind === "section" ? "below" : "above";
+                const rows = lastInRow[side];
+                let row = rows.findIndex((last) => left - last >= GAP);
+                if (row === -1) {
+                  if (rows.length < 4) { row = rows.length; rows.push(left); }
+                  else { row = rows.indexOf(Math.min(...rows)); rows[row] = left; }
+                } else rows[row] = left;
+                return { n, left, side, row };
+              });
               return (
-                <button key={n.id} type="button" title={`${n.label} ${n.ts}`} onClick={() => pick(n)}
-                  className="absolute -translate-x-1/2 rounded-full border border-black"
-                  style={{ left: `${left}%`, top: n.kind === "section" ? 8 : 2, width: n.kind === "section" ? 10 : 14, height: n.kind === "section" ? 10 : 14, background: n.tone }} />
+                <>
+                  <div className="absolute inset-x-0 h-1 rounded bg-white/10" style={{ top: LINE }} />
+                  {placed.map(({ n, left, side, row }) => {
+                    const isSection = side === "below";
+                    const dotSize = isSection ? 10 : 14;
+                    const labelTop = isSection ? LINE + 14 + row * 15 : LINE - 26 - row * 15;
+                    const active = selected === n.id;
+                    const anchor = left > 92 ? "translate(-100%, 0)" : left < 8 ? "translate(0, 0)" : "translate(-50%, 0)";
+                    return (
+                      <div key={n.id} className="absolute" style={{ left: `${left}%` }}>
+                        <div className="absolute -translate-x-1/2 w-px bg-white/15" style={isSection ? { top: LINE + 6, height: labelTop - (LINE + 6) } : { top: labelTop + 11, height: LINE - 7 - (labelTop + 11) }} />
+                        <button type="button" onClick={() => pick(n)} title={`${n.label} ${n.ts}`}
+                          className={"absolute -translate-x-1/2 rounded-full border " + (active ? "border-white" : "border-black")}
+                          style={{ top: LINE + 2 - dotSize / 2, width: dotSize, height: dotSize, background: n.tone }} />
+                        <button type="button" onClick={() => pick(n)}
+                          className={"absolute whitespace-nowrap text-[10px] leading-none px-1 rounded bg-black/70 hover:text-stewart-text " + (active ? "text-stewart-text font-semibold" : isSection ? "text-stewart-muted" : "text-stewart-text")}
+                          style={{ top: labelTop, transform: anchor }}>
+                          {n.label}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </>
               );
-            })}
+            })()}
           </div>
-          <p className="text-[11px] text-stewart-muted">Small dots: the script, in order. Large dots: objections, the bill, the reason, the outcome. Click to jump.</p>
+          <p className="text-[11px] text-stewart-muted">Below the line: the script, in order. Above it: objections, the bill, the reason, the outcome, where to coach. Click any of them to jump the player there.</p>
         </div>
 
         <div className="mt-8 grid lg:grid-cols-[1fr_22rem] gap-6 items-start">
