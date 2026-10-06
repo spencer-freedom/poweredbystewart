@@ -193,7 +193,7 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
                   <div className="absolute inset-x-0 h-1 rounded bg-white/10" style={{ top: LINE }} />
                   {placed.map(({ n, left, side, row }) => {
                     const isSection = side === "below";
-                    const dotSize = isSection ? 10 : 14;
+                    const dotSize = n.kind === "focus" ? 20 : isSection ? 10 : 14;
                     const labelTop = isSection ? LINE + 14 + row * 15 : LINE - 26 - row * 15;
                     const active = selected === n.id;
                     const anchor = left > 92 ? "translate(-100%, 0)" : left < 8 ? "translate(0, 0)" : "translate(-50%, 0)";
@@ -244,11 +244,14 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
                 const p = pos(n); const active = selected === n.id; const big = n.kind !== "section";
                 const e = n.data as Event;
                 const filled = n.kind !== "section" || e.status === "asked";
+                const focus = n.kind === "focus";
+                const radius = focus ? (active ? 26 : 22) : active ? (big ? 16 : 11) : big ? 12 : 8;
                 return (
                   <g key={n.id} transform={`translate(${p.x} ${p.y})`} onClick={() => pick(n)} style={{ cursor: "pointer" }}>
-                    <circle r={active ? (big ? 16 : 11) : big ? 12 : 8} fill={filled ? n.tone : "#000"} stroke={n.tone} strokeWidth={active ? 3 : 1.5} fillOpacity={filled ? 0.9 : 1} />
+                    {focus ? <circle r={radius + 10} fill={n.tone} fillOpacity={0.12} /> : null}
+                    <circle r={radius} fill={filled ? n.tone : "#000"} stroke={focus ? "#fff" : n.tone} strokeWidth={focus ? 2 : active ? 3 : 1.5} fillOpacity={filled ? 0.9 : 1} />
                     {n.kind === "objection" ? <text textAnchor="middle" y={4} fill="#000" fontSize={10} fontWeight={700}>{(n.data as Objection).rep_attempts}</text> : null}
-                    <text textAnchor={p.x > 20 ? "start" : p.x < -20 ? "end" : "middle"} x={p.x > 20 ? 16 : p.x < -20 ? -16 : 0} y={p.x > 20 || p.x < -20 ? 4 : p.y > 0 ? 24 : -16} fill={active ? "#e5e7eb" : "#9ca3af"} fontSize={11}>{n.label}{n.ts ? ` ${n.ts}` : ""}</text>
+                    <text textAnchor={p.x > 20 ? "start" : p.x < -20 ? "end" : "middle"} x={p.x > 20 ? radius + 6 : p.x < -20 ? -(radius + 6) : 0} y={p.x > 20 || p.x < -20 ? 4 : p.y > 0 ? radius + 14 : -(radius + 8)} fill={focus ? "#e5e7eb" : active ? "#e5e7eb" : "#9ca3af"} fontSize={focus ? 13 : 11} fontWeight={focus ? 700 : 400}>{n.label}{n.ts ? ` ${n.ts}` : ""}</text>
                   </g>
                 );
               })}
