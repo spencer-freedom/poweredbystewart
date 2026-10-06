@@ -69,8 +69,14 @@ const pct = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)}%` : "â€
 type Node = { id: string; kind: "section" | "objection" | "audit" | "outcome" | "focus"; label: string; ts: string | null; angle: number; r: number; tone: string; data: unknown };
 
 export type Tab = { callId: string; rep: string | null; durationMin: number | null; outcome: string | null; hook: string };
+export type Beyond = {
+  type: string;
+  total: number;
+  reps: { rep: string; n: number; set: number; continued: number; angles: number; set_rate: number }[];
+  clips: { call_id: string; rep: string; ts: string; start_sec: number; end_sec: number; quote: string; moves: string[]; attempts: number }[];
+};
 
-export function CallAtom({ read, floor, tabs }: { read: CallRead; floor: FloorMoves; tabs: Tab[] }) {
+export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor: FloorMoves; tabs: Tab[]; beyond: Beyond | null }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const b = read.brief;
@@ -134,14 +140,16 @@ export function CallAtom({ read, floor, tabs }: { read: CallRead; floor: FloorMo
   return (
     <main className="min-h-screen bg-black text-stewart-text">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
-        <p className="text-xs uppercase tracking-[0.25em] text-stewart-accent font-semibold">Powered by Stewart &middot; three calls, taken apart</p>
+        <p className="text-xs uppercase tracking-[0.25em] text-stewart-accent font-semibold">Powered by Stewart &middot; three calls, three levels</p>
         {tabs.length > 1 ? (
           <div className="mt-4 grid sm:grid-cols-3 gap-2">
             {tabs.map((t) => {
               const active = t.callId === read.callId;
+              const sc = SHOWCASE[t.callId];
               return (
                 <Link key={t.callId} href={`/ion/call?id=${encodeURIComponent(t.callId)}`} className={"rounded-lg border p-3 transition-colors " + (active ? "border-stewart-accent/60 bg-stewart-accent/10" : "border-stewart-border bg-stewart-card hover:border-stewart-accent/40")}>
-                  <p className="text-sm font-semibold">{t.rep ?? "?"} <span className="text-stewart-muted font-normal">&middot; {t.durationMin ? `${t.durationMin.toFixed(1)} min` : ""} &middot; {t.outcome ? OUTCOME_LABEL[t.outcome] ?? t.outcome : ""}</span></p>
+                  <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-stewart-accent">{sc ? `${sc.level} \u00b7 ${sc.levelTitle}` : ""}</p>
+                  <p className="mt-1 text-sm font-semibold">{t.rep ?? "?"} <span className="text-stewart-muted font-normal">&middot; {t.durationMin ? `${t.durationMin.toFixed(1)} min` : ""} &middot; {t.outcome ? OUTCOME_LABEL[t.outcome] ?? t.outcome : ""}</span></p>
                   <p className="mt-1 text-xs text-stewart-muted leading-snug">{t.hook}</p>
                 </Link>
               );
@@ -149,7 +157,7 @@ export function CallAtom({ read, floor, tabs }: { read: CallRead; floor: FloorMo
           </div>
         ) : null}
         <h1 className="mt-6 text-3xl sm:text-5xl font-bold leading-tight">{read.rep ?? "A rep"} &middot; {read.durationMin ? `${read.durationMin.toFixed(1)} min` : ""} &middot; {outcome ? OUTCOME_LABEL[outcome.outcome] ?? outcome.outcome : ""}{outcome?.set_strength === "set_with_bill" ? ", bill in hand" : ""}</h1>
-        <p className="mt-3 max-w-2xl text-stewart-muted leading-relaxed">Listen to the whole call. Then click anything on the atom to hear the second Stewart is talking about. Every quote on this page was matched to the transcript by code{read.quotes ? `: ${read.quotes.verified + read.quotes.fuzzy} of ${read.quotes.checked} found` : ""}.</p>
+        <p className="mt-3 max-w-2xl text-stewart-muted leading-relaxed">Listen to the whole call. Then click anything on the atom to hear the second Stewart is talking about. Every quote on this page is on the tape{read.quotes ? ` â€” ${read.quotes.verified + read.quotes.fuzzy} of ${read.quotes.checked} checked` : ""}.</p>
 
         {/* The whole call, with a timeline of what Stewart found */}
         <div className="mt-8 rounded-xl border border-stewart-border bg-stewart-card p-4">
@@ -254,7 +262,7 @@ export function CallAtom({ read, floor, tabs }: { read: CallRead; floor: FloorMo
               <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-accent">The moment the one-on-one is about</p>
               <h2 className="mt-2 text-xl sm:text-2xl font-bold">{show.miss.title}</h2>
               <p className="mt-2 text-sm text-stewart-muted leading-relaxed">{show.miss.why}</p>
-              <div className="mt-4 grid md:grid-cols-2 gap-4">
+              <div className={"mt-4 grid gap-4 " + (show.level >= 2 ? "md:grid-cols-2" : "")}>
                 <div className="rounded-lg border border-stewart-border bg-stewart-bg/60 p-4">
                   <p className="text-[11px] uppercase tracking-wider text-stewart-muted">What {read.rep} said</p>
                   {missObj ? (
@@ -272,20 +280,65 @@ export function CallAtom({ read, floor, tabs }: { read: CallRead; floor: FloorMo
                   {missObj ? <FloorLine type={missObj.type} moves={missObj.attempt_moves ?? []} floor={floor} /> : null}
                   <p className="mt-3 text-xs text-stewart-muted leading-relaxed"><span className="uppercase tracking-wider text-[10px]">On this floor</span><br />{show.miss.floor}</p>
                 </div>
-                <div className="rounded-lg border border-stewart-accent/40 bg-stewart-bg/60 p-4">
-                  <p className="text-[11px] uppercase tracking-wider text-stewart-accent">What it sounds like said the way that works</p>
-                  <p className="mt-1 text-sm">{read.rep}: &ldquo;{show.miss.text}&rdquo;</p>
-                  <p className="mt-1 text-[11px] text-stewart-muted">A suggested rephrase, in {read.rep}&apos;s voice. {read.rep} never said this.</p>
-                  <div className="mt-3"><AltTake rep={read.rep} text={show.miss.text} label={`Hear ${read.rep} say it`} /></div>
-                </div>
+                {show.level >= 2 ? (
+                  <div className="rounded-lg border border-stewart-accent/40 bg-stewart-bg/60 p-4">
+                    <p className="text-[11px] uppercase tracking-wider text-stewart-accent">What it could have sounded like</p>
+                    <p className="mt-1 text-sm">{read.rep}: &ldquo;{show.miss.text}&rdquo;</p>
+                    <p className="mt-1 text-[11px] text-stewart-warning">Synthetic coaching example. {read.rep} never said this &mdash; it is a suggested line rendered in a cloned voice.</p>
+                    <div className="mt-3"><AltTake rep={read.rep} text={show.miss.text} label={`Hear it in ${read.rep}\u2019s voice`} /></div>
+                  </div>
+                ) : null}
               </div>
             </div>
+
+            {show.level === 3 && beyond && missObj ? (
+              <div className="mt-6 rounded-xl border border-stewart-warning/40 bg-stewart-warning/5 p-5">
+                <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-warning">Beyond this call</p>
+                <h2 className="mt-2 text-xl sm:text-2xl font-bold">&ldquo;{OBJ_LABEL[beyond.type] ?? beyond.type}&rdquo; came up {beyond.total} times on this floor. Here&apos;s who gets past it, and how.</h2>
+                <div className="mt-4 grid md:grid-cols-2 gap-4">
+                  <div className="rounded-lg border border-stewart-border bg-stewart-bg/60 p-4">
+                    <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-2">By rep &middot; faced &middot; angles per &middot; script went on &middot; set</p>
+                    <ul className="text-sm space-y-1">
+                      {beyond.reps.slice(0, 8).map((r) => (
+                        <li key={r.rep} className={"flex items-baseline gap-2 " + (r.rep === read.rep ? "text-stewart-warning" : "")}>
+                          <span className="flex-1 font-semibold">{r.rep}{r.rep === read.rep ? " (this call)" : ""}</span>
+                          <span className="font-mono text-stewart-muted w-6 text-right">{r.n}</span>
+                          <span className="font-mono text-stewart-muted w-8 text-right">{(r.angles / r.n).toFixed(1)}</span>
+                          <span className="font-mono w-12 text-right">{pct(r.continued, r.n)}</span>
+                          <span className="font-mono w-12 text-right text-stewart-success">{pct(r.set, r.n)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="mt-3 text-[11px] uppercase tracking-wider text-stewart-muted mb-1">By move &middot; used &middot; set</p>
+                    <ul className="text-sm space-y-1">
+                      {Object.entries(floor.byType[beyond.type] ?? {}).filter(([, v]) => v.used >= 3).sort((a, b) => b[1].set / b[1].used - a[1].set / a[1].used).map(([m, v]) => (
+                        <li key={m} className="flex items-baseline gap-2"><span className="flex-1">{MOVE_LABEL[m] ?? m}</span><span className="font-mono text-stewart-muted w-8 text-right">{v.used}</span><span className="font-mono w-12 text-right text-stewart-success">{pct(v.set, v.used)}</span></li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="rounded-lg border border-stewart-border bg-stewart-bg/60 p-4">
+                    <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-2">The tape: the same no, handled, and the appointment set</p>
+                    <ul className="space-y-3">
+                      {beyond.clips.map((c) => (
+                        <li key={c.call_id + c.ts} className="text-sm">
+                          <p className="text-[11px] text-stewart-muted"><span className="font-semibold text-stewart-text">{c.rep}</span> <span className="font-mono">{c.ts}</span> &middot; {c.attempts} {c.attempts === 1 ? "angle" : "angles"}: {c.moves.map((m) => MOVE_LABEL[m] ?? m).join(", ")}</p>
+                          <p className="mt-0.5 leading-snug">customer: &ldquo;{c.quote}&rdquo;</p>
+                          <div className="mt-1.5"><AudioClip callId={c.call_id} startSec={c.start_sec} endSec={c.end_sec} label="Play" /></div>
+                        </li>
+                      ))}
+                    </ul>
+                    {!beyond.clips.length ? <p className="text-xs text-stewart-muted">No set call on the floor handled this one with an angle yet.</p> : null}
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </>
         ) : null}
 
-        <p className="mt-10 text-sm text-stewart-muted">
-          Every one of the {read.corpusCalls} calls has this. <Link href="/ion/manager" className="text-stewart-accent hover:underline">The manager&apos;s surface &rarr;</Link>
-        </p>
+        <div className="mt-14 border-t border-white/10 pt-8">
+          <p className="text-xl sm:text-2xl font-semibold leading-snug">This is already running on Ion&apos;s data. This is what exists today.</p>
+          <p className="mt-2 text-sm text-stewart-muted">{read.corpusCalls} of your calls, read this way.</p>
+        </div>
       </div>
     </main>
   );

@@ -1,6 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { CallAtom, type CallRead, type FloorMoves, type Tab } from "./CallAtom.client";
+import { CallAtom, type Beyond, type CallRead, type FloorMoves, type Tab } from "./CallAtom.client";
 import { SHOWCASE, SHOWCASE_ORDER } from "./showcase";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +25,30 @@ async function readJson<T>(p: string): Promise<T | null> {
   }
 }
 
-type Row = { call_id: string; slug: string; rep_id: string | null; booked: boolean; duration_min: number | null; objections?: { type: string; moves: string[]; continued: boolean | null }[] };
+type Row = { call_id: string; slug: string; rep_id: string | null; booked: boolean; duration_min: number | null; objections?: { ts: string | null; start_sec: number | null; end_sec: number | null; quote: string; type: string; moves: string[]; attempts: number; continued: boolean | null }[] };
+
+// Level 3: one behaviour, exploded outward. For the objection type the rep
+// faced, every rep's record against it, the moves that set, and the tape of
+// the reps who handle it best. Nothing here is a model: counts over the reads.
+function beyond(rows: Row[], type: string, excludeCall: string): Beyond {
+  const reps: Record<string, { n: number; set: number; continued: number; angles: number }> = {};
+  const clips: Beyond["clips"] = [];
+  for (const r of rows) {
+    for (const o of r.objections ?? []) {
+      if (o.type !== type) continue;
+      const rep = r.rep_id || "Unknown";
+      const cell = (reps[rep] ??= { n: 0, set: 0, continued: 0, angles: 0 });
+      cell.n += 1; cell.set += r.booked ? 1 : 0; cell.continued += o.continued ? 1 : 0; cell.angles += o.attempts;
+      if (r.call_id !== excludeCall && r.booked && o.continued && o.attempts >= 1 && o.start_sec !== null && o.end_sec !== null && r.rep_id) {
+        clips.push({ call_id: r.call_id, rep: r.rep_id, ts: o.ts ?? "", start_sec: o.start_sec, end_sec: o.end_sec, quote: o.quote, moves: o.moves, attempts: o.attempts });
+      }
+    }
+  }
+  const ranked = Object.entries(reps).filter(([rep, v]) => rep !== "Unknown" && v.n >= 3).map(([rep, v]) => ({ rep, ...v, set_rate: v.set / v.n })).sort((a, b) => b.set_rate - a.set_rate || b.n - a.n);
+  const bestReps = ranked.slice(0, 3).map((x) => x.rep);
+  const pick = clips.filter((c) => bestReps.includes(c.rep)).sort((a, b) => b.attempts - a.attempts).slice(0, 3);
+  return { type, reps: ranked, clips: pick.length ? pick : clips.sort((a, b) => b.attempts - a.attempts).slice(0, 3), total: Object.values(reps).reduce((n, v) => n + v.n, 0) };
+}
 
 function floorMoves(rows: Row[]): FloorMoves {
   const byType: FloorMoves["byType"] = {};
@@ -81,5 +104,11 @@ export default async function IonCallPage({ searchParams }: { searchParams: Prom
     const tb = await readJson<{ rep_name?: string | null; observed_outcome?: { outcome: string } | null }>(path.join(ION(), "calls", `${bslug}-manager-brief.json`));
     tabs.push({ callId: cid, rep: tb?.rep_name ?? r?.rep_id ?? null, durationMin: r?.duration_min ?? null, outcome: tb?.observed_outcome?.outcome ?? null, hook: SHOWCASE[cid].hook });
   }
-  return <CallAtom read={read} floor={floor} tabs={tabs} />;
+  const show = SHOWCASE[callId];
+  let beyondData: Beyond | null = null;
+  if (show?.level === 3 && show.miss.kind === "objection") {
+    const o = (brief.objections ?? []).find((x) => x.ts === show.miss.ts);
+    if (o) beyondData = beyond(index?.calls ?? [], o.type, callId);
+  }
+  return <CallAtom read={read} floor={floor} tabs={tabs} beyond={beyondData} />;
 }
