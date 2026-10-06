@@ -323,8 +323,8 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
                   <p className="mt-3 text-xs text-stewart-muted leading-relaxed"><span className="uppercase tracking-wider text-[10px]">On this floor</span><br />{show.miss.floor}</p>
                 </div>
                 {show.level >= 2 ? (
-                  <div className="rounded-lg border border-stewart-accent/40 bg-stewart-bg/60 p-4">
-                    <p className="text-[11px] uppercase tracking-wider text-stewart-accent">What it could have sounded like</p>
+                  <div className="rounded-lg border-2 bg-stewart-bg/60 p-4" style={{ borderColor: "#a78bfa", boxShadow: "0 0 0 1px rgba(167,139,250,0.35), 0 0 24px rgba(167,139,250,0.25)" }}>
+                    <p className="text-[11px] uppercase tracking-wider font-semibold" style={{ color: "#a78bfa" }}>What it could have sounded like</p>
                     <p className="mt-1 text-sm">{read.rep}: &ldquo;{show.miss.text}&rdquo;</p>
                     <p className="mt-1 text-[11px] text-stewart-warning">Synthetic coaching example. {read.rep} never said this &mdash; it is a suggested line rendered in a cloned voice.</p>
                     <div className="mt-3"><AltTake rep={read.rep} text={show.miss.text} label={`Hear it in ${read.rep}\u2019s voice`} /></div>
