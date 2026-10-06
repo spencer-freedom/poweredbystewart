@@ -19,6 +19,8 @@ const ALLOWED = new Set(
 
 export default clerkMiddleware(async (auth, req) => {
   if (!isIon(req)) return;
+  // Local screenshots and layout work only: never honoured in production.
+  if (process.env.NODE_ENV !== "production" && process.env.ION_GATE_OFF === "1") return;
   const { userId, sessionClaims, redirectToSignIn } = await auth();
   if (!userId) {
     if (req.nextUrl.pathname.startsWith("/api/")) {
