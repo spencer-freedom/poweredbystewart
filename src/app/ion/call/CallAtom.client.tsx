@@ -312,7 +312,8 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
                 <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-accent">{parts.length > 1 ? `The one-on-one, part ${pi + 1} of ${parts.length}` : "The moment the one-on-one is about"}</p>
                 <h2 className="mt-2 text-xl sm:text-2xl font-bold">{m.title}</h2>
                 <p className="mt-2 text-sm text-stewart-muted leading-relaxed">{m.why}</p>
-                <div className={"mt-4 grid gap-4 " + (show.level >= 2 ? "md:grid-cols-2" : "")}>
+                {(() => { const withBeyond = show.level === 3 && !!beyond && !!obj && obj === beyondObj; return (
+                <div className={"mt-4 grid gap-4 " + (withBeyond ? "lg:grid-cols-3 md:grid-cols-2" : show.level >= 2 ? "md:grid-cols-2" : "")}>
                   <div className="rounded-lg border border-stewart-border bg-stewart-bg/60 p-4">
                     <p className="text-[11px] uppercase tracking-wider text-stewart-muted">What {read.rep} said</p>
                     {m.said ? (
@@ -340,63 +341,12 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
                       <div className="mt-3"><AltTake rep={read.rep ?? ""} text={m.text} label={`Hear it in ${read.rep}\u2019s voice`} /></div>
                     </div>
                   ) : null}
+                  {withBeyond && beyond ? <BeyondCard beyond={beyond} floor={floor} rep={read.rep} /> : null}
                 </div>
+                ); })()}
               </div>
             ))}
 
-            {show.level === 3 && beyond && beyondObj ? (
-              <div className="mt-6 rounded-xl border border-stewart-warning/40 bg-stewart-warning/5 p-5">
-                <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-warning">Beyond this call</p>
-                <h2 className="mt-2 text-xl sm:text-2xl font-bold">&ldquo;{OBJ_LABEL[beyond.type] ?? beyond.type}&rdquo; came up {beyond.total} times on this floor. Here&apos;s who gets past it, and how.</h2>
-                <div className="mt-4 grid md:grid-cols-2 gap-4">
-                  <div className="rounded-lg border border-stewart-border bg-stewart-bg/60 p-4">
-                    <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-1">By rep</p>
-                    <div className="flex items-baseline gap-2 text-[10px] uppercase tracking-wider text-stewart-muted border-b border-stewart-border pb-1 mb-1">
-                      <span className="flex-1">rep</span>
-                      <span className="w-6 text-right">faced</span>
-                      <span className="w-8 text-right">angles</span>
-                      <span className="w-12 text-right">went on</span>
-                      <span className="w-12 text-right">set</span>
-                    </div>
-                    <ul className="text-sm space-y-1">
-                      {beyond.reps.slice(0, 8).map((r) => (
-                        <li key={r.rep} className={"flex items-baseline gap-2 " + (r.rep === read.rep ? "text-stewart-warning" : "")}>
-                          <span className="flex-1 font-semibold">{r.rep}{r.rep === read.rep ? " (this call)" : ""}</span>
-                          <span className="font-mono text-stewart-muted w-6 text-right">{r.n}</span>
-                          <span className="font-mono text-stewart-muted w-8 text-right">{(r.angles / r.n).toFixed(1)}</span>
-                          <span className="font-mono w-12 text-right">{pct(r.continued, r.n)}</span>
-                          <span className="font-mono w-12 text-right text-stewart-success">{pct(r.set, r.n)}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <p className="mt-4 text-[11px] uppercase tracking-wider text-stewart-muted mb-1">By move</p>
-                    <div className="flex items-baseline gap-2 text-[10px] uppercase tracking-wider text-stewart-muted border-b border-stewart-border pb-1 mb-1">
-                      <span className="flex-1">move the rep made</span>
-                      <span className="w-8 text-right">used</span>
-                      <span className="w-12 text-right">set</span>
-                    </div>
-                    <ul className="text-sm space-y-1">
-                      {Object.entries(floor.byType[beyond.type] ?? {}).filter(([, v]) => v.used >= 3).sort((a, b) => b[1].set / b[1].used - a[1].set / a[1].used).map(([m, v]) => (
-                        <li key={m} className="flex items-baseline gap-2"><span className="flex-1">{MOVE_LABEL[m] ?? m}</span><span className="font-mono text-stewart-muted w-8 text-right">{v.used}</span><span className="font-mono w-12 text-right text-stewart-success">{pct(v.set, v.used)}</span></li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="rounded-lg border border-stewart-border bg-stewart-bg/60 p-4">
-                    <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-2">The tape: the same no, handled, and the appointment set</p>
-                    <ul className="space-y-3">
-                      {beyond.clips.map((c) => (
-                        <li key={c.call_id + c.ts} className="text-sm">
-                          <p className="text-[11px] text-stewart-muted"><span className="font-semibold text-stewart-text">{c.rep}</span> <span className="font-mono">{c.ts}</span> &middot; {c.attempts} {c.attempts === 1 ? "angle" : "angles"}: {c.moves.map((m) => MOVE_LABEL[m] ?? m).join(", ")}</p>
-                          <p className="mt-0.5 leading-snug">customer: &ldquo;{c.quote}&rdquo;</p>
-                          <div className="mt-1.5"><AudioClip callId={c.call_id} startSec={c.start_sec} endSec={c.end_sec} label="Play" /></div>
-                        </li>
-                      ))}
-                    </ul>
-                    {!beyond.clips.length ? <p className="text-xs text-stewart-muted">No set call on the floor handled this one with an angle yet.</p> : null}
-                  </div>
-                </div>
-              </div>
-            ) : null}
           </>
         ) : null}
 
@@ -419,6 +369,49 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
         </div>
       </div>
     </main>
+  );
+}
+
+// The third pillar on a level-3 part: one behaviour, exploded outward onto the
+// floor — who gets past this no, the moves that set, and the tape.
+function BeyondCard({ beyond, floor, rep }: { beyond: Beyond; floor: FloorMoves; rep: string | null }) {
+  const moves = Object.entries(floor.byType[beyond.type] ?? {}).filter(([, v]) => v.used >= 3).sort((a, b) => b[1].set / b[1].used - a[1].set / a[1].used).slice(0, 4);
+  return (
+    <div className="rounded-lg border-2 bg-stewart-bg/60 p-4" style={{ borderColor: "#f59e0b", boxShadow: "0 0 0 1px rgba(245,158,11,0.3), 0 0 24px rgba(245,158,11,0.18)" }}>
+      <p className="text-[11px] uppercase tracking-wider font-semibold" style={{ color: "#f59e0b" }}>Beyond this call</p>
+      <p className="mt-1 text-sm font-semibold leading-snug">&ldquo;{OBJ_LABEL[beyond.type] ?? beyond.type}&rdquo; came up {beyond.total} times on this floor. Who gets past it, and how.</p>
+      <div className="mt-3 flex items-baseline gap-2 text-[10px] uppercase tracking-wider text-stewart-muted border-b border-stewart-border pb-1 mb-1">
+        <span className="flex-1">rep</span><span className="w-10 text-right">faced</span><span className="w-12 text-right">angles</span><span className="w-10 text-right">set</span>
+      </div>
+      <ul className="text-xs space-y-0.5">
+        {beyond.reps.slice(0, 6).map((r) => (
+          <li key={r.rep} className={"flex items-baseline gap-2 " + (r.rep === rep ? "text-stewart-warning" : "")}>
+            <span className="flex-1 font-semibold truncate">{r.rep}{r.rep === rep ? " (this call)" : ""}</span>
+            <span className="font-mono text-stewart-muted w-10 text-right">{r.n}</span>
+            <span className="font-mono text-stewart-muted w-12 text-right">{(r.angles / r.n).toFixed(1)}</span>
+            <span className="font-mono w-10 text-right text-stewart-success">{pct(r.set, r.n)}</span>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-3 flex items-baseline gap-2 text-[10px] uppercase tracking-wider text-stewart-muted border-b border-stewart-border pb-1 mb-1">
+        <span className="flex-1">move</span><span className="w-8 text-right">used</span><span className="w-10 text-right">set</span>
+      </div>
+      <ul className="text-xs space-y-0.5">
+        {moves.map(([m, v]) => (
+          <li key={m} className="flex items-baseline gap-2"><span className="flex-1 truncate">{MOVE_LABEL[m] ?? m}</span><span className="font-mono text-stewart-muted w-8 text-right">{v.used}</span><span className="font-mono w-10 text-right text-stewart-success">{pct(v.set, v.used)}</span></li>
+        ))}
+      </ul>
+      <p className="mt-3 text-[10px] uppercase tracking-wider text-stewart-muted">The tape: the same no, handled, and the appointment set</p>
+      <ul className="mt-1 space-y-2">
+        {beyond.clips.slice(0, 2).map((c) => (
+          <li key={c.call_id + c.ts} className="text-xs">
+            <p className="text-[11px] text-stewart-muted"><span className="font-semibold text-stewart-text">{c.rep}</span> <span className="font-mono">{c.ts}</span> &middot; {c.attempts} {c.attempts === 1 ? "angle" : "angles"}</p>
+            <p className="mt-0.5 leading-snug">customer: &ldquo;{c.quote}&rdquo;</p>
+            <div className="mt-1"><AudioClip callId={c.call_id} startSec={c.start_sec} endSec={c.end_sec} label="Play" /></div>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
