@@ -22,7 +22,7 @@ export default async function Visits({ searchParams }: { searchParams: Promise<{
   const { days } = await searchParams;
   const since = new Date(Date.now() - (parseInt(days || "14", 10) || 14) * 86400000).toISOString();
   const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
   let hits: Hit[] = [];
   let error: string | null = null;
   if (url && key) {

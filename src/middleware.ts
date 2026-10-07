@@ -62,7 +62,7 @@ const scripted = (ua: string) => !ua || SCRIPTED.test(ua);
 type Decision = Public | "bot" | "probe" | "gated" | "denied" | "allowed";
 function log(req: NextRequest, event: NextFetchEvent, decision: Decision, email?: string | null) {
   const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
   if (!url || !key) return;
   const h = req.headers;
   const dec = (v: string | null) => { try { return v ? decodeURIComponent(v) : null; } catch { return v; } };
