@@ -60,7 +60,7 @@ const scripted = (ua: string) => !ua || SCRIPTED.test(ua);
 // can be read back later: which pages, which clips, which voices, and whether
 // anything was probed that the page never asked for. /ion/visits reads it.
 type Decision = Public | "bot" | "probe" | "gated" | "denied" | "allowed";
-function log(req: NextRequest, event: NextFetchEvent, decision: Decision, email?: string | null) {
+function log(req: NextRequest, event: NextFetchEvent, decision: Decision, email?: string | null, note?: string | null) {
   const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
   if (!url || !key) return;
@@ -77,6 +77,7 @@ function log(req: NextRequest, event: NextFetchEvent, decision: Decision, email?
     region: h.get("x-vercel-ip-country-region"),
     city: dec(h.get("x-vercel-ip-city")),
     email: email ?? null,
+    note: note ?? null,
   };
   event.waitUntil(
     fetch(`${url}/rest/v1/ion_access_log`, {
@@ -107,13 +108,20 @@ export default clerkMiddleware(async (auth, req, event) => {
   }
   // Local screenshots and layout work only: never honoured in production.
   if (process.env.NODE_ENV !== "production" && process.env.ION_GATE_OFF === "1") return;
-  const { userId, sessionClaims, redirectToSignIn } = await auth();
+  const authObj = await auth();
+  const { userId, sessionClaims, redirectToSignIn } = authObj;
   if (!userId) {
+    // Clerk's own account of why this request has no session (token missing,
+    // signature rejected, key mismatch...) goes into the log's note, so a
+    // signed-in person being turned away can be diagnosed from the log alone.
+    const dbg = (authObj as unknown as { debug?: () => Record<string, unknown> }).debug?.() ?? {};
+    const why = [dbg.status, dbg.reason, dbg.message].filter(Boolean).join(" | ").slice(0, 300) || null;
+    const hasCookies = ["__session", "__client_uat"].filter((c) => req.cookies.has(c)).join("+") || "no clerk cookies";
     if (req.nextUrl.pathname.startsWith("/api/")) {
-      log(req, event, "probe");
+      log(req, event, "probe", null, `${hasCookies}; ${why ?? ""}`);
       return NextResponse.json({ error: "Sign in required" }, { status: 401 });
     }
-    log(req, event, "gated");
+    log(req, event, "gated", null, `${hasCookies}; ${why ?? ""}`);
     return redirectToSignIn({ returnBackUrl: req.url });
   }
   // Email from the session token when the Clerk dashboard adds it to the
