@@ -28,6 +28,16 @@ const KEY_PREFIX = "ion_solar/alt-takes";
 const URL_TTL_SECONDS = 3600;
 const MAX_TEXT_LEN = 600;
 const EL_MODEL = "eleven_multilingual_v2";
+// Pacing: a real rep breathes between thoughts. A break after each sentence
+// and a shorter one at a dash or colon; the tag is ElevenLabs markup, never
+// shown. PACE is in the cache key so a pacing change regenerates the take.
+const PACE = "pace2";
+function paced(t: string): string {
+  return t
+    .replace(/([.?!])\s+(?=\S)/g, '$1 <break time="0.7s" /> ')
+    .replace(/\s\u2014\s/g, ' \u2014 <break time="0.35s" /> ')
+    .replace(/:\s+(?=\S)/g, ': <break time="0.35s" /> ');
+}
 
 function supabaseEnv() {
   const url =
@@ -90,7 +100,7 @@ export async function GET(req: NextRequest) {
 
   // Content-addressed cache key — same inputs never regenerate.
   const hash = createHash("sha256")
-    .update(`${voiceId}|${EL_MODEL}|phone=${phone ? 1 : 0}|${text}`)
+    .update(`${voiceId}|${EL_MODEL}|${PACE}|phone=${phone ? 1 : 0}|${text}`)
     .digest("hex")
     .slice(0, 32);
   const objectPath = `${KEY_PREFIX}/${rep}/${hash}.mp3`;
@@ -112,7 +122,7 @@ export async function GET(req: NextRequest) {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          text,
+          text: paced(text),
           model_id: EL_MODEL,
           voice_settings: {
             stability: 0.5,

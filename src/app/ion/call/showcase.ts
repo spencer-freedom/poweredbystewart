@@ -61,7 +61,7 @@ export const SHOWCASE: Record<string, Showcase> = {
         title: "Part 2 \u00b7 The time. \u201cNot this week\u201d \u2192 \u201cI completely understand.\u201d Zero angles, no slot held.",
         why: "The customer never said no \u2014 he said not this week \u2014 and the rep tried zero angles. On this floor, zero angles sets 7% of the time. One angle, 46%. Two, 61%. Every attempt he didn\u2019t make was odds left on the table, and the call ended with \u201conce that comes through, I\u2019ll reach out again,\u201d which is nobody\u2019s job.",
         floor: "Angles tried against a no, and the set rate that follows: none 7%, one 46%, two 61%, three or more 73%.",
-        text: "Totally understand \u2014 and that\u2019s exactly why I\u2019d rather hold a spot than chase you: the specialist\u2019s in your area this week. It\u2019s a twenty-minute phone call, nothing to drive to. Saturday morning or a weeknight after six? And if the usage says it\u2019s not worth your time, we cancel it and you\u2019ve lost nothing." },
+        text: "Totally understand \u2014 and that\u2019s exactly why I\u2019d rather hold a spot than chase you: the specialist\u2019s in your area this week. Saturday morning or a weeknight after six? And if the usage says it\u2019s not worth your time, we cancel it and you\u2019ve lost nothing." },
     ],
   },
 };
