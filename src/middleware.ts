@@ -7,7 +7,7 @@ import { SHOWCASE, SHOWCASE_ORDER } from "./app/ion/call/showcase";
 // to the Ion surfaces only: every /ion page, every /ion/*.json data file,
 // and the /api/ion routes (audio clips, narration, saves). A sign-up page
 // exists, so "signed in" is not enough — the signed-in user also has to be
-// on the allowlist. Default is Spencer; ION_ALLOWED_EMAILS (comma-separated)
+// on the allowlist. Default is Spencer (both of his addresses); ION_ALLOWED_EMAILS (comma-separated)
 // extends it without a deploy of code.
 
 const isIon = createRouteMatcher(["/ion(.*)", "/api/ion(.*)"]);
@@ -89,7 +89,7 @@ function log(req: NextRequest, event: NextFetchEvent, decision: Decision, email?
 }
 
 const ALLOWED = new Set(
-  (process.env.ION_ALLOWED_EMAILS || "manager@getthriftyprovo.com")
+  (process.env.ION_ALLOWED_EMAILS || "manager@getthriftyprovo.com,spencer.freedom@gmail.com")
     .split(",")
     .map((e) => e.trim().toLowerCase())
     .filter(Boolean),
