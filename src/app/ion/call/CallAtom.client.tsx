@@ -88,6 +88,8 @@ export type Beyond = {
   clipsByRep: Record<string, BeyondClip[]>;
 };
 
+const callPath = (i: number) => (i === 0 ? "/ion/call" : `/ion/call${i + 1}`);
+
 export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor: FloorMoves; tabs: Tab[]; beyond: Beyond | null }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [selected, setSelected] = useState<string | null>(null);
@@ -165,7 +167,7 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
               const active = t.callId === read.callId;
               const sc = SHOWCASE[t.callId];
               return (
-                <Link key={t.callId} href={`/ion/call?id=${encodeURIComponent(t.callId)}`} className={"rounded-xl border p-4 transition-colors " + (active ? "border-stewart-accent bg-stewart-accent/15 ring-1 ring-stewart-accent/40" : "border-stewart-border bg-stewart-card hover:border-stewart-accent/50")}>
+                <Link key={t.callId} href={callPath(i)} className={"rounded-xl border p-4 transition-colors " + (active ? "border-stewart-accent bg-stewart-accent/15 ring-1 ring-stewart-accent/40" : "border-stewart-border bg-stewart-card hover:border-stewart-accent/50")}>
                   <p className={"text-2xl font-bold " + (active ? "text-stewart-accent" : "text-stewart-text")}>Call {i + 1}</p>
                   <p className="mt-0.5 text-sm font-semibold text-stewart-text">{sc ? sc.levelTitle : ""}</p>
                   <p className="mt-2 text-xs text-stewart-muted">{t.rep ?? "?"} &middot; {t.durationMin ? `${t.durationMin.toFixed(1)} min` : ""} &middot; {t.outcome ? OUTCOME_LABEL[t.outcome] ?? t.outcome : ""}</p>
@@ -383,7 +385,7 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
           const next = i >= 0 && i < tabs.length - 1 ? tabs[i + 1] : null;
           const nsc = next ? SHOWCASE[next.callId] : null;
           return next ? (
-            <Link href={`/ion/call?id=${encodeURIComponent(next.callId)}`} className="mt-10 block rounded-xl border border-stewart-accent/50 bg-stewart-accent/10 p-5 hover:bg-stewart-accent/15 transition-colors">
+            <Link href={callPath(i + 1)} className="mt-10 block rounded-xl border border-stewart-accent/50 bg-stewart-accent/10 p-5 hover:bg-stewart-accent/15 transition-colors">
               <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-accent">Next</p>
               <p className="mt-1 text-xl sm:text-2xl font-bold">Call {i + 2}{nsc ? ` \u00b7 ${nsc.levelTitle}` : ""} &rarr;</p>
               <p className="mt-1 text-sm text-stewart-muted">{next.rep} &middot; {next.hook}</p>

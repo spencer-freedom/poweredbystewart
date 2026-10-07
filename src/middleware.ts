@@ -22,7 +22,7 @@ const norm = (t: string) => t.replace(/\s+/g, " ").trim();
 const ALT_LINES = new Set(Object.values(SHOWCASE).flatMap((s) => s.misses.map((m) => norm(m.text))));
 function isPublicDemo(req: { nextUrl: URL }): boolean {
   const { pathname, searchParams } = req.nextUrl;
-  if (pathname === "/ion/call") return true;
+  if (pathname === "/ion/call" || pathname === "/ion/call2" || pathname === "/ion/call3") return true;
   if (pathname.startsWith("/api/ion/audio-clip/")) {
     const id = decodeURIComponent(pathname.slice("/api/ion/audio-clip/".length));
     const clip = searchParams.has("start") && searchParams.has("end");
