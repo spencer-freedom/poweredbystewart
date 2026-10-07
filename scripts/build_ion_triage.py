@@ -208,13 +208,17 @@ def build_exemplars(rows: list[dict], events_by_call: dict[str, list[dict]]) -> 
     return out
 
 
-OBJ_CLIP_LEAD, OBJ_CLIP_LEN, OBJ_CLIP_TAIL, OBJ_CLIP_MAX = 5, 25, 6, 120
+OBJ_CLIP_LEAD, OBJ_CLIP_LEN, OBJ_CLIP_TAIL, OBJ_CLIP_MAX = 5, 25, 10, 120
 
 
-def objection_clip_end(o: dict, t: int) -> int:
-    """The clip runs until the objection is overcome, not a fixed 25 seconds:
-    the read's resolution timestamp when it has one, else the next script
-    event the tape shows, plus a tail so the customer's agreement is heard.
+def objection_clip_end(o: dict, t: int, outcome_ts: int | None = None) -> int:
+    """The clip runs until the objection is overcome ON TAPE, not a fixed 25
+    seconds: through the customer moving (the read's resolution timestamp)
+    AND through the script moving on (the next event the tape shows), then a
+    tail so the rep's line that lands it is heard in full. The later of the
+    two, not the earlier: a clip that stops at the customer's "yeah, that
+    would work" and cuts the rep setting the time never convinces anyone.
+    When the call set, the deciding line of the set is in the window too.
     Capped so a no that lingered for minutes doesn't become a ten-minute clip."""
     ends = []
     r = ts_sec(o.get("resolution_ts"))
@@ -225,16 +229,18 @@ def objection_clip_end(o: dict, t: int) -> int:
         n = ts_sec(nxt.split("@", 1)[1])
         if n is not None and n > t:
             ends.append(n)
-    end = (min(ends) if ends else t + OBJ_CLIP_LEN - OBJ_CLIP_TAIL) + OBJ_CLIP_TAIL
+    if outcome_ts is not None and t < outcome_ts <= t + OBJ_CLIP_MAX - OBJ_CLIP_TAIL and o.get("resolved_by_tape"):
+        ends.append(outcome_ts)
+    end = (max(ends) if ends else t + OBJ_CLIP_LEN - OBJ_CLIP_TAIL) + OBJ_CLIP_TAIL
     return min(max(end, t + OBJ_CLIP_LEN), t + OBJ_CLIP_MAX)
 
 
-def objection_row(o: dict) -> dict:
+def objection_row(o: dict, outcome_ts: int | None = None) -> dict:
     t = ts_sec(o.get("ts"))
     return {
         "ts": o.get("ts"),
         "start_sec": max(0, t - OBJ_CLIP_LEAD) if t is not None else None,
-        "end_sec": objection_clip_end(o, t) if t is not None else None,
+        "end_sec": objection_clip_end(o, t, outcome_ts) if t is not None else None,
         "quote": o.get("quote") or "",
         "type": o.get("type") or "other",
         "blocked_section": norm_section(o.get("blocked_section")) if o.get("blocked_section") not in (None, "", "none") else None,
@@ -362,7 +368,7 @@ def build_row(summary: dict) -> dict:
         "coverage": {norm_section(c["section"]): c["status"] for c in (brief.get("script_coverage") or []) if isinstance(c, dict) and c.get("section")},
         # objections (layered pipeline): a no in any clothing, where it landed, what the rep tried,
         # whether the tape shows the script continuing. Older reads carry type/attempts only.
-        "objections": [objection_row(o) for o in (brief.get("objections") or []) if isinstance(o, dict)],
+        "objections": [objection_row(o, ts_sec((brief.get("observed_outcome") or {}).get("ts")) if observed in ("booked", "tentative") else None) for o in (brief.get("objections") or []) if isinstance(o, dict)],
         "_events": [dict(c, _section=norm_section(c.get("section")), _brief=brief)
                     for c in (brief.get("script_coverage") or []) if isinstance(c, dict) and c.get("section")],
         "counts": {

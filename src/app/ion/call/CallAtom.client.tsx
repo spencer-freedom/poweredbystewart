@@ -29,7 +29,8 @@ function objectionClip(o: Objection): { start: number; end: number } {
   const ends: number[] = [];
   const r = sec(o.resolution_ts ?? null); if (r !== null && r > t) ends.push(r);
   const nx = o.next_event && o.next_event.includes("@") ? sec(o.next_event.split("@")[1]) : null; if (nx !== null && nx > t) ends.push(nx);
-  const end = (ends.length ? Math.min(...ends) : t + 19) + 6;
+  // Through the customer moving AND the script moving on, then a tail so the line that lands it is heard in full.
+  const end = (ends.length ? Math.max(...ends) : t + 15) + 10;
   return { start: Math.max(0, t - 5), end: Math.min(Math.max(end, t + 25), t + 120) };
 }
 export type CallRead = {
