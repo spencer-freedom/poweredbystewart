@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import type { TriageIndex } from "./types";
 import { ManagerApp } from "./ManagerApp.client";
@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 
 async function loadTriage(): Promise<TriageIndex> {
   const filePath = path.join(process.cwd(), "public", "ion", "triage-index.json");
-  return JSON.parse(await fs.readFile(filePath, "utf-8")) as TriageIndex;
+  return JSON.parse(readFileSync(filePath, "utf-8")) as TriageIndex;
 }
 
 export default async function IonManagerPage() {

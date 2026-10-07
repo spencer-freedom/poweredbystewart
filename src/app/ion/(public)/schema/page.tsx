@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import Link from "next/link";
 import { SchemaBrowser } from "./SchemaBrowser.client";
@@ -14,7 +14,7 @@ async function loadPayload(): Promise<SchemaPayload> {
     "ion",
     "schema-payload.json"
   );
-  const raw = await fs.readFile(filePath, "utf-8");
+  const raw = readFileSync(filePath, "utf-8");
   return JSON.parse(raw) as SchemaPayload;
 }
 

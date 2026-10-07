@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 type Candidate = { id: string; family: string; description: string; generated_voice_id: string; file: string };
 
 export default async function NarratorAuditionPage() {
-  const raw = await fs.readFile(path.join(process.cwd(), "public", "ion", "narrator-candidates", "manifest.json"), "utf-8");
+  const raw = readFileSync(path.join(process.cwd(), "public", "ion", "narrator-candidates", "manifest.json"), "utf-8");
   const { line, candidates } = JSON.parse(raw) as { line: string; candidates: Candidate[] };
   const families = [...new Set(candidates.map((c) => c.family))];
   return (

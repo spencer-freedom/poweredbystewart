@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import Link from "next/link";
 import type { CallsIndex } from "./types";
@@ -21,7 +21,7 @@ async function loadIndex(): Promise<CallsIndex> {
     "ion",
     "calls-index.json"
   );
-  const raw = await fs.readFile(filePath, "utf-8");
+  const raw = readFileSync(filePath, "utf-8");
   return JSON.parse(raw) as CallsIndex;
 }
 

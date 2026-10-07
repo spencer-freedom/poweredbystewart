@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import Link from "next/link";
 import { AudioClip } from "../../(public)/_components/AudioClip.client";
@@ -23,7 +23,7 @@ const tsToSeconds = (ts: string) => { const [m, s] = ts.split(":").map((x) => pa
 
 async function pickMisses() {
   const root = path.join(process.cwd(), "public", "ion");
-  const idx = JSON.parse(await fs.readFile(path.join(root, "triage-index.json"), "utf-8")) as { calls: Row[] };
+  const idx = JSON.parse(readFileSync(path.join(root, "triage-index.json"), "utf-8")) as { calls: Row[] };
   const rows = idx.calls.filter((r) => r.rep_id && r.quotes?.grounded && !r.booked);
   const out: { row: Row; pick: Pick; label: string }[] = [];
   const usedReps = new Set<string>();
@@ -31,7 +31,7 @@ async function pickMisses() {
     for (const r of rows) {
       if (usedReps.has(r.rep_id!)) continue;
       let picks: Pick[] = [];
-      try { picks = JSON.parse(await fs.readFile(path.join(root, "calls", `${r.slug}-cherrypicks.json`), "utf-8")) as Pick[]; } catch { continue; }
+      try { picks = JSON.parse(readFileSync(path.join(root, "calls", `${r.slug}-cherrypicks.json`), "utf-8")) as Pick[]; } catch { continue; }
       const p = picks.find((x) => x.classification === w.cls && x.ts && x.quote);
       if (p) { out.push({ row: r, pick: p, label: w.label }); usedReps.add(r.rep_id!); break; }
     }

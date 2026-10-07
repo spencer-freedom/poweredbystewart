@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 
 // Server-side readers for the published corpus files. The deck's numbers
@@ -51,7 +51,7 @@ const ION = () => path.join(process.cwd(), "public", "ion");
 
 export async function loadCorpusStats(): Promise<CorpusStats | null> {
   try {
-    return JSON.parse(await fs.readFile(path.join(ION(), "corpus-stats.json"), "utf-8")) as CorpusStats;
+    return JSON.parse(readFileSync(path.join(ION(), "corpus-stats.json"), "utf-8")) as CorpusStats;
   } catch {
     return null;
   }
@@ -59,7 +59,7 @@ export async function loadCorpusStats(): Promise<CorpusStats | null> {
 
 export async function loadCallJson<T>(slug: string, kind: string): Promise<T | null> {
   try {
-    return JSON.parse(await fs.readFile(path.join(ION(), "calls", `${slug}-${kind}.json`), "utf-8")) as T;
+    return JSON.parse(readFileSync(path.join(ION(), "calls", `${slug}-${kind}.json`), "utf-8")) as T;
   } catch {
     return null;
   }

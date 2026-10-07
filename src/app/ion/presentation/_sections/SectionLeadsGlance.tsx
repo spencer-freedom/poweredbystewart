@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import Link from "next/link";
 import { Bridge } from "../../present/_components/Bridge";
@@ -11,7 +11,7 @@ type Def = { label: string; action: string; tone: string };
 
 async function loadBuckets(): Promise<{ defs: Record<string, Def>; counts: Record<string, number>; total: number } | null> {
   try {
-    const raw = await fs.readFile(path.join(process.cwd(), "public", "ion", "triage-index.json"), "utf-8");
+    const raw = readFileSync(path.join(process.cwd(), "public", "ion", "triage-index.json"), "utf-8");
     const idx = JSON.parse(raw) as { buckets: Record<string, Def>; calls: Row[] };
     const counts: Record<string, number> = {};
     for (const r of idx.calls) {

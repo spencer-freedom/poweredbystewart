@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import type { HeroOverridesFile } from "./types";
 
@@ -28,7 +28,7 @@ export async function loadHeroOverrides(): Promise<HeroOverridesFile> {
   );
   let raw: string;
   try {
-    raw = await fs.readFile(filePath, "utf-8");
+    raw = readFileSync(filePath, "utf-8");
   } catch (err: unknown) {
     // Missing file is the expected default state until Track 2 ships.
     if ((err as NodeJS.ErrnoException)?.code === "ENOENT") return {};

@@ -74,6 +74,23 @@ const MOVE_LABEL: Record<string, string> = {
 const OUTCOME_LABEL: Record<string, string> = { booked: "Booked", tentative: "Tentative", callback: "Callback", no_appointment: "No appointment", dq: "Disqualified", no_contact: "No contact" };
 
 
+// Generated prose never shows internal keys: dotted schema paths and
+// snake_case names become plain words, and "per <path>" clauses drop.
+export function plain(t?: string | null): string {
+  if (!t) return "";
+  return t
+    .replace(/\s*\(?\b(?:per|see|from|via)\s+[a-z_]+(?:\.[a-z_]+)+\)?/gi, "")
+    .replace(/\b[a-z_]+(?:\.[a-z_]+)+\b/g, (m) => m.split(".").pop()!.replace(/_/g, " "))
+    .replace(/\b([a-z]+_[a-z_]+)\b/g, (m) => m.replace(/_/g, " "))
+    .replace(/\s{2,}/g, " ")
+    .replace(/\s+([,.;])/g, "$1")
+    .trim();
+}
+// A stat with its sample size first, and a flag when the sample is thin.
+export function stat(set: number, n: number): React.ReactNode {
+  return <>{n} {n === 1 ? "try" : "tries"}, <span className="font-mono font-bold" style={{ color: "#f59e0b" }}>{pct(set, n)}</span> set{n < 10 ? <span className="text-stewart-muted"> (small sample)</span> : null}</>;
+}
+
 const sec = (ts?: string | null) => { if (!ts) return null; const [m, s] = ts.split(":").map((x) => parseInt(x, 10) || 0); return (m || 0) * 60 + (s || 0); };
 const pct = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)}%` : "—");
 
@@ -288,12 +305,12 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
             {!sel ? (
               <>
                 <p className="text-[11px] uppercase tracking-wider text-stewart-muted">The call in one paragraph</p>
-                <p className="mt-2 text-sm leading-relaxed">{b.trajectory_summary}</p>
+                <p className="mt-2 text-sm leading-relaxed">{show?.summary ?? plain(b.trajectory_summary)}</p>
                 {b.primary_coaching_focus ? (
                   <>
                     <p className="mt-4 text-[11px] uppercase tracking-wider text-stewart-muted">Where to spend the one-on-one</p>
-                    <p className="mt-1 text-sm font-semibold">{b.primary_coaching_focus.topic} <span className="font-mono text-xs text-stewart-muted">{b.primary_coaching_focus.ts}</span></p>
-                    <p className="mt-1 text-xs text-stewart-muted leading-relaxed">{b.primary_coaching_focus.why}</p>
+                    <p className="mt-1 text-sm font-semibold">{show?.focus.title ?? plain(b.primary_coaching_focus.topic)} <span className="font-mono text-xs text-stewart-muted">{b.primary_coaching_focus.ts}</span></p>
+                    <p className="mt-1 text-xs text-stewart-muted leading-relaxed">{show?.focus.why ?? plain(b.primary_coaching_focus.why)}</p>
                   </>
                 ) : null}
                 <p className="mt-4 text-xs text-stewart-muted">Click a node.</p>
@@ -337,7 +354,7 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
                     ) : pick ? (
                       <>
                         <p className="mt-1 text-sm">&ldquo;{pick.quote}&rdquo; <span className="font-mono text-xs text-stewart-muted">{pick.ts}</span></p>
-                        <p className="mt-1 text-xs text-stewart-muted leading-relaxed">{pick.stewart_read}</p>
+                        <p className="mt-2 text-xs text-stewart-muted leading-relaxed"><span className="uppercase tracking-wider text-[10px] text-stewart-accent">Stewart&apos;s read</span> &middot; {plain(pick.stewart_read)}</p>
                       </>
                     ) : null}
                     {!obj ? <div className="mt-3"><AudioClip callId={read.callId} startSec={m.clip?.start ?? Math.max(0, at - 4)} endSec={m.clip?.end ?? at + 26} label="Play what happened" /></div> : null}
@@ -368,7 +385,7 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
         {objections.length ? (
           <div className="mt-10">
             <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-accent">Every objection on this call, the same way</p>
-            <h2 className="mt-2 text-xl sm:text-2xl font-bold">{objections.length} {objections.length === 1 ? "objection" : "objections"}. The objection, the attempts, how many it took, and whether it was overcome.</h2>
+            <h2 className="mt-2 text-xl sm:text-2xl font-bold">{objections.length === 1 ? "One objection on this call." : `${objections.length} objections on this call.`} What the customer said, what {read.rep ?? "the rep"} tried, and whether it worked.</h2>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               {objections.map((o, i) => (
                 <div key={o.ts + i} className={"rounded-xl border p-4 " + (o.resolved_by_tape ? "border-stewart-border bg-stewart-card" : "border-stewart-danger/40 bg-stewart-danger/5")}>
@@ -452,7 +469,7 @@ function BeyondCard({ beyond, floor, rep }: { beyond: Beyond; floor: FloorMoves;
       </div>
       <ul className="text-xs space-y-0.5">
         {moves.map(([m, v]) => (
-          <li key={m} className="flex items-baseline gap-2"><span className="flex-1 truncate">{MOVE_LABEL[m] ?? m}</span><span className="font-mono text-stewart-muted w-8 text-right">{v.used}</span><span className="font-mono w-10 text-right text-stewart-success">{pct(v.set, v.used)}</span></li>
+          <li key={m} className="flex items-baseline gap-2"><span className="flex-1 truncate">{MOVE_LABEL[m] ?? m}{v.used < 10 ? <span className="text-stewart-muted"> \u00b7 small sample</span> : null}</span><span className="font-mono text-stewart-muted w-8 text-right">{v.used}</span><span className="font-mono w-10 text-right text-stewart-success">{pct(v.set, v.used)}</span></li>
         ))}
       </ul>
     </div>
@@ -468,53 +485,59 @@ export function ObjectionSequence({ o, rep, callId, floor, clip, couldHave }: {
   clip?: { start: number; end: number };
   couldHave?: React.ReactNode;
 }) {
-  const s = sec(o.ts) ?? 0;
+  const who = rep ?? "the rep";
   const quotes = o.attempt_quotes ?? [];
   const moves = o.attempt_moves ?? [];
   const kinds = o.attempt_kinds ?? [];
   const results = (o as Objection & { attempt_results?: string[] }).attempt_results ?? [];
-  const tried = quotes.filter((_, i) => moves[i] !== "concede").length > 0;
+  const tried = quotes.some((_, i) => moves[i] !== "concede");
   const overcome = !!o.resolved_by_tape;
   const typed = floor.byType[o.type] ?? {};
   const best = Object.entries(typed).filter(([, v]) => v.used >= 3).sort((a, b) => b[1].set / b[1].used - a[1].set / a[1].used)[0] ?? null;
-  const Row = ({ k, v, tone }: { k: string; v: React.ReactNode; tone?: string }) => (
-    <div className="grid grid-cols-[7.5rem_1fr] gap-3 py-1.5 border-t border-stewart-border/60 first:border-t-0">
-      <span className="text-[10px] uppercase tracking-wider text-stewart-muted pt-0.5">{k}</span>
-      <span className={"text-sm leading-snug " + (tone ?? "")}>{v}</span>
-    </div>
-  );
+  const c = clip ?? objectionClip(o);
+  const next = o.next_event ? o.next_event.split("@") : null;
+  const label = (OBJ_LABEL[o.type] ?? o.type).toLowerCase();
+  const verb: Record<string, string> = { alternative_offered: "offers another way", reason: "gives a reason", reframe: "reframes it", question_back: "asks a question back", reassure: "reassures", social_proof: "points to someone else", redirect_to_specialist: "sends it to the specialist", restate: "says it again", concede: "lets it go", other: "tries something" };
+  const after = (i: number) => {
+    const r = results[i];
+    if (r) return r === "customer_moved" ? "The customer moves." : r === "customer_pushed_back" ? "The customer pushes back." : r === "call_ended" ? "The call ends." : "The customer holds.";
+    const last = i === quotes.length - 1;
+    return last ? (overcome ? "The customer moves." : moves[i] === "concede" ? "And that\u2019s the end of it." : "The customer holds.") : "The customer holds.";
+  };
+  const angles = o.rep_attempts ?? 0;
+  const count = `${angles} ${angles === 1 ? "angle" : "angles"}${o.rep_restates ? `, said it again \u00d7${o.rep_restates}` : ""}`;
+
+  if (overcome) {
+    // Overcome: two sentences and the tape. Not every no earns an autopsy.
+    return (
+      <div className="text-sm leading-relaxed">
+        <p>At {o.ts} the customer stalls on {label}: &ldquo;{o.quote}&rdquo;{o.blocked_section ? ` \u2014 right at ${SECTION_LABEL[o.blocked_section] ?? o.blocked_section}` : ""}.</p>
+        <p className="mt-1">
+          {quotes.map((q, i) => <span key={i}>{i === 0 ? who : `Then ${who}`} {verb[moves[i] ?? "other"] ?? "tries something"}{kinds[i] === "restate" ? " (the same line)" : ""}: &ldquo;{q}&rdquo; {after(i)} </span>)}
+          <span className="text-stewart-muted">{count}, and the script went on{next ? ` to ${SECTION_LABEL[next[0]] ?? next[0]} at ${next[1]}` : ""}.</span>
+        </p>
+        <div className="mt-2"><AudioClip callId={callId} startSec={c.start} endSec={c.end} label="Play it" /></div>
+      </div>
+    );
+  }
+  // Not overcome: the full sequence, in sentences.
   return (
-    <div>
-      <Row k="The objection" v={<>customer: &ldquo;{o.quote}&rdquo; <span className="font-mono text-xs text-stewart-muted">{o.ts}</span>{o.blocked_section ? <span className="text-xs text-stewart-muted"> &middot; stalled {SECTION_LABEL[o.blocked_section] ?? o.blocked_section}</span> : null}</>} />
-      <Row k="Tried to overcome it?" v={tried ? "Yes" : "No"} tone={tried ? "text-stewart-success font-semibold" : "text-stewart-danger font-semibold"} />
+    <div className="text-sm leading-relaxed">
+      <p>At {o.ts} the customer says {label === "other" ? "no" : label}: &ldquo;{o.quote}&rdquo;{o.blocked_section ? ` \u2014 right at ${SECTION_LABEL[o.blocked_section] ?? o.blocked_section}` : ""}.</p>
+      <p className="mt-1 font-semibold text-stewart-danger">{tried ? `${who} tries to get past it.` : `${who} doesn\u2019t try to get past it.`}</p>
       {quotes.length ? (
-        <Row k="The attempts" v={
-          <ol className="space-y-1">
-            {quotes.map((q, i) => {
-              const last = i === quotes.length - 1;
-              const r = results[i];
-              const verdict = r ? r.replace(/_/g, " ") : last ? (overcome ? "the customer moved" : moves[i] === "concede" ? "the rep let it go" : "the customer held") : "the customer held";
-              return (
-                <li key={i}>
-                  <span className="font-mono text-xs text-stewart-muted mr-1">{i + 1}.</span>&ldquo;{q}&rdquo;
-                  <span className="text-xs text-stewart-muted"> &mdash; {MOVE_LABEL[moves[i] ?? ""] ?? moves[i] ?? ""}{kinds[i] === "restate" ? " (said it again)" : ""} &rarr; {verdict}</span>
-                </li>
-              );
-            })}
-          </ol>
-        } />
+        <ul className="mt-1 space-y-1">
+          {quotes.map((q, i) => <li key={i}>{who} {verb[moves[i] ?? "other"] ?? "tries something"}{kinds[i] === "restate" ? " (the same line)" : ""}: &ldquo;{q}&rdquo; <span className="text-stewart-muted">{after(i)}</span></li>)}
+        </ul>
       ) : null}
-      <Row k="How many it took" v={tried ? `${o.rep_attempts} new ${o.rep_attempts === 1 ? "angle" : "angles"}${o.rep_restates ? `, said it again \u00d7${o.rep_restates}` : ""}` : "none"} />
-      <Row k="Overcome?" v={overcome ? <>Yes &mdash; the script went on{o.next_event ? ` to ${o.next_event.replace("@", " at ")}` : ""}.</> : <>No &mdash; the script did not continue past this.</>} tone={overcome ? "text-stewart-success font-semibold" : "text-stewart-danger font-semibold"} />
-      <div className="mt-2"><AudioClip callId={callId} startSec={clip?.start ?? objectionClip(o).start} endSec={clip?.end ?? objectionClip(o).end} label="Play the objection" /></div>
-      {!overcome ? (
-        <div className="mt-3 rounded-md border px-3 py-2" style={{ borderColor: "#f59e0b", background: "rgba(245,158,11,0.08)" }}>
-          <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: "#f59e0b" }}>What works on this floor against &ldquo;{OBJ_LABEL[o.type] ?? o.type}&rdquo;</p>
-          {best ? <p className="mt-1 text-sm">{MOVE_LABEL[best[0]] ?? best[0]} &mdash; sets <span className="font-mono font-bold" style={{ color: "#f59e0b" }}>{pct(best[1].set, best[1].used)}</span> of the time ({best[1].used} tries).</p> : null}
-          {floor.byAngles["1"] && floor.byAngles["2"] ? <p className="mt-1 text-sm">One angle sets <span className="font-mono font-bold" style={{ color: "#f59e0b" }}>{pct(floor.byAngles["1"].set, floor.byAngles["1"].n)}</span>, two sets <span className="font-mono font-bold" style={{ color: "#f59e0b" }}>{pct(floor.byAngles["2"].set, floor.byAngles["2"].n)}</span>.</p> : null}
-          {couldHave ? <div className="mt-2">{couldHave}</div> : null}
-        </div>
-      ) : null}
+      <p className="mt-1 text-stewart-muted">{tried ? count : "No angles"}. <span className="font-semibold text-stewart-danger">Not overcome</span> &mdash; the script never got past this.</p>
+      <div className="mt-2"><AudioClip callId={callId} startSec={c.start} endSec={c.end} label="Play it" /></div>
+      <div className="mt-3 rounded-md border px-3 py-2" style={{ borderColor: "#f59e0b", background: "rgba(245,158,11,0.08)" }}>
+        <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: "#f59e0b" }}>What works on this floor against &ldquo;{OBJ_LABEL[o.type] ?? o.type}&rdquo;</p>
+        {best ? <p className="mt-1 text-sm">{MOVE_LABEL[best[0]] ?? best[0]}: {stat(best[1].set, best[1].used)}.</p> : null}
+        {floor.byAngles["1"] && floor.byAngles["2"] ? <p className="mt-1 text-sm">One angle: {stat(floor.byAngles["1"].set, floor.byAngles["1"].n)}. Two: {stat(floor.byAngles["2"].set, floor.byAngles["2"].n)}.</p> : null}
+        {couldHave ? <div className="mt-2">{couldHave}</div> : null}
+      </div>
     </div>
   );
 }
@@ -551,10 +574,10 @@ function FloorLine({ type, moves, floor }: { type: string; moves: string[]; floo
   return (
     <div className="mt-3 text-xs text-stewart-muted leading-relaxed">
       <p className="uppercase tracking-wider text-[10px]">On this floor, {thin ? "across every objection" : <>against &ldquo;{OBJ_LABEL[type] ?? type}&rdquo;</>}{thin ? ` (only ${Object.values(typed).reduce((n, v) => n + v.used, 0)} of this kind on the tape so far)` : ""}</p>
-      {[...used].map((m) => t[m] ? <p key={m}>{MOVE_LABEL[m] ?? m}: sets {pct(t[m].set, t[m].used)} of the time ({t[m].used} tries)</p> : null)}
-      <p className="text-stewart-text">Best move on the tape: {MOVE_LABEL[best[0]] ?? best[0]} — sets {pct(best[1].set, best[1].used)} ({best[1].used} tries)</p>
+      {[...used].map((m) => t[m] ? <p key={m}>{MOVE_LABEL[m] ?? m}: {stat(t[m].set, t[m].used)}</p> : null)}
+      <p className="text-stewart-text">Best move on the tape, {MOVE_LABEL[best[0]] ?? best[0]}: {stat(best[1].set, best[1].used)}</p>
       {floor.byAngles["1"] && floor.byAngles["2"] ? (
-        <p className="text-stewart-text">And a second angle matters: one angle sets {pct(floor.byAngles["1"].set, floor.byAngles["1"].n)} of the time, two sets {pct(floor.byAngles["2"].set, floor.byAngles["2"].n)}.</p>
+        <p className="text-stewart-text">And a second angle matters. One angle: {stat(floor.byAngles["1"].set, floor.byAngles["1"].n)}. Two: {stat(floor.byAngles["2"].set, floor.byAngles["2"].n)}.</p>
       ) : null}
     </div>
   );
@@ -583,7 +606,7 @@ function GenericCard({ title, ts, quote, body, callId }: { title: string; ts: st
     <>
       <p className="text-[11px] uppercase tracking-wider text-stewart-muted">{title}</p>
       {quote ? <p className="mt-2 text-sm">&ldquo;{quote}&rdquo; {ts ? <span className="font-mono text-xs text-stewart-muted">{ts}</span> : null}</p> : null}
-      {body ? <p className="mt-2 text-xs text-stewart-muted leading-relaxed">{body}</p> : null}
+      {body ? <p className="mt-2 text-xs text-stewart-muted leading-relaxed">{plain(body)}</p> : null}
       {s !== null ? <div className="mt-3"><AudioClip callId={callId} startSec={Math.max(0, s - 4)} endSec={s + 20} label="Play the moment" /></div> : null}
     </>
   );

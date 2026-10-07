@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { ScrollSection } from "./ScrollSection";
 import { CallWalkthrough } from "./session10/CallWalkthrough.client";
@@ -82,7 +82,7 @@ const HERO_SPECS: HeroSpec[] = [
 
 async function loadJson<T>(filename: string): Promise<T> {
   const filePath = path.join(process.cwd(), "public", "ion", filename);
-  const raw = await fs.readFile(filePath, "utf-8");
+  const raw = readFileSync(filePath, "utf-8");
   return JSON.parse(raw) as T;
 }
 

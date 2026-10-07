@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { CallAtom, type Beyond, type CallRead, type FloorMoves, type Tab } from "./CallAtom.client";
 import { SHOWCASE, SHOWCASE_ORDER } from "./showcase";
@@ -14,9 +14,12 @@ import { SHOWCASE, SHOWCASE_ORDER } from "./showcase";
 
 const ION = () => path.join(process.cwd(), "public", "ion");
 
+// Synchronous on purpose: with the async fs API, Next serialised the raw
+// file text into the page's Flight payload (every brief, the whole triage
+// index) — readable in the page source. Sync reads leave nothing to serialise.
 async function readJson<T>(p: string): Promise<T | null> {
   try {
-    return JSON.parse(await fs.readFile(p, "utf-8")) as T;
+    return JSON.parse(readFileSync(p, "utf-8")) as T;
   } catch {
     return null;
   }
@@ -83,13 +86,57 @@ export async function renderCall(callId: string) {
     return <main className="min-h-screen bg-black text-stewart-text p-10">No read for call {callId}.</main>;
   }
   const row = index?.calls.find((r) => r.call_id === callId || r.slug === slug) ?? null;
+  // Display projection. The page's embedded data is readable in the page
+  // source, so the read is reduced to what the screen shows: classification
+  // names become plain labels, reasoning fields and rule stamps are dropped.
+  const CLS: Record<string, string> = {
+    curiosity_creation_failure: "the reason, filed instead of used", unanchored_soft_exit: "ended without a next step",
+    objection_inversion_miss: "an objection taken at face value", setter_scope_creep: "the setter started closing",
+    intro_legitimacy_omission: "opened without saying who or why", prior_contact_probe_miss: "a prior quote, not probed",
+    non_standard_scenario_hold: "put on hold for a non-standard case", softener_overuse: "softeners",
+    enthusiasm_signal: "a buying signal", protocol_violation: "a step out of order", knowledge_gap: "a question he couldn\u2019t answer",
+    bill_anchor: "the bill", rapport_repair: "rapport repaired", micro_trade: "a small trade", cross_sell_miss: "a cross-sell walked past",
+    conditional_booking: "a booking with a condition on it", empathy_miss: "a disclosure walked past", spouse_handling: "the spouse",
+    tesla_expectation_gap: "an expectation gap", other: "a moment",
+  };
+  // No internal keys in generated prose: dotted schema paths and snake_case become plain words.
+  const plainText = (t?: string | null) => (t ?? "")
+    .replace(/\s*\(?\b(?:per|see|from|via)\s+[a-z_]+(?:\.[a-z_]+)+\)?/gi, "")
+    .replace(/\b[a-z_]+(?:\.[a-z_]+)+\b/g, (m) => m.split(".").pop()!.replace(/_/g, " "))
+    .replace(/\b([a-z]+_[a-z_]+)\b/g, (m) => m.replace(/_/g, " "))
+    .replace(/\s{2,}/g, " ").replace(/\s+([,.;])/g, "$1").trim();
+  const strip = <T extends Record<string, unknown>>(o: T | null | undefined, keys: string[]): T | null => {
+    if (!o) return null;
+    const c = { ...o } as Record<string, unknown>;
+    for (const k of keys) delete c[k];
+    return c as T;
+  };
+  const b = brief as Record<string, unknown>;
+  const shownBrief = {
+    rep_name: brief.rep_name,
+    shape: brief.shape,
+    observed_outcome: strip(brief.observed_outcome as Record<string, unknown> | null, ["set_conditions", "set_rule", "reasoning", "set_strength"]),
+    bill_anchor_audit: strip(brief.bill_anchor_audit as Record<string, unknown> | null, ["reasoning"]),
+    bill_document_audit: strip(brief.bill_document_audit as Record<string, unknown> | null, ["reasoning"]),
+    interest_reason_audit: strip(brief.interest_reason_audit as Record<string, unknown> | null, ["reasoning"]),
+    script_coverage: brief.script_coverage,
+    objections: (brief.objections ?? []).map((o) => strip(o as unknown as Record<string, unknown>, ["reasoning", "resolution_agrees", "rep_attempts_model", "moves_mismatch"])),
+    primary_coaching_focus: brief.primary_coaching_focus
+      ? { ...brief.primary_coaching_focus, topic: plainText(brief.primary_coaching_focus.topic), why: plainText(brief.primary_coaching_focus.why) }
+      : null,
+    trajectory_summary: plainText(brief.trajectory_summary),
+  } as unknown as CallRead["brief"];
+  if ((brief.observed_outcome as { set_strength?: string } | null)?.set_strength) {
+    (shownBrief.observed_outcome as { set_strength?: string | null }).set_strength = (brief.observed_outcome as { set_strength?: string }).set_strength;
+  }
+  void b;
   const read: CallRead = {
     callId,
     rep: brief.rep_name ?? row?.rep_id ?? null,
     durationMin: row?.duration_min ?? null,
-    brief,
-    picks: picks ?? [],
-    quotes: qc,
+    brief: shownBrief,
+    picks: (picks ?? []).map((pk) => ({ ts: pk.ts, quote: pk.quote, classification: CLS[pk.classification] ?? pk.classification.replace(/_/g, " "), stewart_read: plainText(pk.stewart_read) })),
+    quotes: qc ? { checked: qc.checked, verified: qc.verified, fuzzy: qc.fuzzy, wrong_ts: qc.wrong_ts, not_found: qc.not_found } : null,
     corpusCalls: stats?.calls ?? index?.calls.length ?? 0,
   };
   const floor = floorMoves(index?.calls ?? []);

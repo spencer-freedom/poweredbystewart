@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import type { BrainV2Payload } from "./types";
 
@@ -17,6 +17,6 @@ export async function loadBrainV2(): Promise<BrainV2Payload> {
     "ion",
     "brain-v2-payload.json"
   );
-  const raw = await fs.readFile(filePath, "utf-8");
+  const raw = readFileSync(filePath, "utf-8");
   return JSON.parse(raw) as BrainV2Payload;
 }

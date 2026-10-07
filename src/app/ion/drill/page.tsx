@@ -1,4 +1,4 @@
-import { promises as fs } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import Link from "next/link";
 import { AudioClip } from "../(public)/_components/AudioClip.client";
@@ -39,13 +39,13 @@ const label = (k: string) => k.replace(/_/g, " ");
 
 async function loadAll(): Promise<{ brief: Brief; meta: Meta }[]> {
   const dir = path.join(process.cwd(), "public", "ion", "calls");
-  const names = (await fs.readdir(dir)).filter((n) => n.endsWith("-manager-brief.json"));
+  const names = readdirSync(dir).filter((n: string) => n.endsWith("-manager-brief.json"));
   return Promise.all(
     names.map(async (n) => {
       const slug = n.slice(0, -"-manager-brief.json".length);
-      const brief = JSON.parse(await fs.readFile(path.join(dir, n), "utf-8")) as Brief;
+      const brief = JSON.parse(readFileSync(path.join(dir, n), "utf-8")) as Brief;
       let meta: Meta = { call_id: brief.call_id };
-      try { meta = JSON.parse(await fs.readFile(path.join(dir, `${slug}-metadata.json`), "utf-8")) as Meta; } catch {}
+      try { meta = JSON.parse(readFileSync(path.join(dir, `${slug}-metadata.json`), "utf-8")) as Meta; } catch {}
       return { brief, meta };
     })
   );
