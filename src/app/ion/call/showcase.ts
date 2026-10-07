@@ -3,6 +3,9 @@
 // rendered in his own voice. Suggested rephrases: not things they said.
 export type Showcase = {
   level: 1 | 2 | 3;
+  // The rep whose cloned voice reads the synthetic lines; the middleware only
+  // lets the voice route pair a line with this voice.
+  voice: string;
   levelTitle: string;
   hook: string;
   // Hand-written, in a coach's voice. Overrides the read's generated prose.
@@ -21,6 +24,7 @@ export type Miss = {
 };
 export const SHOWCASE: Record<string, Showcase> = {
   "10000532255": {
+    voice: "Carter",
     level: 1,
     levelTitle: "Here\u2019s what happened",
     hook: "Every section of the script, a no beaten with two angles, booked with the bill — and the one number he never used.",
@@ -31,6 +35,7 @@ export const SHOWCASE: Record<string, Showcase> = {
       text: "A hundred and eighty a month \u2014 so you\u2019re handing the power company over two grand a year for nothing you own. That\u2019s the number the specialist builds the design around, so let\u2019s get it in front of you." }],
   },
   "SESSION2_e891f024": {
+    voice: "Meg",
     level: 2,
     levelTitle: "Here\u2019s what could have happened",
     hook: "Three objections, all three got past, booked with the bill \u2014 and three minutes in the middle where the setter started closing.",
@@ -41,6 +46,7 @@ export const SHOWCASE: Record<string, Showcase> = {
       text: "Honestly, that\u2019s exactly what the specialist walks you through, with your actual bill in front of you \u2014 it makes way more sense with your numbers than with me describing it. Let me grab the last couple of quick questions so they can build it for you." }],
   },
   "30000139035": {
+    voice: "Joel",
     level: 3,
     levelTitle: "Here\u2019s what Stewart knows that isn\u2019t in this call",
     hook: "A cold open he steadied, a reason the customer gave three times, peer proof from his own son \u2014 and then two asks that ended with no commitment: the bill, then the time.",

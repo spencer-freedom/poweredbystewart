@@ -15,12 +15,14 @@ export function AudioClip({
   endSec,
   label,
   variant = "clip",
+  src,
 }: {
-  callId: string;
+  callId?: string;
   startSec?: number;
   endSec?: number;
   label?: string;
   variant?: "clip" | "full";
+  src?: string; // a URL built (and signed) by the server; wins over callId/start/end
 }) {
   const [active, setActive] = useState(false);
 
@@ -32,8 +34,9 @@ export function AudioClip({
   if (typeof startSec === "number") qs.set("start", startSec.toFixed(3));
   if (typeof endSec === "number") qs.set("end", endSec.toFixed(3));
   const url =
-    `/api/ion/audio-clip/${encodeURIComponent(callId)}` +
-    (qs.toString() ? `?${qs.toString()}` : "");
+    src ??
+    `/api/ion/audio-clip/${encodeURIComponent(callId ?? "")}` +
+      (qs.toString() ? `?${qs.toString()}` : "");
 
   const fallbackLabel =
     variant === "full"

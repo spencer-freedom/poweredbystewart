@@ -13,23 +13,34 @@ const isIon = createRouteMatcher(["/ion(.*)", "/api/ion(.*)"]);
 
 // The one public Ion surface: the three-call demo at /ion/call, outputs only.
 // It needs two API routes, opened just far enough to serve that page:
-//   - whole-call audio only for the three showcase calls; clip windows
-//     (start+end) for any call, since the "beyond this call" tape plays
-//     other reps' moments;
-//   - the cloned-voice route only for the exact lines on the page, so the
-//     voices can't be made to say anything else.
+//   - whole-call audio only for the three showcase calls; a clip window
+//     (start+end) only with the signature the page's server put on it, so a
+//     visitor can pull exactly the tape on the page and nothing else;
+//   - the cloned-voice route only for the exact lines on the page, in the
+//     voice the page pairs them with, so the voices can't be made to say
+//     anything else.
 const norm = (t: string) => t.replace(/\s+/g, " ").trim();
-const ALT_LINES = new Set(Object.values(SHOWCASE).flatMap((s) => s.misses.map((m) => norm(m.text))));
-function isPublicDemo(req: { nextUrl: URL }): boolean {
+const ALT_LINES = new Set(Object.values(SHOWCASE).flatMap((s) => s.misses.map((m) => `${s.voice}|${norm(m.text)}`)));
+const CLIP_SECRET = process.env.ION_CLIP_SECRET || process.env.CLERK_SECRET_KEY || "";
+async function clipSigOk(id: string, sp: URLSearchParams): Promise<boolean> {
+  const start = sp.get("start"), end = sp.get("end"), sig = sp.get("sig");
+  if (!start || !end || !sig || !CLIP_SECRET) return false;
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey("raw", enc.encode(CLIP_SECRET), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const mac = new Uint8Array(await crypto.subtle.sign("HMAC", key, enc.encode(`${id}|${start}|${end}`)));
+  const hex = Array.from(mac).map((b) => b.toString(16).padStart(2, "0")).join("").slice(0, 24);
+  return hex.length === sig.length && hex === sig;
+}
+async function isPublicDemo(req: { nextUrl: URL }): Promise<boolean> {
   const { pathname, searchParams } = req.nextUrl;
   if (pathname === "/ion/call" || pathname === "/ion/call2" || pathname === "/ion/call3") return true;
   if (pathname.startsWith("/api/ion/audio-clip/")) {
     const id = decodeURIComponent(pathname.slice("/api/ion/audio-clip/".length));
-    const clip = searchParams.has("start") && searchParams.has("end");
-    return clip || SHOWCASE_ORDER.includes(id);
+    if (searchParams.has("start") || searchParams.has("end")) return clipSigOk(id, searchParams);
+    return SHOWCASE_ORDER.includes(id);
   }
   if (pathname === "/api/ion/alt-take") {
-    return ALT_LINES.has(norm(searchParams.get("text") || ""));
+    return ALT_LINES.has(`${searchParams.get("rep") || ""}|${norm(searchParams.get("text") || "")}`);
   }
   return false;
 }
@@ -43,7 +54,7 @@ const ALLOWED = new Set(
 
 export default clerkMiddleware(async (auth, req) => {
   if (!isIon(req)) return;
-  if (isPublicDemo(req)) return;
+  if (await isPublicDemo(req)) return;
   // Local screenshots and layout work only: never honoured in production.
   if (process.env.NODE_ENV !== "production" && process.env.ION_GATE_OFF === "1") return;
   const { userId, sessionClaims, redirectToSignIn } = await auth();
