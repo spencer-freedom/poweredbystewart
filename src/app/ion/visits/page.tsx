@@ -35,10 +35,16 @@ export default async function Visits({ searchParams }: { searchParams: Promise<{
     } catch (e) { error = String(e); }
   } else error = "no database configured";
 
+  // An address that signed in at any point is that person for every row it
+  // sent, including the ones before sign-in; otherwise you chase yourself.
+  const emailByIp: Record<string, string> = {};
+  for (const h of hits) if (h.ip && h.email) emailByIp[h.ip] = h.email;
+  for (const h of hits) if (h.ip && !h.email && emailByIp[h.ip]) h.email = emailByIp[h.ip];
+
   type Visitor = { key: string; ip: string; ua: string | null; where: string; email: string | null; first: string; last: string; hits: Hit[]; pages: Set<string>; n: Record<string, number>; probes: Hit[] };
   const visitors = new Map<string, Visitor>();
   for (const h of hits) {
-    const k = `${h.ip ?? "?"}|${h.ua ?? ""}`;
+    const k = h.email ? `${h.email}|${h.ua ?? ""}` : `${h.ip ?? "?"}|${h.ua ?? ""}`;
     const v = visitors.get(k) ?? { key: k, ip: h.ip ?? "?", ua: h.ua, where: [h.city, h.region, h.country].filter(Boolean).join(", "), email: h.email, first: h.at, last: h.at, hits: [], pages: new Set<string>(), n: {}, probes: [] };
     v.last = h.at; v.hits.push(h); v.n[h.decision] = (v.n[h.decision] ?? 0) + 1; if (h.email) v.email = h.email;
     if (h.decision === "page" || h.decision === "allowed") v.pages.add(h.path);

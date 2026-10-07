@@ -61,6 +61,9 @@ const scripted = (ua: string) => !ua || SCRIPTED.test(ua);
 // anything was probed that the page never asked for. /ion/visits reads it.
 type Decision = Public | "bot" | "probe" | "gated" | "denied" | "allowed";
 function log(req: NextRequest, event: NextFetchEvent, decision: Decision, email?: string | null, note?: string | null) {
+  // Claude's own checks from Spencer's machine carry this header so they
+  // never show up on the visits page as a visitor.
+  if (req.headers.get("x-stewart-probe") === "1") return;
   const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
   if (!url || !key) return;
