@@ -291,13 +291,12 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
                 );
               })}
             </svg>
-            <div className="px-3 pb-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-stewart-muted">
-              <span><span className="inline-block w-2 h-2 rounded-full bg-[#3b82f6] mr-1" />ran it</span>
-              <span><span className="inline-block w-2 h-2 rounded-full bg-[#f59e0b] mr-1" />ran it, partial / objection the script got past</span>
-              <span><span className="inline-block w-2 h-2 rounded-full bg-[#ef4444] mr-1" />skipped / objection that stopped it</span>
-              <span><span className="inline-block w-2 h-2 rounded-full bg-[#374151] mr-1" />never reached</span>
-              <span>number on an objection = angles tried</span>
-            </div>
+            <p className="px-3 pb-2 text-[11px] text-stewart-muted leading-snug">
+              <span className="inline-block w-2 h-2 rounded-full bg-[#3b82f6] mr-1 align-middle" />blue ran as scripted;
+              <span className="inline-block w-2 h-2 rounded-full bg-[#f59e0b] ml-2 mr-1 align-middle" />amber ran partly, or a no the script got past;
+              <span className="inline-block w-2 h-2 rounded-full bg-[#ef4444] ml-2 mr-1 align-middle" />red was skipped, or a no that stopped it;
+              <span className="inline-block w-2 h-2 rounded-full bg-[#374151] ml-2 mr-1 align-middle" />grey was never reached. The number on an objection is how many angles the rep tried.
+            </p>
           </div>
 
           {/* The detail card */}
@@ -390,7 +389,7 @@ export function CallAtom({ read, floor, tabs, beyond }: { read: CallRead; floor:
               {objections.map((o, i) => (
                 <div key={o.ts + i} className={"rounded-xl border p-4 " + (o.resolved_by_tape ? "border-stewart-border bg-stewart-card" : "border-stewart-danger/40 bg-stewart-danger/5")}>
                   <p className="text-[11px] uppercase tracking-wider text-stewart-muted mb-2">{OBJ_LABEL[o.type] ?? o.type} &middot; {o.ts}</p>
-                  <ObjectionSequence o={o} rep={read.rep} callId={read.callId} floor={floor} clip={objectionClip(o)} />
+                  <ObjectionSequence o={o} rep={read.rep} callId={read.callId} floor={floor} clip={objectionClip(o)} brief={parts.some((pt) => pt.obj === o)} />
                 </div>
               ))}
             </div>
@@ -480,10 +479,11 @@ function BeyondCard({ beyond, floor, rep }: { beyond: Beyond; floor: FloorMoves;
 //   the objection → did the rep try → each attempt and whether it moved the
 //   customer → how many it took → was it overcome → if not, what works on
 //   this floor. One component, used wherever an objection is shown.
-export function ObjectionSequence({ o, rep, callId, floor, clip, couldHave }: {
+export function ObjectionSequence({ o, rep, callId, floor, clip, couldHave, brief }: {
   o: Objection; rep: string | null; callId: string; floor: FloorMoves;
   clip?: { start: number; end: number };
   couldHave?: React.ReactNode;
+  brief?: boolean; // the no is coached above: show the sequence, skip the floor box
 }) {
   const who = rep ?? "the rep";
   const quotes = o.attempt_quotes ?? [];
@@ -532,12 +532,13 @@ export function ObjectionSequence({ o, rep, callId, floor, clip, couldHave }: {
       ) : null}
       <p className="mt-1 text-stewart-muted">{tried ? count : "No angles"}. <span className="font-semibold text-stewart-danger">Not overcome</span> &mdash; the script never got past this.</p>
       <div className="mt-2"><AudioClip callId={callId} startSec={c.start} endSec={c.end} label="Play it" /></div>
-      <div className="mt-3 rounded-md border px-3 py-2" style={{ borderColor: "#f59e0b", background: "rgba(245,158,11,0.08)" }}>
+      {brief ? <p className="mt-2 text-xs text-stewart-muted">Coached above: what works on this floor, and the line he could have said.</p> : null}
+      {!brief ? <div className="mt-3 rounded-md border px-3 py-2" style={{ borderColor: "#f59e0b", background: "rgba(245,158,11,0.08)" }}>
         <p className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: "#f59e0b" }}>What works on this floor against &ldquo;{OBJ_LABEL[o.type] ?? o.type}&rdquo;</p>
         {best ? <p className="mt-1 text-sm">{MOVE_LABEL[best[0]] ?? best[0]}: {stat(best[1].set, best[1].used)}.</p> : null}
         {floor.byAngles["1"] && floor.byAngles["2"] ? <p className="mt-1 text-sm">One angle: {stat(floor.byAngles["1"].set, floor.byAngles["1"].n)}. Two: {stat(floor.byAngles["2"].set, floor.byAngles["2"].n)}.</p> : null}
         {couldHave ? <div className="mt-2">{couldHave}</div> : null}
-      </div>
+      </div> : null}
     </div>
   );
 }
