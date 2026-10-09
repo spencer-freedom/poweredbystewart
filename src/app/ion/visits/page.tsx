@@ -41,18 +41,20 @@ export default async function Visits({ searchParams }: { searchParams: Promise<{
   for (const h of hits) if (h.ip && h.email) emailByIp[h.ip] = h.email;
   for (const h of hits) if (h.ip && !h.email && emailByIp[h.ip]) h.email = emailByIp[h.ip];
 
-  type Visitor = { key: string; ip: string; ua: string | null; where: string; email: string | null; first: string; last: string; hits: Hit[]; pages: Set<string>; n: Record<string, number>; probes: Hit[] };
+  type Visitor = { key: string; ip: string; ua: string | null; where: string; email: string | null; first: string; last: string; hits: Hit[]; pages: Set<string>; n: Record<string, number>; probes: Hit[]; preview: boolean };
   const visitors = new Map<string, Visitor>();
   for (const h of hits) {
     const k = h.email ? `${h.email}|${h.ua ?? ""}` : `${h.ip ?? "?"}|${h.ua ?? ""}`;
-    const v = visitors.get(k) ?? { key: k, ip: h.ip ?? "?", ua: h.ua, where: [h.city, h.region, h.country].filter(Boolean).join(", "), email: h.email, first: h.at, last: h.at, hits: [], pages: new Set<string>(), n: {}, probes: [] };
+    const v = visitors.get(k) ?? { key: k, ip: h.ip ?? "?", ua: h.ua, where: [h.city, h.region, h.country].filter(Boolean).join(", "), email: h.email, first: h.at, last: h.at, hits: [], pages: new Set<string>(), n: {}, probes: [], preview: false };
     v.last = h.at; v.hits.push(h); v.n[h.decision] = (v.n[h.decision] ?? 0) + 1; if (h.email) v.email = h.email;
     if (h.decision === "page" || h.decision === "allowed") v.pages.add(h.path);
+    if (h.decision === "preview") v.preview = true;
     if (h.decision === "probe" || h.decision === "bot" || h.decision === "gated" || h.decision === "denied") v.probes.push(h);
     visitors.set(k, v);
   }
   const list = [...visitors.values()].sort((a, b) => b.last.localeCompare(a.last));
   const depth = (v: Visitor) => {
+    if (v.preview) return "a messaging app drew the link card: the link was just sent to this phone, nobody read it yet";
     const out: string[] = [];
     const pages = [...v.pages].filter((p) => p.startsWith("/ion/call")).length;
     if (pages) out.push(`${pages} of 3 calls`);
@@ -68,7 +70,7 @@ export default async function Visits({ searchParams }: { searchParams: Promise<{
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
         <p className="text-xs uppercase tracking-[0.25em] text-stewart-accent font-semibold">Powered by Stewart</p>
         <h1 className="mt-2 text-3xl font-bold">Who opened the demo, and how deep they went</h1>
-        <p className="mt-2 text-sm text-stewart-muted">Last {parseInt(days || "14", 10) || 14} days. A visitor is one address and one browser. Probes are requests the page never makes: a clip with a bad signature, a window on another call, a voice saying something else, any other /ion path. You are in here too, as your email.</p>
+        <p className="mt-2 text-sm text-stewart-muted">Last {parseInt(days || "14", 10) || 14} days. A visitor is one address and one browser. Probes are requests the page never makes: a clip with a bad signature, a window on another call, a voice saying something else, any other /ion path. A link preview is a messaging app drawing the card for a text, which means the link was forwarded, not read. Phones on a carrier network show the carrier&apos;s hub city, not the person&apos;s. You are in here too, as your email.</p>
         {error ? <p className="mt-6 text-sm text-stewart-danger">{error}</p> : null}
         {!error && !list.length ? <p className="mt-6 text-sm text-stewart-muted">Nothing yet.</p> : null}
         <div className="mt-6 space-y-3">
@@ -76,7 +78,7 @@ export default async function Visits({ searchParams }: { searchParams: Promise<{
             <details key={v.key} className={"rounded-xl border p-4 " + (v.probes.length ? "border-stewart-warning/50 bg-stewart-warning/5" : "border-stewart-border bg-stewart-card")}>
               <summary className="cursor-pointer list-none">
                 <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <span className="font-semibold">{v.email ?? v.ip}</span>
+                  <span className="font-semibold">{v.preview ? "Link preview" : v.email ?? v.ip}</span>
                   <span className="text-sm text-stewart-muted">{browser(v.ua)}{v.where ? ` · ${v.where}` : ""}</span>
                   <span className="text-sm text-stewart-muted">{when(v.first)}{v.first !== v.last ? ` → ${when(v.last)} (${span(v.first, v.last)})` : ""}</span>
                 </div>

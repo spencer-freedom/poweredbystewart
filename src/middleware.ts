@@ -59,7 +59,11 @@ const scripted = (ua: string) => !ua || SCRIPTED.test(ua);
 // the gate decided, after the response is on its way (waitUntil), so a visit
 // can be read back later: which pages, which clips, which voices, and whether
 // anything was probed that the page never asked for. /ion/visits reads it.
-type Decision = Public | "bot" | "probe" | "gated" | "denied" | "allowed";
+type Decision = Public | "preview" | "bot" | "probe" | "gated" | "denied" | "allowed";
+// Messaging apps fetch the page once to draw the link card in a text. That
+// is served (the card is wanted) but logged as a preview, not a visit: it
+// means the link was just sent to someone, not that anyone read it.
+const PREVIEW = /GoogleMessages|facebookexternalhit|Facebot|Twitterbot|WhatsApp|Slackbot|LinkedInBot|TelegramBot|Discordbot|iMessageLinkPreview|Applebot|SkypeUriPreview|Snapchat|Viber/i;
 function log(req: NextRequest, event: NextFetchEvent, decision: Decision, email?: string | null, note?: string | null) {
   // Claude's own checks from Spencer's machine carry this header so they
   // never show up on the visits page as a visitor.
@@ -102,6 +106,10 @@ export default clerkMiddleware(async (auth, req, event) => {
   if (!isIon(req)) return;
   const kind = await publicKind(req);
   if (kind) {
+    if (PREVIEW.test(req.headers.get("user-agent") || "")) {
+      log(req, event, "preview");
+      return;
+    }
     if (scripted(req.headers.get("user-agent") || "")) {
       log(req, event, "bot");
       return new NextResponse("Not available.", { status: 403 });
