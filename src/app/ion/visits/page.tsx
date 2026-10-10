@@ -53,8 +53,16 @@ export default async function Visits({ searchParams }: { searchParams: Promise<{
     visitors.set(k, v);
   }
   const list = [...visitors.values()].sort((a, b) => b.last.localeCompare(a.last));
+  // A person reads one page at a time. Three page loads inside two seconds,
+  // or a whole call fetched in the same second its page was, is a program.
+  const automated = (v: Visitor) => {
+    const t = v.hits.filter((h) => h.decision === "page" || h.decision === "full").map((h) => new Date(h.at).getTime()).sort((a, b) => a - b);
+    for (let i = 2; i < t.length; i++) if (t[i] - t[i - 2] <= 2000) return true;
+    return false;
+  };
   const depth = (v: Visitor) => {
     if (v.preview) return "a messaging app drew the link card: the link was just sent to this phone, nobody read it yet";
+    if (automated(v)) return `an automated browser, not a person: ${v.n.page ?? 0} page loads and ${v.n.full ?? 0} whole-call fetches in bursts of under two seconds (a crawler, a link scanner, or an AI agent fetching the site)`;
     const out: string[] = [];
     const pages = [...v.pages].filter((p) => p.startsWith("/ion/call")).length;
     if (pages) out.push(`${pages} of 3 calls`);
@@ -78,7 +86,7 @@ export default async function Visits({ searchParams }: { searchParams: Promise<{
             <details key={v.key} className={"rounded-xl border p-4 " + (v.probes.length ? "border-stewart-warning/50 bg-stewart-warning/5" : "border-stewart-border bg-stewart-card")}>
               <summary className="cursor-pointer list-none">
                 <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <span className="font-semibold">{v.preview ? "Link preview" : v.email ?? v.ip}</span>
+                  <span className="font-semibold">{v.preview ? "Link preview" : automated(v) ? `Automated · ${v.ip}` : v.email ?? v.ip}</span>
                   <span className="text-sm text-stewart-muted">{browser(v.ua)}{v.where ? ` · ${v.where}` : ""}</span>
                   <span className="text-sm text-stewart-muted">{when(v.first)}{v.first !== v.last ? ` → ${when(v.last)} (${span(v.first, v.last)})` : ""}</span>
                 </div>

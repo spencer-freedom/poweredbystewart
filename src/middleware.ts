@@ -73,6 +73,12 @@ function log(req: NextRequest, event: NextFetchEvent, decision: Decision, email?
   if (!url || !key) return;
   const h = req.headers;
   const dec = (v: string | null) => { try { return v ? decodeURIComponent(v) : null; } catch { return v; } };
+  const h2 = (n: string) => h.get(n);
+  const fingerprint = [
+    h2("accept-language") ? `lang=${h2("accept-language")!.slice(0, 20)}` : "no-language",
+    h2("sec-ch-ua-platform") ? `platform=${h2("sec-ch-ua-platform")}` : "no-client-hints",
+    h2("sec-fetch-mode") ? `fetch=${h2("sec-fetch-mode")}/${h2("sec-fetch-dest") ?? ""}` : "no-fetch-metadata",
+  ].join(" ");
   const row = {
     path: req.nextUrl.pathname,
     query: req.nextUrl.search ? req.nextUrl.search.slice(0, 500) : null,
@@ -84,7 +90,7 @@ function log(req: NextRequest, event: NextFetchEvent, decision: Decision, email?
     region: h.get("x-vercel-ip-country-region"),
     city: dec(h.get("x-vercel-ip-city")),
     email: email ?? null,
-    note: note ?? null,
+    note: [note, fingerprint].filter(Boolean).join(" · "),
   };
   event.waitUntil(
     fetch(`${url}/rest/v1/ion_access_log`, {
