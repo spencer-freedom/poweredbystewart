@@ -33,7 +33,15 @@ async function clipSigOk(id: string, sp: URLSearchParams): Promise<boolean> {
   return hex.length === sig.length && hex === sig;
 }
 // What the public demo lets through, by kind — or null, which means the gate.
-type Public = "page" | "clip" | "full" | "voice";
+type Public = "page" | "clip" | "full" | "voice" | "tape";
+async function hmacOk(message: string, sig: string | null): Promise<boolean> {
+  if (!sig || !CLIP_SECRET) return false;
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey("raw", enc.encode(CLIP_SECRET), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const mac = new Uint8Array(await crypto.subtle.sign("HMAC", key, enc.encode(message)));
+  const hex = Array.from(mac).map((b) => b.toString(16).padStart(2, "0")).join("").slice(0, 24);
+  return hex.length === sig.length && hex === sig;
+}
 async function publicKind(req: { nextUrl: URL }): Promise<Public | null> {
   const { pathname, searchParams } = req.nextUrl;
   if (pathname === "/ion/call" || pathname === "/ion/call2" || pathname === "/ion/call3") return "page";
@@ -41,6 +49,10 @@ async function publicKind(req: { nextUrl: URL }): Promise<Public | null> {
     const id = decodeURIComponent(pathname.slice("/api/ion/audio-clip/".length));
     if (searchParams.has("start") || searchParams.has("end")) return (await clipSigOk(id, searchParams)) ? "clip" : null;
     return SHOWCASE_ORDER.includes(id) ? "full" : null;
+  }
+  if (pathname === "/api/ion/beyond") {
+    const call = searchParams.get("call") ?? "", rep = searchParams.get("rep") ?? "";
+    return call && rep && (await hmacOk(`tape|${call}|${rep}`, searchParams.get("t"))) ? "tape" : null;
   }
   if (pathname === "/api/ion/alt-take") {
     return ALT_LINES.has(`${searchParams.get("rep") || ""}|${norm(searchParams.get("text") || "")}`) ? "voice" : null;

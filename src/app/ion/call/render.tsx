@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { CallAtom, type Beyond, type Clip, type No, type Note, type Part, type Result, type Step, type Tab, type Try, type View } from "./CallAtom.client";
-import { clipSrc } from "./clipSign";
+import { clipSrc, tapeSrc } from "./clipSign";
 import { SHOWCASE, SHOWCASE_ORDER } from "./showcase";
 
 // /ion/call — one call, taken apart. Listen to the whole thing, then see
@@ -116,27 +116,27 @@ const bestMove = (typed: Record<string, MoveCell>) =>
   Object.entries(typed).filter(([, v]) => v.used >= 3).sort((a, b) => b[1].set / b[1].used - a[1].set / a[1].used)[0] ?? null;
 
 // Level 3: one behaviour, exploded outward. For the objection type the rep
-// faced, every rep's record against it, the moves that set, and the tape of
-// the reps who handle it best. Nothing here is a model: counts over the reads.
-function beyond(rows: Row[], type: string, excludeCall: string, typed: Record<string, MoveCell>): Beyond {
+// faced, every rep's record against it and the moves that set. The tape of
+// how each rep handles it is NOT in the page: each shown rep gets a signed
+// URL, and /api/ion/beyond serves that rep's three clips when clicked. So
+// the page source holds first names and counts, nothing from other calls.
+function beyond(rows: Row[], type: string, callId: string, typed: Record<string, MoveCell>): Beyond {
   const reps: Record<string, { n: number; set: number; angles: number }> = {};
-  const clipsByRep: Record<string, { at: string; said: string; angles: number; hows: string[]; clip: Clip }[]> = {};
+  const hasTape = new Set<string>();
   for (const r of rows) {
     for (const o of r.objections ?? []) {
       if (o.type !== type) continue;
       const rep = r.rep_id || "Unknown";
       const cell = (reps[rep] ??= { n: 0, set: 0, angles: 0 });
       cell.n += 1; cell.set += r.booked ? 1 : 0; cell.angles += o.attempts;
-      // the tape worth hearing: the same no, handled, and the appointment set
-      if (r.call_id !== excludeCall && r.booked && o.continued && o.attempts >= 1 && o.start_sec !== null && o.end_sec !== null && r.rep_id) {
-        (clipsByRep[r.rep_id] ??= []).push({ at: o.ts ?? "", said: o.quote, angles: o.attempts, hows: o.moves.map((m) => MOVE_LABEL[m] ?? words(m)), clip: { src: clipSrc(r.call_id, o.start_sec, o.end_sec) } });
-      }
+      if (r.call_id !== callId && r.booked && o.continued && o.attempts >= 1 && o.start_sec !== null && o.end_sec !== null && r.rep_id) hasTape.add(r.rep_id);
     }
   }
-  for (const rep of Object.keys(clipsByRep)) clipsByRep[rep] = clipsByRep[rep].sort((a, b) => b.angles - a.angles).slice(0, 3);
-  const ranked = Object.entries(reps).filter(([rep, v]) => rep !== "Unknown" && v.n >= 3).map(([rep, v]) => ({ rep, ...v })).sort((a, b) => b.set / b.n - a.set / a.n || b.n - a.n);
+  const ranked = Object.entries(reps).filter(([rep, v]) => rep !== "Unknown" && v.n >= 3).map(([rep, v]) => ({ rep, ...v })).sort((a, b) => b.set / b.n - a.set / a.n || b.n - a.n).slice(0, 7);
+  const tape: Record<string, string> = {};
+  for (const r of ranked) if (hasTape.has(r.rep)) tape[r.rep] = tapeSrc(callId, r.rep);
   const moves = Object.entries(typed).filter(([, v]) => v.used >= 3).sort((a, b) => b[1].set / b[1].used - a[1].set / a[1].used).slice(0, 4).map(([m, v]) => ({ how: MOVE_LABEL[m] ?? words(m), used: v.used, set: v.set }));
-  return { kind: OBJ_LABEL[type] ?? words(type), total: Object.values(reps).reduce((n, v) => n + v.n, 0), reps: ranked, clipsByRep, moves };
+  return { kind: OBJ_LABEL[type] ?? words(type), total: Object.values(reps).reduce((n, v) => n + v.n, 0), reps: ranked, tape, moves };
 }
 
 // Each call has its own path (/ion/call, /ion/call2, /ion/call3) so the page can

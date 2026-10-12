@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AltTake } from "../(public)/_components/AltTake.client";
 import { AudioClip } from "../(public)/_components/AudioClip.client";
 
@@ -35,10 +35,12 @@ export type Part = {
   title: string; why: string; text: string; floor: string; at: string; noId: string | null;
   said: { who: "rep" | "customer"; line: string }[] | null; pick: { said: string; read: string } | null; clip: Clip;
 };
+export type TapeClip = { at: string; said: string; angles: number; hows: string[]; clip: Clip };
 export type Beyond = {
   kind: string; total: number;
   reps: { rep: string; n: number; set: number; angles: number }[];
-  clipsByRep: Record<string, { at: string; said: string; angles: number; hows: string[]; clip: Clip }[]>;
+  /** rep → URL that serves that rep's tape; fetched when the rep is clicked, never embedded. */
+  tape: Record<string, string>;
   moves: { how: string; used: number; set: number }[];
 };
 export type Tab = { callId: string; rep: string | null; durationMin: number | null; outcome: string | null; hook: string; levelTitle: string };
@@ -370,9 +372,20 @@ export function CallAtom({ view }: { view: View }) {
 // The third pillar on a level-3 part: one behaviour, exploded outward onto the
 // floor — who gets past this no, the moves that set, and the tape.
 function BeyondCard({ beyond, rep }: { beyond: Beyond; rep: string | null }) {
-  const withTape = beyond.reps.filter((r) => (beyond.clipsByRep[r.rep] ?? []).length > 0);
+  const withTape = beyond.reps.filter((r) => !!beyond.tape[r.rep]);
   const [who, setWho] = useState<string | null>(withTape[0]?.rep ?? null);
-  const clips = who ? beyond.clipsByRep[who] ?? [] : [];
+  const [loaded, setLoaded] = useState<Record<string, TapeClip[] | "loading" | "failed">>({});
+  const state = who ? loaded[who] : undefined;
+  const clips = Array.isArray(state) ? state : [];
+  // The tape for a rep is fetched the first time that rep is selected.
+  useEffect(() => {
+    if (!who || loaded[who] || !beyond.tape[who]) return;
+    const src = beyond.tape[who];
+    setLoaded((m) => ({ ...m, [who]: "loading" }));
+    fetch(src).then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((j: { clips: TapeClip[] }) => setLoaded((m) => ({ ...m, [who]: j.clips ?? [] })))
+      .catch(() => setLoaded((m) => ({ ...m, [who]: "failed" })));
+  }, [who, loaded, beyond.tape]);
   return (
     <div className="rounded-lg border-2 bg-stewart-bg/60 p-4" style={{ borderColor: "#f59e0b", boxShadow: "0 0 0 1px rgba(245,158,11,0.3), 0 0 24px rgba(245,158,11,0.18)" }}>
       <p className="text-[11px] uppercase tracking-wider font-semibold" style={{ color: "#f59e0b" }}>Beyond this call</p>
@@ -382,7 +395,7 @@ function BeyondCard({ beyond, rep }: { beyond: Beyond; rep: string | null }) {
       </div>
       <ul className="text-xs space-y-0.5">
         {beyond.reps.slice(0, 7).map((r) => {
-          const has = (beyond.clipsByRep[r.rep] ?? []).length > 0;
+          const has = !!beyond.tape[r.rep];
           const active = who === r.rep;
           return (
             <li key={r.rep}>
@@ -397,6 +410,8 @@ function BeyondCard({ beyond, rep }: { beyond: Beyond; rep: string | null }) {
           );
         })}
       </ul>
+      {who && state === "loading" ? <p className="mt-3 text-xs text-stewart-muted">Pulling {who}&rsquo;s tape&hellip;</p> : null}
+      {who && state === "failed" ? <p className="mt-3 text-xs text-stewart-muted">Couldn&rsquo;t load {who}&rsquo;s tape. Try again.</p> : null}
       {who && clips.length ? (
         <div className="mt-3 rounded border border-stewart-warning/40 bg-black/40 p-3">
           <p className="text-[10px] uppercase tracking-wider text-stewart-warning">How {who} handles it &middot; same no, script went on, appointment set</p>
