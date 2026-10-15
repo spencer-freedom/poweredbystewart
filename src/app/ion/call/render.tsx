@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { CallAtom, type Beyond, type Clip, type No, type Note, type Part, type Result, type Step, type Tab, type Try, type View } from "./CallAtom.client";
 import { clipSrc, tapeSrc } from "./clipSign";
+import { MOVE_LABEL, MOVE_VERB, OBJ_LABEL, SECTION_LABEL, words } from "./tape";
 import { SHOWCASE, SHOWCASE_ORDER } from "./showcase";
 
 // /ion/call — one call, taken apart. Listen to the whole thing, then see
@@ -54,29 +55,10 @@ type RawQuotes = { checked: number; verified: number; fuzzy: number; wrong_ts: n
 type Row = { call_id: string; slug: string; rep_id: string | null; booked: boolean; duration_min: number | null; objections?: { ts: string | null; start_sec: number | null; end_sec: number | null; quote: string; type: string; moves: string[]; attempts: number; continued: boolean | null }[] };
 type Stats = { calls: number; objections?: { set_rate_by_max_attempts?: Record<string, { set: number; n: number }> } };
 
-const SECTION_LABEL: Record<string, string> = {
-  intro_legitimacy: "Intro", interest_question: "Why solar?", address_homeowner: "Address & owner", co_owner: "Co-owner",
-  roof: "Roof", utility_company: "Utility", bill_amount: "Bill amount", tax_credit_qualifier: "Credit / tax", military: "Military",
-  prior_design: "Prior design", bill_collection: "Get the bill", appointment_set: "Appointment", button_up: "Button-up",
-};
-const OBJ_LABEL: Record<string, string> = {
-  cost: "Cost", timing_or_callback: "Not now / call back", trust_or_scam: "Trust", spouse_or_co_decider: "Needs the spouse",
-  already_have_quote_or_system: "Already has a quote", not_interested: "Not interested", roof_or_home: "Roof / home", proposal_by_email: "Email me something", other: "Other",
-};
-// Past tense for tables, present tense for the sequence's sentences.
-const MOVE_LABEL: Record<string, string> = {
-  reason: "gave a reason", reframe: "reframed it", question_back: "asked a question back", alternative_offered: "offered an alternative",
-  reassure: "reassured", social_proof: "social proof", redirect_to_specialist: "sent it to the specialist", concede: "conceded", restate: "said it again", other: "other",
-};
-const MOVE_VERB: Record<string, string> = {
-  alternative_offered: "offers another way", reason: "gives a reason", reframe: "reframes it", question_back: "asks a question back", reassure: "reassures",
-  social_proof: "points to someone else", redirect_to_specialist: "sends it to the specialist", restate: "says it again", concede: "lets it go", other: "tries something",
-};
 const RESULT_LABEL: Record<string, string> = { customer_moved: "The customer moves.", customer_held: "The customer holds.", customer_pushed_back: "The customer pushes back.", call_ended: "The call ends." };
 const OUTCOME_LABEL: Record<string, string> = { booked: "Booked", tentative: "Tentative", callback: "Callback", no_appointment: "No appointment", dq: "Disqualified", no_contact: "No contact" };
 
 const sec = (ts?: string | null) => { if (!ts) return null; const [m, s] = ts.split(":").map((x) => parseInt(x, 10) || 0); return (m || 0) * 60 + (s || 0); };
-const words = (t?: string | null) => (t ?? "").replace(/_/g, " ");
 // Generated prose never shows internal keys: dotted schema paths and
 // snake_case names become plain words, and "per <path>" clauses drop.
 const plainText = (t?: string | null) => (t ?? "")

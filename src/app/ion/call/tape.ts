@@ -21,6 +21,20 @@ export const MOVE_LABEL: Record<string, string> = {
   reassure: "reassured", social_proof: "social proof", redirect_to_specialist: "sent it to the specialist", concede: "conceded", restate: "said it again", other: "other",
 };
 export const words = (t?: string | null) => (t ?? "").replace(/_/g, " ");
+export const SECTION_LABEL: Record<string, string> = {
+  intro_legitimacy: "Intro", interest_question: "Why solar?", address_homeowner: "Address & owner", co_owner: "Co-owner",
+  roof: "Roof", utility_company: "Utility", bill_amount: "Bill amount", tax_credit_qualifier: "Credit / tax", military: "Military",
+  prior_design: "Prior design", bill_collection: "Get the bill", appointment_set: "Appointment", button_up: "Button-up",
+};
+export const OBJ_LABEL: Record<string, string> = {
+  cost: "Cost", timing_or_callback: "Not now / call back", trust_or_scam: "Trust", spouse_or_co_decider: "Needs the spouse",
+  already_have_quote_or_system: "Already has a quote", not_interested: "Not interested", roof_or_home: "Roof / home", proposal_by_email: "Email me something", other: "Other",
+};
+// Present tense for the sequence's sentences.
+export const MOVE_VERB: Record<string, string> = {
+  alternative_offered: "offers another way", reason: "gives a reason", reframe: "reframes it", question_back: "asks a question back", reassure: "reassures",
+  social_proof: "points to someone else", redirect_to_specialist: "sends it to the specialist", restate: "says it again", concede: "lets it go", other: "tries something",
+};
 
 /** The objection kind a showcase call's level-3 part is about, from the read itself. */
 export function beyondTypeFor(callId: string): string | null {
