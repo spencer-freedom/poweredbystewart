@@ -53,6 +53,20 @@ export default async function Visits({ searchParams }: { searchParams: Promise<{
     visitors.set(k, v);
   }
   const list = [...visitors.values()].sort((a, b) => b.last.localeCompare(a.last));
+  // A visit: requests with no gap over thirty minutes. Time on the page is a
+  // floor, first request to last; a visit with one request counts a minute.
+  type Session = { first: string; last: string; minutes: number; hits: Hit[] };
+  const sessions = (v: Visitor): Session[] => {
+    const out: Session[] = [];
+    for (const h of v.hits) {
+      const cur = out[out.length - 1];
+      if (cur && new Date(h.at).getTime() - new Date(cur.last).getTime() <= 30 * 60000) { cur.last = h.at; cur.hits.push(h); }
+      else out.push({ first: h.at, last: h.at, minutes: 0, hits: [h] });
+    }
+    for (const sn of out) sn.minutes = Math.max(1, Math.round((new Date(sn.last).getTime() - new Date(sn.first).getTime()) / 60000));
+    return out;
+  };
+  const timeSpent = (v: Visitor) => { const ss = sessions(v); const m = ss.reduce((n, x) => n + x.minutes, 0); return `${ss.length} ${ss.length === 1 ? "visit" : "visits"}, ${m < 60 ? `${m} min` : `${(m / 60).toFixed(1)} h`} on the page`; };
   // A person reads one page at a time. Three page loads inside two seconds,
   // or a whole call fetched in the same second its page was, is a program.
   const automated = (v: Visitor) => {
@@ -91,15 +105,23 @@ export default async function Visits({ searchParams }: { searchParams: Promise<{
                   <span className="text-sm text-stewart-muted">{when(v.first)}{v.first !== v.last ? ` → ${when(v.last)} (${span(v.first, v.last)})` : ""}</span>
                 </div>
                 <p className={"mt-1 text-sm " + (v.probes.length ? "text-stewart-warning font-semibold" : "")}>{depth(v)}{v.n.bot ? " · turned away as a script" : ""}</p>
+                {!v.preview ? <p className="mt-0.5 text-sm text-stewart-muted">{timeSpent(v)}</p> : null}
                 {v.hits[0]?.referer ? <p className="mt-0.5 text-xs text-stewart-muted">came from {v.hits[0].referer}</p> : null}
               </summary>
-              <ul className="mt-3 space-y-0.5 text-xs font-mono text-stewart-muted max-h-96 overflow-auto">
-                {v.hits.map((h, i) => (
-                  <li key={i} className={h.decision === "probe" || h.decision === "bot" || h.decision === "denied" ? "text-stewart-warning" : h.decision === "gated" ? "text-stewart-text" : ""}>
-                    {when(h.at)} · {h.decision} · {h.path}{h.query ? h.query.replace(/&sig=[0-9a-f]+/, "").replace(/text=[^&]+/, "text=…") : ""}
-                  </li>
+              <div className="mt-3 space-y-3 max-h-[32rem] overflow-auto">
+                {sessions(v).map((sn, si) => (
+                  <div key={si}>
+                    <p className="text-xs font-semibold text-stewart-text">Visit {si + 1} · {when(sn.first)} · {sn.minutes} min · {sn.hits.filter((h) => h.decision === "page" || h.decision === "allowed").length} pages, {sn.hits.filter((h) => h.decision === "clip" || h.decision === "full").length} plays</p>
+                    <ul className="mt-1 space-y-0.5 text-xs font-mono text-stewart-muted">
+                      {sn.hits.map((h, i) => (
+                        <li key={i} className={h.decision === "probe" || h.decision === "bot" || h.decision === "denied" ? "text-stewart-warning" : h.decision === "gated" ? "text-stewart-text" : ""}>
+                          {when(h.at)} · {h.decision} · {h.path}{h.query ? h.query.replace(/&sig=[0-9a-f]+/, "").replace(/&t=[0-9a-f]+/, "").replace(/text=[^&]+/, "text=…") : ""}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </details>
           ))}
         </div>
