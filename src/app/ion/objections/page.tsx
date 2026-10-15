@@ -12,6 +12,24 @@ export const dynamic = "force-dynamic";
 
 type Obj = NonNullable<Row["objections"]>[number] & { attempt_quotes?: string[]; kinds?: string[]; restates?: number; next_event?: string | null; blocked_section?: string | null };
 type Hit = { row: Row; o: Obj; worked: string; angles: number };
+// What one moment card is given: words and two clip URLs. The read's own
+// rows never cross into the rendered tree, in any build mode.
+type MomentView = { rep: string; at: string; booked: boolean; label: string; said: string; where: string | null; tries: { who: string; how: string; same: boolean; said: string; then: string }[]; count: string; clip: string; whole: string };
+const slug = (t: string) => (OBJ_LABEL[t] ?? words(t)).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+function momentView(h: Hit): MomentView {
+  const { row, o } = h;
+  const rep = row.rep_id ?? "the rep";
+  const quotes = o.attempt_quotes ?? [], moves = o.moves ?? [], kinds = o.kinds ?? [];
+  const next = o.next_event && o.next_event.includes("@") ? o.next_event.split("@") : null;
+  return {
+    rep, at: o.ts ?? "", booked: row.booked,
+    label: (OBJ_LABEL[o.type] ?? words(o.type)).toLowerCase(), said: o.quote,
+    where: o.blocked_section ? SECTION_LABEL[o.blocked_section] ?? words(o.blocked_section) : null,
+    tries: quotes.map((q, i) => ({ who: i === 0 ? rep : `Then ${rep}`, how: MOVE_VERB[moves[i] ?? "other"] ?? "tries something", same: kinds[i] === "restate", said: q, then: i === quotes.length - 1 ? "The customer moves." : "The customer holds." })),
+    count: `${o.attempts} ${o.attempts === 1 ? "angle" : "angles"}${o.restates ? `, said it again \u00d7${o.restates}` : ""}${next ? `, and the script went on to ${SECTION_LABEL[next[0]] ?? words(next[0])} at ${next[1]}` : ""}.`,
+    clip: clipSrc(row.call_id, o.start_sec!, o.end_sec!), whole: `/api/ion/audio-clip/${encodeURIComponent(row.call_id)}`,
+  };
+}
 
 const ORDER = ["timing_or_callback", "trust_or_scam", "cost", "roof_or_home", "already_have_quote_or_system", "proposal_by_email", "spouse_or_co_decider", "not_interested", "other"];
 const pct = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)}%` : "—");
@@ -46,7 +64,7 @@ export default function Objections() {
         </p>
         <ul className="mt-6 flex flex-wrap gap-2 text-sm">
           {types.map((t) => (
-            <li key={t}><a href={`#${t}`} className="inline-block rounded-full border border-stewart-border px-3 py-1 hover:border-stewart-accent/60">{OBJ_LABEL[t] ?? words(t)} <span className="text-stewart-muted">{byType[t].faced}</span></a></li>
+            <li key={slug(t)}><a href={`#${slug(t)}`} className="inline-block rounded-full border border-stewart-border px-3 py-1 hover:border-stewart-accent/60">{OBJ_LABEL[t] ?? words(t)} <span className="text-stewart-muted">{byType[t].faced}</span></a></li>
           ))}
         </ul>
 
@@ -56,7 +74,7 @@ export default function Objections() {
           for (const h of d.hits) (groups[h.worked] ??= []).push(h);
           const ranked = Object.entries(groups).sort((a, b) => b[1].length - a[1].length);
           return (
-            <section key={t} id={t} className="mt-14 scroll-mt-6">
+            <section key={slug(t)} id={slug(t)} className="mt-14 scroll-mt-6">
               <p className="text-[11px] uppercase tracking-[0.2em] font-semibold text-stewart-accent">{OBJ_LABEL[t] ?? words(t)}</p>
               <h2 className="mt-1 text-2xl font-bold">Came up {d.faced} times. The call still set {pct(d.set, d.faced)} of the time.</h2>
               {d.hits.length ? (
@@ -67,13 +85,13 @@ export default function Objections() {
               {ranked.map(([move, hits]) => {
                 const list = hits.sort((a, b) => Number(b.row.booked) - Number(a.row.booked) || b.angles - a.angles).slice(0, 6);
                 return (
-                  <div key={move} className="mt-6 rounded-xl border border-stewart-border bg-stewart-card p-4">
+                  <div key={(MOVE_LABEL[move] ?? words(move)).replace(/\W+/g, "-")} className="mt-6 rounded-xl border border-stewart-border bg-stewart-card p-4">
                     <p className="text-sm font-semibold">
                       <span style={{ color: "#f59e0b" }}>{(MOVE_LABEL[move] ?? words(move)).replace(/^./, (c) => c.toUpperCase())}</span>
                       <span className="text-stewart-muted"> · worked {hits.length} {hits.length === 1 ? "time" : "times"}, {hits.filter((h) => h.row.booked).length} booked</span>
                     </p>
                     <div className="mt-3 grid gap-3 md:grid-cols-2">
-                      {list.map((h, i) => <Moment key={i} h={h} />)}
+                      {list.map((h, i) => <Moment key={i} m={momentView(h)} />)}
                     </div>
                     {hits.length > list.length ? <p className="mt-2 text-xs text-stewart-muted">{hits.length - list.length} more on the tape.</p> : null}
                   </div>
@@ -91,24 +109,18 @@ export default function Objections() {
 
 // One moment: the no, what the rep tried, and the script moving on. Same
 // sentences as the three-call demo's training sequence, overcome form.
-function Moment({ h }: { h: Hit }) {
-  const { row, o } = h;
-  const rep = row.rep_id ?? "the rep";
-  const quotes = o.attempt_quotes ?? [], moves = o.moves ?? [], kinds = o.kinds ?? [];
-  const next = o.next_event && o.next_event.includes("@") ? o.next_event.split("@") : null;
-  const label = (OBJ_LABEL[o.type] ?? words(o.type)).toLowerCase();
-  const where = o.blocked_section ? SECTION_LABEL[o.blocked_section] ?? words(o.blocked_section) : null;
+function Moment({ m }: { m: MomentView }) {
   return (
-    <div className={"rounded-lg border p-3 text-sm leading-relaxed " + (row.booked ? "border-stewart-success/40 bg-stewart-success/5" : "border-stewart-border bg-black/30")}>
-      <p className="text-[11px] uppercase tracking-wider text-stewart-muted">{rep} &middot; {o.ts}{row.booked ? <span className="text-stewart-success"> &middot; booked</span> : <span> &middot; script went on, no set</span>}</p>
-      <p className="mt-1">The customer stalls on {label}: &ldquo;{o.quote}&rdquo;{where ? ` — right at ${where}` : ""}.</p>
+    <div className={"rounded-lg border p-3 text-sm leading-relaxed " + (m.booked ? "border-stewart-success/40 bg-stewart-success/5" : "border-stewart-border bg-black/30")}>
+      <p className="text-[11px] uppercase tracking-wider text-stewart-muted">{m.rep} &middot; {m.at}{m.booked ? <span className="text-stewart-success"> &middot; booked</span> : <span> &middot; script went on, no set</span>}</p>
+      <p className="mt-1">The customer stalls on {m.label}: &ldquo;{m.said}&rdquo;{m.where ? ` \u2014 right at ${m.where}` : ""}.</p>
       <p className="mt-1">
-        {quotes.map((q, i) => <span key={i}>{i === 0 ? rep : `Then ${rep}`} {MOVE_VERB[moves[i] ?? "other"] ?? "tries something"}{kinds[i] === "restate" ? " (the same line)" : ""}: &ldquo;{q}&rdquo; {i === quotes.length - 1 ? "The customer moves. " : "The customer holds. "}</span>)}
-        <span className="text-stewart-muted">{o.attempts} {o.attempts === 1 ? "angle" : "angles"}{o.restates ? `, said it again ×${o.restates}` : ""}{next ? `, and the script went on to ${SECTION_LABEL[next[0]] ?? words(next[0])} at ${next[1]}` : ""}.</span>
+        {m.tries.map((t, i) => <span key={i}>{t.who} {t.how}{t.same ? " (the same line)" : ""}: &ldquo;{t.said}&rdquo; {t.then} </span>)}
+        <span className="text-stewart-muted">{m.count}</span>
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
-        <AudioClip src={clipSrc(row.call_id, o.start_sec!, o.end_sec!)} label="Play it" />
-        <AudioClip src={`/api/ion/audio-clip/${encodeURIComponent(row.call_id)}`} label="Whole call" variant="full" />
+        <AudioClip src={m.clip} label="Play it" />
+        <AudioClip src={m.whole} label="Whole call" variant="full" />
       </div>
     </div>
   );

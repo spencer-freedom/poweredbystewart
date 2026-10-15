@@ -113,6 +113,18 @@ function log(req: NextRequest, event: NextFetchEvent, decision: Decision, email?
   );
 }
 
+// Viewers: signed-in people who get the tape pages only (the three-call demo
+// and the objection library), never the manager, stats or calls surfaces,
+// which carry the whole floor's reads. Bentley is the first.
+const VIEWERS = new Set(
+  (process.env.ION_VIEWER_EMAILS || "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean),
+);
+const isViewerPath = (p: string) =>
+  p === "/ion/objections" || /^\/ion\/call[0-9]*$/.test(p) || p.startsWith("/api/ion/audio-clip/") || p === "/api/ion/beyond" || p === "/api/ion/alt-take";
+
 const ALLOWED = new Set(
   (process.env.ION_ALLOWED_EMAILS || "manager@getthriftyprovo.com,spencer.freedom@gmail.com")
     .split(",")
@@ -165,11 +177,16 @@ export default clerkMiddleware(async (auth, req, event) => {
       email = undefined;
     }
   }
-  if (!email || !ALLOWED.has(email)) {
-    log(req, event, "denied", email);
-    return new NextResponse("Not available.", { status: 403 });
+  if (email && ALLOWED.has(email)) {
+    log(req, event, "allowed", email);
+    return;
   }
-  log(req, event, "allowed", email);
+  if (email && VIEWERS.has(email) && isViewerPath(req.nextUrl.pathname)) {
+    log(req, event, "allowed", email, "viewer");
+    return;
+  }
+  log(req, event, "denied", email);
+  return new NextResponse("Not available.", { status: 403 });
 });
 
 export const config = {
