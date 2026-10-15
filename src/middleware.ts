@@ -33,7 +33,7 @@ async function clipSigOk(id: string, sp: URLSearchParams): Promise<boolean> {
   return hex.length === sig.length && hex === sig;
 }
 // What the public demo lets through, by kind — or null, which means the gate.
-type Public = "page" | "clip" | "full" | "voice" | "tape";
+type Public = "page" | "clip" | "full" | "voice" | "tape" | "listen";
 async function hmacOk(message: string, sig: string | null): Promise<boolean> {
   if (!sig || !CLIP_SECRET) return false;
   const enc = new TextEncoder();
@@ -50,6 +50,7 @@ async function publicKind(req: { nextUrl: URL }): Promise<Public | null> {
     if (searchParams.has("start") || searchParams.has("end")) return (await clipSigOk(id, searchParams)) ? "clip" : null;
     return SHOWCASE_ORDER.includes(id) ? "full" : null;
   }
+  if (pathname === "/api/ion/listen") return "listen"; // the beacon route writes its own row
   if (pathname === "/api/ion/beyond") {
     const call = searchParams.get("call") ?? "", rep = searchParams.get("rep") ?? "";
     return call && rep && (await hmacOk(`tape|${call}|${rep}`, searchParams.get("t"))) ? "tape" : null;
@@ -135,6 +136,7 @@ const ALLOWED = new Set(
 export default clerkMiddleware(async (auth, req, event) => {
   if (!isIon(req)) return;
   const kind = await publicKind(req);
+  if (kind === "listen") return;
   if (kind) {
     if (PREVIEW.test(req.headers.get("user-agent") || "")) {
       log(req, event, "preview");

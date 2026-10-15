@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { TrackedAudio } from "./Listen.client";
 
 // Shared audio-clip player. V2.1.17 — server-side ffmpeg slicing now
 // returns just the requested window, so the native <audio> duration
@@ -65,7 +66,7 @@ export function AudioClip({
     );
   }
   return (
-    <audio
+    <TrackedAudio
       src={url}
       controls
       autoPlay

@@ -1,4 +1,5 @@
 import { AudioClip } from "../(public)/_components/AudioClip.client";
+import { Presence } from "../(public)/_components/Listen.client";
 import { clipSrc } from "../call/clipSign";
 import { loadRows, MOVE_LABEL, MOVE_VERB, OBJ_LABEL, SECTION_LABEL, words, type Row } from "../call/tape";
 
@@ -55,6 +56,7 @@ export default function Objections() {
 
   return (
     <main className="min-h-screen bg-black text-stewart-text">
+      <Presence />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
         <p className="text-xs uppercase tracking-[0.25em] text-stewart-accent font-semibold">Powered by Stewart · Ion</p>
         <h1 className="mt-2 text-3xl sm:text-4xl font-bold leading-tight">Every objection this floor hears, and what got past it.</h1>

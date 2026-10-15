@@ -7,7 +7,7 @@
 
 export const dynamic = "force-dynamic";
 
-type Hit = { at: string; path: string; query: string | null; decision: string; ip: string | null; ua: string | null; referer: string | null; country: string | null; region: string | null; city: string | null; email: string | null };
+type Hit = { at: string; path: string; query: string | null; decision: string; ip: string | null; ua: string | null; referer: string | null; country: string | null; region: string | null; city: string | null; email: string | null; seconds: number | null };
 
 function browser(ua: string | null): string {
   if (!ua) return "no browser header";
@@ -27,7 +27,7 @@ export default async function Visits({ searchParams }: { searchParams: Promise<{
   let error: string | null = null;
   if (url && key) {
     try {
-      const res = await fetch(`${url}/rest/v1/ion_access_log?select=at,path,query,decision,ip,ua,referer,country,region,city,email&at=gte.${since}&order=at.asc&limit=20000`, {
+      const res = await fetch(`${url}/rest/v1/ion_access_log?select=at,path,query,decision,ip,ua,referer,country,region,city,email,seconds&at=gte.${since}&order=at.asc&limit=20000`, {
         headers: { apikey: key, Authorization: `Bearer ${key}` }, cache: "no-store",
       });
       if (!res.ok) error = `log read failed (${res.status})`;
@@ -55,18 +55,24 @@ export default async function Visits({ searchParams }: { searchParams: Promise<{
   const list = [...visitors.values()].sort((a, b) => b.last.localeCompare(a.last));
   // A visit: requests with no gap over thirty minutes. Time on the page is a
   // floor, first request to last; a visit with one request counts a minute.
-  type Session = { first: string; last: string; minutes: number; hits: Hit[] };
+  type Session = { first: string; last: string; minutes: number; played: number; hits: Hit[] };
   const sessions = (v: Visitor): Session[] => {
     const out: Session[] = [];
     for (const h of v.hits) {
       const cur = out[out.length - 1];
       if (cur && new Date(h.at).getTime() - new Date(cur.last).getTime() <= 30 * 60000) { cur.last = h.at; cur.hits.push(h); }
-      else out.push({ first: h.at, last: h.at, minutes: 0, hits: [h] });
+      else out.push({ first: h.at, last: h.at, minutes: 0, played: 0, hits: [h] });
     }
-    for (const sn of out) sn.minutes = Math.max(1, Math.round((new Date(sn.last).getTime() - new Date(sn.first).getTime()) / 60000));
+    for (const sn of out) {
+      // Measured when the page pinged; otherwise first request to last.
+      const pinged = sn.hits.filter((h) => h.decision === "ping").reduce((n, h) => n + (h.seconds ?? 0), 0);
+      sn.minutes = pinged ? Math.max(1, Math.round(pinged / 60)) : Math.max(1, Math.round((new Date(sn.last).getTime() - new Date(sn.first).getTime()) / 60000));
+      sn.played = Math.round(sn.hits.filter((h) => h.decision === "listen").reduce((n, h) => n + (h.seconds ?? 0), 0) / 60);
+    }
     return out;
   };
-  const timeSpent = (v: Visitor) => { const ss = sessions(v); const m = ss.reduce((n, x) => n + x.minutes, 0); return `${ss.length} ${ss.length === 1 ? "visit" : "visits"}, ${m < 60 ? `${m} min` : `${(m / 60).toFixed(1)} h`} on the page`; };
+  const fmt = (m: number) => (m < 60 ? `${m} min` : `${(m / 60).toFixed(1)} h`);
+  const timeSpent = (v: Visitor) => { const ss = sessions(v); const m = ss.reduce((n, x) => n + x.minutes, 0); const pl = ss.reduce((n, x) => n + x.played, 0); return `${ss.length} ${ss.length === 1 ? "visit" : "visits"} · ${fmt(m)} on the page · ${fmt(pl)} of tape played`; };
   // A person reads one page at a time. Three page loads inside two seconds,
   // or a whole call fetched in the same second its page was, is a program.
   const automated = (v: Visitor) => {
@@ -111,11 +117,11 @@ export default async function Visits({ searchParams }: { searchParams: Promise<{
               <div className="mt-3 space-y-3 max-h-[32rem] overflow-auto">
                 {sessions(v).map((sn, si) => (
                   <div key={si}>
-                    <p className="text-xs font-semibold text-stewart-text">Visit {si + 1} · {when(sn.first)} · {sn.minutes} min · {sn.hits.filter((h) => h.decision === "page" || h.decision === "allowed").length} pages, {sn.hits.filter((h) => h.decision === "clip" || h.decision === "full").length} plays</p>
+                    <p className="text-xs font-semibold text-stewart-text">Visit {si + 1} · {when(sn.first)} · {sn.minutes} min on the page · {sn.played} min of tape played · {sn.hits.filter((h) => h.decision === "page" || h.decision === "allowed").length} pages, {sn.hits.filter((h) => h.decision === "clip" || h.decision === "full").length} plays</p>
                     <ul className="mt-1 space-y-0.5 text-xs font-mono text-stewart-muted">
                       {sn.hits.map((h, i) => (
                         <li key={i} className={h.decision === "probe" || h.decision === "bot" || h.decision === "denied" ? "text-stewart-warning" : h.decision === "gated" ? "text-stewart-text" : ""}>
-                          {when(h.at)} · {h.decision} · {h.path}{h.query ? h.query.replace(/&sig=[0-9a-f]+/, "").replace(/&t=[0-9a-f]+/, "").replace(/text=[^&]+/, "text=…") : ""}
+                          {when(h.at)} · {h.decision}{h.seconds ? ` ${h.seconds}s` : ""} · {h.path.replace(/[?&]sig=[0-9a-f]+/, "")}{h.query && h.decision !== "listen" ? h.query.replace(/&sig=[0-9a-f]+/, "").replace(/&t=[0-9a-f]+/, "").replace(/text=[^&]+/, "text=…") : ""}
                         </li>
                       ))}
                     </ul>

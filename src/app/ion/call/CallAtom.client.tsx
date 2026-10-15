@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AltTake } from "../(public)/_components/AltTake.client";
 import { AudioClip } from "../(public)/_components/AudioClip.client";
+import { Presence, TrackedAudio } from "../(public)/_components/Listen.client";
 
 // One call, taken apart. The whole call plays at the top; everything Stewart
 // read is a node on the atom below; clicking a node seeks the player to that
@@ -123,6 +124,7 @@ export function CallAtom({ view }: { view: View }) {
 
   return (
     <main className="min-h-screen bg-black text-stewart-text">
+      <Presence />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
         <p className="text-xs uppercase tracking-[0.25em] text-stewart-accent font-semibold">Powered by Stewart</p>
         <p className="mt-3 text-2xl sm:text-3xl font-bold leading-tight">Three of Ion&apos;s calls, read by Stewart.</p>
@@ -149,7 +151,7 @@ export function CallAtom({ view }: { view: View }) {
 
         {/* The whole call, with a timeline of what Stewart found */}
         <div className="mt-8 rounded-xl border border-stewart-border bg-stewart-card p-4">
-          <audio ref={audioRef} controls preload="metadata" className="w-full" src={view.fullSrc} />
+          <TrackedAudio ref={audioRef} controls preload="metadata" className="w-full" src={view.fullSrc} />
           {/* The timeline: every node from the atom, named, in call order. Script
               labels stagger below the line, everything else staggers above. */}
           <div className="relative mt-3 h-[12rem]">
